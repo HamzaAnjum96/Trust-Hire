@@ -151,6 +151,12 @@ class _Body extends StatelessWidget {
         ],
 
         const SizedBox(height: BrandSizing.spaceLg),
+        if (job.type != null)
+          _DetailRow(
+            icon: job.type!.icon,
+            label: 'Kind of work',
+            value: job.type!.label,
+          ),
         _DetailRow(
           icon: Icons.schedule,
           label: 'When',

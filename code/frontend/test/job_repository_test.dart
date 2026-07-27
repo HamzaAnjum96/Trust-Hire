@@ -6,6 +6,8 @@ import 'package:trust_hire/services/job_repository.dart';
 import 'package:trust_hire/services/local_store.dart';
 import 'package:trust_hire/services/media_store.dart';
 
+import 'support/seed_facts.dart';
+
 /// The technical constraints in the sprint plan hinge on this class: seed on
 /// first run, then edit the local copy only, with no network anywhere.
 void main() {
@@ -30,23 +32,25 @@ void main() {
     await repository.ensureSeeded();
 
     final jobs = await repository.fetchJobs();
-    expect(jobs, hasLength(12));
+    expect(jobs, hasLength(await SeedFacts.jobCount()));
 
     final users = await repository.fetchUsers();
-    expect(users, hasLength(9));
+    expect(users, hasLength(await SeedFacts.userCount()));
   });
 
   test('does not reseed over local changes on a later run', () async {
     final store = await LocalStore.open();
     final repository = JobRepository(store, MediaStore(store));
 
+    final seeded = await SeedFacts.jobCount();
+
     await repository.ensureSeeded();
     await repository.deleteJob('seed-001');
-    expect(await repository.fetchJobs(), hasLength(11));
+    expect(await repository.fetchJobs(), hasLength(seeded - 1));
 
     // A fresh repository over the same store stands in for a relaunch.
     await JobRepository(store, MediaStore(store)).ensureSeeded();
-    expect(await repository.fetchJobs(), hasLength(11));
+    expect(await repository.fetchJobs(), hasLength(seeded - 1));
   });
 
   test('saves a new job and returns it newest first', () async {
@@ -63,7 +67,7 @@ void main() {
     await repository.saveJob(job);
 
     final jobs = await repository.fetchJobs();
-    expect(jobs, hasLength(13));
+    expect(jobs, hasLength(await SeedFacts.jobCount() + 1));
     expect(jobs.first.id, 'local-001');
     expect(jobs.first.isLocal, isTrue);
   });
@@ -77,7 +81,7 @@ void main() {
     await repository.saveJob(original.copyWith(title: 'AC still not cooling'));
 
     final jobs = await repository.fetchJobs();
-    expect(jobs, hasLength(12));
+    expect(jobs, hasLength(await SeedFacts.jobCount()));
     expect(
       jobs.firstWhere((j) => j.id == 'seed-004').title,
       'AC still not cooling',
@@ -87,12 +91,14 @@ void main() {
   test('restores the seed data on reset', () async {
     final repository = await buildRepository();
     await repository.ensureSeeded();
+    final seeded = await SeedFacts.jobCount();
+
     await repository.deleteJob('seed-001');
     await repository.deleteJob('seed-002');
-    expect(await repository.fetchJobs(), hasLength(10));
+    expect(await repository.fetchJobs(), hasLength(seeded - 2));
 
     await repository.resetToSeed();
-    expect(await repository.fetchJobs(), hasLength(12));
+    expect(await repository.fetchJobs(), hasLength(seeded));
   });
 
   test('reseeds when the store is emptied out from under it', () async {
@@ -103,6 +109,6 @@ void main() {
     await store.clear();
 
     // fetchJobs recovers rather than showing an empty map.
-    expect(await repository.fetchJobs(), hasLength(12));
+    expect(await repository.fetchJobs(), hasLength(await SeedFacts.jobCount()));
   });
 }

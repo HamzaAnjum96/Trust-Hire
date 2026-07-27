@@ -58,10 +58,11 @@ class LocationResult {
 class LocationService {
   const LocationService();
 
-  /// Lahore city centre. Used as the map's opening view when the real
-  /// location is unavailable — the seed data is around Lahore, so the user
-  /// still lands on something meaningful rather than the middle of the ocean.
-  static const fallback = JobLocation(latitude: 31.5204, longitude: 74.3587);
+  /// Between Islamabad and Rawalpindi. Used as the map's opening view when the
+  /// real location is unavailable — most of the seed data is in the twin
+  /// cities, so the user still lands on something meaningful rather than the
+  /// middle of the ocean.
+  static const fallback = JobLocation(latitude: 33.6280, longitude: 73.0530);
 
   Future<LocationResult> current() async {
     try {

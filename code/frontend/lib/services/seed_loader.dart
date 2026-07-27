@@ -4,6 +4,7 @@ import 'package:flutter/services.dart' show rootBundle;
 
 import '../models/app_user.dart';
 import '../models/job.dart';
+import '../models/job_type.dart';
 
 /// Loads the startup JSON bundled in `assets/seed/`.
 ///
@@ -52,6 +53,7 @@ class SeedLoader {
         Duration(minutes: (createdHoursAgo * 60).round()),
       ),
       title: json['title'] as String?,
+      type: JobType.fromId(json['type'] as String?),
       radiusMetres: (json['radiusMetres'] as num?)?.toDouble() ?? 1000,
       scheduledTime: scheduled,
       voiceNotePath: json['voiceNote'] as String?,

@@ -20,7 +20,8 @@ class _FakeLocationService implements LocationService {
 }
 
 void main() {
-  const lahore = JobLocation(latitude: 31.5204, longitude: 74.3587);
+  // Between Islamabad and Rawalpindi, where most of the seed data now is.
+  const twinCities = JobLocation(latitude: 33.6280, longitude: 73.0530);
 
   test('starts with no position and nothing to explain', () {
     final controller = LocationController(
@@ -47,7 +48,7 @@ void main() {
     expect(controller.explanation, isNull);
   });
 
-  test('falls back to Lahore and explains when refused', () async {
+  test('falls back to the twin cities and explains when refused', () async {
     final controller = LocationController(
       _FakeLocationService(const LocationResult(LocationStatus.denied)),
     );
@@ -55,8 +56,9 @@ void main() {
     await controller.request();
 
     expect(controller.position, isNull);
-    // The seed data is around Lahore, so the user still lands on something.
-    expect(controller.mapCentre, lahore);
+    // The seed data is around Islamabad and Rawalpindi, so the user still
+    // lands on something rather than the middle of the ocean.
+    expect(controller.mapCentre, twinCities);
     expect(controller.explanation, contains('You can still move the map'));
   });
 

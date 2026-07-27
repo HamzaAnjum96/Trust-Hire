@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 
 import '../../models/job.dart';
+import '../../models/job_type.dart';
 import 'job_filter.dart';
 
 /// The current search and filter, shared by the map and the list.
@@ -59,6 +60,15 @@ class JobFilterController extends ChangeNotifier {
           ? DistanceFilter.any
           : DistanceFilter.nearMe,
     );
+  }
+
+  /// Adds or removes a kind of work from the filter.
+  void toggleType(JobType type) {
+    final next = Set<JobType>.from(_filter.types);
+    if (!next.remove(type)) next.add(type);
+
+    _filter = _filter.copyWith(types: next);
+    notifyListeners();
   }
 
   void clear() {

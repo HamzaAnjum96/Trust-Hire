@@ -9,6 +9,7 @@ import '../../services/capture_service.dart';
 import '../../services/media_store.dart';
 import '../../widgets/state_views.dart';
 import 'job_draft_controller.dart';
+import 'job_type_field.dart';
 import 'location_picker.dart';
 import 'media_fields.dart';
 
@@ -156,6 +157,19 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
 
               const SizedBox(height: BrandSizing.spaceLg),
               VoiceRecorderField(draft: _draft),
+
+              const SizedBox(height: BrandSizing.spaceLg),
+              _FieldLabel('Kind of work'),
+              const SizedBox(height: BrandSizing.spaceXs),
+              Text(
+                // Never a "please select" — skipping this is fine, and the
+                // marker falls back to what the job carries.
+                'Optional. Choosing one makes your job easier to spot on the '
+                'map.',
+                style: theme.textTheme.labelSmall,
+              ),
+              const SizedBox(height: BrandSizing.spaceSm),
+              JobTypeField(draft: _draft),
 
               const SizedBox(height: BrandSizing.spaceLg),
               _FieldLabel('Photos'),

@@ -6,6 +6,8 @@ import 'package:trust_hire/app/app.dart';
 import 'package:trust_hire/features/map/job_map.dart';
 import 'package:trust_hire/services/local_store.dart';
 
+import 'support/seed_facts.dart';
+
 /// Sprint 0's definition of done is "application launches". This asserts it
 /// end to end: the app boots, seeds local storage from the bundled JSON, and
 /// renders the navigation scaffold with real job data behind it.
@@ -52,7 +54,7 @@ void main() {
     // The seed data made it into local storage.
     final stored = store.readCollection(StoreKeys.jobs);
     expect(stored, isNotNull);
-    expect(stored!.length, 12);
+    expect(stored!.length, await SeedFacts.jobCount());
     expect(store.readFlag(StoreKeys.seeded), isTrue);
   });
 
@@ -93,7 +95,7 @@ void main() {
 
     // The map rendered anyway, centred on the fallback.
     expect(find.text('Nearby work'), findsOneWidget);
-    expect(find.text('12 jobs'), findsOneWidget);
+    expect(find.text('${await SeedFacts.jobCount()} jobs'), findsOneWidget);
   });
 
   testWidgets('the map fills the screen', (tester) async {

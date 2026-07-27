@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../core/tokens.dart';
+import '../../models/job_type.dart';
 import 'job_filter.dart';
 import 'job_filter_controller.dart';
 
@@ -50,9 +51,11 @@ class QuickFilterBar extends StatelessWidget {
         label: 'More',
         icon: Icons.tune,
         selected:
-            filter.time != TimeFilter.any && filter.time != TimeFilter.today ||
+            (filter.time != TimeFilter.any &&
+                filter.time != TimeFilter.today) ||
             (filter.distance != DistanceFilter.any &&
-                filter.distance != DistanceFilter.nearMe),
+                filter.distance != DistanceFilter.nearMe) ||
+            filter.types.isNotEmpty,
         onTap: () => FilterSheet.open(context, controller),
       ),
       if (controller.isActive)
@@ -248,6 +251,29 @@ class FilterSheet extends StatelessWidget {
                     selected: filter.withPhotos,
                     onTap: () => controller.setWithPhotos(!filter.withPhotos),
                   ),
+                ],
+              ),
+
+              const SizedBox(height: BrandSizing.spaceLg),
+              Text('Kind of work', style: theme.textTheme.titleMedium),
+              const SizedBox(height: BrandSizing.spaceXs),
+              Text(
+                // Says the quiet part: this one does hide untyped jobs.
+                'Jobs that did not say what kind they are will be hidden.',
+                style: theme.textTheme.labelSmall,
+              ),
+              const SizedBox(height: BrandSizing.spaceSm),
+              Wrap(
+                spacing: BrandSizing.spaceSm,
+                runSpacing: BrandSizing.spaceSm,
+                children: [
+                  for (final type in JobType.values)
+                    _FilterChip(
+                      label: type.label,
+                      icon: type.icon,
+                      selected: filter.types.contains(type),
+                      onTap: () => controller.toggleType(type),
+                    ),
                 ],
               ),
 

@@ -1,5 +1,9 @@
 import 'dart:math' as math;
 
+import 'package:flutter/material.dart';
+
+import 'job_type.dart';
+
 /// A geographic point. Deliberately approximate — the brand guidelines call
 /// for showing a general area rather than an exact address.
 class JobLocation {
@@ -55,6 +59,7 @@ class Job {
     required this.location,
     required this.createdAt,
     this.title,
+    this.type,
     this.radiusMetres = 1000,
     this.scheduledTime,
     this.voiceNotePath,
@@ -71,6 +76,10 @@ class Job {
 
   /// Optional — a job can be described by voice or photo instead.
   final String? title;
+
+  /// The kind of work, when the poster chose one. Optional: an untyped job is
+  /// normal, and the marker falls back to showing what the job carries.
+  final JobType? type;
 
   /// The approximate work area, shown as a translucent circle on the map.
   final double radiusMetres;
@@ -95,6 +104,8 @@ class Job {
   /// Whether the job carries anything a person can actually understand it by.
   /// Used to keep posting flexible without allowing entirely empty jobs.
   bool get hasContent =>
+      // A chosen type is content in its own right: it says what the work is.
+      type != null ||
       (title != null && title!.trim().isNotEmpty) ||
       (shortDescription != null && shortDescription!.trim().isNotEmpty) ||
       voiceNotePath != null ||
@@ -114,6 +125,11 @@ class Job {
       return d.length <= 40 ? d : '${d.substring(0, 39)}…';
     }
 
+    // A chosen type beats "Voice note job" as a heading — it says what the
+    // work is rather than how it was described.
+    final chosen = type;
+    if (chosen != null && chosen != JobType.other) return chosen.label;
+
     if (hasVoiceNote) return 'Voice note job';
     if (hasPhotos) return 'Photo job';
     return 'Untitled job';
@@ -131,6 +147,19 @@ class Job {
     return (d == null || d.isEmpty) ? null : d;
   }
 
+  /// The glyph that represents this job.
+  ///
+  /// The chosen type when there is one, otherwise what the job carries — a
+  /// microphone for a voice note, a camera for photos. Defined here so the
+  /// map, the list and the details sheet cannot disagree about it.
+  IconData get icon {
+    final chosen = type;
+    if (chosen != null) return chosen.icon;
+    if (hasVoiceNote) return Icons.mic;
+    if (hasPhotos) return Icons.photo_camera;
+    return Icons.work;
+  }
+
   /// True when the job is scheduled for today.
   bool isToday(DateTime now) {
     final t = scheduledTime;
@@ -141,6 +170,8 @@ class Job {
   Job copyWith({
     String? title,
     bool clearTitle = false,
+    JobType? type,
+    bool clearType = false,
     JobLocation? location,
     double? radiusMetres,
     DateTime? scheduledTime,
@@ -157,6 +188,7 @@ class Job {
       location: location ?? this.location,
       createdAt: createdAt,
       title: clearTitle ? null : (title ?? this.title),
+      type: clearType ? null : (type ?? this.type),
       radiusMetres: radiusMetres ?? this.radiusMetres,
       scheduledTime: clearScheduledTime
           ? null
@@ -183,6 +215,7 @@ class Job {
       location: JobLocation.fromJson(json['location'] as Map<String, dynamic>),
       createdAt: DateTime.parse(json['createdAt'] as String),
       title: json['title'] as String?,
+      type: JobType.fromId(json['type'] as String?),
       radiusMetres: (json['radiusMetres'] as num?)?.toDouble() ?? 1000,
       scheduledTime: json['scheduledTime'] == null
           ? null
@@ -205,6 +238,7 @@ class Job {
     'location': location.toJson(),
     'createdAt': createdAt.toIso8601String(),
     'title': title,
+    'type': type?.id,
     'radiusMetres': radiusMetres,
     'scheduledTime': scheduledTime?.toIso8601String(),
     'voiceNotePath': voiceNotePath,

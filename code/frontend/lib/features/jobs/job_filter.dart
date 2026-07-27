@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 
 import '../../models/job.dart';
+import '../../models/job_type.dart';
 
 /// When the work is needed.
 enum TimeFilter {
@@ -40,6 +41,7 @@ class JobFilter {
     this.distance = DistanceFilter.any,
     this.withVoiceNote = false,
     this.withPhotos = false,
+    this.types = const <JobType>{},
   });
 
   final String query;
@@ -48,12 +50,16 @@ class JobFilter {
   final bool withVoiceNote;
   final bool withPhotos;
 
+  /// Kinds of work to keep. Empty means every kind.
+  final Set<JobType> types;
+
   bool get isActive =>
       query.trim().isNotEmpty ||
       time != TimeFilter.any ||
       distance != DistanceFilter.any ||
       withVoiceNote ||
-      withPhotos;
+      withPhotos ||
+      types.isNotEmpty;
 
   /// How many filters are on, for the badge on the filter control.
   int get activeCount => [
@@ -62,6 +68,7 @@ class JobFilter {
     distance != DistanceFilter.any,
     withVoiceNote,
     withPhotos,
+    types.isNotEmpty,
   ].where((on) => on).length;
 
   JobFilter copyWith({
@@ -70,6 +77,7 @@ class JobFilter {
     DistanceFilter? distance,
     bool? withVoiceNote,
     bool? withPhotos,
+    Set<JobType>? types,
   }) {
     return JobFilter(
       query: query ?? this.query,
@@ -77,6 +85,7 @@ class JobFilter {
       distance: distance ?? this.distance,
       withVoiceNote: withVoiceNote ?? this.withVoiceNote,
       withPhotos: withPhotos ?? this.withPhotos,
+      types: types ?? this.types,
     );
   }
 
@@ -93,7 +102,19 @@ class JobFilter {
     if (!_matchesDistance(job, from)) return false;
     if (withVoiceNote && !job.hasVoiceNote) return false;
     if (withPhotos && !job.hasPhotos) return false;
+    if (!_matchesType(job)) return false;
     return true;
+  }
+
+  bool _matchesType(Job job) {
+    if (types.isEmpty) return true;
+
+    // An untyped job is hidden here, unlike the time filter: asking for
+    // "plumbing" is asking for a kind, and a job that never said which kind
+    // it is cannot answer. The chips make the narrowing visible, and clearing
+    // them brings it straight back.
+    final type = job.type;
+    return type != null && types.contains(type);
   }
 
   bool _matchesQuery(Job job) {
@@ -106,6 +127,8 @@ class JobFilter {
       job.title,
       job.shortDescription,
       job.displayTitle,
+      // So "plumbing" finds a plumbing job that never used the word.
+      job.type?.label,
     ].whereType<String>().join(' ').toLowerCase();
 
     // Every word must appear somewhere, so "plumber today" narrows rather

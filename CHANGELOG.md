@@ -12,6 +12,53 @@ that heading to the version and date, and open a fresh `[Unreleased]`.
 
 ## [Unreleased]
 
+### Sprint 7 — Job types and Pakistan-wide seed data
+
+129 tests pass, the analyzer is clean.
+
+#### Added
+
+- **Job type, chosen by the poster, driving the marker icon.** Sixteen kinds of
+  work, each with its own glyph, so a plumbing pin and a driving pin read
+  differently at a glance where a microphone on both did not.
+- Type filter chips in the filter sheet, and type labels are searchable — so
+  "plumbing" finds a plumbing job that never used the word.
+- `documents/product/roadmap.md`, covering what the POC delivered, the next
+  four sprints, what to validate before building a backend, and what is
+  deliberately deferred and why.
+- `test/support/seed_facts.dart`, which reads counts from the seed file so
+  tests assert behaviour rather than how many examples happen to ship.
+
+#### Changed
+
+- **Seed data moved to Islamabad, Rawalpindi and Kashmir** — 15 jobs across
+  the twin cities, Muzaffarabad and Mirpur, with posters' areas to match. The
+  map's fallback centre moved from Lahore to between Islamabad and Rawalpindi.
+- Job markers are now 48px rather than 44px. Section 29 names 48 as the
+  *preferred* target and Android's guideline requires it; a pin is also harder
+  to hit than a rectangle, since its lower half tapers to a point. Caught by
+  the accessibility audit added in Sprint 6.
+
+#### Notes on the type being optional
+
+The brand guidelines are explicit that users should never have to choose a
+category — "Smart Categories" says they are generated, and design principle 2
+lists categories under what not to require. So the type is offered, never
+demanded: there is no "please select", tapping the chosen tile again clears
+it, and a job with no type falls back to showing what it carries. Some seeded
+jobs stay untyped on purpose, and a test enforces that so the fallback keeps
+being exercised.
+
+One filter behaves differently from the rest and the sheet says so: filtering
+by kind *does* hide untyped jobs, because asking for "plumbing" is a question
+a job that never said its kind cannot answer.
+
+#### Fixed
+
+- `Job.toJson` never wrote the type, so seeding silently dropped every type on
+  the way into local storage. `hasContent` did not count a type either, so a
+  job described only by its kind counted as empty.
+
 ### Sprint 6 — Polish
 
 Definition of done: feels like a production mobile application. Met — 110 tests

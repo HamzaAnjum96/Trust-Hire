@@ -205,6 +205,8 @@ class _JobRow extends StatelessWidget {
                 spacing: BrandSizing.spaceMd,
                 runSpacing: BrandSizing.spaceXs,
                 children: [
+                  if (job.type != null)
+                    _Meta(icon: job.type!.icon, label: job.type!.label),
                   _Meta(
                     icon: Icons.schedule,
                     label: Format.scheduled(job.scheduledTime, now),

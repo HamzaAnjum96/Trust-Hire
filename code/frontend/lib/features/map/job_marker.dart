@@ -24,20 +24,17 @@ class JobMarker extends StatelessWidget {
   final bool isSelected;
   final VoidCallback onTap;
 
-  static const double size = 44;
-  static const double selectedSize = 54;
+  // 48, not the 44 minimum: section 29 names 48 as the preferred target and
+  // Android's own guideline requires it. A pin is also harder to hit than a
+  // rectangle, since its lower half tapers to a point.
+  static const double size = BrandSizing.touchTargetPreferred;
+  static const double selectedSize = 58;
 
   @override
   Widget build(BuildContext context) {
     final fill = isSelected
         ? BrandColours.markerSelected
         : (job.isLocal ? BrandColours.markerLocal : BrandColours.markerDefault);
-
-    final icon = switch (job) {
-      final j when j.hasVoiceNote => Icons.mic,
-      final j when j.hasPhotos => Icons.photo_camera,
-      _ => Icons.work,
-    };
 
     return Semantics(
       button: true,
@@ -73,7 +70,7 @@ class JobMarker extends StatelessWidget {
                 // Sit the glyph in the round head of the pin, not the point.
                 padding: EdgeInsets.only(bottom: isSelected ? 14 : 11),
                 child: Icon(
-                  icon,
+                  job.icon,
                   size: isSelected ? 20 : 17,
                   color: Colors.white,
                 ),

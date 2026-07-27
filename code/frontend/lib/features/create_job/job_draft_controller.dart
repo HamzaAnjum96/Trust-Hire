@@ -7,6 +7,7 @@ import 'package:flutter/foundation.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../models/job.dart';
+import '../../models/job_type.dart';
 import '../../services/capture_service.dart';
 import '../../services/media_store.dart';
 
@@ -49,6 +50,7 @@ class JobDraftController extends ChangeNotifier {
        _location = editing?.location ?? initialLocation,
        _radiusMetres = editing?.radiusMetres ?? 1000,
        _title = editing?.title ?? '',
+       _type = editing?.type,
        _description = editing?.shortDescription ?? '',
        _scheduledTime = editing?.scheduledTime,
        _voiceReference = editing?.voiceNotePath,
@@ -66,6 +68,7 @@ class JobDraftController extends ChangeNotifier {
   JobLocation _location;
   double _radiusMetres;
   String _title;
+  JobType? _type;
   String _description;
   DateTime? _scheduledTime;
 
@@ -85,6 +88,7 @@ class JobDraftController extends ChangeNotifier {
   JobLocation get location => _location;
   double get radiusMetres => _radiusMetres;
   String get title => _title;
+  JobType? get type => _type;
   String get description => _description;
   DateTime? get scheduledTime => _scheduledTime;
   List<DraftPhoto> get photos => List.unmodifiable(_photos);
@@ -106,6 +110,7 @@ class JobDraftController extends ChangeNotifier {
 
   /// True once the draft says something — anything.
   bool get hasContent =>
+      _type != null ||
       _title.trim().isNotEmpty ||
       _description.trim().isNotEmpty ||
       hasVoiceNote ||
@@ -125,6 +130,14 @@ class JobDraftController extends ChangeNotifier {
   void setRadius(double metres) {
     if (_radiusMetres == metres) return;
     _radiusMetres = metres;
+    notifyListeners();
+  }
+
+  /// Sets the kind of work, or clears it. Never required — an untyped job is
+  /// normal, and tapping the selected type again unsets it.
+  void setType(JobType? value) {
+    if (_type == value) return;
+    _type = value;
     notifyListeners();
   }
 
@@ -252,6 +265,7 @@ class JobDraftController extends ChangeNotifier {
         location: _location,
         createdAt: _editing?.createdAt ?? DateTime.now(),
         title: trimmedTitle.isEmpty ? null : trimmedTitle,
+        type: _type,
         radiusMetres: _radiusMetres,
         scheduledTime: _scheduledTime,
         voiceNotePath: voiceReference,
