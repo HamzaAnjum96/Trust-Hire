@@ -1,6 +1,7 @@
 import '../models/app_user.dart';
 import '../models/job.dart';
 import 'local_store.dart';
+import 'media_store.dart';
 import 'seed_loader.dart';
 
 /// Reads and writes jobs against local storage.
@@ -9,9 +10,14 @@ import 'seed_loader.dart';
 /// read and write goes to the local copy only. There is no network call
 /// anywhere in this class — the POC works fully offline by design.
 class JobRepository {
-  JobRepository(this._store, [this._seedLoader = const SeedLoader()]);
+  JobRepository(
+    this._store,
+    this._mediaStore, [
+    this._seedLoader = const SeedLoader(),
+  ]);
 
   final LocalStore _store;
+  final MediaStore _mediaStore;
   final SeedLoader _seedLoader;
 
   /// Copies the seed data into local storage if this is a first run.
@@ -24,6 +30,10 @@ class JobRepository {
 
   /// Discards local changes and restores the bundled seed data.
   Future<void> resetToSeed() async {
+    // Photos and recordings made on this device go too, or they would linger
+    // in storage with no job referencing them.
+    await _mediaStore.clear();
+
     final jobs = await _seedLoader.loadJobs();
     final users = await _seedLoader.loadUsers();
 
@@ -74,6 +84,17 @@ class JobRepository {
     final jobs = await fetchJobs();
     jobs.removeWhere((j) => j.id == id);
     await _persist(jobs);
+    await _pruneMedia(jobs);
+  }
+
+  /// Drops blobs no job references any more.
+  Future<void> _pruneMedia(List<Job> jobs) async {
+    final inUse = <String>{};
+    for (final job in jobs) {
+      inUse.addAll(job.photoPaths);
+      if (job.voiceNotePath != null) inUse.add(job.voiceNotePath!);
+    }
+    await _mediaStore.pruneExcept(inUse);
   }
 
   Future<void> _persist(List<Job> jobs) async {

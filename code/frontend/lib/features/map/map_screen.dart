@@ -7,6 +7,8 @@ import '../../app/job_controller.dart';
 import '../../core/formatters.dart';
 import '../../core/tokens.dart';
 import '../../models/job.dart';
+import '../../services/media_store.dart';
+import '../jobs/job_details_sheet.dart';
 import '../../widgets/state_views.dart';
 import 'job_map.dart';
 import 'location_controller.dart';
@@ -51,6 +53,15 @@ class _MapScreenState extends State<MapScreen> {
     setState(() => _selectedJobId = null);
   }
 
+  Future<void> _openDetails(Job job, JobLocation? viewerLocation) {
+    return JobDetailsSheet.open(
+      context,
+      jobId: job.id,
+      mediaStore: context.read<MediaStore>(),
+      viewerLocation: viewerLocation,
+    );
+  }
+
   Future<void> _goToMyLocation(LocationController location) async {
     await location.request();
     if (!mounted) return;
@@ -88,6 +99,7 @@ class _MapScreenState extends State<MapScreen> {
             onMapTapped: _clearSelection,
             onMyLocationPressed: () => _goToMyLocation(location),
             onTilesUnavailable: _onTilesUnavailable,
+            onOpenJob: (job) => _openDetails(job, location.position),
           ),
       },
     );
@@ -105,6 +117,7 @@ class _MapBody extends StatelessWidget {
     required this.onMapTapped,
     required this.onMyLocationPressed,
     required this.onTilesUnavailable,
+    required this.onOpenJob,
   });
 
   final List<Job> jobs;
@@ -116,6 +129,7 @@ class _MapBody extends StatelessWidget {
   final VoidCallback onMapTapped;
   final VoidCallback onMyLocationPressed;
   final VoidCallback onTilesUnavailable;
+  final ValueChanged<Job> onOpenJob;
 
   Job? get _selected {
     if (selectedJobId == null) return null;
@@ -225,6 +239,7 @@ class _MapBody extends StatelessWidget {
                     child: JobPreviewCard(
                       job: selected,
                       viewerLocation: location.position,
+                      onOpen: () => onOpenJob(selected),
                     ),
                   ),
                 ),

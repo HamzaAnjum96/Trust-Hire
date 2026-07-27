@@ -12,6 +12,44 @@ that heading to the version and date, and open a fresh `[Unreleased]`.
 
 ## [Unreleased]
 
+### Sprint 2 — Job details
+
+Definition of done: every seeded job opens correctly. Met — 51 tests pass,
+including one that opens all 12 seeded jobs and asserts none throws.
+
+#### Added
+
+- Job details bottom sheet (section 25): draggable, map preserved behind it,
+  media first. Photos, then the voice note, then the written detail — the
+  order the product expects work to be described in.
+- Swipeable photo gallery with page indicators and a full-screen pinch-zoom
+  viewer. Captions are never required.
+- Voice note player (section 26): Warm Sand surface, burgundy play button, and
+  a copper waveform that fills as it plays. The waveform is derived
+  deterministically from the recording reference — decoding real audio is
+  beyond a POC — so it is stable per recording and different between them.
+- `MediaStore`, which resolves a media reference to either a bundled asset
+  (seed data) or bytes in local storage (captured on device). Bytes are held
+  as base64 rather than files because a file path recorded on web is a blob
+  URL that dies on reload, which would break the requirement that locally
+  created jobs persist.
+- Map preview of the job's approximate area, with copy saying so explicitly.
+- Deleting a job now prunes any photos and recordings nothing else references,
+  and restoring the seed clears captured media rather than orphaning it.
+- The sheet watches by job id, so an edit or delete elsewhere is reflected
+  live; if the job disappears it says so instead of showing a stale copy.
+
+#### Changed
+
+- **Map theming.** Each brightness now gets a purpose-built basemap — CARTO
+  Positron in light, Dark Matter in dark — instead of a colour filter over a
+  single OpenStreetMap raster. Darkening that raster produced muddy greens and
+  hurt label legibility, satisfying neither section 15's low-noise light map
+  nor section 30's warm dark mode. A low-opacity brand tint over the tiles
+  ties the surface to the palette without touching contrast, and the tile
+  style is now the only thing that changes between themes.
+- Attribution updated to credit both OpenStreetMap and CARTO, as required.
+
 ### Sprint 1 — Map screen
 
 Definition of done: user can browse seeded jobs. Met — 38 tests pass, the

@@ -5,6 +5,7 @@ import '../core/theme.dart';
 import '../features/map/location_controller.dart';
 import '../services/job_repository.dart';
 import '../services/local_store.dart';
+import '../services/media_store.dart';
 import 'app_shell.dart';
 import 'job_controller.dart';
 import 'settings_controller.dart';
@@ -22,11 +23,13 @@ class TrustHireApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        Provider<MediaStore>(create: (_) => MediaStore(store)),
         ChangeNotifierProvider(
           create: (_) => SettingsController(store)..load(),
         ),
         ChangeNotifierProvider(
-          create: (_) => JobController(JobRepository(store))..load(),
+          create: (_) => JobController(JobRepository(store, MediaStore(store)))
+            ..load(),
         ),
         ChangeNotifierProvider(
           // Location is requested on first launch so the map can open on the

@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trust_hire/models/job.dart';
 import 'package:trust_hire/services/job_repository.dart';
 import 'package:trust_hire/services/local_store.dart';
+import 'package:trust_hire/services/media_store.dart';
 
 /// The technical constraints in the sprint plan hinge on this class: seed on
 /// first run, then edit the local copy only, with no network anywhere.
@@ -21,7 +22,7 @@ void main() {
 
   Future<JobRepository> buildRepository() async {
     final store = await LocalStore.open();
-    return JobRepository(store);
+    return JobRepository(store, MediaStore(store));
   }
 
   test('seeds local storage on first run', () async {
@@ -37,14 +38,14 @@ void main() {
 
   test('does not reseed over local changes on a later run', () async {
     final store = await LocalStore.open();
-    final repository = JobRepository(store);
+    final repository = JobRepository(store, MediaStore(store));
 
     await repository.ensureSeeded();
     await repository.deleteJob('seed-001');
     expect(await repository.fetchJobs(), hasLength(11));
 
     // A fresh repository over the same store stands in for a relaunch.
-    await JobRepository(store).ensureSeeded();
+    await JobRepository(store, MediaStore(store)).ensureSeeded();
     expect(await repository.fetchJobs(), hasLength(11));
   });
 
@@ -96,7 +97,7 @@ void main() {
 
   test('reseeds when the store is emptied out from under it', () async {
     final store = await LocalStore.open();
-    final repository = JobRepository(store);
+    final repository = JobRepository(store, MediaStore(store));
     await repository.ensureSeeded();
 
     await store.clear();

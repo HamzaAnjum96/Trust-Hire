@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 
+import '../../core/map_theme.dart';
 import '../../core/tokens.dart';
 import '../../models/job.dart';
 import 'job_marker.dart';
@@ -69,7 +70,7 @@ class _JobMapState extends State<JobMap> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final isLight = theme.brightness == Brightness.light;
+    final mapTheme = MapTheme.of(context);
     final selected = _selectedJob;
 
     return Stack(
@@ -84,8 +85,7 @@ class _JobMapState extends State<JobMap> {
             initialZoom: widget.initialZoom,
             minZoom: 4,
             maxZoom: 18,
-            backgroundColor:
-                isLight ? BrandColours.warmSand : BrandColours.darkSurface,
+            backgroundColor: mapTheme.backgroundColour,
             onTap: (_, _) => widget.onMapTapped(),
             interactionOptions: const InteractionOptions(
               // Rotation adds nothing here and makes one-handed panning
@@ -98,14 +98,21 @@ class _JobMapState extends State<JobMap> {
           ),
           children: [
             TileLayer(
-              urlTemplate:
-                  'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+              urlTemplate: mapTheme.tileUrl,
               userAgentPackageName: 'com.trusthire.trust_hire',
               tileProvider: widget.tileProvider,
-              // Keep the map light and low-noise per section 15.
-              tileBuilder: isLight ? null : _darkenTile,
+              retinaMode: RetinaMode.isHighDensity(context),
               errorTileCallback: (_, _, _) => _onTileError(),
               evictErrorTileStrategy: EvictErrorTileStrategy.notVisible,
+            ),
+
+            // A whisper of brand colour over the basemap, under everything
+            // else, so markers and work areas stay untinted.
+            IgnorePointer(
+              child: ColoredBox(
+                color: mapTheme.tint.withValues(alpha: mapTheme.tintOpacity),
+                child: const SizedBox.expand(),
+              ),
             ),
 
             // The approximate work area of the selected job. Only the
@@ -182,7 +189,7 @@ class _JobMapState extends State<JobMap> {
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
               child: Text(
-                '© OpenStreetMap',
+                mapTheme.attribution,
                 style: theme.textTheme.labelSmall?.copyWith(fontSize: 10),
               ),
             ),
@@ -192,18 +199,4 @@ class _JobMapState extends State<JobMap> {
     );
   }
 
-  /// Dark mode keeps the map warm rather than inverted-cold: a mild darkening
-  /// with the saturation left alone reads better than a true dark tile style
-  /// we would otherwise have to host.
-  Widget _darkenTile(BuildContext context, Widget tile, TileImage image) {
-    return ColorFiltered(
-      colorFilter: const ColorFilter.matrix(<double>[
-        0.72, 0, 0, 0, 0, //
-        0, 0.70, 0, 0, 0, //
-        0, 0, 0.72, 0, 0, //
-        0, 0, 0, 1, 0, //
-      ]),
-      child: tile,
-    );
-  }
 }

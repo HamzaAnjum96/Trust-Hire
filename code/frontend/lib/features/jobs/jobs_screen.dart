@@ -5,7 +5,9 @@ import '../../app/job_controller.dart';
 import '../../core/formatters.dart';
 import '../../core/tokens.dart';
 import '../../models/job.dart';
+import '../../services/media_store.dart';
 import '../../widgets/state_views.dart';
+import 'job_details_sheet.dart';
 
 /// A plain list of every job in local storage.
 ///
@@ -21,20 +23,20 @@ class JobsScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: const Text('All jobs')),
       body: switch (controller.state) {
-        LoadState.idle || LoadState.loading =>
-          const LoadingView(message: 'Loading jobs…'),
+        LoadState.idle ||
+        LoadState.loading => const LoadingView(message: 'Loading jobs…'),
         LoadState.failed => ErrorView(
-            message:
-                controller.errorMessage ?? 'Could not load jobs. Try again.',
-            onRetry: controller.load,
-          ),
-        LoadState.ready => controller.jobs.isEmpty
-            ? const EmptyView(
-                icon: Icons.work_outline,
-                title: 'No jobs yet',
-                message: 'Post the first job to see it here.',
-              )
-            : _JobList(jobs: controller.jobs),
+          message: controller.errorMessage ?? 'Could not load jobs. Try again.',
+          onRetry: controller.load,
+        ),
+        LoadState.ready =>
+          controller.jobs.isEmpty
+              ? const EmptyView(
+                  icon: Icons.work_outline,
+                  title: 'No jobs yet',
+                  message: 'Post the first job to see it here.',
+                )
+              : _JobList(jobs: controller.jobs),
       },
     );
   }
@@ -76,71 +78,80 @@ class _JobRow extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(BrandSizing.spaceMd),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: Text(
-                    job.displayTitle,
-                    style: theme.textTheme.titleLarge,
+      clipBehavior: Clip.antiAlias,
+      child: InkWell(
+        onTap: () => JobDetailsSheet.open(
+          context,
+          jobId: job.id,
+          mediaStore: context.read<MediaStore>(),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(BrandSizing.spaceMd),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: Text(
+                      job.displayTitle,
+                      style: theme.textTheme.titleLarge,
+                    ),
                   ),
-                ),
-                if (job.isLocal)
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: BrandSizing.spaceSm,
-                      vertical: 2,
-                    ),
-                    decoration: BoxDecoration(
-                      color: BrandColours.copper,
-                      borderRadius: BrandRadius.smallAll,
-                    ),
-                    child: const Text(
-                      'On this device',
-                      style: TextStyle(
-                        fontSize: 12,
-                        height: 16 / 12,
-                        fontWeight: FontWeight.w600,
-                        color: BrandColours.white,
+                  if (job.isLocal)
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: BrandSizing.spaceSm,
+                        vertical: 2,
+                      ),
+                      decoration: BoxDecoration(
+                        color: BrandColours.copper,
+                        borderRadius: BrandRadius.smallAll,
+                      ),
+                      child: const Text(
+                        'On this device',
+                        style: TextStyle(
+                          fontSize: 12,
+                          height: 16 / 12,
+                          fontWeight: FontWeight.w600,
+                          color: BrandColours.white,
+                        ),
                       ),
                     ),
-                  ),
+                ],
+              ),
+              if (job.supportingDescription != null) ...[
+                const SizedBox(height: BrandSizing.spaceXs),
+                Text(
+                  job.supportingDescription!,
+                  style: theme.textTheme.bodyMedium,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
               ],
-            ),
-            if (job.supportingDescription != null) ...[
-              const SizedBox(height: BrandSizing.spaceXs),
-              Text(
-                job.supportingDescription!,
-                style: theme.textTheme.bodyMedium,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
+              const SizedBox(height: BrandSizing.spaceSm + 4),
+              Wrap(
+                spacing: BrandSizing.spaceMd,
+                runSpacing: BrandSizing.spaceXs,
+                children: [
+                  _Meta(
+                    icon: Icons.schedule,
+                    label: Format.scheduled(job.scheduledTime, now),
+                  ),
+                  if (job.hasVoiceNote)
+                    const _Meta(icon: Icons.mic, label: 'Voice note'),
+                  if (job.hasPhotos)
+                    _Meta(
+                      icon: Icons.photo_library_outlined,
+                      label:
+                          '${job.photoPaths.length} photo'
+                          '${job.photoPaths.length == 1 ? '' : 's'}',
+                    ),
+                ],
               ),
             ],
-            const SizedBox(height: BrandSizing.spaceSm + 4),
-            Wrap(
-              spacing: BrandSizing.spaceMd,
-              runSpacing: BrandSizing.spaceXs,
-              children: [
-                _Meta(
-                  icon: Icons.schedule,
-                  label: Format.scheduled(job.scheduledTime, now),
-                ),
-                if (job.hasVoiceNote)
-                  const _Meta(icon: Icons.mic, label: 'Voice note'),
-                if (job.hasPhotos)
-                  _Meta(
-                    icon: Icons.photo_library_outlined,
-                    label: '${job.photoPaths.length} photo'
-                        '${job.photoPaths.length == 1 ? '' : 's'}',
-                  ),
-              ],
-            ),
-          ],
+          ),
         ),
       ),
     );

@@ -81,5 +81,9 @@ class StoreKeys {
   static const seeded = 'trust_hire.seeded';
   static const themeMode = 'trust_hire.theme_mode';
 
-  static const all = <String>[jobs, users, seeded, themeMode];
+  /// Comma-separated ids of blobs held by [MediaStore]. The blobs themselves
+  /// live under `trust_hire.media.<id>` and are enumerated through this index.
+  static const mediaIndex = 'trust_hire.media_index';
+
+  static const all = <String>[jobs, users, seeded, themeMode, mediaIndex];
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:trust_hire/core/map_theme.dart';
 import 'package:trust_hire/core/theme.dart';
 import 'package:trust_hire/features/map/job_map.dart';
 import 'package:trust_hire/features/map/job_marker.dart';
@@ -103,11 +104,45 @@ void main() {
     expect(find.byType(UserLocationMarker), findsOneWidget);
   });
 
-  testWidgets('credits OpenStreetMap', (tester) async {
+  testWidgets('credits both tile sources', (tester) async {
     await tester.pumpWidget(harness());
     await tester.pumpAndSettle();
 
-    expect(find.text('© OpenStreetMap'), findsOneWidget);
+    expect(find.text('© OpenStreetMap contributors © CARTO'), findsOneWidget);
+  });
+
+  testWidgets('uses a purpose-built basemap per brightness', (tester) async {
+    // Section 15 wants a low-noise light map and section 30 a warm dark one.
+    // Darkening a single raster satisfies neither, so each brightness has its
+    // own tile style rather than a filter over a shared one.
+    expect(MapTheme.light.tileUrl, isNot(MapTheme.dark.tileUrl));
+    expect(MapTheme.light.tileUrl, contains('light_all'));
+    expect(MapTheme.dark.tileUrl, contains('dark_all'));
+
+    // The brand tint must stay subtle enough to leave labels readable.
+    expect(MapTheme.light.tintOpacity, lessThan(0.35));
+    expect(MapTheme.dark.tintOpacity, lessThan(0.35));
+  });
+
+  testWidgets('dark mode uses the dark basemap', (tester) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: BrandTheme.dark,
+        home: Scaffold(
+          body: JobMap(
+            jobs: jobs,
+            centre: const JobLocation(latitude: 31.5204, longitude: 74.3587),
+            onJobTapped: (_) {},
+            onMapTapped: () {},
+            tileProvider: OfflineTileProvider(),
+          ),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    final layer = tester.widget<TileLayer>(find.byType(TileLayer));
+    expect(layer.urlTemplate, MapTheme.dark.tileUrl);
   });
 
   testWidgets('the selected marker grows so colour is not the only cue',
