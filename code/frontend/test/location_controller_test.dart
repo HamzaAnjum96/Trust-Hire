@@ -66,34 +66,39 @@ void main() {
     // The seed data is around Islamabad and Rawalpindi, so the user still
     // lands on something rather than the middle of the ocean.
     expect(controller.mapCentre, twinCities);
-    expect(controller.explanation(strings), contains('You can still move the map'));
+    expect(
+      controller.explanation(strings),
+      contains('You can still move the map'),
+    );
   });
 
-  test('every unavailable status explains what the user can still do',
-      () async {
-    for (final status in <LocationStatus>[
-      LocationStatus.denied,
-      LocationStatus.deniedForever,
-      LocationStatus.serviceDisabled,
-      LocationStatus.failed,
-    ]) {
-      final controller = LocationController(
-        _FakeLocationService(LocationResult(status)),
-      );
-      await controller.request();
+  test(
+    'every unavailable status explains what the user can still do',
+    () async {
+      for (final status in <LocationStatus>[
+        LocationStatus.denied,
+        LocationStatus.deniedForever,
+        LocationStatus.serviceDisabled,
+        LocationStatus.failed,
+      ]) {
+        final controller = LocationController(
+          _FakeLocationService(LocationResult(status)),
+        );
+        await controller.request();
 
-      expect(
-        controller.explanation(strings),
-        isNotNull,
-        reason: '$status should be explained',
-      );
-      expect(
-        controller.explanation(strings),
-        contains('choose an area manually'),
-        reason: '$status should say what is still possible',
-      );
-    }
-  });
+        expect(
+          controller.explanation(strings),
+          isNotNull,
+          reason: '$status should be explained',
+        );
+        expect(
+          controller.explanation(strings),
+          contains('choose an area manually'),
+          reason: '$status should say what is still possible',
+        );
+      }
+    },
+  );
 
   test('an explanation stays dismissed', () async {
     final controller = LocationController(

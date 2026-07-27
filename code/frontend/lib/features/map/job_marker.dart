@@ -207,10 +207,13 @@ class ClusterMarker extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final strings = AppStrings.of(context);
 
     return Semantics(
       button: true,
-      label: '$count jobs here. Tap to zoom in.',
+      // A screen reader is the only way to know what a cluster holds without
+      // zooming, so this label is the whole affordance for anyone using one.
+      label: strings.clusterLabel(count),
       child: GestureDetector(
         onTap: onTap,
         behavior: HitTestBehavior.opaque,

@@ -12,6 +12,64 @@ that heading to the version and date, and open a fresh `[Unreleased]`.
 
 ## [Unreleased]
 
+### P1-1 — Roles, tags and visibility
+
+The first Phase 1 sprint. It replaces the POC's optional job type with the
+mechanism the marketplace rests on: a job reaches a worker only when a job tag
+overlaps a worker tag **and** the job is within reach.
+
+#### Added
+
+- `JobVisibility` (`lib/features/feed/`) — the Section 8 rule, as pure
+  functions over plain data so it can be checked without a widget, a database
+  or a network. `explain()` returns *why* a job did not reach someone, because
+  "why can't I see this job?" is otherwise unanswerable from the outside and a
+  worker losing income will reasonably ask.
+- `WorkerProfile` and `UserRole`. A worker starts on general work with no
+  selection screen; adding a trade only ever widens the feed, and the default
+  cannot be removed — a worker with no tags would have an empty feed forever.
+- A "My trades" screen, and a role switch in settings. Switching role leaves
+  the tag list alone: someone who hires a painter today and looks for work
+  tomorrow should not have to pick their trades again.
+- `TagTile`, shared by the hirer tagging a job and the worker picking trades —
+  the same decision from two sides, so it should not be two controls.
+- A trades prompt on the map and an "add a trade" empty state in the job list,
+  both naming the rule. The rule is not a filter the user can clear, so
+  offering "clear filters" there would be a dead end.
+
+#### Changed
+
+- `JobType` is now `JobTag`: 19 values, with legal, medical and beauty added.
+  A job carries **1 to 3, required** — the one thing the posting form insists
+  on, because a job with no tag would be posted into silence. The save bar
+  says which of the two rules is unmet rather than marking a field with an
+  asterisk.
+- The seed data carries tags, including a specialty job a general worker
+  cannot see and one that needs no travel. Without those the demo would never
+  exercise the rule it is meant to show.
+- The map frames its first load around the jobs the viewer can actually see.
+  The fixed opening camera worked only because the old seed surrounded it; a
+  worker now sees a subset, and an empty map on first launch reads as no work
+  available.
+
+#### Fixed
+
+- A dozen user-facing English strings had never been swapped for their
+  catalogue entries — the map's job count, its notices, the photo-gallery and
+  cluster labels, the microphone and area help, and three settings panels. The
+  app looked translated because the screens opened first were. The guard test
+  now catches both `'Posted ${...}'` and `'$count jobs'`; it previously caught
+  neither.
+- `JobController` and `JobDraftController` wrote English error text that then
+  won over the screens' localised fallbacks. Both now report *that* something
+  failed and let the screen supply the words.
+- A job whose heading fell back to its tag printed that tag twice — once as
+  the heading, once as "kind of work". `Job.supportingTags` excludes it, in
+  the same way `supportingDescription` already did for the description.
+- Three map notices could print on top of each other: two were positioned
+  absolutely at the same offset, next to a comment claiming they could not.
+
+
 ### Documentation — Phase 1 specification added
 
 #### Added

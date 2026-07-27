@@ -4,7 +4,7 @@ import 'package:flutter/services.dart' show rootBundle;
 
 import '../models/app_user.dart';
 import '../models/job.dart';
-import '../models/job_type.dart';
+import '../models/job_tag.dart';
 
 /// Loads the startup JSON bundled in `assets/seed/`.
 ///
@@ -53,7 +53,16 @@ class SeedLoader {
         Duration(minutes: (createdHoursAgo * 60).round()),
       ),
       title: json['title'] as String?,
-      type: JobType.fromId(json['type'] as String?),
+      // Seed files may give a single `type` or a `tags` list; both are read
+      // so the demo data did not have to be rewritten wholesale.
+      tags:
+          ((json['tags'] as List<dynamic>?) ??
+                  [if (json['type'] != null) json['type']])
+              .map((id) => JobTag.fromId(id as String?))
+              .whereType<JobTag>()
+              .toSet(),
+      geofenceMetres: (json['geofenceMetres'] as num?)?.toDouble(),
+      openToAllLocations: json['openToAllLocations'] as bool? ?? false,
       radiusMetres: (json['radiusMetres'] as num?)?.toDouble() ?? 1000,
       scheduledTime: scheduled,
       voiceNotePath: json['voiceNote'] as String?,

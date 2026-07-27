@@ -38,9 +38,7 @@ class _ContactPanelState extends State<ContactPanel> {
     if (await widget.launcher.call(widget.number)) return;
     if (!mounted) return;
 
-    messenger.showSnackBar(
-      SnackBar(content: Text(strings.couldNotOpenDialer)),
-    );
+    messenger.showSnackBar(SnackBar(content: Text(strings.couldNotOpenDialer)));
   }
 
   Future<void> _whatsApp(AppStrings strings) async {
@@ -61,9 +59,7 @@ class _ContactPanelState extends State<ContactPanel> {
     await Clipboard.setData(ClipboardData(text: widget.number));
     if (!mounted) return;
 
-    messenger.showSnackBar(
-      SnackBar(content: Text(strings.numberCopied)),
-    );
+    messenger.showSnackBar(SnackBar(content: Text(strings.numberCopied)));
   }
 
   @override

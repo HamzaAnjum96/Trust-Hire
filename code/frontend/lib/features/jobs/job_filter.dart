@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 
 import '../../l10n/app_localizations.dart';
 import '../../models/job.dart';
-import '../../models/job_type.dart';
+import '../../models/job_tag.dart';
 
 /// When the work is needed.
 enum TimeFilter {
@@ -51,7 +51,7 @@ class JobFilter {
     this.distance = DistanceFilter.any,
     this.withVoiceNote = false,
     this.withPhotos = false,
-    this.types = const <JobType>{},
+    this.tags = const <JobTag>{},
   });
 
   final String query;
@@ -61,7 +61,7 @@ class JobFilter {
   final bool withPhotos;
 
   /// Kinds of work to keep. Empty means every kind.
-  final Set<JobType> types;
+  final Set<JobTag> tags;
 
   bool get isActive =>
       query.trim().isNotEmpty ||
@@ -69,7 +69,7 @@ class JobFilter {
       distance != DistanceFilter.any ||
       withVoiceNote ||
       withPhotos ||
-      types.isNotEmpty;
+      tags.isNotEmpty;
 
   /// How many filters are on, for the badge on the filter control.
   int get activeCount => [
@@ -78,7 +78,7 @@ class JobFilter {
     distance != DistanceFilter.any,
     withVoiceNote,
     withPhotos,
-    types.isNotEmpty,
+    tags.isNotEmpty,
   ].where((on) => on).length;
 
   JobFilter copyWith({
@@ -87,7 +87,7 @@ class JobFilter {
     DistanceFilter? distance,
     bool? withVoiceNote,
     bool? withPhotos,
-    Set<JobType>? types,
+    Set<JobTag>? tags,
   }) {
     return JobFilter(
       query: query ?? this.query,
@@ -95,7 +95,7 @@ class JobFilter {
       distance: distance ?? this.distance,
       withVoiceNote: withVoiceNote ?? this.withVoiceNote,
       withPhotos: withPhotos ?? this.withPhotos,
-      types: types ?? this.types,
+      tags: tags ?? this.tags,
     );
   }
 
@@ -127,19 +127,18 @@ class JobFilter {
     if (!_matchesDistance(job, from)) return false;
     if (withVoiceNote && !job.hasVoiceNote) return false;
     if (withPhotos && !job.hasPhotos) return false;
-    if (!_matchesType(job)) return false;
+    if (!_matchesTag(job)) return false;
     return true;
   }
 
-  bool _matchesType(Job job) {
-    if (types.isEmpty) return true;
+  bool _matchesTag(Job job) {
+    if (tags.isEmpty) return true;
 
-    // An untyped job is hidden here, unlike the time filter: asking for
+    // A job with no tag is hidden here, unlike the time filter: asking for
     // "plumbing" is asking for a kind, and a job that never said which kind
-    // it is cannot answer. The chips make the narrowing visible, and clearing
-    // them brings it straight back.
-    final type = job.type;
-    return type != null && types.contains(type);
+    // it is cannot answer. Only jobs written before tags existed can be in
+    // that state now.
+    return job.tags.any(tags.contains);
   }
 
   bool _matchesQuery(Job job, AppStrings strings) {
@@ -153,7 +152,7 @@ class JobFilter {
       job.shortDescription,
       job.displayTitle(strings),
       // So "plumbing" finds a plumbing job that never used the word.
-      job.type?.label(strings),
+      ...job.tags.map((tag) => tag.label(strings)),
     ].whereType<String>().join(' ').toLowerCase();
 
     // Every word must appear somewhere, so "plumber today" narrows rather

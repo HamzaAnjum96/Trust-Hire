@@ -108,7 +108,12 @@ void main() {
 
     // The map rendered anyway, centred on the fallback.
     expect(find.text('Nearby work'), findsOneWidget);
-    expect(find.text('${await SeedFacts.jobCount()} jobs'), findsOneWidget);
+    // A count of the jobs this worker can see, not of every job in the file:
+    // since P1-1 a worker on the default tag only ever sees general work.
+    expect(
+      find.text('${await SeedFacts.generalJobCount()} jobs'),
+      findsOneWidget,
+    );
   });
 
   testWidgets('the map fills the screen', (tester) async {

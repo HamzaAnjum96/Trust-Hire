@@ -76,8 +76,7 @@ void main() {
     expect(jobs.map((j) => j.id), contains(tapped!.id));
   });
 
-  testWidgets('draws the work area only for the selected job',
-      (tester) async {
+  testWidgets('draws the work area only for the selected job', (tester) async {
     await tester.pumpWidget(harness());
     await tester.pumpAndSettle();
     expect(find.byType(CircleLayer), findsNothing);
@@ -91,8 +90,7 @@ void main() {
     expect(layer.circles.first.useRadiusInMeter, isTrue);
   });
 
-  testWidgets('shows the user location only when it is known',
-      (tester) async {
+  testWidgets('shows the user location only when it is known', (tester) async {
     await tester.pumpWidget(harness());
     await tester.pumpAndSettle();
     expect(find.byType(UserLocationMarker), findsNothing);
@@ -150,8 +148,9 @@ void main() {
     expect(layer.urlTemplate, MapTheme.dark.tileUrl);
   });
 
-  testWidgets('the selected marker grows so colour is not the only cue',
-      (tester) async {
+  testWidgets('the selected marker grows so colour is not the only cue', (
+    tester,
+  ) async {
     await tester.pumpWidget(harness(selectedJobId: 'a'));
     await tester.pumpAndSettle();
 

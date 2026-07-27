@@ -7,7 +7,7 @@ import 'package:trust_hire/features/map/job_map.dart';
 import 'package:trust_hire/features/map/job_marker.dart';
 import 'package:trust_hire/features/map/marker_cluster.dart';
 import 'package:trust_hire/models/job.dart';
-import 'package:trust_hire/models/job_type.dart';
+import 'package:trust_hire/models/job_tag.dart';
 
 import 'support/offline_tiles.dart';
 import 'package:trust_hire/l10n/app_localizations.dart';
@@ -18,11 +18,16 @@ import 'package:trust_hire/l10n/app_localizations.dart';
 void main() {
   final now = DateTime(2026, 7, 27, 10);
 
-  Job job(String id, double lat, double lng, {JobType? type}) => Job(
+  Job job(
+    String id,
+    double lat,
+    double lng, {
+    Set<JobTag> tags = const <JobTag>{},
+  }) => Job(
     id: id,
     location: JobLocation(latitude: lat, longitude: lng),
     createdAt: now,
-    type: type,
+    tags: tags,
     title: 'Job $id',
   );
 
@@ -39,10 +44,7 @@ void main() {
   group('grouping', () {
     test('leaves well-separated jobs alone', () {
       // Islamabad and Muzaffarabad, ~130 km apart, at street zoom.
-      final jobs = [
-        job('isb', 33.6844, 73.0479),
-        job('muz', 34.3700, 73.4711),
-      ];
+      final jobs = [job('isb', 33.6844, 73.0479), job('muz', 34.3700, 73.4711)];
 
       final clusters = const MarkerClusterer().cluster(
         jobs,
@@ -55,10 +57,7 @@ void main() {
 
     test('groups jobs that would overlap on screen', () {
       // Two jobs a few hundred metres apart, viewed from far out.
-      final jobs = [
-        job('a', 33.6844, 73.0479),
-        job('b', 33.6850, 73.0485),
-      ];
+      final jobs = [job('a', 33.6844, 73.0479), job('b', 33.6850, 73.0485)];
 
       final clusters = const MarkerClusterer().cluster(
         jobs,
@@ -71,15 +70,9 @@ void main() {
     });
 
     test('the same jobs separate again as you zoom in', () {
-      final jobs = [
-        job('a', 33.6844, 73.0479),
-        job('b', 33.6900, 73.0540),
-      ];
+      final jobs = [job('a', 33.6844, 73.0479), job('b', 33.6900, 73.0540)];
 
-      final farOut = const MarkerClusterer().cluster(
-        jobs,
-        camera: cameraAt(9),
-      );
+      final farOut = const MarkerClusterer().cluster(jobs, camera: cameraAt(9));
       final closeIn = const MarkerClusterer().cluster(
         jobs,
         camera: cameraAt(16),
@@ -113,10 +106,7 @@ void main() {
     });
 
     test('a cluster sits between the jobs it covers', () {
-      final jobs = [
-        job('a', 33.60, 73.00),
-        job('b', 33.62, 73.04),
-      ];
+      final jobs = [job('a', 33.60, 73.00), job('b', 33.62, 73.04)];
 
       final cluster = const MarkerClusterer()
           .cluster(jobs, camera: cameraAt(9))
@@ -130,8 +120,8 @@ void main() {
   group('uniform clusters keep their glyph', () {
     test('all the same kind counts as uniform', () {
       final jobs = [
-        job('a', 33.6844, 73.0479, type: JobType.plumbing),
-        job('b', 33.6850, 73.0485, type: JobType.plumbing),
+        job('a', 33.6844, 73.0479, tags: const {JobTag.plumbing}),
+        job('b', 33.6850, 73.0485, tags: const {JobTag.plumbing}),
       ];
 
       final cluster = const MarkerClusterer()
@@ -143,8 +133,8 @@ void main() {
 
     test('mixed kinds are not uniform', () {
       final jobs = [
-        job('a', 33.6844, 73.0479, type: JobType.plumbing),
-        job('b', 33.6850, 73.0485, type: JobType.driving),
+        job('a', 33.6844, 73.0479, tags: const {JobTag.plumbing}),
+        job('b', 33.6850, 73.0485, tags: const {JobTag.driving}),
       ];
 
       final cluster = const MarkerClusterer()
@@ -154,11 +144,8 @@ void main() {
       expect(cluster.isUniform, isFalse);
     });
 
-    test('untyped jobs are never uniform', () {
-      final jobs = [
-        job('a', 33.6844, 73.0479),
-        job('b', 33.6850, 73.0485),
-      ];
+    test('untagged jobs are never uniform', () {
+      final jobs = [job('a', 33.6844, 73.0479), job('b', 33.6850, 73.0485)];
 
       final cluster = const MarkerClusterer()
           .cluster(jobs, camera: cameraAt(9))
@@ -180,9 +167,7 @@ void main() {
 
       for (final j in jobs) {
         expect(
-          bounds.contains(
-            LatLng(j.location.latitude, j.location.longitude),
-          ),
+          bounds.contains(LatLng(j.location.latitude, j.location.longitude)),
           isTrue,
           reason: '${j.id} should be inside the bounds',
         );
@@ -214,10 +199,7 @@ void main() {
           home: Scaffold(
             body: JobMap(
               jobs: jobs,
-              centre: const JobLocation(
-                latitude: 33.6844,
-                longitude: 73.0479,
-              ),
+              centre: const JobLocation(latitude: 33.6844, longitude: 73.0479),
               initialZoom: 9,
               onJobTapped: (_) {},
               onMapTapped: () {},
@@ -248,10 +230,7 @@ void main() {
           home: Scaffold(
             body: JobMap(
               jobs: jobs,
-              centre: const JobLocation(
-                latitude: 33.6844,
-                longitude: 73.0479,
-              ),
+              centre: const JobLocation(latitude: 33.6844, longitude: 73.0479),
               initialZoom: 9,
               onJobTapped: (_) {},
               onMapTapped: () {},
@@ -263,10 +242,7 @@ void main() {
       );
       await tester.pumpAndSettle();
 
-      await tester.tap(
-        find.byType(ClusterMarker).first,
-        warnIfMissed: false,
-      );
+      await tester.tap(find.byType(ClusterMarker).first, warnIfMissed: false);
       await tester.pumpAndSettle();
 
       expect(tapped, isNotNull);
@@ -275,10 +251,7 @@ void main() {
 
     testWidgets('shows individual pins once zoomed in', (tester) async {
       // Both on screen at this zoom, but far enough apart not to merge.
-      final jobs = [
-        job('a', 33.6844, 73.0479),
-        job('b', 33.6870, 73.0510),
-      ];
+      final jobs = [job('a', 33.6844, 73.0479), job('b', 33.6870, 73.0510)];
 
       await tester.pumpWidget(
         MaterialApp(
@@ -288,10 +261,7 @@ void main() {
           home: Scaffold(
             body: JobMap(
               jobs: jobs,
-              centre: const JobLocation(
-                latitude: 33.6844,
-                longitude: 73.0479,
-              ),
+              centre: const JobLocation(latitude: 33.6844, longitude: 73.0479),
               initialZoom: 14,
               onJobTapped: (_) {},
               onMapTapped: () {},

@@ -23,9 +23,9 @@ class JobCluster {
   /// one, which keeps the map informative when it is zoomed out.
   bool get isUniform {
     if (isSingle) return true;
-    final first = jobs.first.type;
+    final first = jobs.first.primaryTag;
     if (first == null) return false;
-    return jobs.every((job) => job.type == first);
+    return jobs.every((job) => job.primaryTag == first);
   }
 }
 

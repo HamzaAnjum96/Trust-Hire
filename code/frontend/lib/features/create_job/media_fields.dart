@@ -76,8 +76,7 @@ class _VoiceRecorderFieldState extends State<VoiceRecorderField> {
             const SizedBox(width: BrandSizing.spaceSm + 4),
             Expanded(
               child: Text(
-                'Microphone access is off. You can still add a photo or type '
-                'a short message.',
+                strings.microphoneOff,
                 style: theme.textTheme.bodyMedium,
               ),
             ),

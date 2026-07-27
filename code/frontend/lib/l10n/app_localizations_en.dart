@@ -296,10 +296,6 @@ class AppStringsEn extends AppStrings {
   String get removePhoto => 'Remove photo';
 
   @override
-  String get kindOfWorkOptional =>
-      'Optional. Choosing one makes your job easier to spot on the map.';
-
-  @override
   String get fieldTitle => 'Title';
 
   @override
@@ -412,54 +408,6 @@ class AppStringsEn extends AppStrings {
 
   @override
   String get seedRestored => 'Seed data restored.';
-
-  @override
-  String get typePlumbing => 'Plumbing';
-
-  @override
-  String get typeElectrical => 'Electrical';
-
-  @override
-  String get typePainting => 'Painting';
-
-  @override
-  String get typeCarpentry => 'Carpentry';
-
-  @override
-  String get typeMasonry => 'Masonry';
-
-  @override
-  String get typeConstruction => 'Construction';
-
-  @override
-  String get typeApplianceRepair => 'Appliance repair';
-
-  @override
-  String get typeCleaning => 'Cleaning';
-
-  @override
-  String get typeMoving => 'Moving';
-
-  @override
-  String get typeDriving => 'Driving';
-
-  @override
-  String get typeGardening => 'Gardening';
-
-  @override
-  String get typeTailoring => 'Tailoring';
-
-  @override
-  String get typeCooking => 'Cooking';
-
-  @override
-  String get typeTutoring => 'Tutoring';
-
-  @override
-  String get typeSecurity => 'Security';
-
-  @override
-  String get typeOther => 'Something else';
 
   @override
   String get voiceNoteJob => 'Voice note job';
@@ -719,4 +667,121 @@ class AppStringsEn extends AppStrings {
 
   @override
   String get introReset => 'The intro will show next time you open the app.';
+
+  @override
+  String get tagPlumbing => 'Plumbing';
+
+  @override
+  String get tagElectrical => 'Electrical';
+
+  @override
+  String get tagPainting => 'Painting';
+
+  @override
+  String get tagCarpentry => 'Carpentry';
+
+  @override
+  String get tagMasonry => 'Masonry';
+
+  @override
+  String get tagConstruction => 'Construction';
+
+  @override
+  String get tagApplianceRepair => 'Appliance repair';
+
+  @override
+  String get tagCleaning => 'Cleaning';
+
+  @override
+  String get tagMoving => 'Moving';
+
+  @override
+  String get tagDriving => 'Driving';
+
+  @override
+  String get tagGardening => 'Gardening';
+
+  @override
+  String get tagTailoring => 'Tailoring';
+
+  @override
+  String get tagCooking => 'Cooking';
+
+  @override
+  String get tagTutoring => 'Tutoring';
+
+  @override
+  String get tagSecurity => 'Security';
+
+  @override
+  String get tagLegal => 'Legal advice';
+
+  @override
+  String get tagMedical => 'Medical';
+
+  @override
+  String get tagBeauty => 'Beauty';
+
+  @override
+  String get tagMisc => 'General work';
+
+  @override
+  String get fieldTags => 'Kind of work';
+
+  @override
+  String get tagsHelp => 'Choose 1 to 3. This decides who sees your job.';
+
+  @override
+  String get tagsRequired => 'Choose at least one kind of work.';
+
+  @override
+  String get tagsAtMost => 'You can choose up to 3.';
+
+  @override
+  String get roleWorker => 'Looking for work';
+
+  @override
+  String get roleHirer => 'Hiring someone';
+
+  @override
+  String get myTrades => 'My trades';
+
+  @override
+  String get myTradesHelp =>
+      'You see general work by default. Add your own trade to see those jobs too.';
+
+  @override
+  String get whatBringsYouHere => 'What brings you here';
+
+  @override
+  String get roleWorkerHelp => 'You see jobs near you that match your trades.';
+
+  @override
+  String get roleHirerHelp => 'You post jobs and choose who does them.';
+
+  @override
+  String get generalWorkAlwaysOn =>
+      'General work is always on, so you never miss an untagged job.';
+
+  @override
+  String tradeCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'General work and $count trades',
+      one: 'General work and 1 trade',
+      zero: 'General work only',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get noJobsForTrades => 'Nothing here for your trades';
+
+  @override
+  String get noJobsForTradesHelp =>
+      'Jobs only reach you when they match a trade you do. Add a trade to see more.';
+
+  @override
+  String get addATrade => 'Add a trade';
 }

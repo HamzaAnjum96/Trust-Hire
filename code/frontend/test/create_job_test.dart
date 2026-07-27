@@ -5,6 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trust_hire/features/create_job/job_draft_controller.dart';
 import 'package:trust_hire/models/job.dart';
+import 'package:trust_hire/models/job_tag.dart';
 import 'package:trust_hire/services/capture_service.dart';
 import 'package:trust_hire/services/local_store.dart';
 import 'package:trust_hire/services/media_store.dart';
@@ -87,15 +88,30 @@ void main() {
       final (draft, _, _) = await buildDraft();
 
       expect(draft.hasContent, isFalse);
+      // Two things are wrong; the tag is named first because it is the one
+      // the form asks for first.
+      expect(draft.problem, DraftProblem.noTags);
+      expect(draft.canSave, isFalse);
+
+      expect(await draft.build(), isNull);
+      expect(draft.saveFailed, isFalse, reason: 'refused, not failed');
+    });
+
+    test('a tag alone is still not enough to post', () async {
+      // Tags say what kind of work it is; they do not say what the work is.
+      final (draft, _, _) = await buildDraft();
+      draft.toggleTag(JobTag.plumbing);
+
       expect(draft.problem, DraftProblem.nothingToShow);
       expect(draft.canSave, isFalse);
 
       expect(await draft.build(), isNull);
-      expect(draft.errorMessage, contains('voice note, photo, or short'));
+      expect(draft.saveFailed, isFalse, reason: 'refused, not failed');
     });
 
-    test('a title alone is enough', () async {
+    test('a title alone is enough, once tagged', () async {
       final (draft, _, _) = await buildDraft();
+      draft.toggleTag(JobTag.carpentry);
       draft.setTitle('Fix the gate');
 
       expect(draft.canSave, isTrue);
@@ -103,9 +119,10 @@ void main() {
       expect(job?.title, 'Fix the gate');
     });
 
-    test('a photo alone is enough', () async {
+    test('a photo alone is enough, once tagged', () async {
       final capture = _FakeCapture(photo: Uint8List.fromList([1, 2, 3]));
       final (draft, media, _) = await buildDraft(capture: capture);
+      draft.toggleTag(JobTag.painting);
 
       await draft.takePhoto();
       expect(draft.canSave, isTrue);
@@ -115,9 +132,10 @@ void main() {
       expect(media.read(job.photoPaths.first), capture.photo);
     });
 
-    test('a voice note alone is enough', () async {
+    test('a voice note alone is enough, once tagged', () async {
       final capture = _FakeCapture(recording: Uint8List.fromList([4, 5, 6]));
       final (draft, media, _) = await buildDraft(capture: capture);
+      draft.toggleTag(JobTag.plumbing);
 
       await draft.startRecording();
       expect(draft.isRecording, isTrue);
@@ -135,10 +153,80 @@ void main() {
 
     test('whitespace alone is not content', () async {
       final (draft, _, _) = await buildDraft();
+      draft.toggleTag(JobTag.cleaning);
       draft.setTitle('   ');
       draft.setDescription('  ');
 
       expect(draft.hasContent, isFalse);
+      expect(draft.canSave, isFalse);
+    });
+  });
+
+  group('tags', () {
+    test(
+      'a draft starts with none, so the choice is always deliberate',
+      () async {
+        final (draft, _, _) = await buildDraft();
+
+        expect(draft.tags, isEmpty);
+        expect(draft.problem, DraftProblem.noTags);
+      },
+    );
+
+    test('toggling adds then removes', () async {
+      final (draft, _, _) = await buildDraft();
+
+      draft.toggleTag(JobTag.plumbing);
+      expect(draft.tags, {JobTag.plumbing});
+
+      draft.toggleTag(JobTag.plumbing);
+      expect(draft.tags, isEmpty);
+    });
+
+    test(
+      'three is the limit, and the fourth is refused, not swapped',
+      () async {
+        // Silently evicting the first choice would leave the user unable to
+        // tell which three survived.
+        final (draft, _, _) = await buildDraft();
+
+        draft.toggleTag(JobTag.plumbing);
+        draft.toggleTag(JobTag.electrical);
+        draft.toggleTag(JobTag.carpentry);
+        expect(draft.canAddTag, isFalse);
+
+        draft.toggleTag(JobTag.driving);
+
+        expect(draft.tags, {
+          JobTag.plumbing,
+          JobTag.electrical,
+          JobTag.carpentry,
+        });
+        expect(draft.tags, hasLength(JobDraftController.maxTags));
+      },
+    );
+
+    test('a full draft can still drop one to make room', () async {
+      final (draft, _, _) = await buildDraft();
+
+      draft.toggleTag(JobTag.plumbing);
+      draft.toggleTag(JobTag.electrical);
+      draft.toggleTag(JobTag.carpentry);
+
+      draft.toggleTag(JobTag.carpentry);
+      draft.toggleTag(JobTag.driving);
+
+      expect(draft.tags, {JobTag.plumbing, JobTag.electrical, JobTag.driving});
+    });
+
+    test('the chosen tags reach the saved job', () async {
+      final (draft, _, _) = await buildDraft();
+      draft.toggleTag(JobTag.masonry);
+      draft.toggleTag(JobTag.construction);
+      draft.setTitle('Boundary wall');
+
+      final job = await draft.build();
+      expect(job!.tags, {JobTag.masonry, JobTag.construction});
     });
   });
 
@@ -152,6 +240,7 @@ void main() {
       expect(draft.isRecording, isFalse);
       expect(draft.microphoneUnavailable, isTrue);
       // The rest of the form still works.
+      draft.toggleTag(JobTag.plumbing);
       draft.setTitle('Fix the gate');
       expect(draft.canSave, isTrue);
     });
@@ -181,6 +270,7 @@ void main() {
   group('the job that comes out', () {
     test('is marked as living on this device', () async {
       final (draft, _, _) = await buildDraft();
+      draft.toggleTag(JobTag.misc);
       draft.setTitle('Fix the gate');
 
       final job = await draft.build();
@@ -189,6 +279,7 @@ void main() {
 
     test('keeps optional fields null rather than empty', () async {
       final (draft, _, _) = await buildDraft();
+      draft.toggleTag(JobTag.misc);
       draft.setTitle('Fix the gate');
       draft.setDescription('   ');
 
@@ -199,11 +290,10 @@ void main() {
 
     test('carries the chosen area and time', () async {
       final (draft, _, _) = await buildDraft();
+      draft.toggleTag(JobTag.misc);
       draft.setTitle('Fix the gate');
       draft.setRadius(2500);
-      draft.setLocation(
-        const JobLocation(latitude: 31.60, longitude: 74.40),
-      );
+      draft.setLocation(const JobLocation(latitude: 31.60, longitude: 74.40));
       final when = DateTime(2026, 8, 1, 9);
       draft.setScheduledTime(when);
 
@@ -215,8 +305,10 @@ void main() {
 
     test('gives every new job its own id', () async {
       final (first, _, _) = await buildDraft();
+      first.toggleTag(JobTag.misc);
       first.setTitle('One');
       final (second, _, _) = await buildDraft();
+      second.toggleTag(JobTag.misc);
       second.setTitle('Two');
 
       final a = await first.build();
@@ -227,11 +319,12 @@ void main() {
   });
 
   group('editing an existing job', () {
-    Job existing() => Job(
+    Job existing({Set<JobTag> tags = const {JobTag.plumbing}}) => Job(
       id: 'job-1',
       location: somewhere,
       createdAt: DateTime(2026, 7, 1),
       title: 'Original title',
+      tags: tags,
       radiusMetres: 800,
       shortDescription: 'Original message',
       photoPaths: const ['assets/images/jobs/plumbing-01.png'],
@@ -243,10 +336,31 @@ void main() {
       expect(draft.isEditing, isTrue);
       expect(draft.title, 'Original title');
       expect(draft.description, 'Original message');
+      expect(draft.tags, {JobTag.plumbing});
       expect(draft.radiusMetres, 800);
       expect(draft.photos, hasLength(1));
       expect(draft.photos.first.isNew, isFalse);
     });
+
+    test(
+      'a job from before tags asks for one before it can be saved',
+      () async {
+        // The job is already invisible to every worker. Asking for one tap on
+        // the way past is the fix, not an obstacle — and the save bar says so
+        // rather than leaving a dead button.
+        final (draft, _, _) = await buildDraft(
+          editing: existing(tags: const {}),
+        );
+
+        expect(draft.problem, DraftProblem.noTags);
+        expect(draft.canSave, isFalse);
+
+        draft.toggleTag(JobTag.plumbing);
+
+        expect(draft.canSave, isTrue);
+        expect((await draft.build())!.tags, {JobTag.plumbing});
+      },
+    );
 
     test('keeps the id and the original posting time', () async {
       final original = existing();

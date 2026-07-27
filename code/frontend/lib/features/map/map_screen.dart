@@ -4,6 +4,7 @@ import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
 
 import '../../app/job_controller.dart';
+import '../../app/profile_controller.dart';
 import '../../core/formatters.dart';
 import '../../core/motion.dart';
 import '../../core/tokens.dart';
@@ -12,6 +13,7 @@ import '../../services/media_store.dart';
 import '../jobs/filter_bar.dart';
 import '../jobs/job_details_sheet.dart';
 import '../jobs/job_filter_controller.dart';
+import '../profile/my_trades_screen.dart';
 import '../../widgets/state_views.dart';
 import 'job_map.dart';
 import 'location_controller.dart';
@@ -33,6 +35,9 @@ class _MapScreenState extends State<MapScreen> {
   final MapController _mapController = MapController();
   String? _selectedJobId;
   bool _tilesUnavailable = false;
+
+  /// Set once the camera has been framed around the jobs on first load.
+  bool _framed = false;
 
   @override
   void dispose() {
@@ -67,6 +72,11 @@ class _MapScreenState extends State<MapScreen> {
 
   /// Opens on all of the work rather than an arbitrary point, so a job in
   /// Kashmir is not stranded off-screen with nothing hinting it exists.
+  ///
+  /// The padding is deliberately lopsided: the header, the filter row and any
+  /// notices float *over* the map, so an evenly-fitted pin ends up behind
+  /// them. These clear the tallest realistic stack at the top and the "Post a
+  /// Job" button at the bottom.
   void _fitToJobs(List<Job> jobs) {
     final bounds = boundsOf(jobs);
     if (bounds == null) return;
@@ -74,10 +84,32 @@ class _MapScreenState extends State<MapScreen> {
     _mapController.fitCamera(
       CameraFit.bounds(
         bounds: bounds,
-        padding: const EdgeInsets.all(BrandSizing.spaceLg),
+        padding: const EdgeInsets.fromLTRB(
+          BrandSizing.spaceLg,
+          // Header (~64) plus the filter row (~48) plus room for one notice.
+          240,
+          BrandSizing.spaceLg,
+          // Clear of the "Post a Job" button.
+          140,
+        ),
         maxZoom: 14,
       ),
     );
+  }
+
+  /// Frames the first load around the jobs this user can actually see.
+  ///
+  /// The fixed opening camera used to work because the seed data surrounded
+  /// it. Since P1-1 a worker sees a subset — sometimes four jobs, none of them
+  /// in the middle — and an empty map on first launch reads as no work
+  /// available. Runs once, and never fights a user who has since panned.
+  void _frameOnFirstLoad(List<Job> jobs) {
+    if (_framed || jobs.isEmpty) return;
+    _framed = true;
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) _fitToJobs(jobs);
+    });
   }
 
   void _onTilesUnavailable() {
@@ -115,22 +147,37 @@ class _MapScreenState extends State<MapScreen> {
     final jobs = context.watch<JobController>();
     final location = context.watch<LocationController>();
     final filters = context.watch<JobFilterController>();
+    final profile = context.watch<ProfileController>();
+
+    // The visibility rule first, then the user's filters. See
+    // ProfileController.visibleTo for why a worker never sees everything.
+    final reachable = profile.visibleTo(jobs.jobs, from: location.position);
+
+    if (jobs.state == LoadState.ready) _frameOnFirstLoad(reachable);
 
     return Scaffold(
       body: switch (jobs.state) {
         LoadState.idle ||
         LoadState.loading => LoadingView(message: strings.loadingJobs),
         LoadState.failed => ErrorView(
-          message: jobs.errorMessage ?? strings.couldNotLoadJobsShort,
+          message: strings.couldNotLoadJobs,
           onRetry: jobs.load,
         ),
         LoadState.ready => _MapBody(
           jobs: filters.apply(
-            jobs.jobs,
+            reachable,
             strings: strings,
             from: location.position,
           ),
-          totalJobCount: jobs.jobs.length,
+          // The count the "showing x of y" badge compares against. Reachable
+          // rather than every job, so the badge measures the filters and not
+          // the tag rule underneath them.
+          totalJobCount: reachable.length,
+          // Only ever non-zero for a worker who has not added a trade — see
+          // the notice this drives.
+          hiddenByTags: profile.specialities.isEmpty
+              ? jobs.jobs.length - reachable.length
+              : 0,
           filters: filters,
           selectedJobId: _selectedJobId,
           location: location,
@@ -153,6 +200,7 @@ class _MapBody extends StatelessWidget {
   const _MapBody({
     required this.jobs,
     required this.totalJobCount,
+    required this.hiddenByTags,
     required this.filters,
     required this.selectedJobId,
     required this.location,
@@ -169,6 +217,10 @@ class _MapBody extends StatelessWidget {
 
   final List<Job> jobs;
   final int totalJobCount;
+
+  /// How many jobs the tag rule is holding back from a worker who has not
+  /// added a trade yet. Zero once they have, or for a hirer.
+  final int hiddenByTags;
   final JobFilterController filters;
   final String? selectedJobId;
   final LocationController location;
@@ -239,13 +291,17 @@ class _MapBody extends StatelessWidget {
           child: QuickFilterBar(controller: filters),
         ),
 
-        // Notices stack downward from below the header rather than each
-        // being positioned absolutely, so two at once cannot overlap.
+        // Every notice stacks downward from below the header. One column, not
+        // several absolutely-positioned children: two of these can be true at
+        // once — no location *and* no tiles, or no matches *and* no trades —
+        // and separate Positioned widgets at the same offset would print one
+        // on top of the other.
         Positioned(
           left: BrandSizing.spaceMd,
           right: BrandSizing.spaceMd,
           top: padding.top + 116,
           child: Column(
+            spacing: BrandSizing.spaceSm,
             children: [
               if (locationExplanation != null)
                 _MapNotice(
@@ -253,16 +309,29 @@ class _MapBody extends StatelessWidget {
                   message: locationExplanation,
                   onDismiss: location.dismissExplanation,
                 ),
-              if (tilesUnavailable) ...[
-                if (locationExplanation != null)
-                  const SizedBox(height: BrandSizing.spaceSm),
-                const _MapNotice(
+              if (tilesUnavailable)
+                _MapNotice(
                   icon: Icons.cloud_off,
-                  message:
-                      'Map images are not loading. Jobs are still shown '
-                      'in the right places.',
+                  message: strings.mapImagesNotLoading,
                 ),
-              ],
+              if (jobs.isEmpty && totalJobCount > 0)
+                _MapNotice(
+                  icon: Icons.search_off,
+                  message: strings.noJobsMatchHere,
+                  onDismiss: filters.clear,
+                ),
+
+              // Not a filter and not an error: the tag rule is holding jobs
+              // back, and the only thing that changes it is adding a trade.
+              // Shown just for a worker who has never added one, so it stops
+              // appearing as soon as it stops being news.
+              if (hiddenByTags > 0)
+                _MapNotice(
+                  icon: Icons.construction_outlined,
+                  message: strings.noJobsForTradesHelp,
+                  actionLabel: strings.addATrade,
+                  onAction: () => MyTradesScreen.open(context),
+                ),
             ],
           ),
         ),
@@ -288,20 +357,6 @@ class _MapBody extends StatelessWidget {
             ],
           ),
         ),
-
-        if (jobs.isEmpty && totalJobCount > 0)
-          Positioned(
-            left: BrandSizing.spaceMd,
-            right: BrandSizing.spaceMd,
-            top: padding.top + 116,
-            child: _MapNotice(
-              icon: Icons.search_off,
-              message:
-                  'No jobs match here. Try a wider area or a different '
-                  'time.',
-              onDismiss: filters.clear,
-            ),
-          ),
 
         // Section 28 — the preview slides up rather than appearing abruptly.
         AnimatedSwitcher(
@@ -372,8 +427,8 @@ class _MapHeader extends StatelessWidget {
             // Say what is being hidden, so a short list never looks like a
             // bug.
             jobCount == totalJobCount
-                ? '$jobCount job${jobCount == 1 ? '' : 's'}'
-                : '$jobCount of $totalJobCount',
+                ? strings.jobCount(jobCount)
+                : strings.jobCountFiltered(jobCount, totalJobCount),
             style: theme.textTheme.labelSmall,
           ),
         ],
@@ -383,11 +438,23 @@ class _MapHeader extends StatelessWidget {
 }
 
 class _MapNotice extends StatelessWidget {
-  const _MapNotice({required this.icon, required this.message, this.onDismiss});
+  const _MapNotice({
+    required this.icon,
+    required this.message,
+    this.onDismiss,
+    this.actionLabel,
+    this.onAction,
+  });
 
   final IconData icon;
   final String message;
   final VoidCallback? onDismiss;
+
+  /// An optional way out of whatever the notice describes. Dismissing is not
+  /// always the right offer: nothing changes for a worker who closes the
+  /// trades notice without adding one.
+  final String? actionLabel;
+  final VoidCallback? onAction;
 
   @override
   Widget build(BuildContext context) {
@@ -409,19 +476,29 @@ class _MapNotice extends StatelessWidget {
         ),
         boxShadow: BrandShadows.card,
       ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, size: 20, color: BrandColours.informationBlue),
-          const SizedBox(width: BrandSizing.spaceSm + 4),
-          Expanded(child: Text(message, style: theme.textTheme.bodyMedium)),
-          if (onDismiss != null)
-            IconButton(
-              onPressed: onDismiss,
-              icon: const Icon(Icons.close, size: 18),
-              tooltip: strings.dismiss,
-              visualDensity: VisualDensity.compact,
-            ),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Icon(icon, size: 20, color: BrandColours.informationBlue),
+              const SizedBox(width: BrandSizing.spaceSm + 4),
+              Expanded(child: Text(message, style: theme.textTheme.bodyMedium)),
+              if (onDismiss != null)
+                IconButton(
+                  onPressed: onDismiss,
+                  icon: const Icon(Icons.close, size: 18),
+                  tooltip: strings.dismiss,
+                  visualDensity: VisualDensity.compact,
+                ),
+            ],
+          ),
+          if (actionLabel != null && onAction != null) ...[
+            const SizedBox(height: BrandSizing.spaceSm),
+            OutlinedButton(onPressed: onAction, child: Text(actionLabel!)),
+          ],
         ],
       ),
     );

@@ -201,8 +201,9 @@ void main() {
       expect(find.text('Job mine'), findsOneWidget);
     });
 
-    testWidgets('mentions once when a saved job has disappeared',
-        (tester) async {
+    testWidgets('mentions once when a saved job has disappeared', (
+      tester,
+    ) async {
       final (jobs, media, saved) = await build();
       await saved.toggle('seed-001');
       await saved.toggle('gone-for-good');

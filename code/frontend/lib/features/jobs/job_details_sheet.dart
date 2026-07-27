@@ -133,7 +133,7 @@ class _Body extends StatelessWidget {
         ),
         const SizedBox(height: BrandSizing.spaceXs),
         Text(
-          'Posted ${Format.posted(strings, job.createdAt, now)}',
+          strings.postedAgo(Format.posted(strings, job.createdAt, now)),
           style: theme.textTheme.labelSmall,
         ),
 
@@ -157,11 +157,15 @@ class _Body extends StatelessWidget {
         ],
 
         const SizedBox(height: BrandSizing.spaceLg),
-        if (job.type != null)
+        // Every tag the heading has not already said. A job can carry up to
+        // three, and a worker deciding whether to bid wants all of them.
+        if (job.supportingTags.isNotEmpty)
           _DetailRow(
-            icon: job.type!.icon,
+            icon: job.supportingTags.first.icon,
             label: strings.detailKindOfWork,
-            value: job.type!.label(strings),
+            value: job.supportingTags
+                .map((tag) => tag.label(strings))
+                .join(' · '),
           ),
         _DetailRow(
           icon: Icons.schedule,

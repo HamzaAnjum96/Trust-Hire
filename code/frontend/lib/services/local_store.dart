@@ -88,6 +88,12 @@ class StoreKeys {
   /// Set once the first-run intro has been seen.
   static const introSeen = 'trust_hire.intro_seen';
 
+  /// Which side of the marketplace this device is on — worker or hirer.
+  static const role = 'trust_hire.role';
+
+  /// The worker's tag list and trust signals, as a JSON object.
+  static const workerProfile = 'trust_hire.worker_profile';
+
   /// Comma-separated ids of blobs held by [MediaStore]. The blobs themselves
   /// live under `trust_hire.media.<id>` and are enumerated through this index.
   static const mediaIndex = 'trust_hire.media_index';
@@ -100,6 +106,8 @@ class StoreKeys {
     language,
     savedJobs,
     introSeen,
+    role,
+    workerProfile,
     mediaIndex,
   ];
 }

@@ -76,8 +76,9 @@ void main() {
     final repository = await buildRepository();
     await repository.ensureSeeded();
 
-    final original = (await repository.fetchJobs())
-        .firstWhere((j) => j.id == 'seed-004');
+    final original = (await repository.fetchJobs()).firstWhere(
+      (j) => j.id == 'seed-004',
+    );
     await repository.saveJob(original.copyWith(title: 'AC still not cooling'));
 
     final jobs = await repository.fetchJobs();

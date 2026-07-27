@@ -81,10 +81,13 @@ class JobRow extends StatelessWidget {
                 spacing: BrandSizing.spaceMd,
                 runSpacing: BrandSizing.spaceXs,
                 children: [
-                  if (job.type != null)
+                  // One tag only, and never the one the heading already
+                  // said. A row is for scanning; the sheet lists all three
+                  // for the worker actually deciding whether to bid.
+                  if (job.supportingTags.isNotEmpty)
                     _Meta(
-                      icon: job.type!.icon,
-                      label: job.type!.label(strings),
+                      icon: job.supportingTags.first.icon,
+                      label: job.supportingTags.first.label(strings),
                     ),
                   _Meta(
                     icon: Icons.schedule,

@@ -57,7 +57,7 @@ class _MyJobsScreenState extends State<MyJobsScreen>
       body: switch (jobs.state) {
         LoadState.idle || LoadState.loading => const JobListSkeleton(),
         LoadState.failed => ErrorView(
-          message: jobs.errorMessage ?? strings.couldNotLoadJobsShort,
+          message: strings.couldNotLoadJobs,
           onRetry: jobs.load,
         ),
         LoadState.ready => TabBarView(

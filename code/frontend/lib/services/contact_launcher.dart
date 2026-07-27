@@ -44,9 +44,7 @@ class ContactLauncher {
     final target = whatsAppNumber(number);
     if (target == null) return false;
 
-    return _open(
-      Uri.https('wa.me', '/$target', {'text': message}),
-    );
+    return _open(Uri.https('wa.me', '/$target', {'text': message}));
   }
 
   Future<bool> _open(Uri uri) async {

@@ -38,9 +38,21 @@ void main() {
     );
   }
 
-  final today = job('today', title: 'Plumber', scheduled: DateTime(2026, 7, 27, 16));
-  final tomorrow = job('tomorrow', title: 'Painter', scheduled: DateTime(2026, 7, 28, 9));
-  final nextWeek = job('next-week', title: 'Mason', scheduled: DateTime(2026, 8, 10, 9));
+  final today = job(
+    'today',
+    title: 'Plumber',
+    scheduled: DateTime(2026, 7, 27, 16),
+  );
+  final tomorrow = job(
+    'tomorrow',
+    title: 'Painter',
+    scheduled: DateTime(2026, 7, 28, 9),
+  );
+  final nextWeek = job(
+    'next-week',
+    title: 'Mason',
+    scheduled: DateTime(2026, 8, 10, 9),
+  );
   final anyTime = job('any-time', title: 'Driver');
   final farAway = job(
     'far',
@@ -51,7 +63,15 @@ void main() {
   final withVoice = job('voice', voice: 'v.wav');
   final withPhoto = job('photo', photos: const ['p.png']);
 
-  final all = [today, tomorrow, nextWeek, anyTime, farAway, withVoice, withPhoto];
+  final all = [
+    today,
+    tomorrow,
+    nextWeek,
+    anyTime,
+    farAway,
+    withVoice,
+    withPhoto,
+  ];
 
   List<String> idsOf(List<Job> jobs) => jobs.map((j) => j.id).toList();
 
@@ -63,7 +83,9 @@ void main() {
 
     test('is case insensitive', () {
       const filter = JobFilter(query: 'PAINTER');
-      expect(idsOf(filter.apply(all, now: now, strings: strings)), ['tomorrow']);
+      expect(idsOf(filter.apply(all, now: now, strings: strings)), [
+        'tomorrow',
+      ]);
     });
 
     test('matches the description too', () {
@@ -79,7 +101,11 @@ void main() {
       ];
 
       expect(
-        idsOf(const JobFilter(query: 'plumber urgent').apply(jobs, now: now, strings: strings)),
+        idsOf(
+          const JobFilter(
+            query: 'plumber urgent',
+          ).apply(jobs, now: now, strings: strings),
+        ),
         ['a'],
       );
     });
@@ -91,7 +117,10 @@ void main() {
 
     test('an empty query matches everything', () {
       const filter = JobFilter(query: '   ');
-      expect(filter.apply(all, now: now, strings: strings), hasLength(all.length));
+      expect(
+        filter.apply(all, now: now, strings: strings),
+        hasLength(all.length),
+      );
     });
   });
 
@@ -109,7 +138,9 @@ void main() {
       // "Any time" is a normal state in this product — a job someone would do
       // today. Filtering it out would lose real work.
       for (final option in TimeFilter.values) {
-        final ids = idsOf(JobFilter(time: option).apply(all, now: now, strings: strings));
+        final ids = idsOf(
+          JobFilter(time: option).apply(all, now: now, strings: strings),
+        );
         expect(
           ids,
           contains('any-time'),
@@ -139,7 +170,9 @@ void main() {
   group('distance', () {
     test('near me keeps what is close', () {
       const filter = JobFilter(distance: DistanceFilter.nearMe);
-      final ids = idsOf(filter.apply(all, now: now, strings: strings, from: here));
+      final ids = idsOf(
+        filter.apply(all, now: now, strings: strings, from: here),
+      );
 
       expect(ids, contains('today'));
       expect(ids, isNot(contains('far')));
@@ -164,7 +197,10 @@ void main() {
       // Emptying the list because location was refused would punish the user
       // for a permission choice.
       const filter = JobFilter(distance: DistanceFilter.nearMe);
-      expect(filter.apply(all, now: now, strings: strings), hasLength(all.length));
+      expect(
+        filter.apply(all, now: now, strings: strings),
+        hasLength(all.length),
+      );
     });
   });
 
@@ -188,7 +224,9 @@ void main() {
         distance: DistanceFilter.nearMe,
       );
 
-      expect(idsOf(filter.apply(all, now: now, strings: strings, from: here)), ['today']);
+      expect(idsOf(filter.apply(all, now: now, strings: strings, from: here)), [
+        'today',
+      ]);
     });
 
     test('counts what is active', () {

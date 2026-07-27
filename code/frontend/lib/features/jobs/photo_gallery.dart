@@ -52,6 +52,7 @@ class _PhotoGalleryState extends State<PhotoGallery> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final strings = AppStrings.of(context);
 
     return Column(
       children: [
@@ -67,7 +68,7 @@ class _PhotoGalleryState extends State<PhotoGallery> {
                 onTap: () => _openViewer(index),
                 child: Semantics(
                   button: true,
-                  label: 'Photo ${index + 1} of ${widget.photos.length}',
+                  label: strings.photoOfCount(index + 1, widget.photos.length),
                   child: JobPhoto(
                     reference: widget.photos[index],
                     mediaStore: widget.mediaStore,

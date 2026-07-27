@@ -602,12 +602,6 @@ abstract class AppStrings {
   /// **'Remove photo'**
   String get removePhoto;
 
-  /// No description provided for @kindOfWorkOptional.
-  ///
-  /// In en, this message translates to:
-  /// **'Optional. Choosing one makes your job easier to spot on the map.'**
-  String get kindOfWorkOptional;
-
   /// No description provided for @fieldTitle.
   ///
   /// In en, this message translates to:
@@ -823,102 +817,6 @@ abstract class AppStrings {
   /// In en, this message translates to:
   /// **'Seed data restored.'**
   String get seedRestored;
-
-  /// No description provided for @typePlumbing.
-  ///
-  /// In en, this message translates to:
-  /// **'Plumbing'**
-  String get typePlumbing;
-
-  /// No description provided for @typeElectrical.
-  ///
-  /// In en, this message translates to:
-  /// **'Electrical'**
-  String get typeElectrical;
-
-  /// No description provided for @typePainting.
-  ///
-  /// In en, this message translates to:
-  /// **'Painting'**
-  String get typePainting;
-
-  /// No description provided for @typeCarpentry.
-  ///
-  /// In en, this message translates to:
-  /// **'Carpentry'**
-  String get typeCarpentry;
-
-  /// No description provided for @typeMasonry.
-  ///
-  /// In en, this message translates to:
-  /// **'Masonry'**
-  String get typeMasonry;
-
-  /// No description provided for @typeConstruction.
-  ///
-  /// In en, this message translates to:
-  /// **'Construction'**
-  String get typeConstruction;
-
-  /// No description provided for @typeApplianceRepair.
-  ///
-  /// In en, this message translates to:
-  /// **'Appliance repair'**
-  String get typeApplianceRepair;
-
-  /// No description provided for @typeCleaning.
-  ///
-  /// In en, this message translates to:
-  /// **'Cleaning'**
-  String get typeCleaning;
-
-  /// No description provided for @typeMoving.
-  ///
-  /// In en, this message translates to:
-  /// **'Moving'**
-  String get typeMoving;
-
-  /// No description provided for @typeDriving.
-  ///
-  /// In en, this message translates to:
-  /// **'Driving'**
-  String get typeDriving;
-
-  /// No description provided for @typeGardening.
-  ///
-  /// In en, this message translates to:
-  /// **'Gardening'**
-  String get typeGardening;
-
-  /// No description provided for @typeTailoring.
-  ///
-  /// In en, this message translates to:
-  /// **'Tailoring'**
-  String get typeTailoring;
-
-  /// No description provided for @typeCooking.
-  ///
-  /// In en, this message translates to:
-  /// **'Cooking'**
-  String get typeCooking;
-
-  /// No description provided for @typeTutoring.
-  ///
-  /// In en, this message translates to:
-  /// **'Tutoring'**
-  String get typeTutoring;
-
-  /// No description provided for @typeSecurity.
-  ///
-  /// In en, this message translates to:
-  /// **'Security'**
-  String get typeSecurity;
-
-  /// No description provided for @typeOther.
-  ///
-  /// In en, this message translates to:
-  /// **'Something else'**
-  String get typeOther;
 
   /// No description provided for @voiceNoteJob.
   ///
@@ -1303,6 +1201,216 @@ abstract class AppStrings {
   /// In en, this message translates to:
   /// **'The intro will show next time you open the app.'**
   String get introReset;
+
+  /// No description provided for @tagPlumbing.
+  ///
+  /// In en, this message translates to:
+  /// **'Plumbing'**
+  String get tagPlumbing;
+
+  /// No description provided for @tagElectrical.
+  ///
+  /// In en, this message translates to:
+  /// **'Electrical'**
+  String get tagElectrical;
+
+  /// No description provided for @tagPainting.
+  ///
+  /// In en, this message translates to:
+  /// **'Painting'**
+  String get tagPainting;
+
+  /// No description provided for @tagCarpentry.
+  ///
+  /// In en, this message translates to:
+  /// **'Carpentry'**
+  String get tagCarpentry;
+
+  /// No description provided for @tagMasonry.
+  ///
+  /// In en, this message translates to:
+  /// **'Masonry'**
+  String get tagMasonry;
+
+  /// No description provided for @tagConstruction.
+  ///
+  /// In en, this message translates to:
+  /// **'Construction'**
+  String get tagConstruction;
+
+  /// No description provided for @tagApplianceRepair.
+  ///
+  /// In en, this message translates to:
+  /// **'Appliance repair'**
+  String get tagApplianceRepair;
+
+  /// No description provided for @tagCleaning.
+  ///
+  /// In en, this message translates to:
+  /// **'Cleaning'**
+  String get tagCleaning;
+
+  /// No description provided for @tagMoving.
+  ///
+  /// In en, this message translates to:
+  /// **'Moving'**
+  String get tagMoving;
+
+  /// No description provided for @tagDriving.
+  ///
+  /// In en, this message translates to:
+  /// **'Driving'**
+  String get tagDriving;
+
+  /// No description provided for @tagGardening.
+  ///
+  /// In en, this message translates to:
+  /// **'Gardening'**
+  String get tagGardening;
+
+  /// No description provided for @tagTailoring.
+  ///
+  /// In en, this message translates to:
+  /// **'Tailoring'**
+  String get tagTailoring;
+
+  /// No description provided for @tagCooking.
+  ///
+  /// In en, this message translates to:
+  /// **'Cooking'**
+  String get tagCooking;
+
+  /// No description provided for @tagTutoring.
+  ///
+  /// In en, this message translates to:
+  /// **'Tutoring'**
+  String get tagTutoring;
+
+  /// No description provided for @tagSecurity.
+  ///
+  /// In en, this message translates to:
+  /// **'Security'**
+  String get tagSecurity;
+
+  /// No description provided for @tagLegal.
+  ///
+  /// In en, this message translates to:
+  /// **'Legal advice'**
+  String get tagLegal;
+
+  /// No description provided for @tagMedical.
+  ///
+  /// In en, this message translates to:
+  /// **'Medical'**
+  String get tagMedical;
+
+  /// No description provided for @tagBeauty.
+  ///
+  /// In en, this message translates to:
+  /// **'Beauty'**
+  String get tagBeauty;
+
+  /// No description provided for @tagMisc.
+  ///
+  /// In en, this message translates to:
+  /// **'General work'**
+  String get tagMisc;
+
+  /// No description provided for @fieldTags.
+  ///
+  /// In en, this message translates to:
+  /// **'Kind of work'**
+  String get fieldTags;
+
+  /// No description provided for @tagsHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose 1 to 3. This decides who sees your job.'**
+  String get tagsHelp;
+
+  /// No description provided for @tagsRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose at least one kind of work.'**
+  String get tagsRequired;
+
+  /// No description provided for @tagsAtMost.
+  ///
+  /// In en, this message translates to:
+  /// **'You can choose up to 3.'**
+  String get tagsAtMost;
+
+  /// No description provided for @roleWorker.
+  ///
+  /// In en, this message translates to:
+  /// **'Looking for work'**
+  String get roleWorker;
+
+  /// No description provided for @roleHirer.
+  ///
+  /// In en, this message translates to:
+  /// **'Hiring someone'**
+  String get roleHirer;
+
+  /// No description provided for @myTrades.
+  ///
+  /// In en, this message translates to:
+  /// **'My trades'**
+  String get myTrades;
+
+  /// No description provided for @myTradesHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'You see general work by default. Add your own trade to see those jobs too.'**
+  String get myTradesHelp;
+
+  /// Settings section asking whether the user is a worker or a hirer
+  ///
+  /// In en, this message translates to:
+  /// **'What brings you here'**
+  String get whatBringsYouHere;
+
+  /// Explains the worker role
+  ///
+  /// In en, this message translates to:
+  /// **'You see jobs near you that match your trades.'**
+  String get roleWorkerHelp;
+
+  /// Explains the hirer role
+  ///
+  /// In en, this message translates to:
+  /// **'You post jobs and choose who does them.'**
+  String get roleHirerHelp;
+
+  /// Explains why the default trade cannot be switched off
+  ///
+  /// In en, this message translates to:
+  /// **'General work is always on, so you never miss an untagged job.'**
+  String get generalWorkAlwaysOn;
+
+  /// No description provided for @tradeCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{General work only} =1{General work and 1 trade} other{General work and {count} trades}}'**
+  String tradeCount(int count);
+
+  /// Empty feed heading when the visibility rule hid everything
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing here for your trades'**
+  String get noJobsForTrades;
+
+  /// Empty feed body when the visibility rule hid everything
+  ///
+  /// In en, this message translates to:
+  /// **'Jobs only reach you when they match a trade you do. Add a trade to see more.'**
+  String get noJobsForTradesHelp;
+
+  /// Button opening the trades screen
+  ///
+  /// In en, this message translates to:
+  /// **'Add a trade'**
+  String get addATrade;
 }
 
 class _AppStringsDelegate extends LocalizationsDelegate<AppStrings> {

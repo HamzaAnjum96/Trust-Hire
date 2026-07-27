@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../app/job_controller.dart';
+import '../../app/profile_controller.dart';
 import '../../core/motion.dart';
 import '../../core/tokens.dart';
 import '../../models/job.dart';
@@ -13,6 +14,7 @@ import 'filter_bar.dart';
 import 'job_details_sheet.dart';
 import 'job_filter_controller.dart';
 import 'job_row.dart';
+import '../profile/my_trades_screen.dart';
 import '../../l10n/app_localizations.dart';
 
 /// A plain list of every job in local storage.
@@ -28,9 +30,17 @@ class JobsScreen extends StatelessWidget {
     final controller = context.watch<JobController>();
     final filters = context.watch<JobFilterController>();
     final location = context.watch<LocationController>();
+    final profile = context.watch<ProfileController>();
 
-    final visible = filters.apply(
+    // Two passes, in this order: the tag and geofence rule the user does not
+    // control, then the filters they do. Collapsing them would make "clear
+    // filters" look like it should bring back a job it cannot.
+    final reachable = profile.visibleTo(
       controller.jobs,
+      from: location.position,
+    );
+    final visible = filters.apply(
+      reachable,
       strings: strings,
       from: location.position,
     );
@@ -62,11 +72,12 @@ class JobsScreen extends StatelessWidget {
         // says what is coming and stops the layout jumping.
         LoadState.idle || LoadState.loading => const JobListSkeleton(),
         LoadState.failed => ErrorView(
-          message: controller.errorMessage ?? strings.couldNotLoadJobsShort,
+          message: strings.couldNotLoadJobs,
           onRetry: controller.load,
         ),
         LoadState.ready => _Results(
           all: controller.jobs,
+          reachable: reachable,
           visible: visible,
           filters: filters,
         ),
@@ -80,11 +91,16 @@ class JobsScreen extends StatelessWidget {
 class _Results extends StatelessWidget {
   const _Results({
     required this.all,
+    required this.reachable,
     required this.visible,
     required this.filters,
   });
 
   final List<Job> all;
+
+  /// Everything the visibility rule allows, before the user's own filters.
+  final List<Job> reachable;
+
   final List<Job> visible;
   final JobFilterController filters;
 
@@ -96,6 +112,21 @@ class _Results extends StatelessWidget {
         icon: Icons.work_outline,
         title: strings.noJobsYet,
         message: strings.postTheFirstJob,
+      );
+    }
+
+    // Three empty states, because they need three different next steps.
+    // Clearing filters cannot bring back a job the tag rule excluded, so
+    // offering that button here would be a dead end.
+    if (reachable.isEmpty) {
+      return EmptyView(
+        icon: Icons.construction_outlined,
+        title: strings.noJobsForTrades,
+        message: strings.noJobsForTradesHelp,
+        action: OutlinedButton(
+          onPressed: () => MyTradesScreen.open(context),
+          child: Text(strings.addATrade),
+        ),
       );
     }
 

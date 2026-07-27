@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../core/tokens.dart';
-import '../../models/job_type.dart';
+import '../../models/job_tag.dart';
 import 'job_filter.dart';
 import 'job_filter_controller.dart';
 import '../../l10n/app_localizations.dart';
@@ -57,7 +57,7 @@ class QuickFilterBar extends StatelessWidget {
                 filter.time != TimeFilter.today) ||
             (filter.distance != DistanceFilter.any &&
                 filter.distance != DistanceFilter.nearMe) ||
-            filter.types.isNotEmpty,
+            filter.tags.isNotEmpty,
         onTap: () => FilterSheet.open(context, controller),
       ),
       if (controller.isActive)
@@ -273,12 +273,12 @@ class FilterSheet extends StatelessWidget {
                 spacing: BrandSizing.spaceSm,
                 runSpacing: BrandSizing.spaceSm,
                 children: [
-                  for (final type in JobType.values)
+                  for (final tag in JobTag.values)
                     _FilterChip(
-                      label: type.label(strings),
-                      icon: type.icon,
-                      selected: filter.types.contains(type),
-                      onTap: () => controller.toggleType(type),
+                      label: tag.label(strings),
+                      icon: tag.icon,
+                      selected: filter.tags.contains(tag),
+                      onTap: () => controller.toggleTag(tag),
                     ),
                 ],
               ),

@@ -55,7 +55,7 @@ void main() {
       MultiProvider(
         providers: [
           ChangeNotifierProvider.value(value: controller),
-            ChangeNotifierProvider.value(value: savedJobs),
+          ChangeNotifierProvider.value(value: savedJobs),
           Provider<MediaStore>.value(value: media),
         ],
         child: MaterialApp(
@@ -119,8 +119,7 @@ void main() {
     expect(find.byType(PhotoGallery), findsNothing);
   });
 
-  testWidgets('shows a player only for jobs with a voice note',
-      (tester) async {
+  testWidgets('shows a player only for jobs with a voice note', (tester) async {
     final (controller, media) = await buildControllers();
 
     await openSheet(tester, controller, media, 'seed-003');
@@ -131,8 +130,9 @@ void main() {
     expect(find.byType(VoiceNotePlayer), findsNothing);
   });
 
-  testWidgets('a job with only a voice note still opens usefully',
-      (tester) async {
+  testWidgets('a job with only a voice note still opens usefully', (
+    tester,
+  ) async {
     final (controller, media) = await buildControllers();
 
     // seed-008 has no title, no description, no photos.
@@ -146,8 +146,9 @@ void main() {
     expect(find.text('Area'), findsOneWidget);
   });
 
-  testWidgets('shows distance only when the viewer location is known',
-      (tester) async {
+  testWidgets('shows distance only when the viewer location is known', (
+    tester,
+  ) async {
     final (controller, media) = await buildControllers();
 
     await openSheet(tester, controller, media, 'seed-001');
@@ -176,8 +177,7 @@ void main() {
     );
   });
 
-  testWidgets('handles a job deleted while its sheet is open',
-      (tester) async {
+  testWidgets('handles a job deleted while its sheet is open', (tester) async {
     final (controller, media) = await buildControllers();
     await openSheet(tester, controller, media, 'seed-001');
     expect(find.text('Kitchen tap leaking'), findsOneWidget);
@@ -209,8 +209,10 @@ void main() {
       expect(MediaStore.isLocal(asset), isFalse);
       expect(media.read(asset), isNull);
       // audioplayers wants the path relative to assets/.
-      expect(MediaStore.assetKeyFor('assets/audio/voice-01.wav'),
-          'audio/voice-01.wav');
+      expect(
+        MediaStore.assetKeyFor('assets/audio/voice-01.wav'),
+        'audio/voice-01.wav',
+      );
     });
 
     test('pruning drops blobs no job references', () async {

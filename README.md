@@ -59,7 +59,7 @@ it is for.
 
 | Folder | What belongs in it |
 | --- | --- |
-| `agile/sprint-planning/` | [`poc-sprint-plan.md`](documents/agile/sprint-planning/poc-sprint-plan.md) is the master plan for the POC — vision, goals, constraints, and Sprints 0–6. Alongside it, one document per sprint as it is planned in detail: sprint goal, committed scope, team capacity, risks and dependencies, definition of done. Name those `sprint-NN-planning.md`, zero-padded. |
+| `agile/sprint-planning/` | [`poc-sprint-plan.md`](documents/agile/sprint-planning/poc-sprint-plan.md) is the master plan for the POC — vision, goals, constraints, and Sprints 0–6 as originally scoped — the build ran to Sprint 13. [`phase-1-sprint-plan.md`](documents/agile/sprint-planning/phase-1-sprint-plan.md) plans what follows it, P1-1 to P1-9. Alongside them, one document per sprint as it is planned in detail: sprint goal, committed scope, team capacity, risks and dependencies, definition of done. Name those `sprint-NN-planning.md`, zero-padded. |
 | `agile/backlog/` | Epics (`epic-<slug>.md`) and user stories (`story-<slug>.md`) with testable acceptance criteria. A story is *ready* when its criteria are testable and its open questions are resolved — only ready stories get pulled into planning. |
 | `agile/retrospectives/` | `sprint-NN-retro.md`, matching the sprint number. What went well, what did not, and **actions with named owners**. Carry unfinished actions forward explicitly. |
 | `brand-guidelines/` | [`brand-guidelines.md`](documents/brand-guidelines/brand-guidelines.md) is the source of truth: positioning, the burgundy/copper/sand palette, typography, logo direction, iconography, map styling, voice and tone, component specs, motion, accessibility, dark mode, and design tokens. Anything user-facing should be traceable back to it. Add new colours with their hex value *and* intended use; keep source assets next to exports. |
@@ -96,12 +96,18 @@ halves.
 Flutter, targeting Android and iOS, with web enabled so the POC can be
 demonstrated in a browser and deployed to GitHub Pages.
 
-**POC status: Sprints 0–6 complete.** A person can open the app, see nearby
-jobs on a map, tap a marker, listen to a voice note, view photos, post a job,
-and see it appear immediately — with no internet, no login and no backend.
-That is the success criteria from
+**POC: Sprints 0–13 complete.** A person can open the app, see nearby jobs on
+a map, tap a marker, listen to a voice note, view photos, post a job, and see
+it appear immediately — with no internet, no login and no backend. That is the
+success criteria from
 [`documents/agile/sprint-planning/poc-sprint-plan.md`](documents/agile/sprint-planning/poc-sprint-plan.md),
 with the exception noted under *Map tiles* below.
+
+**Phase 1: P1-1 complete**, per
+[`documents/agile/sprint-planning/phase-1-sprint-plan.md`](documents/agile/sprint-planning/phase-1-sprint-plan.md).
+Roles, the fixed tag vocabulary, and the visibility rule that decides which
+jobs reach which worker. P1-2 onwards adds bidding, the job lifecycle, wallets
+and the backend.
 
 ```
 code/frontend/
@@ -112,9 +118,12 @@ code/frontend/
 │   │   ├── map/          ← the map — the primary surface
 │   │   ├── jobs/         ← job list, details, saved and posted
 │   │   ├── create_job/   ← posting and editing
-│   │   └── settings/     ← theme, local-data controls
+│   │   ├── feed/         ← the visibility rule: which jobs reach whom
+│   │   ├── profile/      ← a worker's trades
+│   │   ├── onboarding/   ← first-run intro and permission priming
+│   │   └── settings/     ← role, theme, language, local-data controls
 │   ├── l10n/         ← app_en.arb, app_ur.arb (generated AppStrings)
-│   ├── models/       ← Job, JobType, AppUser
+│   ├── models/       ← Job, JobTag, WorkerProfile, AppUser
 │   ├── services/     ← local storage, seed loading, repositories
 │   └── widgets/      ← shared UI
 ├── assets/

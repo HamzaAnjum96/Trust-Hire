@@ -7,7 +7,7 @@ import 'package:flutter/foundation.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../models/job.dart';
-import '../../models/job_type.dart';
+import '../../models/job_tag.dart';
 import '../../services/capture_service.dart';
 import '../../services/media_store.dart';
 
@@ -28,6 +28,9 @@ class DraftPhoto {
 enum DraftProblem {
   /// Nothing at all describes the work.
   nothingToShow,
+
+  /// No tag, so nobody would ever see it.
+  noTags,
 }
 
 /// Holds a job being written, for both creating and editing.
@@ -50,7 +53,7 @@ class JobDraftController extends ChangeNotifier {
        _location = editing?.location ?? initialLocation,
        _radiusMetres = editing?.radiusMetres ?? 1000,
        _title = editing?.title ?? '',
-       _type = editing?.type,
+       _tags = {...?editing?.tags},
        _description = editing?.shortDescription ?? '',
        _contactNumber = editing?.contactNumber ?? '',
        _scheduledTime = editing?.scheduledTime,
@@ -69,7 +72,7 @@ class JobDraftController extends ChangeNotifier {
   JobLocation _location;
   double _radiusMetres;
   String _title;
-  JobType? _type;
+  final Set<JobTag> _tags;
   String _description;
   String _contactNumber;
   DateTime? _scheduledTime;
@@ -83,14 +86,14 @@ class JobDraftController extends ChangeNotifier {
   bool _isRecording = false;
   DateTime? _recordingStartedAt;
   bool _isSaving = false;
-  String? _errorMessage;
+  bool _saveFailed = false;
   bool _microphoneUnavailable = false;
 
   bool get isEditing => _editing != null;
   JobLocation get location => _location;
   double get radiusMetres => _radiusMetres;
   String get title => _title;
-  JobType? get type => _type;
+  Set<JobTag> get tags => Set.unmodifiable(_tags);
   String get description => _description;
   String get contactNumber => _contactNumber;
   DateTime? get scheduledTime => _scheduledTime;
@@ -101,7 +104,11 @@ class JobDraftController extends ChangeNotifier {
   Uint8List? get voiceBytes => _voiceBytes;
   bool get isRecording => _isRecording;
   bool get isSaving => _isSaving;
-  String? get errorMessage => _errorMessage;
+
+  /// True when the last [build] threw. The screen supplies the wording — a
+  /// controller has no BuildContext, so a message written here would be
+  /// English in an Urdu interface.
+  bool get saveFailed => _saveFailed;
   bool get microphoneUnavailable => _microphoneUnavailable;
 
   /// How long the current recording has been running.
@@ -113,14 +120,21 @@ class JobDraftController extends ChangeNotifier {
 
   /// True once the draft says something — anything.
   bool get hasContent =>
-      _type != null ||
       _title.trim().isNotEmpty ||
       _description.trim().isNotEmpty ||
       hasVoiceNote ||
       _photos.isNotEmpty;
 
   /// What is stopping a save, or null when it can go ahead.
-  DraftProblem? get problem => hasContent ? null : DraftProblem.nothingToShow;
+  ///
+  /// Two rules now, not one. Tags became required with Phase 1 because they
+  /// decide who ever sees the job — a job with none would be posted into
+  /// silence, which is worse than being asked for one tap.
+  DraftProblem? get problem {
+    if (_tags.isEmpty) return DraftProblem.noTags;
+    if (!hasContent) return DraftProblem.nothingToShow;
+    return null;
+  }
 
   bool get canSave => problem == null && !_isSaving && !_isRecording;
 
@@ -136,11 +150,22 @@ class JobDraftController extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Sets the kind of work, or clears it. Never required — an untyped job is
-  /// normal, and tapping the selected type again unsets it.
-  void setType(JobType? value) {
-    if (_type == value) return;
-    _type = value;
+  /// Section 8 caps a job at three tags. More than that and the tag stops
+  /// narrowing anything, which is the only reason it exists.
+  static const maxTags = 3;
+
+  bool get canAddTag => _tags.length < maxTags;
+
+  /// Adds or removes a tag. Refuses to exceed [maxTags] rather than silently
+  /// dropping an earlier choice, so the user is never surprised by which
+  /// three survived.
+  void toggleTag(JobTag tag) {
+    if (_tags.contains(tag)) {
+      _tags.remove(tag);
+    } else {
+      if (!canAddTag) return;
+      _tags.add(tag);
+    }
     notifyListeners();
   }
 
@@ -235,17 +260,16 @@ class JobDraftController extends ChangeNotifier {
 
   /// Writes any captured media, then returns the job to persist.
   ///
-  /// Returns null when the draft has nothing to show — the caller keeps the
-  /// user on the form rather than saving an empty job.
+  /// Returns null when [problem] is set — the caller keeps the user on the
+  /// form rather than saving a job that is empty or that nobody would see.
+  /// The save bar already names the problem and disables the button, so this
+  /// is a guard against a caller that ignores [canSave], not a second place
+  /// the user is told what to do.
   Future<Job?> build() async {
-    if (!hasContent) {
-      _errorMessage = 'Add a voice note, photo, or short message first.';
-      notifyListeners();
-      return null;
-    }
+    if (problem != null) return null;
 
     _isSaving = true;
-    _errorMessage = null;
+    _saveFailed = false;
     notifyListeners();
 
     try {
@@ -274,7 +298,7 @@ class JobDraftController extends ChangeNotifier {
         location: _location,
         createdAt: _editing?.createdAt ?? DateTime.now(),
         title: trimmedTitle.isEmpty ? null : trimmedTitle,
-        type: _type,
+        tags: _tags,
         radiusMetres: _radiusMetres,
         scheduledTime: _scheduledTime,
         voiceNotePath: voiceReference,
@@ -290,7 +314,7 @@ class JobDraftController extends ChangeNotifier {
       );
     } catch (error) {
       if (kDebugMode) debugPrint('Saving the draft failed: $error');
-      _errorMessage = 'Could not save your job. Try again.';
+      _saveFailed = true;
       return null;
     } finally {
       _isSaving = false;

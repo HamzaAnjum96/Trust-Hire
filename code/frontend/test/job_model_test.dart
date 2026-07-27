@@ -61,7 +61,10 @@ void main() {
     });
 
     test('falls back to a short description', () {
-      expect(job(description: 'Drain blocked').displayTitle(strings), 'Drain blocked');
+      expect(
+        job(description: 'Drain blocked').displayTitle(strings),
+        'Drain blocked',
+      );
     });
 
     test('truncates a long description', () {

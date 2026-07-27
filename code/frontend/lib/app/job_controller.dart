@@ -20,12 +20,10 @@ class JobController extends ChangeNotifier {
   List<Job> _jobs = const <Job>[];
   List<AppUser> _users = const <AppUser>[];
   LoadState _state = LoadState.idle;
-  String? _errorMessage;
 
   List<Job> get jobs => _jobs;
   List<AppUser> get users => _users;
   LoadState get state => _state;
-  String? get errorMessage => _errorMessage;
 
   bool get isLoading => _state == LoadState.loading;
   bool get hasFailed => _state == LoadState.failed;
@@ -33,7 +31,6 @@ class JobController extends ChangeNotifier {
   /// Seeds on first run, then loads everything from local storage.
   Future<void> load() async {
     _state = LoadState.loading;
-    _errorMessage = null;
     notifyListeners();
 
     try {
@@ -42,8 +39,10 @@ class JobController extends ChangeNotifier {
       _users = await _repository.fetchUsers();
       _state = LoadState.ready;
     } catch (error) {
-      // Recovery wording per section 19 — say what to do, not what threw.
-      _errorMessage = 'Could not load jobs. Pull down to try again.';
+      // The screen supplies the wording. A controller has no BuildContext, so
+      // any message written here would be English in an Urdu interface — and
+      // it would win over the screen's fallback rather than being overridden
+      // by it.
       _state = LoadState.failed;
       if (kDebugMode) {
         debugPrint('JobController.load failed: $error');

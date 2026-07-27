@@ -14,10 +14,12 @@ import 'package:trust_hire/services/location_service.dart';
 import 'support/test_strings.dart';
 
 class _FakeLocationService implements LocationService {
-  _FakeLocationService([this.result = const LocationResult(
-    LocationStatus.available,
-    JobLocation(latitude: 33.68, longitude: 73.04),
-  )]);
+  _FakeLocationService([
+    this.result = const LocationResult(
+      LocationStatus.available,
+      JobLocation(latitude: 33.68, longitude: 73.04),
+    ),
+  ]);
 
   final LocationResult result;
   int calls = 0;
@@ -67,8 +69,9 @@ void main() {
   }
 
   group('what it says', () {
-    testWidgets('leads with the promise, not with a permission',
-        (tester) async {
+    testWidgets('leads with the promise, not with a permission', (
+      tester,
+    ) async {
       final service = _FakeLocationService();
       await pumpIntro(tester, location: LocationController(service));
 
@@ -88,8 +91,9 @@ void main() {
       expect(find.text(strings.onboardVoiceTitle), findsOneWidget);
     });
 
-    testWidgets('says why location helps, and that refusing is fine',
-        (tester) async {
+    testWidgets('says why location helps, and that refusing is fine', (
+      tester,
+    ) async {
       await pumpIntro(tester, location: LocationController());
 
       await tester.tap(find.text(strings.onboardNext));
@@ -106,8 +110,9 @@ void main() {
   });
 
   group('asking for location', () {
-    testWidgets('happens only on the last panel, and only on request',
-        (tester) async {
+    testWidgets('happens only on the last panel, and only on request', (
+      tester,
+    ) async {
       final service = _FakeLocationService();
       final location = LocationController(service);
       await pumpIntro(tester, location: location);
@@ -127,8 +132,9 @@ void main() {
       expect(location.position, isNotNull);
     });
 
-    testWidgets('declining asks for nothing and still finishes',
-        (tester) async {
+    testWidgets('declining asks for nothing and still finishes', (
+      tester,
+    ) async {
       final service = _FakeLocationService();
       var finished = false;
 
@@ -149,8 +155,9 @@ void main() {
       expect(finished, isTrue);
     });
 
-    testWidgets('a refusal at the system prompt still finishes',
-        (tester) async {
+    testWidgets('a refusal at the system prompt still finishes', (
+      tester,
+    ) async {
       final service = _FakeLocationService(
         const LocationResult(LocationStatus.denied),
       );

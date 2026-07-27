@@ -10,7 +10,7 @@ import 'package:trust_hire/app/settings_controller.dart';
 import 'package:trust_hire/core/formatters.dart';
 import 'package:trust_hire/l10n/app_localizations.dart';
 import 'package:trust_hire/models/job.dart';
-import 'package:trust_hire/models/job_type.dart';
+import 'package:trust_hire/models/job_tag.dart';
 import 'package:trust_hire/services/local_store.dart';
 
 import 'support/test_strings.dart';
@@ -34,12 +34,12 @@ void main() {
     test('covers every English key in Urdu', () async {
       // A half-translated interface is worse than an untranslated one, so a
       // missing key should fail the build rather than silently fall back.
-      final en = jsonDecode(
-        await rootBundle.loadString('lib/l10n/app_en.arb'),
-      ) as Map<String, dynamic>;
-      final ur = jsonDecode(
-        await rootBundle.loadString('lib/l10n/app_ur.arb'),
-      ) as Map<String, dynamic>;
+      final en =
+          jsonDecode(await rootBundle.loadString('lib/l10n/app_en.arb'))
+              as Map<String, dynamic>;
+      final ur =
+          jsonDecode(await rootBundle.loadString('lib/l10n/app_ur.arb'))
+              as Map<String, dynamic>;
 
       final englishKeys = en.keys.where((k) => !k.startsWith('@')).toSet();
       final urduKeys = ur.keys.where((k) => !k.startsWith('@')).toSet();
@@ -52,12 +52,12 @@ void main() {
     });
 
     test('no Urdu string was left as its English original', () async {
-      final en = jsonDecode(
-        await rootBundle.loadString('lib/l10n/app_en.arb'),
-      ) as Map<String, dynamic>;
-      final ur = jsonDecode(
-        await rootBundle.loadString('lib/l10n/app_ur.arb'),
-      ) as Map<String, dynamic>;
+      final en =
+          jsonDecode(await rootBundle.loadString('lib/l10n/app_en.arb'))
+              as Map<String, dynamic>;
+      final ur =
+          jsonDecode(await rootBundle.loadString('lib/l10n/app_ur.arb'))
+              as Map<String, dynamic>;
 
       final untranslated = <String>[];
       for (final entry in ur.entries) {
@@ -88,7 +88,7 @@ void main() {
       final en = await loadStrings('en');
       final ur = await loadStrings('ur');
 
-      for (final type in JobType.values) {
+      for (final type in JobTag.values) {
         expect(
           type.label(ur),
           isNot(type.label(en)),
@@ -134,21 +134,57 @@ void main() {
   });
 
   group('no English left in the widget tree', () {
+    /// Every Dart file under `lib`, minus the generated catalogue.
+    Iterable<File> sourceFiles() sync* {
+      for (final entity in Directory('lib').listSync(recursive: true)) {
+        if (entity is! File || !entity.path.endsWith('.dart')) continue;
+        if (entity.path.contains('/l10n/')) continue;
+        yield entity;
+      }
+    }
+
+    test('no English sentence is written straight into a widget', () async {
+      // The literal-replacement pass missed a dozen of these, and nothing
+      // caught it: the app looked translated because the screens people
+      // opened first were. Anything that reads like a sentence — two words
+      // and a full stop — has to come from the catalogue.
+      //
+      // debugPrint and thrown errors are exempt: they are for whoever is
+      // reading the logs, not for the user.
+      final sentence = RegExp(r"'[A-Z][a-z]+ [^']*\.[ ']");
+      final developerFacing = RegExp(r'debugPrint\(|Error\(|assert\(');
+
+      final offenders = <String>[];
+      for (final file in sourceFiles()) {
+        for (final line in file.readAsLinesSync()) {
+          if (developerFacing.hasMatch(line)) continue;
+          if (sentence.hasMatch(line)) offenders.add('${file.path}: $line');
+        }
+      }
+
+      expect(offenders, isEmpty);
+    });
+
     test('no interpolated English strings survive in the UI', () async {
       // The literal-replacement pass could only see plain string literals, so
       // anything built with interpolation had to be found by eye. This keeps
       // the obvious offenders from creeping back.
       final offenders = <String>[];
-      final suspects = RegExp(
-        r"'\$\{[^']*\} (photo|job|photos|jobs|of)\b",
-      );
+      // Both shapes: '${count} jobs' and '$count jobs'.
+      // Two shapes, both of which slipped through the first pass:
+      //   'Posted ${...}'  — English word, then an interpolation
+      //   '$count jobs'    — interpolation, then an English word
+      // The \w+ in the second deliberately stops at a dot or a bracket, so an
+      // English-looking word *inside* an interpolated expression — say
+      // `job.radiusMetres` — is not an offender.
+      final suspects = [
+        RegExp(r"'[A-Z][a-z]+ \$\{"),
+        RegExp(r"'\$\{?\w+\}? (photo|job|photos|jobs|of)\b"),
+      ];
 
-      for (final file in Directory('lib').listSync(recursive: true)) {
-        if (file is! File || !file.path.endsWith('.dart')) continue;
-        if (file.path.contains('/l10n/')) continue;
-
+      for (final file in sourceFiles()) {
         final source = file.readAsStringSync();
-        if (suspects.hasMatch(source)) offenders.add(file.path);
+        if (suspects.any((s) => s.hasMatch(source))) offenders.add(file.path);
       }
 
       expect(offenders, isEmpty);
@@ -166,12 +202,13 @@ void main() {
       await settle(tester);
 
       expect(find.text('Nearby work'), findsOneWidget);
-      expect(Directionality.of(tester.element(find.byType(NavigationBar))),
-          TextDirection.ltr);
+      expect(
+        Directionality.of(tester.element(find.byType(NavigationBar))),
+        TextDirection.ltr,
+      );
     });
 
-    testWidgets('switches to Urdu and lays out right to left',
-        (tester) async {
+    testWidgets('switches to Urdu and lays out right to left', (tester) async {
       final store = await LocalStore.open();
       // The intro is covered in onboarding_test; these assert the
       // shell that follows it.
@@ -230,8 +267,9 @@ void main() {
       expect(direction, TextDirection.rtl);
     });
 
-    testWidgets('the whole app renders in Urdu without overflowing',
-        (tester) async {
+    testWidgets('the whole app renders in Urdu without overflowing', (
+      tester,
+    ) async {
       final store = await LocalStore.open();
       // The intro is covered in onboarding_test; these assert the
       // shell that follows it.

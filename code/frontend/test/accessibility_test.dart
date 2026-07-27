@@ -25,8 +25,9 @@ void main() {
   }
 
   group('the running app', () {
-    testWidgets('meets the tap target, label and contrast guidelines',
-        (tester) async {
+    testWidgets('meets the tap target, label and contrast guidelines', (
+      tester,
+    ) async {
       final store = await LocalStore.open();
       // The intro is covered in onboarding_test; these assert the
       // shell that follows it.
@@ -46,8 +47,9 @@ void main() {
       handle.dispose();
     });
 
-    testWidgets('survives the largest text scale without overflowing',
-        (tester) async {
+    testWidgets('survives the largest text scale without overflowing', (
+      tester,
+    ) async {
       final store = await LocalStore.open();
       // The intro is covered in onboarding_test; these assert the
       // shell that follows it.

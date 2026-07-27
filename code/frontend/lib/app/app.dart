@@ -13,6 +13,7 @@ import '../services/media_store.dart';
 import '../features/onboarding/onboarding_screen.dart';
 import 'app_shell.dart';
 import 'job_controller.dart';
+import 'profile_controller.dart';
 import 'settings_controller.dart';
 
 /// Application root — wires up the controllers and the themes.
@@ -37,6 +38,7 @@ class TrustHireApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (_) => SavedJobsController(store)..load(),
         ),
+        ChangeNotifierProvider(create: (_) => ProfileController(store)..load()),
         ChangeNotifierProvider(
           // Deliberately not requested here. Asking for a permission before
           // explaining what it is for is what section 19 warns against, so

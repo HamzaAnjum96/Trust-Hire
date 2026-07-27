@@ -3,7 +3,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 
 import '../l10n/app_localizations.dart';
-import 'job_type.dart';
+import 'job_tag.dart';
 
 /// A geographic point. Deliberately approximate — the brand guidelines call
 /// for showing a general area rather than an exact address.
@@ -60,8 +60,10 @@ class Job {
     required this.location,
     required this.createdAt,
     this.title,
-    this.type,
+    this.tags = const <JobTag>{},
     this.radiusMetres = 1000,
+    this.geofenceMetres,
+    this.openToAllLocations = false,
     this.scheduledTime,
     this.voiceNotePath,
     this.voiceNoteDuration,
@@ -79,9 +81,23 @@ class Job {
   /// Optional — a job can be described by voice or photo instead.
   final String? title;
 
-  /// The kind of work, when the poster chose one. Optional: an untyped job is
-  /// normal, and the marker falls back to showing what the job carries.
-  final JobType? type;
+  /// What kind of work this is — 1 to 3 tags, chosen by the hirer. This is
+  /// what decides who sees the job (section 8), so it is required on anything
+  /// posted from now on.
+  ///
+  /// The model still tolerates an empty set, because jobs written by the POC
+  /// are already in local storage and refusing to load them would lose a
+  /// user's work. [primaryTag] gives those a sensible icon.
+  final Set<JobTag> tags;
+
+  /// The tag a job leads with, for the marker and the heading.
+  JobTag? get primaryTag => tags.isEmpty ? null : tags.first;
+
+  /// Distance beyond which this job is not shown, or null for the default.
+  final double? geofenceMetres;
+
+  /// Set by the hirer for work that needs no physical presence (section 6).
+  final bool openToAllLocations;
 
   /// The approximate work area, shown as a translucent circle on the map.
   final double radiusMetres;
@@ -110,8 +126,8 @@ class Job {
   /// Whether the job carries anything a person can actually understand it by.
   /// Used to keep posting flexible without allowing entirely empty jobs.
   bool get hasContent =>
-      // A chosen type is content in its own right: it says what the work is.
-      type != null ||
+      // A tag is content in its own right: it says what the work is.
+      tags.isNotEmpty ||
       (title != null && title!.trim().isNotEmpty) ||
       (shortDescription != null && shortDescription!.trim().isNotEmpty) ||
       voiceNotePath != null ||
@@ -123,8 +139,25 @@ class Job {
   bool get hasVoiceNote => voiceNotePath != null;
   bool get hasPhotos => photoPaths.isNotEmpty;
 
+  /// The tag [displayTitle] falls back to, or null when it uses something
+  /// else. Kept in one place so the heading and [supportingTags] cannot
+  /// disagree about which tag has already been said.
+  JobTag? get _headingTag {
+    if (title != null && title!.trim().isNotEmpty) return null;
+    if (shortDescription != null && shortDescription!.trim().isNotEmpty) {
+      return null;
+    }
+
+    // A chosen tag beats "Voice note job" as a heading — it says what the
+    // work is rather than how it was described. "General work" says nothing,
+    // so it does not qualify.
+    final chosen = primaryTag;
+    return (chosen == null || chosen == JobTag.misc) ? null : chosen;
+  }
+
   /// A title to show when the poster did not type one. Falls back through the
-  /// description, then the media the job does have — never an empty heading.
+  /// description, then the leading tag, then the media the job does have —
+  /// never an empty heading.
   String displayTitle(AppStrings strings) {
     final t = title?.trim();
     if (t != null && t.isNotEmpty) return t;
@@ -134,14 +167,23 @@ class Job {
       return d.length <= 40 ? d : '${d.substring(0, 39)}…';
     }
 
-    // A chosen type beats "Voice note job" as a heading — it says what the
-    // work is rather than how it was described.
-    final chosen = type;
-    if (chosen != null && chosen != JobType.other) return chosen.label(strings);
+    final heading = _headingTag;
+    if (heading != null) return heading.label(strings);
 
     if (hasVoiceNote) return strings.voiceNoteJob;
     if (hasPhotos) return strings.photoJob;
     return strings.untitledJob;
+  }
+
+  /// The tags worth showing *underneath* [displayTitle].
+  ///
+  /// Excludes the tag the heading was derived from, for the same reason
+  /// [supportingDescription] exists: a job with no typed title should not
+  /// print "Cleaning" as its heading and "Cleaning" again as its kind of work.
+  Set<JobTag> get supportingTags {
+    final heading = _headingTag;
+    if (heading == null) return tags;
+    return tags.where((tag) => tag != heading).toSet();
   }
 
   /// The description to show *underneath* [displayTitle].
@@ -162,7 +204,7 @@ class Job {
   /// microphone for a voice note, a camera for photos. Defined here so the
   /// map, the list and the details sheet cannot disagree about it.
   IconData get icon {
-    final chosen = type;
+    final chosen = primaryTag;
     if (chosen != null) return chosen.icon;
     if (hasVoiceNote) return Icons.mic;
     if (hasPhotos) return Icons.photo_camera;
@@ -179,8 +221,7 @@ class Job {
   Job copyWith({
     String? title,
     bool clearTitle = false,
-    JobType? type,
-    bool clearType = false,
+    Set<JobTag>? tags,
     JobLocation? location,
     double? radiusMetres,
     DateTime? scheduledTime,
@@ -199,7 +240,9 @@ class Job {
       location: location ?? this.location,
       createdAt: createdAt,
       title: clearTitle ? null : (title ?? this.title),
-      type: clearType ? null : (type ?? this.type),
+      tags: tags ?? this.tags,
+      geofenceMetres: geofenceMetres,
+      openToAllLocations: openToAllLocations,
       radiusMetres: radiusMetres ?? this.radiusMetres,
       scheduledTime: clearScheduledTime
           ? null
@@ -229,7 +272,16 @@ class Job {
       location: JobLocation.fromJson(json['location'] as Map<String, dynamic>),
       createdAt: DateTime.parse(json['createdAt'] as String),
       title: json['title'] as String?,
-      type: JobType.fromId(json['type'] as String?),
+      // Jobs written before tags existed carry a single `type`; read it so a
+      // user's existing work is not lost on upgrade.
+      tags:
+          ((json['tags'] as List<dynamic>?) ??
+                  [if (json['type'] != null) json['type']])
+              .map((id) => JobTag.fromId(id as String?))
+              .whereType<JobTag>()
+              .toSet(),
+      geofenceMetres: (json['geofenceMetres'] as num?)?.toDouble(),
+      openToAllLocations: json['openToAllLocations'] as bool? ?? false,
       radiusMetres: (json['radiusMetres'] as num?)?.toDouble() ?? 1000,
       scheduledTime: json['scheduledTime'] == null
           ? null
@@ -253,7 +305,9 @@ class Job {
     'location': location.toJson(),
     'createdAt': createdAt.toIso8601String(),
     'title': title,
-    'type': type?.id,
+    'tags': tags.map((t) => t.id).toList(),
+    'geofenceMetres': geofenceMetres,
+    'openToAllLocations': openToAllLocations,
     'radiusMetres': radiusMetres,
     'scheduledTime': scheduledTime?.toIso8601String(),
     'voiceNotePath': voiceNotePath,

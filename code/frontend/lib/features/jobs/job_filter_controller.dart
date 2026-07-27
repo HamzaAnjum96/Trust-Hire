@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 
 import '../../l10n/app_localizations.dart';
 import '../../models/job.dart';
-import '../../models/job_type.dart';
+import '../../models/job_tag.dart';
 import 'job_filter.dart';
 
 /// The current search and filter, shared by the map and the list.
@@ -64,11 +64,11 @@ class JobFilterController extends ChangeNotifier {
   }
 
   /// Adds or removes a kind of work from the filter.
-  void toggleType(JobType type) {
-    final next = Set<JobType>.from(_filter.types);
-    if (!next.remove(type)) next.add(type);
+  void toggleTag(JobTag tag) {
+    final next = Set<JobTag>.from(_filter.tags);
+    if (!next.remove(tag)) next.add(tag);
 
-    _filter = _filter.copyWith(types: next);
+    _filter = _filter.copyWith(tags: next);
     notifyListeners();
   }
 

@@ -191,8 +191,9 @@ void main() {
       }
     }
 
-    testWidgets('offers edit and delete for jobs on this device',
-        (tester) async {
+    testWidgets('offers edit and delete for jobs on this device', (
+      tester,
+    ) async {
       final (controller, media, _) = await build();
       await controller.saveJob(localJob());
 

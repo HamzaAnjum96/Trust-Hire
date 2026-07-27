@@ -60,10 +60,7 @@ void main() {
     });
 
     test('leaves an international number alone', () {
-      expect(
-        ContactLauncher.whatsAppNumber('+92 333 7761204'),
-        '923337761204',
-      );
+      expect(ContactLauncher.whatsAppNumber('+92 333 7761204'), '923337761204');
     });
 
     test('does not double the country code', () {
@@ -132,8 +129,7 @@ void main() {
       expect(launcher.calledNumber, '0300 4471902');
     });
 
-    testWidgets('hands the number and a greeting to WhatsApp',
-        (tester) async {
+    testWidgets('hands the number and a greeting to WhatsApp', (tester) async {
       final launcher = _FakeLauncher();
       await pumpPanel(tester, launcher: launcher);
 
@@ -146,8 +142,9 @@ void main() {
       expect(launcher.whatsAppMessage, strings.whatsAppMessage);
     });
 
-    testWidgets('says so when the hand-off fails, and keeps the number',
-        (tester) async {
+    testWidgets('says so when the hand-off fails, and keeps the number', (
+      tester,
+    ) async {
       await pumpPanel(tester, launcher: _FakeLauncher(succeeds: false));
 
       await tester.tap(find.text(strings.contactShow));
@@ -205,8 +202,10 @@ void main() {
 
     test('copyWith can clear it', () {
       final withContact = job(contact: '0300 4471902');
-      expect(withContact.copyWith(clearContactNumber: true).contactNumber,
-          isNull);
+      expect(
+        withContact.copyWith(clearContactNumber: true).contactNumber,
+        isNull,
+      );
       expect(withContact.copyWith().contactNumber, '0300 4471902');
     });
   });

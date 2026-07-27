@@ -296,10 +296,6 @@ class AppStringsUr extends AppStrings {
   String get removePhoto => 'تصویر ہٹائیں';
 
   @override
-  String get kindOfWorkOptional =>
-      'یہ ضروری نہیں۔ قسم چننے سے آپ کا کام نقشے پر آسانی سے نظر آتا ہے۔';
-
-  @override
   String get fieldTitle => 'عنوان';
 
   @override
@@ -413,54 +409,6 @@ class AppStringsUr extends AppStrings {
 
   @override
   String get seedRestored => 'اصل مثالیں واپس آ گئیں۔';
-
-  @override
-  String get typePlumbing => 'پلمبنگ';
-
-  @override
-  String get typeElectrical => 'بجلی کا کام';
-
-  @override
-  String get typePainting => 'رنگ و روغن';
-
-  @override
-  String get typeCarpentry => 'لکڑی کا کام';
-
-  @override
-  String get typeMasonry => 'راج مستری';
-
-  @override
-  String get typeConstruction => 'تعمیراتی کام';
-
-  @override
-  String get typeApplianceRepair => 'آلات کی مرمت';
-
-  @override
-  String get typeCleaning => 'صفائی';
-
-  @override
-  String get typeMoving => 'سامان کی منتقلی';
-
-  @override
-  String get typeDriving => 'ڈرائیونگ';
-
-  @override
-  String get typeGardening => 'باغبانی';
-
-  @override
-  String get typeTailoring => 'سلائی';
-
-  @override
-  String get typeCooking => 'کھانا پکانا';
-
-  @override
-  String get typeTutoring => 'پڑھائی';
-
-  @override
-  String get typeSecurity => 'حفاظت';
-
-  @override
-  String get typeOther => 'کوئی اور کام';
 
   @override
   String get voiceNoteJob => 'آواز والا کام';
@@ -722,4 +670,123 @@ class AppStringsUr extends AppStrings {
 
   @override
   String get introReset => 'اگلی بار ایپ کھولنے پر تعارف دکھایا جائے گا۔';
+
+  @override
+  String get tagPlumbing => 'پلمبنگ';
+
+  @override
+  String get tagElectrical => 'بجلی کا کام';
+
+  @override
+  String get tagPainting => 'رنگ و روغن';
+
+  @override
+  String get tagCarpentry => 'لکڑی کا کام';
+
+  @override
+  String get tagMasonry => 'راج مستری';
+
+  @override
+  String get tagConstruction => 'تعمیراتی کام';
+
+  @override
+  String get tagApplianceRepair => 'آلات کی مرمت';
+
+  @override
+  String get tagCleaning => 'صفائی';
+
+  @override
+  String get tagMoving => 'سامان کی منتقلی';
+
+  @override
+  String get tagDriving => 'ڈرائیونگ';
+
+  @override
+  String get tagGardening => 'باغبانی';
+
+  @override
+  String get tagTailoring => 'سلائی';
+
+  @override
+  String get tagCooking => 'کھانا پکانا';
+
+  @override
+  String get tagTutoring => 'پڑھائی';
+
+  @override
+  String get tagSecurity => 'حفاظت';
+
+  @override
+  String get tagLegal => 'قانونی مشورہ';
+
+  @override
+  String get tagMedical => 'طبی';
+
+  @override
+  String get tagBeauty => 'بناؤ سنگھار';
+
+  @override
+  String get tagMisc => 'عام کام';
+
+  @override
+  String get fieldTags => 'کام کی قسم';
+
+  @override
+  String get tagsHelp =>
+      '1 سے 3 چنیں۔ اسی سے طے ہوتا ہے کہ آپ کا کام کون دیکھے گا۔';
+
+  @override
+  String get tagsRequired => 'کم از کم ایک قسم چنیں۔';
+
+  @override
+  String get tagsAtMost => 'زیادہ سے زیادہ 3 چن سکتے ہیں۔';
+
+  @override
+  String get roleWorker => 'کام کی تلاش میں';
+
+  @override
+  String get roleHirer => 'کسی کو کام دینا ہے';
+
+  @override
+  String get myTrades => 'میرے کام';
+
+  @override
+  String get myTradesHelp =>
+      'آپ کو عام کام خودبخود دکھتے ہیں۔ اپنا کام شامل کریں تو وہ بھی دکھنے لگیں گے۔';
+
+  @override
+  String get whatBringsYouHere => 'آپ یہاں کس لیے آئے ہیں';
+
+  @override
+  String get roleWorkerHelp =>
+      'آپ کو اپنے قریب وہ کام نظر آئیں گے جو آپ کے ہنر سے ملتے ہیں۔';
+
+  @override
+  String get roleHirerHelp => 'آپ کام پوسٹ کرتے ہیں اور کرنے والا چنتے ہیں۔';
+
+  @override
+  String get generalWorkAlwaysOn =>
+      'عام کام ہمیشہ آن رہتا ہے، تاکہ کوئی کام آپ سے نہ چھوٹے۔';
+
+  @override
+  String tradeCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'عام کام اور $count ہنر',
+      one: 'عام کام اور 1 ہنر',
+      zero: 'صرف عام کام',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get noJobsForTrades => 'آپ کے ہنر کے لیے یہاں کچھ نہیں';
+
+  @override
+  String get noJobsForTradesHelp =>
+      'کام آپ تک تبھی پہنچتا ہے جب وہ آپ کے کسی ہنر سے ملے۔ مزید دیکھنے کے لیے ہنر شامل کریں۔';
+
+  @override
+  String get addATrade => 'ہنر شامل کریں';
 }

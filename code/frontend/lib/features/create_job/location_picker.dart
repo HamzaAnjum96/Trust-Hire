@@ -156,7 +156,7 @@ class _AreaChip extends StatelessWidget {
           const SizedBox(width: BrandSizing.spaceSm),
           Expanded(
             child: Text(
-              'Move the map to choose the area · '
+              '${strings.moveMapToChooseArea} · '
               '${Format.radius(strings, radiusMetres)}',
               style: theme.textTheme.labelSmall,
               textAlign: TextAlign.center,
