@@ -1,0 +1,99 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# Required by actions/deploy-pages.
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# One deployment at a time; a newer push supersedes an in-flight one.
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build site
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Detect whether the frontend is buildable
+        id: detect
+        run: |
+          if [ -f code/frontend/package.json ]; then
+            echo "frontend=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "frontend=false" >> "$GITHUB_OUTPUT"
+            echo "No code/frontend/package.json — publishing the placeholder site from deployment/pages."
+          fi
+
+      - name: Set up Node
+        if: steps.detect.outputs.frontend == 'true'
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install dependencies
+        if: steps.detect.outputs.frontend == 'true'
+        working-directory: code/frontend
+        run: |
+          if [ -f package-lock.json ]; then
+            npm ci
+          else
+            npm install
+          fi
+
+      - name: Build frontend
+        if: steps.detect.outputs.frontend == 'true'
+        working-directory: code/frontend
+        run: npm run build
+
+      - name: Stage frontend build output
+        if: steps.detect.outputs.frontend == 'true'
+        run: |
+          # Frameworks differ on output directory; take the first that exists.
+          for candidate in dist build out public; do
+            if [ -d "code/frontend/$candidate" ]; then
+              echo "Publishing code/frontend/$candidate"
+              cp -R "code/frontend/$candidate" _site
+              break
+            fi
+          done
+          if [ ! -d _site ]; then
+            echo "::error::Frontend built but no output directory found (looked for dist, build, out, public)."
+            exit 1
+          fi
+
+      - name: Stage placeholder site
+        if: steps.detect.outputs.frontend != 'true'
+        run: cp -R deployment/pages _site
+
+      - name: Disable Jekyll processing
+        run: touch _site/.nojekyll
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    name: Deploy
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

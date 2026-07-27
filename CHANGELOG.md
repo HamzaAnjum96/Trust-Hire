@@ -21,8 +21,22 @@ that heading to the version and date, and open a fresh `[Unreleased]`.
 - `README.md` documenting the folder structure, the Claude Code plugins, and
   the available commands, agents, hooks, and skills.
 - This changelog.
-- Per-folder `README.md` files describing what belongs in each directory and
-  the naming convention to use.
 - Claude Code configuration in `.claude/settings.json`: registers the
   `anthropics/claude-code` plugin marketplace and enables the `feature-dev`,
   `code-review`, `commit-commands`, and `security-guidance` plugins.
+- `AGENTS.md` with instructions for AI coding agents, requiring them to read
+  the README before starting work and to keep it up to date as part of any
+  change. `CLAUDE.md` and `.github/copilot-instructions.md` are short entry
+  points that restate those two rules and defer to it.
+- `deployment/` for deployment configuration, holding a placeholder static
+  site in `deployment/pages/`.
+- GitHub Pages deployment via `.github/workflows/deploy-pages.yml`, running on
+  every push to `main` and manually dispatchable. It publishes
+  `deployment/pages/` until `code/frontend/package.json` exists, after which it
+  builds the frontend and publishes its output instead.
+
+### Changed
+
+- Folder documentation consolidated into the top-level `README.md`; the
+  per-folder `README.md` files were removed and their conventions folded in.
+  Empty directories are now held by `.gitkeep`.
