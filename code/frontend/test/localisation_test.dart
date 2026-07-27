@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -13,6 +12,7 @@ import 'package:trust_hire/models/job.dart';
 import 'package:trust_hire/models/job_tag.dart';
 import 'package:trust_hire/services/local_store.dart';
 
+import 'support/seed_facts.dart';
 import 'support/test_strings.dart';
 
 /// The brand guidelines call for mixed English and Urdu interfaces, and
@@ -35,10 +35,10 @@ void main() {
       // A half-translated interface is worse than an untranslated one, so a
       // missing key should fail the build rather than silently fall back.
       final en =
-          jsonDecode(await rootBundle.loadString('lib/l10n/app_en.arb'))
+          (await SeedFacts.readJsonAsset('lib/l10n/app_en.arb'))
               as Map<String, dynamic>;
       final ur =
-          jsonDecode(await rootBundle.loadString('lib/l10n/app_ur.arb'))
+          (await SeedFacts.readJsonAsset('lib/l10n/app_ur.arb'))
               as Map<String, dynamic>;
 
       final englishKeys = en.keys.where((k) => !k.startsWith('@')).toSet();
@@ -53,10 +53,10 @@ void main() {
 
     test('no Urdu string was left as its English original', () async {
       final en =
-          jsonDecode(await rootBundle.loadString('lib/l10n/app_en.arb'))
+          (await SeedFacts.readJsonAsset('lib/l10n/app_en.arb'))
               as Map<String, dynamic>;
       final ur =
-          jsonDecode(await rootBundle.loadString('lib/l10n/app_ur.arb'))
+          (await SeedFacts.readJsonAsset('lib/l10n/app_ur.arb'))
               as Map<String, dynamic>;
 
       final untranslated = <String>[];

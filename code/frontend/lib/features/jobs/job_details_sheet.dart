@@ -204,9 +204,13 @@ class _Body extends StatelessWidget {
         _DetailRow(
           icon: Icons.place_outlined,
           label: strings.fieldArea,
-          value: distance == null
-              ? Format.radius(strings, job.radiusMetres)
-              : '$distance · ${Format.radius(strings, job.radiusMetres)}',
+          value: [
+            // The neighbourhood first: it is the part a person recognises,
+            // and the only part that means anything without a position.
+            ?job.area,
+            ?distance,
+            Format.radius(strings, job.radiusMetres),
+          ].join(' · '),
         ),
         if (poster != null)
           _DetailRow(

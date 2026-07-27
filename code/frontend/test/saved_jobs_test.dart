@@ -11,6 +11,9 @@ import 'package:trust_hire/features/jobs/saved_jobs_controller.dart';
 import 'package:trust_hire/l10n/app_localizations.dart';
 import 'package:trust_hire/models/job.dart';
 import 'package:trust_hire/services/job_repository.dart';
+import 'package:trust_hire/app/bid_controller.dart';
+import 'package:trust_hire/app/profile_controller.dart';
+import 'package:trust_hire/services/bid_repository.dart';
 import 'package:trust_hire/services/local_store.dart';
 import 'package:trust_hire/services/media_store.dart';
 
@@ -149,11 +152,21 @@ void main() {
       SavedJobsController saved,
       Widget child,
     ) async {
+      final store = await LocalStore.open();
+
       await tester.pumpWidget(
         MultiProvider(
           providers: [
             ChangeNotifierProvider.value(value: jobs),
             ChangeNotifierProvider.value(value: saved),
+            // The details sheet grew a bidding block in P1-2, and it reads
+            // both of these.
+            ChangeNotifierProvider(
+              create: (_) => BidController(BidRepository(store))..load(),
+            ),
+            ChangeNotifierProvider(
+              create: (_) => ProfileController(store)..load(),
+            ),
             Provider<MediaStore>.value(value: media),
           ],
           child: MaterialApp(
@@ -179,11 +192,14 @@ void main() {
 
     testWidgets('lists a saved job', (tester) async {
       final (jobs, media, saved) = await build();
-      await saved.toggle('seed-001');
+      // By whatever the repository actually holds: the seed is generated, so
+      // naming an id here would be testing the generator.
+      final job = jobs.jobs.first;
+      await saved.toggle(job.id);
 
       await pump(tester, jobs, media, saved, const MyJobsScreen());
 
-      expect(find.text('Kitchen tap leaking'), findsOneWidget);
+      expect(find.text(job.displayTitle(strings)), findsOneWidget);
     });
 
     testWidgets('separates postings from saved jobs', (tester) async {
@@ -215,6 +231,7 @@ void main() {
 
     testWidgets('the details sheet saves and unsaves', (tester) async {
       final (jobs, media, saved) = await build();
+      final jobId = jobs.jobs.first.id;
 
       await pump(
         tester,
@@ -222,23 +239,23 @@ void main() {
         media,
         saved,
         Scaffold(
-          body: JobDetailsSheet(jobId: 'seed-001', mediaStore: media),
+          body: JobDetailsSheet(jobId: jobId, mediaStore: media),
         ),
       );
 
-      expect(saved.isSaved('seed-001'), isFalse);
+      expect(saved.isSaved(jobId), isFalse);
 
       await tester.tap(find.byTooltip(strings.saveThisJob));
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 300));
 
-      expect(saved.isSaved('seed-001'), isTrue);
+      expect(saved.isSaved(jobId), isTrue);
 
       await tester.tap(find.byTooltip(strings.removeFromSaved));
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 300));
 
-      expect(saved.isSaved('seed-001'), isFalse);
+      expect(saved.isSaved(jobId), isFalse);
     });
   });
 }

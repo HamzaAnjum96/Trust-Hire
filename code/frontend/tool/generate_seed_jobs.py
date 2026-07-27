@@ -1,0 +1,485 @@
+#!/usr/bin/env python3
+"""Generate the seeded jobs and users, across Pakistan.
+
+The POC shipped sixteen jobs around the twin cities. That was enough to show a
+map working and nothing else: clustering never fired, the distance filter never
+excluded anything interesting, and a worker in Karachi would have seen an empty
+country. This produces a national dataset instead — every province and both
+territories, real neighbourhoods, and fares that a person from that city would
+recognise.
+
+Deterministic. A fixed seed means the demo is the same on every machine and in
+every screenshot, and a diff to this file is the only thing that changes it.
+
+Standard library only, matching the other scripts here.
+
+Usage:
+    python3 tool/generate_seed_jobs.py
+"""
+
+from __future__ import annotations
+
+import json
+import pathlib
+import random
+
+ROOT = pathlib.Path(__file__).resolve().parent.parent
+SEED_DIR = ROOT / "assets" / "seed"
+
+# One stable seed. Changing it reshuffles the whole demo, so don't, casually.
+RANDOM_SEED = 20260727
+
+# ---------------------------------------------------------------------------
+# Places
+#
+# lat/lng are the neighbourhood, not the city centre, so pins land in populated
+# areas rather than on top of each other in the middle of town. `weight` is
+# roughly how much work the city should carry: Karachi and Lahore dominate,
+# Gwadar and Skardu get a handful, which is what the real distribution looks
+# like and what makes the clustering worth having.
+# ---------------------------------------------------------------------------
+CITIES = [
+    # name, province, weight, [(area, lat, lng), ...]
+    ("Karachi", "Sindh", 26, [
+        ("Gulshan-e-Iqbal", 24.9204, 67.0971),
+        ("Defence Phase 5", 24.8009, 67.0509),
+        ("North Nazimabad", 24.9425, 67.0364),
+        ("Korangi", 24.8378, 67.1310),
+        ("Saddar", 24.8607, 67.0111),
+        ("Malir", 24.8918, 67.2050),
+        ("Clifton", 24.8138, 67.0300),
+        ("Orangi Town", 24.9556, 66.9922),
+    ]),
+    ("Lahore", "Punjab", 22, [
+        ("Johar Town", 31.4697, 74.2728),
+        ("Model Town", 31.4805, 74.3239),
+        ("Gulberg", 31.5203, 74.3587),
+        ("Shadman", 31.5406, 74.3195),
+        ("DHA Phase 4", 31.4700, 74.3900),
+        ("Township", 31.4462, 74.3086),
+        ("Walled City", 31.5820, 74.3100),
+    ]),
+    ("Islamabad", "Islamabad Capital Territory", 12, [
+        ("F-7", 33.7104, 73.0551),
+        ("G-11", 33.6680, 72.9990),
+        ("I-8", 33.6650, 73.0760),
+        ("Bahria Enclave", 33.7010, 73.1780),
+        ("F-11", 33.6845, 72.9986),
+        ("Blue Area", 33.7180, 73.0680),
+    ]),
+    ("Rawalpindi", "Punjab", 10, [
+        ("Saddar", 33.5977, 73.0479),
+        ("Satellite Town", 33.6440, 73.0680),
+        ("Bahria Town", 33.5102, 73.1063),
+        ("Raja Bazaar", 33.5980, 73.0400),
+    ]),
+    ("Faisalabad", "Punjab", 8, [
+        ("Peoples Colony", 31.4180, 73.1120),
+        ("Madina Town", 31.4320, 73.1180),
+        ("Ghulam Muhammad Abad", 31.4290, 73.0790),
+    ]),
+    ("Multan", "Punjab", 6, [
+        ("Cantt", 30.1990, 71.4750),
+        ("Gulgasht Colony", 30.2320, 71.4780),
+        ("Shah Rukn-e-Alam", 30.1875, 71.4610),
+    ]),
+    ("Peshawar", "Khyber Pakhtunkhwa", 6, [
+        ("University Town", 34.0020, 71.4870),
+        ("Hayatabad", 33.9930, 71.4340),
+        ("Saddar", 34.0100, 71.5570),
+    ]),
+    ("Quetta", "Balochistan", 4, [
+        ("Jinnah Town", 30.1900, 66.9900),
+        ("Satellite Town", 30.2000, 67.0050),
+    ]),
+    ("Hyderabad", "Sindh", 4, [
+        ("Latifabad", 25.3760, 68.3400),
+        ("Qasimabad", 25.4090, 68.3210),
+    ]),
+    ("Gujranwala", "Punjab", 4, [
+        ("Satellite Town", 32.1710, 74.1880),
+        ("Model Town", 32.1560, 74.1930),
+    ]),
+    ("Sialkot", "Punjab", 3, [
+        ("Cantt", 32.4930, 74.5320),
+        ("Kashmir Road", 32.5050, 74.5240),
+    ]),
+    ("Sargodha", "Punjab", 3, [("Satellite Town", 32.0740, 72.6710)]),
+    ("Bahawalpur", "Punjab", 3, [("Model Town A", 29.3960, 71.6830)]),
+    ("Sukkur", "Sindh", 3, [("Military Road", 27.7050, 68.8580)]),
+    ("Larkana", "Sindh", 2, [("Jinnah Bagh", 27.5590, 68.2120)]),
+    ("Rahim Yar Khan", "Punjab", 2, [("Model Town", 28.4200, 70.2990)]),
+    ("Mardan", "Khyber Pakhtunkhwa", 2, [("Sheikh Maltoon", 34.2010, 72.0450)]),
+    ("Mingora", "Khyber Pakhtunkhwa", 2, [("Saidu Sharif", 34.7500, 72.3600)]),
+    ("Abbottabad", "Khyber Pakhtunkhwa", 2, [("Mandian", 34.1700, 73.2200)]),
+    ("Dera Ghazi Khan", "Punjab", 2, [("Block 17", 30.0450, 70.6400)]),
+    ("Muzaffarabad", "Azad Kashmir", 3, [
+        ("Upper Adda", 34.3700, 73.4711),
+        ("Chattar Domel", 34.3490, 73.4760),
+    ]),
+    ("Mirpur", "Azad Kashmir", 3, [("Sector F-1", 33.1478, 73.7519)]),
+    ("Gilgit", "Gilgit-Baltistan", 2, [("Jutial", 35.9100, 74.3400)]),
+    ("Skardu", "Gilgit-Baltistan", 1, [("Satellite Town", 35.2900, 75.6300)]),
+    ("Gwadar", "Balochistan", 1, [("Marine Drive", 25.1260, 62.3250)]),
+    ("Turbat", "Balochistan", 1, [("Absar", 26.0030, 63.0480)]),
+]
+
+# ---------------------------------------------------------------------------
+# Work
+#
+# `fare` is a plausible range in rupees for a single job of that kind. `cost`
+# scales it by city: work costs more in Karachi and Islamabad than in Larkana,
+# and a demo where every city quotes the same number looks synthetic.
+# ---------------------------------------------------------------------------
+COST_OF_LIVING = {
+    "Karachi": 1.15, "Lahore": 1.10, "Islamabad": 1.25, "Rawalpindi": 1.05,
+    "Faisalabad": 0.95, "Multan": 0.90, "Peshawar": 0.95, "Quetta": 0.95,
+    "Hyderabad": 0.85, "Gujranwala": 0.90, "Sialkot": 0.95, "Sargodha": 0.85,
+    "Bahawalpur": 0.80, "Sukkur": 0.80, "Larkana": 0.75,
+    "Rahim Yar Khan": 0.80, "Mardan": 0.85, "Mingora": 0.85,
+    "Abbottabad": 0.95, "Dera Ghazi Khan": 0.80, "Muzaffarabad": 0.90,
+    "Mirpur": 1.00, "Gilgit": 1.05, "Skardu": 1.05, "Gwadar": 1.00,
+    "Turbat": 0.90,
+}
+
+# tags, weight, fare range, [(title, description), ...]
+WORK = [
+    (["plumbing"], 10, (1200, 4000), [
+        ("Kitchen tap leaking", "Water coming from under the sink since last night. Need someone today if possible."),
+        ("Blocked drain in the bathroom", "Water is not going down. It has been two days."),
+        ("Water motor not working", "Motor runs but no water comes up to the tank."),
+        ("Geyser needs fitting", "New geyser bought, needs installing and connecting."),
+        ("Toilet flush broken", None),
+        ("Bathroom pipe burst", "Water on the floor, tap turned off for now."),
+        ("New sink to fit", "Sink and fittings already bought."),
+        ("Tank overflowing", None),
+    ]),
+    (["electrical"], 9, (1000, 5000), [
+        ("Fan making noise and stopping", "Ceiling fan in the front room. Slows down and stops on its own."),
+        ("New wiring in one room", "Adding two points and a light. Room is empty at the moment."),
+        ("UPS not charging", "Worked fine last month, now the battery does not charge."),
+        ("Main switch tripping", "Trips whenever the iron and AC are on together."),
+        ("Lights need fitting", None),
+        ("Socket sparked and stopped working", "One socket in the kitchen."),
+        ("Generator will not start", None),
+        ("Outside light for the gate", "Needs a switch inside as well."),
+    ]),
+    (["painting"], 8, (6000, 30000), [
+        ("Two rooms need painting before Eid", "Two rooms need painting before Eid."),
+        ("Outside wall and gate", "Front wall and the gate. Paint already bought."),
+        ("Whitewash for the whole house", "Three rooms, kitchen and bathroom."),
+        ("Ceiling stained from a leak", "The leak is fixed, the mark is still there."),
+    ]),
+    (["carpentry"], 7, (2000, 15000), [
+        ("Door not closing properly", "Wooden door has swollen. Needs planing and a new latch."),
+        ("Kitchen cabinet doors", "Two cabinet doors are off their hinges."),
+        ("Bed frame repair", "One side has come loose."),
+        ("Shelves for the shop", "Three shelves along one wall, wood already there."),
+        ("Window frame swollen shut", None),
+        ("Wardrobe rail collapsed", "Needs refitting, wood is fine."),
+    ]),
+    (["masonry", "construction"], 6, (15000, 90000), [
+        ("Boundary wall repair", "Part of the wall has come down after the rain."),
+        ("Roof needs waterproofing", "Leaks in two places during heavy rain."),
+        ("Bathroom floor retiling", "Old tiles cracked, need lifting and replacing."),
+        ("Steps to the roof", "Outside stairs, about eight steps."),
+    ]),
+    (["applianceRepair"], 6, (1500, 6000), [
+        ("AC not cooling", "Split unit in the bedroom. Runs but blows warm air."),
+        ("Fridge not cooling properly", "Freezer works, the lower part does not."),
+        ("Washing machine leaking", "Water comes out from underneath during the spin."),
+        ("Microwave stopped heating", None),
+    ]),
+    (["cleaning"], 8, (1500, 8000), [
+        ("House cleaning after painting", "Dust everywhere. Three rooms and a kitchen."),
+        ("Water tank cleaning", "Underground tank, not cleaned in a year."),
+        ("Office cleaning, weekly", "Small office, four rooms. Looking for someone regular."),
+        ("Sofa and carpet cleaning", None),
+        ("Deep clean before moving in", "Empty flat, two bedrooms."),
+        ("Windows and grilles", None),
+        ("Kitchen degreasing", "Not cleaned properly in a long time."),
+    ]),
+    (["moving"], 6, (3000, 20000), [
+        ("Need help moving furniture to a first-floor flat", "Two beds, a fridge and boxes. First floor, no lift."),
+        ("Shifting shop stock", "Moving to a shop two streets away."),
+        ("Loading a truck", "Just loading, the driver is arranged."),
+        ("House shift within the same area", "One truckload, ground floor to ground floor."),
+        ("Fridge to move to a relative", None),
+    ]),
+    (["driving"], 6, (2000, 12000), [
+        ("Driver needed for the day", "School run in the morning and the office at five."),
+        ("Airport drop at 4am", "Two people and three bags."),
+        ("Delivery van driver for a week", "Local deliveries within the city."),
+        ("Wedding car driver for one evening", None),
+        ("Weekly grocery run", "Two hours on a Sunday."),
+    ]),
+    (["gardening"], 5, (1500, 7000), [
+        ("Lawn and hedges need cutting back before guests come", "Small lawn, hedges along one side."),
+        ("Tree branch over the roof", "Needs cutting before the next storm."),
+        ("Planting for the season", None),
+    ]),
+    (["tailoring"], 5, (800, 6000), [
+        ("Three shalwar kameez to stitch", "Cloth is ready. Needed within a week."),
+        ("Curtains to hem", "Six curtains, all too long."),
+        ("School uniforms", "Four sets, two children."),
+        ("Alterations on four suits", "All need taking in."),
+        ("Cushion covers to stitch", None),
+    ]),
+    (["cooking"], 5, (3000, 25000), [
+        ("Cook for a family dinner", "Around fifteen people. Home kitchen."),
+        ("Daily cook, morning only", "Breakfast and lunch, six days."),
+        ("Catering for a small mehndi", "Around forty people."),
+        ("Someone to cook for a shop crew", "Lunch for six, six days a week."),
+        ("Sweets and snacks for a small gathering", None),
+    ]),
+    (["tutoring"], 5, (4000, 20000), [
+        ("Maths tutor for class 9", "Three evenings a week at home."),
+        ("Quran teacher for two children", None),
+        ("English conversation practice", "For an interview next month."),
+    ]),
+    (["security"], 3, (18000, 45000), [
+        ("Night guard for a shop", "Ten at night to six in the morning."),
+        ("Guard for a building gate", "Twelve-hour shifts, alternating."),
+    ]),
+    (["legal"], 2, (5000, 40000), [
+        ("Rent agreement to check", "Landlord sent a new agreement. Need someone to read it before I sign."),
+        ("Property transfer paperwork", "Inherited plot, papers need sorting."),
+    ]),
+    (["medical"], 2, (2000, 15000), [
+        ("Home nursing for an elderly parent", "Daily dressing and medicines."),
+        ("Physiotherapy at home", "After a knee operation."),
+    ]),
+    (["beauty"], 3, (2000, 25000), [
+        ("Bridal makeup at home", "For a nikah in the afternoon."),
+        ("Haircut at home for two children", None),
+        ("Mehndi artist for a small function", "Around twenty guests."),
+    ]),
+    (["misc"], 9, (1000, 6000), [
+        ("Help needed for a day", None),
+        ("Two people needed for lifting", "One day, heavy boxes."),
+        ("Small jobs around the house", "A few things that need doing."),
+        ("Someone to queue and pay a bill", None),
+        ("Help clearing the store room", "Boxes and old furniture to take out."),
+        ("Someone to collect a parcel", "From the depot, needs an ID copy."),
+        ("Help at a stall for two days", "Setting up and packing away."),
+        ("Odd jobs before guests arrive", None),
+        ("Someone to watch the shop", "Two hours in the afternoon."),
+        ("Help carrying sacks up stairs", "Second floor, about twenty sacks."),
+    ]),
+]
+
+# Remote work — no travel needed, so these carry openToAllLocations.
+REMOTE_WORK = [
+    (["legal"], (5000, 25000), "Rent agreement to check",
+     "Landlord sent a new agreement. Need someone to read it before I sign."),
+    (["tutoring"], (4000, 15000), "Online tutor for O-level physics",
+     "Two sessions a week over video."),
+    (["misc"], (2000, 8000), "Typing up handwritten notes",
+     "About forty pages. Can be sent by phone."),
+]
+
+FIRST_NAMES = [
+    "Ayesha", "Bilal", "Fatima", "Hamza", "Zainab", "Usman", "Sana", "Imran",
+    "Hira", "Adnan", "Maryam", "Kashif", "Nadia", "Faisal", "Rabia", "Tariq",
+    "Saima", "Junaid", "Amna", "Waqar", "Sadia", "Asif", "Noor", "Shahid",
+    "Iqra", "Danish", "Sobia", "Rehan", "Farah", "Zubair", "Mehwish", "Owais",
+    "Naila", "Salman", "Kiran", "Arif", "Uzma", "Nasir", "Hina", "Yasir",
+]
+
+LAST_NAMES = [
+    "Khan", "Ahmed", "Noor", "Iqbal", "Malik", "Hussain", "Raza", "Shah",
+    "Butt", "Chaudhry", "Qureshi", "Siddiqui", "Baloch", "Abbasi", "Awan",
+    "Mir", "Sheikh", "Ansari", "Farooq", "Javed", "Rashid", "Nazir",
+]
+
+MOBILE_PREFIXES = ["0300", "0301", "0321", "0333", "0345", "0311", "0332", "0347"]
+
+PHOTOS = {
+    "plumbing": ["assets/images/jobs/plumbing-01.png", "assets/images/jobs/plumbing-02.png"],
+    "painting": ["assets/images/jobs/painting-01.png", "assets/images/jobs/painting-02.png"],
+    "electrical": ["assets/images/jobs/electrical-01.png"],
+    "carpentry": ["assets/images/jobs/carpentry-01.png"],
+    "masonry": ["assets/images/jobs/masonry-01.png"],
+    "cleaning": ["assets/images/jobs/cleaning-01.png"],
+    "applianceRepair": ["assets/images/jobs/ac-repair-01.png"],
+    "moving": ["assets/images/jobs/delivery-01.png"],
+}
+
+VOICE_NOTES = [f"assets/audio/voice-0{n}.wav" for n in range(1, 7)]
+
+
+def weighted(rng: random.Random, options):
+    """Pick one (item, weight) pair, by weight."""
+    total = sum(weight for _, weight in options)
+    roll = rng.uniform(0, total)
+    for item, weight in options:
+        roll -= weight
+        if roll <= 0:
+            return item
+    return options[-1][0]
+
+
+def jitter(rng: random.Random, degrees: float) -> float:
+    """A small offset, so two jobs in one neighbourhood are not one pin."""
+    return rng.uniform(-degrees, degrees)
+
+
+def round_fare(amount: float) -> int:
+    """Nobody quotes Rs. 2,847. Round the way a person would."""
+    if amount >= 20000:
+        return int(round(amount / 5000) * 5000)
+    if amount >= 5000:
+        return int(round(amount / 1000) * 1000)
+    if amount >= 1000:
+        return int(round(amount / 500) * 500)
+    return int(round(amount / 100) * 100)
+
+
+def build(job_count: int = 180):
+    rng = random.Random(RANDOM_SEED)
+
+    people = []
+    for index in range(1, 61):
+        people.append({
+            "id": f"user-{index:03d}",
+            "name": f"{rng.choice(FIRST_NAMES)} {rng.choice(LAST_NAMES)}",
+            # Filled in below, once we know where their job is.
+            "area": None,
+        })
+
+    jobs = []
+    city_options = [((name, province, areas), weight)
+                    for name, province, weight, areas in CITIES]
+    work_options = [(entry, entry[1]) for entry in WORK]
+
+    for index in range(1, job_count + 1):
+        city_name, province, areas = weighted(rng, city_options)
+        area_name, lat, lng = rng.choice(areas)
+
+        tags, _, fare_range, descriptions = weighted(rng, work_options)
+        title, description = rng.choice(descriptions)
+
+        poster = people[(index - 1) % len(people)]
+        if poster["area"] is None:
+            poster["area"] = f"{area_name}, {city_name}"
+
+        scale = COST_OF_LIVING.get(city_name, 1.0)
+        low, high = fare_range
+        fare = round_fare(rng.uniform(low, high) * scale)
+
+        job = {
+            "id": f"seed-{index:03d}",
+            "city": city_name,
+            "province": province,
+            "area": area_name,
+        }
+
+        # Roughly one job in seven never says what it is in writing. That is
+        # the product working as intended, and the demo has to show it.
+        speaks_only = rng.random() < 0.14
+        if not speaks_only and title:
+            job["title"] = title
+
+        job["tags"] = list(tags)
+
+        # One in twelve hirers has no idea what the work is worth.
+        if rng.random() > 0.08:
+            job["startingFare"] = fare
+
+        if not speaks_only and description and rng.random() < 0.75:
+            job["shortDescription"] = description
+
+        job["location"] = {
+            "latitude": round(lat + jitter(rng, 0.012), 4),
+            "longitude": round(lng + jitter(rng, 0.012), 4),
+        }
+        job["radiusMetres"] = rng.choice([500, 600, 800, 1000, 1200, 1500, 2000, 2500])
+
+        if rng.random() < 0.7:
+            job["scheduledDayOffset"] = rng.choice([0, 0, 1, 1, 2, 3, 5])
+            job["scheduledHour"] = rng.choice([7, 8, 9, 10, 11, 14, 15, 16, 17, 18])
+            job["scheduledMinute"] = rng.choice([0, 0, 30])
+
+        if speaks_only or rng.random() < 0.3:
+            job["voiceNote"] = rng.choice(VOICE_NOTES)
+            job["voiceNoteSeconds"] = round(rng.uniform(4, 14), 1)
+
+        gallery = PHOTOS.get(tags[0])
+        if gallery and rng.random() < 0.35:
+            count = 1 if len(gallery) == 1 or rng.random() < 0.6 else 2
+            job["photos"] = gallery[:count]
+
+        job["postedBy"] = poster["id"]
+        job["createdHoursAgo"] = round(rng.uniform(0.5, 96), 1)
+
+        if rng.random() < 0.75:
+            job["contact"] = (
+                f"{rng.choice(MOBILE_PREFIXES)} {rng.randint(1000000, 9999999)}"
+            )
+
+        jobs.append(job)
+
+    # A handful of jobs that need no travel at all, so the "open to everywhere"
+    # rule is exercised by the demo rather than only by tests.
+    for offset, (tags, fare_range, title, description) in enumerate(REMOTE_WORK):
+        city_name, province, areas = weighted(rng, city_options)
+        area_name, lat, lng = rng.choice(areas)
+        poster = people[(job_count + offset) % len(people)]
+        if poster["area"] is None:
+            poster["area"] = f"{area_name}, {city_name}"
+
+        jobs.append({
+            "id": f"seed-{job_count + offset + 1:03d}",
+            "city": city_name,
+            "province": province,
+            "area": area_name,
+            "title": title,
+            "tags": list(tags),
+            "startingFare": round_fare(rng.uniform(*fare_range)),
+            "shortDescription": description,
+            "location": {
+                "latitude": round(lat + jitter(rng, 0.01), 4),
+                "longitude": round(lng + jitter(rng, 0.01), 4),
+            },
+            "radiusMetres": 1000,
+            "openToAllLocations": True,
+            "scheduledDayOffset": 1,
+            "scheduledHour": 11,
+            "scheduledMinute": 0,
+            "postedBy": poster["id"],
+            "createdHoursAgo": round(rng.uniform(1, 40), 1),
+            "contact": f"{rng.choice(MOBILE_PREFIXES)} {rng.randint(1000000, 9999999)}",
+        })
+
+    # Anyone who never posted still needs somewhere to be from.
+    for person in people:
+        if person["area"] is None:
+            city_name, _, areas = weighted(rng, city_options)
+            area_name, _, _ = rng.choice(areas)
+            person["area"] = f"{area_name}, {city_name}"
+
+    return jobs, people
+
+
+def main() -> None:
+    jobs, people = build()
+
+    SEED_DIR.mkdir(parents=True, exist_ok=True)
+    (SEED_DIR / "jobs.json").write_text(
+        json.dumps(jobs, ensure_ascii=False, indent=2) + "\n"
+    )
+    (SEED_DIR / "users.json").write_text(
+        json.dumps(people, ensure_ascii=False, indent=2) + "\n"
+    )
+
+    cities = {}
+    for job in jobs:
+        cities[job["city"]] = cities.get(job["city"], 0) + 1
+
+    print(f"{len(jobs)} jobs, {len(people)} people, {len(cities)} cities")
+    for city, count in sorted(cities.items(), key=lambda pair: -pair[1]):
+        print(f"  {count:3d}  {city}")
+
+
+if __name__ == "__main__":
+    main()

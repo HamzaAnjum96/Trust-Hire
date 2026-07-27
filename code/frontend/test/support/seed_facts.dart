@@ -18,8 +18,7 @@ class SeedFacts {
   /// fraction of the whole file, and is the number the map actually shows on
   /// a first launch.
   static Future<int> generalJobCount() async {
-    final raw = await rootBundle.loadString('assets/seed/jobs.json');
-    final jobs = (jsonDecode(raw) as List<dynamic>)
+    final jobs = (await readJsonAsset('assets/seed/jobs.json') as List<dynamic>)
         .cast<Map<String, dynamic>>();
 
     return jobs
@@ -33,8 +32,21 @@ class SeedFacts {
 
   static Future<int> userCount() async => _countOf('assets/seed/users.json');
 
-  static Future<int> _countOf(String asset) async {
-    final raw = await rootBundle.loadString(asset);
-    return (jsonDecode(raw) as List<dynamic>).length;
+  static Future<int> _countOf(String asset) async =>
+      (await readJsonAsset(asset) as List<dynamic>).length;
+
+  /// Reads a bundled JSON asset without `rootBundle.loadString`.
+  ///
+  /// Above 50 KB that method decodes in a background isolate, which never
+  /// completes inside `testWidgets` — see `SeedLoader._readJson`. The seed is
+  /// well over that now, so the tests have to read it the same way the app
+  /// does.
+  static Future<Object?> readJsonAsset(String asset) async {
+    final bytes = await rootBundle.load(asset);
+    return jsonDecode(
+      utf8.decode(
+        bytes.buffer.asUint8List(bytes.offsetInBytes, bytes.lengthInBytes),
+      ),
+    );
   }
 }

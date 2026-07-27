@@ -8,7 +8,9 @@ import 'package:trust_hire/core/layout.dart';
 import 'package:trust_hire/core/tokens.dart';
 import 'package:trust_hire/features/jobs/job_details_sheet.dart';
 import 'package:trust_hire/features/jobs/job_row.dart';
+import 'package:flutter_map/flutter_map.dart';
 import 'package:trust_hire/features/map/job_map.dart';
+import 'package:trust_hire/features/map/job_marker.dart';
 import 'package:trust_hire/features/map/map_screen.dart';
 import 'package:trust_hire/services/local_store.dart';
 
@@ -209,6 +211,47 @@ void main() {
       await settle(tester);
 
       expect(find.byType(JobDetailsSheet), findsOneWidget);
+    });
+  });
+
+  group('opening on a country of jobs', () {
+    testWidgets('the map opens on nearby work, not on the whole country', (
+      tester,
+    ) async {
+      // The seed spans Karachi to Gilgit. Framing all of it puts every pin at
+      // dot size with none of them near anybody, and framing none of it leaves
+      // a nearly empty screen — the map has to open on one city's worth.
+      await tester.useCompactSurface();
+      await tester.pumpWidget(TrustHireApp(store: await readyStore()));
+      await settle(tester);
+
+      // Zoom is the readable proof: the whole country needs about 5, one city
+      // about 11. Anything below 8 means it zoomed out to fit everything.
+      //
+      // Read from inside the map — the camera is an inherited value, so it is
+      // only reachable from a descendant's context.
+      final camera = MapCamera.of(
+        tester.element(find.byType(MarkerLayer).first),
+      );
+
+      expect(
+        camera.zoom,
+        greaterThan(8),
+        reason: 'zoomed out to ${camera.zoom} — that is the whole country',
+      );
+    });
+
+    testWidgets('and there are pins on it', (tester) async {
+      await tester.useCompactSurface();
+      await tester.pumpWidget(TrustHireApp(store: await readyStore()));
+      await settle(tester);
+
+      expect(
+        find.byType(JobMarker).evaluate().length +
+            find.byType(ClusterMarker).evaluate().length,
+        greaterThan(1),
+        reason: 'an all-but-empty map reads as no work available',
+      );
     });
   });
 

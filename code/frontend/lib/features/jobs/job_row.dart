@@ -115,6 +115,10 @@ class JobRow extends StatelessWidget {
                       icon: job.supportingTags.first.icon,
                       label: job.supportingTags.first.label(strings),
                     ),
+                  // Where, before when. Once the jobs span a country, a row
+                  // that says only what and when is a row a worker cannot use.
+                  if (job.area != null)
+                    _Meta(icon: Icons.place_outlined, label: job.area!),
                   _Meta(
                     icon: Icons.schedule,
                     label: Format.scheduled(strings, job.scheduledTime, now),
@@ -166,13 +170,28 @@ class _Meta extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Icon(icon, size: 16, color: theme.colorScheme.onSurfaceVariant),
-        const SizedBox(width: BrandSizing.spaceXs + 2),
-        Text(label, style: theme.textTheme.labelSmall),
-      ],
+    // Capped and ellipsised rather than free to size itself. A Wrap gives a
+    // child the full line width and lets it overflow past that, and
+    // "Ghulam Muhammad Abad, Faisalabad" in the 380px results rail is wider
+    // than the line — which paints the yellow-and-black overflow stripes over
+    // a job row.
+    return ConstrainedBox(
+      constraints: const BoxConstraints(maxWidth: 220),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, size: 16, color: theme.colorScheme.onSurfaceVariant),
+          const SizedBox(width: BrandSizing.spaceXs + 2),
+          Flexible(
+            child: Text(
+              label,
+              style: theme.textTheme.labelSmall,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

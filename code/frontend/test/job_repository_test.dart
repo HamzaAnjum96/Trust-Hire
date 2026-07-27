@@ -11,6 +11,36 @@ import 'support/seed_facts.dart';
 /// The technical constraints in the sprint plan hinge on this class: seed on
 /// first run, then edit the local copy only, with no network anywhere.
 void main() {
+  testWidgets('the seed loads inside a widget test, however big it gets', (
+    tester,
+  ) async {
+    // A regression guard for a trap that cost an afternoon. `loadString`
+    // hands any asset over 50 KB to a background isolate via `compute()`, and
+    // that isolate's result never arrives inside `testWidgets` — its
+    // fake-async zone does not run it. The seed crossed 50 KB when it went
+    // national, and every widget test that touched it hung until the harness
+    // gave up with "Cannot close sink while adding stream", which names
+    // nothing useful.
+    //
+    // The size assertion is the point: this test only proves anything while
+    // the asset is over the threshold, so it says so out loud rather than
+    // passing quietly on a small file some day.
+    final bytes = await rootBundle.load('assets/seed/jobs.json');
+    expect(
+      bytes.lengthInBytes,
+      greaterThan(50 * 1024),
+      reason: 'below 50 KB this test proves nothing — loadString would work',
+    );
+
+    final store = await LocalStore.open();
+    final repository = JobRepository(store, MediaStore(store));
+
+    // Deadlocks rather than fails if anyone reaches for loadString again.
+    await repository.ensureSeeded();
+
+    expect(await repository.fetchJobs(), isNotEmpty);
+  });
+
   TestWidgetsFlutterBinding.ensureInitialized();
 
   setUp(() {

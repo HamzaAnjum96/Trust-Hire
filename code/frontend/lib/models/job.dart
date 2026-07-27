@@ -67,6 +67,7 @@ class Job {
     this.startingFare,
     this.agreedFare,
     this.acceptedWorkerId,
+    this.area,
     this.scheduledTime,
     this.voiceNotePath,
     this.voiceNoteDuration,
@@ -122,6 +123,15 @@ class Job {
 
   /// True once the hirer has chosen someone. No further bids are taken.
   bool get isAccepted => acceptedWorkerId != null;
+
+  /// Where this is, in words — "Gulshan-e-Iqbal, Karachi".
+  ///
+  /// Added when the seed went national. A list row saying only "Help needed
+  /// for a day" is useless once the jobs are eight hundred kilometres apart,
+  /// and a worker without location sharing has nothing else to go on. It is a
+  /// neighbourhood and a city, never an address, which is the same promise
+  /// [radiusMetres] makes on the map.
+  final String? area;
 
   /// The approximate work area, shown as a translucent circle on the map.
   final double radiusMetres;
@@ -279,6 +289,7 @@ class Job {
       startingFare: startingFare,
       agreedFare: fare,
       acceptedWorkerId: workerId,
+      area: area,
       radiusMetres: radiusMetres,
       scheduledTime: scheduledTime,
       voiceNotePath: voiceNotePath,
@@ -325,6 +336,7 @@ class Job {
       // fare or who was chosen.
       agreedFare: agreedFare,
       acceptedWorkerId: acceptedWorkerId,
+      area: area,
       radiusMetres: radiusMetres ?? this.radiusMetres,
       scheduledTime: clearScheduledTime
           ? null
@@ -367,6 +379,7 @@ class Job {
       startingFare: (json['startingFare'] as num?)?.round(),
       agreedFare: (json['agreedFare'] as num?)?.round(),
       acceptedWorkerId: json['acceptedWorkerId'] as String?,
+      area: json['area'] as String?,
       radiusMetres: (json['radiusMetres'] as num?)?.toDouble() ?? 1000,
       scheduledTime: json['scheduledTime'] == null
           ? null
@@ -396,6 +409,7 @@ class Job {
     'startingFare': startingFare,
     'agreedFare': agreedFare,
     'acceptedWorkerId': acceptedWorkerId,
+    'area': area,
     'radiusMetres': radiusMetres,
     'scheduledTime': scheduledTime?.toIso8601String(),
     'voiceNotePath': voiceNotePath,

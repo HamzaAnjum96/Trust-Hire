@@ -10,6 +10,7 @@ import '../../core/layout.dart';
 import '../../core/motion.dart';
 import '../../core/tokens.dart';
 import '../../models/job.dart';
+import '../../services/location_service.dart';
 import '../../services/media_store.dart';
 import '../jobs/filter_bar.dart';
 import '../jobs/job_details_sheet.dart';
@@ -99,18 +100,39 @@ class _MapScreenState extends State<MapScreen> {
     );
   }
 
-  /// Frames the first load around the jobs this user can actually see.
+  /// How far from the opening point a job can be and still count as "here".
   ///
-  /// The fixed opening camera used to work because the seed data surrounded
-  /// it. Since P1-1 a worker sees a subset — sometimes four jobs, none of them
-  /// in the middle — and an empty map on first launch reads as no work
-  /// available. Runs once, and never fights a user who has since panned.
-  void _frameOnFirstLoad(List<Job> jobs) {
+  /// Roughly a metropolitan area. It exists because the seed spans Karachi to
+  /// Gilgit: framing *everything* opens on the whole country, where every pin
+  /// is a dot and none of them is near anybody. "Show all jobs" is right there
+  /// for whoever wants that view, and it should be a choice rather than the
+  /// thing that happens on launch.
+  static const _nearbyMetres = 60000.0;
+
+  /// Frames the first load on the work near the opening point.
+  ///
+  /// The fixed opening camera used to work because the seed surrounded it.
+  /// Since P1-1 a worker sees a subset, sometimes with none of it in the
+  /// middle, and an empty map on first launch reads as no work available.
+  ///
+  /// So: fit to the jobs around wherever the map is starting — the device
+  /// position when it is known, the fallback city when it is not. If there is
+  /// nothing near, fit everything instead, because a distant pin the user can
+  /// see beats a correct view of nothing. Runs once, and never fights a user
+  /// who has since panned.
+  void _frameOnFirstLoad(List<Job> jobs, {JobLocation? from}) {
     if (_framed || jobs.isEmpty) return;
     _framed = true;
 
+    final origin = from ?? LocationService.fallback;
+    final nearby = jobs
+        .where((job) => origin.distanceTo(job.location) <= _nearbyMetres)
+        .toList(growable: false);
+
+    final target = nearby.isEmpty ? jobs : nearby;
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted) _fitToJobs(jobs);
+      if (mounted) _fitToJobs(target);
     });
   }
 
@@ -155,7 +177,9 @@ class _MapScreenState extends State<MapScreen> {
     // ProfileController.visibleTo for why a worker never sees everything.
     final reachable = profile.visibleTo(jobs.jobs, from: location.position);
 
-    if (jobs.state == LoadState.ready) _frameOnFirstLoad(reachable);
+    if (jobs.state == LoadState.ready) {
+      _frameOnFirstLoad(reachable, from: location.position);
+    }
 
     return Scaffold(
       body: switch (jobs.state) {

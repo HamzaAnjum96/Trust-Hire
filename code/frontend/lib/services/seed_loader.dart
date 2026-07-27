@@ -19,8 +19,7 @@ class SeedLoader {
   static const _usersAsset = 'assets/seed/users.json';
 
   Future<List<Job>> loadJobs() async {
-    final raw = await rootBundle.loadString(_jobsAsset);
-    final decoded = jsonDecode(raw) as List<dynamic>;
+    final decoded = await _readJson(_jobsAsset) as List<dynamic>;
     final now = DateTime.now();
 
     return decoded
@@ -30,12 +29,32 @@ class SeedLoader {
   }
 
   Future<List<AppUser>> loadUsers() async {
-    final raw = await rootBundle.loadString(_usersAsset);
-    final decoded = jsonDecode(raw) as List<dynamic>;
+    final decoded = await _readJson(_usersAsset) as List<dynamic>;
     return decoded
         .cast<Map<String, dynamic>>()
         .map(AppUser.fromJson)
         .toList(growable: false);
+  }
+
+  /// Reads and decodes a bundled JSON asset.
+  ///
+  /// Deliberately **not** `rootBundle.loadString`. That method hands anything
+  /// over 50 KB to a background isolate via `compute()` to keep the decode off
+  /// the main thread — sensible on a device, and a deadlock inside
+  /// `testWidgets`, whose fake-async zone never lets the isolate's result come
+  /// back. The seed crossed 50 KB when it went national, and every widget test
+  /// that touched it hung until the harness gave up.
+  ///
+  /// Decoding a hundred kilobytes of JSON synchronously costs a few
+  /// milliseconds once, on first run only, which is a price worth paying to
+  /// keep the data loadable from a test.
+  Future<Object?> _readJson(String asset) async {
+    final bytes = await rootBundle.load(asset);
+    return jsonDecode(
+      utf8.decode(
+        bytes.buffer.asUint8List(bytes.offsetInBytes, bytes.lengthInBytes),
+      ),
+    );
   }
 
   /// Resolves the relative day/hour offsets in the seed file into concrete
@@ -61,6 +80,9 @@ class SeedLoader {
               .map((id) => JobTag.fromId(id as String?))
               .whereType<JobTag>()
               .toSet(),
+      // The generator writes the neighbourhood and the city separately; the
+      // app only ever shows them together.
+      area: json['area'] == null ? null : '${json['area']}, ${json['city']}',
       startingFare: (json['startingFare'] as num?)?.round(),
       geofenceMetres: (json['geofenceMetres'] as num?)?.toDouble(),
       openToAllLocations: json['openToAllLocations'] as bool? ?? false,
