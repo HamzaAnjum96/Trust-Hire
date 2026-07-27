@@ -94,7 +94,15 @@ class JobRow extends StatelessWidget {
                     label: Format.scheduled(strings, job.scheduledTime, now),
                   ),
                   if (job.hasVoiceNote)
-                    _Meta(icon: Icons.mic, label: strings.voiceNote),
+                    _Meta(
+                      icon: Icons.mic,
+                      // Distinguishes "has a voice note as well" from "the
+                      // voice note is all there is", which decides whether
+                      // this row is worth opening at all.
+                      label: job.isAudioOnly
+                          ? strings.audioOnlyJob
+                          : strings.voiceNote,
+                    ),
                   if (job.hasPhotos)
                     _Meta(
                       icon: Icons.photo_library_outlined,

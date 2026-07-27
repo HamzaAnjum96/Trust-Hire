@@ -171,15 +171,9 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
               VoiceRecorderField(draft: _draft),
 
               const SizedBox(height: BrandSizing.spaceLg),
-              _FieldLabel(strings.detailKindOfWork),
+              _FieldLabel(strings.fieldTags),
               const SizedBox(height: BrandSizing.spaceXs),
-              Text(
-                // Never a "please select" — skipping this is fine, and the
-                // marker falls back to what the job carries.
-                'Optional. Choosing one makes your job easier to spot on the '
-                'map.',
-                style: theme.textTheme.labelSmall,
-              ),
+              Text(strings.tagsHelp, style: theme.textTheme.labelSmall),
               const SizedBox(height: BrandSizing.spaceSm),
               JobTagField(draft: _draft),
 
@@ -208,6 +202,31 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
                 maxLines: 3,
                 decoration: InputDecoration(hintText: strings.messageHint),
               ),
+
+              // Asked for, never required. Someone who recorded a voice note
+              // because writing is hard must still be able to post — that is
+              // the product — so this says who the words would help and then
+              // gets out of the way.
+              if (_draft.wouldBeAudioOnly) ...[
+                const SizedBox(height: BrandSizing.spaceSm),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Icon(
+                      Icons.hearing_disabled_outlined,
+                      size: 18,
+                      color: theme.colorScheme.onSurfaceVariant,
+                    ),
+                    const SizedBox(width: BrandSizing.spaceSm),
+                    Expanded(
+                      child: Text(
+                        strings.addWordsForVoiceNote,
+                        style: theme.textTheme.labelSmall,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
 
               const SizedBox(height: BrandSizing.spaceLg),
               _FieldLabel(strings.fieldContact),

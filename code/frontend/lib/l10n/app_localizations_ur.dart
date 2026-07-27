@@ -792,4 +792,15 @@ class AppStringsUr extends AppStrings {
 
   @override
   String get navProfile => 'پروفائل';
+
+  @override
+  String get audioOnlyJob => 'صرف آواز میں بتایا گیا';
+
+  @override
+  String get audioOnlyJobHelp =>
+      'اس کام کی کوئی تحریری تفصیل نہیں۔ اگر آپ آواز نہیں سن سکتے تو پوسٹ کرنے والے سے پوچھ لیں۔';
+
+  @override
+  String get addWordsForVoiceNote =>
+      'کچھ لوگ آواز کا پیغام نہیں سن سکتے۔ یہاں چند الفاظ لکھنے سے وہ آپ کا کام ڈھونڈ سکیں گے۔';
 }

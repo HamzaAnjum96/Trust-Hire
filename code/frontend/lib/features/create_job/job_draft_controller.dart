@@ -125,6 +125,14 @@ class JobDraftController extends ChangeNotifier {
       hasVoiceNote ||
       _photos.isNotEmpty;
 
+  /// True when this draft would post a job nobody can read.
+  ///
+  /// Drives a prompt on the form, not a rule: requiring text alongside a voice
+  /// note would shut out the people the voice note exists for. See
+  /// [Job.isAudioOnly].
+  bool get wouldBeAudioOnly =>
+      hasVoiceNote && _title.trim().isEmpty && _description.trim().isEmpty;
+
   /// What is stopping a save, or null when it can go ahead.
   ///
   /// Two rules now, not one. Tags became required with Phase 1 because they

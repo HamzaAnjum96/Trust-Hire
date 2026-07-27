@@ -143,22 +143,33 @@ void main() {
       }
     }
 
-    test('no English sentence is written straight into a widget', () async {
-      // The literal-replacement pass missed a dozen of these, and nothing
+    test('no English prose is written straight into a widget', () async {
+      // The literal-replacement pass missed a dozen of these and nothing
       // caught it: the app looked translated because the screens people
-      // opened first were. Anything that reads like a sentence — two words
-      // and a full stop — has to come from the catalogue.
+      // opened first were.
       //
-      // debugPrint and thrown errors are exempt: they are for whoever is
-      // reading the logs, not for the user.
-      final sentence = RegExp(r"'[A-Z][a-z]+ [^']*\.[ ']");
+      // The rule is "three or more words in one literal". An earlier version
+      // asked for a capital letter followed by a space, and twice let through
+      // a string that opened with "Optional." — a full stop where it expected
+      // a space. Counting words has no such blind spot.
+      final literal = RegExp(r"'([^'\\\$]{8,})'");
+      final prose = RegExp(r'^[A-Za-z][^,;:]*( [a-z]+){2,}');
       final developerFacing = RegExp(r'debugPrint\(|Error\(|assert\(');
+      // Comments are prose by nature and are not shipped to anyone.
+      final comment = RegExp(r'^\s*(///?|\*)');
 
       final offenders = <String>[];
       for (final file in sourceFiles()) {
         for (final line in file.readAsLinesSync()) {
+          if (comment.hasMatch(line)) continue;
           if (developerFacing.hasMatch(line)) continue;
-          if (sentence.hasMatch(line)) offenders.add('${file.path}: $line');
+
+          for (final match in literal.allMatches(line)) {
+            final text = match.group(1)!;
+            if (prose.hasMatch(text)) {
+              offenders.add('${file.path}: $text');
+            }
+          }
         }
       }
 

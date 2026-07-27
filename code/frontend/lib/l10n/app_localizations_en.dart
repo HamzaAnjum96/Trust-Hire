@@ -787,4 +787,15 @@ class AppStringsEn extends AppStrings {
 
   @override
   String get navProfile => 'Profile';
+
+  @override
+  String get audioOnlyJob => 'Described by voice only';
+
+  @override
+  String get audioOnlyJobHelp =>
+      'There is no written description of this work. Ask the poster if you cannot play the voice note.';
+
+  @override
+  String get addWordsForVoiceNote =>
+      'Some people cannot play a voice note. A few words here help them find your job.';
 }

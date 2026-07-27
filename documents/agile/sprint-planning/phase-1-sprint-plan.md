@@ -57,6 +57,31 @@ addresses to both parties after acceptance. Phase 1 wins — but **the copy must
 change in the same sprint as the behaviour**, in P1-3. Leaving a promise in
 place after it stops being true is worse than never having made it.
 
+## A third decision: audio-only jobs
+
+WCAG 1.2.1 asks for a text alternative to prerecorded audio. A job described
+only by a voice note has none, and **requiring one is not an option**: the
+poster spoke because writing is hard, which is the product's entire premise.
+A required summary field would shut out exactly the people Trust Hire exists
+for, and the brand guidelines rule out asterisks and gatekeeping fields
+anyway.
+
+What the app does instead, from 0.3.1:
+
+- **Says so.** A job whose only description is audio is labelled as such in the
+  list and in the details sheet, next to the player. Someone who cannot hear it
+  learns that immediately rather than working out that they have missed
+  something.
+- **Asks, without insisting.** The posting form prompts for a few words once a
+  voice note is the only description, naming who it would help. It never blocks
+  the save.
+- **Leaves the rest readable.** Tags, area and time are text, so a job is never
+  entirely opaque even when its description is not.
+
+This is a partial conformance and should be recorded as one. Real transcripts
+need speech recognition, which needs a server; they arrive with the backend in
+**P1-8**, where the media pipeline already lives.
+
 ## Sprints
 
 Ordered so each one leaves the app working, and so the load-bearing logic is
@@ -123,7 +148,8 @@ logging.
 ### P1-8 — Backend
 Supabase schema from the settled domain, migration of the repositories, and
 sync. Media compression and retention (Section 3) belongs here — it is a
-server-side concern.
+server-side concern, and so are voice-note transcripts (see *A third decision*
+above).
 
 ### P1-9 — Verification
 CNIC upload and plausibility check, SMS OTP, CNIC-SIM name match. Last, because

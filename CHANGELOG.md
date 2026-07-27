@@ -12,6 +12,33 @@ that heading to the version and date, and open a fresh `[Unreleased]`.
 
 ## [Unreleased]
 
+### 0.3.1 — Saying when a job cannot be read
+
+#### Added
+
+- A job described only by a voice note now says so — in the list, and beside
+  the player in the details sheet. WCAG 1.2.1 asks for a text alternative to
+  prerecorded audio and there is none: the poster spoke because writing is
+  hard, which is the product's whole premise, so requiring a summary would
+  shut out the people it exists for. The honest middle is to name the gap
+  rather than show a player and leave someone who cannot hear it to work out
+  that they have missed something. Tags, area and time are still readable, so
+  a job is never entirely opaque. Recorded as partial conformance in the Phase
+  1 plan; real transcripts need speech recognition and arrive with the backend
+  in P1-8.
+- The posting form asks for a few words once a voice note is the only
+  description, naming who they would help. It never blocks the save.
+
+#### Fixed
+
+- The tag field still carried the POC's copy — "Optional. Choosing one makes
+  your job easier to spot on the map" — hard-coded in English and wrong since
+  P1-1 made tags required. The localisation guard had missed it twice: it
+  looked for a capital letter followed by a space, and this string opens with
+  "Optional." It now counts words instead, which has no such blind spot, and
+  is verified against all three strings that previously slipped past it.
+
+
 ### 0.3.0 — Activity and Profile
 
 Two navigation labels described the code rather than what a person would find

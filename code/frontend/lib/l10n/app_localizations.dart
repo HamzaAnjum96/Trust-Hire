@@ -1417,6 +1417,24 @@ abstract class AppStrings {
   /// In en, this message translates to:
   /// **'Profile'**
   String get navProfile;
+
+  /// Label on a job whose only description is a voice note
+  ///
+  /// In en, this message translates to:
+  /// **'Described by voice only'**
+  String get audioOnlyJob;
+
+  /// Explains an audio-only job to someone who cannot hear it
+  ///
+  /// In en, this message translates to:
+  /// **'There is no written description of this work. Ask the poster if you cannot play the voice note.'**
+  String get audioOnlyJobHelp;
+
+  /// Prompt to add text alongside a voice note
+  ///
+  /// In en, this message translates to:
+  /// **'Some people cannot play a voice note. A few words here help them find your job.'**
+  String get addWordsForVoiceNote;
 }
 
 class _AppStringsDelegate extends LocalizationsDelegate<AppStrings> {

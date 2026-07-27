@@ -412,5 +412,17 @@
   "navProfile": "Profile",
   "@navProfile": {
     "description": "Bottom navigation label for role, trades and settings"
+  },
+  "audioOnlyJob": "Described by voice only",
+  "@audioOnlyJob": {
+    "description": "Label on a job whose only description is a voice note"
+  },
+  "audioOnlyJobHelp": "There is no written description of this work. Ask the poster if you cannot play the voice note.",
+  "@audioOnlyJobHelp": {
+    "description": "Explains an audio-only job to someone who cannot hear it"
+  },
+  "addWordsForVoiceNote": "Some people cannot play a voice note. A few words here help them find your job.",
+  "@addWordsForVoiceNote": {
+    "description": "Prompt to add text alongside a voice note"
   }
 }

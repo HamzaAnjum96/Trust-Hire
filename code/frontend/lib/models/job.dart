@@ -139,6 +139,24 @@ class Job {
   bool get hasVoiceNote => voiceNotePath != null;
   bool get hasPhotos => photoPaths.isNotEmpty;
 
+  /// Whether anyone can *read* what this job is about.
+  bool get hasTextDescription =>
+      (title != null && title!.trim().isNotEmpty) ||
+      (shortDescription != null && shortDescription!.trim().isNotEmpty);
+
+  /// A job whose only description is a recording.
+  ///
+  /// WCAG 1.2.1 asks for a text alternative to prerecorded audio, and there
+  /// isn't one: the poster spoke instead of writing, which is the whole point
+  /// of the product. Requiring text would shut out exactly the people it
+  /// exists for. What the app can do is be honest about it — say the
+  /// description is audio, rather than showing a player and leaving someone
+  /// who cannot hear it to work out that they have missed something.
+  ///
+  /// The tags, the area and the time are still readable, so a job is never
+  /// entirely opaque. Transcripts need a backend and arrive with it in P1-8.
+  bool get isAudioOnly => hasVoiceNote && !hasTextDescription;
+
   /// The tag [displayTitle] falls back to, or null when it uses something
   /// else. Kept in one place so the heading and [supportingTags] cannot
   /// disagree about which tag has already been said.

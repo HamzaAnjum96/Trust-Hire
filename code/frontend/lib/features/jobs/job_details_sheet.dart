@@ -10,6 +10,7 @@ import '../../core/tokens.dart';
 import '../../models/app_user.dart';
 import '../../models/job.dart';
 import '../../services/media_store.dart';
+import '../../widgets/state_views.dart';
 import '../../widgets/voice_note_player.dart';
 import '../create_job/create_job_screen.dart';
 import 'contact_panel.dart';
@@ -148,6 +149,18 @@ class _Body extends StatelessWidget {
             reference: job.voiceNotePath!,
             mediaStore: mediaStore,
             duration: job.voiceNoteDuration,
+          ),
+        ],
+
+        // Said plainly, rather than leaving someone who cannot hear the
+        // recording to discover for themselves that there is nothing to read.
+        if (job.isAudioOnly) ...[
+          const SizedBox(height: BrandSizing.spaceSm),
+          NoticePanel(
+            message: job.hasContact
+                ? strings.audioOnlyJobHelp
+                : strings.audioOnlyJob,
+            icon: Icons.hearing_disabled_outlined,
           ),
         ],
 
