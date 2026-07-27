@@ -11,6 +11,7 @@ import '../../models/app_user.dart';
 import '../../models/job.dart';
 import '../../services/media_store.dart';
 import '../../widgets/voice_note_player.dart';
+import '../create_job/create_job_screen.dart';
 import 'photo_gallery.dart';
 
 /// The job details bottom sheet.
@@ -175,6 +176,107 @@ class _Body extends StatelessWidget {
           // Section 33 copy — reassure rather than expose.
           'This is the general area, not an exact address.',
           style: theme.textTheme.labelSmall,
+        ),
+
+        // Only jobs created here can be changed. Seeded ones stand in for
+        // other people's postings, which nobody else gets to edit.
+        if (job.isLocal) ...[
+          const SizedBox(height: BrandSizing.spaceLg),
+          const Divider(),
+          const SizedBox(height: BrandSizing.spaceMd),
+          _JobActions(job: job),
+        ],
+      ],
+    );
+  }
+}
+
+/// Edit and delete, for jobs that live on this device.
+class _JobActions extends StatelessWidget {
+  const _JobActions({required this.job});
+
+  final Job job;
+
+  Future<void> _edit(BuildContext context) async {
+    await Navigator.of(context).push(
+      MaterialPageRoute<String>(
+        fullscreenDialog: true,
+        builder: (_) => CreateJobScreen(
+          initialLocation: job.location,
+          editing: job,
+        ),
+      ),
+    );
+    // The sheet watches the controller by id, so it refreshes itself once the
+    // edit is saved — no manual reload here.
+  }
+
+  Future<void> _delete(BuildContext context) async {
+    final controller = context.read<JobController>();
+    final navigator = Navigator.of(context);
+    final messenger = ScaffoldMessenger.of(context);
+
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        shape: const RoundedRectangleBorder(
+          borderRadius: BrandRadius.largeAll,
+        ),
+        title: const Text('Delete this job?'),
+        content: const Text(
+          'It will be removed from this device. This cannot be undone.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(false),
+            child: const Text('Keep Job'),
+          ),
+          TextButton(
+            style: TextButton.styleFrom(
+              foregroundColor: BrandColours.errorRed,
+            ),
+            // Section 22 — destructive actions are labelled explicitly, never
+            // "Confirm" or "Yes".
+            onPressed: () => Navigator.of(dialogContext).pop(true),
+            child: const Text('Delete Job'),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmed != true) return;
+
+    await controller.deleteJob(job.id);
+    navigator.pop();
+    messenger.showSnackBar(
+      const SnackBar(content: Text('Job deleted from this device.')),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        SizedBox(
+          width: double.infinity,
+          child: OutlinedButton.icon(
+            onPressed: () => _edit(context),
+            icon: const Icon(Icons.edit_outlined),
+            label: const Text('Edit Job'),
+          ),
+        ),
+        const SizedBox(height: BrandSizing.spaceSm),
+        SizedBox(
+          width: double.infinity,
+          child: TextButton.icon(
+            onPressed: () => _delete(context),
+            style: TextButton.styleFrom(
+              foregroundColor: BrandColours.errorRed,
+              minimumSize: const Size(0, BrandSizing.touchTargetPreferred),
+            ),
+            icon: const Icon(Icons.delete_outline),
+            label: const Text('Delete Job'),
+          ),
         ),
       ],
     );

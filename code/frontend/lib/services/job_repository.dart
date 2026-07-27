@@ -78,6 +78,10 @@ class JobRepository {
     }
 
     await _persist(jobs);
+
+    // Editing can drop a photo or replace a recording; the blob it used is
+    // then unreferenced and would otherwise sit in storage forever.
+    await _pruneMedia(jobs);
   }
 
   Future<void> deleteJob(String id) async {

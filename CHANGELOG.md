@@ -12,6 +12,32 @@ that heading to the version and date, and open a fresh `[Unreleased]`.
 
 ## [Unreleased]
 
+### Sprint 4 — Editing
+
+Definition of done: CRUD completed. Met — 77 tests pass, covering update and
+delete alongside the create path from Sprint 3.
+
+#### Added
+
+- Edit and delete on the job details sheet, for jobs created on this device.
+  Seeded jobs stand in for other people's postings, so they offer neither.
+- Editing reuses `JobDraftController` rather than duplicating the form: it
+  opens on the job as it stands, keeps the id and original posting time, and
+  leaves untouched photos alone. Photos can be dropped or added and the voice
+  note re-recorded.
+- Deleting asks first, with the destructive choice labelled "Delete Job" and
+  the safe one "Keep Job" — never "Confirm" or "Yes", per section 22.
+- The details sheet refreshes itself after an edit because it watches by job
+  id, and says the job is gone rather than showing a stale copy after a delete.
+- 10 tests covering in-place update, persistence across reload, deletion,
+  media pruning, and the sheet's actions.
+
+#### Fixed
+
+- Saving an edit left orphaned media in storage. Dropping a photo or replacing
+  a recording now prunes the bytes nothing references, which previously only
+  happened on delete. Media still used by another job is left alone.
+
 ### Sprint 3 — Create job
 
 Definition of done: new jobs appear immediately and persist. Met — 67 tests
