@@ -10,6 +10,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
 
   cupertino_icons: ^1.0.8
 
@@ -23,7 +25,7 @@ dependencies:
   shared_preferences: ^2.3.3
 
   # Formatting for dates, times and distances.
-  intl: ^0.19.0
+  intl: ^0.20.2
 
   # Identifiers for locally created jobs.
   uuid: ^4.5.1
@@ -51,7 +53,14 @@ dev_dependencies:
 flutter:
   uses-material-design: true
 
+  # Generates AppLocalizations from lib/l10n/*.arb on `flutter pub get`.
+  generate: true
+
   assets:
+    # The catalogues ship as assets so a test can check the two languages
+    # cover the same keys.
+    - lib/l10n/app_en.arb
+    - lib/l10n/app_ur.arb
     - assets/seed/
     - assets/images/
     - assets/images/jobs/
@@ -70,4 +79,26 @@ flutter:
         - asset: assets/fonts/Inter-SemiBold.ttf
           weight: 600
         - asset: assets/fonts/Inter-Bold.ttf
+          weight: 700
+
+    # Section 10 asks for Noto Nastaliq Urdu for expressive Urdu, and warns
+    # that Nastaliq should not be set small — it suggests testing Noto Sans
+    # Arabic for dense UI labels. So Noto Sans Arabic carries the interface at
+    # every size, and Nastaliq is reserved for the display style.
+    - family: Noto Sans Arabic
+      fonts:
+        - asset: assets/fonts/NotoSansArabic-400.ttf
+          weight: 400
+        - asset: assets/fonts/NotoSansArabic-500.ttf
+          weight: 500
+        - asset: assets/fonts/NotoSansArabic-600.ttf
+          weight: 600
+        - asset: assets/fonts/NotoSansArabic-700.ttf
+          weight: 700
+
+    - family: Noto Nastaliq Urdu
+      fonts:
+        - asset: assets/fonts/NotoNastaliqUrdu-400.ttf
+          weight: 400
+        - asset: assets/fonts/NotoNastaliqUrdu-700.ttf
           weight: 700

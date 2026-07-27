@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 
+import '../../l10n/app_localizations.dart';
 import '../../models/job.dart';
 import '../../services/location_service.dart';
 
@@ -25,12 +26,13 @@ class LocationController extends ChangeNotifier {
   /// The device location, or null when it is unavailable.
   JobLocation? get position => _result.position;
 
-  /// Where the map should open — the real location when known, Lahore
-  /// otherwise, since that is where the seed data is.
+  /// Where the map should open — the real location when known, the twin
+  /// cities otherwise, since that is where most of the seed data is.
   JobLocation get mapCentre => _result.position ?? LocationService.fallback;
 
   /// Explanation to surface, or null when there is nothing to say.
-  String? get explanation => _explanationDismissed ? null : _result.explanation;
+  String? explanation(AppStrings strings) =>
+      _explanationDismissed ? null : _result.explanation(strings);
 
   Future<void> request() async {
     if (_isRequesting) return;

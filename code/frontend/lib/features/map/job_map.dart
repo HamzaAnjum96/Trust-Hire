@@ -7,6 +7,7 @@ import '../../core/tokens.dart';
 import '../../models/job.dart';
 import 'job_marker.dart';
 import 'marker_cluster.dart';
+import '../../l10n/app_localizations.dart';
 
 /// The map itself — tiles, job radii, markers and the user's position.
 ///
@@ -75,6 +76,7 @@ class _JobMapState extends State<JobMap> {
 
   @override
   Widget build(BuildContext context) {
+    final strings = AppStrings.of(context);
     final theme = Theme.of(context);
     final mapTheme = MapTheme.of(context);
     final selected = _selectedJob;
@@ -85,7 +87,7 @@ class _JobMapState extends State<JobMap> {
         // it needs an explicit label — otherwise a screen reader announces an
         // unnamed button covering the screen.
         Semantics(
-          label: 'Map of nearby jobs',
+          label: strings.mapLabel,
           child: FlutterMap(
             mapController: widget.controller,
             options: MapOptions(

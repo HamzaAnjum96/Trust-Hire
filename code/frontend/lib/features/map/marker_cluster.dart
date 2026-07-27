@@ -46,10 +46,7 @@ class MarkerClusterer {
   /// actually collide.
   final double cellSizePixels;
 
-  List<JobCluster> cluster(
-    List<Job> jobs, {
-    required MapCamera camera,
-  }) {
+  List<JobCluster> cluster(List<Job> jobs, {required MapCamera camera}) {
     if (jobs.isEmpty) return const <JobCluster>[];
 
     final buckets = <({int x, int y}), List<Job>>{};

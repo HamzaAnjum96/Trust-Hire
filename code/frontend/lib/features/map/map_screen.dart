@@ -16,6 +16,7 @@ import '../../widgets/state_views.dart';
 import 'job_map.dart';
 import 'location_controller.dart';
 import 'marker_cluster.dart';
+import '../../l10n/app_localizations.dart';
 
 /// The map — the primary surface of the product.
 ///
@@ -110,6 +111,7 @@ class _MapScreenState extends State<MapScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final strings = AppStrings.of(context);
     final jobs = context.watch<JobController>();
     final location = context.watch<LocationController>();
     final filters = context.watch<JobFilterController>();
@@ -117,13 +119,17 @@ class _MapScreenState extends State<MapScreen> {
     return Scaffold(
       body: switch (jobs.state) {
         LoadState.idle ||
-        LoadState.loading => const LoadingView(message: 'Loading nearby jobs…'),
+        LoadState.loading => LoadingView(message: strings.loadingJobs),
         LoadState.failed => ErrorView(
-          message: jobs.errorMessage ?? 'Could not load jobs. Try again.',
+          message: jobs.errorMessage ?? strings.couldNotLoadJobsShort,
           onRetry: jobs.load,
         ),
         LoadState.ready => _MapBody(
-          jobs: filters.apply(jobs.jobs, from: location.position),
+          jobs: filters.apply(
+            jobs.jobs,
+            strings: strings,
+            from: location.position,
+          ),
           totalJobCount: jobs.jobs.length,
           filters: filters,
           selectedJobId: _selectedJobId,
@@ -186,8 +192,10 @@ class _MapBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final strings = AppStrings.of(context);
     final padding = MediaQuery.paddingOf(context);
     final selected = _selected;
+    final locationExplanation = location.explanation(strings);
 
     return Stack(
       // Every child here is positioned except the preview switcher, which
@@ -239,14 +247,14 @@ class _MapBody extends StatelessWidget {
           top: padding.top + 116,
           child: Column(
             children: [
-              if (location.explanation != null)
+              if (locationExplanation != null)
                 _MapNotice(
                   icon: Icons.location_off_outlined,
-                  message: location.explanation!,
+                  message: locationExplanation,
                   onDismiss: location.dismissExplanation,
                 ),
               if (tilesUnavailable) ...[
-                if (location.explanation != null)
+                if (locationExplanation != null)
                   const SizedBox(height: BrandSizing.spaceSm),
                 const _MapNotice(
                   icon: Icons.cloud_off,
@@ -269,7 +277,7 @@ class _MapBody extends StatelessWidget {
             children: [
               _MapButton(
                 icon: Icons.zoom_out_map,
-                label: 'Show all jobs',
+                label: strings.showAllJobs,
                 onPressed: jobs.isEmpty ? null : () => onFitToJobs(jobs),
               ),
               const SizedBox(height: BrandSizing.spaceSm),
@@ -340,6 +348,7 @@ class _MapHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final strings = AppStrings.of(context);
     final theme = Theme.of(context);
 
     return Container(
@@ -357,7 +366,7 @@ class _MapHeader extends StatelessWidget {
           Icon(Icons.place, size: 20, color: theme.colorScheme.primary),
           const SizedBox(width: BrandSizing.spaceSm),
           Expanded(
-            child: Text('Nearby work', style: theme.textTheme.titleLarge),
+            child: Text(strings.nearbyWork, style: theme.textTheme.titleLarge),
           ),
           Text(
             // Say what is being hidden, so a short list never looks like a
@@ -382,6 +391,7 @@ class _MapNotice extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final strings = AppStrings.of(context);
     final theme = Theme.of(context);
 
     return Container(
@@ -409,7 +419,7 @@ class _MapNotice extends StatelessWidget {
             IconButton(
               onPressed: onDismiss,
               icon: const Icon(Icons.close, size: 18),
-              tooltip: 'Dismiss',
+              tooltip: strings.dismiss,
               visualDensity: VisualDensity.compact,
             ),
         ],
@@ -466,6 +476,7 @@ class _MyLocationButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final strings = AppStrings.of(context);
     final theme = Theme.of(context);
 
     return Material(
@@ -487,7 +498,7 @@ class _MyLocationButton extends StatelessWidget {
               : Icon(
                   Icons.my_location,
                   color: theme.colorScheme.primary,
-                  semanticLabel: 'Near me',
+                  semanticLabel: strings.nearMeLabel,
                 ),
         ),
       ),
@@ -513,9 +524,10 @@ class JobPreviewCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final strings = AppStrings.of(context);
     final theme = Theme.of(context);
     final now = DateTime.now();
-    final distance = Format.distanceToJob(viewerLocation, job);
+    final distance = Format.distanceToJob(strings, viewerLocation, job);
 
     return Container(
       decoration: BoxDecoration(
@@ -534,7 +546,7 @@ class JobPreviewCard extends StatelessWidget {
             children: [
               Expanded(
                 child: Text(
-                  job.displayTitle,
+                  job.displayTitle(strings),
                   style: theme.textTheme.titleLarge,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
@@ -562,22 +574,20 @@ class JobPreviewCard extends StatelessWidget {
             children: [
               _MetaChip(
                 icon: Icons.schedule,
-                label: Format.scheduled(job.scheduledTime, now),
+                label: Format.scheduled(strings, job.scheduledTime, now),
               ),
               if (distance != null)
                 _MetaChip(icon: Icons.near_me_outlined, label: distance),
               _MetaChip(
                 icon: Icons.radio_button_unchecked,
-                label: Format.radius(job.radiusMetres),
+                label: Format.radius(strings, job.radiusMetres),
               ),
               if (job.hasVoiceNote)
-                const _MetaChip(icon: Icons.mic, label: 'Voice note'),
+                _MetaChip(icon: Icons.mic, label: strings.voiceNote),
               if (job.hasPhotos)
                 _MetaChip(
                   icon: Icons.photo_library_outlined,
-                  label:
-                      '${job.photoPaths.length} photo'
-                      '${job.photoPaths.length == 1 ? '' : 's'}',
+                  label: strings.photoCount(job.photoPaths.length),
                 ),
             ],
           ),
@@ -602,6 +612,7 @@ class _LocalBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final strings = AppStrings.of(context);
     return Container(
       padding: const EdgeInsets.symmetric(
         horizontal: BrandSizing.spaceSm,
@@ -611,8 +622,8 @@ class _LocalBadge extends StatelessWidget {
         color: BrandColours.copper,
         borderRadius: BrandRadius.smallAll,
       ),
-      child: const Text(
-        'On this device',
+      child: Text(
+        strings.onThisDevice,
         style: TextStyle(
           fontSize: 12,
           height: 16 / 12,

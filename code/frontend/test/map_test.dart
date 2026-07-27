@@ -8,6 +8,7 @@ import 'package:trust_hire/features/map/job_marker.dart';
 import 'package:trust_hire/models/job.dart';
 
 import 'support/offline_tiles.dart';
+import 'package:trust_hire/l10n/app_localizations.dart';
 
 /// Sprint 1's definition of done is "user can browse seeded jobs". These tests
 /// cover the map surface itself: markers render for every job, tapping one
@@ -39,6 +40,8 @@ void main() {
     VoidCallback? onMapTapped,
   }) {
     return MaterialApp(
+      localizationsDelegates: AppStrings.localizationsDelegates,
+      supportedLocales: AppStrings.supportedLocales,
       theme: BrandTheme.light,
       home: Scaffold(
         body: JobMap(
@@ -127,6 +130,8 @@ void main() {
   testWidgets('dark mode uses the dark basemap', (tester) async {
     await tester.pumpWidget(
       MaterialApp(
+        localizationsDelegates: AppStrings.localizationsDelegates,
+        supportedLocales: AppStrings.supportedLocales,
         theme: BrandTheme.dark,
         home: Scaffold(
           body: JobMap(

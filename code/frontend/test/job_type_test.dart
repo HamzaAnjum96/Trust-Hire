@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:trust_hire/l10n/app_localizations.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -10,10 +11,16 @@ import 'package:trust_hire/services/job_repository.dart';
 import 'package:trust_hire/services/local_store.dart';
 import 'package:trust_hire/services/media_store.dart';
 
+import 'support/test_strings.dart';
+
 /// The job type is chosen by the poster and drives the marker icon — but it
 /// stays optional, because the brand guidelines want categories inferred
 /// rather than demanded. These tests hold both halves of that in place.
 void main() {
+  late AppStrings strings;
+
+  setUpAll(() async => strings = await loadStrings());
+
   TestWidgetsFlutterBinding.ensureInitialized();
 
   setUp(() {
@@ -76,20 +83,20 @@ void main() {
 
   group('the heading', () {
     test('uses the type when there is no title or description', () {
-      expect(job(type: JobType.carpentry).displayTitle, 'Carpentry');
+      expect(job(type: JobType.carpentry).displayTitle(strings), 'Carpentry');
     });
 
     test('does not use the vague type as a heading', () {
       // "Something else" says nothing, so the media wording is better.
       expect(
-        job(type: JobType.other, voice: 'v.wav').displayTitle,
+        job(type: JobType.other, voice: 'v.wav').displayTitle(strings),
         'Voice note job',
       );
     });
 
     test('a real title still wins', () {
       expect(
-        job(type: JobType.plumbing, title: 'Tap dripping').displayTitle,
+        job(type: JobType.plumbing, title: 'Tap dripping').displayTitle(strings),
         'Tap dripping',
       );
     });
@@ -139,29 +146,29 @@ void main() {
     final all = [plumbing, driving, untyped];
 
     test('an empty type filter keeps everything', () {
-      expect(const JobFilter().apply(all, now: now), hasLength(3));
+      expect(const JobFilter().apply(all, now: now, strings: strings), hasLength(3));
     });
 
     test('keeps only the chosen kinds', () {
       final filter = JobFilter(types: {JobType.plumbing});
-      expect(filter.apply(all, now: now).map((j) => j.id), ['a']);
+      expect(filter.apply(all, now: now, strings: strings).map((j) => j.id), ['a']);
     });
 
     test('several kinds widen the result', () {
       final filter = JobFilter(types: {JobType.plumbing, JobType.driving});
-      expect(filter.apply(all, now: now), hasLength(2));
+      expect(filter.apply(all, now: now, strings: strings), hasLength(2));
     });
 
     test('does hide untyped jobs, unlike the time filter', () {
       // Deliberate and different from the time filter: asking for a kind is a
       // question a job that never said its kind cannot answer.
       final filter = JobFilter(types: {JobType.plumbing});
-      expect(filter.apply(all, now: now).map((j) => j.id), isNot(contains('c')));
+      expect(filter.apply(all, now: now, strings: strings).map((j) => j.id), isNot(contains('c')));
     });
 
     test('search finds a job by its type label', () {
       const filter = JobFilter(query: 'driving');
-      expect(filter.apply(all, now: now).map((j) => j.id), ['b']);
+      expect(filter.apply(all, now: now, strings: strings).map((j) => j.id), ['b']);
     });
 
     test('toggling a type on the controller adds then removes it', () {

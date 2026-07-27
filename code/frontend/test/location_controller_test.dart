@@ -1,7 +1,10 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:trust_hire/l10n/app_localizations.dart';
 import 'package:trust_hire/features/map/location_controller.dart';
 import 'package:trust_hire/models/job.dart';
 import 'package:trust_hire/services/location_service.dart';
+
+import 'support/test_strings.dart';
 
 /// A refused location is a normal state, not an error: the map still works,
 /// it just centres on the fallback. These tests pin that down without relying
@@ -20,6 +23,10 @@ class _FakeLocationService implements LocationService {
 }
 
 void main() {
+  late AppStrings strings;
+
+  setUpAll(() async => strings = await loadStrings());
+
   // Between Islamabad and Rawalpindi, where most of the seed data now is.
   const twinCities = JobLocation(latitude: 33.6280, longitude: 73.0530);
 
@@ -29,7 +36,7 @@ void main() {
     );
 
     expect(controller.position, isNull);
-    expect(controller.explanation, isNull);
+    expect(controller.explanation(strings), isNull);
     expect(controller.mapCentre, LocationService.fallback);
   });
 
@@ -45,7 +52,7 @@ void main() {
 
     expect(controller.position, found);
     expect(controller.mapCentre, found);
-    expect(controller.explanation, isNull);
+    expect(controller.explanation(strings), isNull);
   });
 
   test('falls back to the twin cities and explains when refused', () async {
@@ -59,7 +66,7 @@ void main() {
     // The seed data is around Islamabad and Rawalpindi, so the user still
     // lands on something rather than the middle of the ocean.
     expect(controller.mapCentre, twinCities);
-    expect(controller.explanation, contains('You can still move the map'));
+    expect(controller.explanation(strings), contains('You can still move the map'));
   });
 
   test('every unavailable status explains what the user can still do',
@@ -76,12 +83,12 @@ void main() {
       await controller.request();
 
       expect(
-        controller.explanation,
+        controller.explanation(strings),
         isNotNull,
         reason: '$status should be explained',
       );
       expect(
-        controller.explanation,
+        controller.explanation(strings),
         contains('choose an area manually'),
         reason: '$status should say what is still possible',
       );
@@ -94,10 +101,10 @@ void main() {
     );
 
     await controller.request();
-    expect(controller.explanation, isNotNull);
+    expect(controller.explanation(strings), isNotNull);
 
     controller.dismissExplanation();
-    expect(controller.explanation, isNull);
+    expect(controller.explanation(strings), isNull);
   });
 
   test('concurrent requests do not stack up', () async {

@@ -12,6 +12,7 @@ import 'package:trust_hire/models/job.dart';
 import 'package:trust_hire/services/job_repository.dart';
 import 'package:trust_hire/services/local_store.dart';
 import 'package:trust_hire/services/media_store.dart';
+import 'package:trust_hire/l10n/app_localizations.dart';
 
 /// Sprint 4's definition of done is "CRUD completed". Create is covered in
 /// create_job_test; this covers update and delete, including the media those
@@ -162,6 +163,8 @@ void main() {
             Provider<MediaStore>.value(value: media),
           ],
           child: MaterialApp(
+            localizationsDelegates: AppStrings.localizationsDelegates,
+            supportedLocales: AppStrings.supportedLocales,
             theme: BrandTheme.light,
             home: Scaffold(
               body: JobDetailsSheet(jobId: jobId, mediaStore: media),

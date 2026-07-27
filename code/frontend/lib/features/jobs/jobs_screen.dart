@@ -13,6 +13,7 @@ import '../../widgets/state_views.dart';
 import 'filter_bar.dart';
 import 'job_details_sheet.dart';
 import 'job_filter_controller.dart';
+import '../../l10n/app_localizations.dart';
 
 /// A plain list of every job in local storage.
 ///
@@ -23,15 +24,20 @@ class JobsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final strings = AppStrings.of(context);
     final controller = context.watch<JobController>();
     final filters = context.watch<JobFilterController>();
     final location = context.watch<LocationController>();
 
-    final visible = filters.apply(controller.jobs, from: location.position);
+    final visible = filters.apply(
+      controller.jobs,
+      strings: strings,
+      from: location.position,
+    );
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Find work'),
+        title: Text(strings.findWork),
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(112),
           child: Column(
@@ -56,7 +62,7 @@ class JobsScreen extends StatelessWidget {
         // says what is coming and stops the layout jumping.
         LoadState.idle || LoadState.loading => const JobListSkeleton(),
         LoadState.failed => ErrorView(
-          message: controller.errorMessage ?? 'Could not load jobs. Try again.',
+          message: controller.errorMessage ?? strings.couldNotLoadJobsShort,
           onRetry: controller.load,
         ),
         LoadState.ready => _Results(
@@ -84,22 +90,23 @@ class _Results extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final strings = AppStrings.of(context);
     if (all.isEmpty) {
-      return const EmptyView(
+      return EmptyView(
         icon: Icons.work_outline,
-        title: 'No jobs yet',
-        message: 'Post the first job to see it here.',
+        title: strings.noJobsYet,
+        message: strings.postTheFirstJob,
       );
     }
 
     if (visible.isEmpty) {
       return EmptyView(
         icon: Icons.search_off,
-        title: 'No jobs match',
-        message: 'Try a wider area or a different time.',
+        title: strings.noJobsMatch,
+        message: strings.tryWiderArea,
         action: OutlinedButton(
           onPressed: filters.clear,
-          child: const Text('Clear Filters'),
+          child: Text(strings.clearFilters),
         ),
       );
     }
@@ -145,6 +152,7 @@ class _JobRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final strings = AppStrings.of(context);
     final theme = Theme.of(context);
 
     return Card(
@@ -165,7 +173,7 @@ class _JobRow extends StatelessWidget {
                 children: [
                   Expanded(
                     child: Text(
-                      job.displayTitle,
+                      job.displayTitle(strings),
                       style: theme.textTheme.titleLarge,
                     ),
                   ),
@@ -179,8 +187,8 @@ class _JobRow extends StatelessWidget {
                         color: BrandColours.copper,
                         borderRadius: BrandRadius.smallAll,
                       ),
-                      child: const Text(
-                        'On this device',
+                      child: Text(
+                        strings.onThisDevice,
                         style: TextStyle(
                           fontSize: 12,
                           height: 16 / 12,
@@ -206,19 +214,20 @@ class _JobRow extends StatelessWidget {
                 runSpacing: BrandSizing.spaceXs,
                 children: [
                   if (job.type != null)
-                    _Meta(icon: job.type!.icon, label: job.type!.label),
+                    _Meta(
+                      icon: job.type!.icon,
+                      label: job.type!.label(strings),
+                    ),
                   _Meta(
                     icon: Icons.schedule,
-                    label: Format.scheduled(job.scheduledTime, now),
+                    label: Format.scheduled(strings, job.scheduledTime, now),
                   ),
                   if (job.hasVoiceNote)
-                    const _Meta(icon: Icons.mic, label: 'Voice note'),
+                    _Meta(icon: Icons.mic, label: strings.voiceNote),
                   if (job.hasPhotos)
                     _Meta(
                       icon: Icons.photo_library_outlined,
-                      label:
-                          '${job.photoPaths.length} photo'
-                          '${job.photoPaths.length == 1 ? '' : 's'}',
+                      label: strings.photoCount(job.photoPaths.length),
                     ),
                 ],
               ),

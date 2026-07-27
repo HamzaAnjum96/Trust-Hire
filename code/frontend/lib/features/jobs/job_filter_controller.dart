@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 
+import '../../l10n/app_localizations.dart';
 import '../../models/job.dart';
 import '../../models/job_type.dart';
 import 'job_filter.dart';
@@ -77,6 +78,15 @@ class JobFilterController extends ChangeNotifier {
     notifyListeners();
   }
 
-  List<Job> apply(List<Job> jobs, {DateTime? now, JobLocation? from}) =>
-      _filter.apply(jobs, now: now ?? DateTime.now(), from: from);
+  List<Job> apply(
+    List<Job> jobs, {
+    required AppStrings strings,
+    DateTime? now,
+    JobLocation? from,
+  }) => _filter.apply(
+    jobs,
+    now: now ?? DateTime.now(),
+    strings: strings,
+    from: from,
+  );
 }

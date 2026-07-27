@@ -13,6 +13,7 @@ import '../../services/media_store.dart';
 import '../../widgets/voice_note_player.dart';
 import '../create_job/create_job_screen.dart';
 import 'photo_gallery.dart';
+import '../../l10n/app_localizations.dart';
 
 /// The job details bottom sheet.
 ///
@@ -97,9 +98,10 @@ class _Body extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final strings = AppStrings.of(context);
     final theme = Theme.of(context);
     final now = DateTime.now();
-    final distance = Format.distanceToJob(viewerLocation, job);
+    final distance = Format.distanceToJob(strings, viewerLocation, job);
 
     return ListView(
       controller: scrollController,
@@ -115,7 +117,7 @@ class _Body extends StatelessWidget {
           children: [
             Expanded(
               child: Text(
-                job.displayTitle,
+                job.displayTitle(strings),
                 style: theme.textTheme.headlineMedium,
               ),
             ),
@@ -127,7 +129,7 @@ class _Body extends StatelessWidget {
         ),
         const SizedBox(height: BrandSizing.spaceXs),
         Text(
-          'Posted ${Format.posted(job.createdAt, now)}',
+          'Posted ${Format.posted(strings, job.createdAt, now)}',
           style: theme.textTheme.labelSmall,
         ),
 
@@ -154,25 +156,25 @@ class _Body extends StatelessWidget {
         if (job.type != null)
           _DetailRow(
             icon: job.type!.icon,
-            label: 'Kind of work',
-            value: job.type!.label,
+            label: strings.detailKindOfWork,
+            value: job.type!.label(strings),
           ),
         _DetailRow(
           icon: Icons.schedule,
-          label: 'When',
-          value: Format.scheduled(job.scheduledTime, now),
+          label: strings.detailWhen,
+          value: Format.scheduled(strings, job.scheduledTime, now),
         ),
         _DetailRow(
           icon: Icons.place_outlined,
-          label: 'Area',
+          label: strings.fieldArea,
           value: distance == null
-              ? Format.radius(job.radiusMetres)
-              : '$distance · ${Format.radius(job.radiusMetres)}',
+              ? Format.radius(strings, job.radiusMetres)
+              : '$distance · ${Format.radius(strings, job.radiusMetres)}',
         ),
         if (poster != null)
           _DetailRow(
             icon: Icons.person_outline,
-            label: 'Posted by',
+            label: strings.detailPostedBy,
             value: poster!.area == null
                 ? poster!.name
                 : '${poster!.name} · ${poster!.area}',
@@ -183,7 +185,7 @@ class _Body extends StatelessWidget {
         const SizedBox(height: BrandSizing.spaceSm),
         Text(
           // Section 33 copy — reassure rather than expose.
-          'This is the general area, not an exact address.',
+          strings.generalAreaNotice,
           style: theme.textTheme.labelSmall,
         ),
 
@@ -219,6 +221,7 @@ class _JobActions extends StatelessWidget {
   }
 
   Future<void> _delete(BuildContext context) async {
+    final strings = AppStrings.of(context);
     final controller = context.read<JobController>();
     final navigator = Navigator.of(context);
     final messenger = ScaffoldMessenger.of(context);
@@ -227,21 +230,19 @@ class _JobActions extends StatelessWidget {
       context: context,
       builder: (dialogContext) => AlertDialog(
         shape: const RoundedRectangleBorder(borderRadius: BrandRadius.largeAll),
-        title: const Text('Delete this job?'),
-        content: const Text(
-          'It will be removed from this device. This cannot be undone.',
-        ),
+        title: Text(strings.deleteThisJob),
+        content: Text(strings.deleteJobExplanation),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(dialogContext).pop(false),
-            child: const Text('Keep Job'),
+            child: Text(strings.keepJob),
           ),
           TextButton(
             style: TextButton.styleFrom(foregroundColor: BrandColours.errorRed),
             // Section 22 — destructive actions are labelled explicitly, never
             // "Confirm" or "Yes".
             onPressed: () => Navigator.of(dialogContext).pop(true),
-            child: const Text('Delete Job'),
+            child: Text(strings.deleteJob),
           ),
         ],
       ),
@@ -251,13 +252,12 @@ class _JobActions extends StatelessWidget {
 
     await controller.deleteJob(job.id);
     navigator.pop();
-    messenger.showSnackBar(
-      const SnackBar(content: Text('Job deleted from this device.')),
-    );
+    messenger.showSnackBar(SnackBar(content: Text(strings.jobDeleted)));
   }
 
   @override
   Widget build(BuildContext context) {
+    final strings = AppStrings.of(context);
     return Column(
       children: [
         SizedBox(
@@ -265,7 +265,7 @@ class _JobActions extends StatelessWidget {
           child: OutlinedButton.icon(
             onPressed: () => _edit(context),
             icon: const Icon(Icons.edit_outlined),
-            label: const Text('Edit Job'),
+            label: Text(strings.editJob),
           ),
         ),
         const SizedBox(height: BrandSizing.spaceSm),
@@ -278,7 +278,7 @@ class _JobActions extends StatelessWidget {
               minimumSize: const Size(0, BrandSizing.touchTargetPreferred),
             ),
             icon: const Icon(Icons.delete_outline),
-            label: const Text('Delete Job'),
+            label: Text(strings.deleteJob),
           ),
         ),
       ],
@@ -377,6 +377,7 @@ class _LocalBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final strings = AppStrings.of(context);
     return Container(
       padding: const EdgeInsets.symmetric(
         horizontal: BrandSizing.spaceSm,
@@ -386,8 +387,8 @@ class _LocalBadge extends StatelessWidget {
         color: BrandColours.copper,
         borderRadius: BrandRadius.smallAll,
       ),
-      child: const Text(
-        'On this device',
+      child: Text(
+        strings.onThisDevice,
         style: TextStyle(
           fontSize: 12,
           height: 16 / 12,
@@ -406,6 +407,7 @@ class _DeletedJobNotice extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final strings = AppStrings.of(context);
     final theme = Theme.of(context);
 
     return Padding(
@@ -413,14 +415,11 @@ class _DeletedJobNotice extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text(
-            'This job is no longer here.',
-            style: theme.textTheme.titleLarge,
-          ),
+          Text(strings.jobNoLongerHere, style: theme.textTheme.titleLarge),
           const SizedBox(height: BrandSizing.spaceMd),
           OutlinedButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Close'),
+            child: Text(strings.close),
           ),
         ],
       ),

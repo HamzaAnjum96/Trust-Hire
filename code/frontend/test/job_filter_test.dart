@@ -1,12 +1,19 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:trust_hire/l10n/app_localizations.dart';
 import 'package:trust_hire/features/jobs/job_filter.dart';
 import 'package:trust_hire/features/jobs/job_filter_controller.dart';
 import 'package:trust_hire/models/job.dart';
+
+import 'support/test_strings.dart';
 
 /// Sprint 5's definition of done is "jobs easily discoverable". The subtle
 /// part is what filtering must *not* hide: a job with no scheduled time is
 /// normal here, not missing data, so a time filter should not bury it.
 void main() {
+  late AppStrings strings;
+
+  setUpAll(() async => strings = await loadStrings());
+
   final now = DateTime(2026, 7, 27, 10);
   const here = JobLocation(latitude: 31.5204, longitude: 74.3587);
 
@@ -51,18 +58,18 @@ void main() {
   group('search', () {
     test('matches the title', () {
       const filter = JobFilter(query: 'plumber');
-      expect(idsOf(filter.apply(all, now: now)), ['today']);
+      expect(idsOf(filter.apply(all, now: now, strings: strings)), ['today']);
     });
 
     test('is case insensitive', () {
       const filter = JobFilter(query: 'PAINTER');
-      expect(idsOf(filter.apply(all, now: now)), ['tomorrow']);
+      expect(idsOf(filter.apply(all, now: now, strings: strings)), ['tomorrow']);
     });
 
     test('matches the description too', () {
       final jobs = [job('a', description: 'Bathroom drain blocked')];
       const filter = JobFilter(query: 'drain');
-      expect(filter.apply(jobs, now: now), hasLength(1));
+      expect(filter.apply(jobs, now: now, strings: strings), hasLength(1));
     });
 
     test('every word must match, so extra words narrow', () {
@@ -72,26 +79,26 @@ void main() {
       ];
 
       expect(
-        idsOf(const JobFilter(query: 'plumber urgent').apply(jobs, now: now)),
+        idsOf(const JobFilter(query: 'plumber urgent').apply(jobs, now: now, strings: strings)),
         ['a'],
       );
     });
 
     test('finds a voice-only job by its fallback heading', () {
       const filter = JobFilter(query: 'voice');
-      expect(idsOf(filter.apply(all, now: now)), ['voice']);
+      expect(idsOf(filter.apply(all, now: now, strings: strings)), ['voice']);
     });
 
     test('an empty query matches everything', () {
       const filter = JobFilter(query: '   ');
-      expect(filter.apply(all, now: now), hasLength(all.length));
+      expect(filter.apply(all, now: now, strings: strings), hasLength(all.length));
     });
   });
 
   group('time', () {
     test('today keeps today', () {
       const filter = JobFilter(time: TimeFilter.today);
-      final ids = idsOf(filter.apply(all, now: now));
+      final ids = idsOf(filter.apply(all, now: now, strings: strings));
 
       expect(ids, contains('today'));
       expect(ids, isNot(contains('tomorrow')));
@@ -102,18 +109,18 @@ void main() {
       // "Any time" is a normal state in this product — a job someone would do
       // today. Filtering it out would lose real work.
       for (final option in TimeFilter.values) {
-        final ids = idsOf(JobFilter(time: option).apply(all, now: now));
+        final ids = idsOf(JobFilter(time: option).apply(all, now: now, strings: strings));
         expect(
           ids,
           contains('any-time'),
-          reason: '${option.label} should keep untimed jobs',
+          reason: '${option.label(strings)} should keep untimed jobs',
         );
       }
     });
 
     test('this week spans the next seven days', () {
       const filter = JobFilter(time: TimeFilter.thisWeek);
-      final ids = idsOf(filter.apply(all, now: now));
+      final ids = idsOf(filter.apply(all, now: now, strings: strings));
 
       expect(ids, contains('today'));
       expect(ids, contains('tomorrow'));
@@ -122,7 +129,7 @@ void main() {
 
     test('tomorrow keeps only tomorrow', () {
       const filter = JobFilter(time: TimeFilter.tomorrow);
-      final ids = idsOf(filter.apply(all, now: now));
+      final ids = idsOf(filter.apply(all, now: now, strings: strings));
 
       expect(ids, contains('tomorrow'));
       expect(ids, isNot(contains('today')));
@@ -132,7 +139,7 @@ void main() {
   group('distance', () {
     test('near me keeps what is close', () {
       const filter = JobFilter(distance: DistanceFilter.nearMe);
-      final ids = idsOf(filter.apply(all, now: now, from: here));
+      final ids = idsOf(filter.apply(all, now: now, strings: strings, from: here));
 
       expect(ids, contains('today'));
       expect(ids, isNot(contains('far')));
@@ -141,14 +148,14 @@ void main() {
     test('a wider radius reaches further', () {
       const filter = JobFilter(distance: DistanceFilter.withinTen);
       expect(
-        idsOf(filter.apply(all, now: now, from: here)),
+        idsOf(filter.apply(all, now: now, strings: strings, from: here)),
         isNot(contains('far')),
       );
 
       // 12 km away is outside ten but the filter is off entirely without a
       // position.
       expect(
-        idsOf(filter.apply(all, now: now)),
+        idsOf(filter.apply(all, now: now, strings: strings)),
         contains('far'),
       );
     });
@@ -157,19 +164,19 @@ void main() {
       // Emptying the list because location was refused would punish the user
       // for a permission choice.
       const filter = JobFilter(distance: DistanceFilter.nearMe);
-      expect(filter.apply(all, now: now), hasLength(all.length));
+      expect(filter.apply(all, now: now, strings: strings), hasLength(all.length));
     });
   });
 
   group('media', () {
     test('voice note keeps only jobs that have one', () {
       const filter = JobFilter(withVoiceNote: true);
-      expect(idsOf(filter.apply(all, now: now)), ['voice']);
+      expect(idsOf(filter.apply(all, now: now, strings: strings)), ['voice']);
     });
 
     test('photos keeps only jobs that have them', () {
       const filter = JobFilter(withPhotos: true);
-      expect(idsOf(filter.apply(all, now: now)), ['photo']);
+      expect(idsOf(filter.apply(all, now: now, strings: strings)), ['photo']);
     });
   });
 
@@ -181,7 +188,7 @@ void main() {
         distance: DistanceFilter.nearMe,
       );
 
-      expect(idsOf(filter.apply(all, now: now, from: here)), ['today']);
+      expect(idsOf(filter.apply(all, now: now, strings: strings, from: here)), ['today']);
     });
 
     test('counts what is active', () {

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../l10n/app_localizations.dart';
+
 /// The kind of work a job is.
 ///
 /// **Optional by design.** The brand guidelines want categories inferred rather
@@ -11,30 +13,47 @@ import 'package:flutter/material.dart';
 /// What choosing a type buys is a clearer map: a plumbing pin and a driving
 /// pin read differently at a glance, which a microphone icon on both does not.
 enum JobType {
-  plumbing('Plumbing', Icons.plumbing),
-  electrical('Electrical', Icons.electrical_services),
-  painting('Painting', Icons.format_paint),
-  carpentry('Carpentry', Icons.carpenter),
-  masonry('Masonry', Icons.foundation),
-  construction('Construction', Icons.construction),
-  applianceRepair('Appliance repair', Icons.ac_unit),
-  cleaning('Cleaning', Icons.cleaning_services),
-  moving('Moving', Icons.local_shipping),
-  driving('Driving', Icons.directions_car),
-  gardening('Gardening', Icons.yard),
-  tailoring('Tailoring', Icons.checkroom),
-  cooking('Cooking', Icons.restaurant),
-  tutoring('Tutoring', Icons.school),
-  security('Security', Icons.shield_outlined),
-  other('Something else', Icons.handyman);
+  plumbing(Icons.plumbing),
+  electrical(Icons.electrical_services),
+  painting(Icons.format_paint),
+  carpentry(Icons.carpenter),
+  masonry(Icons.foundation),
+  construction(Icons.construction),
+  applianceRepair(Icons.ac_unit),
+  cleaning(Icons.cleaning_services),
+  moving(Icons.local_shipping),
+  driving(Icons.directions_car),
+  gardening(Icons.yard),
+  tailoring(Icons.checkroom),
+  cooking(Icons.restaurant),
+  tutoring(Icons.school),
+  security(Icons.shield_outlined),
+  other(Icons.handyman);
 
-  const JobType(this.label, this.icon);
-
-  /// Shown to the user. Plain words, per section 20 — "Plumbing", never
-  /// "Sanitary Installation Services".
-  final String label;
+  const JobType(this.icon);
 
   final IconData icon;
+
+  /// Shown to the user, in the active language. Plain words, per section 20 —
+  /// "Plumbing", never "Sanitary Installation Services".
+  String label(AppStrings strings) => switch (this) {
+    JobType.plumbing => strings.typePlumbing,
+    JobType.electrical => strings.typeElectrical,
+    JobType.painting => strings.typePainting,
+    JobType.carpentry => strings.typeCarpentry,
+    JobType.masonry => strings.typeMasonry,
+    JobType.construction => strings.typeConstruction,
+    JobType.applianceRepair => strings.typeApplianceRepair,
+    JobType.cleaning => strings.typeCleaning,
+    JobType.moving => strings.typeMoving,
+    JobType.driving => strings.typeDriving,
+    JobType.gardening => strings.typeGardening,
+    JobType.tailoring => strings.typeTailoring,
+    JobType.cooking => strings.typeCooking,
+    JobType.tutoring => strings.typeTutoring,
+    JobType.security => strings.typeSecurity,
+    JobType.other => strings.typeOther,
+  };
 
   /// Stored in local storage. Kept separate from [name] so renaming a label
   /// never orphans saved jobs.

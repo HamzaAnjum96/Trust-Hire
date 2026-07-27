@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import '../core/formatters.dart';
 import '../core/tokens.dart';
 import '../services/media_store.dart';
+import '../l10n/app_localizations.dart';
 
 /// Plays a job's voice note.
 ///
@@ -117,6 +118,7 @@ class _VoiceNotePlayerState extends State<VoiceNotePlayer> {
 
   @override
   Widget build(BuildContext context) {
+    final strings = AppStrings.of(context);
     final theme = Theme.of(context);
     final isLight = theme.brightness == Brightness.light;
 
@@ -133,7 +135,7 @@ class _VoiceNotePlayerState extends State<VoiceNotePlayer> {
             const SizedBox(width: BrandSizing.spaceSm + 4),
             Expanded(
               child: Text(
-                'This voice note could not be played.',
+                strings.voiceNoteCouldNotPlay,
                 style: theme.textTheme.bodyMedium,
               ),
             ),
@@ -148,7 +150,7 @@ class _VoiceNotePlayerState extends State<VoiceNotePlayer> {
         children: [
           Semantics(
             button: true,
-            label: _isPlaying ? 'Pause' : 'Listen',
+            label: _isPlaying ? strings.pause : strings.listen,
             child: Material(
               color: theme.colorScheme.primary,
               shape: const CircleBorder(),
@@ -176,7 +178,7 @@ class _VoiceNotePlayerState extends State<VoiceNotePlayer> {
                   children: [
                     Text(
                       // Section 26 wording.
-                      _isPlaying ? 'Playing' : 'Voice note',
+                      _isPlaying ? strings.playing : strings.voiceNote,
                       style: theme.textTheme.labelMedium?.copyWith(
                         fontWeight: FontWeight.w600,
                         color: theme.colorScheme.onSurface,

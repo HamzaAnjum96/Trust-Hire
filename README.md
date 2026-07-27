@@ -113,6 +113,7 @@ code/frontend/
 │   │   ├── jobs/         ← job list and details
 │   │   ├── create_job/   ← posting and editing
 │   │   └── settings/     ← theme, local-data controls
+│   ├── l10n/         ← app_en.arb, app_ur.arb (generated AppStrings)
 │   ├── models/       ← Job, JobType, AppUser
 │   ├── services/     ← local storage, seed loading, repositories
 │   └── widgets/      ← shared UI
@@ -120,7 +121,7 @@ code/frontend/
 │   ├── seed/         ← jobs.json, users.json — copied to local storage on first run
 │   ├── images/       ← placeholder job photos
 │   ├── audio/        ← placeholder voice notes
-│   └── fonts/        ← Inter, bundled so typography survives offline
+│   └── fonts/        ← Inter, Noto Sans Arabic, Noto Nastaliq Urdu
 ├── test/
 └── tool/             ← dev scripts (placeholder asset generation)
 ```

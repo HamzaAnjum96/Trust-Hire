@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 
 import '../core/theme.dart';
+import '../l10n/app_localizations.dart';
 import '../features/jobs/job_filter_controller.dart';
 import '../features/map/location_controller.dart';
 import '../services/job_repository.dart';
@@ -39,8 +41,16 @@ class TrustHireApp extends StatelessWidget {
       child: Consumer<SettingsController>(
         builder: (context, settings, _) {
           return MaterialApp(
-            title: 'Trust Hire',
+            onGenerateTitle: (context) => AppStrings.of(context).appTitle,
             debugShowCheckedModeBanner: false,
+            locale: settings.locale,
+            supportedLocales: AppStrings.supportedLocales,
+            localizationsDelegates: const [
+              AppStrings.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
             theme: BrandTheme.light,
             darkTheme: BrandTheme.dark,
             themeMode: settings.themeMode,

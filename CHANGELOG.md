@@ -12,6 +12,50 @@ that heading to the version and date, and open a fresh `[Unreleased]`.
 
 ## [Unreleased]
 
+### Sprint 9 — Urdu and right-to-left support
+
+158 tests pass, the analyzer is clean.
+
+#### Added
+
+- **The full interface in Urdu**, with right-to-left layout. The brand
+  guidelines call for mixed English and Urdu interfaces and section 29 lists
+  them among the accessibility requirements; for this audience it is closer to
+  a requirement than a feature.
+- A language control in Settings — English, Urdu, or follow the device, saved
+  locally. Each language names itself, so someone who cannot read the current
+  one can still find their own.
+- Noto Sans Arabic and Noto Nastaliq Urdu bundled alongside Inter. Section 10
+  warns that Nastaliq should not be set small and suggests Noto Sans Arabic
+  for dense labels, so Noto Sans Arabic carries the interface at every size.
+- 15 tests covering catalogue coverage, RTL layout, the persisted preference,
+  translated job types, headings and formatting.
+
+#### Notes
+
+**Translation is more than the chrome.** Job types, the headings a job falls
+back to when it has no title, distances, and relative times all had to move
+into the catalogue — a card reading "2 km away · Plumbing" inside an otherwise
+Urdu screen was the most visible thing left in English. Search takes the
+catalogue too, since it reaches a job's *shown* words: searching Urdu text
+against English labels would quietly have found nothing.
+
+**Two tests guard the seams.** One fails the build if a key exists in English
+but not Urdu, or if an Urdu value was left as its English original. The other
+catches interpolated English (`'${count} photos'`), which the bulk replacement
+could not see and which had in fact been missed in two places.
+
+**The Urdu needs a native reviewer.** The translations are careful and follow
+section 20's plain vocabulary, but they have not been checked by a native
+speaker, and the register matters for an audience the product describes as
+avoiding formal language.
+
+#### Fixed
+
+- Formatting a date in any non-default locale threw, because
+  `initializeDateFormatting` was never called. It threw inside a build, so it
+  would have surfaced as a blank screen rather than an error.
+
 ### Sprint 8 — Map at scale
 
 143 tests pass, the analyzer is clean.

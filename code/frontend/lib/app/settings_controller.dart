@@ -12,7 +12,18 @@ class SettingsController extends ChangeNotifier {
   ThemeMode _themeMode = ThemeMode.system;
   ThemeMode get themeMode => _themeMode;
 
+  /// Null means "follow the device". Kept as an option rather than defaulting
+  /// to one language, since the audience is mixed English and Urdu.
+  Locale? _locale;
+  Locale? get locale => _locale;
+
+  /// Languages offered, in the order they appear in settings.
+  static const supportedLocales = <Locale>[Locale('en'), Locale('ur')];
+
   void load() {
+    final language = _store.readString(StoreKeys.language);
+    _locale = language == null || language.isEmpty ? null : Locale(language);
+
     final stored = _store.readString(StoreKeys.themeMode);
     _themeMode = switch (stored) {
       'light' => ThemeMode.light,
@@ -20,6 +31,15 @@ class SettingsController extends ChangeNotifier {
       _ => ThemeMode.system,
     };
     notifyListeners();
+  }
+
+  /// Sets the interface language, or null to follow the device.
+  Future<void> setLocale(Locale? locale) async {
+    if (_locale == locale) return;
+    _locale = locale;
+    notifyListeners();
+
+    await _store.writeString(StoreKeys.language, locale?.languageCode ?? '');
   }
 
   Future<void> setThemeMode(ThemeMode mode) async {

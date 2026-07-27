@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trust_hire/app/job_controller.dart';
 import 'package:trust_hire/core/theme.dart';
+import 'package:trust_hire/l10n/app_localizations.dart';
 import 'package:trust_hire/features/jobs/job_details_sheet.dart';
 import 'package:trust_hire/features/jobs/photo_gallery.dart';
 import 'package:trust_hire/models/job.dart';
@@ -16,10 +17,16 @@ import 'package:trust_hire/services/local_store.dart';
 import 'package:trust_hire/services/media_store.dart';
 import 'package:trust_hire/widgets/voice_note_player.dart';
 
+import 'support/test_strings.dart';
+
 /// Sprint 2's definition of done is "every seeded job opens correctly" — which
 /// matters most for the jobs that carry only some of the information, since
 /// the product treats missing information as normal.
 void main() {
+  late AppStrings strings;
+
+  setUpAll(() async => strings = await loadStrings());
+
   setUp(() {
     SharedPreferences.setMockInitialValues(<String, Object>{});
     rootBundle.clear();
@@ -47,6 +54,8 @@ void main() {
           Provider<MediaStore>.value(value: media),
         ],
         child: MaterialApp(
+          localizationsDelegates: AppStrings.localizationsDelegates,
+          supportedLocales: AppStrings.supportedLocales,
           theme: BrandTheme.light,
           home: Scaffold(
             body: JobDetailsSheet(
@@ -85,7 +94,7 @@ void main() {
       await openSheet(tester, controller, media, job.id);
 
       expect(
-        find.text(job.displayTitle),
+        find.text(job.displayTitle(strings)),
         findsOneWidget,
         reason: 'job ${job.id} should show a heading',
       );

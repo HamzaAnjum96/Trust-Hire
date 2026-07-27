@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../../core/motion.dart';
 import '../../core/tokens.dart';
 import '../../models/job.dart';
+import '../../l10n/app_localizations.dart';
 
 /// A job pin, styled per section 15 of the brand guidelines.
 ///
@@ -32,6 +33,7 @@ class JobMarker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final strings = AppStrings.of(context);
     final fill = isSelected
         ? BrandColours.markerSelected
         : (job.isLocal ? BrandColours.markerLocal : BrandColours.markerDefault);
@@ -39,7 +41,7 @@ class JobMarker extends StatelessWidget {
     return Semantics(
       button: true,
       selected: isSelected,
-      label: job.displayTitle,
+      label: job.displayTitle(strings),
       child: GestureDetector(
         onTap: onTap,
         behavior: HitTestBehavior.opaque,
@@ -157,8 +159,9 @@ class UserLocationMarker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final strings = AppStrings.of(context);
     return Semantics(
-      label: 'Your location',
+      label: strings.yourLocation,
       child: Container(
         width: size,
         height: size,
@@ -229,8 +232,7 @@ class ClusterMarker extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              if (icon != null)
-                Icon(icon, size: 14, color: BrandColours.white),
+              if (icon != null) Icon(icon, size: 14, color: BrandColours.white),
               Text(
                 '$count',
                 style: theme.textTheme.labelMedium?.copyWith(

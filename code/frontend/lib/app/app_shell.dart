@@ -9,6 +9,7 @@ import '../services/location_service.dart';
 import '../features/jobs/jobs_screen.dart';
 import '../features/map/map_screen.dart';
 import '../features/settings/settings_screen.dart';
+import '../l10n/app_localizations.dart';
 
 /// The navigation scaffold.
 ///
@@ -24,21 +25,23 @@ class AppShell extends StatefulWidget {
 class _AppShellState extends State<AppShell> {
   int _index = 0;
 
-  static const _destinations = <NavigationDestination>[
+  /// Built per call rather than held as a constant: the labels change with
+  /// the interface language.
+  List<NavigationDestination> _destinations(AppStrings strings) => [
     NavigationDestination(
-      icon: Icon(Icons.map_outlined),
-      selectedIcon: Icon(Icons.map),
-      label: 'Map',
+      icon: const Icon(Icons.map_outlined),
+      selectedIcon: const Icon(Icons.map),
+      label: strings.navMap,
     ),
     NavigationDestination(
-      icon: Icon(Icons.work_outline),
-      selectedIcon: Icon(Icons.work),
-      label: 'Jobs',
+      icon: const Icon(Icons.work_outline),
+      selectedIcon: const Icon(Icons.work),
+      label: strings.navJobs,
     ),
     NavigationDestination(
-      icon: Icon(Icons.settings_outlined),
-      selectedIcon: Icon(Icons.settings),
-      label: 'Settings',
+      icon: const Icon(Icons.settings_outlined),
+      selectedIcon: const Icon(Icons.settings),
+      label: strings.navSettings,
     ),
   ];
 
@@ -58,6 +61,7 @@ class _AppShellState extends State<AppShell> {
 
   @override
   Widget build(BuildContext context) {
+    final strings = AppStrings.of(context);
     return Scaffold(
       body: IndexedStack(
         index: _index,
@@ -75,12 +79,12 @@ class _AppShellState extends State<AppShell> {
               ),
               icon: const Icon(Icons.add),
               // Section 21 — say what the action does, never "Submit".
-              label: const Text('Post a Job', style: BrandType.button),
+              label: Text(strings.postAJob, style: BrandType.button),
             ),
       bottomNavigationBar: NavigationBar(
         selectedIndex: _index,
         onDestinationSelected: (value) => setState(() => _index = value),
-        destinations: _destinations,
+        destinations: _destinations(strings),
       ),
     );
   }

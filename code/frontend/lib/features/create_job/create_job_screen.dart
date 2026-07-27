@@ -12,6 +12,7 @@ import 'job_draft_controller.dart';
 import 'job_type_field.dart';
 import 'location_picker.dart';
 import 'media_fields.dart';
+import '../../l10n/app_localizations.dart';
 
 /// Posting a job, and — from Sprint 4 — editing one.
 ///
@@ -65,6 +66,7 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
   }
 
   Future<void> _pickDateTime() async {
+    final strings = AppStrings.of(context);
     final now = DateTime.now();
     final current = _draft.scheduledTime;
 
@@ -73,14 +75,14 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
       initialDate: current ?? now,
       firstDate: now.subtract(const Duration(days: 1)),
       lastDate: now.add(const Duration(days: 365)),
-      helpText: 'When is the work needed?',
+      helpText: strings.whenIsWorkNeeded,
     );
     if (date == null || !mounted) return;
 
     final time = await showTimePicker(
       context: context,
       initialTime: TimeOfDay.fromDateTime(current ?? now),
-      helpText: 'What time?',
+      helpText: strings.whatTime,
     );
     if (!mounted) return;
 
@@ -96,6 +98,7 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
   }
 
   Future<void> _save() async {
+    final strings = AppStrings.of(context);
     final jobs = context.read<JobController>();
     final navigator = Navigator.of(context);
     final messenger = ScaffoldMessenger.of(context);
@@ -112,8 +115,8 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
         content: Text(
           widget.editing == null
               // Section 33 copy — honest about where it went.
-              ? 'Your job has been posted on this device.'
-              : 'Your changes have been saved on this device.',
+              ? strings.postedOnThisDevice
+              : strings.changesSaved,
         ),
       ),
     );
@@ -121,6 +124,7 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final strings = AppStrings.of(context);
     final theme = Theme.of(context);
     final mediaStore = context.read<MediaStore>();
 
@@ -129,10 +133,14 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
       builder: (context, _) {
         return Scaffold(
           appBar: AppBar(
-            title: Text(widget.editing == null ? 'Post a job' : 'Edit job'),
+            title: Text(
+              widget.editing == null
+                  ? strings.postAJobTitle
+                  : strings.editJobTitle,
+            ),
             leading: IconButton(
               icon: const Icon(Icons.close),
-              tooltip: 'Close',
+              tooltip: strings.close,
               onPressed: () => Navigator.of(context).pop(),
             ),
           ),
@@ -145,13 +153,13 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
             ),
             children: [
               Text(
-                'What work do you need?',
+                strings.whatWorkDoYouNeed,
                 style: theme.textTheme.headlineMedium,
               ),
               const SizedBox(height: BrandSizing.spaceXs),
               Text(
                 // Section 33 copy — the whole premise, said plainly.
-                'Add a voice note, photo, or short message. Any one is enough.',
+                strings.anyOneIsEnough,
                 style: theme.textTheme.bodyMedium,
               ),
 
@@ -159,7 +167,7 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
               VoiceRecorderField(draft: _draft),
 
               const SizedBox(height: BrandSizing.spaceLg),
-              _FieldLabel('Kind of work'),
+              _FieldLabel(strings.detailKindOfWork),
               const SizedBox(height: BrandSizing.spaceXs),
               Text(
                 // Never a "please select" — skipping this is fine, and the
@@ -172,37 +180,33 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
               JobTypeField(draft: _draft),
 
               const SizedBox(height: BrandSizing.spaceLg),
-              _FieldLabel('Photos'),
+              _FieldLabel(strings.photos),
               const SizedBox(height: BrandSizing.spaceSm),
               PhotoField(draft: _draft, mediaStore: mediaStore),
 
               const SizedBox(height: BrandSizing.spaceLg),
-              _FieldLabel('Title'),
+              _FieldLabel(strings.fieldTitle),
               const SizedBox(height: BrandSizing.spaceSm),
               TextField(
                 controller: _titleController,
                 onChanged: _draft.setTitle,
                 textCapitalization: TextCapitalization.sentences,
-                decoration: const InputDecoration(
-                  hintText: 'Short title. You can add this later.',
-                ),
+                decoration: InputDecoration(hintText: strings.titleHint),
               ),
 
               const SizedBox(height: BrandSizing.spaceLg),
-              _FieldLabel('Message'),
+              _FieldLabel(strings.fieldMessage),
               const SizedBox(height: BrandSizing.spaceSm),
               TextField(
                 controller: _descriptionController,
                 onChanged: _draft.setDescription,
                 textCapitalization: TextCapitalization.sentences,
                 maxLines: 3,
-                decoration: const InputDecoration(
-                  hintText: 'Anything else worth knowing.',
-                ),
+                decoration: InputDecoration(hintText: strings.messageHint),
               ),
 
               const SizedBox(height: BrandSizing.spaceLg),
-              _FieldLabel('Area'),
+              _FieldLabel(strings.fieldArea),
               const SizedBox(height: BrandSizing.spaceXs),
               Text(
                 'Choose the general area. Your exact location will not be '
@@ -222,7 +226,7 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
               ),
 
               const SizedBox(height: BrandSizing.spaceLg),
-              _FieldLabel('When'),
+              _FieldLabel(strings.detailWhen),
               const SizedBox(height: BrandSizing.spaceSm),
               _WhenField(
                 scheduledTime: _draft.scheduledTime,
@@ -272,6 +276,7 @@ class _RadiusSlider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final strings = AppStrings.of(context);
     return Row(
       children: [
         Expanded(
@@ -280,14 +285,14 @@ class _RadiusSlider extends StatelessWidget {
             min: 250,
             max: 5000,
             divisions: 19,
-            label: Format.radius(metres),
+            label: Format.radius(strings, metres),
             onChanged: onChanged,
           ),
         ),
         SizedBox(
           width: 82,
           child: Text(
-            Format.radius(metres),
+            Format.radius(strings, metres),
             style: Theme.of(context).textTheme.labelSmall,
             textAlign: TextAlign.end,
           ),
@@ -310,6 +315,7 @@ class _WhenField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final strings = AppStrings.of(context);
     final theme = Theme.of(context);
 
     return Row(
@@ -322,8 +328,8 @@ class _WhenField extends StatelessWidget {
               alignment: Alignment.centerLeft,
               child: Text(
                 scheduledTime == null
-                    ? 'Any time'
-                    : Format.scheduled(scheduledTime, DateTime.now()),
+                    ? strings.anyTime
+                    : Format.scheduled(strings, scheduledTime, DateTime.now()),
               ),
             ),
           ),
@@ -332,7 +338,7 @@ class _WhenField extends StatelessWidget {
           IconButton(
             onPressed: onClear,
             icon: const Icon(Icons.close),
-            tooltip: 'Clear time',
+            tooltip: strings.clearTime,
             color: theme.colorScheme.onSurfaceVariant,
           ),
       ],
@@ -355,6 +361,7 @@ class _SaveBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final strings = AppStrings.of(context);
     final theme = Theme.of(context);
 
     return SafeArea(
@@ -367,7 +374,7 @@ class _SaveBar extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(bottom: BrandSizing.spaceSm),
                 child: Text(
-                  'Add at least one voice note, photo, or message.',
+                  strings.addAtLeastOne,
                   style: theme.textTheme.labelSmall,
                   textAlign: TextAlign.center,
                 ),
@@ -386,7 +393,7 @@ class _SaveBar extends StatelessWidget {
                         ),
                       )
                     // Section 21 — never "Submit".
-                    : Text(isEditing ? 'Save Changes' : 'Save Job'),
+                    : Text(isEditing ? strings.saveChanges : strings.saveJob),
               ),
             ),
           ],

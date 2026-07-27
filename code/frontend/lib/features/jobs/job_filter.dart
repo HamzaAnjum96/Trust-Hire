@@ -1,31 +1,41 @@
 import 'package:flutter/foundation.dart';
 
+import '../../l10n/app_localizations.dart';
 import '../../models/job.dart';
 import '../../models/job_type.dart';
 
 /// When the work is needed.
 enum TimeFilter {
-  any('Any time'),
-  today("Today's Jobs"),
-  tomorrow('Tomorrow'),
-  thisWeek('This week');
+  any,
+  today,
+  tomorrow,
+  thisWeek;
 
-  const TimeFilter(this.label);
-
-  final String label;
+  String label(AppStrings strings) => switch (this) {
+    TimeFilter.any => strings.anyTime,
+    TimeFilter.today => strings.todaysJobs,
+    TimeFilter.tomorrow => strings.tomorrow,
+    TimeFilter.thisWeek => strings.thisWeek,
+  };
 }
 
 /// How far away the work is. Only meaningful once a position is known.
 enum DistanceFilter {
-  any('Any distance', null),
-  nearMe('Near Me', 2000),
-  withinFive('Within 5 km', 5000),
-  withinTen('Within 10 km', 10000);
+  any(null),
+  nearMe(2000),
+  withinFive(5000),
+  withinTen(10000);
 
-  const DistanceFilter(this.label, this.metres);
+  const DistanceFilter(this.metres);
 
-  final String label;
   final double? metres;
+
+  String label(AppStrings strings) => switch (this) {
+    DistanceFilter.any => strings.anyDistance,
+    DistanceFilter.nearMe => strings.nearMe,
+    DistanceFilter.withinFive => strings.withinFive,
+    DistanceFilter.withinTen => strings.withinTen,
+  };
 }
 
 /// A search and filter over the job list.
@@ -90,14 +100,29 @@ class JobFilter {
   }
 
   /// Applies the filter, newest first.
-  List<Job> apply(List<Job> jobs, {required DateTime now, JobLocation? from}) {
+  ///
+  /// Takes [strings] because search reaches the job's *shown* words — its
+  /// fallback heading and its kind of work — and those change with the
+  /// interface language. Searching Urdu text against English labels would
+  /// quietly find nothing.
+  List<Job> apply(
+    List<Job> jobs, {
+    required DateTime now,
+    required AppStrings strings,
+    JobLocation? from,
+  }) {
     return jobs
-        .where((job) => _matches(job, now: now, from: from))
+        .where((job) => _matches(job, now: now, from: from, strings: strings))
         .toList(growable: false);
   }
 
-  bool _matches(Job job, {required DateTime now, JobLocation? from}) {
-    if (!_matchesQuery(job)) return false;
+  bool _matches(
+    Job job, {
+    required DateTime now,
+    required AppStrings strings,
+    JobLocation? from,
+  }) {
+    if (!_matchesQuery(job, strings)) return false;
     if (!_matchesTime(job, now)) return false;
     if (!_matchesDistance(job, from)) return false;
     if (withVoiceNote && !job.hasVoiceNote) return false;
@@ -117,7 +142,7 @@ class JobFilter {
     return type != null && types.contains(type);
   }
 
-  bool _matchesQuery(Job job) {
+  bool _matchesQuery(Job job, AppStrings strings) {
     final needle = query.trim().toLowerCase();
     if (needle.isEmpty) return true;
 
@@ -126,9 +151,9 @@ class JobFilter {
     final haystack = [
       job.title,
       job.shortDescription,
-      job.displayTitle,
+      job.displayTitle(strings),
       // So "plumbing" finds a plumbing job that never used the word.
-      job.type?.label,
+      job.type?.label(strings),
     ].whereType<String>().join(' ').toLowerCase();
 
     // Every word must appear somewhere, so "plumber today" narrows rather

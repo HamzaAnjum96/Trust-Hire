@@ -7,6 +7,7 @@ import '../../core/tokens.dart';
 import '../../services/media_store.dart';
 import '../../widgets/job_photo.dart';
 import 'job_draft_controller.dart';
+import '../../l10n/app_localizations.dart';
 
 /// Recording a voice note.
 ///
@@ -57,6 +58,7 @@ class _VoiceRecorderFieldState extends State<VoiceRecorderField> {
 
   @override
   Widget build(BuildContext context) {
+    final strings = AppStrings.of(context);
     final theme = Theme.of(context);
     final isLight = theme.brightness == Brightness.light;
     final draft = widget.draft;
@@ -93,7 +95,7 @@ class _VoiceRecorderFieldState extends State<VoiceRecorderField> {
             _RoundButton(
               colour: BrandColours.errorRed,
               icon: Icons.stop,
-              label: 'Stop recording',
+              label: strings.stopRecording,
               onTap: draft.stopRecording,
             ),
             const SizedBox(width: BrandSizing.spaceMd),
@@ -102,7 +104,7 @@ class _VoiceRecorderFieldState extends State<VoiceRecorderField> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Recording…',
+                    strings.recording,
                     style: theme.textTheme.labelMedium?.copyWith(
                       fontWeight: FontWeight.w600,
                       color: theme.colorScheme.onSurface,
@@ -117,7 +119,7 @@ class _VoiceRecorderFieldState extends State<VoiceRecorderField> {
             ),
             TextButton(
               onPressed: draft.cancelRecording,
-              child: const Text('Discard'),
+              child: Text(strings.discard),
             ),
           ],
         ),
@@ -136,7 +138,7 @@ class _VoiceRecorderFieldState extends State<VoiceRecorderField> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Voice Note Added',
+                    strings.voiceNoteAdded,
                     style: theme.textTheme.labelMedium?.copyWith(
                       fontWeight: FontWeight.w600,
                       color: theme.colorScheme.onSurface,
@@ -151,12 +153,12 @@ class _VoiceRecorderFieldState extends State<VoiceRecorderField> {
             ),
             TextButton(
               onPressed: draft.startRecording,
-              child: const Text('Record Again'),
+              child: Text(strings.recordAgain),
             ),
             IconButton(
               onPressed: draft.removeVoiceNote,
               icon: const Icon(Icons.close),
-              tooltip: 'Remove voice note',
+              tooltip: strings.removeVoiceNote,
             ),
           ],
         ),
@@ -170,7 +172,7 @@ class _VoiceRecorderFieldState extends State<VoiceRecorderField> {
           _RoundButton(
             colour: BrandColours.copper,
             icon: Icons.mic,
-            label: 'Record a voice note',
+            label: strings.recordAVoiceNote,
             onTap: draft.startRecording,
           ),
           const SizedBox(width: BrandSizing.spaceMd),
@@ -179,7 +181,7 @@ class _VoiceRecorderFieldState extends State<VoiceRecorderField> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Tell people about the job',
+                  strings.tellPeopleAboutTheJob,
                   style: theme.textTheme.labelMedium?.copyWith(
                     fontWeight: FontWeight.w600,
                     color: theme.colorScheme.onSurface,
@@ -187,7 +189,7 @@ class _VoiceRecorderFieldState extends State<VoiceRecorderField> {
                 ),
                 Text(
                   // Section 33 copy.
-                  'Speak naturally. You do not need to prepare anything.',
+                  strings.speakNaturally,
                   style: theme.textTheme.labelSmall,
                 ),
               ],
@@ -210,6 +212,7 @@ class PhotoField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final strings = AppStrings.of(context);
     final theme = Theme.of(context);
     final isLight = theme.brightness == Brightness.light;
 
@@ -220,14 +223,14 @@ class PhotoField extends StatelessWidget {
         children: [
           _AddTile(
             icon: Icons.photo_camera_outlined,
-            label: 'Take Photo',
+            label: strings.takePhoto,
             isLight: isLight,
             onTap: draft.takePhoto,
           ),
           const SizedBox(width: BrandSizing.spaceSm),
           _AddTile(
             icon: Icons.photo_library_outlined,
-            label: 'Choose Photo',
+            label: strings.choosePhoto,
             isLight: isLight,
             onTap: draft.choosePhoto,
           ),
@@ -307,6 +310,7 @@ class _PhotoTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final strings = AppStrings.of(context);
     return SizedBox(
       width: PhotoField._tileSize,
       child: Stack(
@@ -331,13 +335,13 @@ class _PhotoTile extends StatelessWidget {
               child: InkWell(
                 onTap: onRemove,
                 customBorder: const CircleBorder(),
-                child: const Padding(
+                child: Padding(
                   padding: EdgeInsets.all(4),
                   child: Icon(
                     Icons.close,
                     size: 16,
                     color: BrandColours.white,
-                    semanticLabel: 'Remove photo',
+                    semanticLabel: strings.removePhoto,
                   ),
                 ),
               ),

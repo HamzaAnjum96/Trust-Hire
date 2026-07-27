@@ -2,6 +2,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
+import '../l10n/app_localizations.dart';
 import 'job_type.dart';
 
 /// A geographic point. Deliberately approximate — the brand guidelines call
@@ -116,7 +117,7 @@ class Job {
 
   /// A title to show when the poster did not type one. Falls back through the
   /// description, then the media the job does have — never an empty heading.
-  String get displayTitle {
+  String displayTitle(AppStrings strings) {
     final t = title?.trim();
     if (t != null && t.isNotEmpty) return t;
 
@@ -128,11 +129,11 @@ class Job {
     // A chosen type beats "Voice note job" as a heading — it says what the
     // work is rather than how it was described.
     final chosen = type;
-    if (chosen != null && chosen != JobType.other) return chosen.label;
+    if (chosen != null && chosen != JobType.other) return chosen.label(strings);
 
-    if (hasVoiceNote) return 'Voice note job';
-    if (hasPhotos) return 'Photo job';
-    return 'Untitled job';
+    if (hasVoiceNote) return strings.voiceNoteJob;
+    if (hasPhotos) return strings.photoJob;
+    return strings.untitledJob;
   }
 
   /// The description to show *underneath* [displayTitle].

@@ -1,0 +1,292 @@
+{
+  "@@locale": "en",
+  "appTitle": "Trust Hire",
+  "languageName": "English",
+  "navMap": "Map",
+  "navJobs": "Jobs",
+  "navSettings": "Settings",
+  "postAJob": "Post a Job",
+  "nearbyWork": "Nearby work",
+  "findWork": "Find work",
+  "jobCount": "{count, plural, =1{1 job} other{{count} jobs}}",
+  "@jobCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "jobCountFiltered": "{shown} of {total}",
+  "@jobCountFiltered": {
+    "placeholders": {
+      "shown": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "loadingJobs": "Loading nearby jobs…",
+  "couldNotLoadJobs": "Could not load jobs. Pull down to try again.",
+  "couldNotLoadJobsShort": "Could not load jobs. Try again.",
+  "tryAgain": "Try Again",
+  "close": "Close",
+  "dismiss": "Dismiss",
+  "showAllJobs": "Show all jobs",
+  "nearMeLabel": "Near me",
+  "clusterLabel": "{count} jobs here. Tap to zoom in.",
+  "@clusterLabel": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "mapLabel": "Map of nearby jobs",
+  "yourLocation": "Your location",
+  "mapImagesNotLoading": "Map images are not loading. Jobs are still shown in the right places.",
+  "noJobsMatchHere": "No jobs match here. Try a wider area or a different time.",
+  "locationOff": "Location access is off. You can still move the map and choose an area manually.",
+  "locationOffForApp": "Location access is off for this app. You can still move the map and choose an area manually.",
+  "locationServiceOff": "Location is switched off on this device. You can still move the map and choose an area manually.",
+  "locationNotFound": "Could not find your location. You can still move the map and choose an area manually.",
+  "searchJobs": "Search jobs",
+  "clearSearch": "Clear search",
+  "todaysJobs": "Today's Jobs",
+  "tomorrow": "Tomorrow",
+  "thisWeek": "This week",
+  "anyTime": "Any time",
+  "nearMe": "Near Me",
+  "anyDistance": "Any distance",
+  "withinFive": "Within 5 km",
+  "withinTen": "Within 10 km",
+  "voiceNote": "Voice note",
+  "photos": "Photos",
+  "more": "More",
+  "clear": "Clear",
+  "clearAll": "Clear All",
+  "clearFilters": "Clear Filters",
+  "showJobs": "Show Jobs",
+  "filterWhen": "When",
+  "filterHowFar": "How far",
+  "filterIncludes": "What it includes",
+  "filterKind": "Kind of work",
+  "filterKindWarning": "Jobs that did not say what kind they are will be hidden.",
+  "noJobsYet": "No jobs yet",
+  "postTheFirstJob": "Post the first job to see it here.",
+  "noJobsMatch": "No jobs match",
+  "tryWiderArea": "Try a wider area or a different time.",
+  "postedAgo": "Posted {when}",
+  "@postedAgo": {
+    "placeholders": {
+      "when": {
+        "type": "String"
+      }
+    }
+  },
+  "onThisDevice": "On this device",
+  "detailWhen": "When",
+  "detailArea": "Area",
+  "detailPostedBy": "Posted by",
+  "detailKindOfWork": "Kind of work",
+  "generalAreaNotice": "This is the general area, not an exact address.",
+  "jobNoLongerHere": "This job is no longer here.",
+  "photoOfCount": "Photo {index} of {total}",
+  "@photoOfCount": {
+    "placeholders": {
+      "index": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "photoCount": "{count, plural, =1{1 photo} other{{count} photos}}",
+  "@photoCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "listen": "Listen",
+  "pause": "Pause",
+  "playing": "Playing",
+  "voiceNoteCouldNotPlay": "This voice note could not be played.",
+  "postAJobTitle": "Post a job",
+  "editJobTitle": "Edit job",
+  "whatWorkDoYouNeed": "What work do you need?",
+  "anyOneIsEnough": "Add a voice note, photo, or short message. Any one is enough.",
+  "tellPeopleAboutTheJob": "Tell people about the job",
+  "speakNaturally": "Speak naturally. You do not need to prepare anything.",
+  "recordAVoiceNote": "Record a voice note",
+  "recording": "Recording…",
+  "stopRecording": "Stop recording",
+  "discard": "Discard",
+  "voiceNoteAdded": "Voice Note Added",
+  "recordAgain": "Record Again",
+  "removeVoiceNote": "Remove voice note",
+  "microphoneOff": "Microphone access is off. You can still add a photo or type a short message.",
+  "takePhoto": "Take Photo",
+  "choosePhoto": "Choose Photo",
+  "removePhoto": "Remove photo",
+  "kindOfWorkOptional": "Optional. Choosing one makes your job easier to spot on the map.",
+  "fieldTitle": "Title",
+  "titleHint": "Short title. You can add this later.",
+  "fieldMessage": "Message",
+  "messageHint": "Anything else worth knowing.",
+  "fieldArea": "Area",
+  "areaHelp": "Choose the general area. Your exact location will not be shown.",
+  "moveMapToChooseArea": "Move the map to choose the area",
+  "clearTime": "Clear time",
+  "whenIsWorkNeeded": "When is the work needed?",
+  "whatTime": "What time?",
+  "addAtLeastOne": "Add at least one voice note, photo, or message.",
+  "addSomethingFirst": "Add a voice note, photo, or short message first.",
+  "couldNotSave": "Could not save your job. Try again.",
+  "saveJob": "Save Job",
+  "saveChanges": "Save Changes",
+  "postedOnThisDevice": "Your job has been posted on this device.",
+  "changesSaved": "Your changes have been saved on this device.",
+  "editJob": "Edit Job",
+  "deleteJob": "Delete Job",
+  "deleteThisJob": "Delete this job?",
+  "deleteJobExplanation": "It will be removed from this device. This cannot be undone.",
+  "keepJob": "Keep Job",
+  "jobDeleted": "Job deleted from this device.",
+  "settingsStorageNotice": "This POC stores jobs only on this device. Nothing is uploaded and no account is needed.",
+  "appearance": "Appearance",
+  "themeSystem": "System",
+  "themeLight": "Light",
+  "themeDark": "Dark",
+  "language": "Language",
+  "localData": "Local data",
+  "restoreSeedExplanation": "Restoring the seed data removes every job you created on this device and brings back the original examples.",
+  "restoreSeedData": "Restore Seed Data",
+  "restoreSeedTitle": "Restore seed data?",
+  "restoreSeedWarning": "Jobs you created on this device will be removed. This cannot be undone.",
+  "keepMyJobs": "Keep My Jobs",
+  "seedRestored": "Seed data restored.",
+  "typePlumbing": "Plumbing",
+  "typeElectrical": "Electrical",
+  "typePainting": "Painting",
+  "typeCarpentry": "Carpentry",
+  "typeMasonry": "Masonry",
+  "typeConstruction": "Construction",
+  "typeApplianceRepair": "Appliance repair",
+  "typeCleaning": "Cleaning",
+  "typeMoving": "Moving",
+  "typeDriving": "Driving",
+  "typeGardening": "Gardening",
+  "typeTailoring": "Tailoring",
+  "typeCooking": "Cooking",
+  "typeTutoring": "Tutoring",
+  "typeSecurity": "Security",
+  "typeOther": "Something else",
+  "voiceNoteJob": "Voice note job",
+  "photoJob": "Photo job",
+  "untitledJob": "Untitled job",
+  "veryClose": "Very close",
+  "metresAway": "{metres} m away",
+  "@metresAway": {
+    "placeholders": {
+      "metres": {
+        "type": "int"
+      }
+    }
+  },
+  "kilometresAway": "{km} km away",
+  "@kilometresAway": {
+    "placeholders": {
+      "km": {
+        "type": "String"
+      }
+    }
+  },
+  "metresArea": "{metres} m area",
+  "@metresArea": {
+    "placeholders": {
+      "metres": {
+        "type": "int"
+      }
+    }
+  },
+  "kilometresArea": "{km} km area",
+  "@kilometresArea": {
+    "placeholders": {
+      "km": {
+        "type": "String"
+      }
+    }
+  },
+  "todayAt": "Today, {time}",
+  "@todayAt": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "tomorrowAt": "Tomorrow, {time}",
+  "@tomorrowAt": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "yesterdayAt": "Yesterday, {time}",
+  "@yesterdayAt": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "dayAt": "{day}, {time}",
+  "@dayAt": {
+    "placeholders": {
+      "day": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "wasOn": "Was {date}",
+  "@wasOn": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "justNow": "Just now",
+  "minutesAgo": "{count, plural, =1{1 minute ago} other{{count} minutes ago}}",
+  "@minutesAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "hoursAgo": "{count, plural, =1{1 hour ago} other{{count} hours ago}}",
+  "@hoursAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "daysAgo": "{count, plural, =1{1 day ago} other{{count} days ago}}",
+  "@daysAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
+}

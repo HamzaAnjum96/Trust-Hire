@@ -4,6 +4,7 @@ import '../../core/motion.dart';
 import '../../core/tokens.dart';
 import '../../services/media_store.dart';
 import '../../widgets/job_photo.dart';
+import '../../l10n/app_localizations.dart';
 
 /// A swipeable gallery of a job's photos, with a full-screen viewer.
 ///
@@ -115,6 +116,7 @@ class _PhotoViewer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final strings = AppStrings.of(context);
     return Scaffold(
       backgroundColor: BrandColours.ink,
       appBar: AppBar(
@@ -122,7 +124,7 @@ class _PhotoViewer extends StatelessWidget {
         foregroundColor: BrandColours.white,
         leading: IconButton(
           icon: const Icon(Icons.close),
-          tooltip: 'Close',
+          tooltip: strings.close,
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),

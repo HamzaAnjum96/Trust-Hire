@@ -1,5 +1,6 @@
 import 'package:intl/intl.dart';
 
+import '../l10n/app_localizations.dart';
 import '../models/job.dart';
 
 /// Human-readable formatting for distance and time.
@@ -7,78 +8,77 @@ import '../models/job.dart';
 /// Wording follows section 19 of the brand guidelines: familiar words, no
 /// system language, and approximate rather than precise where precision would
 /// be false ("about 2 km away", not "1,987 m").
+///
+/// Every method takes [AppStrings] so the words come from the active language
+/// and dates from the matching locale — a distance reading "2 km away" inside
+/// an otherwise Urdu screen was the most visible thing left in English.
 class Format {
   const Format._();
 
+  /// The locale to format dates and numbers in.
+  static String _localeOf(AppStrings strings) => strings.localeName;
+
   /// Distance from the viewer to a job, phrased approximately.
-  static String distance(double metres) {
-    if (metres < 100) return 'Very close';
-    if (metres < 1000) return '${(metres / 50).round() * 50} m away';
+  static String distance(AppStrings strings, double metres) {
+    if (metres < 100) return strings.veryClose;
+    if (metres < 1000) {
+      return strings.metresAway((metres / 50).round() * 50);
+    }
     if (metres < 10000) {
       final km = (metres / 100).round() / 10;
-      return '${km.toStringAsFixed(1)} km away';
+      return strings.kilometresAway(km.toStringAsFixed(1));
     }
-    return '${(metres / 1000).round()} km away';
+    return strings.kilometresAway('${(metres / 1000).round()}');
   }
 
   /// The work area a job covers.
-  static String radius(double metres) {
-    if (metres < 1000) return '${metres.round()} m area';
+  static String radius(AppStrings strings, double metres) {
+    if (metres < 1000) return strings.metresArea(metres.round());
+
     final km = (metres / 100).round() / 10;
-    return '${km.toStringAsFixed(km.truncateToDouble() == km ? 0 : 1)} km area';
+    return strings.kilometresArea(
+      km.toStringAsFixed(km.truncateToDouble() == km ? 0 : 1),
+    );
   }
 
   /// When the work needs to happen, relative to [now] where that reads better.
-  static String scheduled(DateTime? time, DateTime now) {
-    if (time == null) return 'Any time';
+  static String scheduled(AppStrings strings, DateTime? time, DateTime now) {
+    if (time == null) return strings.anyTime;
 
+    final locale = _localeOf(strings);
     final today = DateTime(now.year, now.month, now.day);
     final day = DateTime(time.year, time.month, time.day);
     final dayDifference = day.difference(today).inDays;
-    final clock = DateFormat.jm().format(time);
+    final clock = DateFormat.jm(locale).format(time);
 
-    if (dayDifference == 0) return 'Today, $clock';
-    if (dayDifference == 1) return 'Tomorrow, $clock';
-    if (dayDifference == -1) return 'Yesterday, $clock';
+    if (dayDifference == 0) return strings.todayAt(clock);
+    if (dayDifference == 1) return strings.tomorrowAt(clock);
+    if (dayDifference == -1) return strings.yesterdayAt(clock);
     if (dayDifference > 1 && dayDifference < 7) {
-      return '${DateFormat.EEEE().format(time)}, $clock';
+      return strings.dayAt(DateFormat.EEEE(locale).format(time), clock);
     }
-    if (dayDifference < 0) return 'Was ${DateFormat.MMMd().format(time)}';
-    return '${DateFormat.MMMd().format(time)}, $clock';
-  }
-
-  /// Short form for map markers and dense list rows.
-  static String scheduledShort(DateTime? time, DateTime now) {
-    if (time == null) return 'Any time';
-
-    final today = DateTime(now.year, now.month, now.day);
-    final day = DateTime(time.year, time.month, time.day);
-    final dayDifference = day.difference(today).inDays;
-    final clock = DateFormat.jm().format(time);
-
-    if (dayDifference == 0) return clock;
-    if (dayDifference == 1) return 'Tomorrow $clock';
-    return DateFormat.MMMd().format(time);
+    if (dayDifference < 0) {
+      return strings.wasOn(DateFormat.MMMd(locale).format(time));
+    }
+    return strings.dayAt(DateFormat.MMMd(locale).format(time), clock);
   }
 
   /// How long ago a job was posted.
-  static String posted(DateTime createdAt, DateTime now) {
+  static String posted(AppStrings strings, DateTime createdAt, DateTime now) {
     final elapsed = now.difference(createdAt);
 
-    if (elapsed.inMinutes < 1) return 'Just now';
-    if (elapsed.inMinutes < 60) return '${elapsed.inMinutes} min ago';
-    if (elapsed.inHours < 24) {
-      final h = elapsed.inHours;
-      return '$h hour${h == 1 ? '' : 's'} ago';
-    }
-    if (elapsed.inDays < 7) {
-      final d = elapsed.inDays;
-      return '$d day${d == 1 ? '' : 's'} ago';
-    }
-    return DateFormat.MMMd().format(createdAt);
+    if (elapsed.inMinutes < 1) return strings.justNow;
+    if (elapsed.inMinutes < 60) return strings.minutesAgo(elapsed.inMinutes);
+    if (elapsed.inHours < 24) return strings.hoursAgo(elapsed.inHours);
+    if (elapsed.inDays < 7) return strings.daysAgo(elapsed.inDays);
+
+    return DateFormat.MMMd(_localeOf(strings)).format(createdAt);
   }
 
   /// Playback position or recording length, as m:ss.
+  ///
+  /// Deliberately not localised: a timecode is read as a number, and
+  /// translating the separator would make it harder to scan, not easier.
   static String duration(Duration? value) {
     if (value == null) return '0:00';
     final minutes = value.inMinutes;
@@ -88,8 +88,8 @@ class Format {
 
   /// Distance from a viewer position to a job, or null when the viewer's
   /// location is unknown.
-  static String? distanceToJob(JobLocation? from, Job job) {
+  static String? distanceToJob(AppStrings strings, JobLocation? from, Job job) {
     if (from == null) return null;
-    return distance(from.distanceTo(job.location));
+    return distance(strings, from.distanceTo(job.location));
   }
 }

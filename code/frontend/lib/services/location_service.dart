@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:geolocator/geolocator.dart';
 
+import '../l10n/app_localizations.dart';
 import '../models/job.dart';
 
 /// Why the app does not have a location, so the UI can explain rather than
@@ -36,20 +37,12 @@ class LocationResult {
 
   /// Plain-language explanation, following section 19 — say what the user can
   /// still do, never what the system failed to do.
-  String? get explanation => switch (status) {
+  String? explanation(AppStrings strings) => switch (status) {
     LocationStatus.available || LocationStatus.unknown => null,
-    LocationStatus.denied =>
-      'Location access is off. You can still move the map and choose an '
-          'area manually.',
-    LocationStatus.deniedForever =>
-      'Location access is off for this app. You can still move the map and '
-          'choose an area manually.',
-    LocationStatus.serviceDisabled =>
-      'Location is switched off on this device. You can still move the map '
-          'and choose an area manually.',
-    LocationStatus.failed =>
-      'Could not find your location. You can still move the map and choose '
-          'an area manually.',
+    LocationStatus.denied => strings.locationOff,
+    LocationStatus.deniedForever => strings.locationOffForApp,
+    LocationStatus.serviceDisabled => strings.locationServiceOff,
+    LocationStatus.failed => strings.locationNotFound,
   };
 }
 

@@ -6,6 +6,7 @@ import '../../core/formatters.dart';
 import '../../core/map_theme.dart';
 import '../../core/tokens.dart';
 import '../../models/job.dart';
+import '../../l10n/app_localizations.dart';
 
 /// Choosing roughly where the work is.
 ///
@@ -132,6 +133,7 @@ class _AreaChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final strings = AppStrings.of(context);
     final theme = Theme.of(context);
 
     return Container(
@@ -155,7 +157,7 @@ class _AreaChip extends StatelessWidget {
           Expanded(
             child: Text(
               'Move the map to choose the area · '
-              '${Format.radius(radiusMetres)}',
+              '${Format.radius(strings, radiusMetres)}',
               style: theme.textTheme.labelSmall,
               textAlign: TextAlign.center,
             ),

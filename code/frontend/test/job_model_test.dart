@@ -1,10 +1,17 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:trust_hire/l10n/app_localizations.dart';
 import 'package:trust_hire/models/job.dart';
+
+import 'support/test_strings.dart';
 
 /// The core principle from the sprint plan is that missing information is
 /// acceptable — a job posted with voice alone, a photo alone, or a title alone
 /// is valid. These tests pin that behaviour down.
 void main() {
+  late AppStrings strings;
+
+  setUpAll(() async => strings = await loadStrings());
+
   final now = DateTime(2026, 7, 27, 10);
 
   Job job({
@@ -50,16 +57,16 @@ void main() {
 
   group('displayTitle', () {
     test('uses the title when present', () {
-      expect(job(title: 'Fix the tap').displayTitle, 'Fix the tap');
+      expect(job(title: 'Fix the tap').displayTitle(strings), 'Fix the tap');
     });
 
     test('falls back to a short description', () {
-      expect(job(description: 'Drain blocked').displayTitle, 'Drain blocked');
+      expect(job(description: 'Drain blocked').displayTitle(strings), 'Drain blocked');
     });
 
     test('truncates a long description', () {
       final long = 'A' * 60;
-      final title = job(description: long).displayTitle;
+      final title = job(description: long).displayTitle(strings);
       expect(title.length, 40);
       expect(title.endsWith('…'), isTrue);
     });
@@ -68,7 +75,7 @@ void main() {
       // When the heading came from the description, printing it again below
       // duplicates the same sentence on the card.
       final derived = job(description: 'Bathroom drain blocked');
-      expect(derived.displayTitle, 'Bathroom drain blocked');
+      expect(derived.displayTitle(strings), 'Bathroom drain blocked');
       expect(derived.supportingDescription, isNull);
 
       // With a real title, the description is genuinely additional.
@@ -77,9 +84,9 @@ void main() {
     });
 
     test('describes the media when there is no text at all', () {
-      expect(job(voice: 'v.wav').displayTitle, 'Voice note job');
-      expect(job(photos: const ['a.png']).displayTitle, 'Photo job');
-      expect(job().displayTitle, 'Untitled job');
+      expect(job(voice: 'v.wav').displayTitle(strings), 'Voice note job');
+      expect(job(photos: const ['a.png']).displayTitle(strings), 'Photo job');
+      expect(job().displayTitle(strings), 'Untitled job');
     });
   });
 

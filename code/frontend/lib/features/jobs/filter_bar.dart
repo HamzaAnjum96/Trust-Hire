@@ -4,6 +4,7 @@ import '../../core/tokens.dart';
 import '../../models/job_type.dart';
 import 'job_filter.dart';
 import 'job_filter_controller.dart';
+import '../../l10n/app_localizations.dart';
 
 /// Quick filters: the two the sprint plan names, plus a way into the rest.
 ///
@@ -20,35 +21,36 @@ class QuickFilterBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final strings = AppStrings.of(context);
     final filter = controller.filter;
 
     final chips = <Widget>[
       _FilterChip(
-        label: TimeFilter.today.label,
+        label: TimeFilter.today.label(strings),
         icon: Icons.today_outlined,
         selected: filter.time == TimeFilter.today,
         onTap: controller.toggleToday,
       ),
       _FilterChip(
-        label: DistanceFilter.nearMe.label,
+        label: DistanceFilter.nearMe.label(strings),
         icon: Icons.near_me_outlined,
         selected: filter.distance == DistanceFilter.nearMe,
         onTap: controller.toggleNearMe,
       ),
       _FilterChip(
-        label: 'Voice note',
+        label: strings.voiceNote,
         icon: Icons.mic_none,
         selected: filter.withVoiceNote,
         onTap: () => controller.setWithVoiceNote(!filter.withVoiceNote),
       ),
       _FilterChip(
-        label: 'Photos',
+        label: strings.photos,
         icon: Icons.photo_library_outlined,
         selected: filter.withPhotos,
         onTap: () => controller.setWithPhotos(!filter.withPhotos),
       ),
       _FilterChip(
-        label: 'More',
+        label: strings.more,
         icon: Icons.tune,
         selected:
             (filter.time != TimeFilter.any &&
@@ -60,7 +62,7 @@ class QuickFilterBar extends StatelessWidget {
       ),
       if (controller.isActive)
         _FilterChip(
-          label: 'Clear',
+          label: strings.clear,
           icon: Icons.close,
           selected: false,
           onTap: controller.clear,
@@ -177,6 +179,7 @@ class FilterSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final strings = AppStrings.of(context);
     final theme = Theme.of(context);
 
     return ListenableBuilder(
@@ -195,10 +198,10 @@ class FilterSheet extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text('Find work', style: theme.textTheme.headlineMedium),
+              Text(strings.findWork, style: theme.textTheme.headlineMedium),
               const SizedBox(height: BrandSizing.spaceLg),
 
-              Text('When', style: theme.textTheme.titleMedium),
+              Text(strings.detailWhen, style: theme.textTheme.titleMedium),
               const SizedBox(height: BrandSizing.spaceSm),
               Wrap(
                 spacing: BrandSizing.spaceSm,
@@ -206,7 +209,7 @@ class FilterSheet extends StatelessWidget {
                 children: [
                   for (final option in TimeFilter.values)
                     _FilterChip(
-                      label: option.label,
+                      label: option.label(strings),
                       icon: Icons.schedule,
                       selected: filter.time == option,
                       onTap: () => controller.setTime(option),
@@ -215,7 +218,7 @@ class FilterSheet extends StatelessWidget {
               ),
 
               const SizedBox(height: BrandSizing.spaceLg),
-              Text('How far', style: theme.textTheme.titleMedium),
+              Text(strings.filterHowFar, style: theme.textTheme.titleMedium),
               const SizedBox(height: BrandSizing.spaceSm),
               Wrap(
                 spacing: BrandSizing.spaceSm,
@@ -223,7 +226,7 @@ class FilterSheet extends StatelessWidget {
                 children: [
                   for (final option in DistanceFilter.values)
                     _FilterChip(
-                      label: option.label,
+                      label: option.label(strings),
                       icon: Icons.near_me_outlined,
                       selected: filter.distance == option,
                       onTap: () => controller.setDistance(option),
@@ -232,21 +235,21 @@ class FilterSheet extends StatelessWidget {
               ),
 
               const SizedBox(height: BrandSizing.spaceLg),
-              Text('What it includes', style: theme.textTheme.titleMedium),
+              Text(strings.filterIncludes, style: theme.textTheme.titleMedium),
               const SizedBox(height: BrandSizing.spaceSm),
               Wrap(
                 spacing: BrandSizing.spaceSm,
                 runSpacing: BrandSizing.spaceSm,
                 children: [
                   _FilterChip(
-                    label: 'Voice note',
+                    label: strings.voiceNote,
                     icon: Icons.mic_none,
                     selected: filter.withVoiceNote,
                     onTap: () =>
                         controller.setWithVoiceNote(!filter.withVoiceNote),
                   ),
                   _FilterChip(
-                    label: 'Photos',
+                    label: strings.photos,
                     icon: Icons.photo_library_outlined,
                     selected: filter.withPhotos,
                     onTap: () => controller.setWithPhotos(!filter.withPhotos),
@@ -255,11 +258,14 @@ class FilterSheet extends StatelessWidget {
               ),
 
               const SizedBox(height: BrandSizing.spaceLg),
-              Text('Kind of work', style: theme.textTheme.titleMedium),
+              Text(
+                strings.detailKindOfWork,
+                style: theme.textTheme.titleMedium,
+              ),
               const SizedBox(height: BrandSizing.spaceXs),
               Text(
                 // Says the quiet part: this one does hide untyped jobs.
-                'Jobs that did not say what kind they are will be hidden.',
+                strings.filterKindWarning,
                 style: theme.textTheme.labelSmall,
               ),
               const SizedBox(height: BrandSizing.spaceSm),
@@ -269,7 +275,7 @@ class FilterSheet extends StatelessWidget {
                 children: [
                   for (final type in JobType.values)
                     _FilterChip(
-                      label: type.label,
+                      label: type.label(strings),
                       icon: type.icon,
                       selected: filter.types.contains(type),
                       onTap: () => controller.toggleType(type),
@@ -283,14 +289,14 @@ class FilterSheet extends StatelessWidget {
                   Expanded(
                     child: OutlinedButton(
                       onPressed: controller.clear,
-                      child: const Text('Clear All'),
+                      child: Text(strings.clearAll),
                     ),
                   ),
                   const SizedBox(width: BrandSizing.spaceMd),
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () => Navigator.of(context).pop(),
-                      child: const Text('Show Jobs'),
+                      child: Text(strings.showJobs),
                     ),
                   ),
                 ],
@@ -327,18 +333,19 @@ class _JobSearchFieldState extends State<JobSearchField> {
 
   @override
   Widget build(BuildContext context) {
+    final strings = AppStrings.of(context);
     return TextField(
       controller: _text,
       onChanged: widget.controller.setQuery,
       textInputAction: TextInputAction.search,
       decoration: InputDecoration(
-        hintText: 'Search jobs',
+        hintText: strings.searchJobs,
         prefixIcon: const Icon(Icons.search),
         suffixIcon: widget.controller.filter.query.isEmpty
             ? null
             : IconButton(
                 icon: const Icon(Icons.close),
-                tooltip: 'Clear search',
+                tooltip: strings.clearSearch,
                 onPressed: () {
                   _text.clear();
                   widget.controller.setQuery('');

@@ -4,6 +4,7 @@ import '../../core/motion.dart';
 import '../../core/tokens.dart';
 import '../../models/job_type.dart';
 import 'job_draft_controller.dart';
+import '../../l10n/app_localizations.dart';
 
 /// Choosing the kind of work.
 ///
@@ -54,6 +55,7 @@ class _TypeTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final strings = AppStrings.of(context);
     final theme = Theme.of(context);
     final isLight = theme.brightness == Brightness.light;
 
@@ -67,7 +69,7 @@ class _TypeTile extends StatelessWidget {
     return Semantics(
       button: true,
       selected: selected,
-      label: type.label,
+      label: type.label(strings),
       child: Material(
         color: background,
         borderRadius: BrandRadius.mediumAll,
@@ -95,7 +97,7 @@ class _TypeTile extends StatelessWidget {
                 Icon(type.icon, size: 28, color: foreground),
                 const SizedBox(height: BrandSizing.spaceXs + 2),
                 Text(
-                  type.label,
+                  type.label(strings),
                   style: theme.textTheme.labelSmall?.copyWith(
                     color: foreground,
                     fontWeight: selected ? FontWeight.w600 : FontWeight.w500,

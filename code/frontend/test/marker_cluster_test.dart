@@ -10,6 +10,7 @@ import 'package:trust_hire/models/job.dart';
 import 'package:trust_hire/models/job_type.dart';
 
 import 'support/offline_tiles.dart';
+import 'package:trust_hire/l10n/app_localizations.dart';
 
 /// Clustering was optional in Sprint 1 and became necessary once the seed data
 /// spanned Islamabad to Muzaffarabad: at any zoom showing the whole picture,
@@ -207,6 +208,8 @@ void main() {
 
       await tester.pumpWidget(
         MaterialApp(
+          localizationsDelegates: AppStrings.localizationsDelegates,
+          supportedLocales: AppStrings.supportedLocales,
           theme: BrandTheme.light,
           home: Scaffold(
             body: JobMap(
@@ -239,6 +242,8 @@ void main() {
 
       await tester.pumpWidget(
         MaterialApp(
+          localizationsDelegates: AppStrings.localizationsDelegates,
+          supportedLocales: AppStrings.supportedLocales,
           theme: BrandTheme.light,
           home: Scaffold(
             body: JobMap(
@@ -277,6 +282,8 @@ void main() {
 
       await tester.pumpWidget(
         MaterialApp(
+          localizationsDelegates: AppStrings.localizationsDelegates,
+          supportedLocales: AppStrings.supportedLocales,
           theme: BrandTheme.light,
           home: Scaffold(
             body: JobMap(
