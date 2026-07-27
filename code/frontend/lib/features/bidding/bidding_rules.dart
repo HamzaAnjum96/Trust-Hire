@@ -19,6 +19,10 @@ enum BidRefusal {
   /// almost certainly mistyped.
   fareNotPositive,
 
+  /// The wallet is locked: two unpaid jobs, so no new leads until it clears
+  /// (Section 11).
+  walletLocked,
+
   /// Absurdly high. Not a rule the spec asks for, but a mistyped extra zero
   /// on a Rs. 2,000 job is a Rs. 20,000 bid, and a hirer scanning a list
   /// should not have to catch that for them.
@@ -49,8 +53,12 @@ class BiddingRules {
     required WorkerProfile worker,
     JobLocation? from,
     required List<Bid> existingBids,
+    bool walletLocked = false,
   }) {
     if (job.isLocal) return BidRefusal.ownJob;
+    // Checked before visibility: a locked worker should be told why they
+    // cannot bid, not left to wonder whether the job simply moved.
+    if (walletLocked) return BidRefusal.walletLocked;
     // The job's own status is the authority from P1-3 — a job can stop taking
     // offers by being cancelled or expiring, not only by being accepted.
     if (!job.status.isTakingOffers ||
@@ -68,12 +76,14 @@ class BiddingRules {
     required WorkerProfile worker,
     JobLocation? from,
     required List<Bid> existingBids,
+    bool walletLocked = false,
   }) {
     return refusalFor(
           job,
           worker: worker,
           from: from,
           existingBids: existingBids,
+          walletLocked: walletLocked,
         ) ==
         null;
   }

@@ -91,6 +91,9 @@ class StoreKeys {
   /// Every bid on every job, as a JSON list.
   static const bids = 'trust_hire.bids';
 
+  /// The worker's token wallet — the whole ledger, as a JSON object.
+  static const wallet = 'trust_hire.wallet';
+
   /// Which side of the marketplace this device is on — worker or hirer.
   static const role = 'trust_hire.role';
 
@@ -110,6 +113,7 @@ class StoreKeys {
     savedJobs,
     introSeen,
     bids,
+    wallet,
     role,
     workerProfile,
     mediaIndex,

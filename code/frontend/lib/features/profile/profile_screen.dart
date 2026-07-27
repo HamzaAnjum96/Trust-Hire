@@ -3,6 +3,8 @@ import 'package:provider/provider.dart';
 
 import '../../app/job_controller.dart';
 import '../../app/profile_controller.dart';
+import '../../app/wallet_controller.dart';
+import '../../core/formatters.dart';
 import '../../app/settings_controller.dart';
 import '../../core/app_version.dart';
 import '../../core/layout.dart';
@@ -10,7 +12,8 @@ import '../../core/tokens.dart';
 import '../../models/worker_profile.dart';
 import '../../widgets/state_views.dart';
 import '../../l10n/app_localizations.dart';
-import '../profile/my_trades_screen.dart';
+import '../wallet/wallet_screen.dart';
+import 'my_trades_screen.dart';
 
 /// Who you are here, and how the app behaves for you.
 ///
@@ -173,6 +176,34 @@ class ProfileScreen extends StatelessWidget {
   }
 }
 
+/// The wallet, from the profile.
+///
+/// Only for a worker: the commission is charged to the person doing the work,
+/// so a hirer has no balance to look at.
+class _WalletTile extends StatelessWidget {
+  const _WalletTile();
+
+  @override
+  Widget build(BuildContext context) {
+    final strings = AppStrings.of(context);
+    final wallet = context.watch<WalletController>();
+
+    return ListTile(
+      contentPadding: EdgeInsets.zero,
+      leading: Icon(
+        wallet.isLockedOut
+            ? Icons.lock_outline
+            : Icons.account_balance_wallet_outlined,
+        color: wallet.isInDebt ? BrandColours.errorRed : null,
+      ),
+      title: Text(strings.navWallet),
+      subtitle: Text(Format.fare(strings, wallet.balance)),
+      trailing: const Icon(Icons.chevron_right),
+      onTap: () => WalletScreen.open(context),
+    );
+  }
+}
+
 /// The build, at the foot of settings — where people look for it.
 class _VersionLine extends StatelessWidget {
   const _VersionLine();
@@ -242,6 +273,7 @@ class _RolePicker extends StatelessWidget {
             trailing: const Icon(Icons.chevron_right),
             onTap: () => MyTradesScreen.open(context),
           ),
+          const _WalletTile(),
         ],
       ],
     );

@@ -1693,6 +1693,114 @@ abstract class AppStrings {
   /// In en, this message translates to:
   /// **'Nobody was chosen, so this is no longer listed.'**
   String get jobExpired;
+
+  /// Section heading for the token wallet
+  ///
+  /// In en, this message translates to:
+  /// **'Wallet'**
+  String get navWallet;
+
+  /// Label above the token balance
+  ///
+  /// In en, this message translates to:
+  /// **'Balance'**
+  String get walletBalance;
+
+  /// No description provided for @tokens.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} tokens'**
+  String tokens(String count);
+
+  /// Ledger entry: bought tokens
+  ///
+  /// In en, this message translates to:
+  /// **'Top-up'**
+  String get walletTopUp;
+
+  /// Ledger entry: the platform's 5%
+  ///
+  /// In en, this message translates to:
+  /// **'Commission'**
+  String get walletCommission;
+
+  /// Ledger entry: the Rs. 500 starter credit
+  ///
+  /// In en, this message translates to:
+  /// **'First job credit'**
+  String get walletFirstJobCredit;
+
+  /// Ledger entry: the 1,000-token bonus
+  ///
+  /// In en, this message translates to:
+  /// **'Loyalty bonus'**
+  String get walletLoyaltyBonus;
+
+  /// Ledger entry: the penalty for walking away
+  ///
+  /// In en, this message translates to:
+  /// **'Cancellation charge'**
+  String get walletCancellationPenalty;
+
+  /// Explains the wallet
+  ///
+  /// In en, this message translates to:
+  /// **'Trust Hire takes 5% of the agreed fare when a job is finished. Tokens are not real money.'**
+  String get walletExplanation;
+
+  /// No description provided for @walletInDebt.
+  ///
+  /// In en, this message translates to:
+  /// **'You owe {amount}. You can still take one more job before your account is paused.'**
+  String walletInDebt(String amount);
+
+  /// Warning when locked out
+  ///
+  /// In en, this message translates to:
+  /// **'Your account is paused until you clear what you owe. Top up to start getting work again.'**
+  String get walletLocked;
+
+  /// Empty ledger
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing has moved yet. Your first job\'s commission will show up here.'**
+  String get walletEmpty;
+
+  /// Title of the top-up screen
+  ///
+  /// In en, this message translates to:
+  /// **'Add tokens'**
+  String get topUpTitle;
+
+  /// Says the top-up is simulated
+  ///
+  /// In en, this message translates to:
+  /// **'This is a demonstration. No real payment is taken and no card details are asked for.'**
+  String get topUpNotReal;
+
+  /// No description provided for @topUpConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Add {amount}'**
+  String topUpConfirm(String amount);
+
+  /// No description provided for @topUpDone.
+  ///
+  /// In en, this message translates to:
+  /// **'{amount} added to your wallet.'**
+  String topUpDone(String amount);
+
+  /// No description provided for @loyaltyProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'{amount} more in top-ups earns a 1,000 token bonus.'**
+  String loyaltyProgress(String amount);
+
+  /// No description provided for @firstJobCreditWaiting.
+  ///
+  /// In en, this message translates to:
+  /// **'Your first job\'s commission is covered up to {amount}.'**
+  String firstJobCreditWaiting(String amount);
 }
 
 class _AppStringsDelegate extends LocalizationsDelegate<AppStrings> {

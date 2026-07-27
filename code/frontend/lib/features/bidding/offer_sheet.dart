@@ -202,6 +202,7 @@ class OfferAction extends StatelessWidget {
       final reason = switch (refusal!) {
         BidRefusal.ownJob => strings.cannotBidOwnJob,
         BidRefusal.alreadyAccepted => strings.cannotBidAccepted,
+        BidRefusal.walletLocked => strings.walletLocked,
         _ => null,
       };
 

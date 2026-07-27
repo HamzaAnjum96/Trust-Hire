@@ -3,6 +3,7 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'package:provider/provider.dart';
 import 'package:trust_hire/app/job_controller.dart';
 import 'package:trust_hire/app/profile_controller.dart';
+import 'package:trust_hire/app/wallet_controller.dart';
 import 'package:trust_hire/core/theme.dart';
 import 'package:trust_hire/features/jobs/job_details_sheet.dart';
 import 'package:trust_hire/features/jobs/saved_jobs_controller.dart';
@@ -489,6 +490,7 @@ Future<_Harness> _harness(
 
   final bidController = BidController(BidRepository(store))..load();
   final profile = ProfileController(store)..load();
+  final wallet = WalletController(store)..load();
   final saved = SavedJobsController(store)..load();
 
   await tester.pumpWidget(
@@ -497,6 +499,7 @@ Future<_Harness> _harness(
         ChangeNotifierProvider.value(value: jobController),
         ChangeNotifierProvider.value(value: bidController),
         ChangeNotifierProvider.value(value: profile),
+        ChangeNotifierProvider.value(value: wallet),
         ChangeNotifierProvider.value(value: saved),
         Provider<MediaStore>.value(value: media),
       ],

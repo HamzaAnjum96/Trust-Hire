@@ -15,6 +15,7 @@ import '../features/onboarding/onboarding_screen.dart';
 import 'app_shell.dart';
 import 'bid_controller.dart';
 import 'job_controller.dart';
+import 'wallet_controller.dart';
 import 'profile_controller.dart';
 import 'settings_controller.dart';
 
@@ -44,6 +45,7 @@ class TrustHireApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (_) => BidController(BidRepository(store))..load(),
         ),
+        ChangeNotifierProvider(create: (_) => WalletController(store)..load()),
         ChangeNotifierProvider(
           // Deliberately not requested here. Asking for a permission before
           // explaining what it is for is what section 19 warns against, so

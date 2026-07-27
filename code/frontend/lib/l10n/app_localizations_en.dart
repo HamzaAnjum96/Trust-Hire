@@ -952,4 +952,74 @@ class AppStringsEn extends AppStrings {
 
   @override
   String get jobExpired => 'Nobody was chosen, so this is no longer listed.';
+
+  @override
+  String get navWallet => 'Wallet';
+
+  @override
+  String get walletBalance => 'Balance';
+
+  @override
+  String tokens(String count) {
+    return '$count tokens';
+  }
+
+  @override
+  String get walletTopUp => 'Top-up';
+
+  @override
+  String get walletCommission => 'Commission';
+
+  @override
+  String get walletFirstJobCredit => 'First job credit';
+
+  @override
+  String get walletLoyaltyBonus => 'Loyalty bonus';
+
+  @override
+  String get walletCancellationPenalty => 'Cancellation charge';
+
+  @override
+  String get walletExplanation =>
+      'Trust Hire takes 5% of the agreed fare when a job is finished. Tokens are not real money.';
+
+  @override
+  String walletInDebt(String amount) {
+    return 'You owe $amount. You can still take one more job before your account is paused.';
+  }
+
+  @override
+  String get walletLocked =>
+      'Your account is paused until you clear what you owe. Top up to start getting work again.';
+
+  @override
+  String get walletEmpty =>
+      'Nothing has moved yet. Your first job\'s commission will show up here.';
+
+  @override
+  String get topUpTitle => 'Add tokens';
+
+  @override
+  String get topUpNotReal =>
+      'This is a demonstration. No real payment is taken and no card details are asked for.';
+
+  @override
+  String topUpConfirm(String amount) {
+    return 'Add $amount';
+  }
+
+  @override
+  String topUpDone(String amount) {
+    return '$amount added to your wallet.';
+  }
+
+  @override
+  String loyaltyProgress(String amount) {
+    return '$amount more in top-ups earns a 1,000 token bonus.';
+  }
+
+  @override
+  String firstJobCreditWaiting(String amount) {
+    return 'Your first job\'s commission is covered up to $amount.';
+  }
 }

@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../../app/bid_controller.dart';
 import '../../app/job_controller.dart';
+import '../../app/wallet_controller.dart';
 import '../../core/tokens.dart';
 import '../../l10n/app_localizations.dart';
 import '../../models/job.dart';
@@ -29,6 +30,7 @@ class JobStatusPanel extends StatelessWidget {
   Future<void> _run(BuildContext context, JobAction action) async {
     final strings = AppStrings.of(context);
     final jobs = context.read<JobController>();
+    final wallet = context.read<WalletController>();
     final role = lifecycle.roleFor(job, viewerId: BidController.localWorkerId);
 
     if (action == JobAction.cancel) {
@@ -65,6 +67,19 @@ class JobStatusPanel extends StatelessWidget {
     if (next == null) return;
 
     await jobs.saveJob(job.withStatus(next));
+
+    // The money follows the status, and only after it is saved. If the write
+    // above fails, nobody has been charged for a job that did not finish.
+    // Both wallet calls are idempotent by job id, so a retry cannot charge
+    // twice — see WalletController.
+    final fare = job.agreedFare;
+    if (next == JobStatus.completed && fare != null) {
+      await wallet.recordCompletion(jobId: job.id, agreedFare: fare);
+    } else if (next == JobStatus.cancelled && role == JobRole.worker) {
+      // Only the worker is penalised. Section 11 charges the person who
+      // accepted a job and then walked away from it.
+      await wallet.recordWorkerCancellation(jobId: job.id);
+    }
   }
 
   @override

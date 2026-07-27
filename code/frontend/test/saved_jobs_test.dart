@@ -13,6 +13,7 @@ import 'package:trust_hire/models/job.dart';
 import 'package:trust_hire/services/job_repository.dart';
 import 'package:trust_hire/app/bid_controller.dart';
 import 'package:trust_hire/app/profile_controller.dart';
+import 'package:trust_hire/app/wallet_controller.dart';
 import 'package:trust_hire/services/bid_repository.dart';
 import 'package:trust_hire/services/local_store.dart';
 import 'package:trust_hire/services/media_store.dart';
@@ -166,6 +167,9 @@ void main() {
             ),
             ChangeNotifierProvider(
               create: (_) => ProfileController(store)..load(),
+            ),
+            ChangeNotifierProvider(
+              create: (_) => WalletController(store)..load(),
             ),
             Provider<MediaStore>.value(value: media),
           ],

@@ -163,13 +163,39 @@ Three calls worth recording:
   is shared. A privacy promise that quietly stops being true is the failure
   this sprint existed to prevent, so it is guarded rather than remembered.
 
-### P1-4 — Wallet and commission
+### P1-4 — Wallet and commission ✅
 Token wallet, Rs. 500 first-job credit, 5% commission on completion, loyalty
 bonus at each Rs. 100k, one-job debt tolerance then lockout, cancellation
 penalty. Simulated top-up.
 
 **Done when** the wallet cannot reach an inconsistent state, tested against
 each rule in Section 11.
+
+**Delivered.** The "cannot reach an inconsistent state" requirement was read
+as a design instruction rather than a testing one: **the ledger is the only
+stored state**, and balance, lifetime top-up, debt and the lock are all
+derived by replaying it. There is no balance field to disagree with the
+entries that produced it, so there is no repair routine to write and no
+reconciliation bug to have.
+
+Decisions Section 11 left open:
+
+- **The cancellation penalty is Rs. 200, flat.** The spec says "a small token
+  penalty". Flat rather than a percentage because the harm to the hirer is
+  much the same whatever the job was worth, and small enough that a worker
+  with a real emergency is not pushed into going anyway.
+- **Commission rounds down.** At 5% the difference is at most a rupee, and it
+  should fall in favour of the person being charged.
+- **The first-job credit is capped at the commission owed**, not granted as
+  500 tokens. Section 11 ties it to the first job, so an unused remainder is
+  not carried forward.
+- **"A second job goes unpaid on top of that"** is read literally: a
+  commission charged while the wallet is already short is a second unpaid job,
+  and locks the account. Clearing the balance clears the count — the debt is
+  what is owed now, not a permanent record of having once been short.
+
+The credit is recorded as its own entry rather than netted off the commission,
+so a worker's history shows both the full 5% taken and the help given.
 
 ### P1-5 — Ratings and profiles
 Mutual rating, worker rating public and hirer rating internal. Aggregate fare

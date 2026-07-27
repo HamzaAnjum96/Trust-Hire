@@ -958,4 +958,74 @@ class AppStringsUr extends AppStrings {
 
   @override
   String get jobExpired => 'کوئی منتخب نہیں ہوا، اس لیے یہ اب فہرست میں نہیں۔';
+
+  @override
+  String get navWallet => 'بٹوہ';
+
+  @override
+  String get walletBalance => 'بیلنس';
+
+  @override
+  String tokens(String count) {
+    return '$count ٹوکن';
+  }
+
+  @override
+  String get walletTopUp => 'ٹوکن ڈالے';
+
+  @override
+  String get walletCommission => 'کمیشن';
+
+  @override
+  String get walletFirstJobCredit => 'پہلے کام کی رعایت';
+
+  @override
+  String get walletLoyaltyBonus => 'وفاداری بونس';
+
+  @override
+  String get walletCancellationPenalty => 'منسوخی کی کٹوتی';
+
+  @override
+  String get walletExplanation =>
+      'کام مکمل ہونے پر ٹرسٹ ہائر طے شدہ کرائے کا 5% لیتا ہے۔ ٹوکن اصلی پیسے نہیں ہیں۔';
+
+  @override
+  String walletInDebt(String amount) {
+    return 'آپ پر $amount واجب ہیں۔ اکاؤنٹ رکنے سے پہلے آپ ایک اور کام لے سکتے ہیں۔';
+  }
+
+  @override
+  String get walletLocked =>
+      'جب تک آپ واجبات ادا نہیں کرتے، آپ کا اکاؤنٹ رکا ہوا ہے۔ کام دوبارہ شروع کرنے کے لیے ٹوکن ڈالیں۔';
+
+  @override
+  String get walletEmpty =>
+      'ابھی کچھ نہیں ہوا۔ آپ کے پہلے کام کا کمیشن یہاں نظر آئے گا۔';
+
+  @override
+  String get topUpTitle => 'ٹوکن شامل کریں';
+
+  @override
+  String get topUpNotReal =>
+      'یہ صرف نمونہ ہے۔ کوئی اصلی رقم نہیں لی جاتی اور نہ کارڈ کی تفصیل مانگی جاتی ہے۔';
+
+  @override
+  String topUpConfirm(String amount) {
+    return '$amount شامل کریں';
+  }
+
+  @override
+  String topUpDone(String amount) {
+    return '$amount آپ کے بٹوے میں شامل ہو گئے۔';
+  }
+
+  @override
+  String loyaltyProgress(String amount) {
+    return 'مزید $amount ڈالنے پر 1,000 ٹوکن بونس ملے گا۔';
+  }
+
+  @override
+  String firstJobCreditWaiting(String amount) {
+    return 'آپ کے پہلے کام کا کمیشن $amount تک معاف ہے۔';
+  }
 }

@@ -12,6 +12,39 @@ that heading to the version and date, and open a fresh `[Unreleased]`.
 
 ## [Unreleased]
 
+### 0.9.0 — P1-4, the wallet
+
+#### Added
+
+- A token wallet with the full Section 11 rules: 5% commission on completion,
+  the Rs. 500 first-job credit, a 1,000-token loyalty bonus at every
+  Rs. 100,000 of lifetime top-up, one unpaid job tolerated and a second one
+  locking the account, and a cancellation charge when a worker walks away from
+  a job they accepted. Top-up is simulated and says so plainly on the screen —
+  a page that looks like a payment form without being one is the shape of a
+  scam, and a product about trust cannot teach people that Trust Hire asks for
+  card numbers.
+- The wallet screen shows the ledger, not a summary. A worker being charged 5%
+  of their earnings should be able to see every charge without asking anybody,
+  and it is the same list the balance is computed from.
+- A locked worker cannot bid, and is told why rather than shown a dead button.
+
+#### Notes on the design
+
+**The ledger is the only stored state.** Balance, lifetime top-up, debt and the
+lock are all derived by replaying it. The sprint's definition of done — "the
+wallet cannot reach an inconsistent state" — is therefore structural rather
+than defended: there is no balance field to disagree with the entries that
+produced it, no repair routine, and no reconciliation bug to have.
+
+Four things Section 11 left open are decided and recorded in the sprint plan:
+the penalty is Rs. 200 flat, commission rounds down in the worker's favour, the
+first-job credit is capped at the commission owed rather than granted outright,
+and "a second job goes unpaid on top of that" is read literally — a commission
+charged while already short locks the account, and clearing the balance clears
+the count.
+
+
 ### 0.8.0 — P1-3, the job's life and the location reveal
 
 #### Added

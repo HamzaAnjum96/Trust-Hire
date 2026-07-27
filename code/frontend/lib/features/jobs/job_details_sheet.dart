@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import '../../app/bid_controller.dart';
 import '../../app/job_controller.dart';
 import '../../app/profile_controller.dart';
+import '../../app/wallet_controller.dart';
 import '../../core/formatters.dart';
 import '../../core/map_theme.dart';
 import '../../core/tokens.dart';
@@ -297,6 +298,7 @@ class _Bidding extends StatelessWidget {
 
     final profile = context.watch<ProfileController>();
     final bids = context.watch<BidController>();
+    final wallet = context.watch<WalletController>();
 
     return OfferAction(
       job: job,
@@ -305,6 +307,7 @@ class _Bidding extends StatelessWidget {
         worker: profile.profile,
         from: viewerLocation,
         existingBids: bids.forJob(job.id),
+        walletLocked: wallet.isLockedOut,
       ),
     );
   }

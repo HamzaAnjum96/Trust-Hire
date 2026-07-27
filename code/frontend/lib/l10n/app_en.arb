@@ -620,5 +620,101 @@
   "jobExpired": "Nobody was chosen, so this is no longer listed.",
   "@jobExpired": {
     "description": "Notice on an expired job"
+  },
+  "navWallet": "Wallet",
+  "@navWallet": {
+    "description": "Section heading for the token wallet"
+  },
+  "walletBalance": "Balance",
+  "@walletBalance": {
+    "description": "Label above the token balance"
+  },
+  "tokens": "{count} tokens",
+  "@tokens": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "walletTopUp": "Top-up",
+  "@walletTopUp": {
+    "description": "Ledger entry: bought tokens"
+  },
+  "walletCommission": "Commission",
+  "@walletCommission": {
+    "description": "Ledger entry: the platform's 5%"
+  },
+  "walletFirstJobCredit": "First job credit",
+  "@walletFirstJobCredit": {
+    "description": "Ledger entry: the Rs. 500 starter credit"
+  },
+  "walletLoyaltyBonus": "Loyalty bonus",
+  "@walletLoyaltyBonus": {
+    "description": "Ledger entry: the 1,000-token bonus"
+  },
+  "walletCancellationPenalty": "Cancellation charge",
+  "@walletCancellationPenalty": {
+    "description": "Ledger entry: the penalty for walking away"
+  },
+  "walletExplanation": "Trust Hire takes 5% of the agreed fare when a job is finished. Tokens are not real money.",
+  "@walletExplanation": {
+    "description": "Explains the wallet"
+  },
+  "walletInDebt": "You owe {amount}. You can still take one more job before your account is paused.",
+  "@walletInDebt": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "walletLocked": "Your account is paused until you clear what you owe. Top up to start getting work again.",
+  "@walletLocked": {
+    "description": "Warning when locked out"
+  },
+  "walletEmpty": "Nothing has moved yet. Your first job's commission will show up here.",
+  "@walletEmpty": {
+    "description": "Empty ledger"
+  },
+  "topUpTitle": "Add tokens",
+  "@topUpTitle": {
+    "description": "Title of the top-up screen"
+  },
+  "topUpNotReal": "This is a demonstration. No real payment is taken and no card details are asked for.",
+  "@topUpNotReal": {
+    "description": "Says the top-up is simulated"
+  },
+  "topUpConfirm": "Add {amount}",
+  "@topUpConfirm": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "topUpDone": "{amount} added to your wallet.",
+  "@topUpDone": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "loyaltyProgress": "{amount} more in top-ups earns a 1,000 token bonus.",
+  "@loyaltyProgress": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "firstJobCreditWaiting": "Your first job's commission is covered up to {amount}.",
+  "@firstJobCreditWaiting": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
   }
 }

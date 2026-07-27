@@ -16,6 +16,7 @@ import 'package:trust_hire/models/job.dart';
 import 'package:trust_hire/services/job_repository.dart';
 import 'package:trust_hire/app/bid_controller.dart';
 import 'package:trust_hire/app/profile_controller.dart';
+import 'package:trust_hire/app/wallet_controller.dart';
 import 'package:trust_hire/services/bid_repository.dart';
 import 'package:trust_hire/services/local_store.dart';
 import 'package:trust_hire/services/media_store.dart';
@@ -39,12 +40,14 @@ void main() {
   late SavedJobsController savedJobs;
   late BidController bids;
   late ProfileController profile;
+  late WalletController wallet;
 
   Future<(JobController, MediaStore)> buildControllers() async {
     final store = await LocalStore.open();
     savedJobs = SavedJobsController(store)..load();
     bids = BidController(BidRepository(store))..load();
     profile = ProfileController(store)..load();
+    wallet = WalletController(store)..load();
     final media = MediaStore(store);
     final controller = JobController(JobRepository(store, media));
     await controller.load();
@@ -68,6 +71,7 @@ void main() {
           ChangeNotifierProvider.value(value: savedJobs),
           ChangeNotifierProvider.value(value: bids),
           ChangeNotifierProvider.value(value: profile),
+          ChangeNotifierProvider.value(value: wallet),
           Provider<MediaStore>.value(value: media),
         ],
         child: MaterialApp(
