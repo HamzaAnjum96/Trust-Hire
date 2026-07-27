@@ -18,6 +18,17 @@ class Format {
   /// The locale to format dates and numbers in.
   static String _localeOf(AppStrings strings) => strings.localeName;
 
+  /// A fare, with thousands separated in the reader's language.
+  ///
+  /// Whole rupees only. The audience does not think about a job in paisa, and
+  /// a decimal point would only ever be noise or a mistype.
+  static String fare(AppStrings strings, int rupees) {
+    final grouped = NumberFormat.decimalPattern(
+      _localeOf(strings),
+    ).format(rupees);
+    return strings.rupees(grouped);
+  }
+
   /// Distance from the viewer to a job, phrased approximately.
   static String distance(AppStrings strings, double metres) {
     if (metres < 100) return strings.veryClose;

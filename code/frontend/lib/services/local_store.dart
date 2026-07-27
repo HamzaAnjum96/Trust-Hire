@@ -88,6 +88,9 @@ class StoreKeys {
   /// Set once the first-run intro has been seen.
   static const introSeen = 'trust_hire.intro_seen';
 
+  /// Every bid on every job, as a JSON list.
+  static const bids = 'trust_hire.bids';
+
   /// Which side of the marketplace this device is on — worker or hirer.
   static const role = 'trust_hire.role';
 
@@ -106,6 +109,7 @@ class StoreKeys {
     language,
     savedJobs,
     introSeen,
+    bids,
     role,
     workerProfile,
     mediaIndex,

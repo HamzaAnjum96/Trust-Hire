@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import '../../app/job_controller.dart';
@@ -50,6 +51,7 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _contactController = TextEditingController();
+  final TextEditingController _fareController = TextEditingController();
 
   @override
   void initState() {
@@ -57,6 +59,7 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
     _titleController.text = _draft.title;
     _descriptionController.text = _draft.description;
     _contactController.text = _draft.contactNumber;
+    _fareController.text = _draft.startingFare;
   }
 
   @override
@@ -64,6 +67,7 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
     _titleController.dispose();
     _descriptionController.dispose();
     _contactController.dispose();
+    _fareController.dispose();
     _draft.dispose();
     _capture.dispose();
     super.dispose();
@@ -227,6 +231,22 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
                   ],
                 ),
               ],
+
+              const SizedBox(height: BrandSizing.spaceLg),
+              _FieldLabel(strings.fieldStartingFare),
+              const SizedBox(height: BrandSizing.spaceXs),
+              Text(strings.startingFareHelp, style: theme.textTheme.labelSmall),
+              const SizedBox(height: BrandSizing.spaceSm),
+              TextField(
+                controller: _fareController,
+                onChanged: _draft.setStartingFare,
+                keyboardType: TextInputType.number,
+                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                decoration: InputDecoration(
+                  hintText: strings.fareHint,
+                  prefixText: '${strings.rupees('').trim()} ',
+                ),
+              ),
 
               const SizedBox(height: BrandSizing.spaceLg),
               _FieldLabel(strings.fieldContact),

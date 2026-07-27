@@ -809,4 +809,104 @@ class AppStringsUr extends AppStrings {
 
   @override
   String get openDetails => 'تفصیل کھولیں';
+
+  @override
+  String get fieldStartingFare => 'ابتدائی کرایہ';
+
+  @override
+  String get startingFareHelp =>
+      'ضروری نہیں۔ یہ صرف شروعات ہے، قیمت نہیں — کام کرنے والے اپنی پیشکش دیں گے۔';
+
+  @override
+  String get fareHint => 'روپے 2,000';
+
+  @override
+  String rupees(String amount) {
+    return 'روپے $amount';
+  }
+
+  @override
+  String startsAt(String amount) {
+    return 'شروع $amount سے';
+  }
+
+  @override
+  String agreedAt(String amount) {
+    return 'طے شدہ $amount';
+  }
+
+  @override
+  String get offerAFare => 'اپنی قیمت بتائیں';
+
+  @override
+  String get changeMyOffer => 'اپنی پیشکش بدلیں';
+
+  @override
+  String yourOffer(String amount) {
+    return 'آپ کی پیشکش: $amount';
+  }
+
+  @override
+  String get sendOffer => 'پیشکش بھیجیں';
+
+  @override
+  String get withdrawOffer => 'واپس لیں';
+
+  @override
+  String get offerMessageHint => 'اگر کچھ بتانا ہو تو لکھیں (ضروری نہیں)';
+
+  @override
+  String get fareMustBePositive => 'صفر سے زیادہ رقم لکھیں۔';
+
+  @override
+  String get fareLooksTooHigh => 'یہ غلطی لگتی ہے۔ رقم دوبارہ دیکھ لیں۔';
+
+  @override
+  String get offersOnThisJob => 'پیشکشیں';
+
+  @override
+  String offerCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count پیشکشیں',
+      one: '1 پیشکش',
+      zero: 'ابھی کوئی پیشکش نہیں',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get noOffersYet =>
+      'ابھی کسی نے پیشکش نہیں دی۔ آس پاس کے وہ لوگ جو یہ کام کرتے ہیں، اسے دیکھیں گے۔';
+
+  @override
+  String get chooseThisWorker => 'منتخب کریں';
+
+  @override
+  String get chosen => 'منتخب';
+
+  @override
+  String get notChosen => 'منتخب نہیں';
+
+  @override
+  String get fareLocked =>
+      'منتخب کرنے کے بعد کرایہ طے ہو جائے گا۔ پھر اسے بدلا نہیں جا سکتا۔';
+
+  @override
+  String confirmChoose(String amount) {
+    return 'اس شخص کو $amount پر منتخب کریں؟';
+  }
+
+  @override
+  String get cannotBidOwnJob => 'یہ آپ کا اپنا کام ہے۔';
+
+  @override
+  String get cannotBidAccepted => 'یہ کام کسی کو دیا جا چکا ہے۔';
+
+  @override
+  String get offerWithdrawn => 'آپ کی پیشکش واپس لے لی گئی۔';
+
+  @override
+  String get cancel => 'منسوخ کریں';
 }

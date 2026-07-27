@@ -432,5 +432,133 @@
   "openDetails": "Open details",
   "@openDetails": {
     "description": "Button on a job row that opens the full details"
+  },
+  "fieldStartingFare": "Starting fare",
+  "@fieldStartingFare": {
+    "description": "Label on the fare field of the posting form"
+  },
+  "startingFareHelp": "Optional. A starting point, not a price — workers will offer their own.",
+  "@startingFareHelp": {
+    "description": "Explains the starting fare"
+  },
+  "fareHint": "Rs. 2,000",
+  "@fareHint": {
+    "description": "Placeholder in a fare field"
+  },
+  "rupees": "Rs. {amount}",
+  "@rupees": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "startsAt": "Starts at {amount}",
+  "@startsAt": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "agreedAt": "Agreed at {amount}",
+  "@agreedAt": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "offerAFare": "Offer a fare",
+  "@offerAFare": {
+    "description": "Button that opens the bidding sheet"
+  },
+  "changeMyOffer": "Change my offer",
+  "@changeMyOffer": {
+    "description": "Button when this device has already bid"
+  },
+  "yourOffer": "Your offer: {amount}",
+  "@yourOffer": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "sendOffer": "Send offer",
+  "@sendOffer": {
+    "description": "Confirms a bid"
+  },
+  "withdrawOffer": "Withdraw",
+  "@withdrawOffer": {
+    "description": "Removes this worker's bid"
+  },
+  "offerMessageHint": "Anything the hirer should know (optional)",
+  "@offerMessageHint": {
+    "description": "Placeholder for the optional bid message"
+  },
+  "fareMustBePositive": "Enter a fare above zero.",
+  "@fareMustBePositive": {
+    "description": "Error when a bid is zero or negative"
+  },
+  "fareLooksTooHigh": "That looks like a typo. Check the amount.",
+  "@fareLooksTooHigh": {
+    "description": "Error when a bid is implausibly high"
+  },
+  "offersOnThisJob": "Offers",
+  "@offersOnThisJob": {
+    "description": "Heading over the bids on a job"
+  },
+  "offerCount": "{count, plural, =0{No offers yet} =1{1 offer} other{{count} offers}}",
+  "@offerCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "noOffersYet": "Nobody has offered yet. Workers nearby who do this kind of work will see it.",
+  "@noOffersYet": {
+    "description": "Empty state under a hirer's job"
+  },
+  "chooseThisWorker": "Choose",
+  "@chooseThisWorker": {
+    "description": "Button that accepts a bid"
+  },
+  "chosen": "Chosen",
+  "@chosen": {
+    "description": "Label on the accepted bid"
+  },
+  "notChosen": "Not chosen",
+  "@notChosen": {
+    "description": "Label on a bid the hirer passed over"
+  },
+  "fareLocked": "The fare is fixed once you choose. It cannot be changed afterwards.",
+  "@fareLocked": {
+    "description": "Warns the hirer before accepting"
+  },
+  "confirmChoose": "Choose this worker at {amount}?",
+  "@confirmChoose": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "cannotBidOwnJob": "This is your own job.",
+  "@cannotBidOwnJob": {
+    "description": "Why the bid button is absent"
+  },
+  "cannotBidAccepted": "This job has been given to someone.",
+  "@cannotBidAccepted": {
+    "description": "Why bidding is closed"
+  },
+  "offerWithdrawn": "Your offer was withdrawn.",
+  "@offerWithdrawn": {
+    "description": "Confirmation after withdrawing a bid"
+  },
+  "cancel": "Cancel",
+  "@cancel": {
+    "description": "Dismisses a dialog without acting"
   }
 }

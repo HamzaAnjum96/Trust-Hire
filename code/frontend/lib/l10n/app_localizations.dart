@@ -1447,6 +1447,162 @@ abstract class AppStrings {
   /// In en, this message translates to:
   /// **'Open details'**
   String get openDetails;
+
+  /// Label on the fare field of the posting form
+  ///
+  /// In en, this message translates to:
+  /// **'Starting fare'**
+  String get fieldStartingFare;
+
+  /// Explains the starting fare
+  ///
+  /// In en, this message translates to:
+  /// **'Optional. A starting point, not a price — workers will offer their own.'**
+  String get startingFareHelp;
+
+  /// Placeholder in a fare field
+  ///
+  /// In en, this message translates to:
+  /// **'Rs. 2,000'**
+  String get fareHint;
+
+  /// No description provided for @rupees.
+  ///
+  /// In en, this message translates to:
+  /// **'Rs. {amount}'**
+  String rupees(String amount);
+
+  /// No description provided for @startsAt.
+  ///
+  /// In en, this message translates to:
+  /// **'Starts at {amount}'**
+  String startsAt(String amount);
+
+  /// No description provided for @agreedAt.
+  ///
+  /// In en, this message translates to:
+  /// **'Agreed at {amount}'**
+  String agreedAt(String amount);
+
+  /// Button that opens the bidding sheet
+  ///
+  /// In en, this message translates to:
+  /// **'Offer a fare'**
+  String get offerAFare;
+
+  /// Button when this device has already bid
+  ///
+  /// In en, this message translates to:
+  /// **'Change my offer'**
+  String get changeMyOffer;
+
+  /// No description provided for @yourOffer.
+  ///
+  /// In en, this message translates to:
+  /// **'Your offer: {amount}'**
+  String yourOffer(String amount);
+
+  /// Confirms a bid
+  ///
+  /// In en, this message translates to:
+  /// **'Send offer'**
+  String get sendOffer;
+
+  /// Removes this worker's bid
+  ///
+  /// In en, this message translates to:
+  /// **'Withdraw'**
+  String get withdrawOffer;
+
+  /// Placeholder for the optional bid message
+  ///
+  /// In en, this message translates to:
+  /// **'Anything the hirer should know (optional)'**
+  String get offerMessageHint;
+
+  /// Error when a bid is zero or negative
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a fare above zero.'**
+  String get fareMustBePositive;
+
+  /// Error when a bid is implausibly high
+  ///
+  /// In en, this message translates to:
+  /// **'That looks like a typo. Check the amount.'**
+  String get fareLooksTooHigh;
+
+  /// Heading over the bids on a job
+  ///
+  /// In en, this message translates to:
+  /// **'Offers'**
+  String get offersOnThisJob;
+
+  /// No description provided for @offerCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{No offers yet} =1{1 offer} other{{count} offers}}'**
+  String offerCount(int count);
+
+  /// Empty state under a hirer's job
+  ///
+  /// In en, this message translates to:
+  /// **'Nobody has offered yet. Workers nearby who do this kind of work will see it.'**
+  String get noOffersYet;
+
+  /// Button that accepts a bid
+  ///
+  /// In en, this message translates to:
+  /// **'Choose'**
+  String get chooseThisWorker;
+
+  /// Label on the accepted bid
+  ///
+  /// In en, this message translates to:
+  /// **'Chosen'**
+  String get chosen;
+
+  /// Label on a bid the hirer passed over
+  ///
+  /// In en, this message translates to:
+  /// **'Not chosen'**
+  String get notChosen;
+
+  /// Warns the hirer before accepting
+  ///
+  /// In en, this message translates to:
+  /// **'The fare is fixed once you choose. It cannot be changed afterwards.'**
+  String get fareLocked;
+
+  /// No description provided for @confirmChoose.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose this worker at {amount}?'**
+  String confirmChoose(String amount);
+
+  /// Why the bid button is absent
+  ///
+  /// In en, this message translates to:
+  /// **'This is your own job.'**
+  String get cannotBidOwnJob;
+
+  /// Why bidding is closed
+  ///
+  /// In en, this message translates to:
+  /// **'This job has been given to someone.'**
+  String get cannotBidAccepted;
+
+  /// Confirmation after withdrawing a bid
+  ///
+  /// In en, this message translates to:
+  /// **'Your offer was withdrawn.'**
+  String get offerWithdrawn;
+
+  /// Dismisses a dialog without acting
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get cancel;
 }
 
 class _AppStringsDelegate extends LocalizationsDelegate<AppStrings> {

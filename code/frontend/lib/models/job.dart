@@ -64,6 +64,9 @@ class Job {
     this.radiusMetres = 1000,
     this.geofenceMetres,
     this.openToAllLocations = false,
+    this.startingFare,
+    this.agreedFare,
+    this.acceptedWorkerId,
     this.scheduledTime,
     this.voiceNotePath,
     this.voiceNoteDuration,
@@ -98,6 +101,27 @@ class Job {
 
   /// Set by the hirer for work that needs no physical presence (section 6).
   final bool openToAllLocations;
+
+  /// What the hirer opened at, in rupees.
+  ///
+  /// Section 4 is explicit that this is a starting point and not a price —
+  /// workers counter it. Optional, because a hirer who has no idea what the
+  /// work is worth should not be blocked from asking.
+  final int? startingFare;
+
+  /// The fare agreed when the hirer accepted a bid. Null until then.
+  ///
+  /// **Locked once set.** Section 4 forbids renegotiation after acceptance,
+  /// and Section 11 leans on that: the commission is trustworthy precisely
+  /// because the number it is taken from was fixed before the work started.
+  /// Nothing writes this twice — see [withAcceptedBid].
+  final int? agreedFare;
+
+  /// Who the hirer chose. Null until a bid is accepted.
+  final String? acceptedWorkerId;
+
+  /// True once the hirer has chosen someone. No further bids are taken.
+  bool get isAccepted => acceptedWorkerId != null;
 
   /// The approximate work area, shown as a translucent circle on the map.
   final double radiusMetres;
@@ -236,6 +260,37 @@ class Job {
     return t.year == now.year && t.month == now.month && t.day == now.day;
   }
 
+  /// This job with a worker chosen and the fare locked.
+  ///
+  /// The only place [agreedFare] is ever set, and it refuses to run twice — a
+  /// second acceptance would silently rewrite the number the commission is
+  /// calculated from, which is what Section 4 forbids.
+  Job withAcceptedBid({required String workerId, required int fare}) {
+    if (isAccepted) return this;
+
+    return Job(
+      id: id,
+      location: location,
+      createdAt: createdAt,
+      title: title,
+      tags: tags,
+      geofenceMetres: geofenceMetres,
+      openToAllLocations: openToAllLocations,
+      startingFare: startingFare,
+      agreedFare: fare,
+      acceptedWorkerId: workerId,
+      radiusMetres: radiusMetres,
+      scheduledTime: scheduledTime,
+      voiceNotePath: voiceNotePath,
+      voiceNoteDuration: voiceNoteDuration,
+      photoPaths: photoPaths,
+      shortDescription: shortDescription,
+      contactNumber: contactNumber,
+      postedBy: postedBy,
+      isLocal: isLocal,
+    );
+  }
+
   Job copyWith({
     String? title,
     bool clearTitle = false,
@@ -252,6 +307,8 @@ class Job {
     bool clearShortDescription = false,
     String? contactNumber,
     bool clearContactNumber = false,
+    int? startingFare,
+    bool clearStartingFare = false,
   }) {
     return Job(
       id: id,
@@ -261,6 +318,13 @@ class Job {
       tags: tags ?? this.tags,
       geofenceMetres: geofenceMetres,
       openToAllLocations: openToAllLocations,
+      startingFare: clearStartingFare
+          ? null
+          : (startingFare ?? this.startingFare),
+      // Deliberately not editable: editing a job must never touch the agreed
+      // fare or who was chosen.
+      agreedFare: agreedFare,
+      acceptedWorkerId: acceptedWorkerId,
       radiusMetres: radiusMetres ?? this.radiusMetres,
       scheduledTime: clearScheduledTime
           ? null
@@ -300,6 +364,9 @@ class Job {
               .toSet(),
       geofenceMetres: (json['geofenceMetres'] as num?)?.toDouble(),
       openToAllLocations: json['openToAllLocations'] as bool? ?? false,
+      startingFare: (json['startingFare'] as num?)?.round(),
+      agreedFare: (json['agreedFare'] as num?)?.round(),
+      acceptedWorkerId: json['acceptedWorkerId'] as String?,
       radiusMetres: (json['radiusMetres'] as num?)?.toDouble() ?? 1000,
       scheduledTime: json['scheduledTime'] == null
           ? null
@@ -326,6 +393,9 @@ class Job {
     'tags': tags.map((t) => t.id).toList(),
     'geofenceMetres': geofenceMetres,
     'openToAllLocations': openToAllLocations,
+    'startingFare': startingFare,
+    'agreedFare': agreedFare,
+    'acceptedWorkerId': acceptedWorkerId,
     'radiusMetres': radiusMetres,
     'scheduledTime': scheduledTime?.toIso8601String(),
     'voiceNotePath': voiceNotePath,

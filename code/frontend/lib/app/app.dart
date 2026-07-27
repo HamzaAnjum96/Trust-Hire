@@ -7,11 +7,13 @@ import '../l10n/app_localizations.dart';
 import '../features/jobs/job_filter_controller.dart';
 import '../features/jobs/saved_jobs_controller.dart';
 import '../features/map/location_controller.dart';
+import '../services/bid_repository.dart';
 import '../services/job_repository.dart';
 import '../services/local_store.dart';
 import '../services/media_store.dart';
 import '../features/onboarding/onboarding_screen.dart';
 import 'app_shell.dart';
+import 'bid_controller.dart';
 import 'job_controller.dart';
 import 'profile_controller.dart';
 import 'settings_controller.dart';
@@ -39,6 +41,9 @@ class TrustHireApp extends StatelessWidget {
           create: (_) => SavedJobsController(store)..load(),
         ),
         ChangeNotifierProvider(create: (_) => ProfileController(store)..load()),
+        ChangeNotifierProvider(
+          create: (_) => BidController(BidRepository(store))..load(),
+        ),
         ChangeNotifierProvider(
           // Deliberately not requested here. Asking for a permission before
           // explaining what it is for is what section 19 warns against, so

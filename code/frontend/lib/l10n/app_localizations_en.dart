@@ -804,4 +804,104 @@ class AppStringsEn extends AppStrings {
 
   @override
   String get openDetails => 'Open details';
+
+  @override
+  String get fieldStartingFare => 'Starting fare';
+
+  @override
+  String get startingFareHelp =>
+      'Optional. A starting point, not a price — workers will offer their own.';
+
+  @override
+  String get fareHint => 'Rs. 2,000';
+
+  @override
+  String rupees(String amount) {
+    return 'Rs. $amount';
+  }
+
+  @override
+  String startsAt(String amount) {
+    return 'Starts at $amount';
+  }
+
+  @override
+  String agreedAt(String amount) {
+    return 'Agreed at $amount';
+  }
+
+  @override
+  String get offerAFare => 'Offer a fare';
+
+  @override
+  String get changeMyOffer => 'Change my offer';
+
+  @override
+  String yourOffer(String amount) {
+    return 'Your offer: $amount';
+  }
+
+  @override
+  String get sendOffer => 'Send offer';
+
+  @override
+  String get withdrawOffer => 'Withdraw';
+
+  @override
+  String get offerMessageHint => 'Anything the hirer should know (optional)';
+
+  @override
+  String get fareMustBePositive => 'Enter a fare above zero.';
+
+  @override
+  String get fareLooksTooHigh => 'That looks like a typo. Check the amount.';
+
+  @override
+  String get offersOnThisJob => 'Offers';
+
+  @override
+  String offerCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count offers',
+      one: '1 offer',
+      zero: 'No offers yet',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get noOffersYet =>
+      'Nobody has offered yet. Workers nearby who do this kind of work will see it.';
+
+  @override
+  String get chooseThisWorker => 'Choose';
+
+  @override
+  String get chosen => 'Chosen';
+
+  @override
+  String get notChosen => 'Not chosen';
+
+  @override
+  String get fareLocked =>
+      'The fare is fixed once you choose. It cannot be changed afterwards.';
+
+  @override
+  String confirmChoose(String amount) {
+    return 'Choose this worker at $amount?';
+  }
+
+  @override
+  String get cannotBidOwnJob => 'This is your own job.';
+
+  @override
+  String get cannotBidAccepted => 'This job has been given to someone.';
+
+  @override
+  String get offerWithdrawn => 'Your offer was withdrawn.';
+
+  @override
+  String get cancel => 'Cancel';
 }

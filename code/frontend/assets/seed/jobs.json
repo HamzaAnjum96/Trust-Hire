@@ -5,6 +5,7 @@
     "tags": [
       "plumbing"
     ],
+    "startingFare": 1500,
     "shortDescription": "Water coming from under the sink since last night. Need someone today if possible.",
     "location": {
       "latitude": 33.7104,
@@ -28,6 +29,7 @@
     "tags": [
       "painting"
     ],
+    "startingFare": 12000,
     "shortDescription": "Two rooms need painting before Eid.",
     "location": {
       "latitude": 33.6844,
@@ -51,6 +53,7 @@
       "cleaning",
       "misc"
     ],
+    "startingFare": 2500,
     "location": {
       "latitude": 33.6518,
       "longitude": 72.9899
@@ -72,6 +75,7 @@
       "applianceRepair",
       "electrical"
     ],
+    "startingFare": 3000,
     "shortDescription": "Split unit in the bedroom. Runs but blows warm air.",
     "location": {
       "latitude": 33.7294,
@@ -96,6 +100,7 @@
     "tags": [
       "electrical"
     ],
+    "startingFare": 2000,
     "location": {
       "latitude": 33.5973,
       "longitude": 73.0479
@@ -117,6 +122,7 @@
       "moving",
       "misc"
     ],
+    "startingFare": 4500,
     "shortDescription": "Need help moving furniture to a first-floor flat. Two people, about three hours.",
     "location": {
       "latitude": 33.5651,
@@ -162,6 +168,7 @@
     "tags": [
       "misc"
     ],
+    "startingFare": 1200,
     "location": {
       "latitude": 33.5102,
       "longitude": 73.1063
@@ -179,6 +186,7 @@
       "masonry",
       "construction"
     ],
+    "startingFare": 25000,
     "shortDescription": "Section of brickwork has come loose after the rain.",
     "location": {
       "latitude": 34.37,
@@ -201,6 +209,7 @@
     "tags": [
       "cleaning"
     ],
+    "startingFare": 2000,
     "location": {
       "latitude": 34.3489,
       "longitude": 73.4762
@@ -221,6 +230,7 @@
     "tags": [
       "plumbing"
     ],
+    "startingFare": 1800,
     "shortDescription": "Bathroom drain blocked.",
     "location": {
       "latitude": 33.1478,
@@ -242,6 +252,7 @@
     "tags": [
       "driving"
     ],
+    "startingFare": 3500,
     "shortDescription": "Airport drop and pick-up. Own car available.",
     "location": {
       "latitude": 33.6162,
@@ -280,6 +291,7 @@
       "gardening",
       "misc"
     ],
+    "startingFare": 2200,
     "shortDescription": "Lawn and hedges need cutting back before the guests arrive.",
     "location": {
       "latitude": 33.7451,
@@ -298,6 +310,7 @@
     "tags": [
       "tutoring"
     ],
+    "startingFare": 6000,
     "location": {
       "latitude": 34.3617,
       "longitude": 73.4534
@@ -316,6 +329,7 @@
     "tags": [
       "legal"
     ],
+    "startingFare": 5000,
     "shortDescription": "Landlord sent a new agreement. Need someone to read it before I sign.",
     "location": {
       "latitude": 33.6938,

@@ -111,11 +111,29 @@ quarter of the seeded jobs. That is the rule working, not a defect — but it
 means every surface showing a reduced set has to say why and offer the way
 out, which is what the map notice and the list's empty state do.
 
-### P1-2 — Bidding (Mode A)
+### P1-2 — Bidding (Mode A) ✅
 Starting fare on a job. Workers bid; hirers review and select. Fare locks at
 acceptance.
 
 **Done when** a hirer can take a job from posted to accepted at an agreed fare.
+
+**Delivered.** Three calls worth recording:
+
+- **Reading order is not a recommendation.** Section 4 forbids auto-selection,
+  so offers are listed cheapest-first only because a list needs an order.
+  Nothing marks a row as the one to take, and the top row gets no more
+  emphasis than any other.
+- **A fare ceiling the spec does not ask for.** A Rs. 2,000 job carrying a
+  Rs. 200,000 offer is a mistyped zero, and the hirer should not have to catch
+  it for the worker. Deliberately loose — ten times the opening ask — so it
+  only ever catches typos, never a worker who knows the job is worth more.
+- **Revising an offer replaces it.** Two live bids from one worker would let
+  them occupy a hirer's list twice, and there is no honest way to show that.
+
+The locked fare is enforced on the model rather than in the UI:
+`Job.withAcceptedBid` is the only writer of `agreedFare` and refuses to run
+twice, because Section 11's commission is trustworthy only while that number
+is the one both sides agreed to.
 
 ### P1-3 — Job lifecycle and location reveal
 Statuses: open, accepted, in progress, completed, cancelled, expired. Arrival

@@ -61,6 +61,7 @@ class SeedLoader {
               .map((id) => JobTag.fromId(id as String?))
               .whereType<JobTag>()
               .toSet(),
+      startingFare: (json['startingFare'] as num?)?.round(),
       geofenceMetres: (json['geofenceMetres'] as num?)?.toDouble(),
       openToAllLocations: json['openToAllLocations'] as bool? ?? false,
       radiusMetres: (json['radiusMetres'] as num?)?.toDouble() ?? 1000,

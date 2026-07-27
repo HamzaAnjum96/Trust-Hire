@@ -12,6 +12,33 @@ that heading to the version and date, and open a fresh `[Unreleased]`.
 
 ## [Unreleased]
 
+### 0.6.0 — P1-2, bidding
+
+A hirer can now take a job from posted to accepted at an agreed fare.
+
+#### Added
+
+- A **starting fare** on a job — optional, and explicitly an opening point
+  rather than a price. A hirer with no idea what the work is worth should not
+  be blocked from asking.
+- **Offers.** A worker names their price, with an optional message; a hirer
+  sees every offer on their own job and chooses one. Cheapest is listed first
+  because a list needs an order, but Section 4 forbids auto-selection, so
+  nothing marks a row as the one to take.
+- **The fare locks at acceptance.** `Job.withAcceptedBid` is the only writer
+  of `agreedFare` and refuses to run twice, and editing a job cannot reach it.
+  Section 11's commission is trustworthy only while that number is the one
+  both sides agreed to, so a second write is not a cosmetic bug — it is the
+  platform charging against a figure nobody agreed.
+- Bidding is closed to a worker the job never reached. That is the point of
+  the P1-1 visibility rule: not "shown but should not be bid on".
+- A loose ceiling on offers — ten times the opening ask — that exists only to
+  catch a mistyped zero. A worker who knows the job is worth more is never
+  stopped.
+- Seeded jobs carry plausible opening fares, two of them deliberately without,
+  so the demo shows both.
+
+
 ### 0.5.0 — The jobs beside the map
 
 #### Added

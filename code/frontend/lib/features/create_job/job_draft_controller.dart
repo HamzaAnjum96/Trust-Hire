@@ -56,6 +56,7 @@ class JobDraftController extends ChangeNotifier {
        _tags = {...?editing?.tags},
        _description = editing?.shortDescription ?? '',
        _contactNumber = editing?.contactNumber ?? '',
+       _startingFare = editing?.startingFare?.toString() ?? '',
        _scheduledTime = editing?.scheduledTime,
        _voiceReference = editing?.voiceNotePath,
        _voiceDuration = editing?.voiceNoteDuration,
@@ -75,6 +76,7 @@ class JobDraftController extends ChangeNotifier {
   final Set<JobTag> _tags;
   String _description;
   String _contactNumber;
+  String _startingFare;
   DateTime? _scheduledTime;
 
   final List<DraftPhoto> _photos;
@@ -96,6 +98,14 @@ class JobDraftController extends ChangeNotifier {
   Set<JobTag> get tags => Set.unmodifiable(_tags);
   String get description => _description;
   String get contactNumber => _contactNumber;
+  String get startingFare => _startingFare;
+
+  /// The fare as a number, or null when the field is empty or unparseable.
+  int? get startingFareValue {
+    final parsed = int.tryParse(_startingFare.trim());
+    return (parsed == null || parsed <= 0) ? null : parsed;
+  }
+
   DateTime? get scheduledTime => _scheduledTime;
   List<DraftPhoto> get photos => List.unmodifiable(_photos);
   bool get hasVoiceNote => _voiceReference != null || _voiceBytes != null;
@@ -189,6 +199,11 @@ class JobDraftController extends ChangeNotifier {
 
   void setContactNumber(String value) {
     _contactNumber = value;
+    notifyListeners();
+  }
+
+  void setStartingFare(String value) {
+    _startingFare = value;
     notifyListeners();
   }
 
@@ -307,6 +322,11 @@ class JobDraftController extends ChangeNotifier {
         createdAt: _editing?.createdAt ?? DateTime.now(),
         title: trimmedTitle.isEmpty ? null : trimmedTitle,
         tags: _tags,
+        startingFare: startingFareValue,
+        // Never editable from the form. Section 4 fixes the agreed fare at
+        // acceptance, and an edit screen must not be a way around that.
+        agreedFare: _editing?.agreedFare,
+        acceptedWorkerId: _editing?.acceptedWorkerId,
         radiusMetres: _radiusMetres,
         scheduledTime: _scheduledTime,
         voiceNotePath: voiceReference,

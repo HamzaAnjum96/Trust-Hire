@@ -3,7 +3,9 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
 
+import '../../app/bid_controller.dart';
 import '../../app/job_controller.dart';
+import '../../app/profile_controller.dart';
 import '../../core/formatters.dart';
 import '../../core/map_theme.dart';
 import '../../core/tokens.dart';
@@ -12,6 +14,8 @@ import '../../models/job.dart';
 import '../../services/media_store.dart';
 import '../../widgets/state_views.dart';
 import '../../widgets/voice_note_player.dart';
+import '../bidding/offer_list.dart';
+import '../bidding/offer_sheet.dart';
 import '../create_job/create_job_screen.dart';
 import 'contact_panel.dart';
 import 'saved_jobs_controller.dart';
@@ -180,6 +184,18 @@ class _Body extends StatelessWidget {
                 .map((tag) => tag.label(strings))
                 .join(' · '),
           ),
+        if (job.agreedFare != null)
+          _DetailRow(
+            icon: Icons.lock_outline,
+            label: strings.fieldStartingFare,
+            value: strings.agreedAt(Format.fare(strings, job.agreedFare!)),
+          )
+        else if (job.startingFare != null)
+          _DetailRow(
+            icon: Icons.payments_outlined,
+            label: strings.fieldStartingFare,
+            value: strings.startsAt(Format.fare(strings, job.startingFare!)),
+          ),
         _DetailRow(
           icon: Icons.schedule,
           label: strings.detailWhen,
@@ -201,7 +217,14 @@ class _Body extends StatelessWidget {
                 : '${poster!.name} · ${poster!.area}',
           ),
 
-        const SizedBox(height: BrandSizing.spaceSm),
+        // Money, before the phone number: from P1-2 the way to take a job is
+        // to offer a fare, not to ring the poster.
+        const SizedBox(height: BrandSizing.spaceMd),
+        const Divider(),
+        const SizedBox(height: BrandSizing.spaceMd),
+        _Bidding(job: job, viewerLocation: viewerLocation),
+
+        const SizedBox(height: BrandSizing.spaceLg),
         Text(strings.contact, style: theme.textTheme.titleMedium),
         const SizedBox(height: BrandSizing.spaceSm),
         if (job.hasContact)
@@ -235,6 +258,38 @@ class _Body extends StatelessWidget {
 ///
 /// Sits beside the heading rather than at the bottom: deciding to keep a job
 /// happens while reading it, not after scrolling past the map.
+/// Bidding, from whichever side the viewer is on.
+///
+/// The hirer of a job sees the offers on it; everyone else sees the way to
+/// make one. Both live here rather than in two screens, because a job is one
+/// thing and splitting it would mean keeping two layouts in step.
+class _Bidding extends StatelessWidget {
+  const _Bidding({required this.job, required this.viewerLocation});
+
+  final Job job;
+  final JobLocation? viewerLocation;
+
+  @override
+  Widget build(BuildContext context) {
+    // Posted on this device, so this viewer is its hirer. P1-8 replaces the
+    // device check with an account id.
+    if (job.isLocal) return OfferList(job: job);
+
+    final profile = context.watch<ProfileController>();
+    final bids = context.watch<BidController>();
+
+    return OfferAction(
+      job: job,
+      refusal: bids.rules.refusalFor(
+        job,
+        worker: profile.profile,
+        from: viewerLocation,
+        existingBids: bids.forJob(job.id),
+      ),
+    );
+  }
+}
+
 class _SaveButton extends StatelessWidget {
   const _SaveButton({required this.jobId});
 
