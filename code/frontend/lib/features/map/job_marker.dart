@@ -181,3 +181,68 @@ class UserLocationMarker extends StatelessWidget {
     );
   }
 }
+
+/// A pin standing for several jobs at once.
+///
+/// Shows the count, and keeps the kind's glyph when every job in the group is
+/// the same kind — a cluster of five plumbing jobs is more useful than a
+/// cluster of five anonymous ones.
+class ClusterMarker extends StatelessWidget {
+  const ClusterMarker({
+    super.key,
+    required this.count,
+    required this.icon,
+    required this.onTap,
+  });
+
+  final int count;
+  final IconData? icon;
+  final VoidCallback onTap;
+
+  static const double size = 52;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Semantics(
+      button: true,
+      label: '$count jobs here. Tap to zoom in.',
+      child: GestureDetector(
+        onTap: onTap,
+        behavior: HitTestBehavior.opaque,
+        child: Container(
+          width: size,
+          height: size,
+          decoration: BoxDecoration(
+            color: BrandColours.trustBurgundy,
+            shape: BoxShape.circle,
+            border: Border.all(color: Colors.white, width: 2.5),
+            boxShadow: [
+              BoxShadow(
+                color: BrandColours.ink.withValues(alpha: 0.28),
+                blurRadius: 6,
+                offset: const Offset(0, 2),
+              ),
+            ],
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              if (icon != null)
+                Icon(icon, size: 14, color: BrandColours.white),
+              Text(
+                '$count',
+                style: theme.textTheme.labelMedium?.copyWith(
+                  color: BrandColours.white,
+                  fontWeight: FontWeight.w700,
+                  height: 1.1,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}

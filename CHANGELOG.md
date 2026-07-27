@@ -12,6 +12,34 @@ that heading to the version and date, and open a fresh `[Unreleased]`.
 
 ## [Unreleased]
 
+### Sprint 8 — Map at scale
+
+143 tests pass, the analyzer is clean.
+
+#### Added
+
+- **Marker clustering.** Listed as optional in Sprint 1 and left undone; now
+  necessary, because the seed data spans Islamabad to Muzaffarabad and at any
+  zoom showing the whole picture the twin-cities pins piled on top of each
+  other with none of them tappable. Tapping a cluster zooms to fit the jobs
+  inside it, capped at zoom 16 so a tight group does not drop to street level
+  and lose all context.
+- A cluster keeps its kind's glyph when every job in it is the same kind — a
+  group of five plumbing jobs says more than five anonymous ones.
+- **"Show all jobs"**, which fits the camera to every visible job. Without it a
+  job in Kashmir sat off-screen with nothing hinting it existed.
+- 14 tests covering grouping, separation as zoom increases, every job landing
+  in exactly one group, cluster centres, uniformity, bounds, and the rendered
+  markers.
+
+#### Notes on the approach
+
+Clustering works in **screen space, not degrees**. Grouping by degrees would
+behave differently at the equator than at 34° north, and the problem being
+solved is pins overlapping on screen — a pixel problem, not a geographic one.
+The grid cell is roughly one marker wide, so two jobs merge only once their
+pins would actually collide.
+
 ### Sprint 7 — Job types and Pakistan-wide seed data
 
 129 tests pass, the analyzer is clean.

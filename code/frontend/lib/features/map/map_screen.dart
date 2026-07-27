@@ -15,6 +15,7 @@ import '../jobs/job_filter_controller.dart';
 import '../../widgets/state_views.dart';
 import 'job_map.dart';
 import 'location_controller.dart';
+import 'marker_cluster.dart';
 
 /// The map — the primary surface of the product.
 ///
@@ -43,6 +44,38 @@ class _MapScreenState extends State<MapScreen> {
     _mapController.move(
       LatLng(job.location.latitude, job.location.longitude),
       _mapController.camera.zoom.clamp(14, 18),
+    );
+  }
+
+  /// Zooming in on a cluster separates its pins, which is the only useful
+  /// thing to do with a group of overlapping jobs.
+  void _zoomToCluster(JobCluster cluster) {
+    final bounds = boundsOf(cluster.jobs, paddingDegrees: 0.005);
+    if (bounds == null) return;
+
+    _mapController.fitCamera(
+      CameraFit.bounds(
+        bounds: bounds,
+        padding: const EdgeInsets.all(BrandSizing.spaceXl * 2),
+        // Without a ceiling, a cluster of jobs at nearly the same point zooms
+        // to street level and loses all context.
+        maxZoom: 16,
+      ),
+    );
+  }
+
+  /// Opens on all of the work rather than an arbitrary point, so a job in
+  /// Kashmir is not stranded off-screen with nothing hinting it exists.
+  void _fitToJobs(List<Job> jobs) {
+    final bounds = boundsOf(jobs);
+    if (bounds == null) return;
+
+    _mapController.fitCamera(
+      CameraFit.bounds(
+        bounds: bounds,
+        padding: const EdgeInsets.all(BrandSizing.spaceLg),
+        maxZoom: 14,
+      ),
     );
   }
 
@@ -102,6 +135,8 @@ class _MapScreenState extends State<MapScreen> {
           onMyLocationPressed: () => _goToMyLocation(location),
           onTilesUnavailable: _onTilesUnavailable,
           onOpenJob: (job) => _openDetails(job, location.position),
+          onClusterTapped: _zoomToCluster,
+          onFitToJobs: _fitToJobs,
         ),
       },
     );
@@ -122,6 +157,8 @@ class _MapBody extends StatelessWidget {
     required this.onMyLocationPressed,
     required this.onTilesUnavailable,
     required this.onOpenJob,
+    required this.onClusterTapped,
+    required this.onFitToJobs,
   });
 
   final List<Job> jobs;
@@ -136,6 +173,8 @@ class _MapBody extends StatelessWidget {
   final VoidCallback onMyLocationPressed;
   final VoidCallback onTilesUnavailable;
   final ValueChanged<Job> onOpenJob;
+  final void Function(JobCluster) onClusterTapped;
+  final ValueChanged<List<Job>> onFitToJobs;
 
   Job? get _selected {
     if (selectedJobId == null) return null;
@@ -167,6 +206,7 @@ class _MapBody extends StatelessWidget {
             onJobTapped: onJobTapped,
             onMapTapped: onMapTapped,
             onTilesUnavailable: onTilesUnavailable,
+            onClusterTapped: onClusterTapped,
           ),
         ),
 
@@ -225,9 +265,19 @@ class _MapBody extends StatelessWidget {
           curve: BrandMotion.curve,
           right: BrandSizing.spaceMd,
           bottom: selected != null ? 236 : 96,
-          child: _MyLocationButton(
-            isBusy: location.isRequesting,
-            onPressed: onMyLocationPressed,
+          child: Column(
+            children: [
+              _MapButton(
+                icon: Icons.zoom_out_map,
+                label: 'Show all jobs',
+                onPressed: jobs.isEmpty ? null : () => onFitToJobs(jobs),
+              ),
+              const SizedBox(height: BrandSizing.spaceSm),
+              _MyLocationButton(
+                isBusy: location.isRequesting,
+                onPressed: onMyLocationPressed,
+              ),
+            ],
           ),
         ),
 
@@ -363,6 +413,46 @@ class _MapNotice extends StatelessWidget {
               visualDensity: VisualDensity.compact,
             ),
         ],
+      ),
+    );
+  }
+}
+
+/// A square map control, matching the "Near Me" button.
+class _MapButton extends StatelessWidget {
+  const _MapButton({
+    required this.icon,
+    required this.label,
+    required this.onPressed,
+  });
+
+  final IconData icon;
+  final String label;
+  final VoidCallback? onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Material(
+      color: theme.colorScheme.surface,
+      borderRadius: BrandRadius.mediumAll,
+      elevation: 2,
+      shadowColor: BrandColours.ink.withValues(alpha: 0.2),
+      child: InkWell(
+        onTap: onPressed,
+        borderRadius: BrandRadius.mediumAll,
+        child: SizedBox(
+          width: BrandSizing.touchTargetPreferred,
+          height: BrandSizing.touchTargetPreferred,
+          child: Icon(
+            icon,
+            color: onPressed == null
+                ? theme.colorScheme.outline
+                : theme.colorScheme.primary,
+            semanticLabel: label,
+          ),
+        ),
       ),
     );
   }

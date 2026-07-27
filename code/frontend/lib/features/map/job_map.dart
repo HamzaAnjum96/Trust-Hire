@@ -6,6 +6,7 @@ import '../../core/map_theme.dart';
 import '../../core/tokens.dart';
 import '../../models/job.dart';
 import 'job_marker.dart';
+import 'marker_cluster.dart';
 
 /// The map itself — tiles, job radii, markers and the user's position.
 ///
@@ -24,6 +25,7 @@ class JobMap extends StatefulWidget {
     this.initialZoom = 13,
     this.tileProvider,
     this.onTilesUnavailable,
+    this.onClusterTapped,
   });
 
   final List<Job> jobs;
@@ -44,6 +46,10 @@ class JobMap extends StatefulWidget {
   /// markers stay correctly positioned over the plain background — so the
   /// owner decides how to explain it.
   final VoidCallback? onTilesUnavailable;
+
+  /// Called when a group of overlapping jobs is tapped. The map zooms to it so
+  /// the individual pins separate.
+  final void Function(JobCluster cluster)? onClusterTapped;
 
   @override
   State<JobMap> createState() => _JobMapState();
@@ -153,26 +159,55 @@ class _JobMapState extends State<JobMap> {
                   ],
                 ),
 
-              MarkerLayer(
-                markers: [
-                  for (final job in widget.jobs)
-                    Marker(
-                      point: LatLng(
-                        job.location.latitude,
-                        job.location.longitude,
-                      ),
-                      width: JobMarker.selectedSize,
-                      height: JobMarker.selectedSize,
-                      // Anchor the pin's point at the coordinate rather than
-                      // its centre, so it indicates the right spot.
-                      alignment: Alignment.topCenter,
-                      child: JobMarker(
-                        job: job,
-                        isSelected: job.id == widget.selectedJobId,
-                        onTap: () => widget.onJobTapped(job),
-                      ),
-                    ),
-                ],
+              // Clustering needs the camera, which only exists inside the map.
+              Builder(
+                builder: (context) {
+                  final clusters = const MarkerClusterer().cluster(
+                    widget.jobs,
+                    camera: MapCamera.of(context),
+                  );
+
+                  return MarkerLayer(
+                    markers: [
+                      for (final cluster in clusters)
+                        if (cluster.isSingle)
+                          Marker(
+                            point: LatLng(
+                              cluster.only.location.latitude,
+                              cluster.only.location.longitude,
+                            ),
+                            width: JobMarker.selectedSize,
+                            height: JobMarker.selectedSize,
+                            // Anchor the pin's point at the coordinate rather
+                            // than its centre, so it marks the right spot.
+                            alignment: Alignment.topCenter,
+                            child: JobMarker(
+                              job: cluster.only,
+                              isSelected:
+                                  cluster.only.id == widget.selectedJobId,
+                              onTap: () => widget.onJobTapped(cluster.only),
+                            ),
+                          )
+                        else
+                          Marker(
+                            point: LatLng(
+                              cluster.centre.latitude,
+                              cluster.centre.longitude,
+                            ),
+                            width: ClusterMarker.size,
+                            height: ClusterMarker.size,
+                            child: ClusterMarker(
+                              count: cluster.count,
+                              icon: cluster.isUniform
+                                  ? cluster.jobs.first.icon
+                                  : null,
+                              onTap: () =>
+                                  widget.onClusterTapped?.call(cluster),
+                            ),
+                          ),
+                    ],
+                  );
+                },
               ),
             ],
           ),
