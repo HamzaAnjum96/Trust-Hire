@@ -12,6 +12,32 @@ that heading to the version and date, and open a fresh `[Unreleased]`.
 
 ## [Unreleased]
 
+### Documentation — Phase 1 specification added
+
+#### Added
+
+- `documents/product/phase-1-system-logic.md` — a full system specification
+  for a two-sided marketplace: worker verification, bidding, wallets and
+  commission, premium accounts, ratings, and an admin panel, on a Supabase
+  backend.
+- `documents/product/poc-vs-phase-1.md`, reconciling it with the POC that
+  Sprints 0–12 built. **They are not the same product**, and eight decisions
+  contradict outright — framework (Flutter vs React Native), backend,
+  accounts, money, categories, location privacy, pricing, and target
+  platforms.
+
+Two contradictions are about the product rather than the plumbing, and matter
+most:
+
+- The brand guidelines say users should never choose a category; Phase 1 makes
+  1–3 tags mandatory and builds visibility on them.
+- The POC promises, in copy the user would rely on, that an exact location is
+  never shown; Phase 1 reveals exact addresses after acceptance.
+
+No code changed. The note sets out what carries over either way — the brand
+implementation, the Urdu catalogue, the seed data, and the recorded reasoning
+behind each product decision.
+
 ### Sprint 12 — Onboarding and permission priming
 
 199 tests pass, the analyzer is clean.
