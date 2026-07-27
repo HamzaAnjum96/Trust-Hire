@@ -92,6 +92,18 @@ class SettingsScreen extends StatelessWidget {
           ),
           const SizedBox(height: BrandSizing.spaceMd),
           OutlinedButton.icon(
+            onPressed: () async {
+              final messenger = ScaffoldMessenger.of(context);
+              await settings.resetIntro();
+              messenger.showSnackBar(
+                SnackBar(content: Text(strings.introReset)),
+              );
+            },
+            icon: const Icon(Icons.slideshow_outlined),
+            label: Text(strings.showIntroAgain),
+          ),
+          const SizedBox(height: BrandSizing.spaceSm),
+          OutlinedButton.icon(
             onPressed: () => _confirmReset(context),
             icon: const Icon(Icons.restart_alt),
             // Section 21 — explicit label, never "Confirm".

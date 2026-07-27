@@ -12,6 +12,27 @@ that heading to the version and date, and open a fresh `[Unreleased]`.
 
 ## [Unreleased]
 
+### Sprint 12 — Onboarding and permission priming
+
+199 tests pass, the analyzer is clean.
+
+#### Added
+
+- **A first run** — three skippable panels covering what the app is, that you
+  post by speaking rather than typing, and what location is for. The central
+  idea is unusual enough that an audience used to forms will not discover it
+  by poking around.
+- **"Show Intro Again"** in settings, for demos and for anyone who skipped too
+  fast.
+
+#### Changed
+
+- **Location is no longer requested at launch.** The app used to ask the
+  moment it opened, before saying what for — precisely what section 19 warns
+  against. It is now asked only on the last intro panel, after explaining
+  what it buys and that refusing costs nothing, with "Not Now" offered as
+  plainly as accepting. Afterwards only "Near Me" asks.
+
 ### Sprint 11 — Saved jobs and my postings
 
 187 tests pass, the analyzer is clean.

@@ -1213,6 +1213,96 @@ abstract class AppStrings {
   /// In en, this message translates to:
   /// **'A job you saved is no longer here.'**
   String get savedJobGone;
+
+  /// No description provided for @onboardWelcomeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Nearby work, made simple'**
+  String get onboardWelcomeTitle;
+
+  /// No description provided for @onboardWelcomeBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Trust Hire shows work happening near you, on a map. No account, nothing to fill in.'**
+  String get onboardWelcomeBody;
+
+  /// No description provided for @onboardVoiceTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Say it, do not type it'**
+  String get onboardVoiceTitle;
+
+  /// No description provided for @onboardVoiceBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Post a job with a voice note, a photo, or a few words. Any one of them is enough — you never have to fill in a form.'**
+  String get onboardVoiceBody;
+
+  /// No description provided for @onboardLocationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Work near you'**
+  String get onboardLocationTitle;
+
+  /// No description provided for @onboardLocationBody.
+  ///
+  /// In en, this message translates to:
+  /// **'If you share your location, jobs are sorted by how close they are. You can say no and still use everything — just move the map yourself.'**
+  String get onboardLocationBody;
+
+  /// No description provided for @onboardPrivacyNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Your exact location is never shown on a job. Only a general area is.'**
+  String get onboardPrivacyNote;
+
+  /// No description provided for @onboardNext.
+  ///
+  /// In en, this message translates to:
+  /// **'Next'**
+  String get onboardNext;
+
+  /// No description provided for @onboardSkip.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip'**
+  String get onboardSkip;
+
+  /// No description provided for @onboardAllowLocation.
+  ///
+  /// In en, this message translates to:
+  /// **'Share My Location'**
+  String get onboardAllowLocation;
+
+  /// No description provided for @onboardNotNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Not Now'**
+  String get onboardNotNow;
+
+  /// No description provided for @onboardStart.
+  ///
+  /// In en, this message translates to:
+  /// **'Start'**
+  String get onboardStart;
+
+  /// No description provided for @onboardStepOf.
+  ///
+  /// In en, this message translates to:
+  /// **'Step {step} of {total}'**
+  String onboardStepOf(int step, int total);
+
+  /// No description provided for @showIntroAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'Show Intro Again'**
+  String get showIntroAgain;
+
+  /// No description provided for @introReset.
+  ///
+  /// In en, this message translates to:
+  /// **'The intro will show next time you open the app.'**
+  String get introReset;
 }
 
 class _AppStringsDelegate extends LocalizationsDelegate<AppStrings> {

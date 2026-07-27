@@ -671,4 +671,55 @@ class AppStringsUr extends AppStrings {
 
   @override
   String get savedJobGone => 'آپ کا محفوظ کیا ہوا ایک کام اب موجود نہیں۔';
+
+  @override
+  String get onboardWelcomeTitle => 'قریبی کام، آسان طریقے سے';
+
+  @override
+  String get onboardWelcomeBody =>
+      'ٹرسٹ ہائر آپ کے قریب ہونے والے کام نقشے پر دکھاتی ہے۔ نہ اکاؤنٹ چاہیے، نہ کوئی فارم بھرنا ہے۔';
+
+  @override
+  String get onboardVoiceTitle => 'لکھنے کے بجائے بولیں';
+
+  @override
+  String get onboardVoiceBody =>
+      'آواز کا پیغام، تصویر یا چند لفظ — کام لگانے کے لیے ان میں سے ایک ہی کافی ہے۔ فارم بھرنے کی ضرورت کبھی نہیں۔';
+
+  @override
+  String get onboardLocationTitle => 'آپ کے قریب کا کام';
+
+  @override
+  String get onboardLocationBody =>
+      'اگر آپ اپنی جگہ بتائیں تو کام قربت کے حساب سے ترتیب دیے جاتے ہیں۔ آپ منع بھی کر سکتے ہیں اور پھر بھی سب کچھ استعمال کر سکتے ہیں — بس نقشہ خود ہلا لیں۔';
+
+  @override
+  String get onboardPrivacyNote =>
+      'آپ کی اصل جگہ کسی کام پر کبھی نہیں دکھائی جاتی۔ صرف عام علاقہ دکھایا جاتا ہے۔';
+
+  @override
+  String get onboardNext => 'آگے';
+
+  @override
+  String get onboardSkip => 'چھوڑ دیں';
+
+  @override
+  String get onboardAllowLocation => 'میری جگہ بتائیں';
+
+  @override
+  String get onboardNotNow => 'ابھی نہیں';
+
+  @override
+  String get onboardStart => 'شروع کریں';
+
+  @override
+  String onboardStepOf(int step, int total) {
+    return '$total میں سے $step قدم';
+  }
+
+  @override
+  String get showIntroAgain => 'تعارف دوبارہ دکھائیں';
+
+  @override
+  String get introReset => 'اگلی بار ایپ کھولنے پر تعارف دکھایا جائے گا۔';
 }

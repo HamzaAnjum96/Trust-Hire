@@ -5,6 +5,7 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trust_hire/app/app.dart';
+import 'package:trust_hire/app/settings_controller.dart';
 import 'package:trust_hire/core/theme.dart';
 import 'package:trust_hire/core/tokens.dart';
 import 'package:trust_hire/services/local_store.dart';
@@ -27,6 +28,9 @@ void main() {
     testWidgets('meets the tap target, label and contrast guidelines',
         (tester) async {
       final store = await LocalStore.open();
+      // The intro is covered in onboarding_test; these assert the
+      // shell that follows it.
+      await (SettingsController(store)..load()).markIntroSeen();
       final handle = tester.ensureSemantics();
 
       await tester.pumpWidget(TrustHireApp(store: store));
@@ -45,6 +49,9 @@ void main() {
     testWidgets('survives the largest text scale without overflowing',
         (tester) async {
       final store = await LocalStore.open();
+      // The intro is covered in onboarding_test; these assert the
+      // shell that follows it.
+      await (SettingsController(store)..load()).markIntroSeen();
 
       await tester.pumpWidget(
         MediaQuery(
@@ -60,6 +67,9 @@ void main() {
 
     testWidgets('renders in dark mode without error', (tester) async {
       final store = await LocalStore.open();
+      // The intro is covered in onboarding_test; these assert the
+      // shell that follows it.
+      await (SettingsController(store)..load()).markIntroSeen();
 
       await tester.pumpWidget(
         MediaQuery(
@@ -74,6 +84,9 @@ void main() {
 
     testWidgets('renders with animations disabled', (tester) async {
       final store = await LocalStore.open();
+      // The intro is covered in onboarding_test; these assert the
+      // shell that follows it.
+      await (SettingsController(store)..load()).markIntroSeen();
 
       await tester.pumpWidget(
         MediaQuery(

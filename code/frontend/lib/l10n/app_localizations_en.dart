@@ -668,4 +668,55 @@ class AppStringsEn extends AppStrings {
 
   @override
   String get savedJobGone => 'A job you saved is no longer here.';
+
+  @override
+  String get onboardWelcomeTitle => 'Nearby work, made simple';
+
+  @override
+  String get onboardWelcomeBody =>
+      'Trust Hire shows work happening near you, on a map. No account, nothing to fill in.';
+
+  @override
+  String get onboardVoiceTitle => 'Say it, do not type it';
+
+  @override
+  String get onboardVoiceBody =>
+      'Post a job with a voice note, a photo, or a few words. Any one of them is enough — you never have to fill in a form.';
+
+  @override
+  String get onboardLocationTitle => 'Work near you';
+
+  @override
+  String get onboardLocationBody =>
+      'If you share your location, jobs are sorted by how close they are. You can say no and still use everything — just move the map yourself.';
+
+  @override
+  String get onboardPrivacyNote =>
+      'Your exact location is never shown on a job. Only a general area is.';
+
+  @override
+  String get onboardNext => 'Next';
+
+  @override
+  String get onboardSkip => 'Skip';
+
+  @override
+  String get onboardAllowLocation => 'Share My Location';
+
+  @override
+  String get onboardNotNow => 'Not Now';
+
+  @override
+  String get onboardStart => 'Start';
+
+  @override
+  String onboardStepOf(int step, int total) {
+    return 'Step $step of $total';
+  }
+
+  @override
+  String get showIntroAgain => 'Show Intro Again';
+
+  @override
+  String get introReset => 'The intro will show next time you open the app.';
 }

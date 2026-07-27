@@ -10,6 +10,7 @@ import '../features/map/location_controller.dart';
 import '../services/job_repository.dart';
 import '../services/local_store.dart';
 import '../services/media_store.dart';
+import '../features/onboarding/onboarding_screen.dart';
 import 'app_shell.dart';
 import 'job_controller.dart';
 import 'settings_controller.dart';
@@ -37,9 +38,10 @@ class TrustHireApp extends StatelessWidget {
           create: (_) => SavedJobsController(store)..load(),
         ),
         ChangeNotifierProvider(
-          // Location is requested on first launch so the map can open on the
-          // user rather than the fallback. A refusal is handled, not retried.
-          create: (_) => LocationController()..request(),
+          // Deliberately not requested here. Asking for a permission before
+          // explaining what it is for is what section 19 warns against, so
+          // the intro asks — and afterwards, only "Near Me" does.
+          create: (_) => LocationController(),
         ),
       ],
       child: Consumer<SettingsController>(
@@ -58,10 +60,27 @@ class TrustHireApp extends StatelessWidget {
             theme: BrandTheme.light,
             darkTheme: BrandTheme.dark,
             themeMode: settings.themeMode,
-            home: const AppShell(),
+            home: const _Entry(),
           );
         },
       ),
+    );
+  }
+}
+
+/// Chooses between the intro and the app itself.
+class _Entry extends StatelessWidget {
+  const _Entry();
+
+  @override
+  Widget build(BuildContext context) {
+    final settings = context.watch<SettingsController>();
+
+    if (settings.introSeen) return const AppShell();
+
+    return OnboardingScreen(
+      location: context.read<LocationController>(),
+      onFinished: settings.markIntroSeen,
     );
   }
 }

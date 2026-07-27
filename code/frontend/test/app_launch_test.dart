@@ -3,6 +3,7 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trust_hire/app/app.dart';
+import 'package:trust_hire/app/settings_controller.dart';
 import 'package:trust_hire/features/map/job_map.dart';
 import 'package:trust_hire/services/local_store.dart';
 
@@ -35,6 +36,9 @@ void main() {
 
   testWidgets('app launches and seeds jobs into local storage', (tester) async {
     final store = await LocalStore.open();
+    // The intro is covered in onboarding_test; these assert the
+    // shell that follows it.
+    await (SettingsController(store)..load()).markIntroSeen();
 
     await tester.pumpWidget(TrustHireApp(store: store));
     await settle(tester);
@@ -60,6 +64,9 @@ void main() {
 
   testWidgets('every navigation destination opens', (tester) async {
     final store = await LocalStore.open();
+    // The intro is covered in onboarding_test; these assert the
+    // shell that follows it.
+    await (SettingsController(store)..load()).markIntroSeen();
 
     await tester.pumpWidget(TrustHireApp(store: store));
     await settle(tester);
@@ -75,6 +82,9 @@ void main() {
 
   testWidgets('posting a job is reachable from the shell', (tester) async {
     final store = await LocalStore.open();
+    // The intro is covered in onboarding_test; these assert the
+    // shell that follows it.
+    await (SettingsController(store)..load()).markIntroSeen();
 
     await tester.pumpWidget(TrustHireApp(store: store));
     await settle(tester);
@@ -87,6 +97,9 @@ void main() {
 
   testWidgets('the map still works without a device location', (tester) async {
     final store = await LocalStore.open();
+    // The intro is covered in onboarding_test; these assert the
+    // shell that follows it.
+    await (SettingsController(store)..load()).markIntroSeen();
 
     // geolocator has no platform implementation under test, so no position is
     // ever produced — the same situation as a refusal.
@@ -100,6 +113,9 @@ void main() {
 
   testWidgets('the map fills the screen', (tester) async {
     final store = await LocalStore.open();
+    // The intro is covered in onboarding_test; these assert the
+    // shell that follows it.
+    await (SettingsController(store)..load()).markIntroSeen();
 
     await tester.pumpWidget(TrustHireApp(store: store));
     await settle(tester);

@@ -158,6 +158,9 @@ void main() {
   group('the running app', () {
     testWidgets('starts in English by default', (tester) async {
       final store = await LocalStore.open();
+      // The intro is covered in onboarding_test; these assert the
+      // shell that follows it.
+      await (SettingsController(store)..load()).markIntroSeen();
 
       await tester.pumpWidget(TrustHireApp(store: store));
       await settle(tester);
@@ -170,6 +173,9 @@ void main() {
     testWidgets('switches to Urdu and lays out right to left',
         (tester) async {
       final store = await LocalStore.open();
+      // The intro is covered in onboarding_test; these assert the
+      // shell that follows it.
+      await (SettingsController(store)..load()).markIntroSeen();
       final settings = SettingsController(store)..load();
       await settings.setLocale(const Locale('ur'));
 
@@ -227,6 +233,9 @@ void main() {
     testWidgets('the whole app renders in Urdu without overflowing',
         (tester) async {
       final store = await LocalStore.open();
+      // The intro is covered in onboarding_test; these assert the
+      // shell that follows it.
+      await (SettingsController(store)..load()).markIntroSeen();
       await SettingsController(store).setLocale(const Locale('ur'));
 
       await tester.pumpWidget(TrustHireApp(store: store));
@@ -239,6 +248,9 @@ void main() {
   group('the language preference', () {
     test('defaults to following the device', () async {
       final store = await LocalStore.open();
+      // The intro is covered in onboarding_test; these assert the
+      // shell that follows it.
+      await (SettingsController(store)..load()).markIntroSeen();
       final settings = SettingsController(store)..load();
 
       expect(settings.locale, isNull);
@@ -246,6 +258,9 @@ void main() {
 
     test('survives a restart', () async {
       final store = await LocalStore.open();
+      // The intro is covered in onboarding_test; these assert the
+      // shell that follows it.
+      await (SettingsController(store)..load()).markIntroSeen();
       await (SettingsController(store)..load()).setLocale(const Locale('ur'));
 
       final reloaded = SettingsController(store)..load();
@@ -254,6 +269,9 @@ void main() {
 
     test('can be set back to following the device', () async {
       final store = await LocalStore.open();
+      // The intro is covered in onboarding_test; these assert the
+      // shell that follows it.
+      await (SettingsController(store)..load()).markIntroSeen();
       final settings = SettingsController(store)..load();
 
       await settings.setLocale(const Locale('ur'));

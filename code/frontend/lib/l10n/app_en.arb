@@ -334,5 +334,30 @@
       }
     }
   },
-  "savedJobGone": "A job you saved is no longer here."
+  "savedJobGone": "A job you saved is no longer here.",
+  "onboardWelcomeTitle": "Nearby work, made simple",
+  "onboardWelcomeBody": "Trust Hire shows work happening near you, on a map. No account, nothing to fill in.",
+  "onboardVoiceTitle": "Say it, do not type it",
+  "onboardVoiceBody": "Post a job with a voice note, a photo, or a few words. Any one of them is enough — you never have to fill in a form.",
+  "onboardLocationTitle": "Work near you",
+  "onboardLocationBody": "If you share your location, jobs are sorted by how close they are. You can say no and still use everything — just move the map yourself.",
+  "onboardPrivacyNote": "Your exact location is never shown on a job. Only a general area is.",
+  "onboardNext": "Next",
+  "onboardSkip": "Skip",
+  "onboardAllowLocation": "Share My Location",
+  "onboardNotNow": "Not Now",
+  "onboardStart": "Start",
+  "onboardStepOf": "Step {step} of {total}",
+  "@onboardStepOf": {
+    "placeholders": {
+      "step": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "showIntroAgain": "Show Intro Again",
+  "introReset": "The intro will show next time you open the app."
 }

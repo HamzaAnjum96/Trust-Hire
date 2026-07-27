@@ -20,7 +20,14 @@ class SettingsController extends ChangeNotifier {
   /// Languages offered, in the order they appear in settings.
   static const supportedLocales = <Locale>[Locale('en'), Locale('ur')];
 
+  /// False until the first-run intro has been seen. Drives whether the app
+  /// opens on the intro or straight onto the map.
+  bool _introSeen = false;
+  bool get introSeen => _introSeen;
+
   void load() {
+    _introSeen = _store.readFlag(StoreKeys.introSeen);
+
     final language = _store.readString(StoreKeys.language);
     _locale = language == null || language.isEmpty ? null : Locale(language);
 
@@ -31,6 +38,21 @@ class SettingsController extends ChangeNotifier {
       _ => ThemeMode.system,
     };
     notifyListeners();
+  }
+
+  Future<void> markIntroSeen() async {
+    if (_introSeen) return;
+    _introSeen = true;
+    notifyListeners();
+    await _store.writeFlag(StoreKeys.introSeen, true);
+  }
+
+  /// Shows the intro again next launch. Useful for demonstrating the app, and
+  /// for anyone who skipped past it too quickly.
+  Future<void> resetIntro() async {
+    _introSeen = false;
+    notifyListeners();
+    await _store.writeFlag(StoreKeys.introSeen, false);
   }
 
   /// Sets the interface language, or null to follow the device.

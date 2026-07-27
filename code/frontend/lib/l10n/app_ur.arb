@@ -185,5 +185,20 @@
   "postedTab": "لگائے ہوئے",
   "savedCount": "{count, plural, =1{1 محفوظ} other{{count} محفوظ}}",
   "postedCount": "{count, plural, =1{1 لگایا} other{{count} لگائے}}",
-  "savedJobGone": "آپ کا محفوظ کیا ہوا ایک کام اب موجود نہیں۔"
+  "savedJobGone": "آپ کا محفوظ کیا ہوا ایک کام اب موجود نہیں۔",
+  "onboardWelcomeTitle": "قریبی کام، آسان طریقے سے",
+  "onboardWelcomeBody": "ٹرسٹ ہائر آپ کے قریب ہونے والے کام نقشے پر دکھاتی ہے۔ نہ اکاؤنٹ چاہیے، نہ کوئی فارم بھرنا ہے۔",
+  "onboardVoiceTitle": "لکھنے کے بجائے بولیں",
+  "onboardVoiceBody": "آواز کا پیغام، تصویر یا چند لفظ — کام لگانے کے لیے ان میں سے ایک ہی کافی ہے۔ فارم بھرنے کی ضرورت کبھی نہیں۔",
+  "onboardLocationTitle": "آپ کے قریب کا کام",
+  "onboardLocationBody": "اگر آپ اپنی جگہ بتائیں تو کام قربت کے حساب سے ترتیب دیے جاتے ہیں۔ آپ منع بھی کر سکتے ہیں اور پھر بھی سب کچھ استعمال کر سکتے ہیں — بس نقشہ خود ہلا لیں۔",
+  "onboardPrivacyNote": "آپ کی اصل جگہ کسی کام پر کبھی نہیں دکھائی جاتی۔ صرف عام علاقہ دکھایا جاتا ہے۔",
+  "onboardNext": "آگے",
+  "onboardSkip": "چھوڑ دیں",
+  "onboardAllowLocation": "میری جگہ بتائیں",
+  "onboardNotNow": "ابھی نہیں",
+  "onboardStart": "شروع کریں",
+  "onboardStepOf": "{total} میں سے {step} قدم",
+  "showIntroAgain": "تعارف دوبارہ دکھائیں",
+  "introReset": "اگلی بار ایپ کھولنے پر تعارف دکھایا جائے گا۔"
 }
