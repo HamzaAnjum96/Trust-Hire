@@ -27,18 +27,7 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v4
 
-      - name: Detect whether the Flutter app is buildable
-        id: detect
-        run: |
-          if [ -f code/frontend/pubspec.yaml ]; then
-            echo "app=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "app=false" >> "$GITHUB_OUTPUT"
-            echo "No code/frontend/pubspec.yaml — publishing the placeholder site."
-          fi
-
       - name: Set up Flutter
-        if: steps.detect.outputs.app == 'true'
         uses: subosito/flutter-action@v2
         with:
           flutter-version: ${{ env.FLUTTER_VERSION }}
@@ -46,22 +35,18 @@ jobs:
           cache: true
 
       - name: Install dependencies
-        if: steps.detect.outputs.app == 'true'
         working-directory: code/frontend
         run: flutter pub get
 
       - name: Analyze
-        if: steps.detect.outputs.app == 'true'
         working-directory: code/frontend
         run: flutter analyze
 
       - name: Test
-        if: steps.detect.outputs.app == 'true'
         working-directory: code/frontend
         run: flutter test
 
       - name: Build web
-        if: steps.detect.outputs.app == 'true'
         working-directory: code/frontend
         # --no-web-resources-cdn bundles CanvasKit locally instead of pulling it
         # from gstatic, so the app loads without third-party network access —
@@ -75,12 +60,7 @@ jobs:
             --base-href "/${{ github.event.repository.name }}/"
 
       - name: Stage the built app
-        if: steps.detect.outputs.app == 'true'
         run: cp -R code/frontend/build/web _site
-
-      - name: Stage placeholder site
-        if: steps.detect.outputs.app != 'true'
-        run: cp -R deployment/pages _site
 
       - name: Disable Jekyll processing
         run: touch _site/.nojekyll

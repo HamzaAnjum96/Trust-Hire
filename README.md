@@ -44,7 +44,6 @@ Trust-Hire/
 │   └── frontend/
 │
 └── deployment/                   ← deployment configuration and assets
-    └── pages/                    ← static site published to GitHub Pages
 ```
 
 Empty folders carry a `.gitkeep` so git tracks them. Delete it once the folder
@@ -155,10 +154,12 @@ CDN, or the app will not load without third-party network access:
 flutter build web --release --no-web-resources-cdn --base-href /Trust-Hire/
 ```
 
-**Map tiles.** The map uses OpenStreetMap's public tile servers, which need no
-API key — deliberate, so the app runs from a fresh checkout with no setup. That
-is fine for a POC but [not for production traffic](https://operations.osmfoundation.org/policies/tiles);
-a real deployment needs a paid or self-hosted tile provider. Tiles are the one
+**Map tiles.** The map uses CARTO's Positron and Dark Matter basemaps — one
+purpose-built style per brightness rather than a filter over a shared raster,
+since darkening a standard map produces muddy greens and hurts label
+legibility. Neither needs an API key, so the app runs from a fresh checkout
+with no setup. That is fine for a POC but not for production traffic; a real
+deployment needs a paid or self-hosted tile provider. Tiles are the one
 part of the app that needs a network: everything else works offline, and when
 tiles cannot be fetched the map still positions jobs correctly over a plain
 background and says so.
@@ -193,23 +194,19 @@ implementing them live in `documents/agile/backlog/`.
 ## Deployment
 
 `deployment/` holds deployment configuration and any assets that ship with a
-deployment but are not application source.
-
-| Path | Purpose |
-| --- | --- |
-| `deployment/pages/` | Static site published to GitHub Pages. Currently a placeholder page, served until a frontend exists. |
+deployment but are not application source. It is currently empty: the Flutter
+app is the deployment, and the placeholder site it used to hold was removed
+once that app existed.
 
 The workflow itself lives at `.github/workflows/deploy-pages.yml` — GitHub only
 runs workflows from `.github/workflows/`, so it cannot sit inside `deployment/`.
 
 ### GitHub Pages
 
-Every push to `main` deploys the site (and it can be run manually from the
+Every push to `main` deploys the app (and it can be run manually from the
 Actions tab). The workflow sets up Flutter, runs `flutter analyze` and
 `flutter test` as gates, then builds the web release and publishes it — so a
-failing analyzer or test blocks the deploy rather than shipping past it. If
-`code/frontend/pubspec.yaml` is ever absent it falls back to publishing
-`deployment/pages/`.
+failing analyzer or test blocks the deploy rather than shipping past it.
 
 The build passes `--no-web-resources-cdn` so CanvasKit is served from the
 deployment itself rather than gstatic, and `--base-href /Trust-Hire/` because

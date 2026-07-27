@@ -46,6 +46,9 @@ run against the live app.
 - **The map had no accessible name.** It is one large tappable surface with no
   text of its own, so a screen reader announced an unnamed button covering the
   screen. Caught by `labeledTapTargetGuideline`, not by eye.
+- The Pages workflow still carried a fallback that published
+  `deployment/pages/`, which no longer exists now that the app itself is the
+  deployment. Removed, along with the branch that chose between them.
 - Tile caching pulled in `path_provider`, which threw on platforms without it.
   All three maps — the main one, the details preview and the area picker — now
   build their tile layer through one `MapTheme.tileLayer` factory with disk
