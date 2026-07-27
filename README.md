@@ -110,7 +110,7 @@ code/frontend/
 │   ├── core/         ← brand tokens, theme, formatters
 │   ├── features/
 │   │   ├── map/          ← the map — the primary surface
-│   │   ├── jobs/         ← job list and details
+│   │   ├── jobs/         ← job list, details, saved and posted
 │   │   ├── create_job/   ← posting and editing
 │   │   └── settings/     ← theme, local-data controls
 │   ├── l10n/         ← app_en.arb, app_ur.arb (generated AppStrings)

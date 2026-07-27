@@ -1105,6 +1105,114 @@ abstract class AppStrings {
   /// In en, this message translates to:
   /// **'Salaam, I saw your job on Trust Hire.'**
   String get whatsAppMessage;
+
+  /// No description provided for @save.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get save;
+
+  /// No description provided for @saved.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved'**
+  String get saved;
+
+  /// No description provided for @saveThisJob.
+  ///
+  /// In en, this message translates to:
+  /// **'Save this job'**
+  String get saveThisJob;
+
+  /// No description provided for @removeFromSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove from saved'**
+  String get removeFromSaved;
+
+  /// No description provided for @jobSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved. Find it under Saved.'**
+  String get jobSaved;
+
+  /// No description provided for @jobUnsaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Removed from saved.'**
+  String get jobUnsaved;
+
+  /// No description provided for @navSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved'**
+  String get navSaved;
+
+  /// No description provided for @savedJobs.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved jobs'**
+  String get savedJobs;
+
+  /// No description provided for @myPostings.
+  ///
+  /// In en, this message translates to:
+  /// **'My postings'**
+  String get myPostings;
+
+  /// No description provided for @noSavedJobs.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing saved yet'**
+  String get noSavedJobs;
+
+  /// No description provided for @noSavedJobsMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap the bookmark on a job to keep it here.'**
+  String get noSavedJobsMessage;
+
+  /// No description provided for @noPostings.
+  ///
+  /// In en, this message translates to:
+  /// **'You have not posted any work yet'**
+  String get noPostings;
+
+  /// No description provided for @noPostingsMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Anything you post shows up here.'**
+  String get noPostingsMessage;
+
+  /// No description provided for @savedTab.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved'**
+  String get savedTab;
+
+  /// No description provided for @postedTab.
+  ///
+  /// In en, this message translates to:
+  /// **'Posted'**
+  String get postedTab;
+
+  /// No description provided for @savedCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 saved} other{{count} saved}}'**
+  String savedCount(int count);
+
+  /// No description provided for @postedCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 posted} other{{count} posted}}'**
+  String postedCount(int count);
+
+  /// No description provided for @savedJobGone.
+  ///
+  /// In en, this message translates to:
+  /// **'A job you saved is no longer here.'**
+  String get savedJobGone;
 }
 
 class _AppStringsDelegate extends LocalizationsDelegate<AppStrings> {

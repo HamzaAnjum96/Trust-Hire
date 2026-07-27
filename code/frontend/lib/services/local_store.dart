@@ -82,6 +82,9 @@ class StoreKeys {
   static const themeMode = 'trust_hire.theme_mode';
   static const language = 'trust_hire.language';
 
+  /// Ids of jobs the user bookmarked, comma separated.
+  static const savedJobs = 'trust_hire.saved_jobs';
+
   /// Comma-separated ids of blobs held by [MediaStore]. The blobs themselves
   /// live under `trust_hire.media.<id>` and are enumerated through this index.
   static const mediaIndex = 'trust_hire.media_index';
@@ -92,6 +95,7 @@ class StoreKeys {
     seeded,
     themeMode,
     language,
+    savedJobs,
     mediaIndex,
   ];
 }

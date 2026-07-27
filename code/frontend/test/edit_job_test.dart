@@ -8,6 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trust_hire/app/job_controller.dart';
 import 'package:trust_hire/core/theme.dart';
 import 'package:trust_hire/features/jobs/job_details_sheet.dart';
+import 'package:trust_hire/features/jobs/saved_jobs_controller.dart';
 import 'package:trust_hire/models/job.dart';
 import 'package:trust_hire/services/job_repository.dart';
 import 'package:trust_hire/services/local_store.dart';
@@ -23,8 +24,11 @@ void main() {
     rootBundle.clear();
   });
 
+  late SavedJobsController savedJobs;
+
   Future<(JobController, MediaStore, LocalStore)> build() async {
     final store = await LocalStore.open();
+    savedJobs = SavedJobsController(store)..load();
     final media = MediaStore(store);
     final controller = JobController(JobRepository(store, media));
     await controller.load();
@@ -160,6 +164,7 @@ void main() {
         MultiProvider(
           providers: [
             ChangeNotifierProvider.value(value: controller),
+            ChangeNotifierProvider.value(value: savedJobs),
             Provider<MediaStore>.value(value: media),
           ],
           child: MaterialApp(

@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import '../core/theme.dart';
 import '../l10n/app_localizations.dart';
 import '../features/jobs/job_filter_controller.dart';
+import '../features/jobs/saved_jobs_controller.dart';
 import '../features/map/location_controller.dart';
 import '../services/job_repository.dart';
 import '../services/local_store.dart';
@@ -32,6 +33,9 @@ class TrustHireApp extends StatelessWidget {
               JobController(JobRepository(store, MediaStore(store)))..load(),
         ),
         ChangeNotifierProvider(create: (_) => JobFilterController()),
+        ChangeNotifierProvider(
+          create: (_) => SavedJobsController(store)..load(),
+        ),
         ChangeNotifierProvider(
           // Location is requested on first launch so the map can open on the
           // user rather than the fallback. A refusal is handled, not retried.

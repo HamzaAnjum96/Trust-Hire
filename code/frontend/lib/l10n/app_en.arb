@@ -302,5 +302,37 @@
   "fieldContact": "Phone number",
   "contactHint": "So people can reach you. You can add this later.",
   "contactHelp": "Shown only to people who tap to see it.",
-  "whatsAppMessage": "Salaam, I saw your job on Trust Hire."
+  "whatsAppMessage": "Salaam, I saw your job on Trust Hire.",
+  "save": "Save",
+  "saved": "Saved",
+  "saveThisJob": "Save this job",
+  "removeFromSaved": "Remove from saved",
+  "jobSaved": "Saved. Find it under Saved.",
+  "jobUnsaved": "Removed from saved.",
+  "navSaved": "Saved",
+  "savedJobs": "Saved jobs",
+  "myPostings": "My postings",
+  "noSavedJobs": "Nothing saved yet",
+  "noSavedJobsMessage": "Tap the bookmark on a job to keep it here.",
+  "noPostings": "You have not posted any work yet",
+  "noPostingsMessage": "Anything you post shows up here.",
+  "savedTab": "Saved",
+  "postedTab": "Posted",
+  "savedCount": "{count, plural, =1{1 saved} other{{count} saved}}",
+  "@savedCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "postedCount": "{count, plural, =1{1 posted} other{{count} posted}}",
+  "@postedCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "savedJobGone": "A job you saved is no longer here."
 }

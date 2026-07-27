@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../app/job_controller.dart';
-import '../../core/formatters.dart';
 import '../../core/motion.dart';
 import '../../core/tokens.dart';
 import '../../models/job.dart';
@@ -13,6 +12,7 @@ import '../../widgets/state_views.dart';
 import 'filter_bar.dart';
 import 'job_details_sheet.dart';
 import 'job_filter_controller.dart';
+import 'job_row.dart';
 import '../../l10n/app_localizations.dart';
 
 /// A plain list of every job in local storage.
@@ -138,124 +138,16 @@ class _JobList extends StatelessWidget {
       itemBuilder: (context, index) => SettleIn(
         // A short stagger so the list assembles rather than snapping in.
         delay: Duration(milliseconds: (index * 40).clamp(0, 240)),
-        child: _JobRow(job: jobs[index], now: now),
-      ),
-    );
-  }
-}
-
-class _JobRow extends StatelessWidget {
-  const _JobRow({required this.job, required this.now});
-
-  final Job job;
-  final DateTime now;
-
-  @override
-  Widget build(BuildContext context) {
-    final strings = AppStrings.of(context);
-    final theme = Theme.of(context);
-
-    return Card(
-      clipBehavior: Clip.antiAlias,
-      child: InkWell(
-        onTap: () => JobDetailsSheet.open(
-          context,
-          jobId: job.id,
-          mediaStore: context.read<MediaStore>(),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(BrandSizing.spaceMd),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                    child: Text(
-                      job.displayTitle(strings),
-                      style: theme.textTheme.titleLarge,
-                    ),
-                  ),
-                  if (job.isLocal)
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: BrandSizing.spaceSm,
-                        vertical: 2,
-                      ),
-                      decoration: BoxDecoration(
-                        color: BrandColours.copper,
-                        borderRadius: BrandRadius.smallAll,
-                      ),
-                      child: Text(
-                        strings.onThisDevice,
-                        style: TextStyle(
-                          fontSize: 12,
-                          height: 16 / 12,
-                          fontWeight: FontWeight.w600,
-                          color: BrandColours.white,
-                        ),
-                      ),
-                    ),
-                ],
-              ),
-              if (job.supportingDescription != null) ...[
-                const SizedBox(height: BrandSizing.spaceXs),
-                Text(
-                  job.supportingDescription!,
-                  style: theme.textTheme.bodyMedium,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ],
-              const SizedBox(height: BrandSizing.spaceSm + 4),
-              Wrap(
-                spacing: BrandSizing.spaceMd,
-                runSpacing: BrandSizing.spaceXs,
-                children: [
-                  if (job.type != null)
-                    _Meta(
-                      icon: job.type!.icon,
-                      label: job.type!.label(strings),
-                    ),
-                  _Meta(
-                    icon: Icons.schedule,
-                    label: Format.scheduled(strings, job.scheduledTime, now),
-                  ),
-                  if (job.hasVoiceNote)
-                    _Meta(icon: Icons.mic, label: strings.voiceNote),
-                  if (job.hasPhotos)
-                    _Meta(
-                      icon: Icons.photo_library_outlined,
-                      label: strings.photoCount(job.photoPaths.length),
-                    ),
-                ],
-              ),
-            ],
+        child: JobRow(
+          job: jobs[index],
+          now: now,
+          onTap: () => JobDetailsSheet.open(
+            context,
+            jobId: jobs[index].id,
+            mediaStore: context.read<MediaStore>(),
           ),
         ),
       ),
-    );
-  }
-}
-
-class _Meta extends StatelessWidget {
-  const _Meta({required this.icon, required this.label});
-
-  final IconData icon;
-  final String label;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Icon(icon, size: 16, color: theme.colorScheme.onSurfaceVariant),
-        const SizedBox(width: BrandSizing.spaceXs + 2),
-        Text(label, style: theme.textTheme.labelSmall),
-      ],
     );
   }
 }

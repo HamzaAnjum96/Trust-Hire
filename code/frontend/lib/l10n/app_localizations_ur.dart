@@ -601,4 +601,74 @@ class AppStringsUr extends AppStrings {
   @override
   String get whatsAppMessage =>
       'السلام علیکم، میں نے ٹرسٹ ہائر پر آپ کا کام دیکھا۔';
+
+  @override
+  String get save => 'محفوظ کریں';
+
+  @override
+  String get saved => 'محفوظ شدہ';
+
+  @override
+  String get saveThisJob => 'یہ کام محفوظ کریں';
+
+  @override
+  String get removeFromSaved => 'محفوظ شدہ سے ہٹائیں';
+
+  @override
+  String get jobSaved => 'محفوظ ہو گیا۔ اسے محفوظ شدہ میں دیکھیں۔';
+
+  @override
+  String get jobUnsaved => 'محفوظ شدہ سے ہٹا دیا گیا۔';
+
+  @override
+  String get navSaved => 'محفوظ شدہ';
+
+  @override
+  String get savedJobs => 'محفوظ کام';
+
+  @override
+  String get myPostings => 'میرے لگائے ہوئے کام';
+
+  @override
+  String get noSavedJobs => 'ابھی کچھ محفوظ نہیں';
+
+  @override
+  String get noSavedJobsMessage => 'کسی کام پر نشان دبائیں تاکہ وہ یہاں رہے۔';
+
+  @override
+  String get noPostings => 'آپ نے ابھی کوئی کام نہیں لگایا';
+
+  @override
+  String get noPostingsMessage => 'آپ جو کام لگائیں گے وہ یہاں آ جائے گا۔';
+
+  @override
+  String get savedTab => 'محفوظ شدہ';
+
+  @override
+  String get postedTab => 'لگائے ہوئے';
+
+  @override
+  String savedCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count محفوظ',
+      one: '1 محفوظ',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String postedCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count لگائے',
+      one: '1 لگایا',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get savedJobGone => 'آپ کا محفوظ کیا ہوا ایک کام اب موجود نہیں۔';
 }

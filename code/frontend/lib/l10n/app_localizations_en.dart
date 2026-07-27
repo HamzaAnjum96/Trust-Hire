@@ -598,4 +598,74 @@ class AppStringsEn extends AppStrings {
 
   @override
   String get whatsAppMessage => 'Salaam, I saw your job on Trust Hire.';
+
+  @override
+  String get save => 'Save';
+
+  @override
+  String get saved => 'Saved';
+
+  @override
+  String get saveThisJob => 'Save this job';
+
+  @override
+  String get removeFromSaved => 'Remove from saved';
+
+  @override
+  String get jobSaved => 'Saved. Find it under Saved.';
+
+  @override
+  String get jobUnsaved => 'Removed from saved.';
+
+  @override
+  String get navSaved => 'Saved';
+
+  @override
+  String get savedJobs => 'Saved jobs';
+
+  @override
+  String get myPostings => 'My postings';
+
+  @override
+  String get noSavedJobs => 'Nothing saved yet';
+
+  @override
+  String get noSavedJobsMessage => 'Tap the bookmark on a job to keep it here.';
+
+  @override
+  String get noPostings => 'You have not posted any work yet';
+
+  @override
+  String get noPostingsMessage => 'Anything you post shows up here.';
+
+  @override
+  String get savedTab => 'Saved';
+
+  @override
+  String get postedTab => 'Posted';
+
+  @override
+  String savedCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count saved',
+      one: '1 saved',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String postedCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count posted',
+      one: '1 posted',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get savedJobGone => 'A job you saved is no longer here.';
 }

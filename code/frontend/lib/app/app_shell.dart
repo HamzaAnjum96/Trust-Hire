@@ -7,6 +7,7 @@ import '../features/create_job/create_job_screen.dart';
 import '../features/map/location_controller.dart';
 import '../services/location_service.dart';
 import '../features/jobs/jobs_screen.dart';
+import '../features/jobs/my_jobs_screen.dart';
 import '../features/map/map_screen.dart';
 import '../features/settings/settings_screen.dart';
 import '../l10n/app_localizations.dart';
@@ -39,6 +40,11 @@ class _AppShellState extends State<AppShell> {
       label: strings.navJobs,
     ),
     NavigationDestination(
+      icon: const Icon(Icons.bookmark_border),
+      selectedIcon: const Icon(Icons.bookmark),
+      label: strings.navSaved,
+    ),
+    NavigationDestination(
       icon: const Icon(Icons.settings_outlined),
       selectedIcon: const Icon(Icons.settings),
       label: strings.navSettings,
@@ -65,9 +71,14 @@ class _AppShellState extends State<AppShell> {
     return Scaffold(
       body: IndexedStack(
         index: _index,
-        children: const [MapScreen(), JobsScreen(), SettingsScreen()],
+        children: const [
+          MapScreen(),
+          JobsScreen(),
+          MyJobsScreen(),
+          SettingsScreen(),
+        ],
       ),
-      floatingActionButton: _index == 2
+      floatingActionButton: _index == 3
           ? null
           : FloatingActionButton.extended(
               onPressed: _openCreateJob,

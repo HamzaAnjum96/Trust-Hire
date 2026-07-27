@@ -12,6 +12,29 @@ that heading to the version and date, and open a fresh `[Unreleased]`.
 
 ## [Unreleased]
 
+### Sprint 11 — Saved jobs and my postings
+
+187 tests pass, the analyzer is clean.
+
+#### Added
+
+- **Saving a job**, from a bookmark beside the heading on the details sheet.
+  It sits there rather than at the bottom because deciding to keep a job
+  happens while reading it, not after scrolling past the map.
+- **A "Saved" destination** with two tabs: work you kept, and work you posted.
+  Both answer the same gap — the app had nowhere to come back to. A worker who
+  found a job had to find it again; a poster had no home for what they offered.
+- `JobRow`, extracted so the browse list and both new lists cannot drift apart.
+- 13 tests covering toggling, ordering, persistence, resolution against live
+  jobs, pruning, and both tabs.
+
+#### Notes
+
+**Ids are stored, not copies of the job.** A saved job that has since been
+edited shows the edit, and one that has been deleted disappears rather than
+lingering as a stale duplicate. When something saved has gone, the list says
+so once instead of quietly shrinking.
+
 ### Sprint 10 — Contacting the poster
 
 174 tests pass, the analyzer is clean.

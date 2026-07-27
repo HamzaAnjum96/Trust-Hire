@@ -13,6 +13,7 @@ import '../../services/media_store.dart';
 import '../../widgets/voice_note_player.dart';
 import '../create_job/create_job_screen.dart';
 import 'contact_panel.dart';
+import 'saved_jobs_controller.dart';
 import 'photo_gallery.dart';
 import '../../l10n/app_localizations.dart';
 
@@ -126,6 +127,8 @@ class _Body extends StatelessWidget {
               const SizedBox(width: BrandSizing.spaceSm),
               const _LocalBadge(),
             ],
+            const SizedBox(width: BrandSizing.spaceSm),
+            _SaveButton(jobId: job.id),
           ],
         ),
         const SizedBox(height: BrandSizing.spaceXs),
@@ -207,6 +210,40 @@ class _Body extends StatelessWidget {
           _JobActions(job: job),
         ],
       ],
+    );
+  }
+}
+
+/// Bookmarks a job so it can be found again.
+///
+/// Sits beside the heading rather than at the bottom: deciding to keep a job
+/// happens while reading it, not after scrolling past the map.
+class _SaveButton extends StatelessWidget {
+  const _SaveButton({required this.jobId});
+
+  final String jobId;
+
+  @override
+  Widget build(BuildContext context) {
+    final strings = AppStrings.of(context);
+    final saved = context.watch<SavedJobsController>();
+    final isSaved = saved.isSaved(jobId);
+
+    return IconButton(
+      onPressed: () async {
+        final messenger = ScaffoldMessenger.of(context);
+        final nowSaved = await saved.toggle(jobId);
+
+        messenger.showSnackBar(
+          SnackBar(
+            content: Text(nowSaved ? strings.jobSaved : strings.jobUnsaved),
+          ),
+        );
+      },
+      icon: Icon(isSaved ? Icons.bookmark : Icons.bookmark_border),
+      // Colour is never the only cue: the icon fills as well.
+      color: isSaved ? Theme.of(context).colorScheme.primary : null,
+      tooltip: isSaved ? strings.removeFromSaved : strings.saveThisJob,
     );
   }
 }
