@@ -16,6 +16,9 @@ concurrency:
   group: pages
   cancel-in-progress: true
 
+env:
+  FLUTTER_VERSION: '3.44.8'
+
 jobs:
   build:
     name: Build site
@@ -24,55 +27,59 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v4
 
-      - name: Detect whether the frontend is buildable
+      - name: Detect whether the Flutter app is buildable
         id: detect
         run: |
-          if [ -f code/frontend/package.json ]; then
-            echo "frontend=true" >> "$GITHUB_OUTPUT"
+          if [ -f code/frontend/pubspec.yaml ]; then
+            echo "app=true" >> "$GITHUB_OUTPUT"
           else
-            echo "frontend=false" >> "$GITHUB_OUTPUT"
-            echo "No code/frontend/package.json — publishing the placeholder site from deployment/pages."
+            echo "app=false" >> "$GITHUB_OUTPUT"
+            echo "No code/frontend/pubspec.yaml — publishing the placeholder site."
           fi
 
-      - name: Set up Node
-        if: steps.detect.outputs.frontend == 'true'
-        uses: actions/setup-node@v4
+      - name: Set up Flutter
+        if: steps.detect.outputs.app == 'true'
+        uses: subosito/flutter-action@v2
         with:
-          node-version: '22'
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: stable
+          cache: true
 
       - name: Install dependencies
-        if: steps.detect.outputs.frontend == 'true'
+        if: steps.detect.outputs.app == 'true'
         working-directory: code/frontend
-        run: |
-          if [ -f package-lock.json ]; then
-            npm ci
-          else
-            npm install
-          fi
+        run: flutter pub get
 
-      - name: Build frontend
-        if: steps.detect.outputs.frontend == 'true'
+      - name: Analyze
+        if: steps.detect.outputs.app == 'true'
         working-directory: code/frontend
-        run: npm run build
+        run: flutter analyze
 
-      - name: Stage frontend build output
-        if: steps.detect.outputs.frontend == 'true'
+      - name: Test
+        if: steps.detect.outputs.app == 'true'
+        working-directory: code/frontend
+        run: flutter test
+
+      - name: Build web
+        if: steps.detect.outputs.app == 'true'
+        working-directory: code/frontend
+        # --no-web-resources-cdn bundles CanvasKit locally instead of pulling it
+        # from gstatic, so the app loads without third-party network access —
+        # the POC is meant to work offline.
+        # base-href matches the repository name, since project Pages sites are
+        # served from /<repo>/ rather than the domain root.
         run: |
-          # Frameworks differ on output directory; take the first that exists.
-          for candidate in dist build out public; do
-            if [ -d "code/frontend/$candidate" ]; then
-              echo "Publishing code/frontend/$candidate"
-              cp -R "code/frontend/$candidate" _site
-              break
-            fi
-          done
-          if [ ! -d _site ]; then
-            echo "::error::Frontend built but no output directory found (looked for dist, build, out, public)."
-            exit 1
-          fi
+          flutter build web \
+            --release \
+            --no-web-resources-cdn \
+            --base-href "/${{ github.event.repository.name }}/"
+
+      - name: Stage the built app
+        if: steps.detect.outputs.app == 'true'
+        run: cp -R code/frontend/build/web _site
 
       - name: Stage placeholder site
-        if: steps.detect.outputs.frontend != 'true'
+        if: steps.detect.outputs.app != 'true'
         run: cp -R deployment/pages _site
 
       - name: Disable Jekyll processing

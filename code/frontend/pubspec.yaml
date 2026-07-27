@@ -1,0 +1,59 @@
+name: trust_hire
+description: "Trust Hire — nearby work, made simple. Location-first job platform (POC)."
+publish_to: 'none'
+
+version: 0.1.0+1
+
+environment:
+  sdk: ^3.12.2
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.8
+
+  # State management — kept deliberately simple for the POC.
+  provider: ^6.1.2
+
+  # Local persistence. The sprint plan treats the choice as unimportant;
+  # shared_preferences stores the JSON document store on every platform
+  # (including web) with no native setup, and sits behind a repository
+  # interface so it can be swapped for Isar or SQLite later.
+  shared_preferences: ^2.3.3
+
+  # Formatting for dates, times and distances.
+  intl: ^0.19.0
+
+  # Identifiers for locally created jobs.
+  uuid: ^4.5.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/seed/
+    - assets/images/
+    - assets/images/jobs/
+    - assets/audio/
+
+  # Inter, per section 10 of the brand guidelines. Bundled rather than fetched
+  # at runtime so the app keeps its typography with no internet connection —
+  # the POC must work fully offline.
+  fonts:
+    - family: Inter
+      fonts:
+        - asset: assets/fonts/Inter-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/Inter-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/Inter-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/Inter-Bold.ttf
+          weight: 700

@@ -1,0 +1,202 @@
+import 'dart:math' as math;
+
+/// A geographic point. Deliberately approximate — the brand guidelines call
+/// for showing a general area rather than an exact address.
+class JobLocation {
+  const JobLocation({required this.latitude, required this.longitude});
+
+  final double latitude;
+  final double longitude;
+
+  factory JobLocation.fromJson(Map<String, dynamic> json) => JobLocation(
+        latitude: (json['latitude'] as num).toDouble(),
+        longitude: (json['longitude'] as num).toDouble(),
+      );
+
+  Map<String, dynamic> toJson() => <String, dynamic>{
+        'latitude': latitude,
+        'longitude': longitude,
+      };
+
+  /// Great-circle distance in metres, via the haversine formula.
+  double distanceTo(JobLocation other) {
+    const earthRadiusMetres = 6371000.0;
+    final dLat = _toRadians(other.latitude - latitude);
+    final dLon = _toRadians(other.longitude - longitude);
+    final a = math.sin(dLat / 2) * math.sin(dLat / 2) +
+        math.cos(_toRadians(latitude)) *
+            math.cos(_toRadians(other.latitude)) *
+            math.sin(dLon / 2) *
+            math.sin(dLon / 2);
+    return earthRadiusMetres * 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a));
+  }
+
+  static double _toRadians(double degrees) => degrees * math.pi / 180;
+
+  @override
+  bool operator ==(Object other) =>
+      other is JobLocation &&
+      other.latitude == latitude &&
+      other.longitude == longitude;
+
+  @override
+  int get hashCode => Object.hash(latitude, longitude);
+}
+
+/// A job posting.
+///
+/// The core principle from the sprint plan is that **missing information is
+/// acceptable**. Only [id], [location] and [createdAt] are required; a job is
+/// postable with a voice note alone, a photo alone, or a title alone.
+class Job {
+  const Job({
+    required this.id,
+    required this.location,
+    required this.createdAt,
+    this.title,
+    this.radiusMetres = 1000,
+    this.scheduledTime,
+    this.voiceNotePath,
+    this.voiceNoteDuration,
+    this.photoPaths = const <String>[],
+    this.shortDescription,
+    this.postedBy,
+    this.isLocal = false,
+  });
+
+  final String id;
+  final JobLocation location;
+  final DateTime createdAt;
+
+  /// Optional — a job can be described by voice or photo instead.
+  final String? title;
+
+  /// The approximate work area, shown as a translucent circle on the map.
+  final double radiusMetres;
+
+  /// When the work needs to happen. Null means "no particular time".
+  final DateTime? scheduledTime;
+
+  /// Asset path (seeded jobs) or on-device file path (locally created ones).
+  final String? voiceNotePath;
+  final Duration? voiceNoteDuration;
+
+  final List<String> photoPaths;
+  final String? shortDescription;
+
+  /// Id of the user who posted it, if known.
+  final String? postedBy;
+
+  /// True for jobs created on this device. Drives the copper marker treatment
+  /// from section 15 of the brand guidelines.
+  final bool isLocal;
+
+  /// Whether the job carries anything a person can actually understand it by.
+  /// Used to keep posting flexible without allowing entirely empty jobs.
+  bool get hasContent =>
+      (title != null && title!.trim().isNotEmpty) ||
+      (shortDescription != null && shortDescription!.trim().isNotEmpty) ||
+      voiceNotePath != null ||
+      photoPaths.isNotEmpty;
+
+  bool get hasVoiceNote => voiceNotePath != null;
+  bool get hasPhotos => photoPaths.isNotEmpty;
+
+  /// A title to show when the poster did not type one. Falls back through the
+  /// description, then the media the job does have — never an empty heading.
+  String get displayTitle {
+    final t = title?.trim();
+    if (t != null && t.isNotEmpty) return t;
+
+    final d = shortDescription?.trim();
+    if (d != null && d.isNotEmpty) {
+      return d.length <= 40 ? d : '${d.substring(0, 39)}…';
+    }
+
+    if (hasVoiceNote) return 'Voice note job';
+    if (hasPhotos) return 'Photo job';
+    return 'Untitled job';
+  }
+
+  /// True when the job is scheduled for today.
+  bool isToday(DateTime now) {
+    final t = scheduledTime;
+    if (t == null) return false;
+    return t.year == now.year && t.month == now.month && t.day == now.day;
+  }
+
+  Job copyWith({
+    String? title,
+    bool clearTitle = false,
+    JobLocation? location,
+    double? radiusMetres,
+    DateTime? scheduledTime,
+    bool clearScheduledTime = false,
+    String? voiceNotePath,
+    Duration? voiceNoteDuration,
+    bool clearVoiceNote = false,
+    List<String>? photoPaths,
+    String? shortDescription,
+    bool clearShortDescription = false,
+  }) {
+    return Job(
+      id: id,
+      location: location ?? this.location,
+      createdAt: createdAt,
+      title: clearTitle ? null : (title ?? this.title),
+      radiusMetres: radiusMetres ?? this.radiusMetres,
+      scheduledTime:
+          clearScheduledTime ? null : (scheduledTime ?? this.scheduledTime),
+      voiceNotePath:
+          clearVoiceNote ? null : (voiceNotePath ?? this.voiceNotePath),
+      voiceNoteDuration: clearVoiceNote
+          ? null
+          : (voiceNoteDuration ?? this.voiceNoteDuration),
+      photoPaths: photoPaths ?? this.photoPaths,
+      shortDescription: clearShortDescription
+          ? null
+          : (shortDescription ?? this.shortDescription),
+      postedBy: postedBy,
+      isLocal: isLocal,
+    );
+  }
+
+  factory Job.fromJson(Map<String, dynamic> json) {
+    final durationMs = json['voiceNoteDurationMs'] as int?;
+    return Job(
+      id: json['id'] as String,
+      location:
+          JobLocation.fromJson(json['location'] as Map<String, dynamic>),
+      createdAt: DateTime.parse(json['createdAt'] as String),
+      title: json['title'] as String?,
+      radiusMetres: (json['radiusMetres'] as num?)?.toDouble() ?? 1000,
+      scheduledTime: json['scheduledTime'] == null
+          ? null
+          : DateTime.parse(json['scheduledTime'] as String),
+      voiceNotePath: json['voiceNotePath'] as String?,
+      voiceNoteDuration:
+          durationMs == null ? null : Duration(milliseconds: durationMs),
+      photoPaths:
+          (json['photoPaths'] as List<dynamic>?)?.cast<String>() ??
+              const <String>[],
+      shortDescription: json['shortDescription'] as String?,
+      postedBy: json['postedBy'] as String?,
+      isLocal: json['isLocal'] as bool? ?? false,
+    );
+  }
+
+  Map<String, dynamic> toJson() => <String, dynamic>{
+        'id': id,
+        'location': location.toJson(),
+        'createdAt': createdAt.toIso8601String(),
+        'title': title,
+        'radiusMetres': radiusMetres,
+        'scheduledTime': scheduledTime?.toIso8601String(),
+        'voiceNotePath': voiceNotePath,
+        'voiceNoteDurationMs': voiceNoteDuration?.inMilliseconds,
+        'photoPaths': photoPaths,
+        'shortDescription': shortDescription,
+        'postedBy': postedBy,
+        'isLocal': isLocal,
+      };
+}

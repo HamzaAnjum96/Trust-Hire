@@ -1,0 +1,11 @@
+[
+  { "id": "user-001", "name": "Ayesha Khan", "area": "Gulberg" },
+  { "id": "user-002", "name": "Bilal Ahmed", "area": "Garden Town" },
+  { "id": "user-003", "name": "Fatima Noor", "area": "Model Town" },
+  { "id": "user-004", "name": "Usman Tariq", "area": "Johar Town" },
+  { "id": "user-005", "name": "Sana Iqbal", "area": "Township" },
+  { "id": "user-006", "name": "Hamza Sheikh", "area": "Shadman" },
+  { "id": "user-007", "name": "Rabia Aslam", "area": "Faisal Town" },
+  { "id": "user-008", "name": "Imran Yousaf", "area": "Cantt" },
+  { "id": "user-009", "name": "Zainab Malik", "area": "Iqbal Town" }
+]

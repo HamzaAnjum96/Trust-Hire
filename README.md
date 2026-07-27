@@ -85,28 +85,84 @@ it is for.
 ## Code
 
 `code/` holds the application itself, split into two independently runnable
-halves. Neither has a stack chosen yet — record the decision in
-[`CHANGELOG.md`](CHANGELOG.md) when it is made, and document setup and run
-steps here.
+halves.
 
 | Folder | What belongs in it |
 | --- | --- |
-| `code/backend/` | API layer, business logic, data access, migrations, backend tests. Keep business logic out of route handlers — handlers parse, delegate, and serialise, while services hold the decisions. Migrations are ordered, reversible, and never edited once merged. |
-| `code/frontend/` | Web client, components, styling, frontend tests. All backend calls go through one API module, not `fetch` scattered through components. Design tokens implement `documents/brand-guidelines/` rather than restating it. |
+| `code/frontend/` | The Flutter app — the whole POC lives here. Design tokens implement `documents/brand-guidelines/` rather than restating it. |
+| `code/backend/` | API layer, business logic, data access, migrations, backend tests. **Empty and out of scope for the POC**, which runs entirely on-device with no backend. Reserved for the post-POC cloud work. |
+
+### The app (`code/frontend/`)
+
+Flutter, targeting Android and iOS, with web enabled so the POC can be
+demonstrated in a browser and deployed to GitHub Pages.
+
+```
+code/frontend/
+├── lib/
+│   ├── app/          ← app root, shell, controllers
+│   ├── core/         ← brand tokens, theme, formatters
+│   ├── features/
+│   │   ├── map/          ← the map — the primary surface
+│   │   ├── jobs/         ← job list and details
+│   │   ├── create_job/   ← posting and editing
+│   │   └── settings/     ← theme, local-data controls
+│   ├── models/       ← Job, AppUser
+│   ├── services/     ← local storage, seed loading, repositories
+│   └── widgets/      ← shared UI
+├── assets/
+│   ├── seed/         ← jobs.json, users.json — copied to local storage on first run
+│   ├── images/       ← placeholder job photos
+│   ├── audio/        ← placeholder voice notes
+│   └── fonts/        ← Inter, bundled so typography survives offline
+├── test/
+└── tool/             ← dev scripts (placeholder asset generation)
+```
+
+**Running it**
+
+```bash
+cd code/frontend
+flutter pub get
+flutter run                    # device or emulator
+flutter run -d chrome          # browser
+```
+
+**Checks**
+
+```bash
+flutter analyze
+flutter test
+```
+
+**Building for the web** — CanvasKit must be bundled rather than fetched from a
+CDN, or the app will not load without third-party network access:
+
+```bash
+flutter build web --release --no-web-resources-cdn --base-href /Trust-Hire/
+```
+
+**Placeholder assets.** The bundled job photos and voice notes are generated,
+not real: `python3 tool/generate_placeholder_assets.py` rebuilds them. Photos
+are brand-palette graphics rather than stock photography, which section 16 of
+the brand guidelines rules out; voice notes are amplitude-modulated tones, not
+speech, and exist so playback and the waveform can be demonstrated.
 
 ### Code conventions
 
-- **Each half owns its own dependency manifest, configuration, and test suite.**
-  They are not expected to share a build or a lockfile.
-- **The contract between them is the API.** The frontend consumes it; it does
-  not reach into backend internals.
+- **Reference the brand tokens, never hard-coded values.** `lib/core/tokens.dart`
+  is the Dart equivalent of section 31 of the brand guidelines and is the only
+  place colour, radius, type and motion values are written down.
+- **Missing information is acceptable.** A job is postable with a voice note
+  alone, a photo alone, or a title alone — do not add required fields.
+- **No network calls in the POC.** Everything runs against local storage;
+  seed data is copied in on first run and edited locally from then on.
 - **No secrets in the repository.** Commit a `.env.example` listing required
-  variables, and supply real values at runtime. Anything shipped to the browser
-  is public.
-- **Validate every input at the boundary.** This product handles candidate and
-  employer data — treat all of it as sensitive, and never log it.
-- **Accessibility is a requirement, not a polish step** — semantic markup,
-  keyboard reachability, and the contrast ratios in the brand guidelines.
+  variables when a backend arrives. Anything shipped to a client is public.
+- **Treat candidate and employer data as sensitive** — never log it.
+- **Accessibility is a requirement, not a polish step** — 44px minimum touch
+  targets, 16px body text, and the contrast ratios in the brand guidelines.
+  Colour is never the only indicator of state.
 
 Requirements driving the code live in `documents/product/`; the stories
 implementing them live in `documents/agile/backlog/`.
@@ -128,16 +184,15 @@ runs workflows from `.github/workflows/`, so it cannot sit inside `deployment/`.
 ### GitHub Pages
 
 Every push to `main` deploys the site (and it can be run manually from the
-Actions tab). The workflow adapts to the state of the project:
+Actions tab). The workflow sets up Flutter, runs `flutter analyze` and
+`flutter test` as gates, then builds the web release and publishes it — so a
+failing analyzer or test blocks the deploy rather than shipping past it. If
+`code/frontend/pubspec.yaml` is ever absent it falls back to publishing
+`deployment/pages/`.
 
-- **No `code/frontend/package.json`** → publishes `deployment/pages/` as-is.
-- **Frontend present** → runs `npm ci` (or `npm install` without a lockfile)
-  and `npm run build` in `code/frontend/`, then publishes the first build
-  directory it finds among `dist`, `build`, `out`, `public`.
-
-So the placeholder is served today and the real frontend takes over
-automatically once one exists — no workflow edit needed, provided the frontend
-has a `build` script.
+The build passes `--no-web-resources-cdn` so CanvasKit is served from the
+deployment itself rather than gstatic, and `--base-href /Trust-Hire/` because
+project Pages sites are served from `/<repo>/`, not the domain root.
 
 **One-time setup:** in **Settings → Pages**, set **Source** to **GitHub
 Actions**. Until that is done the workflow builds but the deploy step fails.
