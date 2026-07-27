@@ -5,9 +5,12 @@ import '../../app/job_controller.dart';
 import '../../core/formatters.dart';
 import '../../core/tokens.dart';
 import '../../models/job.dart';
+import '../map/location_controller.dart';
 import '../../services/media_store.dart';
 import '../../widgets/state_views.dart';
+import 'filter_bar.dart';
 import 'job_details_sheet.dart';
+import 'job_filter_controller.dart';
 
 /// A plain list of every job in local storage.
 ///
@@ -19,9 +22,36 @@ class JobsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = context.watch<JobController>();
+    final filters = context.watch<JobFilterController>();
+    final location = context.watch<LocationController>();
+
+    final visible = filters.apply(
+      controller.jobs,
+      from: location.position,
+    );
 
     return Scaffold(
-      appBar: AppBar(title: const Text('All jobs')),
+      appBar: AppBar(
+        title: const Text('Find work'),
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(112),
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(
+                  BrandSizing.spaceMd,
+                  0,
+                  BrandSizing.spaceMd,
+                  BrandSizing.spaceSm,
+                ),
+                child: JobSearchField(controller: filters),
+              ),
+              QuickFilterBar(controller: filters),
+              const SizedBox(height: BrandSizing.spaceSm),
+            ],
+          ),
+        ),
+      ),
       body: switch (controller.state) {
         LoadState.idle ||
         LoadState.loading => const LoadingView(message: 'Loading jobs…'),
@@ -29,16 +59,52 @@ class JobsScreen extends StatelessWidget {
           message: controller.errorMessage ?? 'Could not load jobs. Try again.',
           onRetry: controller.load,
         ),
-        LoadState.ready =>
-          controller.jobs.isEmpty
-              ? const EmptyView(
-                  icon: Icons.work_outline,
-                  title: 'No jobs yet',
-                  message: 'Post the first job to see it here.',
-                )
-              : _JobList(jobs: controller.jobs),
+        LoadState.ready => _Results(
+          all: controller.jobs,
+          visible: visible,
+          filters: filters,
+        ),
       },
     );
+  }
+}
+
+/// Results, or an empty state that distinguishes "nothing posted" from
+/// "nothing matches" — they need different next steps.
+class _Results extends StatelessWidget {
+  const _Results({
+    required this.all,
+    required this.visible,
+    required this.filters,
+  });
+
+  final List<Job> all;
+  final List<Job> visible;
+  final JobFilterController filters;
+
+  @override
+  Widget build(BuildContext context) {
+    if (all.isEmpty) {
+      return const EmptyView(
+        icon: Icons.work_outline,
+        title: 'No jobs yet',
+        message: 'Post the first job to see it here.',
+      );
+    }
+
+    if (visible.isEmpty) {
+      return EmptyView(
+        icon: Icons.search_off,
+        title: 'No jobs match',
+        message: 'Try a wider area or a different time.',
+        action: OutlinedButton(
+          onPressed: filters.clear,
+          child: const Text('Clear Filters'),
+        ),
+      );
+    }
+
+    return _JobList(jobs: visible);
   }
 }
 

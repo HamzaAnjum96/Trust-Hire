@@ -8,7 +8,9 @@ import '../../core/formatters.dart';
 import '../../core/tokens.dart';
 import '../../models/job.dart';
 import '../../services/media_store.dart';
+import '../jobs/filter_bar.dart';
 import '../jobs/job_details_sheet.dart';
+import '../jobs/job_filter_controller.dart';
 import '../../widgets/state_views.dart';
 import 'job_map.dart';
 import 'location_controller.dart';
@@ -79,6 +81,7 @@ class _MapScreenState extends State<MapScreen> {
   Widget build(BuildContext context) {
     final jobs = context.watch<JobController>();
     final location = context.watch<LocationController>();
+    final filters = context.watch<JobFilterController>();
 
     return Scaffold(
       body: switch (jobs.state) {
@@ -90,7 +93,9 @@ class _MapScreenState extends State<MapScreen> {
             onRetry: jobs.load,
           ),
         LoadState.ready => _MapBody(
-            jobs: jobs.jobs,
+            jobs: filters.apply(jobs.jobs, from: location.position),
+            totalJobCount: jobs.jobs.length,
+            filters: filters,
             selectedJobId: _selectedJobId,
             location: location,
             mapController: _mapController,
@@ -109,6 +114,8 @@ class _MapScreenState extends State<MapScreen> {
 class _MapBody extends StatelessWidget {
   const _MapBody({
     required this.jobs,
+    required this.totalJobCount,
+    required this.filters,
     required this.selectedJobId,
     required this.location,
     required this.mapController,
@@ -121,6 +128,8 @@ class _MapBody extends StatelessWidget {
   });
 
   final List<Job> jobs;
+  final int totalJobCount;
+  final JobFilterController filters;
   final String? selectedJobId;
   final LocationController location;
   final MapController mapController;
@@ -170,7 +179,19 @@ class _MapBody extends StatelessWidget {
           left: BrandSizing.spaceMd,
           right: BrandSizing.spaceMd,
           top: padding.top + BrandSizing.spaceSm,
-          child: _MapHeader(jobCount: jobs.length),
+          child: _MapHeader(
+            jobCount: jobs.length,
+            totalJobCount: totalJobCount,
+          ),
+        ),
+
+        // Quick filters sit under the header, so narrowing the map never
+        // means leaving it.
+        Positioned(
+          left: 0,
+          right: 0,
+          top: padding.top + 64,
+          child: QuickFilterBar(controller: filters),
         ),
 
         // Notices stack downward from below the header rather than each
@@ -178,7 +199,7 @@ class _MapBody extends StatelessWidget {
         Positioned(
           left: BrandSizing.spaceMd,
           right: BrandSizing.spaceMd,
-          top: padding.top + 72,
+          top: padding.top + 116,
           child: Column(
             children: [
               if (location.explanation != null)
@@ -211,6 +232,19 @@ class _MapBody extends StatelessWidget {
             onPressed: onMyLocationPressed,
           ),
         ),
+
+        if (jobs.isEmpty && totalJobCount > 0)
+          Positioned(
+            left: BrandSizing.spaceMd,
+            right: BrandSizing.spaceMd,
+            top: padding.top + 116,
+            child: _MapNotice(
+              icon: Icons.search_off,
+              message: 'No jobs match here. Try a wider area or a different '
+                  'time.',
+              onDismiss: filters.clear,
+            ),
+          ),
 
         // Section 28 — the preview slides up rather than appearing abruptly.
         AnimatedSwitcher(
@@ -250,9 +284,10 @@ class _MapBody extends StatelessWidget {
 }
 
 class _MapHeader extends StatelessWidget {
-  const _MapHeader({required this.jobCount});
+  const _MapHeader({required this.jobCount, required this.totalJobCount});
 
   final int jobCount;
+  final int totalJobCount;
 
   @override
   Widget build(BuildContext context) {
@@ -276,7 +311,11 @@ class _MapHeader extends StatelessWidget {
             child: Text('Nearby work', style: theme.textTheme.titleLarge),
           ),
           Text(
-            '$jobCount job${jobCount == 1 ? '' : 's'}',
+            // Say what is being hidden, so a short list never looks like a
+            // bug.
+            jobCount == totalJobCount
+                ? '$jobCount job${jobCount == 1 ? '' : 's'}'
+                : '$jobCount of $totalJobCount',
             style: theme.textTheme.labelSmall,
           ),
         ],

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../core/theme.dart';
+import '../features/jobs/job_filter_controller.dart';
 import '../features/map/location_controller.dart';
 import '../services/job_repository.dart';
 import '../services/local_store.dart';
@@ -31,6 +32,7 @@ class TrustHireApp extends StatelessWidget {
           create: (_) => JobController(JobRepository(store, MediaStore(store)))
             ..load(),
         ),
+        ChangeNotifierProvider(create: (_) => JobFilterController()),
         ChangeNotifierProvider(
           // Location is requested on first launch so the map can open on the
           // user rather than the fallback. A refusal is handled, not retried.

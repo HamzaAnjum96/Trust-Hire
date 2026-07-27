@@ -64,7 +64,7 @@ void main() {
 
     await tester.tap(find.text('Jobs'));
     await settle(tester);
-    expect(find.text('All jobs'), findsOneWidget);
+    expect(find.text('Find work'), findsOneWidget);
 
     await tester.tap(find.text('Settings'));
     await settle(tester);

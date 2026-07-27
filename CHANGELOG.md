@@ -12,6 +12,39 @@ that heading to the version and date, and open a fresh `[Unreleased]`.
 
 ## [Unreleased]
 
+### Sprint 5 — Discovery
+
+Definition of done: jobs easily discoverable. Met — 97 tests pass, 20 of them
+covering the filter's behaviour directly.
+
+#### Added
+
+- Search across titles and messages. Every word must match, so extra words
+  narrow rather than widen, and a voice-only job stays findable through its
+  fallback heading.
+- Quick filters as one-tap chips — "Today's Jobs" and "Near Me" from the
+  sprint plan, plus voice note and photos — with a sheet holding the fuller
+  set (tomorrow, this week; 2 km, 5 km, 10 km). Tapping an active chip clears
+  it, and selection shows a tick as well as a fill so colour is not the only
+  signal.
+- One filter shared by the map and the list, so switching tabs does not
+  silently change what you are looking at. The map header reads "4 of 12" when
+  filtering is on, so a short list never looks like a bug.
+- Empty states that distinguish "nothing posted yet" from "nothing matches" —
+  they need different next steps — with a way back out of the filter.
+
+#### Notes on behaviour
+
+Two decisions worth recording, both about not punishing the user for how this
+product actually works:
+
+- **A job with no scheduled time is never hidden by a time filter.** "Any
+  time" is a normal state here, not missing data, and such a job could well be
+  wanted today. Filtering it out would lose real work.
+- **The distance filter stands down when there is no position.** Emptying the
+  list because location was refused would punish a permission choice the
+  product elsewhere treats as fine.
+
 ### Sprint 4 — Editing
 
 Definition of done: CRUD completed. Met — 77 tests pass, covering update and
