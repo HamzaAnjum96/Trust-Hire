@@ -11,4 +11,9 @@ the same commit.
 **Log notable changes in [`../CHANGELOG.md`](../CHANGELOG.md)** under
 `[Unreleased]`.
 
+**Raise the app version on every push that changes the app** — `version:` in
+`code/frontend/pubspec.yaml` *and* the constant in
+`code/frontend/lib/core/app_version.dart`. They must agree; a test fails the
+build if they do not.
+
 Full instructions and conventions are in [`../AGENTS.md`](../AGENTS.md).

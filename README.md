@@ -144,6 +144,15 @@ flutter run                    # device or emulator
 flutter run -d chrome          # browser
 ```
 
+**Versioning.** The app version lives in `pubspec.yaml` (`version:`) and is
+mirrored in `lib/core/app_version.dart`, which is what the app displays — at
+the foot of the settings screen and at the bottom of the post/edit job form.
+**Raise both on every push that changes the app**: patch for a fix, minor for
+a completed sprint, and the build number after the `+` every time. The
+deployed web app is served from a URL with no commit in it, so without a
+visible version a stale cache and a failed deploy look identical.
+`test/version_test.dart` fails the build if the two ever disagree.
+
 **Checks**
 
 ```bash

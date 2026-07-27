@@ -12,6 +12,31 @@ that heading to the version and date, and open a fresh `[Unreleased]`.
 
 ## [Unreleased]
 
+### 0.2.0 — Versioning, and a map that stops flickering
+
+#### Added
+
+- An app version, in `pubspec.yaml` and mirrored in `lib/core/app_version.dart`,
+  shown at the foot of settings and at the bottom of the post/edit job form.
+  The deployed web app is served from a URL with no commit in it, so without a
+  visible version a stale cache and a failed deploy look identical.
+  `test/version_test.dart` fails the build if the two ever disagree, since a
+  drifted mirror is worse than no version — it names the wrong build with
+  confidence. README, `AGENTS.md`, `CLAUDE.md` and the Copilot instructions all
+  now require raising it on every push.
+
+#### Fixed
+
+- Markers regrouped on every camera frame, so pins visibly merged and split
+  apart mid-drag — one job appearing to arrive and leave several times in a
+  single pan. Clustering works in screen space, which is why panning changed
+  it at all. The grouping is now held for the duration of a movement and
+  recomputed once the camera settles. Markers are positioned by latitude and
+  longitude, so a held grouping still pans and zooms; only the decision about
+  what is grouped waits. A changed job list — a filter, a trade added — never
+  waits, or a removed job would linger on the map.
+
+
 ### P1-1 — Roles, tags and visibility
 
 The first Phase 1 sprint. It replaces the POC's optional job type with the

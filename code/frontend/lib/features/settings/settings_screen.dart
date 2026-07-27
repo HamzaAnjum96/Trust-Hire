@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../../app/job_controller.dart';
 import '../../app/profile_controller.dart';
 import '../../app/settings_controller.dart';
+import '../../core/app_version.dart';
 import '../../core/tokens.dart';
 import '../../models/worker_profile.dart';
 import '../../widgets/state_views.dart';
@@ -115,6 +116,8 @@ class SettingsScreen extends StatelessWidget {
             // Section 21 — explicit label, never "Confirm".
             label: Text(strings.restoreSeedData),
           ),
+
+          const _VersionLine(),
         ],
       ),
     );
@@ -156,6 +159,27 @@ class SettingsScreen extends StatelessWidget {
 
     await controller.resetToSeed();
     messenger.showSnackBar(SnackBar(content: Text(strings.seedRestored)));
+  }
+}
+
+/// The build, at the foot of settings — where people look for it.
+class _VersionLine extends StatelessWidget {
+  const _VersionLine();
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Padding(
+      padding: const EdgeInsets.only(top: BrandSizing.spaceXl),
+      child: Text(
+        AppVersion.label,
+        style: theme.textTheme.labelSmall?.copyWith(
+          color: theme.colorScheme.onSurfaceVariant,
+        ),
+        textAlign: TextAlign.center,
+      ),
+    );
   }
 }
 

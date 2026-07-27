@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../../app/job_controller.dart';
 import '../../core/formatters.dart';
+import '../../core/app_version.dart';
 import '../../core/tokens.dart';
 import '../../models/job.dart';
 import '../../services/capture_service.dart';
@@ -253,6 +254,18 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
                   tone: NoticeTone.warning,
                 ),
               ],
+
+              // Which build this is. Deliberately quiet and at the very
+              // bottom: it is for whoever is checking that a change actually
+              // deployed, and means nothing to someone posting a job.
+              const SizedBox(height: BrandSizing.spaceXl),
+              Text(
+                AppVersion.label,
+                style: theme.textTheme.labelSmall?.copyWith(
+                  color: theme.colorScheme.onSurfaceVariant,
+                ),
+                textAlign: TextAlign.center,
+              ),
             ],
           ),
           bottomNavigationBar: _SaveBar(

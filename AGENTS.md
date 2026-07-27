@@ -37,6 +37,28 @@ the matching group (`Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`,
 `Security`). The changelog lives in its own file — do not fold it into the
 README.
 
+## Bump the app version on every push
+
+The frontend version lives in two places that must agree:
+
+- `code/frontend/pubspec.yaml` — the `version:` line, the source of truth.
+- `code/frontend/lib/core/app_version.dart` — the constant the app displays.
+
+Raise both before pushing any change to the app. `code/frontend/test/version_test.dart`
+fails if they disagree, so a mismatch stops the build rather than shipping a
+number that names the wrong build.
+
+- Patch (`0.2.1`) — fixes and small changes within a sprint.
+- Minor (`0.3.0`) — a completed sprint.
+- Major (`1.0.0`) — reserved for a first real release.
+
+The build number after the `+` increments on every push and never resets.
+
+This matters because the deployed web app is served from a URL with no commit
+in it: without a visible version, a stale cache and a failed deploy look
+identical. The number is shown at the foot of the settings screen and at the
+bottom of the post/edit job form.
+
 ## Working conventions
 
 - **Put things where the README says.** Documentation under `documents/`, in
@@ -59,4 +81,6 @@ Check each of these:
 1. Is the work in the folder the README says it belongs in?
 2. Does `README.md` still describe the repository accurately?
 3. Is there a `CHANGELOG.md` entry under `[Unreleased]`?
-4. Are there any secrets, credentials, or personal data in the diff?
+4. Has the app version been raised in **both** `pubspec.yaml` and
+   `lib/core/app_version.dart`?
+5. Are there any secrets, credentials, or personal data in the diff?

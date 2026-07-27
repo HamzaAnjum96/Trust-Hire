@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:trust_hire/core/map_theme.dart';
 import 'package:trust_hire/core/theme.dart';
 import 'package:trust_hire/features/map/job_map.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:trust_hire/features/map/job_marker.dart';
 import 'package:trust_hire/models/job.dart';
 
@@ -146,6 +147,94 @@ void main() {
 
     final layer = tester.widget<TileLayer>(find.byType(TileLayer));
     expect(layer.urlTemplate, MapTheme.dark.tileUrl);
+  });
+
+  group('regrouping waits for the map to settle', () {
+    /// Far enough apart to stand alone at street level, close enough to merge
+    /// when the whole city is in view.
+    final spread = <Job>[
+      job('a', 31.5204, 74.3587),
+      job('b', 31.5310, 74.3721),
+      job('c', 31.5102, 74.3450),
+    ];
+
+    Widget movingHarness(MapController controller) => MaterialApp(
+      localizationsDelegates: AppStrings.localizationsDelegates,
+      supportedLocales: AppStrings.supportedLocales,
+      theme: BrandTheme.light,
+      home: Scaffold(
+        body: JobMap(
+          jobs: spread,
+          centre: const JobLocation(latitude: 31.5204, longitude: 74.3587),
+          controller: controller,
+          initialZoom: 15,
+          onJobTapped: (_) {},
+          onMapTapped: () {},
+          tileProvider: OfflineTileProvider(),
+        ),
+      ),
+    );
+
+    testWidgets('the grouping is held while the camera is moving', (
+      tester,
+    ) async {
+      final controller = MapController();
+      addTearDown(controller.dispose);
+
+      await tester.pumpWidget(movingHarness(controller));
+      await tester.pumpAndSettle();
+      expect(find.byType(JobMarker), findsNWidgets(3));
+
+      // Zoom out far enough that all three belong in one cluster.
+      controller.move(const LatLng(31.5204, 74.3587), 9);
+      await tester.pump();
+
+      // Still three: recomputing here is what makes pins flicker mid-drag.
+      expect(find.byType(JobMarker), findsNWidgets(3));
+      expect(find.byType(ClusterMarker), findsNothing);
+
+      // Once the camera settles, the grouping catches up.
+      await tester.pump(const Duration(milliseconds: 200));
+      await tester.pumpAndSettle();
+      expect(find.byType(ClusterMarker), findsOneWidget);
+    });
+
+    testWidgets('a changed job list does not wait for the camera', (
+      tester,
+    ) async {
+      // Filtering is not camera movement. Holding the old grouping there
+      // would leave a removed job on the map.
+      final controller = MapController();
+      addTearDown(controller.dispose);
+
+      await tester.pumpWidget(movingHarness(controller));
+      await tester.pumpAndSettle();
+
+      controller.move(const LatLng(31.5204, 74.3587), 15.5);
+      await tester.pump();
+
+      await tester.pumpWidget(
+        MaterialApp(
+          localizationsDelegates: AppStrings.localizationsDelegates,
+          supportedLocales: AppStrings.supportedLocales,
+          theme: BrandTheme.light,
+          home: Scaffold(
+            body: JobMap(
+              jobs: [spread.first],
+              centre: const JobLocation(latitude: 31.5204, longitude: 74.3587),
+              controller: controller,
+              initialZoom: 15,
+              onJobTapped: (_) {},
+              onMapTapped: () {},
+              tileProvider: OfflineTileProvider(),
+            ),
+          ),
+        ),
+      );
+      await tester.pump();
+
+      expect(find.byType(JobMarker), findsOneWidget);
+    });
   });
 
   testWidgets('the selected marker grows so colour is not the only cue', (

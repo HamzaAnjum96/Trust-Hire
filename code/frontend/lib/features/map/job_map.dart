@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
@@ -59,6 +61,56 @@ class JobMap extends StatefulWidget {
 class _JobMapState extends State<JobMap> {
   bool _reportedTileFailure = false;
 
+  /// The last grouping, held while the camera is moving.
+  ///
+  /// Clustering works in screen space, so recomputing it every frame makes
+  /// pins visibly merge and split apart as a finger drags — a job appears to
+  /// arrive and leave several times in one pan. The grouping is frozen for
+  /// the duration of a movement and recomputed once it settles. Markers are
+  /// positioned by latitude and longitude, so a held grouping still pans and
+  /// zooms with the map; only the decision about what is grouped waits.
+  List<JobCluster>? _clusters;
+
+  /// True from the first camera change until [_settleDelay] after the last.
+  bool _isMoving = false;
+  Timer? _settleTimer;
+
+  /// Long enough to cover the gap between drag frames, short enough that the
+  /// regroup reads as part of letting go rather than a later change.
+  static const _settleDelay = Duration(milliseconds: 140);
+
+  @override
+  void didUpdateWidget(JobMap oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    // A different set of jobs — a filter, or a trade added — is not camera
+    // movement and must not wait for the map to settle.
+    if (!identical(oldWidget.jobs, widget.jobs)) _clusters = null;
+  }
+
+  @override
+  void dispose() {
+    _settleTimer?.cancel();
+    super.dispose();
+  }
+
+  void _onMapEvent(MapEvent event) {
+    // Only camera movement freezes the grouping. A tap, a marker selection or
+    // a size change is not a reason to hold stale clusters.
+    if (event is! MapEventWithMove) return;
+    if (event.camera.center == event.oldCamera.center &&
+        event.camera.zoom == event.oldCamera.zoom) {
+      return;
+    }
+
+    if (!_isMoving) setState(() => _isMoving = true);
+
+    _settleTimer?.cancel();
+    _settleTimer = Timer(_settleDelay, () {
+      if (mounted) setState(() => _isMoving = false);
+    });
+  }
+
   void _onTileError() {
     if (_reportedTileFailure || !mounted) return;
     _reportedTileFailure = true;
@@ -100,6 +152,7 @@ class _JobMapState extends State<JobMap> {
               maxZoom: 18,
               backgroundColor: mapTheme.backgroundColour,
               onTap: (_, _) => widget.onMapTapped(),
+              onMapEvent: _onMapEvent,
               interactionOptions: const InteractionOptions(
                 // Rotation adds nothing here and makes one-handed panning
                 // fiddly, so it is off.
@@ -164,10 +217,14 @@ class _JobMapState extends State<JobMap> {
               // Clustering needs the camera, which only exists inside the map.
               Builder(
                 builder: (context) {
-                  final clusters = const MarkerClusterer().cluster(
-                    widget.jobs,
-                    camera: MapCamera.of(context),
-                  );
+                  final held = _clusters;
+                  final clusters = (_isMoving && held != null)
+                      ? held
+                      : const MarkerClusterer().cluster(
+                          widget.jobs,
+                          camera: MapCamera.of(context),
+                        );
+                  _clusters = clusters;
 
                   return MarkerLayer(
                     markers: [
