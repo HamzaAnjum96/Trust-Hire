@@ -3,7 +3,9 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
 
+import '../../app/account_controller.dart';
 import '../../app/job_controller.dart';
+import '../account/account_switcher.dart';
 import '../../app/profile_controller.dart';
 import '../../core/formatters.dart';
 import '../../core/layout.dart';
@@ -459,6 +461,7 @@ class _MapBody extends StatelessWidget {
             onMapTapped: onMapTapped,
             onTilesUnavailable: onTilesUnavailable,
             onClusterTapped: onClusterTapped,
+            myAccountId: context.watch<AccountController>().activeId,
           ),
         ),
 
@@ -625,8 +628,31 @@ class _MapHeader extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Icon(Icons.place, size: 20, color: theme.colorScheme.primary),
-          const SizedBox(width: BrandSizing.spaceSm),
+          // The map has no app bar to hang the account switcher off, and the
+          // landing screen is the one place a demonstration must not leave
+          // "who am I?" unanswered. It takes the header's leading slot: the
+          // heading beside it already says these are jobs near a place, so
+          // the pin icon was saying it twice.
+          Tooltip(
+            message: strings.switchAccount,
+            child: InkWell(
+              customBorder: const CircleBorder(),
+              onTap: () => AccountSheet.open(context),
+              // The avatar is drawn at 28px, but section 29 asks for a 48px
+              // target and a circle is harder to hit than a rectangle. The
+              // box is invisible; only the reach changes.
+              child: SizedBox(
+                width: BrandSizing.touchTargetPreferred,
+                height: BrandSizing.touchTargetPreferred,
+                child: Center(
+                  child: AccountAvatar(
+                    account: context.watch<AccountController>().active,
+                    radius: 14,
+                  ),
+                ),
+              ),
+            ),
+          ),
           Expanded(
             child: Text(strings.nearbyWork, style: theme.textTheme.titleLarge),
           ),
@@ -859,10 +885,11 @@ class JobPreviewCard extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
-              if (job.isLocal) ...[
-                const SizedBox(width: BrandSizing.spaceSm),
-                const _LocalBadge(),
-              ],
+              if (job.isPostedBy(context.watch<AccountController>().activeId))
+                ...[
+                  const SizedBox(width: BrandSizing.spaceSm),
+                  const _LocalBadge(),
+                ],
             ],
           ),
           if (job.supportingDescription != null) ...[

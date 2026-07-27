@@ -12,6 +12,57 @@ that heading to the version and date, and open a fresh `[Unreleased]`.
 
 ## [Unreleased]
 
+### 0.10.0 — P1-5, ratings; and demo accounts
+
+#### Added
+
+- **Demo accounts.** The device can now be any of six people — the account it
+  started on, plus five from the seed data, one per city and each with jobs
+  already posted. Switching changes who owns which job, whose bids are yours,
+  whose wallet is charged and which trades filter the feed. A switcher lives
+  in the map header, in the app bar of every other destination, and at the top
+  of the profile screen.
+- Mutual rating, per Section 10. Either side of a finished job can score the
+  other one to five with an optional note. **The two sides are not
+  symmetric**: the worker's average is shown on their profile and next to
+  their offer, the hirer's is collected and never displayed.
+- A worker's record — average stars, jobs finished, and an **aggregated** fare
+  average — under every offer in a hirer's list, and on the worker's own
+  profile.
+
+#### Changed
+
+- Ownership of a job is now `postedBy == the active account`, not "posted on
+  this device". The badge that said "On this device" says "Your posting".
+- Role, trades, saved jobs and the wallet are stored per account. The account
+  the app started on keeps the unsuffixed storage keys, so anything already in
+  somebody's browser is still theirs after this update.
+- `LocalStore.clear()` sweeps by key prefix rather than walking a list, because
+  neither the media blobs nor the per-account keys are enumerable.
+
+#### Notes on the design
+
+**Demo accounts are not accounts.** No password, no verification, no privacy
+between them; everything is in the same browser storage and switching is a
+menu item. They exist because every rule Phase 1 added — who may bid, who may
+edit, who is charged commission, who may rate whom — is a rule about *two*
+people, and a device that could only ever be one of them left half the
+behaviour unreachable. P1-8 replaces the whole idea with real accounts.
+
+The five personas duplicate their names out of `assets/seed/users.json` so the
+switcher can be drawn before the seed has loaded. `test/account_test.dart`
+fails if the copies ever drift, and also fails if a persona has no jobs —
+landing on an empty "my postings" list looks like a failed switch.
+
+**A cancelled job cannot be rated.** Nobody did any work, and a one-star for a
+job that never happened is a weapon rather than a signal; cancelling already
+has its own consequence in the wallet. An unrated worker shows no stars rather
+than a zero, because new is not bad and a zero says the opposite of the truth.
+
+The hirer's ratings are reachable only through `internalHirerRatings`, named
+explicitly so that the admin panel in P1-7 has to ask for them and nothing
+else can leak them by accident.
+
 ### 0.9.0 — P1-4, the wallet
 
 #### Added

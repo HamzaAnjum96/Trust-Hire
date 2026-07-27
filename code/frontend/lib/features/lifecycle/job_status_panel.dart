@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../app/bid_controller.dart';
+import '../../app/account_controller.dart';
 import '../../app/job_controller.dart';
 import '../../app/wallet_controller.dart';
 import '../../core/tokens.dart';
 import '../../l10n/app_localizations.dart';
 import '../../models/job.dart';
 import '../../models/job_status.dart';
+import '../../app/rating_controller.dart';
 import '../../widgets/state_views.dart';
+import '../ratings/rating_sheet.dart';
 import 'job_lifecycle.dart';
 
 /// Where a job stands, and what the person looking at it can do next.
@@ -31,7 +33,8 @@ class JobStatusPanel extends StatelessWidget {
     final strings = AppStrings.of(context);
     final jobs = context.read<JobController>();
     final wallet = context.read<WalletController>();
-    final role = lifecycle.roleFor(job, viewerId: BidController.localWorkerId);
+    final me = context.read<AccountController>().activeId;
+    final role = lifecycle.roleFor(job, viewerId: me);
 
     if (action == JobAction.cancel) {
       final confirmed = await showDialog<bool>(
@@ -86,7 +89,8 @@ class JobStatusPanel extends StatelessWidget {
   Widget build(BuildContext context) {
     final strings = AppStrings.of(context);
     final theme = Theme.of(context);
-    final role = lifecycle.roleFor(job, viewerId: BidController.localWorkerId);
+    final me = context.watch<AccountController>().activeId;
+    final role = lifecycle.roleFor(job, viewerId: me);
     final actions = lifecycle.actionsFor(job, role: role);
 
     final ending = switch (job.status) {
@@ -119,6 +123,13 @@ class JobStatusPanel extends StatelessWidget {
           NoticePanel(message: ending, icon: Icons.info_outline),
         ],
 
+        // Only on a finished job, and only for the two people who were in it.
+        // A cancelled job is deliberately not ratable — nobody did any work,
+        // and a one-star for a job that never happened is a weapon rather
+        // than a signal.
+        if (job.status == JobStatus.completed && role != JobRole.bystander)
+          _RatingPrompt(job: job, role: role),
+
         for (final action in actions) ...[
           const SizedBox(height: BrandSizing.spaceSm),
           if (action == JobAction.cancel)
@@ -140,6 +151,41 @@ class JobStatusPanel extends StatelessWidget {
             ),
         ],
       ],
+    );
+  }
+}
+
+/// The way in to rating the other person, once there is one.
+///
+/// It replaces itself with a note when the rating is already given, rather
+/// than disappearing: a button that vanishes reads as a failed tap, and a
+/// person who cannot remember whether they rated somebody will tap it again.
+class _RatingPrompt extends StatelessWidget {
+  const _RatingPrompt({required this.job, required this.role});
+
+  final Job job;
+  final JobRole role;
+
+  @override
+  Widget build(BuildContext context) {
+    final strings = AppStrings.of(context);
+    final theme = Theme.of(context);
+    final ratings = context.watch<RatingController>();
+
+    if (!ratings.canRate(job, role: role)) {
+      return Padding(
+        padding: const EdgeInsets.only(top: BrandSizing.spaceSm),
+        child: Text(strings.alreadyRated, style: theme.textTheme.labelSmall),
+      );
+    }
+
+    return Padding(
+      padding: const EdgeInsets.only(top: BrandSizing.spaceSm),
+      child: FilledButton.tonalIcon(
+        onPressed: () => RatingSheet.open(context, job: job, role: role),
+        icon: const Icon(Icons.star_border),
+        label: Text(strings.rateThisJob),
+      ),
     );
   }
 }

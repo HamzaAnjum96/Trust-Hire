@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
-
 import '../../core/map_theme.dart';
 import '../../core/tokens.dart';
 import '../../models/job.dart';
@@ -29,6 +28,7 @@ class JobMap extends StatefulWidget {
     this.tileProvider,
     this.onTilesUnavailable,
     this.onClusterTapped,
+    this.myAccountId,
   });
 
   final List<Job> jobs;
@@ -53,6 +53,12 @@ class JobMap extends StatefulWidget {
   /// Called when a group of overlapping jobs is tapped. The map zooms to it so
   /// the individual pins separate.
   final void Function(JobCluster cluster)? onClusterTapped;
+
+  /// The demo account whose pins get the copper treatment. Passed in rather
+  /// than read from a provider: the map is given its jobs, its centre and its
+  /// selection, and taking one of the four things it draws from somewhere
+  /// else would make it untestable on its own.
+  final String? myAccountId;
 
   @override
   State<JobMap> createState() => _JobMapState();
@@ -242,6 +248,9 @@ class _JobMapState extends State<JobMap> {
                             alignment: Alignment.topCenter,
                             child: JobMarker(
                               job: cluster.only,
+                              isMine:
+                                  widget.myAccountId != null &&
+                                  cluster.only.isPostedBy(widget.myAccountId!),
                               isSelected:
                                   cluster.only.id == widget.selectedJobId,
                               onTap: () => widget.onJobTapped(cluster.only),

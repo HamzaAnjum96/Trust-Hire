@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../../app/account_controller.dart';
 import '../../core/formatters.dart';
 import '../../core/tokens.dart';
 import '../../l10n/app_localizations.dart';
@@ -71,7 +73,7 @@ class JobRow extends StatelessWidget {
                       style: theme.textTheme.titleLarge,
                     ),
                   ),
-                  if (job.isLocal)
+                  if (job.isPostedBy(context.watch<AccountController>().activeId))
                     Container(
                       padding: const EdgeInsets.symmetric(
                         horizontal: BrandSizing.spaceSm,

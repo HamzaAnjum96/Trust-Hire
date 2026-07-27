@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../models/account.dart';
+
 /// A small JSON document store backed by `shared_preferences`.
 ///
 /// The sprint plan lists Hive, Isar, SQLite and local JSON as equally
@@ -64,8 +66,15 @@ class LocalStore {
 
   /// Clears everything the app has stored. Used by the "reset to seed data"
   /// action in settings.
+  ///
+  /// Swept by prefix rather than by walking [StoreKeys.all], because two
+  /// groups of keys are not enumerable: the media blobs, which are named after
+  /// the ids they hold, and the per-account keys, which are named after
+  /// whichever demo accounts have been used. Anything the app wrote starts
+  /// with [StoreKeys.prefix]; nothing else is touched.
   Future<void> clear() async {
-    for (final key in StoreKeys.all) {
+    final ours = _prefs.getKeys().where((key) => key.startsWith(StoreKeys.prefix));
+    for (final key in ours.toList(growable: false)) {
       await _prefs.remove(key);
     }
   }
@@ -75,6 +84,10 @@ class LocalStore {
 /// them without clearing unrelated preferences.
 class StoreKeys {
   const StoreKeys._();
+
+  /// Every key the app writes begins with this, so a reset can find them all
+  /// without leaving anything else in `shared_preferences` behind.
+  static const prefix = 'trust_hire.';
 
   static const jobs = 'trust_hire.jobs';
   static const users = 'trust_hire.users';
@@ -94,11 +107,30 @@ class StoreKeys {
   /// The worker's token wallet — the whole ledger, as a JSON object.
   static const wallet = 'trust_hire.wallet';
 
+  /// Every rating either side has given, as a JSON list.
+  static const ratings = 'trust_hire.ratings';
+
   /// Which side of the marketplace this device is on — worker or hirer.
   static const role = 'trust_hire.role';
 
   /// The worker's tag list and trust signals, as a JSON object.
   static const workerProfile = 'trust_hire.worker_profile';
+
+  /// Which demo account the device is currently being.
+  static const activeAccount = 'trust_hire.active_account';
+
+  /// The per-account name for a key.
+  ///
+  /// Role, trades, saved jobs and the wallet belong to a person rather than to
+  /// the device, so each demo account gets its own copy — otherwise switching
+  /// to a hirer would hand them the worker's balance and trades, and the
+  /// switch would prove nothing.
+  ///
+  /// The device account deliberately keeps the **unsuffixed** key. It is the
+  /// account the app had before the switcher existed, so everything already
+  /// stored on somebody's phone is still theirs after an update.
+  static String forAccount(String key, String accountId) =>
+      accountId == DemoAccounts.deviceId ? key : '$key#$accountId';
 
   /// Comma-separated ids of blobs held by [MediaStore]. The blobs themselves
   /// live under `trust_hire.media.<id>` and are enumerated through this index.
@@ -114,8 +146,10 @@ class StoreKeys {
     introSeen,
     bids,
     wallet,
+    ratings,
     role,
     workerProfile,
+    activeAccount,
     mediaIndex,
   ];
 }

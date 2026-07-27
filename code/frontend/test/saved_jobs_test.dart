@@ -19,6 +19,7 @@ import 'package:trust_hire/services/local_store.dart';
 import 'package:trust_hire/services/media_store.dart';
 
 import 'support/test_strings.dart';
+import 'package:trust_hire/app/account_controller.dart';
 
 /// Until now there was nowhere to come back to: a worker who found a job had
 /// to find it again, and a poster had no home for what they had offered.
@@ -160,6 +161,9 @@ void main() {
           providers: [
             ChangeNotifierProvider.value(value: jobs),
             ChangeNotifierProvider.value(value: saved),
+            ChangeNotifierProvider(
+              create: (_) => AccountController(store)..load(),
+            ),
             // The details sheet grew a bidding block in P1-2, and it reads
             // both of these.
             ChangeNotifierProvider(

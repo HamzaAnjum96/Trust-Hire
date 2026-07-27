@@ -103,14 +103,24 @@ success criteria from
 [`documents/agile/sprint-planning/poc-sprint-plan.md`](documents/agile/sprint-planning/poc-sprint-plan.md),
 with the exception noted under *Map tiles* below.
 
-**Phase 1: P1-1 to P1-4 complete**, per
+**Phase 1: P1-1 to P1-5 complete**, per
 [`documents/agile/sprint-planning/phase-1-sprint-plan.md`](documents/agile/sprint-planning/phase-1-sprint-plan.md).
 Roles, the fixed tag vocabulary, the visibility rule that decides which jobs
 reach which worker, Mode A bidding — a starting fare, counter-offers, and a
-fare locked when the hirer chooses — and the job's life from posted to
-finished, including the mutual location reveal on acceptance, and the token
-wallet that takes the platform's 5%. P1-5 onwards adds ratings, the premium
-directory and the backend.
+fare locked when the hirer chooses — the job's life from posted to finished
+including the mutual location reveal on acceptance, the token wallet that
+takes the platform's 5%, and mutual rating with the worker's record public and
+the hirer's kept internal. P1-6 onwards adds the premium directory, the admin
+panel and the backend.
+
+**Demo accounts.** There is no sign-in — Section 13a excludes authentication
+from the POC — but the device can be any of six people, switched from the map
+header, the app bar or the profile screen. Five are seeded users with jobs
+already posted, one per city. Switching changes who owns which job, whose bids
+are yours, whose wallet is charged and which trades filter the feed, which is
+the only way to see bidding, the job lifecycle and mutual ratings work end to
+end on one device. They are not accounts: no password, no verification, no
+privacy between them, and everything shares one browser's storage.
 
 ```
 code/frontend/
@@ -124,11 +134,13 @@ code/frontend/
 │   │   ├── feed/         ← the visibility rule: which jobs reach whom
 │   │   ├── bidding/      ← offers, and the hirer's choice
 │   │   ├── lifecycle/    ← a job's statuses and the location reveal
+│   │   ├── ratings/      ← mutual rating, and a worker's public record
 │   │   ├── wallet/       ← tokens, commission, top-up
+│   │   ├── account/      ← the demo account switcher
 │   │   ├── profile/      ← role, trades, and the app's settings
 │   │   └── onboarding/   ← first-run intro and permission priming
 │   ├── l10n/         ← app_en.arb, app_ur.arb (generated AppStrings)
-│   ├── models/       ← Job, JobTag, Bid, Wallet, WorkerProfile, AppUser
+│   ├── models/       ← Job, JobTag, Bid, Wallet, Rating, DemoAccount, AppUser
 │   ├── services/     ← local storage, seed loading, repositories
 │   └── widgets/      ← shared UI
 ├── assets/

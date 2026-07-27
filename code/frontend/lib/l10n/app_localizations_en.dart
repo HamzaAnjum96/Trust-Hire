@@ -192,7 +192,7 @@ class AppStringsEn extends AppStrings {
   }
 
   @override
-  String get onThisDevice => 'On this device';
+  String get onThisDevice => 'Your posting';
 
   @override
   String get detailWhen => 'When';
@@ -1022,4 +1022,102 @@ class AppStringsEn extends AppStrings {
   String firstJobCreditWaiting(String amount) {
     return 'Your first job\'s commission is covered up to $amount.';
   }
+
+  @override
+  String get rateThisJob => 'How did it go?';
+
+  @override
+  String get rateWorker => 'Rate the person who did the work';
+
+  @override
+  String get rateHirer => 'Rate the person who hired you';
+
+  @override
+  String get rateHirerPrivate =>
+      'This is not shown to them or to anyone else. It helps us spot people who cause trouble.';
+
+  @override
+  String get rateWorkerPublic => 'This is shown on their profile.';
+
+  @override
+  String get rateNoteHint => 'Anything we should know (optional)';
+
+  @override
+  String get sendRating => 'Send';
+
+  @override
+  String get ratingThanks => 'Thank you.';
+
+  @override
+  String starsChosen(int count) {
+    return '$count of 5';
+  }
+
+  @override
+  String get alreadyRated => 'You have rated this job.';
+
+  @override
+  String get workerStanding => 'Their record';
+
+  @override
+  String jobsCompleted(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count jobs finished',
+      one: '1 job finished',
+      zero: 'No jobs finished yet',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String averageFare(String amount) {
+    return 'Usually charges around $amount';
+  }
+
+  @override
+  String get notRatedYet => 'Not rated yet';
+
+  @override
+  String get newToTrustHire => 'New to Trust Hire';
+
+  @override
+  String get demoAccounts => 'Demo accounts';
+
+  @override
+  String get demoAccountsExplain =>
+      'Signing in comes later. For now you can be any of these people — post a job as one, make an offer as another, and see both sides of the same hire.';
+
+  @override
+  String get accountYou => 'You';
+
+  @override
+  String get accountYouHelp => 'The account this device started on';
+
+  @override
+  String get switchAccount => 'Switch account';
+
+  @override
+  String nowActingAs(String name) {
+    return 'You are now $name';
+  }
+
+  @override
+  String accountPostings(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count jobs posted',
+      one: '1 job posted',
+      zero: 'No jobs posted',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get accountIsActive => 'Currently active';
+
+  @override
+  String get yourStanding => 'Your record';
 }

@@ -9,6 +9,7 @@ import '../../l10n/app_localizations.dart';
 import '../../models/bid.dart';
 import '../../models/job.dart';
 import '../../widgets/state_views.dart';
+import '../ratings/worker_standing_view.dart';
 
 /// What the hirer sees on their own job: every offer, and the choice.
 ///
@@ -146,6 +147,13 @@ class _OfferRow extends StatelessWidget {
                   _StatusChip(label: strings.notChosen),
               ],
             ),
+
+            // Section 10's whole purpose, in the one place it can change an
+            // outcome: what a worker has done before, next to what they are
+            // asking for it. Under the fare rather than beside it, so the
+            // list still reads as a column of prices.
+            const SizedBox(height: BrandSizing.spaceXs),
+            WorkerStandingView(workerId: bid.workerId, compact: true),
 
             if (bid.message != null) ...[
               const SizedBox(height: BrandSizing.spaceXs),

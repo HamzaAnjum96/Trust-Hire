@@ -23,6 +23,8 @@ import 'package:trust_hire/services/media_store.dart';
 import 'package:trust_hire/widgets/voice_note_player.dart';
 
 import 'support/test_strings.dart';
+import 'package:trust_hire/models/account.dart';
+import 'package:trust_hire/app/account_controller.dart';
 
 /// Sprint 2's definition of done is "every seeded job opens correctly" — which
 /// matters most for the jobs that carry only some of the information, since
@@ -38,6 +40,7 @@ void main() {
   });
 
   late SavedJobsController savedJobs;
+  late AccountController accounts;
   late BidController bids;
   late ProfileController profile;
   late WalletController wallet;
@@ -45,6 +48,7 @@ void main() {
   Future<(JobController, MediaStore)> buildControllers() async {
     final store = await LocalStore.open();
     savedJobs = SavedJobsController(store)..load();
+    accounts = AccountController(store)..load();
     bids = BidController(BidRepository(store))..load();
     profile = ProfileController(store)..load();
     wallet = WalletController(store)..load();
@@ -69,6 +73,7 @@ void main() {
         providers: [
           ChangeNotifierProvider.value(value: controller),
           ChangeNotifierProvider.value(value: savedJobs),
+          ChangeNotifierProvider.value(value: accounts),
           ChangeNotifierProvider.value(value: bids),
           ChangeNotifierProvider.value(value: profile),
           ChangeNotifierProvider.value(value: wallet),
@@ -280,7 +285,7 @@ void main() {
 
     await controller.saveJob(
       anyJob.copyWith().withAcceptedBid(
-        workerId: BidController.localWorkerId,
+        workerId: DemoAccounts.deviceId,
         fare: 1500,
       ),
     );

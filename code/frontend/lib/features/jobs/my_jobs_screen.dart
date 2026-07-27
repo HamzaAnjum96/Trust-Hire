@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../app/account_controller.dart';
 import '../../app/job_controller.dart';
 import '../../core/layout.dart';
 import '../../core/tokens.dart';
@@ -12,6 +13,7 @@ import '../../widgets/state_views.dart';
 import 'job_details_sheet.dart';
 import 'job_row.dart';
 import 'saved_jobs_controller.dart';
+import '../account/account_switcher.dart';
 
 /// The two lists that are about *you* — work you kept, and work you offered.
 ///
@@ -42,11 +44,13 @@ class _MyJobsScreenState extends State<MyJobsScreen>
     final saved = context.watch<SavedJobsController>();
 
     final savedJobs = saved.resolve(jobs.jobs);
-    final myPostings = jobs.jobs.where((job) => job.isLocal).toList();
+    final me = context.watch<AccountController>().activeId;
+    final myPostings = jobs.jobs.where((job) => job.isPostedBy(me)).toList();
 
     return Scaffold(
       appBar: AppBar(
         title: Text(strings.navActivity),
+        actions: const [AccountButton()],
         bottom: TabBar(
           controller: _tabs,
           tabs: [

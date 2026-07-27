@@ -425,7 +425,7 @@ abstract class AppStrings {
   /// No description provided for @onThisDevice.
   ///
   /// In en, this message translates to:
-  /// **'On this device'**
+  /// **'Your posting'**
   String get onThisDevice;
 
   /// No description provided for @detailWhen.
@@ -1801,6 +1801,150 @@ abstract class AppStrings {
   /// In en, this message translates to:
   /// **'Your first job\'s commission is covered up to {amount}.'**
   String firstJobCreditWaiting(String amount);
+
+  /// Title of the rating sheet
+  ///
+  /// In en, this message translates to:
+  /// **'How did it go?'**
+  String get rateThisJob;
+
+  /// Prompt for a hirer
+  ///
+  /// In en, this message translates to:
+  /// **'Rate the person who did the work'**
+  String get rateWorker;
+
+  /// Prompt for a worker
+  ///
+  /// In en, this message translates to:
+  /// **'Rate the person who hired you'**
+  String get rateHirer;
+
+  /// Explains that the hirer's rating is internal
+  ///
+  /// In en, this message translates to:
+  /// **'This is not shown to them or to anyone else. It helps us spot people who cause trouble.'**
+  String get rateHirerPrivate;
+
+  /// Explains that the worker's rating is public
+  ///
+  /// In en, this message translates to:
+  /// **'This is shown on their profile.'**
+  String get rateWorkerPublic;
+
+  /// Placeholder for the optional note
+  ///
+  /// In en, this message translates to:
+  /// **'Anything we should know (optional)'**
+  String get rateNoteHint;
+
+  /// Confirms a rating
+  ///
+  /// In en, this message translates to:
+  /// **'Send'**
+  String get sendRating;
+
+  /// Confirmation after rating
+  ///
+  /// In en, this message translates to:
+  /// **'Thank you.'**
+  String get ratingThanks;
+
+  /// No description provided for @starsChosen.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} of 5'**
+  String starsChosen(int count);
+
+  /// Shown once a rating exists
+  ///
+  /// In en, this message translates to:
+  /// **'You have rated this job.'**
+  String get alreadyRated;
+
+  /// Heading over a worker's public numbers
+  ///
+  /// In en, this message translates to:
+  /// **'Their record'**
+  String get workerStanding;
+
+  /// No description provided for @jobsCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{No jobs finished yet} =1{1 job finished} other{{count} jobs finished}}'**
+  String jobsCompleted(int count);
+
+  /// No description provided for @averageFare.
+  ///
+  /// In en, this message translates to:
+  /// **'Usually charges around {amount}'**
+  String averageFare(String amount);
+
+  /// Shown for a worker nobody has rated
+  ///
+  /// In en, this message translates to:
+  /// **'Not rated yet'**
+  String get notRatedYet;
+
+  /// Shown for a worker with no history
+  ///
+  /// In en, this message translates to:
+  /// **'New to Trust Hire'**
+  String get newToTrustHire;
+
+  /// Heading for the account switcher
+  ///
+  /// In en, this message translates to:
+  /// **'Demo accounts'**
+  String get demoAccounts;
+
+  /// Explains why an app with no accounts has an account switcher
+  ///
+  /// In en, this message translates to:
+  /// **'Signing in comes later. For now you can be any of these people — post a job as one, make an offer as another, and see both sides of the same hire.'**
+  String get demoAccountsExplain;
+
+  /// Name of the account the app starts on
+  ///
+  /// In en, this message translates to:
+  /// **'You'**
+  String get accountYou;
+
+  /// No description provided for @accountYouHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'The account this device started on'**
+  String get accountYouHelp;
+
+  /// No description provided for @switchAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Switch account'**
+  String get switchAccount;
+
+  /// No description provided for @nowActingAs.
+  ///
+  /// In en, this message translates to:
+  /// **'You are now {name}'**
+  String nowActingAs(String name);
+
+  /// No description provided for @accountPostings.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{No jobs posted} =1{1 job posted} other{{count} jobs posted}}'**
+  String accountPostings(int count);
+
+  /// No description provided for @accountIsActive.
+  ///
+  /// In en, this message translates to:
+  /// **'Currently active'**
+  String get accountIsActive;
+
+  /// Heading for your own rating, completed count and fare average
+  ///
+  /// In en, this message translates to:
+  /// **'Your record'**
+  String get yourStanding;
 }
 
 class _AppStringsDelegate extends LocalizationsDelegate<AppStrings> {

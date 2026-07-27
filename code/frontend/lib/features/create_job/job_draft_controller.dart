@@ -6,6 +6,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:uuid/uuid.dart';
 
+import '../../models/account.dart';
 import '../../models/job.dart';
 import '../../models/job_tag.dart';
 import '../../services/capture_service.dart';
@@ -46,7 +47,9 @@ class JobDraftController extends ChangeNotifier {
     required JobLocation initialLocation,
     Job? editing,
     Uuid uuid = const Uuid(),
+    String postedBy = DemoAccounts.deviceId,
   }) : _mediaStore = mediaStore,
+       _postedBy = postedBy,
        _capture = capture,
        _uuid = uuid,
        _editing = editing,
@@ -68,6 +71,10 @@ class JobDraftController extends ChangeNotifier {
   final MediaStore _mediaStore;
   final CaptureService _capture;
   final Uuid _uuid;
+
+  /// Who this job will belong to — the demo account that is posting it. An
+  /// edit keeps the original poster rather than quietly changing hands.
+  final String _postedBy;
   final Job? _editing;
 
   JobLocation _location;
@@ -336,7 +343,7 @@ class JobDraftController extends ChangeNotifier {
             ? null
             : trimmedDescription,
         contactNumber: trimmedContact.isEmpty ? null : trimmedContact,
-        postedBy: _editing?.postedBy,
+        postedBy: _editing?.postedBy ?? _postedBy,
         // Anything written here lives on this device only.
         isLocal: true,
       );

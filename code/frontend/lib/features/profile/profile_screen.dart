@@ -14,6 +14,9 @@ import '../../widgets/state_views.dart';
 import '../../l10n/app_localizations.dart';
 import '../wallet/wallet_screen.dart';
 import 'my_trades_screen.dart';
+import '../account/account_switcher.dart';
+import '../ratings/worker_standing_view.dart';
+import '../../app/account_controller.dart';
 
 /// Who you are here, and how the app behaves for you.
 ///
@@ -40,7 +43,20 @@ class ProfileScreen extends StatelessWidget {
             NoticePanel(message: strings.settingsStorageNotice),
             SizedBox(height: BrandSizing.spaceLg),
 
-            // First, because it changes what the rest of the app shows: a
+            // Above the role picker, because switching account can change the
+            // role underneath it — and a control that silently reorders the
+            // one below should sit above it.
+            Text(strings.demoAccounts, style: theme.textTheme.titleLarge),
+            const SizedBox(height: BrandSizing.spaceXs),
+            Text(
+              strings.demoAccountsExplain,
+              style: theme.textTheme.bodyMedium,
+            ),
+            const SizedBox(height: BrandSizing.spaceSm),
+            const AccountCard(),
+            const SizedBox(height: BrandSizing.spaceXl),
+
+            // Then, because it changes what the rest of the app shows: a
             // worker gets a feed filtered to their trades, a hirer gets the
             // jobs they posted.
             Text(strings.whatBringsYouHere, style: theme.textTheme.titleLarge),
@@ -264,6 +280,15 @@ class _RolePicker extends StatelessWidget {
           style: theme.textTheme.labelSmall,
         ),
         if (profile.isWorker) ...[
+          const SizedBox(height: BrandSizing.spaceMd),
+          // Your own record, the way a hirer reviewing your offer sees it.
+          // Shown to you unprompted because Section 10 makes it the thing
+          // that decides what you are offered next — a number that governs
+          // your income should not be something you have to go looking for.
+          WorkerStandingView(
+            workerId: context.watch<AccountController>().activeId,
+            heading: strings.yourStanding,
+          ),
           const SizedBox(height: BrandSizing.spaceSm),
           ListTile(
             contentPadding: EdgeInsets.zero,

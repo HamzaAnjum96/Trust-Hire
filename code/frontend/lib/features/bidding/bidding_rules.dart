@@ -55,7 +55,10 @@ class BiddingRules {
     required List<Bid> existingBids,
     bool walletLocked = false,
   }) {
-    if (job.isLocal) return BidRefusal.ownJob;
+    // Your own job, whoever you are currently being. Taken from the worker's
+    // id rather than from "posted on this device", so switching demo account
+    // switches which jobs are off limits.
+    if (job.isPostedBy(worker.userId)) return BidRefusal.ownJob;
     // Checked before visibility: a locked worker should be told why they
     // cannot bid, not left to wonder whether the job simply moved.
     if (walletLocked) return BidRefusal.walletLocked;

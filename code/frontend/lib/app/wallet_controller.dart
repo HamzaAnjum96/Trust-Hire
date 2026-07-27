@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 
 import '../features/wallet/wallet_rules.dart';
+import '../models/account.dart';
 import '../models/wallet.dart';
 import '../services/local_store.dart';
 
@@ -17,10 +18,26 @@ class WalletController extends ChangeNotifier {
   final LocalStore _store;
   final WalletRules rules;
 
-  /// No sign-in yet, so one wallet per device. P1-8 gives it an account.
-  static const localWorkerId = 'local-user';
+  /// Whose wallet this is. One ledger per demo account, because a commission
+  /// is charged to the person who did the work — handing a hirer the worker's
+  /// balance would make the switch meaningless.
+  String _workerId = DemoAccounts.deviceId;
+  String get workerId => _workerId;
 
-  Wallet _wallet = Wallet(userId: localWorkerId);
+  /// Points the controller at another account's ledger and reads it.
+  ///
+  /// The old ledger is not written back: every change is saved as it happens,
+  /// so there is never an unsaved balance to lose.
+  void setAccount(String id) {
+    if (_workerId == id) return;
+    _workerId = id;
+    _wallet = Wallet(userId: id);
+    load();
+  }
+
+  String get _key => StoreKeys.forAccount(StoreKeys.wallet, _workerId);
+
+  Wallet _wallet = Wallet(userId: DemoAccounts.deviceId);
   Wallet get wallet => _wallet;
 
   int get balance => _wallet.balance;
@@ -29,7 +46,7 @@ class WalletController extends ChangeNotifier {
   bool get isInDebt => _wallet.balance < 0;
 
   void load() {
-    final raw = _store.readString(StoreKeys.wallet);
+    final raw = _store.readString(_key);
     if (raw != null && raw.isNotEmpty) {
       try {
         _wallet = Wallet.fromJson(jsonDecode(raw) as Map<String, dynamic>);
@@ -37,8 +54,10 @@ class WalletController extends ChangeNotifier {
         // A corrupt ledger is not recoverable by guessing. Starting empty is
         // wrong in the worker's favour, which is the right direction to be
         // wrong in when the alternative is inventing a debt.
-        _wallet = Wallet(userId: localWorkerId);
+        _wallet = Wallet(userId: _workerId);
       }
+    } else {
+      _wallet = Wallet(userId: _workerId);
     }
 
     notifyListeners();
@@ -93,6 +112,6 @@ class WalletController extends ChangeNotifier {
     _wallet = _wallet.withEntries(entries);
     notifyListeners();
 
-    await _store.writeString(StoreKeys.wallet, jsonEncode(_wallet.toJson()));
+    await _store.writeString(_key, jsonEncode(_wallet.toJson()));
   }
 }

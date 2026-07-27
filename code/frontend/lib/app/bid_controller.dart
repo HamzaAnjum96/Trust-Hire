@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:uuid/uuid.dart';
 
 import '../features/bidding/bidding_rules.dart';
+import '../models/account.dart';
 import '../models/bid.dart';
 import '../models/job.dart';
 import '../services/bid_repository.dart';
@@ -19,6 +20,7 @@ class BidController extends ChangeNotifier {
     this.uuid = const Uuid(),
   });
 
+
   final BidRepository _repository;
   final BiddingRules rules;
 
@@ -28,9 +30,20 @@ class BidController extends ChangeNotifier {
   List<Bid> _bids = const <Bid>[];
   List<Bid> get bids => _bids;
 
-  /// No sign-in yet, so every bid from this device is from the same notional
-  /// person. P1-8 replaces this with a real account id.
-  static const localWorkerId = 'local-user';
+  /// Whose bids count as mine. Follows the active demo account.
+  ///
+  /// The bid list itself is shared: a bid records the worker who made it, so
+  /// switching account changes which of them are yours rather than which of
+  /// them exist. That is what lets one person bid, another accept, and both
+  /// see the same offer.
+  String _workerId = DemoAccounts.deviceId;
+  String get workerId => _workerId;
+
+  void setAccount(String id) {
+    if (_workerId == id) return;
+    _workerId = id;
+    notifyListeners();
+  }
 
   Future<void> load() async {
     _bids = await _repository.fetchBids();
@@ -40,10 +53,10 @@ class BidController extends ChangeNotifier {
   List<Bid> forJob(String jobId) =>
       _bids.where((bid) => bid.jobId == jobId).toList(growable: false);
 
-  /// This device's bid on a job, if it has made one.
+  /// The active account's bid on a job, if it has made one.
   Bid? myBidOn(String jobId) {
     for (final bid in _bids) {
-      if (bid.jobId == jobId && bid.workerId == localWorkerId) return bid;
+      if (bid.jobId == jobId && bid.workerId == _workerId) return bid;
     }
     return null;
   }
@@ -52,7 +65,7 @@ class BidController extends ChangeNotifier {
   /// marked as recommended. See [BiddingRules.forReview].
   List<Bid> forReview(String jobId) => rules.forReview(forJob(jobId));
 
-  /// Places or replaces this device's bid.
+  /// Places or replaces the active account's bid.
   ///
   /// Replacing rather than adding a second: a worker who changes their mind
   /// has revised their offer, and two live bids from one person would let them
@@ -70,7 +83,7 @@ class BidController extends ChangeNotifier {
         ? Bid(
             id: uuid.v4(),
             jobId: jobId,
-            workerId: localWorkerId,
+            workerId: _workerId,
             fare: fare,
             createdAt: DateTime.now(),
             message: trimmed?.isEmpty ?? true ? null : trimmed,

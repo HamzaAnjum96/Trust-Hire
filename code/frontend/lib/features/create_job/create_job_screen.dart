@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
+import '../../app/account_controller.dart';
 import '../../app/job_controller.dart';
 import '../../core/formatters.dart';
 import '../../core/app_version.dart';
@@ -46,6 +47,7 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
     capture: _capture,
     initialLocation: widget.initialLocation,
     editing: widget.editing,
+    postedBy: context.read<AccountController>().activeId,
   );
 
   final TextEditingController _titleController = TextEditingController();

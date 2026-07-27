@@ -3,8 +3,10 @@ import '../../models/job_status.dart';
 
 /// Who is looking at a job.
 ///
-/// There is no sign-in yet, so this is derived from whether the job was posted
-/// on this device. P1-8 replaces it with an account id.
+/// Derived from the active demo account: the hirer is whoever posted it, the
+/// worker is whoever was accepted onto it, and everybody else is a bystander.
+/// P1-8 replaces the demo account with a real one and this stops being a
+/// choice.
 enum JobRole { hirer, worker, bystander }
 
 /// Something a person can do to a job right now.
@@ -37,7 +39,7 @@ class JobLifecycle {
 
   /// Who [job] belongs to, from this device's point of view.
   JobRole roleFor(Job job, {required String viewerId}) {
-    if (job.isLocal) return JobRole.hirer;
+    if (job.isPostedBy(viewerId)) return JobRole.hirer;
     if (job.acceptedWorkerId == viewerId) return JobRole.worker;
     return JobRole.bystander;
   }

@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 
+import '../../models/account.dart';
 import '../../models/job.dart';
 import '../../services/local_store.dart';
 
@@ -18,13 +19,26 @@ class SavedJobsController extends ChangeNotifier {
 
   final LocalStore _store;
 
+  /// Whose bookmarks these are. A saved job is a personal shortlist, so each
+  /// demo account keeps its own.
+  String _userId = DemoAccounts.deviceId;
+
+  /// Points the controller at another account's list and reads it.
+  void setAccount(String id) {
+    if (_userId == id) return;
+    _userId = id;
+    load();
+  }
+
+  String get _key => StoreKeys.forAccount(StoreKeys.savedJobs, _userId);
+
   Set<String> _saved = <String>{};
 
   /// Ids in the order they were saved, newest first.
   List<String> _order = <String>[];
 
   void load() {
-    final raw = _store.readString(StoreKeys.savedJobs) ?? '';
+    final raw = _store.readString(_key) ?? '';
     _order = raw.split(',').where((id) => id.isNotEmpty).toList();
     _saved = _order.toSet();
     notifyListeners();
@@ -83,5 +97,5 @@ class SavedJobsController extends ChangeNotifier {
   }
 
   Future<void> _persist() =>
-      _store.writeString(StoreKeys.savedJobs, _order.join(','));
+      _store.writeString(_key, _order.join(','));
 }

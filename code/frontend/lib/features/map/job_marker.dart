@@ -19,11 +19,17 @@ class JobMarker extends StatelessWidget {
     required this.job,
     required this.isSelected,
     required this.onTap,
+    this.isMine = false,
   });
 
   final Job job;
   final bool isSelected;
   final VoidCallback onTap;
+
+  /// Whether the active demo account posted this job. Drives the copper
+  /// treatment from section 15 of the brand guidelines — your own pins should
+  /// be findable among everybody else's.
+  final bool isMine;
 
   // 48, not the 44 minimum: section 29 names 48 as the preferred target and
   // Android's own guideline requires it. A pin is also harder to hit than a
@@ -36,7 +42,7 @@ class JobMarker extends StatelessWidget {
     final strings = AppStrings.of(context);
     final fill = isSelected
         ? BrandColours.markerSelected
-        : (job.isLocal ? BrandColours.markerLocal : BrandColours.markerDefault);
+        : (isMine ? BrandColours.markerLocal : BrandColours.markerDefault);
 
     return Semantics(
       button: true,

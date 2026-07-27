@@ -85,7 +85,7 @@
       }
     }
   },
-  "onThisDevice": "On this device",
+  "onThisDevice": "Your posting",
   "detailWhen": "When",
   "detailArea": "Area",
   "detailPostedBy": "Posted by",
@@ -716,5 +716,112 @@
         "type": "String"
       }
     }
+  },
+  "rateThisJob": "How did it go?",
+  "@rateThisJob": {
+    "description": "Title of the rating sheet"
+  },
+  "rateWorker": "Rate the person who did the work",
+  "@rateWorker": {
+    "description": "Prompt for a hirer"
+  },
+  "rateHirer": "Rate the person who hired you",
+  "@rateHirer": {
+    "description": "Prompt for a worker"
+  },
+  "rateHirerPrivate": "This is not shown to them or to anyone else. It helps us spot people who cause trouble.",
+  "@rateHirerPrivate": {
+    "description": "Explains that the hirer's rating is internal"
+  },
+  "rateWorkerPublic": "This is shown on their profile.",
+  "@rateWorkerPublic": {
+    "description": "Explains that the worker's rating is public"
+  },
+  "rateNoteHint": "Anything we should know (optional)",
+  "@rateNoteHint": {
+    "description": "Placeholder for the optional note"
+  },
+  "sendRating": "Send",
+  "@sendRating": {
+    "description": "Confirms a rating"
+  },
+  "ratingThanks": "Thank you.",
+  "@ratingThanks": {
+    "description": "Confirmation after rating"
+  },
+  "starsChosen": "{count} of 5",
+  "@starsChosen": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "alreadyRated": "You have rated this job.",
+  "@alreadyRated": {
+    "description": "Shown once a rating exists"
+  },
+  "workerStanding": "Their record",
+  "@workerStanding": {
+    "description": "Heading over a worker's public numbers"
+  },
+  "jobsCompleted": "{count, plural, =0{No jobs finished yet} =1{1 job finished} other{{count} jobs finished}}",
+  "@jobsCompleted": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "averageFare": "Usually charges around {amount}",
+  "@averageFare": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "notRatedYet": "Not rated yet",
+  "@notRatedYet": {
+    "description": "Shown for a worker nobody has rated"
+  },
+  "newToTrustHire": "New to Trust Hire",
+  "@newToTrustHire": {
+    "description": "Shown for a worker with no history"
+  },
+  "demoAccounts": "Demo accounts",
+  "@demoAccounts": {
+    "description": "Heading for the account switcher"
+  },
+  "demoAccountsExplain": "Signing in comes later. For now you can be any of these people — post a job as one, make an offer as another, and see both sides of the same hire.",
+  "@demoAccountsExplain": {
+    "description": "Explains why an app with no accounts has an account switcher"
+  },
+  "accountYou": "You",
+  "@accountYou": {
+    "description": "Name of the account the app starts on"
+  },
+  "accountYouHelp": "The account this device started on",
+  "switchAccount": "Switch account",
+  "nowActingAs": "You are now {name}",
+  "@nowActingAs": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "accountPostings": "{count, plural, =0{No jobs posted} =1{1 job posted} other{{count} jobs posted}}",
+  "@accountPostings": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "accountIsActive": "Currently active",
+  "yourStanding": "Your record",
+  "@yourStanding": {
+    "description": "Heading for your own rating, completed count and fare average"
   }
 }

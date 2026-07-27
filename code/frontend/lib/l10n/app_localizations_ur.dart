@@ -193,7 +193,7 @@ class AppStringsUr extends AppStrings {
   }
 
   @override
-  String get onThisDevice => 'اسی فون پر';
+  String get onThisDevice => 'آپ کی پوسٹ';
 
   @override
   String get detailWhen => 'کب';
@@ -1028,4 +1028,102 @@ class AppStringsUr extends AppStrings {
   String firstJobCreditWaiting(String amount) {
     return 'آپ کے پہلے کام کا کمیشن $amount تک معاف ہے۔';
   }
+
+  @override
+  String get rateThisJob => 'کام کیسا رہا؟';
+
+  @override
+  String get rateWorker => 'کام کرنے والے کو درجہ دیں';
+
+  @override
+  String get rateHirer => 'کام دینے والے کو درجہ دیں';
+
+  @override
+  String get rateHirerPrivate =>
+      'یہ نہ اُنہیں دکھایا جاتا ہے نہ کسی اور کو۔ اس سے ہمیں مسئلہ کرنے والوں کا پتا چلتا ہے۔';
+
+  @override
+  String get rateWorkerPublic => 'یہ اُن کے پروفائل پر دکھایا جاتا ہے۔';
+
+  @override
+  String get rateNoteHint => 'کچھ بتانا ہو تو لکھیں (ضروری نہیں)';
+
+  @override
+  String get sendRating => 'بھیجیں';
+
+  @override
+  String get ratingThanks => 'شکریہ۔';
+
+  @override
+  String starsChosen(int count) {
+    return '5 میں سے $count';
+  }
+
+  @override
+  String get alreadyRated => 'آپ اس کام کو درجہ دے چکے ہیں۔';
+
+  @override
+  String get workerStanding => 'اُن کا ریکارڈ';
+
+  @override
+  String jobsCompleted(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count کام مکمل',
+      one: '1 کام مکمل',
+      zero: 'ابھی کوئی کام مکمل نہیں',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String averageFare(String amount) {
+    return 'عام طور پر تقریباً $amount لیتے ہیں';
+  }
+
+  @override
+  String get notRatedYet => 'ابھی کوئی درجہ نہیں';
+
+  @override
+  String get newToTrustHire => 'ٹرسٹ ہائر پر نئے ہیں';
+
+  @override
+  String get demoAccounts => 'ڈیمو اکاؤنٹس';
+
+  @override
+  String get demoAccountsExplain =>
+      'لاگ ان بعد میں آئے گا۔ فی الحال آپ ان میں سے کوئی بھی بن سکتے ہیں — ایک کے طور پر کام لگائیں، دوسرے کے طور پر پیشکش کریں، اور ایک ہی کام کے دونوں رخ دیکھیں۔';
+
+  @override
+  String get accountYou => 'آپ';
+
+  @override
+  String get accountYouHelp => 'وہ اکاؤنٹ جس سے اس فون پر شروع ہوا';
+
+  @override
+  String get switchAccount => 'اکاؤنٹ بدلیں';
+
+  @override
+  String nowActingAs(String name) {
+    return 'اب آپ $name ہیں';
+  }
+
+  @override
+  String accountPostings(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count کام لگائے',
+      one: '1 کام لگایا',
+      zero: 'کوئی کام نہیں لگایا',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get accountIsActive => 'ابھی فعال';
+
+  @override
+  String get yourStanding => 'آپ کا ریکارڈ';
 }

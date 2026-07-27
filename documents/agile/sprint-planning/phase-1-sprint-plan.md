@@ -197,9 +197,78 @@ Decisions Section 11 left open:
 The credit is recorded as its own entry rather than netted off the commission,
 so a worker's history shows both the full 5% taken and the help given.
 
-### P1-5 — Ratings and profiles
+### P1-5 — Ratings and profiles ✅
 Mutual rating, worker rating public and hirer rating internal. Aggregate fare
 average and completed count on the worker profile.
+
+**Done when** a hirer's rating is never shown publicly and a worker's record
+is visible where it can change what they are offered.
+
+**Delivered.** The rules are pure functions over plain data, like visibility,
+bidding and the lifecycle before them: what a worker's public number is
+decides what future hirers offer them, so it is checkable without a widget.
+The worker's record sits under every offer in the hirer's list — the one place
+in the app where it can change an outcome — and on the worker's own profile,
+because a number that governs your income should not be something you have to
+go looking for.
+
+Decisions Section 10 left open:
+
+- **A cancelled job cannot be rated.** Nobody did any work, and a one-star for
+  a job that never happened is a weapon rather than a signal. Cancelling
+  already has its own consequence in the wallet.
+- **An unrated worker shows no stars, not a zero.** New is not bad, and a zero
+  out of five says the opposite of the truth about somebody who has not
+  started yet.
+- **The fare average comes from the jobs, not from the ratings.** A worker who
+  was never rated has still been paid, and a hirer deciding what to offer
+  should see that. Jobs with no agreed fare are left out rather than counted
+  as zero.
+- **No public free text.** The note is collected for the admin panel in P1-7
+  and never shown beside the average. A marketplace where a stranger's
+  paragraph follows a labourer around is one where a single bad day costs
+  somebody their livelihood.
+
+The hirer's ratings are reachable only through `internalHirerRatings`, named
+so that P1-7 has to ask for them by name. A general "ratings for this user"
+accessor would have made leaking them a one-word mistake.
+
+### P1-5a — Demo accounts ✅
+Not in the original plan. Added because every rule Phase 1 has added is a rule
+about **two** people — who may bid, who may edit, who is charged commission,
+who may rate whom — and a device that could only ever be one of them left half
+the behaviour unreachable. Ratings in particular could be written but never
+seen from both ends.
+
+**Done when** one device can post a job as one person, offer on it as another,
+accept, finish and rate in both directions.
+
+**Delivered.** Six accounts: the one the app started on, plus five people from
+the seed, one per city and each with jobs already posted. Switching changes
+ownership, whose bids are yours, whose wallet is charged, and which trades
+filter the feed.
+
+Decisions:
+
+- **Ownership moved from `isLocal` to `postedBy`.** "Posted on this device"
+  and "posted by me" were the same thing until now. Jobs written before the
+  switcher existed fall back to the device account rather than becoming
+  unowned — otherwise an update would orphan everything a user had posted, and
+  leave them able to bid on their own work.
+- **Role, trades, saved jobs and the wallet are per account; bids and ratings
+  are not.** A bid records its worker and a rating records its job and side,
+  so those two lists stay shared — which is exactly what lets one person's
+  offer appear in another person's list.
+- **The device account keeps the unsuffixed storage keys**, so anything
+  already in somebody's browser is still theirs after the update.
+- **The five personas duplicate their names from the seed** so the switcher
+  can be drawn before the seed loads. A test fails if the copies drift, and
+  another fails if a persona has no jobs — landing on an empty "my postings"
+  list reads as a failed switch.
+
+These are **not** accounts: no password, no verification, no privacy between
+them, and everything shares one browser's storage. P1-8 replaces the idea
+entirely.
 
 ### P1-6 — Mode B: directory and premium
 Premium subscription, service menus at fixed prices, worker-set service radius,

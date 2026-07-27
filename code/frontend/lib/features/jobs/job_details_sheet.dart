@@ -4,6 +4,7 @@ import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
 
 import '../../app/bid_controller.dart';
+import '../../app/account_controller.dart';
 import '../../app/job_controller.dart';
 import '../../app/profile_controller.dart';
 import '../../app/wallet_controller.dart';
@@ -132,10 +133,11 @@ class _Body extends StatelessWidget {
                 style: theme.textTheme.headlineMedium,
               ),
             ),
-            if (job.isLocal) ...[
-              const SizedBox(width: BrandSizing.spaceSm),
-              const _LocalBadge(),
-            ],
+            if (job.isPostedBy(context.watch<AccountController>().activeId))
+              ...[
+                const SizedBox(width: BrandSizing.spaceSm),
+                const _LocalBadge(),
+              ],
             const SizedBox(width: BrandSizing.spaceSm),
             _SaveButton(jobId: job.id),
           ],
@@ -256,15 +258,16 @@ class _Body extends StatelessWidget {
           // agreed to work together, and to nobody else — so the line says
           // which of those two things is happening rather than the old
           // reassurance that is no longer true.
-          _revealsExactLocation(job)
+          _revealsExactLocation(job, context.watch<AccountController>().activeId)
               ? strings.exactLocationShown
               : strings.generalAreaNotice,
           style: theme.textTheme.labelSmall,
         ),
 
-        // Only jobs created here can be changed. Seeded ones stand in for
-        // other people's postings, which nobody else gets to edit.
-        if (job.isLocal) ...[
+        // Only your own postings can be changed. Other people's stand in for
+        // work you have no business editing — and which of the two a job is
+        // depends on who you are currently being.
+        if (job.isPostedBy(context.watch<AccountController>().activeId)) ...[
           const SizedBox(height: BrandSizing.spaceLg),
           const Divider(),
           const SizedBox(height: BrandSizing.spaceMd),
@@ -292,9 +295,11 @@ class _Bidding extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Posted on this device, so this viewer is its hirer. P1-8 replaces the
-    // device check with an account id.
-    if (job.isLocal) return OfferList(job: job);
+    // The viewer posted it, so they are its hirer and get the offers rather
+    // than the way to make one.
+    if (job.isPostedBy(context.watch<AccountController>().activeId)) {
+      return OfferList(job: job);
+    }
 
     final profile = context.watch<ProfileController>();
     final bids = context.watch<BidController>();
@@ -430,11 +435,11 @@ class _JobActions extends StatelessWidget {
 /// A static map showing where the work is, with its approximate area.
 /// True when this viewer is one of the two people who agreed to work
 /// together, and so may see the exact spot rather than the area (Section 5).
-bool _revealsExactLocation(Job job) {
+bool _revealsExactLocation(Job job, String viewerId) {
   const lifecycle = JobLifecycle();
   return lifecycle.revealsExactLocation(
     job,
-    role: lifecycle.roleFor(job, viewerId: BidController.localWorkerId),
+    role: lifecycle.roleFor(job, viewerId: viewerId),
   );
 }
 
@@ -447,7 +452,8 @@ class _MapPreview extends StatelessWidget {
   Widget build(BuildContext context) {
     final mapTheme = MapTheme.of(context);
     final centre = LatLng(job.location.latitude, job.location.longitude);
-    final revealsExact = _revealsExactLocation(job);
+    final me = context.watch<AccountController>().activeId;
+    final revealsExact = _revealsExactLocation(job, me);
 
     return ClipRRect(
       borderRadius: BrandRadius.largeAll,
@@ -481,6 +487,7 @@ class _MapPreview extends StatelessWidget {
                       height: JobMarker.size,
                       child: JobMarker(
                         job: job,
+                        isMine: job.isPostedBy(me),
                         isSelected: false,
                         onTap: () {},
                       ),

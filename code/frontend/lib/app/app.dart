@@ -12,9 +12,11 @@ import '../services/job_repository.dart';
 import '../services/local_store.dart';
 import '../services/media_store.dart';
 import '../features/onboarding/onboarding_screen.dart';
+import 'account_controller.dart';
 import 'app_shell.dart';
 import 'bid_controller.dart';
 import 'job_controller.dart';
+import 'rating_controller.dart';
 import 'wallet_controller.dart';
 import 'profile_controller.dart';
 import 'settings_controller.dart';
@@ -38,14 +40,35 @@ class TrustHireApp extends StatelessWidget {
               JobController(JobRepository(store, MediaStore(store)))..load(),
         ),
         ChangeNotifierProvider(create: (_) => JobFilterController()),
-        ChangeNotifierProvider(
+
+        // Before everything that depends on identity, so the proxies below
+        // read a settled account rather than switching one frame in.
+        ChangeNotifierProvider(create: (_) => AccountController(store)..load()),
+
+        // Each of these belongs to a person rather than to the device, so
+        // each follows the active account. A proxy rather than a listener in
+        // a widget: the dependency is real and permanent, and hiding it in a
+        // `initState` somewhere would let a screen forget to re-read.
+        ChangeNotifierProxyProvider<AccountController, SavedJobsController>(
           create: (_) => SavedJobsController(store)..load(),
+          update: (_, account, saved) =>
+              saved!..setAccount(account.activeId),
         ),
-        ChangeNotifierProvider(create: (_) => ProfileController(store)..load()),
-        ChangeNotifierProvider(
+        ChangeNotifierProxyProvider<AccountController, ProfileController>(
+          create: (_) => ProfileController(store)..load(),
+          update: (_, account, profile) =>
+              profile!..setAccount(account.activeId),
+        ),
+        ChangeNotifierProxyProvider<AccountController, BidController>(
           create: (_) => BidController(BidRepository(store))..load(),
+          update: (_, account, bids) => bids!..setAccount(account.activeId),
         ),
-        ChangeNotifierProvider(create: (_) => WalletController(store)..load()),
+        ChangeNotifierProxyProvider<AccountController, WalletController>(
+          create: (_) => WalletController(store)..load(),
+          update: (_, account, wallet) =>
+              wallet!..setAccount(account.activeId),
+        ),
+        ChangeNotifierProvider(create: (_) => RatingController(store)..load()),
         ChangeNotifierProvider(
           // Deliberately not requested here. Asking for a permission before
           // explaining what it is for is what section 19 warns against, so

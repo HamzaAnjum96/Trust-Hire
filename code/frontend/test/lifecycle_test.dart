@@ -4,7 +4,6 @@ import 'dart:io';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:trust_hire/app/bid_controller.dart';
 import 'package:trust_hire/features/bidding/bidding_rules.dart';
 import 'package:trust_hire/features/lifecycle/job_lifecycle.dart';
 import 'package:trust_hire/models/bid.dart';
@@ -12,6 +11,7 @@ import 'package:trust_hire/models/job.dart';
 import 'package:trust_hire/models/job_status.dart';
 import 'package:trust_hire/models/job_tag.dart';
 import 'package:trust_hire/models/worker_profile.dart';
+import 'package:trust_hire/models/account.dart';
 
 /// Section 7 (the job's life) and Section 5 (the location reveal).
 ///
@@ -35,6 +35,7 @@ void main() {
     JobStatus status = JobStatus.open,
     bool isLocal = false,
     String? workerId,
+    String? postedBy,
     DateTime? createdAt,
   }) => Job(
     id: 'job-1',
@@ -44,13 +45,24 @@ void main() {
     status: status,
     acceptedWorkerId: workerId,
     isLocal: isLocal,
+    postedBy: postedBy,
   );
 
   group('who is looking', () {
-    test('a job posted here belongs to its hirer', () {
+    test('a job you posted belongs to you as its hirer', () {
       expect(
-        lifecycle.roleFor(job(isLocal: true), viewerId: 'me'),
+        lifecycle.roleFor(job(postedBy: 'me'), viewerId: 'me'),
         JobRole.hirer,
+      );
+    });
+
+    test('and to nobody else', () {
+      // The same job, a different viewer. Before demo accounts this was
+      // decided by "posted on this device", which made every local job the
+      // viewer's own however many people the demo was pretending to be.
+      expect(
+        lifecycle.roleFor(job(postedBy: 'someone-else'), viewerId: 'me'),
+        JobRole.bystander,
       );
     });
 
@@ -387,15 +399,15 @@ void main() {
   });
 
   test('the controller ids line up with the lifecycle', () {
-    // roleFor compares against BidController.localWorkerId; if those two ever
+    // roleFor compares against DemoAccounts.deviceId; if those two ever
     // disagree, a worker stops recognising their own accepted job.
     final taken = job(
       status: JobStatus.accepted,
-      workerId: BidController.localWorkerId,
+      workerId: DemoAccounts.deviceId,
     );
 
     expect(
-      lifecycle.roleFor(taken, viewerId: BidController.localWorkerId),
+      lifecycle.roleFor(taken, viewerId: DemoAccounts.deviceId),
       JobRole.worker,
     );
   });

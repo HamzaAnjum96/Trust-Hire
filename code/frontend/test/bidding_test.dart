@@ -20,6 +20,9 @@ import 'package:trust_hire/services/bid_repository.dart';
 import 'package:trust_hire/services/job_repository.dart';
 import 'package:trust_hire/services/local_store.dart';
 import 'package:trust_hire/services/media_store.dart';
+import 'package:trust_hire/models/account.dart';
+import 'package:trust_hire/app/account_controller.dart';
+import 'package:trust_hire/app/rating_controller.dart';
 
 /// Section 4: the hirer posts a starting fare, workers counter, the hirer
 /// chooses, and the fare is locked at that moment.
@@ -46,6 +49,7 @@ void main() {
     JobLocation location = islamabad,
     int? startingFare = 2000,
     bool isLocal = false,
+    String? postedBy,
   }) => Job(
     id: 'job-1',
     location: location,
@@ -53,6 +57,7 @@ void main() {
     tags: tags,
     startingFare: startingFare,
     isLocal: isLocal,
+    postedBy: postedBy,
   );
 
   Bid bid(String id, int fare, {int minutesAgo = 0, String worker = 'w'}) =>
@@ -105,8 +110,38 @@ void main() {
     test('a hirer cannot bid on their own job', () {
       expect(
         rules.refusalFor(
-          job(isLocal: true),
+          job(postedBy: 'w1'),
           worker: worker(),
+          from: islamabad,
+          existingBids: const [],
+        ),
+        BidRefusal.ownJob,
+      );
+    });
+
+    test('someone else may bid on it', () {
+      // The mirror of the test above, and the reason demo accounts exist: the
+      // same job is your own posting or somebody else's work depending only
+      // on who you are currently being.
+      expect(
+        rules.refusalFor(
+          job(postedBy: 'someone-else'),
+          worker: worker(),
+          from: islamabad,
+          existingBids: const [],
+        ),
+        isNull,
+      );
+    });
+
+    test('a job posted before demo accounts still belongs to the device', () {
+      // Jobs already in local storage carry `isLocal` and no poster. Without
+      // the fallback in Job.isPostedBy they would belong to nobody, and their
+      // author could bid on their own work.
+      expect(
+        rules.refusalFor(
+          job(isLocal: true),
+          worker: WorkerProfile(userId: DemoAccounts.deviceId),
           from: islamabad,
           existingBids: const [],
         ),
@@ -362,7 +397,7 @@ void main() {
       final accepted = await bids.accept(mine, job: posted);
 
       expect(accepted.agreedFare, 1800);
-      expect(accepted.acceptedWorkerId, BidController.localWorkerId);
+      expect(accepted.acceptedWorkerId, DemoAccounts.deviceId);
       expect(bids.myBidOn(posted.id)!.status, BidStatus.accepted);
     });
 
@@ -498,6 +533,8 @@ Future<_Harness> _harness(
       providers: [
         ChangeNotifierProvider.value(value: jobController),
         ChangeNotifierProvider.value(value: bidController),
+        ChangeNotifierProvider(create: (_) => AccountController(store)..load()),
+        ChangeNotifierProvider(create: (_) => RatingController(store)..load()),
         ChangeNotifierProvider.value(value: profile),
         ChangeNotifierProvider.value(value: wallet),
         ChangeNotifierProvider.value(value: saved),

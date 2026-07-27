@@ -89,8 +89,13 @@ void main() {
 
     await tester.tap(find.text('Profile'));
     await settle(tester);
-    // Role and trades lead; the preferences sit underneath them.
+    // Who you are leads, then role and trades; the preferences sit
+    // underneath them, off the first screenful on a handset.
+    expect(find.text('Demo accounts'), findsOneWidget);
     expect(find.text('What brings you here'), findsOneWidget);
+
+    await tester.drag(find.byType(ListView), const Offset(0, -400));
+    await settle(tester);
     expect(find.text('Appearance'), findsOneWidget);
   });
 

@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 
 import '../l10n/app_localizations.dart';
+import 'account.dart';
 import 'job_status.dart';
 import 'job_tag.dart';
 
@@ -129,6 +130,13 @@ class Job {
   /// True once the hirer has chosen someone. No further bids are taken.
   bool get isAccepted => acceptedWorkerId != null;
 
+  /// Whether this job counts toward [workerId]'s history.
+  ///
+  /// Both halves matter: a job they were chosen for but that was cancelled is
+  /// not work they did, and a completed job somebody else did is not theirs.
+  bool isCompletedBy(String workerId) =>
+      status == JobStatus.completed && acceptedWorkerId == workerId;
+
   /// This job at a new point in its life.
   ///
   /// Separate from [copyWith] on purpose: editing a job and moving it forward
@@ -162,12 +170,29 @@ class Job {
   /// else, and never shown until someone asks to see it.
   final String? contactNumber;
 
-  /// Id of the user who posted it, if known.
+  /// Id of the account that posted it, if known. Seeded jobs carry a seed user
+  /// id; jobs posted in the app carry whichever demo account was active.
   final String? postedBy;
 
-  /// True for jobs created on this device. Drives the copper marker treatment
-  /// from section 15 of the brand guidelines.
+  /// True for jobs created in the app rather than loaded from the seed.
+  ///
+  /// This is about where the job came from, not about who owns it — the two
+  /// were the same thing until demo accounts arrived. Ownership is
+  /// [isPostedBy].
   final bool isLocal;
+
+  /// Whether [accountId] is the hirer here.
+  ///
+  /// This decides who may edit the job, who sees the offers on it, who cannot
+  /// bid on it, and which marker gets the copper treatment from section 15 of
+  /// the brand guidelines.
+  ///
+  /// The fallback covers jobs written before the switcher existed: they were
+  /// created on this device by the one identity there was, so they belong to
+  /// [DemoAccounts.deviceId]. Without it, an update would orphan everything a
+  /// user had already posted.
+  bool isPostedBy(String accountId) =>
+      (postedBy ?? (isLocal ? DemoAccounts.deviceId : null)) == accountId;
 
   /// Whether the job carries anything a person can actually understand it by.
   /// Used to keep posting flexible without allowing entirely empty jobs.

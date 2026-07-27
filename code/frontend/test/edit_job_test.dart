@@ -18,6 +18,7 @@ import 'package:trust_hire/services/bid_repository.dart';
 import 'package:trust_hire/services/local_store.dart';
 import 'package:trust_hire/services/media_store.dart';
 import 'package:trust_hire/l10n/app_localizations.dart';
+import 'package:trust_hire/app/account_controller.dart';
 
 /// Sprint 4's definition of done is "CRUD completed". Create is covered in
 /// create_job_test; this covers update and delete, including the media those
@@ -29,6 +30,7 @@ void main() {
   });
 
   late SavedJobsController savedJobs;
+  late AccountController accounts;
   late BidController bids;
   late ProfileController profile;
   late WalletController wallet;
@@ -36,6 +38,7 @@ void main() {
   Future<(JobController, MediaStore, LocalStore)> build() async {
     final store = await LocalStore.open();
     savedJobs = SavedJobsController(store)..load();
+    accounts = AccountController(store)..load();
     bids = BidController(BidRepository(store))..load();
     profile = ProfileController(store)..load();
     wallet = WalletController(store)..load();
@@ -175,6 +178,7 @@ void main() {
           providers: [
             ChangeNotifierProvider.value(value: controller),
             ChangeNotifierProvider.value(value: savedJobs),
+            ChangeNotifierProvider.value(value: accounts),
             ChangeNotifierProvider.value(value: bids),
             ChangeNotifierProvider.value(value: profile),
             ChangeNotifierProvider.value(value: wallet),
