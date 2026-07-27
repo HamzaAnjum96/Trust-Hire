@@ -131,9 +131,17 @@ code/frontend/
 │   ├── images/       ← placeholder job photos
 │   ├── audio/        ← placeholder voice notes
 │   └── fonts/        ← Inter, Noto Sans Arabic, Noto Nastaliq Urdu
+├── web/              ← the web shell: metadata, manifest, boot screen, icons
 ├── test/
-└── tool/             ← dev scripts (placeholder asset generation)
+└── tool/             ← dev scripts (placeholder assets, app icons)
 ```
+
+**The web shell.** `web/index.html` and `web/manifest.json` are the product's
+only presence outside the app — the browser tab, the shared link, the installed
+icon, and everything a crawler that does not run JavaScript can see. They are
+deliberately not Flutter's defaults, and `test/web_shell_test.dart` fails if
+they drift back. Regenerate the icons with `python3 tool/generate_app_icons.py`
+after any change to the mark.
 
 **Running it**
 

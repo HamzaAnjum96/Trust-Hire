@@ -1,46 +1,161 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <!--
-    If you are serving your web app in a path other than the root, change the
-    href value below to reflect the base path you are serving from.
-
-    The path provided below has to start and end with a slash "/" in order for
-    it to work correctly.
-
-    For more details:
-    * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
-
-    This is a placeholder for base href that will be replaced by the value of
-    the `--base-href` argument provided to `flutter build`.
+    Replaced by the `--base-href` argument to `flutter build`. Project Pages
+    sites are served from /<repo>/ rather than the domain root, so this cannot
+    be hard-coded to "/".
   -->
   <base href="$FLUTTER_BASE_HREF">
 
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
-  <meta name="description" content="A new Flutter project.">
 
-  <!-- iOS meta tags & icons -->
+  <title>Trust Hire — nearby work, made simple</title>
+  <meta name="description" content="Trust Hire shows work happening near you, on a map. Post a job with a voice note, a photo, or a few words — no account, nothing to fill in.">
+
+  <!--
+    The address bar and the PWA splash take their colour from here. Trust
+    Burgundy, per section 5 of the brand guidelines; the Flutter default was a
+    blue that appears nowhere else in the product.
+  -->
+  <meta name="theme-color" content="#7A263A">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Trust Hire">
+  <meta property="og:title" content="Trust Hire — nearby work, made simple">
+  <meta property="og:description" content="Work happening near you, on a map. Post a job with a voice note, a photo, or a few words.">
+  <meta property="og:image" content="icons/Icon-512.png">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Trust Hire — nearby work, made simple">
+  <meta name="twitter:description" content="Work happening near you, on a map. Post a job with a voice note, a photo, or a few words.">
+
   <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <meta name="apple-mobile-web-app-title" content="trust_hire">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Trust Hire">
   <link rel="apple-touch-icon" href="icons/Icon-192.png">
 
-  <!-- Favicon -->
   <link rel="icon" type="image/png" href="favicon.png"/>
-
-  <title>trust_hire</title>
   <link rel="manifest" href="manifest.json">
+
+  <style>
+    /*
+      A branded first paint. A Flutter web app shows nothing until the engine
+      has loaded, and on a slow connection that is several seconds of blank
+      white — indistinguishable from a broken deploy. This is the only styling
+      in the page; everything after the first frame comes from the app's theme.
+    */
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      background: #F4E9DE; /* Warm Sand */
+    }
+
+    @media (prefers-color-scheme: dark) {
+      html, body { background: #1A1214; }
+    }
+
+    #boot {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      padding: 24px;
+      box-sizing: border-box;
+      text-align: center;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      color: #7A263A;
+      /* Fades out once Flutter paints, rather than cutting to the app. */
+      transition: opacity 240ms ease-out;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      #boot { color: #F4E9DE; }
+    }
+
+    #boot.ready { opacity: 0; pointer-events: none; }
+
+    #boot img { width: 72px; height: 72px; }
+
+    #boot p {
+      margin: 0;
+      font-size: 15px;
+      font-weight: 500;
+      letter-spacing: 0.01em;
+    }
+
+    #boot .track {
+      width: 160px;
+      height: 3px;
+      border-radius: 2px;
+      background: rgba(122, 38, 58, 0.18);
+      overflow: hidden;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      #boot .track { background: rgba(244, 233, 222, 0.2); }
+    }
+
+    /*
+      Indeterminate: the engine reports readiness, not progress, and a bar
+      claiming a percentage it does not know is a lie the user can see the
+      moment it stalls at 90%.
+    */
+    #boot .track span {
+      display: block;
+      width: 40%;
+      height: 100%;
+      border-radius: 2px;
+      background: currentColor;
+      animation: slide 1.4s ease-in-out infinite;
+    }
+
+    @keyframes slide {
+      0%   { transform: translateX(-100%); }
+      100% { transform: translateX(350%); }
+    }
+
+    /*
+      Section 30 of the brand guidelines: motion is never the only cue, and it
+      stops entirely for anyone who has asked it to.
+    */
+    @media (prefers-reduced-motion: reduce) {
+      #boot .track span { animation: none; width: 100%; }
+      #boot { transition: none; }
+    }
+  </style>
 </head>
 <body>
   <!--
-    You can customize the "flutter_bootstrap.js" script.
-    This is useful to provide a custom configuration to the Flutter loader
-    or to give the user feedback during the initialization process.
-
-    For more details:
-    * https://docs.flutter.dev/platform-integration/web/initialization
+    Real text, not just a spinner. A crawler that does not run JavaScript sees
+    the app shell and nothing else, so this is the only description of the
+    product in the served HTML.
   -->
+  <div id="boot">
+    <img src="icons/Icon-192.png" alt="" width="72" height="72">
+    <p>Trust Hire — nearby work, made simple</p>
+    <div class="track" role="progressbar" aria-label="Loading Trust Hire"><span></span></div>
+    <noscript>
+      <p>Trust Hire needs JavaScript to show the map. Please enable it and reload.</p>
+    </noscript>
+  </div>
+
+  <script>
+    // Hide the boot screen once Flutter has painted its first frame, rather
+    // than on a timer — a timer either uncovers a blank canvas early or holds
+    // a loading screen over an app that is already usable.
+    window.addEventListener('flutter-first-frame', function () {
+      var boot = document.getElementById('boot');
+      if (!boot) return;
+      boot.classList.add('ready');
+      setTimeout(function () { boot.remove(); }, 300);
+    });
+  </script>
   <script src="flutter_bootstrap.js" async></script>
 </body>
 </html>

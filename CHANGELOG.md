@@ -12,6 +12,39 @@ that heading to the version and date, and open a fresh `[Unreleased]`.
 
 ## [Unreleased]
 
+### 0.2.1 — The web shell
+
+Everything a person sees before the app loads was still Flutter's default,
+thirteen sprints in, because nothing in the project ever looked at it.
+
+#### Changed
+
+- The app icon, the maskable variants and the favicon are the brand's map pin
+  in white on Trust Burgundy, drawn by `tool/generate_app_icons.py` from the
+  same tangent construction `job_marker.dart` uses, so the installed icon and
+  the pins on the map are the same mark. They were the Flutter logo.
+- `index.html` and `manifest.json` name the product, describe it, carry Open
+  Graph and Twitter cards, and use Trust Burgundy rather than Flutter blue.
+  They said `trust_hire` and "A new Flutter project." The manifest is no
+  longer locked to `portrait-primary`, which the same build ignores on a
+  desktop browser anyway.
+- The page is no longer blank until the engine loads. A branded boot screen —
+  mark, product line, indeterminate bar — hands over on `flutter-first-frame`
+  rather than on a timer, so it never uncovers an unpainted canvas or lingers
+  over a usable app. It stops animating under `prefers-reduced-motion`, and it
+  carries the only description of the product a crawler that does not run
+  JavaScript will ever see.
+- The deploy injects a canonical URL, which is only knowable there: the repo
+  can be forked or renamed, and a canonical pointing at the wrong origin is
+  worse than none.
+
+#### Added
+
+- `test/web_shell_test.dart`, which fails on each of those defaults
+  specifically. Re-running `flutter create` over the project restores every
+  one of them silently.
+
+
 ### 0.2.0 — Versioning, and a map that stops flickering
 
 #### Added

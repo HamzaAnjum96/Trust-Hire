@@ -62,6 +62,25 @@ jobs:
       - name: Stage the built app
         run: cp -R code/frontend/build/web _site
 
+      # The canonical URL is only knowable here: the app is built from a repo
+      # that could be forked or renamed, and a canonical pointing at the wrong
+      # origin is worse than none at all.
+      - name: Add the canonical URL
+        env:
+          PAGE_URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/
+        run: |
+          python3 - "$PAGE_URL" <<'EOF'
+          import pathlib, sys
+
+          url = sys.argv[1].lower()
+          page = pathlib.Path('_site/index.html')
+          html = page.read_text()
+          tag = f'  <link rel="canonical" href="{url}">\n'
+
+          page.write_text(html.replace('</head>', tag + '</head>', 1))
+          print(f'canonical: {url}')
+          EOF
+
       - name: Disable Jekyll processing
         run: touch _site/.nojekyll
 

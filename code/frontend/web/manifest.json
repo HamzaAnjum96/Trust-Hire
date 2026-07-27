@@ -1,12 +1,15 @@
 {
-    "name": "trust_hire",
-    "short_name": "trust_hire",
+    "name": "Trust Hire",
+    "short_name": "Trust Hire",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#0175C2",
-    "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
-    "orientation": "portrait-primary",
+    "background_color": "#F4E9DE",
+    "theme_color": "#7A263A",
+    "description": "Work happening near you, on a map. Post a job with a voice note, a photo, or a few words — no account, nothing to fill in.",
+    "orientation": "any",
+    "lang": "en",
+    "dir": "auto",
+    "categories": ["business", "productivity"],
     "prefer_related_applications": false,
     "icons": [
         {
