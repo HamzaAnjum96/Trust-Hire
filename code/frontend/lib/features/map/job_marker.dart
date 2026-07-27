@@ -2,6 +2,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
+import '../../core/motion.dart';
 import '../../core/tokens.dart';
 import '../../models/job.dart';
 
@@ -30,9 +31,7 @@ class JobMarker extends StatelessWidget {
   Widget build(BuildContext context) {
     final fill = isSelected
         ? BrandColours.markerSelected
-        : (job.isLocal
-            ? BrandColours.markerLocal
-            : BrandColours.markerDefault);
+        : (job.isLocal ? BrandColours.markerLocal : BrandColours.markerDefault);
 
     final icon = switch (job) {
       final j when j.hasVoiceNote => Icons.mic,
@@ -49,7 +48,7 @@ class JobMarker extends StatelessWidget {
         behavior: HitTestBehavior.opaque,
         child: AnimatedContainer(
           // Section 28 — the marker gently enlarges when selected.
-          duration: BrandMotion.fast,
+          duration: Motion.fast(context),
           curve: BrandMotion.curve,
           width: isSelected ? selectedSize : size,
           height: isSelected ? selectedSize : size,
@@ -111,9 +110,7 @@ class _PinPainter extends CustomPainter {
     // and back down. Drawing the head and the point as separate shapes leaves
     // the stroke cutting a visible seam across the join.
     final distanceToTip = tip.dy - centre.dy;
-    final tangentAngle = math.acos(
-      (radius / distanceToTip).clamp(-1.0, 1.0),
-    );
+    final tangentAngle = math.acos((radius / distanceToTip).clamp(-1.0, 1.0));
 
     // Canvas angles run clockwise from the positive x-axis, so π/2 points
     // straight down towards the tip.
@@ -126,8 +123,12 @@ class _PinPainter extends CustomPainter {
         centre.dx + radius * math.cos(start),
         centre.dy + radius * math.sin(start),
       )
-      ..arcTo(Rect.fromCircle(center: centre, radius: radius), start, sweep,
-          false)
+      ..arcTo(
+        Rect.fromCircle(center: centre, radius: radius),
+        start,
+        sweep,
+        false,
+      )
       ..close();
 
     // A soft drop shadow so pins stay legible over busy map tiles.

@@ -3,10 +3,12 @@ import 'package:provider/provider.dart';
 
 import '../../app/job_controller.dart';
 import '../../core/formatters.dart';
+import '../../core/motion.dart';
 import '../../core/tokens.dart';
 import '../../models/job.dart';
 import '../map/location_controller.dart';
 import '../../services/media_store.dart';
+import '../../widgets/job_skeleton.dart';
 import '../../widgets/state_views.dart';
 import 'filter_bar.dart';
 import 'job_details_sheet.dart';
@@ -25,10 +27,7 @@ class JobsScreen extends StatelessWidget {
     final filters = context.watch<JobFilterController>();
     final location = context.watch<LocationController>();
 
-    final visible = filters.apply(
-      controller.jobs,
-      from: location.position,
-    );
+    final visible = filters.apply(controller.jobs, from: location.position);
 
     return Scaffold(
       appBar: AppBar(
@@ -53,8 +52,9 @@ class JobsScreen extends StatelessWidget {
         ),
       ),
       body: switch (controller.state) {
-        LoadState.idle ||
-        LoadState.loading => const LoadingView(message: 'Loading jobs…'),
+        // A placeholder in the shape of the content beats a spinner: it
+        // says what is coming and stops the layout jumping.
+        LoadState.idle || LoadState.loading => const JobListSkeleton(),
         LoadState.failed => ErrorView(
           message: controller.errorMessage ?? 'Could not load jobs. Try again.',
           onRetry: controller.load,
@@ -128,7 +128,11 @@ class _JobList extends StatelessWidget {
       itemCount: jobs.length,
       separatorBuilder: (_, _) =>
           const SizedBox(height: BrandSizing.spaceSm + 4),
-      itemBuilder: (context, index) => _JobRow(job: jobs[index], now: now),
+      itemBuilder: (context, index) => SettleIn(
+        // A short stagger so the list assembles rather than snapping in.
+        delay: Duration(milliseconds: (index * 40).clamp(0, 240)),
+        child: _JobRow(job: jobs[index], now: now),
+      ),
     );
   }
 }

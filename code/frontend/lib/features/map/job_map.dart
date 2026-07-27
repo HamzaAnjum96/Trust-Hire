@@ -75,105 +75,108 @@ class _JobMapState extends State<JobMap> {
 
     return Stack(
       children: [
-        FlutterMap(
-          mapController: widget.controller,
-          options: MapOptions(
-            initialCenter: LatLng(
-              widget.centre.latitude,
-              widget.centre.longitude,
-            ),
-            initialZoom: widget.initialZoom,
-            minZoom: 4,
-            maxZoom: 18,
-            backgroundColor: mapTheme.backgroundColour,
-            onTap: (_, _) => widget.onMapTapped(),
-            interactionOptions: const InteractionOptions(
-              // Rotation adds nothing here and makes one-handed panning
-              // fiddly, so it is off.
-              flags: InteractiveFlag.drag |
-                  InteractiveFlag.pinchZoom |
-                  InteractiveFlag.doubleTapZoom |
-                  InteractiveFlag.scrollWheelZoom,
-            ),
-          ),
-          children: [
-            TileLayer(
-              urlTemplate: mapTheme.tileUrl,
-              userAgentPackageName: 'com.trusthire.trust_hire',
-              tileProvider: widget.tileProvider,
-              retinaMode: RetinaMode.isHighDensity(context),
-              errorTileCallback: (_, _, _) => _onTileError(),
-              evictErrorTileStrategy: EvictErrorTileStrategy.notVisible,
-            ),
-
-            // A whisper of brand colour over the basemap, under everything
-            // else, so markers and work areas stay untinted.
-            IgnorePointer(
-              child: ColoredBox(
-                color: mapTheme.tint.withValues(alpha: mapTheme.tintOpacity),
-                child: const SizedBox.expand(),
+        // The map is one large tappable surface with no text of its own, so
+        // it needs an explicit label — otherwise a screen reader announces an
+        // unnamed button covering the screen.
+        Semantics(
+          label: 'Map of nearby jobs',
+          child: FlutterMap(
+            mapController: widget.controller,
+            options: MapOptions(
+              initialCenter: LatLng(
+                widget.centre.latitude,
+                widget.centre.longitude,
+              ),
+              initialZoom: widget.initialZoom,
+              minZoom: 4,
+              maxZoom: 18,
+              backgroundColor: mapTheme.backgroundColour,
+              onTap: (_, _) => widget.onMapTapped(),
+              interactionOptions: const InteractionOptions(
+                // Rotation adds nothing here and makes one-handed panning
+                // fiddly, so it is off.
+                flags:
+                    InteractiveFlag.drag |
+                    InteractiveFlag.pinchZoom |
+                    InteractiveFlag.doubleTapZoom |
+                    InteractiveFlag.scrollWheelZoom,
               ),
             ),
+            children: [
+              mapTheme.tileLayer(
+                context,
+                provider: widget.tileProvider,
+                onTileError: _onTileError,
+              ),
 
-            // The approximate work area of the selected job. Only the
-            // selected one is drawn — every radius at once turns the map into
-            // noise, which section 15 warns against.
-            if (selected != null)
-              CircleLayer(
-                circles: [
-                  CircleMarker(
-                    point: LatLng(
-                      selected.location.latitude,
-                      selected.location.longitude,
+              // A whisper of brand colour over the basemap, under everything
+              // else, so markers and work areas stay untinted.
+              IgnorePointer(
+                child: ColoredBox(
+                  color: mapTheme.tint.withValues(alpha: mapTheme.tintOpacity),
+                  child: const SizedBox.expand(),
+                ),
+              ),
+
+              // The approximate work area of the selected job. Only the
+              // selected one is drawn — every radius at once turns the map into
+              // noise, which section 15 warns against.
+              if (selected != null)
+                CircleLayer(
+                  circles: [
+                    CircleMarker(
+                      point: LatLng(
+                        selected.location.latitude,
+                        selected.location.longitude,
+                      ),
+                      radius: selected.radiusMetres,
+                      useRadiusInMeter: true,
+                      color: BrandColours.jobRadiusFill,
+                      borderColor: BrandColours.jobRadiusBorder,
+                      borderStrokeWidth: 1.5,
                     ),
-                    radius: selected.radiusMetres,
-                    useRadiusInMeter: true,
-                    color: BrandColours.jobRadiusFill,
-                    borderColor: BrandColours.jobRadiusBorder,
-                    borderStrokeWidth: 1.5,
-                  ),
-                ],
-              ),
+                  ],
+                ),
 
-            if (widget.userLocation != null)
+              if (widget.userLocation != null)
+                MarkerLayer(
+                  markers: [
+                    Marker(
+                      point: LatLng(
+                        widget.userLocation!.latitude,
+                        widget.userLocation!.longitude,
+                      ),
+                      width: UserLocationMarker.size,
+                      height: UserLocationMarker.size,
+                      child: const UserLocationMarker(),
+                    ),
+                  ],
+                ),
+
               MarkerLayer(
                 markers: [
-                  Marker(
-                    point: LatLng(
-                      widget.userLocation!.latitude,
-                      widget.userLocation!.longitude,
+                  for (final job in widget.jobs)
+                    Marker(
+                      point: LatLng(
+                        job.location.latitude,
+                        job.location.longitude,
+                      ),
+                      width: JobMarker.selectedSize,
+                      height: JobMarker.selectedSize,
+                      // Anchor the pin's point at the coordinate rather than
+                      // its centre, so it indicates the right spot.
+                      alignment: Alignment.topCenter,
+                      child: JobMarker(
+                        job: job,
+                        isSelected: job.id == widget.selectedJobId,
+                        onTap: () => widget.onJobTapped(job),
+                      ),
                     ),
-                    width: UserLocationMarker.size,
-                    height: UserLocationMarker.size,
-                    child: const UserLocationMarker(),
-                  ),
                 ],
               ),
-
-            MarkerLayer(
-              markers: [
-                for (final job in widget.jobs)
-                  Marker(
-                    point: LatLng(
-                      job.location.latitude,
-                      job.location.longitude,
-                    ),
-                    width: JobMarker.selectedSize,
-                    height: JobMarker.selectedSize,
-                    // Anchor the pin's point at the coordinate rather than
-                    // its centre, so it indicates the right spot.
-                    alignment: Alignment.topCenter,
-                    child: JobMarker(
-                      job: job,
-                      isSelected: job.id == widget.selectedJobId,
-                      onTap: () => widget.onJobTapped(job),
-                    ),
-                  ),
-              ],
-            ),
-          ],
+            ],
+          ),
         ),
-
 
         // OpenStreetMap requires visible attribution.
         Positioned(
@@ -198,5 +201,4 @@ class _JobMapState extends State<JobMap> {
       ],
     );
   }
-
 }

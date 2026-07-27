@@ -46,8 +46,7 @@ class _AppShellState extends State<AppShell> {
     // Open the area picker on the user where possible, so posting starts from
     // somewhere meaningful rather than an arbitrary point.
     final location =
-        context.read<LocationController>().position ??
-        LocationService.fallback;
+        context.read<LocationController>().position ?? LocationService.fallback;
 
     Navigator.of(context).push(
       MaterialPageRoute<String>(
@@ -62,11 +61,7 @@ class _AppShellState extends State<AppShell> {
     return Scaffold(
       body: IndexedStack(
         index: _index,
-        children: const [
-          MapScreen(),
-          JobsScreen(),
-          SettingsScreen(),
-        ],
+        children: const [MapScreen(), JobsScreen(), SettingsScreen()],
       ),
       floatingActionButton: _index == 2
           ? null

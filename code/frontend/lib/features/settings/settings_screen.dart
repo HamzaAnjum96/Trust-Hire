@@ -21,7 +21,8 @@ class SettingsScreen extends StatelessWidget {
         padding: const EdgeInsets.all(BrandSizing.spaceMd),
         children: [
           const NoticePanel(
-            message: 'This POC stores jobs only on this device. '
+            message:
+                'This POC stores jobs only on this device. '
                 'Nothing is uploaded and no account is needed.',
           ),
           const SizedBox(height: BrandSizing.spaceLg),
@@ -78,9 +79,7 @@ class SettingsScreen extends StatelessWidget {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (dialogContext) => AlertDialog(
-        shape: const RoundedRectangleBorder(
-          borderRadius: BrandRadius.largeAll,
-        ),
+        shape: const RoundedRectangleBorder(borderRadius: BrandRadius.largeAll),
         title: const Text('Restore seed data?'),
         content: const Text(
           'Jobs you created on this device will be removed. This cannot be '
@@ -92,9 +91,7 @@ class SettingsScreen extends StatelessWidget {
             child: const Text('Keep My Jobs'),
           ),
           TextButton(
-            style: TextButton.styleFrom(
-              foregroundColor: BrandColours.errorRed,
-            ),
+            style: TextButton.styleFrom(foregroundColor: BrandColours.errorRed),
             onPressed: () => Navigator.of(dialogContext).pop(true),
             child: const Text('Restore Seed Data'),
           ),

@@ -129,11 +129,7 @@ class _VoiceRecorderFieldState extends State<VoiceRecorderField> {
         isLight: isLight,
         child: Row(
           children: [
-            const Icon(
-              Icons.graphic_eq,
-              color: BrandColours.copper,
-              size: 26,
-            ),
+            const Icon(Icons.graphic_eq, color: BrandColours.copper, size: 26),
             const SizedBox(width: BrandSizing.spaceMd),
             Expanded(
               child: Column(
@@ -205,11 +201,7 @@ class _VoiceRecorderFieldState extends State<VoiceRecorderField> {
 
 /// Adding photos. Large tappable thumbnails, never a caption requirement.
 class PhotoField extends StatelessWidget {
-  const PhotoField({
-    super.key,
-    required this.draft,
-    required this.mediaStore,
-  });
+  const PhotoField({super.key, required this.draft, required this.mediaStore});
 
   final JobDraftController draft;
   final MediaStore mediaStore;

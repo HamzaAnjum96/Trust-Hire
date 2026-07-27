@@ -32,22 +32,21 @@ class AppUser {
   }
 
   factory AppUser.fromJson(Map<String, dynamic> json) => AppUser(
-        id: json['id'] as String,
-        name: json['name'] as String,
-        area: json['area'] as String?,
-        avatarInitials: json['avatarInitials'] as String?,
-      );
+    id: json['id'] as String,
+    name: json['name'] as String,
+    area: json['area'] as String?,
+    avatarInitials: json['avatarInitials'] as String?,
+  );
 
   Map<String, dynamic> toJson() => <String, dynamic>{
-        'id': id,
-        'name': name,
-        'area': area,
-        'avatarInitials': avatarInitials,
-      };
+    'id': id,
+    'name': name,
+    'area': area,
+    'avatarInitials': avatarInitials,
+  };
 }
 
 extension on String {
   /// First character, uppercased — safe on empty strings.
-  String get firstLetter =>
-      isEmpty ? '' : substring(0, 1).toUpperCase();
+  String get firstLetter => isEmpty ? '' : substring(0, 1).toUpperCase();
 }

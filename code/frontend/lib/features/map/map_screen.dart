@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 
 import '../../app/job_controller.dart';
 import '../../core/formatters.dart';
+import '../../core/motion.dart';
 import '../../core/tokens.dart';
 import '../../models/job.dart';
 import '../../services/media_store.dart';
@@ -71,10 +72,7 @@ class _MapScreenState extends State<MapScreen> {
     final position = location.position;
     if (position == null) return;
 
-    _mapController.move(
-      LatLng(position.latitude, position.longitude),
-      15,
-    );
+    _mapController.move(LatLng(position.latitude, position.longitude), 15);
   }
 
   @override
@@ -85,27 +83,26 @@ class _MapScreenState extends State<MapScreen> {
 
     return Scaffold(
       body: switch (jobs.state) {
-        LoadState.idle || LoadState.loading =>
-          const LoadingView(message: 'Loading nearby jobs…'),
+        LoadState.idle ||
+        LoadState.loading => const LoadingView(message: 'Loading nearby jobs…'),
         LoadState.failed => ErrorView(
-            message:
-                jobs.errorMessage ?? 'Could not load jobs. Try again.',
-            onRetry: jobs.load,
-          ),
+          message: jobs.errorMessage ?? 'Could not load jobs. Try again.',
+          onRetry: jobs.load,
+        ),
         LoadState.ready => _MapBody(
-            jobs: filters.apply(jobs.jobs, from: location.position),
-            totalJobCount: jobs.jobs.length,
-            filters: filters,
-            selectedJobId: _selectedJobId,
-            location: location,
-            mapController: _mapController,
-            tilesUnavailable: _tilesUnavailable,
-            onJobTapped: _selectJob,
-            onMapTapped: _clearSelection,
-            onMyLocationPressed: () => _goToMyLocation(location),
-            onTilesUnavailable: _onTilesUnavailable,
-            onOpenJob: (job) => _openDetails(job, location.position),
-          ),
+          jobs: filters.apply(jobs.jobs, from: location.position),
+          totalJobCount: jobs.jobs.length,
+          filters: filters,
+          selectedJobId: _selectedJobId,
+          location: location,
+          mapController: _mapController,
+          tilesUnavailable: _tilesUnavailable,
+          onJobTapped: _selectJob,
+          onMapTapped: _clearSelection,
+          onMyLocationPressed: () => _goToMyLocation(location),
+          onTilesUnavailable: _onTilesUnavailable,
+          onOpenJob: (job) => _openDetails(job, location.position),
+        ),
       },
     );
   }
@@ -213,7 +210,8 @@ class _MapBody extends StatelessWidget {
                   const SizedBox(height: BrandSizing.spaceSm),
                 const _MapNotice(
                   icon: Icons.cloud_off,
-                  message: 'Map images are not loading. Jobs are still shown '
+                  message:
+                      'Map images are not loading. Jobs are still shown '
                       'in the right places.',
                 ),
               ],
@@ -223,7 +221,7 @@ class _MapBody extends StatelessWidget {
 
         // "Near Me" sits above the preview card so it never ends up behind it.
         AnimatedPositioned(
-          duration: BrandMotion.standard,
+          duration: Motion.standard(context),
           curve: BrandMotion.curve,
           right: BrandSizing.spaceMd,
           bottom: selected != null ? 236 : 96,
@@ -240,7 +238,8 @@ class _MapBody extends StatelessWidget {
             top: padding.top + 116,
             child: _MapNotice(
               icon: Icons.search_off,
-              message: 'No jobs match here. Try a wider area or a different '
+              message:
+                  'No jobs match here. Try a wider area or a different '
                   'time.',
               onDismiss: filters.clear,
             ),
@@ -248,7 +247,7 @@ class _MapBody extends StatelessWidget {
 
         // Section 28 — the preview slides up rather than appearing abruptly.
         AnimatedSwitcher(
-          duration: BrandMotion.standard,
+          duration: Motion.standard(context),
           switchInCurve: BrandMotion.curve,
           transitionBuilder: (child, animation) => SlideTransition(
             position: Tween<Offset>(
@@ -325,11 +324,7 @@ class _MapHeader extends StatelessWidget {
 }
 
 class _MapNotice extends StatelessWidget {
-  const _MapNotice({
-    required this.icon,
-    required this.message,
-    this.onDismiss,
-  });
+  const _MapNotice({required this.icon, required this.message, this.onDismiss});
 
   final IconData icon;
   final String message;
@@ -359,9 +354,7 @@ class _MapNotice extends StatelessWidget {
         children: [
           Icon(icon, size: 20, color: BrandColours.informationBlue),
           const SizedBox(width: BrandSizing.spaceSm + 4),
-          Expanded(
-            child: Text(message, style: theme.textTheme.bodyMedium),
-          ),
+          Expanded(child: Text(message, style: theme.textTheme.bodyMedium)),
           if (onDismiss != null)
             IconButton(
               onPressed: onDismiss,
@@ -492,7 +485,8 @@ class JobPreviewCard extends StatelessWidget {
               if (job.hasPhotos)
                 _MetaChip(
                   icon: Icons.photo_library_outlined,
-                  label: '${job.photoPaths.length} photo'
+                  label:
+                      '${job.photoPaths.length} photo'
                       '${job.photoPaths.length == 1 ? '' : 's'}',
                 ),
             ],

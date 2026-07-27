@@ -81,11 +81,7 @@ class JobFilter {
   }
 
   /// Applies the filter, newest first.
-  List<Job> apply(
-    List<Job> jobs, {
-    required DateTime now,
-    JobLocation? from,
-  }) {
+  List<Job> apply(List<Job> jobs, {required DateTime now, JobLocation? from}) {
     return jobs
         .where((job) => _matches(job, now: now, from: from))
         .toList(growable: false);

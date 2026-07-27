@@ -30,8 +30,7 @@ class LocationController extends ChangeNotifier {
   JobLocation get mapCentre => _result.position ?? LocationService.fallback;
 
   /// Explanation to surface, or null when there is nothing to say.
-  String? get explanation =>
-      _explanationDismissed ? null : _result.explanation;
+  String? get explanation => _explanationDismissed ? null : _result.explanation;
 
   Future<void> request() async {
     if (_isRequesting) return;

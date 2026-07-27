@@ -75,9 +75,7 @@ class EmptyView extends StatelessWidget {
               child: Icon(
                 icon,
                 size: 36,
-                color: isLight
-                    ? BrandColours.copper
-                    : BrandColours.darkCopper,
+                color: isLight ? BrandColours.copper : BrandColours.darkCopper,
               ),
             ),
             const SizedBox(height: BrandSizing.spaceLg),

@@ -46,10 +46,7 @@ class _LocationPickerState extends State<LocationPicker> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final mapTheme = MapTheme.of(context);
-    final centre = LatLng(
-      widget.location.latitude,
-      widget.location.longitude,
-    );
+    final centre = LatLng(widget.location.latitude, widget.location.longitude);
 
     return ClipRRect(
       borderRadius: BrandRadius.largeAll,
@@ -67,7 +64,8 @@ class _LocationPickerState extends State<LocationPicker> {
                 maxZoom: 18,
                 backgroundColor: mapTheme.backgroundColour,
                 interactionOptions: const InteractionOptions(
-                  flags: InteractiveFlag.drag |
+                  flags:
+                      InteractiveFlag.drag |
                       InteractiveFlag.pinchZoom |
                       InteractiveFlag.doubleTapZoom,
                 ),
@@ -82,20 +80,8 @@ class _LocationPickerState extends State<LocationPicker> {
                 },
               ),
               children: [
-                TileLayer(
-                  urlTemplate: mapTheme.tileUrl,
-                  userAgentPackageName: 'com.trusthire.trust_hire',
-                  tileProvider: widget.tileProvider,
-                  retinaMode: RetinaMode.isHighDensity(context),
-                ),
-                IgnorePointer(
-                  child: ColoredBox(
-                    color: mapTheme.tint.withValues(
-                      alpha: mapTheme.tintOpacity,
-                    ),
-                    child: const SizedBox.expand(),
-                  ),
-                ),
+                mapTheme.tileLayer(context, provider: widget.tileProvider),
+                mapTheme.tintLayer(),
                 CircleLayer(
                   circles: [
                     CircleMarker(
@@ -121,9 +107,7 @@ class _LocationPickerState extends State<LocationPicker> {
                   Icons.place,
                   size: 44,
                   color: theme.colorScheme.primary,
-                  shadows: const [
-                    Shadow(color: Colors.black26, blurRadius: 6),
-                  ],
+                  shadows: const [Shadow(color: Colors.black26, blurRadius: 6)],
                 ),
               ),
             ),

@@ -9,21 +9,22 @@ class JobLocation {
   final double longitude;
 
   factory JobLocation.fromJson(Map<String, dynamic> json) => JobLocation(
-        latitude: (json['latitude'] as num).toDouble(),
-        longitude: (json['longitude'] as num).toDouble(),
-      );
+    latitude: (json['latitude'] as num).toDouble(),
+    longitude: (json['longitude'] as num).toDouble(),
+  );
 
   Map<String, dynamic> toJson() => <String, dynamic>{
-        'latitude': latitude,
-        'longitude': longitude,
-      };
+    'latitude': latitude,
+    'longitude': longitude,
+  };
 
   /// Great-circle distance in metres, via the haversine formula.
   double distanceTo(JobLocation other) {
     const earthRadiusMetres = 6371000.0;
     final dLat = _toRadians(other.latitude - latitude);
     final dLon = _toRadians(other.longitude - longitude);
-    final a = math.sin(dLat / 2) * math.sin(dLat / 2) +
+    final a =
+        math.sin(dLat / 2) * math.sin(dLat / 2) +
         math.cos(_toRadians(latitude)) *
             math.cos(_toRadians(other.latitude)) *
             math.sin(dLon / 2) *
@@ -157,10 +158,12 @@ class Job {
       createdAt: createdAt,
       title: clearTitle ? null : (title ?? this.title),
       radiusMetres: radiusMetres ?? this.radiusMetres,
-      scheduledTime:
-          clearScheduledTime ? null : (scheduledTime ?? this.scheduledTime),
-      voiceNotePath:
-          clearVoiceNote ? null : (voiceNotePath ?? this.voiceNotePath),
+      scheduledTime: clearScheduledTime
+          ? null
+          : (scheduledTime ?? this.scheduledTime),
+      voiceNotePath: clearVoiceNote
+          ? null
+          : (voiceNotePath ?? this.voiceNotePath),
       voiceNoteDuration: clearVoiceNote
           ? null
           : (voiceNoteDuration ?? this.voiceNoteDuration),
@@ -177,8 +180,7 @@ class Job {
     final durationMs = json['voiceNoteDurationMs'] as int?;
     return Job(
       id: json['id'] as String,
-      location:
-          JobLocation.fromJson(json['location'] as Map<String, dynamic>),
+      location: JobLocation.fromJson(json['location'] as Map<String, dynamic>),
       createdAt: DateTime.parse(json['createdAt'] as String),
       title: json['title'] as String?,
       radiusMetres: (json['radiusMetres'] as num?)?.toDouble() ?? 1000,
@@ -186,11 +188,12 @@ class Job {
           ? null
           : DateTime.parse(json['scheduledTime'] as String),
       voiceNotePath: json['voiceNotePath'] as String?,
-      voiceNoteDuration:
-          durationMs == null ? null : Duration(milliseconds: durationMs),
+      voiceNoteDuration: durationMs == null
+          ? null
+          : Duration(milliseconds: durationMs),
       photoPaths:
           (json['photoPaths'] as List<dynamic>?)?.cast<String>() ??
-              const <String>[],
+          const <String>[],
       shortDescription: json['shortDescription'] as String?,
       postedBy: json['postedBy'] as String?,
       isLocal: json['isLocal'] as bool? ?? false,
@@ -198,17 +201,17 @@ class Job {
   }
 
   Map<String, dynamic> toJson() => <String, dynamic>{
-        'id': id,
-        'location': location.toJson(),
-        'createdAt': createdAt.toIso8601String(),
-        'title': title,
-        'radiusMetres': radiusMetres,
-        'scheduledTime': scheduledTime?.toIso8601String(),
-        'voiceNotePath': voiceNotePath,
-        'voiceNoteDurationMs': voiceNoteDuration?.inMilliseconds,
-        'photoPaths': photoPaths,
-        'shortDescription': shortDescription,
-        'postedBy': postedBy,
-        'isLocal': isLocal,
-      };
+    'id': id,
+    'location': location.toJson(),
+    'createdAt': createdAt.toIso8601String(),
+    'title': title,
+    'radiusMetres': radiusMetres,
+    'scheduledTime': scheduledTime?.toIso8601String(),
+    'voiceNotePath': voiceNotePath,
+    'voiceNoteDurationMs': voiceNoteDuration?.inMilliseconds,
+    'photoPaths': photoPaths,
+    'shortDescription': shortDescription,
+    'postedBy': postedBy,
+    'isLocal': isLocal,
+  };
 }

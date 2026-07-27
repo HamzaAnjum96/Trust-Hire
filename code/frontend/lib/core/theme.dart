@@ -32,9 +32,7 @@ class BrandTheme {
       onError: BrandColours.white,
     );
 
-    return _base(scheme).copyWith(
-      scaffoldBackgroundColor: BrandColours.mist,
-    );
+    return _base(scheme).copyWith(scaffoldBackgroundColor: BrandColours.mist);
   }
 
   static ThemeData get dark {
@@ -59,9 +57,9 @@ class BrandTheme {
       onError: BrandColours.white,
     );
 
-    return _base(scheme).copyWith(
-      scaffoldBackgroundColor: BrandColours.darkBackground,
-    );
+    return _base(
+      scheme,
+    ).copyWith(scaffoldBackgroundColor: BrandColours.darkBackground);
   }
 
   static ThemeData _base(ColorScheme scheme) {
@@ -103,32 +101,35 @@ class BrandTheme {
 
       // Section 22 — primary button: burgundy, white text, 48px, 12px radius.
       elevatedButtonTheme: ElevatedButtonThemeData(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: scheme.primary,
-          foregroundColor: scheme.onPrimary,
-          disabledBackgroundColor: BrandColours.stone,
-          disabledForegroundColor: BrandColours.white,
-          minimumSize: const Size(0, BrandSizing.touchTargetPreferred),
-          padding: const EdgeInsets.symmetric(horizontal: BrandSizing.spaceLg),
-          elevation: 0,
-          textStyle: BrandType.button,
-          shape: const RoundedRectangleBorder(
-            borderRadius: BrandRadius.mediumAll,
-          ),
-        ).copyWith(
-          // Pressed state darkens to Deep Burgundy in light mode.
-          backgroundColor: WidgetStateProperty.resolveWith((states) {
-            if (states.contains(WidgetState.disabled)) {
-              return BrandColours.stone;
-            }
-            if (states.contains(WidgetState.pressed)) {
-              return isLight
-                  ? BrandColours.deepBurgundy
-                  : BrandColours.trustBurgundy;
-            }
-            return scheme.primary;
-          }),
-        ),
+        style:
+            ElevatedButton.styleFrom(
+              backgroundColor: scheme.primary,
+              foregroundColor: scheme.onPrimary,
+              disabledBackgroundColor: BrandColours.stone,
+              disabledForegroundColor: BrandColours.white,
+              minimumSize: const Size(0, BrandSizing.touchTargetPreferred),
+              padding: const EdgeInsets.symmetric(
+                horizontal: BrandSizing.spaceLg,
+              ),
+              elevation: 0,
+              textStyle: BrandType.button,
+              shape: const RoundedRectangleBorder(
+                borderRadius: BrandRadius.mediumAll,
+              ),
+            ).copyWith(
+              // Pressed state darkens to Deep Burgundy in light mode.
+              backgroundColor: WidgetStateProperty.resolveWith((states) {
+                if (states.contains(WidgetState.disabled)) {
+                  return BrandColours.stone;
+                }
+                if (states.contains(WidgetState.pressed)) {
+                  return isLight
+                      ? BrandColours.deepBurgundy
+                      : BrandColours.trustBurgundy;
+                }
+                return scheme.primary;
+              }),
+            ),
       ),
 
       // Section 22 — secondary button: transparent with a burgundy border.
@@ -212,9 +213,7 @@ class BrandTheme {
         elevation: 0,
         showDragHandle: true,
         dragHandleColor: BrandColours.stone,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BrandRadius.sheetTop,
-        ),
+        shape: const RoundedRectangleBorder(borderRadius: BrandRadius.sheetTop),
       ),
 
       navigationBarTheme: NavigationBarThemeData(
@@ -242,8 +241,12 @@ class BrandTheme {
       ),
 
       chipTheme: ChipThemeData(
-        backgroundColor: isLight ? BrandColours.white : BrandColours.darkElevated,
-        selectedColor: isLight ? BrandColours.warmSand : BrandColours.darkElevated,
+        backgroundColor: isLight
+            ? BrandColours.white
+            : BrandColours.darkElevated,
+        selectedColor: isLight
+            ? BrandColours.warmSand
+            : BrandColours.darkElevated,
         side: BorderSide(color: scheme.outlineVariant),
         labelStyle: BrandType.supporting.copyWith(color: scheme.onSurface),
         padding: const EdgeInsets.symmetric(

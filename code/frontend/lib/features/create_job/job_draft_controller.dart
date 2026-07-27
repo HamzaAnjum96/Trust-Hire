@@ -112,8 +112,7 @@ class JobDraftController extends ChangeNotifier {
       _photos.isNotEmpty;
 
   /// What is stopping a save, or null when it can go ahead.
-  DraftProblem? get problem =>
-      hasContent ? null : DraftProblem.nothingToShow;
+  DraftProblem? get problem => hasContent ? null : DraftProblem.nothingToShow;
 
   bool get canSave => problem == null && !_isSaving && !_isRecording;
 
@@ -242,10 +241,7 @@ class JobDraftController extends ChangeNotifier {
 
       var voiceReference = _voiceReference;
       if (_voiceBytes != null) {
-        voiceReference = await _mediaStore.save(
-          _voiceBytes!,
-          extension: 'm4a',
-        );
+        voiceReference = await _mediaStore.save(_voiceBytes!, extension: 'm4a');
       }
 
       final trimmedTitle = _title.trim();
@@ -261,8 +257,9 @@ class JobDraftController extends ChangeNotifier {
         voiceNotePath: voiceReference,
         voiceNoteDuration: _voiceDuration,
         photoPaths: photoReferences,
-        shortDescription:
-            trimmedDescription.isEmpty ? null : trimmedDescription,
+        shortDescription: trimmedDescription.isEmpty
+            ? null
+            : trimmedDescription,
         postedBy: _editing?.postedBy,
         // Anything written here lives on this device only.
         isLocal: true,

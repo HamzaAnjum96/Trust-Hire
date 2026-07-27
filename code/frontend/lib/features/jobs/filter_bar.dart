@@ -49,8 +49,8 @@ class QuickFilterBar extends StatelessWidget {
       _FilterChip(
         label: 'More',
         icon: Icons.tune,
-        selected: filter.time != TimeFilter.any &&
-            filter.time != TimeFilter.today ||
+        selected:
+            filter.time != TimeFilter.any && filter.time != TimeFilter.today ||
             (filter.distance != DistanceFilter.any &&
                 filter.distance != DistanceFilter.nearMe),
         onTap: () => FilterSheet.open(context, controller),
@@ -132,7 +132,11 @@ class _FilterChip extends StatelessWidget {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(selected ? Icons.check : icon, size: 16, color: foreground),
+                Icon(
+                  selected ? Icons.check : icon,
+                  size: 16,
+                  color: foreground,
+                ),
                 const SizedBox(width: BrandSizing.spaceXs + 2),
                 Text(
                   label,

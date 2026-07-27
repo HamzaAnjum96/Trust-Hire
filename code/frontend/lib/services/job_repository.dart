@@ -62,9 +62,7 @@ class JobRepository {
 
   Future<List<AppUser>> fetchUsers() async {
     final raw = _store.readCollection(StoreKeys.users) ?? const [];
-    return raw
-        .map(AppUser.fromJson)
-        .toList(growable: false);
+    return raw.map(AppUser.fromJson).toList(growable: false);
   }
 
   Future<void> saveJob(Job job) async {

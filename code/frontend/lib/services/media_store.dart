@@ -77,10 +77,7 @@ class MediaStore {
 
   /// Drops blobs no longer referenced by any job.
   Future<void> pruneExcept(Set<String> referencesInUse) async {
-    final keep = referencesInUse
-        .where(isLocal)
-        .map(_idOf)
-        .toSet();
+    final keep = referencesInUse.where(isLocal).map(_idOf).toSet();
 
     final remaining = <String>[];
     for (final id in _index()) {

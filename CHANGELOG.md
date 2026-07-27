@@ -12,6 +12,45 @@ that heading to the version and date, and open a fresh `[Unreleased]`.
 
 ## [Unreleased]
 
+### Sprint 6 — Polish
+
+Definition of done: feels like a production mobile application. Met — 110 tests
+pass, including Flutter's tap-target, semantic-label and text-contrast audits
+run against the live app.
+
+#### Added
+
+- Reduced-motion support throughout. Animations go through `Motion`, which
+  collapses durations to zero when the platform asks for less movement, so no
+  screen has to remember. Nothing is removed — only the movement.
+- Loading placeholders in the shape of the content instead of a spinner, so
+  the layout does not jump when data lands. Section 28 rules out decorative
+  loading animations, so the shimmer is slow and low-contrast, and stops
+  entirely under reduced motion.
+- A short stagger as list items settle in — 8 logical pixels of movement, not
+  a parallax sweep.
+- An accessibility test suite that holds the app to the numbers in section 29
+  rather than to a glance: Flutter's `androidTapTargetGuideline`,
+  `iOSTapTargetGuideline`, `labeledTapTargetGuideline` and
+  `textContrastGuideline` against the running app, plus WCAG contrast maths
+  over every text pairing the app actually uses, the 12px type floor, the
+  documented motion bands, and rendering at 2× text scale.
+
+#### Fixed
+
+- **A crash under reduced motion.** `LoadingBlock` held its `AnimationController`
+  in a `late final` field, which `build` never read when animations were
+  disabled — so `dispose()` constructed the controller for the first time and
+  looked up `TickerMode` on a deactivated element. Both animation controllers
+  now initialise in `initState`.
+- **The map had no accessible name.** It is one large tappable surface with no
+  text of its own, so a screen reader announced an unnamed button covering the
+  screen. Caught by `labeledTapTargetGuideline`, not by eye.
+- Tile caching pulled in `path_provider`, which threw on platforms without it.
+  All three maps — the main one, the details preview and the area picker — now
+  build their tile layer through one `MapTheme.tileLayer` factory with disk
+  caching off, so they cannot drift apart either.
+
 ### Sprint 5 — Discovery
 
 Definition of done: jobs easily discoverable. Met — 97 tests pass, 20 of them

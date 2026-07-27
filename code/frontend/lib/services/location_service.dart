@@ -37,20 +37,20 @@ class LocationResult {
   /// Plain-language explanation, following section 19 — say what the user can
   /// still do, never what the system failed to do.
   String? get explanation => switch (status) {
-        LocationStatus.available || LocationStatus.unknown => null,
-        LocationStatus.denied =>
-          'Location access is off. You can still move the map and choose an '
-              'area manually.',
-        LocationStatus.deniedForever =>
-          'Location access is off for this app. You can still move the map and '
-              'choose an area manually.',
-        LocationStatus.serviceDisabled =>
-          'Location is switched off on this device. You can still move the map '
-              'and choose an area manually.',
-        LocationStatus.failed =>
-          'Could not find your location. You can still move the map and choose '
-              'an area manually.',
-      };
+    LocationStatus.available || LocationStatus.unknown => null,
+    LocationStatus.denied =>
+      'Location access is off. You can still move the map and choose an '
+          'area manually.',
+    LocationStatus.deniedForever =>
+      'Location access is off for this app. You can still move the map and '
+          'choose an area manually.',
+    LocationStatus.serviceDisabled =>
+      'Location is switched off on this device. You can still move the map '
+          'and choose an area manually.',
+    LocationStatus.failed =>
+      'Could not find your location. You can still move the map and choose '
+          'an area manually.',
+  };
 }
 
 /// Wraps geolocator so screens deal in [LocationResult] rather than platform
@@ -92,10 +92,7 @@ class LocationService {
 
       return LocationResult(
         LocationStatus.available,
-        JobLocation(
-          latitude: position.latitude,
-          longitude: position.longitude,
-        ),
+        JobLocation(latitude: position.latitude, longitude: position.longitude),
       );
     } catch (error) {
       if (kDebugMode) {

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_map/flutter_map.dart';
 
 import 'tokens.dart';
 
@@ -44,8 +45,7 @@ class MapTheme {
 
   /// CARTO Positron — near-white, minimal colour, strong labels.
   static const light = MapTheme(
-    tileUrl:
-        'https://basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
+    tileUrl: 'https://basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
     backgroundColour: BrandColours.warmSand,
     tint: BrandColours.warmSand,
     tintOpacity: 0.30,
@@ -65,7 +65,44 @@ class MapTheme {
   static MapTheme of(BuildContext context) =>
       Theme.of(context).brightness == Brightness.light ? light : dark;
 
+  /// The tile layer for this theme.
+  ///
+  /// Built here rather than at each call site so the three maps in the app —
+  /// the main one, the details preview and the area picker — cannot drift
+  /// apart. Disk caching is off: the POC does not need it, and it pulls in
+  /// path_provider, which then throws on any platform without it.
+  TileLayer tileLayer(
+    BuildContext context, {
+    TileProvider? provider,
+    VoidCallback? onTileError,
+  }) {
+    return TileLayer(
+      urlTemplate: tileUrl,
+      userAgentPackageName: 'com.trusthire.trust_hire',
+      retinaMode: RetinaMode.isHighDensity(context),
+      tileProvider:
+          provider ??
+          NetworkTileProvider(
+            cachingProvider: const DisabledMapCachingProvider(),
+          ),
+      errorTileCallback: onTileError == null
+          ? null
+          : (_, _, _) => onTileError(),
+      evictErrorTileStrategy: EvictErrorTileStrategy.notVisible,
+    );
+  }
+
+  /// The brand tint laid over the basemap. Sits under everything else so
+  /// markers and work areas stay untinted.
+  Widget tintLayer() => IgnorePointer(
+    child: ColoredBox(
+      color: tint.withValues(alpha: tintOpacity),
+      child: const SizedBox.expand(),
+    ),
+  );
+
   /// Marker outline that separates a pin from the basemap underneath it.
-  Color get markerOutline =>
-      tint == BrandColours.deepBurgundy ? BrandColours.darkTextPrimary : Colors.white;
+  Color get markerOutline => tint == BrandColours.deepBurgundy
+      ? BrandColours.darkTextPrimary
+      : Colors.white;
 }

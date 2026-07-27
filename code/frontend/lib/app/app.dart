@@ -13,10 +13,7 @@ import 'settings_controller.dart';
 
 /// Application root — wires up the controllers and the themes.
 class TrustHireApp extends StatelessWidget {
-  const TrustHireApp({
-    super.key,
-    required this.store,
-  });
+  const TrustHireApp({super.key, required this.store});
 
   final LocalStore store;
 
@@ -29,8 +26,8 @@ class TrustHireApp extends StatelessWidget {
           create: (_) => SettingsController(store)..load(),
         ),
         ChangeNotifierProvider(
-          create: (_) => JobController(JobRepository(store, MediaStore(store)))
-            ..load(),
+          create: (_) =>
+              JobController(JobRepository(store, MediaStore(store)))..load(),
         ),
         ChangeNotifierProvider(create: (_) => JobFilterController()),
         ChangeNotifierProvider(

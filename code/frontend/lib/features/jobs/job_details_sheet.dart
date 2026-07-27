@@ -114,7 +114,10 @@ class _Body extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Expanded(
-              child: Text(job.displayTitle, style: theme.textTheme.headlineMedium),
+              child: Text(
+                job.displayTitle,
+                style: theme.textTheme.headlineMedium,
+              ),
             ),
             if (job.isLocal) ...[
               const SizedBox(width: BrandSizing.spaceSm),
@@ -201,10 +204,8 @@ class _JobActions extends StatelessWidget {
     await Navigator.of(context).push(
       MaterialPageRoute<String>(
         fullscreenDialog: true,
-        builder: (_) => CreateJobScreen(
-          initialLocation: job.location,
-          editing: job,
-        ),
+        builder: (_) =>
+            CreateJobScreen(initialLocation: job.location, editing: job),
       ),
     );
     // The sheet watches the controller by id, so it refreshes itself once the
@@ -219,9 +220,7 @@ class _JobActions extends StatelessWidget {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (dialogContext) => AlertDialog(
-        shape: const RoundedRectangleBorder(
-          borderRadius: BrandRadius.largeAll,
-        ),
+        shape: const RoundedRectangleBorder(borderRadius: BrandRadius.largeAll),
         title: const Text('Delete this job?'),
         content: const Text(
           'It will be removed from this device. This cannot be undone.',
@@ -232,9 +231,7 @@ class _JobActions extends StatelessWidget {
             child: const Text('Keep Job'),
           ),
           TextButton(
-            style: TextButton.styleFrom(
-              foregroundColor: BrandColours.errorRed,
-            ),
+            style: TextButton.styleFrom(foregroundColor: BrandColours.errorRed),
             // Section 22 — destructive actions are labelled explicitly, never
             // "Confirm" or "Yes".
             onPressed: () => Navigator.of(dialogContext).pop(true),
@@ -309,17 +306,8 @@ class _MapPreview extends StatelessWidget {
               ),
             ),
             children: [
-              TileLayer(
-                urlTemplate: mapTheme.tileUrl,
-                userAgentPackageName: 'com.trusthire.trust_hire',
-                retinaMode: RetinaMode.isHighDensity(context),
-              ),
-              IgnorePointer(
-                child: ColoredBox(
-                  color: mapTheme.tint.withValues(alpha: mapTheme.tintOpacity),
-                  child: const SizedBox.expand(),
-                ),
-              ),
+              mapTheme.tileLayer(context),
+              mapTheme.tintLayer(),
               CircleLayer(
                 circles: [
                   CircleMarker(
@@ -419,7 +407,10 @@ class _DeletedJobNotice extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text('This job is no longer here.', style: theme.textTheme.titleLarge),
+          Text(
+            'This job is no longer here.',
+            style: theme.textTheme.titleLarge,
+          ),
           const SizedBox(height: BrandSizing.spaceMd),
           OutlinedButton(
             onPressed: () => Navigator.of(context).pop(),

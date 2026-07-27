@@ -97,6 +97,13 @@ halves.
 Flutter, targeting Android and iOS, with web enabled so the POC can be
 demonstrated in a browser and deployed to GitHub Pages.
 
+**POC status: Sprints 0–6 complete.** A person can open the app, see nearby
+jobs on a map, tap a marker, listen to a voice note, view photos, post a job,
+and see it appear immediately — with no internet, no login and no backend.
+That is the success criteria from
+[`documents/agile/sprint-planning/poc-sprint-plan.md`](documents/agile/sprint-planning/poc-sprint-plan.md),
+with the exception noted under *Map tiles* below.
+
 ```
 code/frontend/
 ├── lib/
@@ -134,6 +141,12 @@ flutter run -d chrome          # browser
 flutter analyze
 flutter test
 ```
+
+Both gate the deploy. The suite includes an accessibility audit
+(`test/accessibility_test.dart`) that runs Flutter's tap-target, semantic-label
+and text-contrast guidelines against the live app, and checks the palette's
+contrast ratios against WCAG AA — so a regression there fails the build rather
+than shipping.
 
 **Building for the web** — CanvasKit must be bundled rather than fetched from a
 CDN, or the app will not load without third-party network access:

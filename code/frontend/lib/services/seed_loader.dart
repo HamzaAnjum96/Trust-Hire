@@ -60,7 +60,7 @@ class SeedLoader {
           : Duration(milliseconds: (durationSeconds * 1000).round()),
       photoPaths:
           (json['photos'] as List<dynamic>?)?.cast<String>() ??
-              const <String>[],
+          const <String>[],
       shortDescription: json['shortDescription'] as String?,
       postedBy: json['postedBy'] as String?,
       isLocal: false,
@@ -74,8 +74,11 @@ class SeedLoader {
     final hour = (json['scheduledHour'] as num?)?.toInt() ?? 9;
     final minute = (json['scheduledMinute'] as num?)?.toInt() ?? 0;
 
-    final day = DateTime(now.year, now.month, now.day)
-        .add(Duration(days: dayOffset));
+    final day = DateTime(
+      now.year,
+      now.month,
+      now.day,
+    ).add(Duration(days: dayOffset));
     return DateTime(day.year, day.month, day.day, hour, minute);
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../core/motion.dart';
 import '../../core/tokens.dart';
 import '../../services/media_store.dart';
 import '../../widgets/job_photo.dart';
@@ -82,7 +83,7 @@ class _PhotoGalleryState extends State<PhotoGallery> {
             children: [
               for (var i = 0; i < widget.photos.length; i++)
                 AnimatedContainer(
-                  duration: BrandMotion.fast,
+                  duration: Motion.fast(context),
                   margin: const EdgeInsets.symmetric(horizontal: 3),
                   width: i == _page ? 20 : 7,
                   height: 7,

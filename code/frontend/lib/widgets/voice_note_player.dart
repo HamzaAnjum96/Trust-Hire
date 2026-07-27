@@ -267,7 +267,8 @@ class _WaveformPainter extends CustomPainter {
     for (var i = 0; i < count; i++) {
       // A gentle envelope so the shape reads as speech rather than noise.
       final envelope = 0.35 + 0.65 * math.sin((i / count) * math.pi);
-      final height = (0.25 + random.nextDouble() * 0.75) * envelope * size.height;
+      final height =
+          (0.25 + random.nextDouble() * 0.75) * envelope * size.height;
 
       final left = i * (barWidth + gap);
       final top = (size.height - height) / 2;

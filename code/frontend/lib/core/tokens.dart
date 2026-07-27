@@ -124,11 +124,7 @@ class BrandShadows {
   ];
 
   static const sheet = <BoxShadow>[
-    BoxShadow(
-      color: Color(0x1F211B1D),
-      blurRadius: 24,
-      offset: Offset(0, -4),
-    ),
+    BoxShadow(color: Color(0x1F211B1D), blurRadius: 24, offset: Offset(0, -4)),
   ];
 }
 
