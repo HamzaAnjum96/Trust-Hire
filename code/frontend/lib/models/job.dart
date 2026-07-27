@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 
 import '../l10n/app_localizations.dart';
+import 'job_status.dart';
 import 'job_tag.dart';
 
 /// A geographic point. Deliberately approximate — the brand guidelines call
@@ -67,6 +68,7 @@ class Job {
     this.startingFare,
     this.agreedFare,
     this.acceptedWorkerId,
+    this.status = JobStatus.open,
     this.area,
     this.scheduledTime,
     this.voiceNotePath,
@@ -121,8 +123,18 @@ class Job {
   /// Who the hirer chose. Null until a bid is accepted.
   final String? acceptedWorkerId;
 
+  /// Where the job is in its life (Section 7).
+  final JobStatus status;
+
   /// True once the hirer has chosen someone. No further bids are taken.
   bool get isAccepted => acceptedWorkerId != null;
+
+  /// This job at a new point in its life.
+  ///
+  /// Separate from [copyWith] on purpose: editing a job and moving it forward
+  /// are different acts, and the edit form must not be able to do the second
+  /// by accident.
+  Job withStatus(JobStatus next) => _rebuild(status: next);
 
   /// Where this is, in words — "Gulshan-e-Iqbal, Karachi".
   ///
@@ -278,6 +290,17 @@ class Job {
   Job withAcceptedBid({required String workerId, required int fare}) {
     if (isAccepted) return this;
 
+    return _rebuild(
+      agreedFare: fare,
+      acceptedWorkerId: workerId,
+      status: JobStatus.accepted,
+    );
+  }
+
+  /// Every field carried across, with a few replaced. Private, so the only
+  /// ways to change a job from outside are [copyWith] for an edit and the
+  /// named transitions for everything else.
+  Job _rebuild({int? agreedFare, String? acceptedWorkerId, JobStatus? status}) {
     return Job(
       id: id,
       location: location,
@@ -287,8 +310,9 @@ class Job {
       geofenceMetres: geofenceMetres,
       openToAllLocations: openToAllLocations,
       startingFare: startingFare,
-      agreedFare: fare,
-      acceptedWorkerId: workerId,
+      agreedFare: agreedFare ?? this.agreedFare,
+      acceptedWorkerId: acceptedWorkerId ?? this.acceptedWorkerId,
+      status: status ?? this.status,
       area: area,
       radiusMetres: radiusMetres,
       scheduledTime: scheduledTime,
@@ -336,6 +360,7 @@ class Job {
       // fare or who was chosen.
       agreedFare: agreedFare,
       acceptedWorkerId: acceptedWorkerId,
+      status: status,
       area: area,
       radiusMetres: radiusMetres ?? this.radiusMetres,
       scheduledTime: clearScheduledTime
@@ -379,6 +404,13 @@ class Job {
       startingFare: (json['startingFare'] as num?)?.round(),
       agreedFare: (json['agreedFare'] as num?)?.round(),
       acceptedWorkerId: json['acceptedWorkerId'] as String?,
+      // Jobs written before P1-3 have no status. One with a worker on it was
+      // accepted; everything else was open.
+      status: json['status'] == null
+          ? (json['acceptedWorkerId'] == null
+                ? JobStatus.open
+                : JobStatus.accepted)
+          : JobStatus.fromId(json['status'] as String),
       area: json['area'] as String?,
       radiusMetres: (json['radiusMetres'] as num?)?.toDouble() ?? 1000,
       scheduledTime: json['scheduledTime'] == null
@@ -409,6 +441,7 @@ class Job {
     'startingFare': startingFare,
     'agreedFare': agreedFare,
     'acceptedWorkerId': acceptedWorkerId,
+    'status': status.id,
     'area': area,
     'radiusMetres': radiusMetres,
     'scheduledTime': scheduledTime?.toIso8601String(),

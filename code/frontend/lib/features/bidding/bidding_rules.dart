@@ -51,7 +51,10 @@ class BiddingRules {
     required List<Bid> existingBids,
   }) {
     if (job.isLocal) return BidRefusal.ownJob;
-    if (existingBids.any((b) => b.status == BidStatus.accepted)) {
+    // The job's own status is the authority from P1-3 — a job can stop taking
+    // offers by being cancelled or expiring, not only by being accepted.
+    if (!job.status.isTakingOffers ||
+        existingBids.any((b) => b.status == BidStatus.accepted)) {
       return BidRefusal.alreadyAccepted;
     }
     if (!visibility.isVisibleTo(job, worker: worker, from: from)) {

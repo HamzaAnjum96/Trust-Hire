@@ -15,6 +15,9 @@ import '../../services/media_store.dart';
 import '../../widgets/state_views.dart';
 import '../../widgets/voice_note_player.dart';
 import '../bidding/offer_list.dart';
+import '../lifecycle/job_lifecycle.dart';
+import '../map/job_marker.dart';
+import '../lifecycle/job_status_panel.dart';
 import '../bidding/offer_sheet.dart';
 import '../create_job/create_job_screen.dart';
 import 'contact_panel.dart';
@@ -221,10 +224,17 @@ class _Body extends StatelessWidget {
                 : '${poster!.name} · ${poster!.area}',
           ),
 
-        // Money, before the phone number: from P1-2 the way to take a job is
-        // to offer a fare, not to ring the poster.
         const SizedBox(height: BrandSizing.spaceMd),
         const Divider(),
+        const SizedBox(height: BrandSizing.spaceMd),
+
+        // Where the job stands comes first: it decides whether an offer is
+        // even possible, and a bid button above a "called off" notice would
+        // be a trap.
+        JobStatusPanel(job: job),
+
+        // Money, before the phone number: from P1-2 the way to take a job is
+        // to offer a fare, not to ring the poster.
         const SizedBox(height: BrandSizing.spaceMd),
         _Bidding(job: job, viewerLocation: viewerLocation),
 
@@ -240,8 +250,14 @@ class _Body extends StatelessWidget {
         _MapPreview(job: job),
         const SizedBox(height: BrandSizing.spaceSm),
         Text(
-          // Section 33 copy — reassure rather than expose.
-          strings.generalAreaNotice,
+          // Section 5 of the Phase 1 spec replaced the POC's promise that an
+          // exact location is never shown. It is shown — to the two people who
+          // agreed to work together, and to nobody else — so the line says
+          // which of those two things is happening rather than the old
+          // reassurance that is no longer true.
+          _revealsExactLocation(job)
+              ? strings.exactLocationShown
+              : strings.generalAreaNotice,
           style: theme.textTheme.labelSmall,
         ),
 
@@ -409,6 +425,16 @@ class _JobActions extends StatelessWidget {
 }
 
 /// A static map showing where the work is, with its approximate area.
+/// True when this viewer is one of the two people who agreed to work
+/// together, and so may see the exact spot rather than the area (Section 5).
+bool _revealsExactLocation(Job job) {
+  const lifecycle = JobLifecycle();
+  return lifecycle.revealsExactLocation(
+    job,
+    role: lifecycle.roleFor(job, viewerId: BidController.localWorkerId),
+  );
+}
+
 class _MapPreview extends StatelessWidget {
   const _MapPreview({required this.job});
 
@@ -418,6 +444,7 @@ class _MapPreview extends StatelessWidget {
   Widget build(BuildContext context) {
     final mapTheme = MapTheme.of(context);
     final centre = LatLng(job.location.latitude, job.location.longitude);
+    final revealsExact = _revealsExactLocation(job);
 
     return ClipRRect(
       borderRadius: BrandRadius.largeAll,
@@ -436,18 +463,40 @@ class _MapPreview extends StatelessWidget {
             children: [
               mapTheme.tileLayer(context),
               mapTheme.tintLayer(),
-              CircleLayer(
-                circles: [
-                  CircleMarker(
-                    point: centre,
-                    radius: job.radiusMetres,
-                    useRadiusInMeter: true,
-                    color: BrandColours.jobRadiusFill,
-                    borderColor: BrandColours.jobRadiusBorder,
-                    borderStrokeWidth: 1.5,
-                  ),
-                ],
-              ),
+
+              // Before the reveal: a circle, and no point inside it. After it:
+              // the point, and no circle. Drawing both would leave the old
+              // approximation on screen next to the address it no longer
+              // protects, which reads as though the app is still hiding
+              // something it has already given away.
+              if (revealsExact)
+                MarkerLayer(
+                  markers: [
+                    Marker(
+                      point: centre,
+                      width: JobMarker.size,
+                      height: JobMarker.size,
+                      child: JobMarker(
+                        job: job,
+                        isSelected: false,
+                        onTap: () {},
+                      ),
+                    ),
+                  ],
+                )
+              else
+                CircleLayer(
+                  circles: [
+                    CircleMarker(
+                      point: centre,
+                      radius: job.radiusMetres,
+                      useRadiusInMeter: true,
+                      color: BrandColours.jobRadiusFill,
+                      borderColor: BrandColours.jobRadiusBorder,
+                      borderStrokeWidth: 1.5,
+                    ),
+                  ],
+                ),
             ],
           ),
         ),

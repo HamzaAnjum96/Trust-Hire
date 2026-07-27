@@ -103,12 +103,13 @@ success criteria from
 [`documents/agile/sprint-planning/poc-sprint-plan.md`](documents/agile/sprint-planning/poc-sprint-plan.md),
 with the exception noted under *Map tiles* below.
 
-**Phase 1: P1-1 and P1-2 complete**, per
+**Phase 1: P1-1 to P1-3 complete**, per
 [`documents/agile/sprint-planning/phase-1-sprint-plan.md`](documents/agile/sprint-planning/phase-1-sprint-plan.md).
 Roles, the fixed tag vocabulary, the visibility rule that decides which jobs
-reach which worker, and Mode A bidding — a starting fare, counter-offers, and
-a fare locked when the hirer chooses. P1-3 onwards adds the job lifecycle,
-wallets, ratings and the backend.
+reach which worker, Mode A bidding — a starting fare, counter-offers, and a
+fare locked when the hirer chooses — and the job's life from posted to
+finished, including the mutual location reveal on acceptance. P1-4 onwards
+adds wallets, ratings and the backend.
 
 ```
 code/frontend/
@@ -121,6 +122,7 @@ code/frontend/
 │   │   ├── create_job/   ← posting and editing
 │   │   ├── feed/         ← the visibility rule: which jobs reach whom
 │   │   ├── bidding/      ← offers, and the hirer's choice
+│   │   ├── lifecycle/    ← a job's statuses and the location reveal
 │   │   ├── profile/      ← role, trades, and the app's settings
 │   │   └── onboarding/   ← first-run intro and permission priming
 │   ├── l10n/         ← app_en.arb, app_ur.arb (generated AppStrings)

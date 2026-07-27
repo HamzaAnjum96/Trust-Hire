@@ -135,13 +135,33 @@ The locked fare is enforced on the model rather than in the UI:
 twice, because Section 11's commission is trustworthy only while that number
 is the one both sides agreed to.
 
-### P1-3 — Job lifecycle and location reveal
+### P1-3 — Job lifecycle and location reveal ✅
 Statuses: open, accepted, in progress, completed, cancelled, expired. Arrival
 confirmation by hirer judgment. Mutual location reveal on acceptance — **and
 the copy rewritten to match**. Optional before/after proof, private by default.
 
 **Done when** a job runs end to end and no screen claims a privacy guarantee
 the app no longer offers.
+
+**Delivered**, except the before/after proof, which is deferred to **P1-8**:
+it is media, and the compression and retention rules that govern media are
+already scheduled there. Keeping proof photos on-device with no retention
+policy would be the one place the app stores a picture of someone's home
+indefinitely.
+
+Three calls worth recording:
+
+- **The worker can only walk away.** Section 7 gives arrival and completion to
+  the hirer. Letting a worker mark a job complete would let them claim a fare
+  the hirer has not agreed was earned, and the hirer is the one who can see
+  whether anybody turned up.
+- **A cancelled job goes back to hiding the address**, while a completed one
+  does not. They met; hiding it again afterwards would be theatre.
+- **The copy is tested, not just changed.** `lifecycle_test.dart` reads the
+  string catalogue and fails if anything still promises the exact location is
+  never shown — and separately, that the replacement actually says *when* it
+  is shared. A privacy promise that quietly stops being true is the failure
+  this sprint existed to prevent, so it is guarded rather than remembered.
 
 ### P1-4 — Wallet and commission
 Token wallet, Rs. 500 first-job credit, 5% commission on completion, loyalty

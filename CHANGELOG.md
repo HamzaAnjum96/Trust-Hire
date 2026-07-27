@@ -12,6 +12,42 @@ that heading to the version and date, and open a fresh `[Unreleased]`.
 
 ## [Unreleased]
 
+### 0.8.0 — P1-3, the job's life and the location reveal
+
+#### Added
+
+- **Statuses**: taking offers, worker chosen, under way, finished, called off,
+  no longer listed. The hirer confirms arrival and completion — Section 7 gives
+  those to the hirer because the hirer is the one who can see whether anybody
+  turned up. The worker's only power is to walk away; letting them mark a job
+  complete would let them claim a fare the hirer has not agreed was earned.
+- **The mutual location reveal.** While offers are open, both sides see a
+  general area and a distance and neither sees the other's exact point. Once a
+  worker is chosen, both see it. A bystander never does, at any status. The map
+  preview drops the approximation circle and shows the point instead — drawing
+  both would leave the old circle on screen beside an address it no longer
+  protects.
+- Bidding now follows the status, so a cancelled or expired job stops taking
+  offers without anybody having been accepted.
+
+#### Changed
+
+- **The privacy copy, in the same commit as the behaviour.** The POC promised,
+  on the posting form, on every job, and in the onboarding, that an exact
+  location is never shown. Phase 1 shows it. The new wording says when it is
+  shared and with whom, and `lifecycle_test.dart` reads the catalogue and fails
+  if the old promise comes back — or if the replacement stops saying *when*.
+  A privacy promise that quietly stops being true is the failure this sprint
+  existed to prevent, so it is guarded rather than remembered.
+
+#### Deferred
+
+- Before/after proof photos move to **P1-8**. They are media, and the
+  compression and retention rules that govern media are already scheduled
+  there; keeping them on-device with no retention policy would be the one
+  place the app stores a picture of someone's home indefinitely.
+
+
 ### 0.7.0 — Jobs across Pakistan, and what that broke
 
 The seed went from sixteen jobs around the twin cities to **183 across 25

@@ -208,7 +208,7 @@ class AppStringsEn extends AppStrings {
 
   @override
   String get generalAreaNotice =>
-      'This is the general area, not an exact address.';
+      'This is the general area. The exact spot is shared once a worker is chosen.';
 
   @override
   String get jobNoLongerHere => 'This job is no longer here.';
@@ -312,7 +312,7 @@ class AppStringsEn extends AppStrings {
 
   @override
   String get areaHelp =>
-      'Choose the general area. Your exact location will not be shown.';
+      'Choose the general area. Only this area is shown until you choose someone — then they get the exact spot.';
 
   @override
   String get moveMapToChooseArea => 'Move the map to choose the area';
@@ -637,7 +637,7 @@ class AppStringsEn extends AppStrings {
 
   @override
   String get onboardPrivacyNote =>
-      'Your exact location is never shown on a job. Only a general area is.';
+      'Your exact location stays hidden while people are offering. It is shared only with the person you choose.';
 
   @override
   String get onboardNext => 'Next';
@@ -904,4 +904,52 @@ class AppStringsEn extends AppStrings {
 
   @override
   String get cancel => 'Cancel';
+
+  @override
+  String get statusOpen => 'Taking offers';
+
+  @override
+  String get statusAccepted => 'Worker chosen';
+
+  @override
+  String get statusInProgress => 'Under way';
+
+  @override
+  String get statusCompleted => 'Finished';
+
+  @override
+  String get statusCancelled => 'Called off';
+
+  @override
+  String get statusExpired => 'No longer listed';
+
+  @override
+  String get confirmArrival => 'They have arrived';
+
+  @override
+  String get markComplete => 'Work is finished';
+
+  @override
+  String get cancelJob => 'Call this off';
+
+  @override
+  String get cancelJobExplanation =>
+      'The other person will be told. This cannot be undone.';
+
+  @override
+  String get exactLocationShown =>
+      'This is the exact spot, shared because you two are working together.';
+
+  @override
+  String get exactLocationWithWorker =>
+      'You chose someone, so you can both see each other\'s exact location now.';
+
+  @override
+  String get jobFinished => 'This work is finished.';
+
+  @override
+  String get jobCalledOff => 'This work was called off.';
+
+  @override
+  String get jobExpired => 'Nobody was chosen, so this is no longer listed.';
 }

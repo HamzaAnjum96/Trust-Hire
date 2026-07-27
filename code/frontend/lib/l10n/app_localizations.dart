@@ -455,7 +455,7 @@ abstract class AppStrings {
   /// No description provided for @generalAreaNotice.
   ///
   /// In en, this message translates to:
-  /// **'This is the general area, not an exact address.'**
+  /// **'This is the general area. The exact spot is shared once a worker is chosen.'**
   String get generalAreaNotice;
 
   /// No description provided for @jobNoLongerHere.
@@ -635,7 +635,7 @@ abstract class AppStrings {
   /// No description provided for @areaHelp.
   ///
   /// In en, this message translates to:
-  /// **'Choose the general area. Your exact location will not be shown.'**
+  /// **'Choose the general area. Only this area is shown until you choose someone — then they get the exact spot.'**
   String get areaHelp;
 
   /// No description provided for @moveMapToChooseArea.
@@ -1145,7 +1145,7 @@ abstract class AppStrings {
   /// No description provided for @onboardPrivacyNote.
   ///
   /// In en, this message translates to:
-  /// **'Your exact location is never shown on a job. Only a general area is.'**
+  /// **'Your exact location stays hidden while people are offering. It is shared only with the person you choose.'**
   String get onboardPrivacyNote;
 
   /// No description provided for @onboardNext.
@@ -1603,6 +1603,96 @@ abstract class AppStrings {
   /// In en, this message translates to:
   /// **'Cancel'**
   String get cancel;
+
+  /// Job status: posted, nobody chosen yet
+  ///
+  /// In en, this message translates to:
+  /// **'Taking offers'**
+  String get statusOpen;
+
+  /// Job status: a worker has been picked
+  ///
+  /// In en, this message translates to:
+  /// **'Worker chosen'**
+  String get statusAccepted;
+
+  /// Job status: the worker has arrived and started
+  ///
+  /// In en, this message translates to:
+  /// **'Under way'**
+  String get statusInProgress;
+
+  /// Job status: the work is done
+  ///
+  /// In en, this message translates to:
+  /// **'Finished'**
+  String get statusCompleted;
+
+  /// Job status: cancelled by either side
+  ///
+  /// In en, this message translates to:
+  /// **'Called off'**
+  String get statusCancelled;
+
+  /// Job status: expired without being taken
+  ///
+  /// In en, this message translates to:
+  /// **'No longer listed'**
+  String get statusExpired;
+
+  /// Hirer confirms the worker turned up
+  ///
+  /// In en, this message translates to:
+  /// **'They have arrived'**
+  String get confirmArrival;
+
+  /// Hirer marks the job done
+  ///
+  /// In en, this message translates to:
+  /// **'Work is finished'**
+  String get markComplete;
+
+  /// Cancels a job
+  ///
+  /// In en, this message translates to:
+  /// **'Call this off'**
+  String get cancelJob;
+
+  /// Warning before cancelling
+  ///
+  /// In en, this message translates to:
+  /// **'The other person will be told. This cannot be undone.'**
+  String get cancelJobExplanation;
+
+  /// Shown on an accepted job's map
+  ///
+  /// In en, this message translates to:
+  /// **'This is the exact spot, shared because you two are working together.'**
+  String get exactLocationShown;
+
+  /// Explains the reveal to the hirer
+  ///
+  /// In en, this message translates to:
+  /// **'You chose someone, so you can both see each other\'s exact location now.'**
+  String get exactLocationWithWorker;
+
+  /// Notice on a completed job
+  ///
+  /// In en, this message translates to:
+  /// **'This work is finished.'**
+  String get jobFinished;
+
+  /// Notice on a cancelled job
+  ///
+  /// In en, this message translates to:
+  /// **'This work was called off.'**
+  String get jobCalledOff;
+
+  /// Notice on an expired job
+  ///
+  /// In en, this message translates to:
+  /// **'Nobody was chosen, so this is no longer listed.'**
+  String get jobExpired;
 }
 
 class _AppStringsDelegate extends LocalizationsDelegate<AppStrings> {

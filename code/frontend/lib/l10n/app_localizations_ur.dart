@@ -208,7 +208,8 @@ class AppStringsUr extends AppStrings {
   String get detailKindOfWork => 'کام کی قسم';
 
   @override
-  String get generalAreaNotice => 'یہ عام علاقہ ہے، پورا پتہ نہیں۔';
+  String get generalAreaNotice =>
+      'یہ عام علاقہ ہے۔ کام کرنے والا منتخب ہونے پر ٹھیک جگہ بتائی جاتی ہے۔';
 
   @override
   String get jobNoLongerHere => 'یہ کام اب یہاں نہیں ہے۔';
@@ -312,7 +313,7 @@ class AppStringsUr extends AppStrings {
 
   @override
   String get areaHelp =>
-      'عام علاقہ چنیں۔ آپ کی اصل جگہ کسی کو نہیں دکھائی جائے گی۔';
+      'عام علاقہ چنیں۔ جب تک آپ کسی کو منتخب نہیں کرتے، صرف یہی علاقہ نظر آتا ہے — پھر انہیں ٹھیک جگہ مل جاتی ہے۔';
 
   @override
   String get moveMapToChooseArea => 'علاقہ چننے کے لیے نقشہ ہلائیں';
@@ -640,7 +641,7 @@ class AppStringsUr extends AppStrings {
 
   @override
   String get onboardPrivacyNote =>
-      'آپ کی اصل جگہ کسی کام پر کبھی نہیں دکھائی جاتی۔ صرف عام علاقہ دکھایا جاتا ہے۔';
+      'جب تک لوگ پیشکش دے رہے ہیں، آپ کی ٹھیک جگہ چھپی رہتی ہے۔ یہ صرف اُس شخص کو دی جاتی ہے جسے آپ منتخب کریں۔';
 
   @override
   String get onboardNext => 'آگے';
@@ -909,4 +910,52 @@ class AppStringsUr extends AppStrings {
 
   @override
   String get cancel => 'منسوخ کریں';
+
+  @override
+  String get statusOpen => 'پیشکشیں لی جا رہی ہیں';
+
+  @override
+  String get statusAccepted => 'کام کرنے والا منتخب';
+
+  @override
+  String get statusInProgress => 'کام جاری ہے';
+
+  @override
+  String get statusCompleted => 'مکمل';
+
+  @override
+  String get statusCancelled => 'منسوخ';
+
+  @override
+  String get statusExpired => 'اب فہرست میں نہیں';
+
+  @override
+  String get confirmArrival => 'وہ پہنچ گئے ہیں';
+
+  @override
+  String get markComplete => 'کام مکمل ہو گیا';
+
+  @override
+  String get cancelJob => 'یہ کام منسوخ کریں';
+
+  @override
+  String get cancelJobExplanation =>
+      'دوسرے شخص کو بتا دیا جائے گا۔ یہ واپس نہیں ہو سکتا۔';
+
+  @override
+  String get exactLocationShown =>
+      'یہ ٹھیک جگہ ہے، کیونکہ آپ دونوں مل کر کام کر رہے ہیں۔';
+
+  @override
+  String get exactLocationWithWorker =>
+      'آپ نے کسی کو منتخب کر لیا ہے، اس لیے اب آپ دونوں ایک دوسرے کی ٹھیک جگہ دیکھ سکتے ہیں۔';
+
+  @override
+  String get jobFinished => 'یہ کام مکمل ہو چکا ہے۔';
+
+  @override
+  String get jobCalledOff => 'یہ کام منسوخ کر دیا گیا تھا۔';
+
+  @override
+  String get jobExpired => 'کوئی منتخب نہیں ہوا، اس لیے یہ اب فہرست میں نہیں۔';
 }

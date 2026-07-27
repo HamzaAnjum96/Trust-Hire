@@ -90,7 +90,7 @@
   "detailArea": "Area",
   "detailPostedBy": "Posted by",
   "detailKindOfWork": "Kind of work",
-  "generalAreaNotice": "This is the general area, not an exact address.",
+  "generalAreaNotice": "This is the general area. The exact spot is shared once a worker is chosen.",
   "jobNoLongerHere": "This job is no longer here.",
   "photoOfCount": "Photo {index} of {total}",
   "@photoOfCount": {
@@ -137,7 +137,7 @@
   "fieldMessage": "Message",
   "messageHint": "Anything else worth knowing.",
   "fieldArea": "Area",
-  "areaHelp": "Choose the general area. Your exact location will not be shown.",
+  "areaHelp": "Choose the general area. Only this area is shown until you choose someone — then they get the exact spot.",
   "moveMapToChooseArea": "Move the map to choose the area",
   "clearTime": "Clear time",
   "whenIsWorkNeeded": "When is the work needed?",
@@ -323,7 +323,7 @@
   "onboardVoiceBody": "Post a job with a voice note, a photo, or a few words. Any one of them is enough — you never have to fill in a form.",
   "onboardLocationTitle": "Work near you",
   "onboardLocationBody": "If you share your location, jobs are sorted by how close they are. You can say no and still use everything — just move the map yourself.",
-  "onboardPrivacyNote": "Your exact location is never shown on a job. Only a general area is.",
+  "onboardPrivacyNote": "Your exact location stays hidden while people are offering. It is shared only with the person you choose.",
   "onboardNext": "Next",
   "onboardSkip": "Skip",
   "onboardAllowLocation": "Share My Location",
@@ -560,5 +560,65 @@
   "cancel": "Cancel",
   "@cancel": {
     "description": "Dismisses a dialog without acting"
+  },
+  "statusOpen": "Taking offers",
+  "@statusOpen": {
+    "description": "Job status: posted, nobody chosen yet"
+  },
+  "statusAccepted": "Worker chosen",
+  "@statusAccepted": {
+    "description": "Job status: a worker has been picked"
+  },
+  "statusInProgress": "Under way",
+  "@statusInProgress": {
+    "description": "Job status: the worker has arrived and started"
+  },
+  "statusCompleted": "Finished",
+  "@statusCompleted": {
+    "description": "Job status: the work is done"
+  },
+  "statusCancelled": "Called off",
+  "@statusCancelled": {
+    "description": "Job status: cancelled by either side"
+  },
+  "statusExpired": "No longer listed",
+  "@statusExpired": {
+    "description": "Job status: expired without being taken"
+  },
+  "confirmArrival": "They have arrived",
+  "@confirmArrival": {
+    "description": "Hirer confirms the worker turned up"
+  },
+  "markComplete": "Work is finished",
+  "@markComplete": {
+    "description": "Hirer marks the job done"
+  },
+  "cancelJob": "Call this off",
+  "@cancelJob": {
+    "description": "Cancels a job"
+  },
+  "cancelJobExplanation": "The other person will be told. This cannot be undone.",
+  "@cancelJobExplanation": {
+    "description": "Warning before cancelling"
+  },
+  "exactLocationShown": "This is the exact spot, shared because you two are working together.",
+  "@exactLocationShown": {
+    "description": "Shown on an accepted job's map"
+  },
+  "exactLocationWithWorker": "You chose someone, so you can both see each other's exact location now.",
+  "@exactLocationWithWorker": {
+    "description": "Explains the reveal to the hirer"
+  },
+  "jobFinished": "This work is finished.",
+  "@jobFinished": {
+    "description": "Notice on a completed job"
+  },
+  "jobCalledOff": "This work was called off.",
+  "@jobCalledOff": {
+    "description": "Notice on a cancelled job"
+  },
+  "jobExpired": "Nobody was chosen, so this is no longer listed.",
+  "@jobExpired": {
+    "description": "Notice on an expired job"
   }
 }

@@ -273,9 +273,7 @@ void main() {
     ) async {
       final harness = await _harness(tester, jobs: [job(isLocal: true)]);
       await harness.settle();
-
-      await tester.ensureVisible(find.text('Offers'));
-      await harness.settle();
+      await harness.revealOffers();
 
       expect(find.text('Offers'), findsOneWidget);
       expect(find.textContaining('Nobody has offered yet'), findsOneWidget);
@@ -288,11 +286,9 @@ void main() {
       await harness.bids.placeBid(jobId: posted.id, fare: 1800);
       await harness.settle();
 
+      await harness.revealOffers();
       expect(find.text('Rs. 1,800'), findsWidgets);
 
-      // The sheet is long; the offers sit below the fold.
-      await tester.ensureVisible(find.text('Choose').first);
-      await harness.settle();
       await tester.tap(find.text('Choose').first);
       await harness.settle();
       // The warning is repeated in the dialog, deliberately: it is the last
@@ -461,6 +457,19 @@ class _Harness {
   Future<void> settle() async {
     for (var i = 0; i < 12; i++) {
       await tester.pump(const Duration(milliseconds: 100));
+    }
+  }
+
+  /// Drags the sheet up so the offers build.
+  ///
+  /// A drag rather than `ensureVisible` or `scrollUntilVisible`: the sheet is
+  /// a ListView, so anything below the fold does not exist yet, and both of
+  /// those need the widget to be in the tree already. P1-3 put the job's
+  /// status above the offers, which pushed them out of the built range.
+  Future<void> revealOffers() async {
+    for (var attempt = 0; attempt < 4; attempt++) {
+      await tester.drag(find.byType(ListView), const Offset(0, -350));
+      await settle();
     }
   }
 }

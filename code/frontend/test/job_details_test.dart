@@ -259,16 +259,32 @@ void main() {
     expect(find.textContaining('away'), findsOneWidget);
   });
 
-  testWidgets('says the location is approximate', (tester) async {
+  testWidgets('says the area is approximate, and when that changes', (
+    tester,
+  ) async {
+    // P1-3 replaced the POC's promise that an exact location is never shown.
+    // On a job still taking offers it is approximate and says so; once a
+    // worker is chosen the caption has to change with the behaviour, or the
+    // app is reassuring people about something it has already given away.
     final (controller, media) = await buildControllers();
     final anyJob = controller.jobs.first;
-    await openSheet(tester, controller, media, anyJob.id);
-    await scrollToBottom(tester);
 
-    expect(
-      find.text('This is the general area, not an exact address.'),
-      findsOneWidget,
+    await openSheet(tester, controller, media, anyJob.id);
+    await scrollTo(tester, find.text(strings.generalAreaNotice));
+    expect(find.text(strings.generalAreaNotice), findsOneWidget);
+    expect(find.text(strings.exactLocationShown), findsNothing);
+
+    await controller.saveJob(
+      anyJob.copyWith().withAcceptedBid(
+        workerId: BidController.localWorkerId,
+        fare: 1500,
+      ),
     );
+    await openSheet(tester, controller, media, anyJob.id);
+    await scrollTo(tester, find.text(strings.exactLocationShown));
+
+    expect(find.text(strings.exactLocationShown), findsOneWidget);
+    expect(find.text(strings.generalAreaNotice), findsNothing);
   });
 
   testWidgets('handles a job deleted while its sheet is open', (tester) async {
