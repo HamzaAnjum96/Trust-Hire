@@ -12,6 +12,37 @@ that heading to the version and date, and open a fresh `[Unreleased]`.
 
 ## [Unreleased]
 
+### Sprint 3 — Create job
+
+Definition of done: new jobs appear immediately and persist. Met — 67 tests
+pass, including the full save path from capture to stored job.
+
+#### Added
+
+- Posting a job. Voice first, then photos, then the optional words — the order
+  design principle 3 asks for, since every extra field costs adoption.
+- Area picker: the pin stays fixed at the centre and the map moves under it,
+  which is one-handed and impossible to mis-tap, with a radius slider from
+  250 m to 5 km and the work area drawn as you change it. The copy says the
+  exact location will not be shown, because it will not be.
+- Voice recording with the section 26 states — copper to start, Error Red
+  while recording with a running timer, then "Voice Note Added" with
+  "Record Again" and a discard action.
+- Photos via camera or gallery, as large tiles with a remove control. No
+  captions are ever requested.
+- Optional date and time, clearable back to "Any time".
+- `JobDraftController`, which holds a draft for both posting and editing, and
+  `CaptureService`, which returns bytes rather than paths — a path captured on
+  web is a blob URL that stops resolving after a reload.
+- **No required fields and no asterisks.** The only rule is that a job say
+  something; the save bar names what would satisfy that rather than refusing
+  silently. Saving is blocked mid-recording so a note in progress is not lost.
+- A refused microphone or a cancelled camera leaves the rest of the form
+  working and explains itself.
+- 16 tests covering each single-input path (voice alone, photo alone, title
+  alone), whitespace not counting as content, capture refusals, and the shape
+  of the job that comes out.
+
 ### Sprint 2 — Job details
 
 Definition of done: every seeded job opens correctly. Met — 51 tests pass,

@@ -39,6 +39,8 @@ dependencies:
   # Voice-note playback. Voice is a first-class content type in this product,
   # so it needs to work on every target including web.
   audioplayers: ^6.8.1
+  image_picker: ^1.2.3
+  record: ^7.1.1
 
 dev_dependencies:
   flutter_test:

@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 
+import 'package:provider/provider.dart';
+
 import '../core/tokens.dart';
 import '../features/create_job/create_job_screen.dart';
+import '../features/map/location_controller.dart';
+import '../services/location_service.dart';
 import '../features/jobs/jobs_screen.dart';
 import '../features/map/map_screen.dart';
 import '../features/settings/settings_screen.dart';
@@ -39,9 +43,15 @@ class _AppShellState extends State<AppShell> {
   ];
 
   void _openCreateJob() {
+    // Open the area picker on the user where possible, so posting starts from
+    // somewhere meaningful rather than an arbitrary point.
+    final location =
+        context.read<LocationController>().position ??
+        LocationService.fallback;
+
     Navigator.of(context).push(
-      MaterialPageRoute<void>(
-        builder: (_) => const CreateJobScreen(),
+      MaterialPageRoute<String>(
+        builder: (_) => CreateJobScreen(initialLocation: location),
         fullscreenDialog: true,
       ),
     );
