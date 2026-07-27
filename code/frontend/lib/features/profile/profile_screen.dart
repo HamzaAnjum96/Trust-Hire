@@ -11,9 +11,15 @@ import '../../widgets/state_views.dart';
 import '../../l10n/app_localizations.dart';
 import '../profile/my_trades_screen.dart';
 
-/// Settings — theme, and the local-data controls the POC needs.
-class SettingsScreen extends StatelessWidget {
-  const SettingsScreen({super.key});
+/// Who you are here, and how the app behaves for you.
+///
+/// Role and trades are not settings — they decide which jobs the rest of the
+/// app shows you at all — so they lead, above the appearance and language
+/// controls. Giving them a destination of their own also gives P1-5 somewhere
+/// to put a rating, a completed-jobs count and a fare average, rather than
+/// bolting a marketplace identity onto a preferences screen.
+class ProfileScreen extends StatelessWidget {
+  const ProfileScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +28,7 @@ class SettingsScreen extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Scaffold(
-      appBar: AppBar(title: Text(strings.navSettings)),
+      appBar: AppBar(title: Text(strings.navProfile)),
       body: ListView(
         padding: const EdgeInsets.all(BrandSizing.spaceMd),
         children: [
@@ -37,7 +43,9 @@ class SettingsScreen extends StatelessWidget {
           const _RolePicker(),
 
           const SizedBox(height: BrandSizing.spaceXl),
-          Text(strings.appearance, style: theme.textTheme.titleLarge),
+          Text(strings.navSettings, style: theme.textTheme.titleLarge),
+          const SizedBox(height: BrandSizing.spaceSm),
+          Text(strings.appearance, style: theme.textTheme.titleMedium),
           SizedBox(height: BrandSizing.spaceSm),
           SegmentedButton<ThemeMode>(
             segments: [
@@ -62,8 +70,8 @@ class SettingsScreen extends StatelessWidget {
                 settings.setThemeMode(selection.first),
           ),
 
-          const SizedBox(height: BrandSizing.spaceXl),
-          Text(strings.language, style: theme.textTheme.titleLarge),
+          const SizedBox(height: BrandSizing.spaceLg),
+          Text(strings.language, style: theme.textTheme.titleMedium),
           const SizedBox(height: BrandSizing.spaceSm),
           SegmentedButton<String>(
             segments: [
@@ -90,8 +98,8 @@ class SettingsScreen extends StatelessWidget {
             ),
           ),
 
-          const SizedBox(height: BrandSizing.spaceXl),
-          Text(strings.localData, style: theme.textTheme.titleLarge),
+          const SizedBox(height: BrandSizing.spaceLg),
+          Text(strings.localData, style: theme.textTheme.titleMedium),
           const SizedBox(height: BrandSizing.spaceSm),
           Text(
             strings.restoreSeedExplanation,

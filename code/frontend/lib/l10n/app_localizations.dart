@@ -1040,12 +1040,6 @@ abstract class AppStrings {
   /// **'Removed from saved.'**
   String get jobUnsaved;
 
-  /// No description provided for @navSaved.
-  ///
-  /// In en, this message translates to:
-  /// **'Saved'**
-  String get navSaved;
-
   /// No description provided for @savedJobs.
   ///
   /// In en, this message translates to:
@@ -1411,6 +1405,18 @@ abstract class AppStrings {
   /// In en, this message translates to:
   /// **'Add a trade'**
   String get addATrade;
+
+  /// Bottom navigation label for saved and posted jobs
+  ///
+  /// In en, this message translates to:
+  /// **'Activity'**
+  String get navActivity;
+
+  /// Bottom navigation label for role, trades and settings
+  ///
+  /// In en, this message translates to:
+  /// **'Profile'**
+  String get navProfile;
 }
 
 class _AppStringsDelegate extends LocalizationsDelegate<AppStrings> {

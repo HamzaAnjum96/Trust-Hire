@@ -45,7 +45,7 @@ class _MyJobsScreenState extends State<MyJobsScreen>
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(strings.navSaved),
+        title: Text(strings.navActivity),
         bottom: TabBar(
           controller: _tabs,
           tabs: [

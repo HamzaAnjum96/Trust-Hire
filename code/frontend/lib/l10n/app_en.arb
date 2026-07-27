@@ -292,7 +292,6 @@
   "removeFromSaved": "Remove from saved",
   "jobSaved": "Saved. Find it under Saved.",
   "jobUnsaved": "Removed from saved.",
-  "navSaved": "Saved",
   "savedJobs": "Saved jobs",
   "myPostings": "My postings",
   "noSavedJobs": "Nothing saved yet",
@@ -405,5 +404,13 @@
   "addATrade": "Add a trade",
   "@addATrade": {
     "description": "Button opening the trades screen"
+  },
+  "navActivity": "Activity",
+  "@navActivity": {
+    "description": "Bottom navigation label for saved and posted jobs"
+  },
+  "navProfile": "Profile",
+  "@navProfile": {
+    "description": "Bottom navigation label for role, trades and settings"
   }
 }

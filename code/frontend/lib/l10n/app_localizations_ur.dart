@@ -569,9 +569,6 @@ class AppStringsUr extends AppStrings {
   String get jobUnsaved => 'محفوظ شدہ سے ہٹا دیا گیا۔';
 
   @override
-  String get navSaved => 'محفوظ شدہ';
-
-  @override
   String get savedJobs => 'محفوظ کام';
 
   @override
@@ -789,4 +786,10 @@ class AppStringsUr extends AppStrings {
 
   @override
   String get addATrade => 'ہنر شامل کریں';
+
+  @override
+  String get navActivity => 'سرگرمی';
+
+  @override
+  String get navProfile => 'پروفائل';
 }

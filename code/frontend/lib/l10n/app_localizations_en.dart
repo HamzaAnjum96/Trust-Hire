@@ -566,9 +566,6 @@ class AppStringsEn extends AppStrings {
   String get jobUnsaved => 'Removed from saved.';
 
   @override
-  String get navSaved => 'Saved';
-
-  @override
   String get savedJobs => 'Saved jobs';
 
   @override
@@ -784,4 +781,10 @@ class AppStringsEn extends AppStrings {
 
   @override
   String get addATrade => 'Add a trade';
+
+  @override
+  String get navActivity => 'Activity';
+
+  @override
+  String get navProfile => 'Profile';
 }

@@ -12,6 +12,26 @@ that heading to the version and date, and open a fresh `[Unreleased]`.
 
 ## [Unreleased]
 
+### 0.3.0 — Activity and Profile
+
+Two navigation labels described the code rather than what a person would find
+behind them.
+
+#### Changed
+
+- **"Saved" is now "Activity".** The screen behind it has always held two tabs,
+  Saved *and* Posted, so naming it after one of them sent anyone looking for
+  their own postings to the wrong place.
+- **"Settings" is now "Profile"**, with role and trades leading and the
+  appearance, language and local-data controls grouped underneath as Settings.
+  Role and trades are not preferences: since P1-1 they decide which jobs the
+  rest of the app shows at all. A marketplace also needs somewhere to put a
+  rating, a completed-jobs count and a fare average, and P1-5 now has it
+  rather than bolting a marketplace identity onto a preferences screen.
+- `settings_screen.dart` moved to `features/profile/`, next to the trades
+  screen it links to.
+
+
 ### 0.2.1 — The web shell
 
 Everything a person sees before the app loads was still Flutter's default,

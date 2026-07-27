@@ -43,11 +43,12 @@ void main() {
     await tester.pumpWidget(TrustHireApp(store: store));
     await settle(tester);
 
-    // Navigation scaffold is present with all three destinations.
+    // Navigation scaffold is present with all four destinations.
     expect(find.byType(NavigationBar), findsOneWidget);
     expect(find.text('Map'), findsOneWidget);
     expect(find.text('Jobs'), findsOneWidget);
-    expect(find.text('Settings'), findsOneWidget);
+    expect(find.text('Activity'), findsOneWidget);
+    expect(find.text('Profile'), findsOneWidget);
 
     // Primary action is reachable from the landing screen.
     expect(find.text('Post a Job'), findsOneWidget);
@@ -75,8 +76,17 @@ void main() {
     await settle(tester);
     expect(find.text('Find work'), findsOneWidget);
 
-    await tester.tap(find.text('Settings'));
+    // "Activity", not "Saved" — the screen has always held both tabs, and
+    // naming it after one of them hid the other.
+    await tester.tap(find.text('Activity'));
     await settle(tester);
+    expect(find.text('Saved · 0'), findsOneWidget);
+    expect(find.text('Posted · 0'), findsOneWidget);
+
+    await tester.tap(find.text('Profile'));
+    await settle(tester);
+    // Role and trades lead; the preferences sit underneath them.
+    expect(find.text('What brings you here'), findsOneWidget);
     expect(find.text('Appearance'), findsOneWidget);
   });
 

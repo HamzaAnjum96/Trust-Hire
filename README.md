@@ -119,9 +119,8 @@ code/frontend/
 │   │   ├── jobs/         ← job list, details, saved and posted
 │   │   ├── create_job/   ← posting and editing
 │   │   ├── feed/         ← the visibility rule: which jobs reach whom
-│   │   ├── profile/      ← a worker's trades
-│   │   ├── onboarding/   ← first-run intro and permission priming
-│   │   └── settings/     ← role, theme, language, local-data controls
+│   │   ├── profile/      ← role, trades, and the app's settings
+│   │   └── onboarding/   ← first-run intro and permission priming
 │   ├── l10n/         ← app_en.arb, app_ur.arb (generated AppStrings)
 │   ├── models/       ← Job, JobTag, WorkerProfile, AppUser
 │   ├── services/     ← local storage, seed loading, repositories

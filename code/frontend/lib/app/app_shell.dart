@@ -9,7 +9,7 @@ import '../services/location_service.dart';
 import '../features/jobs/jobs_screen.dart';
 import '../features/jobs/my_jobs_screen.dart';
 import '../features/map/map_screen.dart';
-import '../features/settings/settings_screen.dart';
+import '../features/profile/profile_screen.dart';
 import '../l10n/app_localizations.dart';
 
 /// The navigation scaffold.
@@ -39,15 +39,21 @@ class _AppShellState extends State<AppShell> {
       selectedIcon: const Icon(Icons.work),
       label: strings.navJobs,
     ),
+    // "Activity", not "Saved": the screen behind it has always held both
+    // saved and posted jobs, and naming it after one of its two tabs sent
+    // anyone looking for their own postings to the wrong place.
     NavigationDestination(
       icon: const Icon(Icons.bookmark_border),
       selectedIcon: const Icon(Icons.bookmark),
-      label: strings.navSaved,
+      label: strings.navActivity,
     ),
+    // "Profile", not "Settings": role and trades decide what the rest of the
+    // app shows, which is not a setting — and a marketplace with no profile
+    // destination has nowhere to put trust signals later.
     NavigationDestination(
-      icon: const Icon(Icons.settings_outlined),
-      selectedIcon: const Icon(Icons.settings),
-      label: strings.navSettings,
+      icon: const Icon(Icons.person_outline),
+      selectedIcon: const Icon(Icons.person),
+      label: strings.navProfile,
     ),
   ];
 
@@ -75,7 +81,7 @@ class _AppShellState extends State<AppShell> {
           MapScreen(),
           JobsScreen(),
           MyJobsScreen(),
-          SettingsScreen(),
+          ProfileScreen(),
         ],
       ),
       floatingActionButton: _index == 3
