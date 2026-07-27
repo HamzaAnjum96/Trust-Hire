@@ -12,6 +12,23 @@ that heading to the version and date, and open a fresh `[Unreleased]`.
 
 ## [Unreleased]
 
+### 0.5.0 — The jobs beside the map
+
+#### Added
+
+- On a desktop-width window, discovery becomes two panes: the map keeps
+  showing *where*, and a rail beside it answers *what* without covering it.
+  One list, not two views of one — the rail renders exactly the jobs the pins
+  come from, and selecting in either place selects in both.
+- `JobRow` gained a selected state and an optional "Open details" action. The
+  rail needs both halves of that: opening a sheet on every click would make
+  the list unbrowsable, and no way through to the details would make it
+  useless.
+- The preview card stands down in the split view. It exists because a handset
+  has nowhere else to put "what is this pin?", and beside a rail it would only
+  cover the map to repeat what the rail already says.
+
+
 ### 0.4.0 — A layout for the screen it is on
 
 The same build runs on a handset, a tablet and a desktop browser, and it only

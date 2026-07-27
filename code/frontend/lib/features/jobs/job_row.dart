@@ -16,11 +16,25 @@ class JobRow extends StatelessWidget {
     required this.job,
     required this.now,
     required this.onTap,
+    this.isSelected = false,
+    this.onOpen,
   });
 
   final Job job;
   final DateTime now;
   final VoidCallback onTap;
+
+  /// Marks the row whose pin is selected on the map beside it. Only ever true
+  /// in the wide-screen rail, where the two halves have to agree about which
+  /// job is being looked at.
+  final bool isSelected;
+
+  /// When set, the row separates *look at this on the map* from *open it*.
+  ///
+  /// The rail needs both: opening a sheet on every click would make the list
+  /// unbrowsable, and having no way through to the details would make it
+  /// useless. A list with nowhere else to go leaves this null and opens on tap.
+  final VoidCallback? onOpen;
 
   @override
   Widget build(BuildContext context) {
@@ -29,6 +43,18 @@ class JobRow extends StatelessWidget {
 
     return Card(
       clipBehavior: Clip.antiAlias,
+      // Selection is a border rather than a fill: these rows already carry a
+      // copper badge and coloured meta, and a tinted background behind them
+      // costs the text its contrast.
+      shape: RoundedRectangleBorder(
+        borderRadius: BrandRadius.largeAll,
+        side: BorderSide(
+          color: isSelected
+              ? theme.colorScheme.primary
+              : theme.colorScheme.outlineVariant,
+          width: isSelected ? 2 : 1,
+        ),
+      ),
       child: InkWell(
         onTap: onTap,
         child: Padding(
@@ -110,6 +136,18 @@ class JobRow extends StatelessWidget {
                     ),
                 ],
               ),
+
+              if (onOpen != null) ...[
+                const SizedBox(height: BrandSizing.spaceSm),
+                Align(
+                  alignment: AlignmentDirectional.centerEnd,
+                  child: TextButton.icon(
+                    onPressed: onOpen,
+                    icon: const Icon(Icons.open_in_full, size: 16),
+                    label: Text(strings.openDetails),
+                  ),
+                ),
+              ],
             ],
           ),
         ),

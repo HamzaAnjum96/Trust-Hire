@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import '../../app/job_controller.dart';
 import '../../app/profile_controller.dart';
 import '../../core/formatters.dart';
+import '../../core/layout.dart';
 import '../../core/motion.dart';
 import '../../core/tokens.dart';
 import '../../models/job.dart';
@@ -13,6 +14,7 @@ import '../../services/media_store.dart';
 import '../jobs/filter_bar.dart';
 import '../jobs/job_details_sheet.dart';
 import '../jobs/job_filter_controller.dart';
+import '../jobs/job_row.dart';
 import '../profile/my_trades_screen.dart';
 import '../../widgets/state_views.dart';
 import 'job_map.dart';
@@ -163,7 +165,7 @@ class _MapScreenState extends State<MapScreen> {
           message: strings.couldNotLoadJobs,
           onRetry: jobs.load,
         ),
-        LoadState.ready => _MapBody(
+        LoadState.ready => _Discovery(
           jobs: filters.apply(
             reachable,
             strings: strings,
@@ -196,8 +198,17 @@ class _MapScreenState extends State<MapScreen> {
   }
 }
 
-class _MapBody extends StatelessWidget {
-  const _MapBody({
+/// The map, and — where there is room for it — the list beside it.
+///
+/// On a handset the map is the whole screen and a tapped pin raises a preview
+/// card over it, because there is nowhere else for one to go. Past the
+/// expanded breakpoint the same jobs get a rail of their own: the map keeps
+/// showing *where*, and the rail answers *what* without covering it.
+///
+/// One list, not two views of one: the rail renders the same filtered jobs the
+/// pins come from, and selecting in either place selects in both.
+class _Discovery extends StatelessWidget {
+  const _Discovery({
     required this.jobs,
     required this.totalJobCount,
     required this.hiddenByTags,
@@ -217,6 +228,163 @@ class _MapBody extends StatelessWidget {
 
   final List<Job> jobs;
   final int totalJobCount;
+  final int hiddenByTags;
+  final JobFilterController filters;
+  final String? selectedJobId;
+  final LocationController location;
+  final MapController mapController;
+  final bool tilesUnavailable;
+  final ValueChanged<Job> onJobTapped;
+  final VoidCallback onMapTapped;
+  final VoidCallback onMyLocationPressed;
+  final VoidCallback onTilesUnavailable;
+  final ValueChanged<Job> onOpenJob;
+  final ValueChanged<JobCluster> onClusterTapped;
+  final ValueChanged<List<Job>> onFitToJobs;
+
+  @override
+  Widget build(BuildContext context) {
+    final map = _MapBody(
+      jobs: jobs,
+      totalJobCount: totalJobCount,
+      hiddenByTags: hiddenByTags,
+      filters: filters,
+      selectedJobId: selectedJobId,
+      location: location,
+      mapController: mapController,
+      tilesUnavailable: tilesUnavailable,
+      // The preview card is the handset's answer to "what is this pin?". With
+      // a rail beside the map that question is already answered, and a card
+      // over the map would only cover it.
+      showsPreviewCard: !LayoutSize.of(context).isSplit,
+      onJobTapped: onJobTapped,
+      onMapTapped: onMapTapped,
+      onMyLocationPressed: onMyLocationPressed,
+      onTilesUnavailable: onTilesUnavailable,
+      onOpenJob: onOpenJob,
+      onClusterTapped: onClusterTapped,
+      onFitToJobs: onFitToJobs,
+    );
+
+    if (!LayoutSize.of(context).isSplit) return map;
+
+    return Row(
+      children: [
+        Expanded(flex: 3, child: map),
+        const VerticalDivider(width: 1, thickness: 1),
+        // Fixed rather than a share of the width: a list of job rows has a
+        // comfortable size, and letting it grow with the window would undo
+        // the reading measure the rest of the app now keeps.
+        SizedBox(
+          width: 380,
+          child: _ResultsRail(
+            jobs: jobs,
+            selectedJobId: selectedJobId,
+            onSelect: onJobTapped,
+            onOpen: onOpenJob,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+/// The list beside the map.
+class _ResultsRail extends StatelessWidget {
+  const _ResultsRail({
+    required this.jobs,
+    required this.selectedJobId,
+    required this.onSelect,
+    required this.onOpen,
+  });
+
+  final List<Job> jobs;
+  final String? selectedJobId;
+  final ValueChanged<Job> onSelect;
+  final ValueChanged<Job> onOpen;
+
+  @override
+  Widget build(BuildContext context) {
+    final strings = AppStrings.of(context);
+    final theme = Theme.of(context);
+    final now = DateTime.now();
+
+    return Material(
+      color: theme.colorScheme.surface,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(
+              BrandSizing.spaceMd,
+              BrandSizing.spaceMd,
+              BrandSizing.spaceMd,
+              BrandSizing.spaceSm,
+            ),
+            // No count here: the map's own header carries it a hundred
+            // pixels away, and the two can never disagree — the rail renders
+            // exactly the jobs the pins come from.
+            child: Text(strings.jobsNearby, style: theme.textTheme.titleMedium),
+          ),
+          const Divider(height: 1),
+          Expanded(
+            child: jobs.isEmpty
+                ? EmptyView(
+                    icon: Icons.search_off,
+                    title: strings.noJobsMatch,
+                    message: strings.tryWiderArea,
+                  )
+                : ListView.separated(
+                    padding: const EdgeInsets.all(BrandSizing.spaceMd),
+                    itemCount: jobs.length,
+                    separatorBuilder: (_, _) =>
+                        const SizedBox(height: BrandSizing.spaceSm),
+                    itemBuilder: (context, index) {
+                      final job = jobs[index];
+                      return JobRow(
+                        job: job,
+                        now: now,
+                        isSelected: job.id == selectedJobId,
+                        // One tap moves the map to it; the details are a
+                        // second, deliberate tap. Opening a sheet on every
+                        // click would make the list unbrowsable.
+                        onTap: () => onSelect(job),
+                        onOpen: () => onOpen(job),
+                      );
+                    },
+                  ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _MapBody extends StatelessWidget {
+  const _MapBody({
+    required this.jobs,
+    required this.totalJobCount,
+    required this.hiddenByTags,
+    required this.filters,
+    required this.selectedJobId,
+    required this.location,
+    required this.mapController,
+    required this.tilesUnavailable,
+    required this.onJobTapped,
+    required this.onMapTapped,
+    required this.onMyLocationPressed,
+    required this.onTilesUnavailable,
+    required this.onOpenJob,
+    required this.onClusterTapped,
+    required this.onFitToJobs,
+    this.showsPreviewCard = true,
+  });
+
+  final List<Job> jobs;
+  final int totalJobCount;
+
+  /// False when a list beside the map is already saying what the pins are.
+  final bool showsPreviewCard;
 
   /// How many jobs the tag rule is holding back from a worker who has not
   /// added a trade yet. Zero once they have, or for a hirer.
@@ -379,7 +547,7 @@ class _MapBody extends StatelessWidget {
             ).animate(animation),
             child: FadeTransition(opacity: animation, child: child),
           ),
-          child: selected == null
+          child: (selected == null || !showsPreviewCard)
               ? const SizedBox.shrink()
               : Align(
                   key: ValueKey(selected.id),

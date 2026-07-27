@@ -803,4 +803,10 @@ class AppStringsUr extends AppStrings {
   @override
   String get addWordsForVoiceNote =>
       'کچھ لوگ آواز کا پیغام نہیں سن سکتے۔ یہاں چند الفاظ لکھنے سے وہ آپ کا کام ڈھونڈ سکیں گے۔';
+
+  @override
+  String get jobsNearby => 'اس نقشے پر کام';
+
+  @override
+  String get openDetails => 'تفصیل کھولیں';
 }

@@ -1435,6 +1435,18 @@ abstract class AppStrings {
   /// In en, this message translates to:
   /// **'Some people cannot play a voice note. A few words here help them find your job.'**
   String get addWordsForVoiceNote;
+
+  /// Heading over the list beside the map on a wide screen
+  ///
+  /// In en, this message translates to:
+  /// **'Work on this map'**
+  String get jobsNearby;
+
+  /// Button on a job row that opens the full details
+  ///
+  /// In en, this message translates to:
+  /// **'Open details'**
+  String get openDetails;
 }
 
 class _AppStringsDelegate extends LocalizationsDelegate<AppStrings> {

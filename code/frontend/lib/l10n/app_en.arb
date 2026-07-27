@@ -424,5 +424,13 @@
   "addWordsForVoiceNote": "Some people cannot play a voice note. A few words here help them find your job.",
   "@addWordsForVoiceNote": {
     "description": "Prompt to add text alongside a voice note"
+  },
+  "jobsNearby": "Work on this map",
+  "@jobsNearby": {
+    "description": "Heading over the list beside the map on a wide screen"
+  },
+  "openDetails": "Open details",
+  "@openDetails": {
+    "description": "Button on a job row that opens the full details"
   }
 }

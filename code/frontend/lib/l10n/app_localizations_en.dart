@@ -798,4 +798,10 @@ class AppStringsEn extends AppStrings {
   @override
   String get addWordsForVoiceNote =>
       'Some people cannot play a voice note. A few words here help them find your job.';
+
+  @override
+  String get jobsNearby => 'Work on this map';
+
+  @override
+  String get openDetails => 'Open details';
 }

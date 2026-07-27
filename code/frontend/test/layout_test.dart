@@ -6,7 +6,10 @@ import 'package:trust_hire/app/app.dart';
 import 'package:trust_hire/app/settings_controller.dart';
 import 'package:trust_hire/core/layout.dart';
 import 'package:trust_hire/core/tokens.dart';
+import 'package:trust_hire/features/jobs/job_details_sheet.dart';
 import 'package:trust_hire/features/jobs/job_row.dart';
+import 'package:trust_hire/features/map/job_map.dart';
+import 'package:trust_hire/features/map/map_screen.dart';
 import 'package:trust_hire/services/local_store.dart';
 
 import 'support/surface.dart';
@@ -130,6 +133,82 @@ void main() {
           reason: 'the primary action vanished at one size',
         );
       }
+    });
+  });
+
+  group('the split view', () {
+    testWidgets('a desktop shows the jobs beside the map', (tester) async {
+      await tester.useExpandedSurface();
+      await tester.pumpWidget(TrustHireApp(store: await readyStore()));
+      await settle(tester);
+
+      // The map is still the surface; the rail answers "what is this pin?"
+      // without covering it.
+      expect(find.byType(JobMap), findsOneWidget);
+      expect(find.text('Work on this map'), findsWidgets);
+      expect(find.byType(JobRow), findsWidgets);
+    });
+
+    testWidgets('a handset shows the map alone', (tester) async {
+      await tester.useCompactSurface();
+      await tester.pumpWidget(TrustHireApp(store: await readyStore()));
+      await settle(tester);
+
+      expect(find.byType(JobMap), findsOneWidget);
+      expect(find.text('Work on this map'), findsNothing);
+      expect(find.byType(JobRow), findsNothing);
+    });
+
+    testWidgets('selecting in the rail selects on the map', (tester) async {
+      await tester.useExpandedSurface();
+      await tester.pumpWidget(TrustHireApp(store: await readyStore()));
+      await settle(tester);
+
+      final rows = find.byType(JobRow);
+      expect(rows, findsWidgets);
+      expect(
+        tester.widgetList<JobRow>(rows).where((r) => r.isSelected),
+        isEmpty,
+        reason: 'nothing is selected before a tap',
+      );
+
+      await tester.tap(rows.first);
+      await settle(tester);
+
+      expect(
+        tester
+            .widgetList<JobRow>(find.byType(JobRow))
+            .where((r) => r.isSelected),
+        hasLength(1),
+        reason: 'the two halves must agree about which job is being looked at',
+      );
+    });
+
+    testWidgets('the preview card gives way to the rail', (tester) async {
+      // On a handset a tapped pin raises a card because there is nowhere else
+      // for it to go. Beside a rail, the same card would cover the map to say
+      // what the rail already says.
+      await tester.useExpandedSurface();
+      await tester.pumpWidget(TrustHireApp(store: await readyStore()));
+      await settle(tester);
+
+      await tester.tap(find.byType(JobRow).first);
+      await settle(tester);
+
+      expect(find.byType(JobPreviewCard), findsNothing);
+    });
+
+    testWidgets('the rail can still reach the details', (tester) async {
+      // Browsing must not open a sheet on every click, but a list with no way
+      // through to the details would be useless.
+      await tester.useExpandedSurface();
+      await tester.pumpWidget(TrustHireApp(store: await readyStore()));
+      await settle(tester);
+
+      await tester.tap(find.text('Open details').first);
+      await settle(tester);
+
+      expect(find.byType(JobDetailsSheet), findsOneWidget);
     });
   });
 
