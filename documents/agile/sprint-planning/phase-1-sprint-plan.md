@@ -270,6 +270,53 @@ These are **not** accounts: no password, no verification, no privacy between
 them, and everything shares one browser's storage. P1-8 replaces the idea
 entirely.
 
+### P1-5b — A demo with a past ✅
+Also not in the original plan. The seed produced jobs that had only just been
+posted: no offers to choose between, nobody with a record, and every wallet
+empty. Half of what P1-2 to P1-5 built was therefore invisible from a fresh
+install, and the five demo accounts were five identical blank slates.
+
+**Done when** every screen Phase 1 added can be reached from a fresh install
+without editing storage by hand.
+
+**Delivered.** The generator gained a second phase, on its own random seed, so
+regenerating the history leaves every job where it was and posted by the same
+person. It emits offers, winners and passed-over offers, ratings on finished
+work, and a role, trades and wallet per demo account. Jobs now arrive in every
+state the lifecycle has.
+
+Decisions:
+
+- **The five accounts are deliberately unalike.** A hirer with postings in
+  three states; a busy worker paid up and well rated; a worker locked out by
+  debt; a nearly-new worker whose first-job credit is still in the ledger; a
+  generalist. Five similar accounts would demonstrate nothing that one does
+  not.
+- **A persona only ever holds offers on work Section 8 would have shown
+  them.** An electrician with an offer on a bricklaying job contradicts the
+  rule the whole feed rests on, and it is the detail somebody looking closely
+  at the demo notices first.
+- **No loyalty bonus is seeded.** It triggers at Rs. 100,000 of lifetime
+  top-up, which at 5% implies about Rs. 2,000,000 of completed work. The seed
+  does not have those volumes, and a ledger faked to reach it would be visibly
+  incoherent on the wallet screen, which shows every entry. The rule stays
+  covered by tests.
+- **The device account is left empty.** It is what a first-time user sees, and
+  the only clean slate in the set.
+
+An **Offers** tab was added to Activity in the same pass. A worker's own list
+is mostly the jobs they did not get, and a passed-over offer had nowhere to be
+seen.
+
+**Found by building it.** Seeding used to happen inside `JobController.load()`.
+That was safe while the only seeded keys were the ones that controller read
+back itself, and unsafe the moment the seed grew offers, ratings and wallets:
+four other controllers read their keys as they are constructed and raced the
+write. It surfaced in a screenshot — a worker with seventeen offers behind him
+whose Offers tab said zero — not in the test suite, which passed throughout.
+Seeding moved to `bootstrap()`, ahead of the first frame, and the tests that
+pump the whole app now go through the same function.
+
 ### P1-6 — Mode B: directory and premium
 Premium subscription, service menus at fixed prices, worker-set service radius,
 credentials showcase, direct booking, and the 2.5% hirer discount.

@@ -307,5 +307,12 @@
   "nowActingAs": "اب آپ {name} ہیں",
   "accountPostings": "{count, plural, =0{کوئی کام نہیں لگایا} =1{1 کام لگایا} other{{count} کام لگائے}}",
   "accountIsActive": "ابھی فعال",
-  "yourStanding": "آپ کا ریکارڈ"
+  "yourStanding": "آپ کا ریکارڈ",
+  "offersTab": "پیشکشیں",
+  "noOffers": "ابھی کوئی پیشکش نہیں",
+  "noOffersMessage": "کوئی کام کھولیں اور اپنی قیمت بتائیں۔ آپ کی پیشکشیں یہاں نظر آئیں گی۔",
+  "yourOffer": "آپ نے {fare} کی پیشکش کی",
+  "offerWaiting": "انتظار میں",
+  "offerNotChosen": "منتخب نہیں ہوئی",
+  "offerWithdrawn": "واپس لے لی"
 }

@@ -1499,8 +1499,8 @@ abstract class AppStrings {
   /// No description provided for @yourOffer.
   ///
   /// In en, this message translates to:
-  /// **'Your offer: {amount}'**
-  String yourOffer(String amount);
+  /// **'You offered {fare}'**
+  String yourOffer(String fare);
 
   /// Confirms a bid
   ///
@@ -1595,7 +1595,7 @@ abstract class AppStrings {
   /// Confirmation after withdrawing a bid
   ///
   /// In en, this message translates to:
-  /// **'Your offer was withdrawn.'**
+  /// **'Withdrawn'**
   String get offerWithdrawn;
 
   /// Dismisses a dialog without acting
@@ -1945,6 +1945,36 @@ abstract class AppStrings {
   /// In en, this message translates to:
   /// **'Your record'**
   String get yourStanding;
+
+  /// Activity tab holding the jobs you have bid on
+  ///
+  /// In en, this message translates to:
+  /// **'Offers'**
+  String get offersTab;
+
+  /// No description provided for @noOffers.
+  ///
+  /// In en, this message translates to:
+  /// **'No offers yet'**
+  String get noOffers;
+
+  /// No description provided for @noOffersMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Open a job and name your price. Offers you make show up here.'**
+  String get noOffersMessage;
+
+  /// No description provided for @offerWaiting.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting'**
+  String get offerWaiting;
+
+  /// No description provided for @offerNotChosen.
+  ///
+  /// In en, this message translates to:
+  /// **'Not chosen'**
+  String get offerNotChosen;
 }
 
 class _AppStringsDelegate extends LocalizationsDelegate<AppStrings> {

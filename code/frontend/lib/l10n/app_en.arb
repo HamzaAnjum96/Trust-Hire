@@ -823,5 +823,22 @@
   "yourStanding": "Your record",
   "@yourStanding": {
     "description": "Heading for your own rating, completed count and fare average"
-  }
+  },
+  "offersTab": "Offers",
+  "@offersTab": {
+    "description": "Activity tab holding the jobs you have bid on"
+  },
+  "noOffers": "No offers yet",
+  "noOffersMessage": "Open a job and name your price. Offers you make show up here.",
+  "yourOffer": "You offered {fare}",
+  "@yourOffer": {
+    "placeholders": {
+      "fare": {
+        "type": "String"
+      }
+    }
+  },
+  "offerWaiting": "Waiting",
+  "offerNotChosen": "Not chosen",
+  "offerWithdrawn": "Withdrawn"
 }

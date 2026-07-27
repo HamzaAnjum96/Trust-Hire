@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
 import 'app/app.dart';
+import 'app/bootstrap.dart';
 import 'l10n/app_localizations.dart';
-import 'services/local_store.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -15,9 +15,9 @@ Future<void> main() async {
     await initializeDateFormatting(locale.languageCode);
   }
 
-  // Local storage is opened before the first frame so the app never renders
-  // against an uninitialised store.
-  final store = await LocalStore.open();
+  // Storage opened *and seeded* before the first frame. See [bootstrap] for
+  // why the second half of that matters.
+  final store = await bootstrap();
 
   runApp(TrustHireApp(store: store));
 }

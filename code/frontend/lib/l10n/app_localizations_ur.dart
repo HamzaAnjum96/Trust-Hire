@@ -843,8 +843,8 @@ class AppStringsUr extends AppStrings {
   String get changeMyOffer => 'اپنی پیشکش بدلیں';
 
   @override
-  String yourOffer(String amount) {
-    return 'آپ کی پیشکش: $amount';
+  String yourOffer(String fare) {
+    return 'آپ نے $fare کی پیشکش کی';
   }
 
   @override
@@ -906,7 +906,7 @@ class AppStringsUr extends AppStrings {
   String get cannotBidAccepted => 'یہ کام کسی کو دیا جا چکا ہے۔';
 
   @override
-  String get offerWithdrawn => 'آپ کی پیشکش واپس لے لی گئی۔';
+  String get offerWithdrawn => 'واپس لے لی';
 
   @override
   String get cancel => 'منسوخ کریں';
@@ -1126,4 +1126,20 @@ class AppStringsUr extends AppStrings {
 
   @override
   String get yourStanding => 'آپ کا ریکارڈ';
+
+  @override
+  String get offersTab => 'پیشکشیں';
+
+  @override
+  String get noOffers => 'ابھی کوئی پیشکش نہیں';
+
+  @override
+  String get noOffersMessage =>
+      'کوئی کام کھولیں اور اپنی قیمت بتائیں۔ آپ کی پیشکشیں یہاں نظر آئیں گی۔';
+
+  @override
+  String get offerWaiting => 'انتظار میں';
+
+  @override
+  String get offerNotChosen => 'منتخب نہیں ہوئی';
 }

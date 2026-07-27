@@ -442,6 +442,7 @@ class _MapBody extends StatelessWidget {
     final padding = MediaQuery.paddingOf(context);
     final selected = _selected;
     final locationExplanation = location.explanation(strings);
+    final profile = context.watch<ProfileController>();
 
     return Stack(
       // Every child here is positioned except the preview switcher, which
@@ -529,12 +530,19 @@ class _MapBody extends StatelessWidget {
                 // back, and the only thing that changes it is adding a trade.
                 // Shown just for a worker who has never added one, so it stops
                 // appearing as soon as it stops being news.
-                if (hiddenByTags > 0)
+                //
+                // Dismissible, though closing it changes nothing about the
+                // rule. It sits over the map — the thing the app is for — and
+                // somebody who has read it and is happy on general work should
+                // not have to read it again on every launch. The way back is
+                // the trades screen, which the profile always links to.
+                if (hiddenByTags > 0 && !profile.tradesNoticeDismissed)
                   _MapNotice(
                     icon: Icons.construction_outlined,
                     message: strings.noJobsForTradesHelp,
                     actionLabel: strings.addATrade,
                     onAction: () => MyTradesScreen.open(context),
+                    onDismiss: profile.dismissTradesNotice,
                   ),
               ],
             ),
@@ -747,7 +755,14 @@ class _MapNotice extends StatelessWidget {
                   onPressed: onDismiss,
                   icon: const Icon(Icons.close, size: 18),
                   tooltip: strings.dismiss,
-                  visualDensity: VisualDensity.compact,
+                  // Not `VisualDensity.compact`, which takes the target to
+                  // 40px. Section 29 asks for 48, and this is the control
+                  // somebody reaches for when a notice is in the way of the
+                  // map — the worst one to make hard to hit.
+                  constraints: const BoxConstraints(
+                    minWidth: BrandSizing.touchTargetPreferred,
+                    minHeight: BrandSizing.touchTargetPreferred,
+                  ),
                 ),
             ],
           ),

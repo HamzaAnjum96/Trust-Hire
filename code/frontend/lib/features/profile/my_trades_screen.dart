@@ -49,7 +49,7 @@ class MyTradesScreen extends StatelessWidget {
               spacing: BrandSizing.spaceSm,
               runSpacing: BrandSizing.spaceSm,
               children: [
-                for (final tag in JobTag.values)
+                for (final tag in JobTag.workerOrder)
                   TagTile(
                     tag: tag,
                     selected: profile.tags.contains(tag),

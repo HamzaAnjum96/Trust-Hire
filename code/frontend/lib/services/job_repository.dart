@@ -1,5 +1,6 @@
 import '../models/app_user.dart';
 import '../models/job.dart';
+import 'demo_seed.dart';
 import 'local_store.dart';
 import 'media_store.dart';
 import 'seed_loader.dart';
@@ -45,6 +46,13 @@ class JobRepository {
       StoreKeys.users,
       users.map((u) => u.toJson()).toList(growable: false),
     );
+
+    // The rest of the demo's past — offers, ratings and each account's role,
+    // trades and wallet. Written before the flag, so a failure part-way
+    // through reseeds next launch rather than leaving jobs with no offers on
+    // them and a hirer with nothing to choose between.
+    await DemoSeed(_store, _seedLoader).install();
+
     await _store.writeFlag(StoreKeys.seeded, true);
   }
 

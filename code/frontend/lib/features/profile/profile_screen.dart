@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../app/bid_controller.dart';
 import '../../app/job_controller.dart';
+import '../../app/rating_controller.dart';
+import '../../features/jobs/saved_jobs_controller.dart';
 import '../../app/profile_controller.dart';
 import '../../app/wallet_controller.dart';
 import '../../core/formatters.dart';
@@ -165,6 +168,14 @@ class ProfileScreen extends StatelessWidget {
     final controller = context.read<JobController>();
     final messenger = ScaffoldMessenger.of(context);
 
+    // Everything the reset rewrites. Read before the dialogue, because after
+    // an await the context may be gone.
+    final bids = context.read<BidController>();
+    final ratings = context.read<RatingController>();
+    final wallet = context.read<WalletController>();
+    final profile = context.read<ProfileController>();
+    final saved = context.read<SavedJobsController>();
+
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (dialogContext) => AlertDialog(
@@ -188,6 +199,18 @@ class ProfileScreen extends StatelessWidget {
     if (confirmed != true) return;
 
     await controller.resetToSeed();
+
+    // The reset replaces the offers, ratings, wallets and trades as well as
+    // the jobs, and every one of those is already in memory somewhere. Without
+    // this the screen would show a restored map beside a wallet balance that
+    // no longer exists in storage — and the next write would put the stale one
+    // back.
+    await bids.load();
+    ratings.load();
+    wallet.load();
+    profile.load();
+    saved.load();
+
     messenger.showSnackBar(SnackBar(content: Text(strings.seedRestored)));
   }
 }

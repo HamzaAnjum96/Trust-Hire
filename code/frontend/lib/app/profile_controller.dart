@@ -34,6 +34,7 @@ class ProfileController extends ChangeNotifier {
     _userId = id;
     _profile = WorkerProfile(userId: id);
     _role = UserRole.worker;
+    _tradesNoticeDismissed = false;
     load();
   }
 
@@ -60,6 +61,9 @@ class ProfileController extends ChangeNotifier {
 
   void load() {
     _role = UserRole.fromId(_store.readString(_keyFor(StoreKeys.role)));
+    _tradesNoticeDismissed = _store.readFlag(
+      _keyFor(StoreKeys.tradesNoticeDismissed),
+    );
 
     final raw = _store.readString(_keyFor(StoreKeys.workerProfile));
     if (raw != null && raw.isNotEmpty) {
@@ -96,6 +100,23 @@ class ProfileController extends ChangeNotifier {
     notifyListeners();
 
     await _persist();
+  }
+
+  /// Whether the worker has closed the "add a trade" notice.
+  ///
+  /// Per account, and sticky. The notice is not an error and not a filter —
+  /// it explains a rule that is holding jobs back — but it sits over the map,
+  /// and somebody who has read it and decided they are happy on general work
+  /// should not have to read it again on every launch.
+  bool _tradesNoticeDismissed = false;
+  bool get tradesNoticeDismissed => _tradesNoticeDismissed;
+
+  Future<void> dismissTradesNotice() async {
+    if (_tradesNoticeDismissed) return;
+    _tradesNoticeDismissed = true;
+    notifyListeners();
+
+    await _store.writeFlag(_keyFor(StoreKeys.tradesNoticeDismissed), true);
   }
 
   Future<void> _persist() => _store.writeString(

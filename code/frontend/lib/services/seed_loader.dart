@@ -3,8 +3,13 @@ import 'dart:convert';
 import 'package:flutter/services.dart' show rootBundle;
 
 import '../models/app_user.dart';
+import '../models/bid.dart';
 import '../models/job.dart';
+import '../models/job_status.dart';
 import '../models/job_tag.dart';
+import '../models/rating.dart';
+import '../models/wallet.dart';
+import '../models/worker_profile.dart';
 
 /// Loads the startup JSON bundled in `assets/seed/`.
 ///
@@ -17,6 +22,9 @@ class SeedLoader {
 
   static const _jobsAsset = 'assets/seed/jobs.json';
   static const _usersAsset = 'assets/seed/users.json';
+  static const _bidsAsset = 'assets/seed/bids.json';
+  static const _ratingsAsset = 'assets/seed/ratings.json';
+  static const _accountsAsset = 'assets/seed/accounts.json';
 
   Future<List<Job>> loadJobs() async {
     final decoded = await _readJson(_jobsAsset) as List<dynamic>;
@@ -35,6 +43,91 @@ class SeedLoader {
         .map(AppUser.fromJson)
         .toList(growable: false);
   }
+
+  /// Offers on the seeded jobs — waiting, accepted and passed over.
+  ///
+  /// Without these a demonstration could reach the bidding screen but never a
+  /// hirer with a choice to make, and never a worker looking at an offer that
+  /// went to somebody else.
+  Future<List<Bid>> loadBids() async {
+    final decoded = await _readJson(_bidsAsset) as List<dynamic>;
+    final now = DateTime.now();
+
+    return decoded.cast<Map<String, dynamic>>().map((json) {
+      return Bid(
+        id: json['id'] as String,
+        jobId: json['jobId'] as String,
+        workerId: json['workerId'] as String,
+        fare: (json['fare'] as num).round(),
+        createdAt: _ago(json, now),
+        message: json['message'] as String?,
+        status: BidStatus.fromId(json['status'] as String?),
+      );
+    }).toList(growable: false);
+  }
+
+  Future<List<Rating>> loadRatings() async {
+    final decoded = await _readJson(_ratingsAsset) as List<dynamic>;
+    final now = DateTime.now();
+
+    return decoded.cast<Map<String, dynamic>>().map((json) {
+      return Rating(
+        id: json['id'] as String,
+        jobId: json['jobId'] as String,
+        side: RatedSide.fromId(json['side'] as String?),
+        stars: (json['stars'] as num).round(),
+        createdAt: _ago(json, now),
+        note: json['note'] as String?,
+      );
+    }).toList(growable: false);
+  }
+
+  /// The state that belongs to a person rather than to a job: which side of
+  /// the marketplace they are on, the trades they have opted into, and their
+  /// wallet.
+  Future<List<SeededAccount>> loadAccounts() async {
+    final decoded = await _readJson(_accountsAsset) as List<dynamic>;
+    final now = DateTime.now();
+
+    return decoded.cast<Map<String, dynamic>>().map((json) {
+      final id = json['id'] as String;
+
+      return SeededAccount(
+        id: id,
+        role: UserRole.fromId(json['role'] as String?),
+        profile: WorkerProfile(
+          userId: id,
+          tags: (json['trades'] as List<dynamic>? ?? const [])
+              .map((tag) => JobTag.fromId(tag as String?))
+              .whereType<JobTag>()
+              .toSet(),
+        ),
+        wallet: Wallet(
+          userId: id,
+          entries: (json['wallet'] as List<dynamic>? ?? const [])
+              .cast<Map<String, dynamic>>()
+              .map(
+                (entry) => WalletEntry(
+                  id: entry['id'] as String,
+                  kind: WalletEntryKind.fromId(entry['kind'] as String?),
+                  tokens: (entry['tokens'] as num).round(),
+                  createdAt: _ago(entry, now),
+                  jobId: entry['jobId'] as String?,
+                ),
+              )
+              .toList(),
+        ),
+      );
+    }).toList(growable: false);
+  }
+
+  /// Resolves a seed file's `hoursAgo` against [now].
+  ///
+  /// Relative like the job times, and for the same reason: a wallet whose last
+  /// entry is dated whenever the demo was packaged reads as abandoned.
+  DateTime _ago(Map<String, dynamic> json, DateTime now) => now.subtract(
+    Duration(minutes: (((json['hoursAgo'] as num?)?.toDouble() ?? 0) * 60).round()),
+  );
 
   /// Reads and decodes a bundled JSON asset.
   ///
@@ -98,6 +191,9 @@ class SeedLoader {
       shortDescription: json['shortDescription'] as String?,
       contactNumber: json['contact'] as String?,
       postedBy: json['postedBy'] as String?,
+      status: JobStatus.fromId(json['status'] as String?),
+      acceptedWorkerId: json['acceptedWorkerId'] as String?,
+      agreedFare: (json['agreedFare'] as num?)?.round(),
       isLocal: false,
     );
   }
@@ -116,4 +212,23 @@ class SeedLoader {
     ).add(Duration(days: dayOffset));
     return DateTime(day.year, day.month, day.day, hour, minute);
   }
+}
+
+/// One demo account's stored state, as the seed describes it.
+///
+/// A record rather than three parallel lists, because the three are written
+/// together and a wallet that landed without the trades beside it would give a
+/// worker a balance and an empty feed.
+class SeededAccount {
+  const SeededAccount({
+    required this.id,
+    required this.role,
+    required this.profile,
+    required this.wallet,
+  });
+
+  final String id;
+  final UserRole role;
+  final WorkerProfile profile;
+  final Wallet wallet;
 }

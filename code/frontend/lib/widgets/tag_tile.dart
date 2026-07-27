@@ -79,15 +79,23 @@ class TagTile extends StatelessWidget {
               children: [
                 Icon(tag.icon, size: 28, color: foreground),
                 const SizedBox(height: BrandSizing.spaceXs + 2),
-                Text(
-                  tag.label(strings),
-                  style: theme.textTheme.labelSmall?.copyWith(
-                    color: foreground,
-                    fontWeight: selected ? FontWeight.w600 : FontWeight.w500,
+                // Shrunk to fit rather than broken mid-word. "Construction"
+                // is one character too long for a 92px tile and was wrapping
+                // as "Constructio / n", which reads as a rendering fault —
+                // and these labels exist precisely so somebody who reads
+                // slowly can check the icon against a word.
+                FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text(
+                    tag.label(strings),
+                    style: theme.textTheme.labelSmall?.copyWith(
+                      color: foreground,
+                      fontWeight: selected ? FontWeight.w600 : FontWeight.w500,
+                    ),
+                    textAlign: TextAlign.center,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                   ),
-                  textAlign: TextAlign.center,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
                 ),
               ],
             ),

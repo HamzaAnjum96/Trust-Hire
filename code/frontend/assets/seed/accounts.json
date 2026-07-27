@@ -1,0 +1,211 @@
+[
+  {
+    "id": "user-003",
+    "role": "hirer",
+    "trades": [],
+    "wallet": []
+  },
+  {
+    "id": "user-009",
+    "role": "worker",
+    "trades": [
+      "electrical",
+      "applianceRepair"
+    ],
+    "wallet": [
+      {
+        "id": "entry-0001",
+        "kind": "topUp",
+        "tokens": 5000,
+        "hoursAgo": 620
+      },
+      {
+        "id": "entry-0002",
+        "kind": "topUp",
+        "tokens": 3000,
+        "hoursAgo": 210
+      },
+      {
+        "id": "entry-0003",
+        "kind": "firstJobCredit",
+        "tokens": 100,
+        "hoursAgo": 38.0,
+        "jobId": "seed-080"
+      },
+      {
+        "id": "entry-0004",
+        "kind": "commission",
+        "tokens": -100,
+        "hoursAgo": 38.0,
+        "jobId": "seed-080"
+      },
+      {
+        "id": "entry-0005",
+        "kind": "commission",
+        "tokens": -225,
+        "hoursAgo": 18.4,
+        "jobId": "seed-011"
+      },
+      {
+        "id": "entry-0006",
+        "kind": "commission",
+        "tokens": -75,
+        "hoursAgo": 13.0,
+        "jobId": "seed-176"
+      },
+      {
+        "id": "entry-0007",
+        "kind": "commission",
+        "tokens": -250,
+        "hoursAgo": 4.2,
+        "jobId": "seed-113"
+      },
+      {
+        "id": "entry-0008",
+        "kind": "commission",
+        "tokens": -100,
+        "hoursAgo": 2.9,
+        "jobId": "seed-040"
+      }
+    ]
+  },
+  {
+    "id": "user-016",
+    "role": "worker",
+    "trades": [
+      "plumbing",
+      "masonry"
+    ],
+    "wallet": [
+      {
+        "id": "entry-0009",
+        "kind": "topUp",
+        "tokens": 1800,
+        "hoursAgo": 500
+      },
+      {
+        "id": "entry-0010",
+        "kind": "firstJobCredit",
+        "tokens": 500,
+        "hoursAgo": 25.2,
+        "jobId": "seed-056"
+      },
+      {
+        "id": "entry-0011",
+        "kind": "commission",
+        "tokens": -2500,
+        "hoursAgo": 25.2,
+        "jobId": "seed-056"
+      },
+      {
+        "id": "entry-0024",
+        "kind": "commission",
+        "tokens": -150,
+        "hoursAgo": 17.6,
+        "jobId": "seed-063"
+      },
+      {
+        "id": "entry-0012",
+        "kind": "commission",
+        "tokens": -125,
+        "hoursAgo": 11.0,
+        "jobId": "seed-105"
+      },
+      {
+        "id": "entry-0013",
+        "kind": "commission",
+        "tokens": -2500,
+        "hoursAgo": 4.2,
+        "jobId": "seed-081"
+      }
+    ]
+  },
+  {
+    "id": "user-017",
+    "role": "worker",
+    "trades": [
+      "driving"
+    ],
+    "wallet": [
+      {
+        "id": "entry-0014",
+        "kind": "topUp",
+        "tokens": 700,
+        "hoursAgo": 96
+      },
+      {
+        "id": "entry-0015",
+        "kind": "firstJobCredit",
+        "tokens": 350,
+        "hoursAgo": 17.1,
+        "jobId": "seed-045"
+      },
+      {
+        "id": "entry-0016",
+        "kind": "commission",
+        "tokens": -350,
+        "hoursAgo": 17.1,
+        "jobId": "seed-045"
+      }
+    ]
+  },
+  {
+    "id": "user-001",
+    "role": "worker",
+    "trades": [
+      "cleaning",
+      "cooking",
+      "tailoring",
+      "gardening"
+    ],
+    "wallet": [
+      {
+        "id": "entry-0017",
+        "kind": "topUp",
+        "tokens": 4000,
+        "hoursAgo": 700
+      },
+      {
+        "id": "entry-0018",
+        "kind": "topUp",
+        "tokens": 2500,
+        "hoursAgo": 300
+      },
+      {
+        "id": "entry-0019",
+        "kind": "firstJobCredit",
+        "tokens": 400,
+        "hoursAgo": 45.2,
+        "jobId": "seed-166"
+      },
+      {
+        "id": "entry-0020",
+        "kind": "commission",
+        "tokens": -400,
+        "hoursAgo": 45.2,
+        "jobId": "seed-166"
+      },
+      {
+        "id": "entry-0021",
+        "kind": "commission",
+        "tokens": -200,
+        "hoursAgo": 28.3,
+        "jobId": "seed-100"
+      },
+      {
+        "id": "entry-0022",
+        "kind": "commission",
+        "tokens": -400,
+        "hoursAgo": 13.9,
+        "jobId": "seed-065"
+      },
+      {
+        "id": "entry-0023",
+        "kind": "commission",
+        "tokens": -150,
+        "hoursAgo": 6.7,
+        "jobId": "seed-047"
+      }
+    ]
+  }
+]

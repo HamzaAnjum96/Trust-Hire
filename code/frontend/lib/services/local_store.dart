@@ -119,6 +119,9 @@ class StoreKeys {
   /// Which demo account the device is currently being.
   static const activeAccount = 'trust_hire.active_account';
 
+  /// Set once the worker has closed the "add a trade" notice. Per account.
+  static const tradesNoticeDismissed = 'trust_hire.trades_notice_dismissed';
+
   /// The per-account name for a key.
   ///
   /// Role, trades, saved jobs and the wallet belong to a person rather than to
@@ -150,6 +153,7 @@ class StoreKeys {
     role,
     workerProfile,
     activeAccount,
+    tradesNoticeDismissed,
     mediaIndex,
   ];
 }

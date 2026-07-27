@@ -837,8 +837,8 @@ class AppStringsEn extends AppStrings {
   String get changeMyOffer => 'Change my offer';
 
   @override
-  String yourOffer(String amount) {
-    return 'Your offer: $amount';
+  String yourOffer(String fare) {
+    return 'You offered $fare';
   }
 
   @override
@@ -900,7 +900,7 @@ class AppStringsEn extends AppStrings {
   String get cannotBidAccepted => 'This job has been given to someone.';
 
   @override
-  String get offerWithdrawn => 'Your offer was withdrawn.';
+  String get offerWithdrawn => 'Withdrawn';
 
   @override
   String get cancel => 'Cancel';
@@ -1120,4 +1120,20 @@ class AppStringsEn extends AppStrings {
 
   @override
   String get yourStanding => 'Your record';
+
+  @override
+  String get offersTab => 'Offers';
+
+  @override
+  String get noOffers => 'No offers yet';
+
+  @override
+  String get noOffersMessage =>
+      'Open a job and name your price. Offers you make show up here.';
+
+  @override
+  String get offerWaiting => 'Waiting';
+
+  @override
+  String get offerNotChosen => 'Not chosen';
 }

@@ -14,6 +14,7 @@ import 'package:trust_hire/app/bid_controller.dart';
 import 'package:trust_hire/features/bidding/bidding_rules.dart';
 import 'package:trust_hire/models/bid.dart';
 import 'package:trust_hire/models/job.dart';
+import 'package:trust_hire/models/job_status.dart';
 import 'package:trust_hire/models/job_tag.dart';
 import 'package:trust_hire/models/worker_profile.dart';
 import 'package:trust_hire/services/bid_repository.dart';
@@ -365,14 +366,67 @@ void main() {
       }
     });
 
-    test('nothing arrives already accepted', () async {
+    test('a job that was accepted agrees with the bid behind it', () async {
+      // The seed gives the demo a past — offers, choices and finished work —
+      // and the fare is where that could quietly go wrong. Section 4 makes
+      // acceptance the thing that fixes the price, so a seeded job whose
+      // agreed fare disagreed with its accepted bid would be a demonstration
+      // of a bug rather than of the rule.
       final store = await LocalStore.open();
       final repository = JobRepository(store, MediaStore(store));
       await repository.ensureSeeded();
 
+      final jobs = await repository.fetchJobs();
+      final bids = await BidRepository(store).fetchBids();
+
+      final accepted = jobs.where((job) => job.isAccepted).toList();
+      expect(accepted, isNotEmpty, reason: 'the demo needs finished work');
+
+      for (final job in accepted) {
+        final winner = bids.singleWhere(
+          (bid) => bid.jobId == job.id && bid.status == BidStatus.accepted,
+          orElse: () => throw StateError('${job.id} has no accepted bid'),
+        );
+
+        expect(job.agreedFare, winner.fare, reason: job.id);
+        expect(job.acceptedWorkerId, winner.workerId, reason: job.id);
+      }
+    });
+
+    test('an open job has nobody on it, and nobody accepted', () async {
+      final store = await LocalStore.open();
+      final repository = JobRepository(store, MediaStore(store));
+      await repository.ensureSeeded();
+
+      final jobs = await repository.fetchJobs();
+      final bids = await BidRepository(store).fetchBids();
+      final open = jobs.where((job) => job.status == JobStatus.open);
+
+      expect(open, isNotEmpty, reason: 'the map needs work to offer on');
+
+      for (final job in open) {
+        expect(job.acceptedWorkerId, isNull, reason: job.id);
+        expect(job.agreedFare, isNull, reason: job.id);
+        expect(
+          bids.where(
+            (bid) => bid.jobId == job.id && bid.status == BidStatus.accepted,
+          ),
+          isEmpty,
+          reason: job.id,
+        );
+      }
+    });
+
+    test('somebody has been passed over', () async {
+      // The state a worker sees most often, and the one that existed only in
+      // the tests until the seed grew a history.
+      final store = await LocalStore.open();
+      await JobRepository(store, MediaStore(store)).ensureSeeded();
+
+      final bids = await BidRepository(store).fetchBids();
       expect(
-        (await repository.fetchJobs()).where((j) => j.isAccepted),
-        isEmpty,
+        bids.where((bid) => bid.status == BidStatus.passedOver),
+        isNotEmpty,
       );
     });
   });

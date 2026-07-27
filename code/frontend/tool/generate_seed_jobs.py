@@ -461,24 +461,490 @@ def build(job_count: int = 180):
     return jobs, people
 
 
+# ---------------------------------------------------------------------------
+# History
+#
+# Everything above produces jobs that have only just been posted: no offers on
+# them, nobody chosen, nothing finished, and therefore no worker with a record
+# and no wallet with anything in it. Half of Phase 1 was invisible in the demo
+# as a result — you could read the bidding screen but never a passed-over
+# offer, open a wallet but never a locked one.
+#
+# This second phase gives that data a past. It runs on its **own** random seed
+# and touches nothing the first phase decided, so regenerating adds history to
+# the same jobs, in the same places, posted by the same people. Changing the
+# constant below reshuffles the history and leaves the map alone.
+# ---------------------------------------------------------------------------
+HISTORY_SEED = 20260801
+
+# What the five people in the demo switcher are for. Each one is a state the
+# app can be in that the others cannot show, so a demonstration can reach every
+# branch by changing who it is rather than by editing storage by hand.
+PERSONAS = {
+    # The hirer. No trades, no wallet worth looking at — a hirer is never
+    # charged commission — and postings in every state, including one that was
+    # called off.
+    "user-003": {
+        "role": "hirer",
+        "trades": [],
+        "wallet": [],
+        "works": False,
+    },
+    # The busy worker. Well rated, paid up, and the one whose record makes an
+    # offer look like a safe choice.
+    "user-009": {
+        "role": "worker",
+        "trades": ["electrical", "applianceRepair"],
+        "wallet": [
+            ("topUp", 5000, 620),
+            ("topUp", 3000, 210),
+        ],
+        "works": True,
+        "wins": 5,
+        "loses": 4,
+        "live_bids": 2,
+    },
+    # The worker who owes money. Two commissions charged while already short,
+    # which is Section 11's lockout: the bidding screen refuses and says why.
+    "user-016": {
+        "role": "worker",
+        "trades": ["plumbing", "masonry"],
+        "wallet": [
+            ("topUp", 1800, 500),
+        ],
+        "works": True,
+        "wins": 3,
+        "loses": 3,
+        "live_bids": 1,
+    },
+    # Almost new. One job finished, the Rs. 500 first-job credit still visible
+    # in the ledger, and a balance close to nothing.
+    "user-017": {
+        "role": "worker",
+        "trades": ["driving"],
+        "wallet": [
+            ("topUp", 700, 96),
+        ],
+        "works": True,
+        "wins": 1,
+        "loses": 2,
+        "live_bids": 1,
+    },
+    # The generalist. Most trades of anybody, so the feed she sees is the
+    # widest one in the demo.
+    "user-001": {
+        "role": "worker",
+        "trades": ["cleaning", "cooking", "tailoring", "gardening"],
+        "wallet": [
+            ("topUp", 4000, 700),
+            ("topUp", 2500, 300),
+        ],
+        "works": True,
+        "wins": 4,
+        "loses": 3,
+        "live_bids": 2,
+    },
+}
+
+# What a worker types alongside a number, when they type anything at all. Kept
+# short and plain: a bid is a price, and the message is the thing a worker who
+# does not write comfortably is free to leave out.
+BID_MESSAGES = [
+    None, None, None,
+    "Can come today.",
+    "I have the tools with me.",
+    "Free after 2pm.",
+    "Done this many times.",
+    "Can bring my own material.",
+    "Live nearby, can be there in 20 minutes.",
+    "Price includes the parts.",
+    "Tomorrow morning suits me better.",
+]
+
+RATING_NOTES = [
+    None, None, None, None,
+    "Arrived on time.",
+    "Good work, cleaned up after.",
+    "Took longer than agreed.",
+    "Polite and quick.",
+    "Had to be called twice.",
+]
+
+# 5% of the agreed fare, rounded down — the same rule WalletRules applies.
+COMMISSION_PERCENT = 5
+FIRST_JOB_CREDIT = 500
+
+
+def commission_on(fare: int) -> int:
+    return fare * COMMISSION_PERCENT // 100
+
+
+def add_history(jobs, people):
+    """Give the jobs a past: offers, choices, finishes, ratings and wallets."""
+    rng = random.Random(HISTORY_SEED)
+
+    by_id = {job["id"]: job for job in jobs}
+    person_ids = [person["id"] for person in people]
+
+    bids = []
+    ratings = []
+    counters = {"bid": 0, "rating": 0, "entry": 0}
+
+    def next_id(kind: str) -> str:
+        counters[kind] += 1
+        return f"{kind}-{counters[kind]:04d}"
+
+    def can_reach(person_id, job) -> bool:
+        """Whether Section 8 would ever have put this job in front of them.
+
+        Only the personas have a stored trade list, so only they can be wrong
+        about this — but they are the five people anybody demonstrating the app
+        actually looks at, and an electrician holding an offer on a bricklaying
+        job contradicts the rule the whole of Section 8 rests on.
+        """
+        persona = PERSONAS.get(person_id)
+        if persona is None:
+            return True
+        if not persona["works"]:
+            return False
+
+        return bool({*persona["trades"], "misc"}.intersection(job["tags"]))
+
+    def other_than(job, *excluded):
+        """Somebody who could have seen this job, and is not already on it."""
+        for _ in range(200):
+            candidate = rng.choice(person_ids)
+            if candidate in excluded:
+                continue
+            if not can_reach(candidate, job):
+                continue
+            return candidate
+
+        # Every draw was a persona who cannot reach it, which needs 200 unlucky
+        # rolls out of sixty people. Fall back to somebody with no trade list,
+        # who is therefore never wrong about this.
+        return next(
+            person for person in person_ids
+            if person not in excluded and person not in PERSONAS
+        )
+
+    def bid_fare(job) -> int:
+        """A counter-offer. Section 4 makes the starting fare a starting point,
+        so bids land either side of it — and a job posted without one still
+        gets offers, because that is the case the hirer most needs help with."""
+        base = job.get("startingFare") or rng.choice([1500, 2500, 4000, 8000])
+        return round_fare(base * rng.uniform(0.75, 1.35))
+
+    def place_bid(job, worker, status, hours_ago):
+        bid = {
+            "id": next_id("bid"),
+            "jobId": job["id"],
+            "workerId": worker,
+            "fare": bid_fare(job),
+            "hoursAgo": round(hours_ago, 1),
+            "status": status,
+        }
+        message = rng.choice(BID_MESSAGES)
+        if message:
+            bid["message"] = message
+        bids.append(bid)
+        return bid
+
+    def finish(job, worker, *, status, hours_ago):
+        """Put a worker on a job and take it to `status`.
+
+        The accepted bid's fare becomes the agreed fare, because Section 4 says
+        acceptance is what fixes the price — a job whose agreed fare disagreed
+        with the bid behind it would be a demo of a bug.
+        """
+        posted = job["createdHoursAgo"]
+        chosen = place_bid(job, worker, "accepted", rng.uniform(hours_ago, posted))
+
+        for _ in range(rng.randint(0, 3)):
+            place_bid(
+                job,
+                other_than(job, job["postedBy"], worker),
+                "passedOver",
+                rng.uniform(hours_ago, posted),
+            )
+
+        job["status"] = status
+        job["acceptedWorkerId"] = worker
+        job["agreedFare"] = chosen["fare"]
+        return chosen
+
+    def rate(job, side, hours_ago):
+        rating = {
+            "id": next_id("rating"),
+            "jobId": job["id"],
+            "side": side,
+            # Skewed high, and never uniformly: most work is fine, and a demo
+            # where every worker averages three stars would say the platform is
+            # full of bad tradesmen.
+            "stars": weighted(rng, [(5, 52), (4, 28), (3, 12), (2, 5), (1, 3)]),
+            "hoursAgo": round(hours_ago, 1),
+        }
+        note = rng.choice(RATING_NOTES)
+        if note:
+            rating["note"] = note
+        ratings.append(rating)
+
+    # --- The personas, first, so they get the jobs they need ---------------
+    #
+    # Claimed here and removed from the pool below, so a persona's history is
+    # never at the mercy of what the random pass happened to leave over.
+    open_jobs = [job for job in jobs if job["postedBy"] not in PERSONAS]
+    rng.shuffle(open_jobs)
+    taken = set()
+
+    def claim(trades=None):
+        """Take a job out of the pool for a persona's history.
+
+        `trades` restricts it to work the tag rule would actually have shown
+        that worker — general work, plus whatever they have opted into. A
+        demonstration where an electrician has an offer on a bricklaying job
+        contradicts the rule the whole of Section 8 rests on, and it is the
+        kind of detail somebody looking closely at the demo notices first.
+        """
+        reachable = None if trades is None else {*trades, "misc"}
+
+        for index in range(len(open_jobs) - 1, -1, -1):
+            job = open_jobs[index]
+            if job["id"] in taken:
+                continue
+            if reachable is not None and not reachable.intersection(job["tags"]):
+                continue
+
+            open_jobs.pop(index)
+            taken.add(job["id"])
+            return job
+
+        raise RuntimeError("ran out of jobs to give the personas a history")
+
+    wallets = {}
+
+    for person_id, persona in PERSONAS.items():
+        entries = [
+            {
+                "id": next_id("entry"),
+                "kind": kind,
+                "tokens": tokens,
+                "hoursAgo": hours,
+            }
+            for kind, tokens, hours in persona["wallet"]
+        ]
+
+        if persona["works"]:
+            # Jobs this persona did. Each one finished, rated, and charged for,
+            # in that order, so the ledger reads as a history rather than a
+            # list of numbers somebody typed.
+            finished = []
+            for _ in range(persona["wins"]):
+                job = claim(persona["trades"])
+                done_at = rng.uniform(2, job["createdHoursAgo"] * 0.6)
+                finish(job, person_id, status="completed", hours_ago=done_at)
+                finished.append((job, done_at))
+
+            finished.sort(key=lambda pair: -pair[1])
+
+            for index, (job, done_at) in enumerate(finished):
+                rate(job, "worker", done_at * 0.8)
+                # Not every hirer bothers, and not every worker rates back.
+                if rng.random() < 0.65:
+                    rate(job, "hirer", done_at * 0.7)
+
+                charge = commission_on(job["agreedFare"])
+                if index == 0:
+                    # Section 11's first-job credit, capped at what is owed.
+                    entries.append({
+                        "id": next_id("entry"),
+                        "kind": "firstJobCredit",
+                        "tokens": min(FIRST_JOB_CREDIT, charge),
+                        "hoursAgo": round(done_at, 1),
+                        "jobId": job["id"],
+                    })
+                entries.append({
+                    "id": next_id("entry"),
+                    "kind": "commission",
+                    "tokens": -charge,
+                    "hoursAgo": round(done_at, 1),
+                    "jobId": job["id"],
+                })
+
+            # Offers that went nowhere. The demo needs these: a worker's own
+            # list is mostly the jobs they did not get, and until now that
+            # state existed only in the tests.
+            for _ in range(persona["loses"]):
+                job = claim(persona["trades"])
+                winner = other_than(job, job["postedBy"], person_id)
+                finish(
+                    job,
+                    winner,
+                    status=rng.choice(["completed", "inProgress", "accepted"]),
+                    hours_ago=rng.uniform(2, job["createdHoursAgo"] * 0.5),
+                )
+                place_bid(
+                    job,
+                    person_id,
+                    "passedOver",
+                    rng.uniform(1, job["createdHoursAgo"]),
+                )
+
+            # And offers still waiting on somebody's answer.
+            for _ in range(persona["live_bids"]):
+                job = claim(persona["trades"])
+                place_bid(
+                    job,
+                    person_id,
+                    "offered",
+                    rng.uniform(0.5, job["createdHoursAgo"]),
+                )
+                for _ in range(rng.randint(0, 2)):
+                    place_bid(
+                        job,
+                        other_than(job, job["postedBy"], person_id),
+                        "offered",
+                        rng.uniform(0.5, job["createdHoursAgo"]),
+                    )
+
+        wallets[person_id] = entries
+
+    # The hirer's own postings, in every state a posting can be in. Hers are
+    # picked out by hand rather than left to the random pass, because "open
+    # with offers on it", "finished" and "called off" are the three things
+    # somebody demonstrating the hirer's side needs to be able to point at.
+    hina = [job for job in jobs if job["postedBy"] == "user-003"]
+    if len(hina) >= 4:
+        for _ in range(rng.randint(2, 3)):
+            place_bid(
+                hina[0],
+                other_than(hina[0], "user-003"),
+                "offered",
+                rng.uniform(0.5, hina[0]["createdHoursAgo"]),
+            )
+        # Whoever in the switcher could actually have seen it — so the demo
+        # can show one demo account working for another, without inventing an
+        # offer Section 8 would never have delivered.
+        def persona_for(job):
+            for person_id in PERSONAS:
+                if can_reach(person_id, job):
+                    return person_id
+            return other_than(job, "user-003")
+
+        worker = persona_for(hina[1])
+        done = finish(
+            hina[1],
+            worker,
+            status="completed",
+            hours_ago=hina[1]["createdHoursAgo"] * 0.4,
+        )
+        rate(hina[1], "worker", hina[1]["createdHoursAgo"] * 0.3)
+        if worker in wallets:
+            wallets[worker].append({
+                "id": next_id("entry"),
+                "kind": "commission",
+                "tokens": -commission_on(done["fare"]),
+                "hoursAgo": round(hina[1]["createdHoursAgo"] * 0.3, 1),
+                "jobId": hina[1]["id"],
+            })
+        finish(
+            hina[2],
+            persona_for(hina[2]),
+            status="inProgress",
+            hours_ago=hina[2]["createdHoursAgo"] * 0.5,
+        )
+        hina[3]["status"] = "cancelled"
+
+    # --- Everybody else ----------------------------------------------------
+    #
+    # Enough of the rest of the map has a past that a hirer's offer list and a
+    # worker's record are populated wherever you look, rather than only around
+    # the five people in the switcher.
+    for job in open_jobs:
+        roll = rng.random()
+
+        if roll < 0.22:
+            worker = other_than(job, job["postedBy"])
+            done_at = rng.uniform(1, max(2, job["createdHoursAgo"] * 0.6))
+            finish(job, worker, status="completed", hours_ago=done_at)
+            if rng.random() < 0.7:
+                rate(job, "worker", done_at * 0.8)
+            if rng.random() < 0.4:
+                rate(job, "hirer", done_at * 0.7)
+        elif roll < 0.30:
+            finish(
+                job,
+                other_than(job, job["postedBy"]),
+                status=rng.choice(["accepted", "inProgress"]),
+                hours_ago=rng.uniform(1, max(2, job["createdHoursAgo"] * 0.5)),
+            )
+        elif roll < 0.34:
+            job["status"] = "cancelled"
+        else:
+            # Still open. Most of these have somebody waiting on an answer,
+            # which is what makes the hirer's side worth looking at.
+            for _ in range(weighted(rng, [(0, 30), (1, 25), (2, 22), (3, 15), (4, 8)])):
+                place_bid(
+                    job,
+                    other_than(job, job["postedBy"]),
+                    "offered",
+                    rng.uniform(0.2, job["createdHoursAgo"]),
+                )
+
+    accounts = [
+        {
+            "id": person_id,
+            "role": persona["role"],
+            "trades": persona["trades"],
+            "wallet": sorted(wallets[person_id], key=lambda e: -e["hoursAgo"]),
+        }
+        for person_id, persona in PERSONAS.items()
+    ]
+
+    bids.sort(key=lambda bid: -bid["hoursAgo"])
+    ratings.sort(key=lambda rating: -rating["hoursAgo"])
+
+    return bids, ratings, accounts
+
+
+def balance_of(entries) -> int:
+    return sum(entry["tokens"] for entry in entries)
+
+
 def main() -> None:
     jobs, people = build()
+    bids, ratings, accounts = add_history(jobs, people)
 
     SEED_DIR.mkdir(parents=True, exist_ok=True)
-    (SEED_DIR / "jobs.json").write_text(
-        json.dumps(jobs, ensure_ascii=False, indent=2) + "\n"
-    )
-    (SEED_DIR / "users.json").write_text(
-        json.dumps(people, ensure_ascii=False, indent=2) + "\n"
-    )
+    for name, payload in [
+        ("jobs.json", jobs),
+        ("users.json", people),
+        ("bids.json", bids),
+        ("ratings.json", ratings),
+        ("accounts.json", accounts),
+    ]:
+        (SEED_DIR / name).write_text(
+            json.dumps(payload, ensure_ascii=False, indent=2) + "\n"
+        )
 
     cities = {}
+    statuses = {}
     for job in jobs:
         cities[job["city"]] = cities.get(job["city"], 0) + 1
+        state = job.get("status", "open")
+        statuses[state] = statuses.get(state, 0) + 1
 
     print(f"{len(jobs)} jobs, {len(people)} people, {len(cities)} cities")
-    for city, count in sorted(cities.items(), key=lambda pair: -pair[1]):
-        print(f"  {count:3d}  {city}")
+    print(f"{len(bids)} bids, {len(ratings)} ratings, {len(accounts)} accounts")
+    print("  jobs by status: " + ", ".join(
+        f"{count} {state}" for state, count in sorted(statuses.items())
+    ))
+    for account in accounts:
+        print(
+            f"  {account['id']}  {account['role']:<6} "
+            f"{len(account['trades'])} trades  "
+            f"Rs. {balance_of(account['wallet'])}"
+        )
 
 
 if __name__ == "__main__":

@@ -79,6 +79,22 @@ enum JobTag {
   /// Every worker starts here, with no selection screen and no decision.
   static const defaultWorkerTags = <JobTag>{JobTag.misc};
 
+  /// The order a **worker** reads their own trades in: general work first.
+  ///
+  /// It is the one they already hold, it is the one that cannot be switched
+  /// off, and the screen shows it selected-and-inert to prove it is on. Having
+  /// it eighteenth in the list meant the tile answering "am I still going to
+  /// see general jobs?" was the last one anybody found.
+  ///
+  /// Deliberately not the order a **hirer** picks tags in. There, general work
+  /// is the fallback for someone who cannot name the trade they need, and
+  /// putting it first would make it the path of least resistance — which would
+  /// quietly undo the tag rule the whole of Section 8 rests on.
+  static List<JobTag> get workerOrder => [
+    ...defaultWorkerTags,
+    ...values.where((tag) => !defaultWorkerTags.contains(tag)),
+  ];
+
   static JobTag? fromId(String? id) {
     if (id == null) return null;
     for (final type in JobTag.values) {
