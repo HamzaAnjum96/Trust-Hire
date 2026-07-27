@@ -113,7 +113,7 @@ and the backend.
 code/frontend/
 ├── lib/
 │   ├── app/          ← app root, shell, controllers
-│   ├── core/         ← brand tokens, theme, formatters
+│   ├── core/         ← brand tokens, theme, breakpoints, formatters
 │   ├── features/
 │   │   ├── map/          ← the map — the primary surface
 │   │   ├── jobs/         ← job list, details, saved and posted

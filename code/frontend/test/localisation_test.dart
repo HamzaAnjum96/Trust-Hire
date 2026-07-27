@@ -213,8 +213,10 @@ void main() {
       await settle(tester);
 
       expect(find.text('Nearby work'), findsOneWidget);
+      // Read off the navigation, whichever shape this surface gets — the
+      // point is the text direction, not the control.
       expect(
-        Directionality.of(tester.element(find.byType(NavigationBar))),
+        Directionality.of(tester.element(find.byType(NavigationRail))),
         TextDirection.ltr,
       );
     });

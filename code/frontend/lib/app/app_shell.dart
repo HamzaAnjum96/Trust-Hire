@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
 
+import '../core/layout.dart';
 import '../core/tokens.dart';
 import '../features/create_job/create_job_screen.dart';
 import '../features/map/location_controller.dart';
@@ -71,25 +72,69 @@ class _AppShellState extends State<AppShell> {
     );
   }
 
+  /// Posting is the app's one primary action, so it is present on every
+  /// destination except the one that is about the user rather than the work.
+  bool get _showsPostAction => _index != _profileIndex;
+
+  static const _profileIndex = 3;
+
   @override
   Widget build(BuildContext context) {
     final strings = AppStrings.of(context);
+    final theme = Theme.of(context);
+    final layout = LayoutSize.of(context);
+
+    final body = IndexedStack(
+      index: _index,
+      children: const [
+        MapScreen(),
+        JobsScreen(),
+        MyJobsScreen(),
+        ProfileScreen(),
+      ],
+    );
+
+    // A bottom bar on a desktop browser puts the app's main controls as far
+    // from the pointer as the window allows. Past the medium breakpoint the
+    // destinations move to a rail down the side, which is also where a mouse
+    // already is on the way back from the address bar.
+    if (layout.usesRail) {
+      return Scaffold(
+        body: Row(
+          children: [
+            _NavigationRail(
+              index: _index,
+              onSelected: (value) => setState(() => _index = value),
+              // Extended labels need the room; a tablet does not have it.
+              extended: layout == LayoutSize.expanded,
+              action: _showsPostAction
+                  ? FloatingActionButton(
+                      onPressed: _openCreateJob,
+                      backgroundColor: theme.colorScheme.primary,
+                      foregroundColor: theme.colorScheme.onPrimary,
+                      elevation: 2,
+                      tooltip: strings.postAJob,
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BrandRadius.mediumAll,
+                      ),
+                      child: const Icon(Icons.add),
+                    )
+                  : null,
+            ),
+            const VerticalDivider(width: 1, thickness: 1),
+            Expanded(child: body),
+          ],
+        ),
+      );
+    }
+
     return Scaffold(
-      body: IndexedStack(
-        index: _index,
-        children: const [
-          MapScreen(),
-          JobsScreen(),
-          MyJobsScreen(),
-          ProfileScreen(),
-        ],
-      ),
-      floatingActionButton: _index == 3
-          ? null
-          : FloatingActionButton.extended(
+      body: body,
+      floatingActionButton: _showsPostAction
+          ? FloatingActionButton.extended(
               onPressed: _openCreateJob,
-              backgroundColor: Theme.of(context).colorScheme.primary,
-              foregroundColor: Theme.of(context).colorScheme.onPrimary,
+              backgroundColor: theme.colorScheme.primary,
+              foregroundColor: theme.colorScheme.onPrimary,
               elevation: 2,
               shape: const RoundedRectangleBorder(
                 borderRadius: BrandRadius.mediumAll,
@@ -97,11 +142,83 @@ class _AppShellState extends State<AppShell> {
               icon: const Icon(Icons.add),
               // Section 21 — say what the action does, never "Submit".
               label: Text(strings.postAJob, style: BrandType.button),
-            ),
+            )
+          : null,
       bottomNavigationBar: NavigationBar(
         selectedIndex: _index,
         onDestinationSelected: (value) => setState(() => _index = value),
         destinations: _destinations(strings),
+      ),
+    );
+  }
+}
+
+/// The side navigation used from the medium breakpoint upward.
+///
+/// Its own widget so the shell's build stays readable, and so the rail's
+/// scroll behaviour is contained: at 600px height with four destinations and
+/// a button, the rail can overflow, and a navigation control that clips is
+/// worse than one that scrolls.
+class _NavigationRail extends StatelessWidget {
+  const _NavigationRail({
+    required this.index,
+    required this.onSelected,
+    required this.extended,
+    this.action,
+  });
+
+  final int index;
+  final ValueChanged<int> onSelected;
+  final bool extended;
+  final Widget? action;
+
+  @override
+  Widget build(BuildContext context) {
+    final strings = AppStrings.of(context);
+
+    return LayoutBuilder(
+      builder: (context, constraints) => SingleChildScrollView(
+        child: ConstrainedBox(
+          constraints: BoxConstraints(minHeight: constraints.maxHeight),
+          child: IntrinsicHeight(
+            child: NavigationRail(
+              selectedIndex: index,
+              onDestinationSelected: onSelected,
+              extended: extended,
+              labelType: extended ? null : NavigationRailLabelType.all,
+              leading: action == null
+                  ? null
+                  : Padding(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: BrandSizing.spaceMd,
+                      ),
+                      child: action,
+                    ),
+              destinations: [
+                NavigationRailDestination(
+                  icon: const Icon(Icons.map_outlined),
+                  selectedIcon: const Icon(Icons.map),
+                  label: Text(strings.navMap),
+                ),
+                NavigationRailDestination(
+                  icon: const Icon(Icons.work_outline),
+                  selectedIcon: const Icon(Icons.work),
+                  label: Text(strings.navJobs),
+                ),
+                NavigationRailDestination(
+                  icon: const Icon(Icons.bookmark_border),
+                  selectedIcon: const Icon(Icons.bookmark),
+                  label: Text(strings.navActivity),
+                ),
+                NavigationRailDestination(
+                  icon: const Icon(Icons.person_outline),
+                  selectedIcon: const Icon(Icons.person),
+                  label: Text(strings.navProfile),
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }

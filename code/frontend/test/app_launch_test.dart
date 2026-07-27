@@ -8,6 +8,7 @@ import 'package:trust_hire/features/map/job_map.dart';
 import 'package:trust_hire/services/local_store.dart';
 
 import 'support/seed_facts.dart';
+import 'support/surface.dart';
 
 /// Sprint 0's definition of done is "application launches". This asserts it
 /// end to end: the app boots, seeds local storage from the bundled JSON, and
@@ -40,11 +41,13 @@ void main() {
     // shell that follows it.
     await (SettingsController(store)..load()).markIntroSeen();
 
+    await tester.useCompactSurface();
     await tester.pumpWidget(TrustHireApp(store: store));
     await settle(tester);
 
     // Navigation scaffold is present with all four destinations.
     expect(find.byType(NavigationBar), findsOneWidget);
+    expect(find.byType(NavigationRail), findsNothing);
     expect(find.text('Map'), findsOneWidget);
     expect(find.text('Jobs'), findsOneWidget);
     expect(find.text('Activity'), findsOneWidget);
@@ -69,6 +72,7 @@ void main() {
     // shell that follows it.
     await (SettingsController(store)..load()).markIntroSeen();
 
+    await tester.useCompactSurface();
     await tester.pumpWidget(TrustHireApp(store: store));
     await settle(tester);
 
@@ -96,6 +100,7 @@ void main() {
     // shell that follows it.
     await (SettingsController(store)..load()).markIntroSeen();
 
+    await tester.useCompactSurface();
     await tester.pumpWidget(TrustHireApp(store: store));
     await settle(tester);
 
@@ -113,6 +118,7 @@ void main() {
 
     // geolocator has no platform implementation under test, so no position is
     // ever produced — the same situation as a refusal.
+    await tester.useCompactSurface();
     await tester.pumpWidget(TrustHireApp(store: store));
     await settle(tester);
 
@@ -132,6 +138,7 @@ void main() {
     // shell that follows it.
     await (SettingsController(store)..load()).markIntroSeen();
 
+    await tester.useCompactSurface();
     await tester.pumpWidget(TrustHireApp(store: store));
     await settle(tester);
 

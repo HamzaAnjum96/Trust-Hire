@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../app/job_controller.dart';
+import '../../core/layout.dart';
 import '../../core/tokens.dart';
 import '../../l10n/app_localizations.dart';
 import '../../models/job.dart';
@@ -54,32 +55,37 @@ class _MyJobsScreenState extends State<MyJobsScreen>
           ],
         ),
       ),
-      body: switch (jobs.state) {
-        LoadState.idle || LoadState.loading => const JobListSkeleton(),
-        LoadState.failed => ErrorView(
-          message: strings.couldNotLoadJobs,
-          onRetry: jobs.load,
-        ),
-        LoadState.ready => TabBarView(
-          controller: _tabs,
-          children: [
-            _JobsTab(
-              jobs: savedJobs,
-              emptyIcon: Icons.bookmark_border,
-              emptyTitle: strings.noSavedJobs,
-              emptyMessage: strings.noSavedJobsMessage,
-              // Said once, rather than letting the list quietly shrink.
-              notice: saved.hasMissing(jobs.jobs) ? strings.savedJobGone : null,
-            ),
-            _JobsTab(
-              jobs: myPostings,
-              emptyIcon: Icons.work_outline,
-              emptyTitle: strings.noPostings,
-              emptyMessage: strings.noPostingsMessage,
-            ),
-          ],
-        ),
-      },
+      // The same measure as the job list; these are the same rows.
+      body: ReadableWidth(
+        child: switch (jobs.state) {
+          LoadState.idle || LoadState.loading => const JobListSkeleton(),
+          LoadState.failed => ErrorView(
+            message: strings.couldNotLoadJobs,
+            onRetry: jobs.load,
+          ),
+          LoadState.ready => TabBarView(
+            controller: _tabs,
+            children: [
+              _JobsTab(
+                jobs: savedJobs,
+                emptyIcon: Icons.bookmark_border,
+                emptyTitle: strings.noSavedJobs,
+                emptyMessage: strings.noSavedJobsMessage,
+                // Said once, rather than letting the list quietly shrink.
+                notice: saved.hasMissing(jobs.jobs)
+                    ? strings.savedJobGone
+                    : null,
+              ),
+              _JobsTab(
+                jobs: myPostings,
+                emptyIcon: Icons.work_outline,
+                emptyTitle: strings.noPostings,
+                emptyMessage: strings.noPostingsMessage,
+              ),
+            ],
+          ),
+        },
+      ),
     );
   }
 }

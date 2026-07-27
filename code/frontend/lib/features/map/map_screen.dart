@@ -276,9 +276,15 @@ class _MapBody extends StatelessWidget {
           left: BrandSizing.spaceMd,
           right: BrandSizing.spaceMd,
           top: padding.top + BrandSizing.spaceSm,
-          child: _MapHeader(
-            jobCount: jobs.length,
-            totalJobCount: totalJobCount,
+          // The map wants the whole canvas; the cards floating over it do
+          // not. Left-aligned rather than centred, so the overlays sit
+          // together in one column instead of drifting apart as the window
+          // widens.
+          child: _OverlayWidth(
+            child: _MapHeader(
+              jobCount: jobs.length,
+              totalJobCount: totalJobCount,
+            ),
           ),
         ),
 
@@ -288,7 +294,9 @@ class _MapBody extends StatelessWidget {
           left: 0,
           right: 0,
           top: padding.top + 64,
-          child: QuickFilterBar(controller: filters),
+          // Already a horizontal scroller, so it only needs the same ceiling
+          // as the header above it to stay in the same column.
+          child: _OverlayWidth(child: QuickFilterBar(controller: filters)),
         ),
 
         // Every notice stacks downward from below the header. One column, not
@@ -300,39 +308,41 @@ class _MapBody extends StatelessWidget {
           left: BrandSizing.spaceMd,
           right: BrandSizing.spaceMd,
           top: padding.top + 116,
-          child: Column(
-            spacing: BrandSizing.spaceSm,
-            children: [
-              if (locationExplanation != null)
-                _MapNotice(
-                  icon: Icons.location_off_outlined,
-                  message: locationExplanation,
-                  onDismiss: location.dismissExplanation,
-                ),
-              if (tilesUnavailable)
-                _MapNotice(
-                  icon: Icons.cloud_off,
-                  message: strings.mapImagesNotLoading,
-                ),
-              if (jobs.isEmpty && totalJobCount > 0)
-                _MapNotice(
-                  icon: Icons.search_off,
-                  message: strings.noJobsMatchHere,
-                  onDismiss: filters.clear,
-                ),
+          child: _OverlayWidth(
+            child: Column(
+              spacing: BrandSizing.spaceSm,
+              children: [
+                if (locationExplanation != null)
+                  _MapNotice(
+                    icon: Icons.location_off_outlined,
+                    message: locationExplanation,
+                    onDismiss: location.dismissExplanation,
+                  ),
+                if (tilesUnavailable)
+                  _MapNotice(
+                    icon: Icons.cloud_off,
+                    message: strings.mapImagesNotLoading,
+                  ),
+                if (jobs.isEmpty && totalJobCount > 0)
+                  _MapNotice(
+                    icon: Icons.search_off,
+                    message: strings.noJobsMatchHere,
+                    onDismiss: filters.clear,
+                  ),
 
-              // Not a filter and not an error: the tag rule is holding jobs
-              // back, and the only thing that changes it is adding a trade.
-              // Shown just for a worker who has never added one, so it stops
-              // appearing as soon as it stops being news.
-              if (hiddenByTags > 0)
-                _MapNotice(
-                  icon: Icons.construction_outlined,
-                  message: strings.noJobsForTradesHelp,
-                  actionLabel: strings.addATrade,
-                  onAction: () => MyTradesScreen.open(context),
-                ),
-            ],
+                // Not a filter and not an error: the tag rule is holding jobs
+                // back, and the only thing that changes it is adding a trade.
+                // Shown just for a worker who has never added one, so it stops
+                // appearing as soon as it stops being news.
+                if (hiddenByTags > 0)
+                  _MapNotice(
+                    icon: Icons.construction_outlined,
+                    message: strings.noJobsForTradesHelp,
+                    actionLabel: strings.addATrade,
+                    onAction: () => MyTradesScreen.open(context),
+                  ),
+              ],
+            ),
           ),
         ),
 
@@ -382,10 +392,15 @@ class _MapBody extends StatelessWidget {
                       // Clear the navigation bar and the post button.
                       96,
                     ),
-                    child: JobPreviewCard(
-                      job: selected,
-                      viewerLocation: location.position,
-                      onOpen: () => onOpenJob(selected),
+                    child: ConstrainedBox(
+                      constraints: const BoxConstraints(
+                        maxWidth: BrandSizing.readableWidth,
+                      ),
+                      child: JobPreviewCard(
+                        job: selected,
+                        viewerLocation: location.position,
+                        onOpen: () => onOpenJob(selected),
+                      ),
                     ),
                   ),
                 ),
@@ -432,6 +447,29 @@ class _MapHeader extends StatelessWidget {
             style: theme.textTheme.labelSmall,
           ),
         ],
+      ),
+    );
+  }
+}
+
+/// Caps a floating map overlay and pins it to the leading edge.
+///
+/// A notice stretched across a 1440px browser is a line of text with a metre
+/// of white beside it, and the header's count ends up half a screen from its
+/// title. Leading-aligned rather than centred so the header, the filters and
+/// the notices read as one stack.
+class _OverlayWidth extends StatelessWidget {
+  const _OverlayWidth({required this.child});
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return Align(
+      alignment: AlignmentDirectional.topStart,
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: BrandSizing.readableWidth),
+        child: child,
       ),
     );
   }

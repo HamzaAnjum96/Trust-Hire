@@ -109,6 +109,19 @@ class BrandSizing {
   static const double spaceMd = 16;
   static const double spaceLg = 24;
   static const double spaceXl = 32;
+
+  /// Wide-screen gutters. The 4/8/16/24/32 rhythm was drawn for a handset and
+  /// is too tight to separate a rail from a canvas.
+  static const double spaceXxl = 40;
+  static const double space3xl = 56;
+
+  /// The widest a column of text or job rows is allowed to get.
+  ///
+  /// A job row stretched across a 1440px browser is a 1400px band holding
+  /// forty characters, and the eye has to travel the whole way to find the
+  /// next line. This is roughly the 60–80 character measure that typography
+  /// has settled on, at this app's body size.
+  static const double readableWidth = 720;
 }
 
 /// Elevation (section 24) — subtle, never heavy, no glow.

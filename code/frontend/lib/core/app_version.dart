@@ -17,12 +17,12 @@ class AppVersion {
 
   /// Must match the `version:` line in `pubspec.yaml`, without the build
   /// number after the `+`.
-  static const name = '0.3.1';
+  static const name = '0.4.0';
 
   /// The build number — the part after the `+` in `pubspec.yaml`. Increments
   /// on every push, and never resets.
-  static const build = 5;
+  static const build = 6;
 
-  /// What the app shows: `v0.3.1 (5)`.
+  /// What the app shows: `v0.4.0 (6)`.
   static String get label => 'v$name ($build)';
 }

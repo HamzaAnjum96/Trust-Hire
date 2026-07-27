@@ -12,6 +12,30 @@ that heading to the version and date, and open a fresh `[Unreleased]`.
 
 ## [Unreleased]
 
+### 0.4.0 — A layout for the screen it is on
+
+The same build runs on a handset, a tablet and a desktop browser, and it only
+ever laid out for the first: a bottom navigation bar stranded at the foot of a
+1440px window, and job rows stretched into bands of white holding forty
+characters.
+
+#### Added
+
+- `LayoutSize` in `core/layout.dart` — compact, medium, expanded — named for
+  what the app does at each rather than for the device that usually has it. A
+  phone in landscape gets the medium treatment because it has the room.
+- A navigation rail from the medium breakpoint upward, with labels once there
+  is space for them. A bottom bar on a desktop browser puts the app's main
+  controls as far from the pointer as the window allows.
+- `ReadableWidth`, and a `readableWidth` token, applied to the job list,
+  Activity, Profile and the map's floating overlays. The map still takes the
+  whole canvas; the cards over it no longer do.
+- `test/support/surface.dart`. Flutter's default test window is 800x600, which
+  under these breakpoints is a *tablet* — so every shell test written so far
+  had been quietly asserting tablet behaviour without saying so. Tests that
+  care now name the screen they mean.
+
+
 ### 0.3.1 — Saying when a job cannot be read
 
 #### Added

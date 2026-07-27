@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../../app/job_controller.dart';
 import '../../app/profile_controller.dart';
+import '../../core/layout.dart';
 import '../../core/motion.dart';
 import '../../core/tokens.dart';
 import '../../models/job.dart';
@@ -50,38 +51,45 @@ class JobsScreen extends StatelessWidget {
         title: Text(strings.findWork),
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(112),
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(
-                  BrandSizing.spaceMd,
-                  0,
-                  BrandSizing.spaceMd,
-                  BrandSizing.spaceSm,
+          child: ReadableWidth(
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(
+                    BrandSizing.spaceMd,
+                    0,
+                    BrandSizing.spaceMd,
+                    BrandSizing.spaceSm,
+                  ),
+                  child: JobSearchField(controller: filters),
                 ),
-                child: JobSearchField(controller: filters),
-              ),
-              QuickFilterBar(controller: filters),
-              const SizedBox(height: BrandSizing.spaceSm),
-            ],
+                QuickFilterBar(controller: filters),
+                const SizedBox(height: BrandSizing.spaceSm),
+              ],
+            ),
           ),
         ),
       ),
-      body: switch (controller.state) {
-        // A placeholder in the shape of the content beats a spinner: it
-        // says what is coming and stops the layout jumping.
-        LoadState.idle || LoadState.loading => const JobListSkeleton(),
-        LoadState.failed => ErrorView(
-          message: strings.couldNotLoadJobs,
-          onRetry: controller.load,
-        ),
-        LoadState.ready => _Results(
-          all: controller.jobs,
-          reachable: reachable,
-          visible: visible,
-          filters: filters,
-        ),
-      },
+      // A job row across a 1440px browser is a band of white holding forty
+      // characters. Everything on this screen shares one measure so the
+      // search field, the filters and the rows line up.
+      body: ReadableWidth(
+        child: switch (controller.state) {
+          // A placeholder in the shape of the content beats a spinner: it
+          // says what is coming and stops the layout jumping.
+          LoadState.idle || LoadState.loading => const JobListSkeleton(),
+          LoadState.failed => ErrorView(
+            message: strings.couldNotLoadJobs,
+            onRetry: controller.load,
+          ),
+          LoadState.ready => _Results(
+            all: controller.jobs,
+            reachable: reachable,
+            visible: visible,
+            filters: filters,
+          ),
+        },
+      ),
     );
   }
 }

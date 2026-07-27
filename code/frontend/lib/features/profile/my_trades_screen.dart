@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../app/profile_controller.dart';
+import '../../core/layout.dart';
 import '../../core/tokens.dart';
 import '../../l10n/app_localizations.dart';
 import '../../models/job_tag.dart';
@@ -30,35 +31,43 @@ class MyTradesScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(title: Text(strings.myTrades)),
-      body: ListView(
-        padding: const EdgeInsets.all(BrandSizing.spaceMd),
-        children: [
-          Text(strings.myTradesHelp, style: theme.textTheme.bodyMedium),
-          const SizedBox(height: BrandSizing.spaceSm),
-          Text(strings.generalWorkAlwaysOn, style: theme.textTheme.labelSmall),
-          const SizedBox(height: BrandSizing.spaceLg),
-          Wrap(
-            spacing: BrandSizing.spaceSm,
-            runSpacing: BrandSizing.spaceSm,
-            children: [
-              for (final tag in JobTag.values)
-                TagTile(
-                  tag: tag,
-                  selected: profile.tags.contains(tag),
-                  // The default is shown selected and inert rather than
-                  // hidden: a worker should be able to see that general work
-                  // is on, not just be told it.
-                  enabled: !JobTag.defaultWorkerTags.contains(tag),
-                  onTap: () => profile.toggleTag(tag),
-                ),
-            ],
-          ),
-          const SizedBox(height: BrandSizing.spaceLg),
-          Text(
-            strings.tradeCount(profile.specialities.length),
-            style: theme.textTheme.labelMedium,
-          ),
-        ],
+      body: ReadableWidth(
+        // Wider than the reading measure: this is a grid of tiles, and more
+        // columns means less scrolling to find your own trade.
+        maxWidth: 900,
+        child: ListView(
+          padding: const EdgeInsets.all(BrandSizing.spaceMd),
+          children: [
+            Text(strings.myTradesHelp, style: theme.textTheme.bodyMedium),
+            const SizedBox(height: BrandSizing.spaceSm),
+            Text(
+              strings.generalWorkAlwaysOn,
+              style: theme.textTheme.labelSmall,
+            ),
+            const SizedBox(height: BrandSizing.spaceLg),
+            Wrap(
+              spacing: BrandSizing.spaceSm,
+              runSpacing: BrandSizing.spaceSm,
+              children: [
+                for (final tag in JobTag.values)
+                  TagTile(
+                    tag: tag,
+                    selected: profile.tags.contains(tag),
+                    // The default is shown selected and inert rather than
+                    // hidden: a worker should be able to see that general work
+                    // is on, not just be told it.
+                    enabled: !JobTag.defaultWorkerTags.contains(tag),
+                    onTap: () => profile.toggleTag(tag),
+                  ),
+              ],
+            ),
+            const SizedBox(height: BrandSizing.spaceLg),
+            Text(
+              strings.tradeCount(profile.specialities.length),
+              style: theme.textTheme.labelMedium,
+            ),
+          ],
+        ),
       ),
     );
   }

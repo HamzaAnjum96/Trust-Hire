@@ -5,6 +5,7 @@ import '../../app/job_controller.dart';
 import '../../app/profile_controller.dart';
 import '../../app/settings_controller.dart';
 import '../../core/app_version.dart';
+import '../../core/layout.dart';
 import '../../core/tokens.dart';
 import '../../models/worker_profile.dart';
 import '../../widgets/state_views.dart';
@@ -29,104 +30,106 @@ class ProfileScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(title: Text(strings.navProfile)),
-      body: ListView(
-        padding: const EdgeInsets.all(BrandSizing.spaceMd),
-        children: [
-          NoticePanel(message: strings.settingsStorageNotice),
-          SizedBox(height: BrandSizing.spaceLg),
+      body: ReadableWidth(
+        child: ListView(
+          padding: const EdgeInsets.all(BrandSizing.spaceMd),
+          children: [
+            NoticePanel(message: strings.settingsStorageNotice),
+            SizedBox(height: BrandSizing.spaceLg),
 
-          // First, because it changes what the rest of the app shows: a
-          // worker gets a feed filtered to their trades, a hirer gets the
-          // jobs they posted.
-          Text(strings.whatBringsYouHere, style: theme.textTheme.titleLarge),
-          const SizedBox(height: BrandSizing.spaceSm),
-          const _RolePicker(),
+            // First, because it changes what the rest of the app shows: a
+            // worker gets a feed filtered to their trades, a hirer gets the
+            // jobs they posted.
+            Text(strings.whatBringsYouHere, style: theme.textTheme.titleLarge),
+            const SizedBox(height: BrandSizing.spaceSm),
+            const _RolePicker(),
 
-          const SizedBox(height: BrandSizing.spaceXl),
-          Text(strings.navSettings, style: theme.textTheme.titleLarge),
-          const SizedBox(height: BrandSizing.spaceSm),
-          Text(strings.appearance, style: theme.textTheme.titleMedium),
-          SizedBox(height: BrandSizing.spaceSm),
-          SegmentedButton<ThemeMode>(
-            segments: [
-              ButtonSegment(
-                value: ThemeMode.system,
-                label: Text(strings.themeSystem),
-                icon: Icon(Icons.brightness_auto_outlined),
-              ),
-              ButtonSegment(
-                value: ThemeMode.light,
-                label: Text(strings.themeLight),
-                icon: Icon(Icons.light_mode_outlined),
-              ),
-              ButtonSegment(
-                value: ThemeMode.dark,
-                label: Text(strings.themeDark),
-                icon: Icon(Icons.dark_mode_outlined),
-              ),
-            ],
-            selected: {settings.themeMode},
-            onSelectionChanged: (selection) =>
-                settings.setThemeMode(selection.first),
-          ),
-
-          const SizedBox(height: BrandSizing.spaceLg),
-          Text(strings.language, style: theme.textTheme.titleMedium),
-          const SizedBox(height: BrandSizing.spaceSm),
-          SegmentedButton<String>(
-            segments: [
-              ButtonSegment(
-                value: '',
-                label: Text(strings.themeSystem),
-                icon: const Icon(Icons.translate),
-              ),
-              for (final locale in SettingsController.supportedLocales)
+            const SizedBox(height: BrandSizing.spaceXl),
+            Text(strings.navSettings, style: theme.textTheme.titleLarge),
+            const SizedBox(height: BrandSizing.spaceSm),
+            Text(strings.appearance, style: theme.textTheme.titleMedium),
+            SizedBox(height: BrandSizing.spaceSm),
+            SegmentedButton<ThemeMode>(
+              segments: [
                 ButtonSegment(
-                  value: locale.languageCode,
-                  // Each language names itself, so someone who cannot read
-                  // the current one can still find their own.
-                  label: Text(
-                    AppStrings.of(context).localeName == locale.languageCode
-                        ? strings.languageName
-                        : _languageName(locale.languageCode),
-                  ),
+                  value: ThemeMode.system,
+                  label: Text(strings.themeSystem),
+                  icon: Icon(Icons.brightness_auto_outlined),
                 ),
-            ],
-            selected: {settings.locale?.languageCode ?? ''},
-            onSelectionChanged: (selection) => settings.setLocale(
-              selection.first.isEmpty ? null : Locale(selection.first),
+                ButtonSegment(
+                  value: ThemeMode.light,
+                  label: Text(strings.themeLight),
+                  icon: Icon(Icons.light_mode_outlined),
+                ),
+                ButtonSegment(
+                  value: ThemeMode.dark,
+                  label: Text(strings.themeDark),
+                  icon: Icon(Icons.dark_mode_outlined),
+                ),
+              ],
+              selected: {settings.themeMode},
+              onSelectionChanged: (selection) =>
+                  settings.setThemeMode(selection.first),
             ),
-          ),
 
-          const SizedBox(height: BrandSizing.spaceLg),
-          Text(strings.localData, style: theme.textTheme.titleMedium),
-          const SizedBox(height: BrandSizing.spaceSm),
-          Text(
-            strings.restoreSeedExplanation,
-            style: theme.textTheme.bodyMedium,
-          ),
-          const SizedBox(height: BrandSizing.spaceMd),
-          OutlinedButton.icon(
-            onPressed: () async {
-              final messenger = ScaffoldMessenger.of(context);
-              await settings.resetIntro();
-              messenger.showSnackBar(
-                SnackBar(content: Text(strings.introReset)),
-              );
-            },
-            icon: const Icon(Icons.slideshow_outlined),
-            label: Text(strings.showIntroAgain),
-          ),
-          const SizedBox(height: BrandSizing.spaceSm),
-          OutlinedButton.icon(
-            onPressed: () => _confirmReset(context),
-            icon: const Icon(Icons.restart_alt),
-            // Section 21 — explicit label, never "Confirm".
-            label: Text(strings.restoreSeedData),
-          ),
+            const SizedBox(height: BrandSizing.spaceLg),
+            Text(strings.language, style: theme.textTheme.titleMedium),
+            const SizedBox(height: BrandSizing.spaceSm),
+            SegmentedButton<String>(
+              segments: [
+                ButtonSegment(
+                  value: '',
+                  label: Text(strings.themeSystem),
+                  icon: const Icon(Icons.translate),
+                ),
+                for (final locale in SettingsController.supportedLocales)
+                  ButtonSegment(
+                    value: locale.languageCode,
+                    // Each language names itself, so someone who cannot read
+                    // the current one can still find their own.
+                    label: Text(
+                      AppStrings.of(context).localeName == locale.languageCode
+                          ? strings.languageName
+                          : _languageName(locale.languageCode),
+                    ),
+                  ),
+              ],
+              selected: {settings.locale?.languageCode ?? ''},
+              onSelectionChanged: (selection) => settings.setLocale(
+                selection.first.isEmpty ? null : Locale(selection.first),
+              ),
+            ),
 
-          const _VersionLine(),
-        ],
+            const SizedBox(height: BrandSizing.spaceLg),
+            Text(strings.localData, style: theme.textTheme.titleMedium),
+            const SizedBox(height: BrandSizing.spaceSm),
+            Text(
+              strings.restoreSeedExplanation,
+              style: theme.textTheme.bodyMedium,
+            ),
+            const SizedBox(height: BrandSizing.spaceMd),
+            OutlinedButton.icon(
+              onPressed: () async {
+                final messenger = ScaffoldMessenger.of(context);
+                await settings.resetIntro();
+                messenger.showSnackBar(
+                  SnackBar(content: Text(strings.introReset)),
+                );
+              },
+              icon: const Icon(Icons.slideshow_outlined),
+              label: Text(strings.showIntroAgain),
+            ),
+            const SizedBox(height: BrandSizing.spaceSm),
+            OutlinedButton.icon(
+              onPressed: () => _confirmReset(context),
+              icon: const Icon(Icons.restart_alt),
+              // Section 21 — explicit label, never "Confirm".
+              label: Text(strings.restoreSeedData),
+            ),
+
+            const _VersionLine(),
+          ],
+        ),
       ),
     );
   }
