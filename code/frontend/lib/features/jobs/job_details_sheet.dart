@@ -12,6 +12,7 @@ import '../../models/job.dart';
 import '../../services/media_store.dart';
 import '../../widgets/voice_note_player.dart';
 import '../create_job/create_job_screen.dart';
+import 'contact_panel.dart';
 import 'photo_gallery.dart';
 import '../../l10n/app_localizations.dart';
 
@@ -180,7 +181,15 @@ class _Body extends StatelessWidget {
                 : '${poster!.name} · ${poster!.area}',
           ),
 
-        const SizedBox(height: BrandSizing.spaceMd),
+        const SizedBox(height: BrandSizing.spaceSm),
+        Text(strings.contact, style: theme.textTheme.titleMedium),
+        const SizedBox(height: BrandSizing.spaceSm),
+        if (job.hasContact)
+          ContactPanel(number: job.contactNumber!)
+        else
+          Text(strings.noContactGiven, style: theme.textTheme.bodyMedium),
+
+        const SizedBox(height: BrandSizing.spaceLg),
         _MapPreview(job: job),
         const SizedBox(height: BrandSizing.spaceSm),
         Text(

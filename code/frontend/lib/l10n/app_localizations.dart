@@ -1021,6 +1021,90 @@ abstract class AppStrings {
   /// In en, this message translates to:
   /// **'{count, plural, =1{1 day ago} other{{count} days ago}}'**
   String daysAgo(int count);
+
+  /// No description provided for @contact.
+  ///
+  /// In en, this message translates to:
+  /// **'Contact'**
+  String get contact;
+
+  /// No description provided for @contactShow.
+  ///
+  /// In en, this message translates to:
+  /// **'Show Contact'**
+  String get contactShow;
+
+  /// No description provided for @contactHiddenNotice.
+  ///
+  /// In en, this message translates to:
+  /// **'Contact details are shown only when you ask for them.'**
+  String get contactHiddenNotice;
+
+  /// No description provided for @callNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Call'**
+  String get callNumber;
+
+  /// No description provided for @whatsAppNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'WhatsApp'**
+  String get whatsAppNumber;
+
+  /// No description provided for @copyNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy Number'**
+  String get copyNumber;
+
+  /// No description provided for @numberCopied.
+  ///
+  /// In en, this message translates to:
+  /// **'Number copied.'**
+  String get numberCopied;
+
+  /// No description provided for @couldNotOpenDialer.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not open the phone app. The number is above, so you can dial it yourself.'**
+  String get couldNotOpenDialer;
+
+  /// No description provided for @couldNotOpenWhatsApp.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not open WhatsApp. The number is above, so you can message it yourself.'**
+  String get couldNotOpenWhatsApp;
+
+  /// No description provided for @noContactGiven.
+  ///
+  /// In en, this message translates to:
+  /// **'This job has no contact details.'**
+  String get noContactGiven;
+
+  /// No description provided for @fieldContact.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone number'**
+  String get fieldContact;
+
+  /// No description provided for @contactHint.
+  ///
+  /// In en, this message translates to:
+  /// **'So people can reach you. You can add this later.'**
+  String get contactHint;
+
+  /// No description provided for @contactHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Shown only to people who tap to see it.'**
+  String get contactHelp;
+
+  /// No description provided for @whatsAppMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Salaam, I saw your job on Trust Hire.'**
+  String get whatsAppMessage;
 }
 
 class _AppStringsDelegate extends LocalizationsDelegate<AppStrings> {

@@ -67,6 +67,7 @@ class Job {
     this.voiceNoteDuration,
     this.photoPaths = const <String>[],
     this.shortDescription,
+    this.contactNumber,
     this.postedBy,
     this.isLocal = false,
   });
@@ -95,6 +96,10 @@ class Job {
   final List<String> photoPaths;
   final String? shortDescription;
 
+  /// A phone number people can reach the poster on. Optional like everything
+  /// else, and never shown until someone asks to see it.
+  final String? contactNumber;
+
   /// Id of the user who posted it, if known.
   final String? postedBy;
 
@@ -111,6 +116,9 @@ class Job {
       (shortDescription != null && shortDescription!.trim().isNotEmpty) ||
       voiceNotePath != null ||
       photoPaths.isNotEmpty;
+
+  bool get hasContact =>
+      contactNumber != null && contactNumber!.trim().isNotEmpty;
 
   bool get hasVoiceNote => voiceNotePath != null;
   bool get hasPhotos => photoPaths.isNotEmpty;
@@ -183,6 +191,8 @@ class Job {
     List<String>? photoPaths,
     String? shortDescription,
     bool clearShortDescription = false,
+    String? contactNumber,
+    bool clearContactNumber = false,
   }) {
     return Job(
       id: id,
@@ -204,6 +214,9 @@ class Job {
       shortDescription: clearShortDescription
           ? null
           : (shortDescription ?? this.shortDescription),
+      contactNumber: clearContactNumber
+          ? null
+          : (contactNumber ?? this.contactNumber),
       postedBy: postedBy,
       isLocal: isLocal,
     );
@@ -229,6 +242,7 @@ class Job {
           (json['photoPaths'] as List<dynamic>?)?.cast<String>() ??
           const <String>[],
       shortDescription: json['shortDescription'] as String?,
+      contactNumber: json['contactNumber'] as String?,
       postedBy: json['postedBy'] as String?,
       isLocal: json['isLocal'] as bool? ?? false,
     );
@@ -246,6 +260,7 @@ class Job {
     'voiceNoteDurationMs': voiceNoteDuration?.inMilliseconds,
     'photoPaths': photoPaths,
     'shortDescription': shortDescription,
+    'contactNumber': contactNumber,
     'postedBy': postedBy,
     'isLocal': isLocal,
   };

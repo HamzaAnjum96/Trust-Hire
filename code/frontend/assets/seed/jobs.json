@@ -4,22 +4,31 @@
     "title": "Kitchen tap leaking",
     "type": "plumbing",
     "shortDescription": "Water coming from under the sink since last night. Need someone today if possible.",
-    "location": { "latitude": 33.7104, "longitude": 73.0551 },
+    "location": {
+      "latitude": 33.7104,
+      "longitude": 73.0551
+    },
     "radiusMetres": 800,
     "scheduledDayOffset": 0,
     "scheduledHour": 16,
     "scheduledMinute": 0,
     "voiceNote": "assets/audio/voice-01.wav",
     "voiceNoteSeconds": 7.5,
-    "photos": ["assets/images/jobs/plumbing-01.png"],
+    "photos": [
+      "assets/images/jobs/plumbing-01.png"
+    ],
     "postedBy": "user-001",
-    "createdHoursAgo": 3
+    "createdHoursAgo": 3,
+    "contact": "0300 4471902"
   },
   {
     "id": "seed-002",
     "type": "painting",
     "shortDescription": "Two rooms need painting before Eid.",
-    "location": { "latitude": 33.6844, "longitude": 73.0479 },
+    "location": {
+      "latitude": 33.6844,
+      "longitude": 73.0479
+    },
     "radiusMetres": 1500,
     "scheduledDayOffset": 2,
     "scheduledHour": 9,
@@ -29,11 +38,15 @@
       "assets/images/jobs/painting-02.png"
     ],
     "postedBy": "user-002",
-    "createdHoursAgo": 9
+    "createdHoursAgo": 9,
+    "contact": "0321 5580143"
   },
   {
     "id": "seed-003",
-    "location": { "latitude": 33.6518, "longitude": 72.9899 },
+    "location": {
+      "latitude": 33.6518,
+      "longitude": 72.9899
+    },
     "radiusMetres": 600,
     "scheduledDayOffset": 1,
     "scheduledHour": 8,
@@ -41,69 +54,97 @@
     "voiceNote": "assets/audio/voice-02.wav",
     "voiceNoteSeconds": 11.0,
     "postedBy": "user-003",
-    "createdHoursAgo": 1
+    "createdHoursAgo": 1,
+    "contact": "+92 333 7761204"
   },
   {
     "id": "seed-004",
     "title": "AC not cooling",
     "type": "applianceRepair",
     "shortDescription": "Split unit in the bedroom. Runs but blows warm air.",
-    "location": { "latitude": 33.7294, "longitude": 73.0931 },
+    "location": {
+      "latitude": 33.7294,
+      "longitude": 73.0931
+    },
     "radiusMetres": 1200,
     "scheduledDayOffset": 0,
     "scheduledHour": 18,
     "scheduledMinute": 30,
     "voiceNote": "assets/audio/voice-03.wav",
     "voiceNoteSeconds": 5.0,
-    "photos": ["assets/images/jobs/ac-repair-01.png"],
+    "photos": [
+      "assets/images/jobs/ac-repair-01.png"
+    ],
     "postedBy": "user-004",
-    "createdHoursAgo": 5
+    "createdHoursAgo": 5,
+    "contact": "0345 2219876"
   },
   {
     "id": "seed-005",
     "title": "Electrician for shop wiring",
     "type": "electrical",
-    "location": { "latitude": 33.5973, "longitude": 73.0479 },
+    "location": {
+      "latitude": 33.5973,
+      "longitude": 73.0479
+    },
     "radiusMetres": 2000,
     "scheduledDayOffset": 3,
     "scheduledHour": 10,
     "scheduledMinute": 0,
-    "photos": ["assets/images/jobs/electrical-01.png"],
+    "photos": [
+      "assets/images/jobs/electrical-01.png"
+    ],
     "postedBy": "user-005",
-    "createdHoursAgo": 26
+    "createdHoursAgo": 26,
+    "contact": "0308 6640215"
   },
   {
     "id": "seed-006",
     "type": "moving",
     "shortDescription": "Need help moving furniture to a first-floor flat. Two people, about three hours.",
-    "location": { "latitude": 33.5651, "longitude": 73.0169 },
+    "location": {
+      "latitude": 33.5651,
+      "longitude": 73.0169
+    },
     "radiusMetres": 1000,
     "scheduledDayOffset": 1,
     "scheduledHour": 14,
     "scheduledMinute": 0,
     "voiceNote": "assets/audio/voice-04.wav",
     "voiceNoteSeconds": 14.5,
-    "photos": ["assets/images/jobs/delivery-01.png"],
+    "photos": [
+      "assets/images/jobs/delivery-01.png"
+    ],
     "postedBy": "user-006",
-    "createdHoursAgo": 14
+    "createdHoursAgo": 14,
+    "contact": "0332 9903471"
   },
   {
     "id": "seed-007",
     "title": "Carpenter — wardrobe door",
     "type": "carpentry",
     "shortDescription": "Hinge has come away from the frame.",
-    "location": { "latitude": 33.5432, "longitude": 73.0688 },
+    "location": {
+      "latitude": 33.5432,
+      "longitude": 73.0688
+    },
     "radiusMetres": 700,
     "scheduledDayOffset": 0,
     "scheduledHour": 11,
     "scheduledMinute": 0,
-    "photos": ["assets/images/jobs/carpentry-01.png"],
+    "photos": [
+      "assets/images/jobs/carpentry-01.png"
+    ],
     "postedBy": "user-002",
-    "createdHoursAgo": 7
+    "createdHoursAgo": 7,
+    "contact": "0301 7724508"
   },
   {
     "id": "seed-008",
-    "location": { "latitude": 33.5102, "longitude": 73.1063 },
+    "location": {
+      "latitude": 33.5102,
+      "longitude": 73.1063
+    },
     "radiusMetres": 2500,
     "voiceNote": "assets/audio/voice-05.wav",
     "voiceNoteSeconds": 9.0,
@@ -115,33 +156,48 @@
     "title": "Boundary wall repair",
     "type": "masonry",
     "shortDescription": "Section of brickwork has come loose after the rain.",
-    "location": { "latitude": 34.3700, "longitude": 73.4711 },
+    "location": {
+      "latitude": 34.37,
+      "longitude": 73.4711
+    },
     "radiusMetres": 1800,
     "scheduledDayOffset": 4,
     "scheduledHour": 8,
     "scheduledMinute": 0,
-    "photos": ["assets/images/jobs/masonry-01.png"],
+    "photos": [
+      "assets/images/jobs/masonry-01.png"
+    ],
     "postedBy": "user-008",
-    "createdHoursAgo": 40
+    "createdHoursAgo": 40,
+    "contact": "03215 604417"
   },
   {
     "id": "seed-010",
     "title": "Weekly house cleaning",
     "type": "cleaning",
-    "location": { "latitude": 34.3489, "longitude": 73.4762 },
+    "location": {
+      "latitude": 34.3489,
+      "longitude": 73.4762
+    },
     "radiusMetres": 900,
     "scheduledDayOffset": 2,
     "scheduledHour": 13,
     "scheduledMinute": 0,
-    "photos": ["assets/images/jobs/cleaning-01.png"],
+    "photos": [
+      "assets/images/jobs/cleaning-01.png"
+    ],
     "postedBy": "user-003",
-    "createdHoursAgo": 18
+    "createdHoursAgo": 18,
+    "contact": "0313 8890256"
   },
   {
     "id": "seed-011",
     "type": "plumbing",
     "shortDescription": "Bathroom drain blocked.",
-    "location": { "latitude": 33.1478, "longitude": 73.7519 },
+    "location": {
+      "latitude": 33.1478,
+      "longitude": 73.7519
+    },
     "radiusMetres": 500,
     "scheduledDayOffset": 0,
     "scheduledHour": 20,
@@ -149,39 +205,51 @@
     "voiceNote": "assets/audio/voice-06.wav",
     "voiceNoteSeconds": 6.5,
     "postedBy": "user-009",
-    "createdHoursAgo": 1
+    "createdHoursAgo": 1,
+    "contact": "0302 4471165"
   },
   {
     "id": "seed-012",
     "title": "Driver needed for one day",
     "type": "driving",
     "shortDescription": "Airport drop and pick-up. Own car available.",
-    "location": { "latitude": 33.6162, "longitude": 73.0996 },
+    "location": {
+      "latitude": 33.6162,
+      "longitude": 73.0996
+    },
     "radiusMetres": 3000,
     "scheduledDayOffset": 5,
     "scheduledHour": 6,
     "scheduledMinute": 30,
     "postedBy": "user-005",
-    "createdHoursAgo": 33
+    "createdHoursAgo": 33,
+    "contact": "0335 7728094"
   },
   {
     "id": "seed-013",
     "title": "Tailor for shalwar kameez",
     "type": "tailoring",
     "shortDescription": "Three suits, measurements taken already.",
-    "location": { "latitude": 33.5889, "longitude": 73.0562 },
+    "location": {
+      "latitude": 33.5889,
+      "longitude": 73.0562
+    },
     "radiusMetres": 1200,
     "scheduledDayOffset": 3,
     "scheduledHour": 15,
     "scheduledMinute": 0,
     "postedBy": "user-010",
-    "createdHoursAgo": 12
+    "createdHoursAgo": 12,
+    "contact": "0300 4471902"
   },
   {
     "id": "seed-014",
     "type": "gardening",
     "shortDescription": "Lawn and hedges need cutting back before the guests arrive.",
-    "location": { "latitude": 33.7451, "longitude": 73.1201 },
+    "location": {
+      "latitude": 33.7451,
+      "longitude": 73.1201
+    },
     "radiusMetres": 800,
     "scheduledDayOffset": 1,
     "scheduledHour": 7,
@@ -193,12 +261,16 @@
     "id": "seed-015",
     "title": "Maths tuition, class 9",
     "type": "tutoring",
-    "location": { "latitude": 34.3617, "longitude": 73.4534 },
+    "location": {
+      "latitude": 34.3617,
+      "longitude": 73.4534
+    },
     "radiusMetres": 2000,
     "scheduledDayOffset": 6,
     "scheduledHour": 17,
     "scheduledMinute": 0,
     "postedBy": "user-012",
-    "createdHoursAgo": 30
+    "createdHoursAgo": 30,
+    "contact": "+92 333 7761204"
   }
 ]

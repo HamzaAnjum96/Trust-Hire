@@ -52,6 +52,7 @@ class JobDraftController extends ChangeNotifier {
        _title = editing?.title ?? '',
        _type = editing?.type,
        _description = editing?.shortDescription ?? '',
+       _contactNumber = editing?.contactNumber ?? '',
        _scheduledTime = editing?.scheduledTime,
        _voiceReference = editing?.voiceNotePath,
        _voiceDuration = editing?.voiceNoteDuration,
@@ -70,6 +71,7 @@ class JobDraftController extends ChangeNotifier {
   String _title;
   JobType? _type;
   String _description;
+  String _contactNumber;
   DateTime? _scheduledTime;
 
   final List<DraftPhoto> _photos;
@@ -90,6 +92,7 @@ class JobDraftController extends ChangeNotifier {
   String get title => _title;
   JobType? get type => _type;
   String get description => _description;
+  String get contactNumber => _contactNumber;
   DateTime? get scheduledTime => _scheduledTime;
   List<DraftPhoto> get photos => List.unmodifiable(_photos);
   bool get hasVoiceNote => _voiceReference != null || _voiceBytes != null;
@@ -148,6 +151,11 @@ class JobDraftController extends ChangeNotifier {
 
   void setDescription(String value) {
     _description = value;
+    notifyListeners();
+  }
+
+  void setContactNumber(String value) {
+    _contactNumber = value;
     notifyListeners();
   }
 
@@ -259,6 +267,7 @@ class JobDraftController extends ChangeNotifier {
 
       final trimmedTitle = _title.trim();
       final trimmedDescription = _description.trim();
+      final trimmedContact = _contactNumber.trim();
 
       return Job(
         id: _editing?.id ?? _uuid.v4(),
@@ -274,6 +283,7 @@ class JobDraftController extends ChangeNotifier {
         shortDescription: trimmedDescription.isEmpty
             ? null
             : trimmedDescription,
+        contactNumber: trimmedContact.isEmpty ? null : trimmedContact,
         postedBy: _editing?.postedBy,
         // Anything written here lives on this device only.
         isLocal: true,

@@ -64,6 +64,7 @@ class SeedLoader {
           (json['photos'] as List<dynamic>?)?.cast<String>() ??
           const <String>[],
       shortDescription: json['shortDescription'] as String?,
+      contactNumber: json['contact'] as String?,
       postedBy: json['postedBy'] as String?,
       isLocal: false,
     );

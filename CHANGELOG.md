@@ -12,6 +12,41 @@ that heading to the version and date, and open a fresh `[Unreleased]`.
 
 ## [Unreleased]
 
+### Sprint 10 — Contacting the poster
+
+174 tests pass, the analyzer is clean.
+
+#### Added
+
+- **A phone number on each job, and the two ways people actually use one** —
+  the dialler and WhatsApp, plus copy to clipboard. The POC stopped at
+  *finding* work, which made it impossible to test whether anyone would act on
+  it; handing off to apps people already have closes that loop with no
+  backend, account or messaging system.
+- The number is **hidden until asked for**. The product promises approximate
+  locations and says so on every job; showing a phone number unprompted
+  alongside that would undercut it. A deliberate tap is also a small brake on
+  casual scraping — not real protection, and the copy says as much rather than
+  implying otherwise.
+- An optional phone field when posting, with copy explaining it is shown only
+  to people who tap to see it.
+- Seed data gains numbers, with two jobs deliberately left without so the
+  "no contact details" path stays exercised.
+- 16 tests covering number normalising, the WhatsApp country-code rules,
+  reveal-on-tap, both hand-offs, clipboard copy, and failure.
+
+#### Notes
+
+**The country code is where this breaks.** A Pakistani number written the local
+way — `0300 4471902` — is meaningless to WhatsApp, which wants `92300…`. The
+launcher swaps a leading zero for the country code, leaves an international
+number alone, and refuses to double a code that is already there; each of
+those is a test.
+
+**Every hand-off can fail** — no dialler, no WhatsApp, a browser blocking the
+scheme. When one does, the number stays on screen and the message says you can
+use it yourself, rather than the tap appearing to do nothing.
+
 ### Sprint 9 — Urdu and right-to-left support
 
 158 tests pass, the analyzer is clean.

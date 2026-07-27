@@ -553,4 +553,49 @@ class AppStringsEn extends AppStrings {
     );
     return '$_temp0';
   }
+
+  @override
+  String get contact => 'Contact';
+
+  @override
+  String get contactShow => 'Show Contact';
+
+  @override
+  String get contactHiddenNotice =>
+      'Contact details are shown only when you ask for them.';
+
+  @override
+  String get callNumber => 'Call';
+
+  @override
+  String get whatsAppNumber => 'WhatsApp';
+
+  @override
+  String get copyNumber => 'Copy Number';
+
+  @override
+  String get numberCopied => 'Number copied.';
+
+  @override
+  String get couldNotOpenDialer =>
+      'Could not open the phone app. The number is above, so you can dial it yourself.';
+
+  @override
+  String get couldNotOpenWhatsApp =>
+      'Could not open WhatsApp. The number is above, so you can message it yourself.';
+
+  @override
+  String get noContactGiven => 'This job has no contact details.';
+
+  @override
+  String get fieldContact => 'Phone number';
+
+  @override
+  String get contactHint => 'So people can reach you. You can add this later.';
+
+  @override
+  String get contactHelp => 'Shown only to people who tap to see it.';
+
+  @override
+  String get whatsAppMessage => 'Salaam, I saw your job on Trust Hire.';
 }

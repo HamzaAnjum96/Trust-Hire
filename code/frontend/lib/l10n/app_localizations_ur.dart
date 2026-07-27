@@ -554,4 +554,51 @@ class AppStringsUr extends AppStrings {
     );
     return '$_temp0';
   }
+
+  @override
+  String get contact => 'رابطہ';
+
+  @override
+  String get contactShow => 'رابطہ دکھائیں';
+
+  @override
+  String get contactHiddenNotice =>
+      'رابطے کی تفصیل تبھی دکھائی جاتی ہے جب آپ خود مانگیں۔';
+
+  @override
+  String get callNumber => 'کال کریں';
+
+  @override
+  String get whatsAppNumber => 'واٹس ایپ';
+
+  @override
+  String get copyNumber => 'نمبر کاپی کریں';
+
+  @override
+  String get numberCopied => 'نمبر کاپی ہو گیا۔';
+
+  @override
+  String get couldNotOpenDialer =>
+      'فون ایپ نہیں کھل سکی۔ نمبر اوپر موجود ہے، آپ خود ملا سکتے ہیں۔';
+
+  @override
+  String get couldNotOpenWhatsApp =>
+      'واٹس ایپ نہیں کھل سکی۔ نمبر اوپر موجود ہے، آپ خود پیغام بھیج سکتے ہیں۔';
+
+  @override
+  String get noContactGiven => 'اس کام کے ساتھ رابطے کی کوئی تفصیل نہیں۔';
+
+  @override
+  String get fieldContact => 'فون نمبر';
+
+  @override
+  String get contactHint =>
+      'تاکہ لوگ آپ سے رابطہ کر سکیں۔ یہ بعد میں بھی ڈال سکتے ہیں۔';
+
+  @override
+  String get contactHelp => 'صرف انہیں دکھایا جائے گا جو دیکھنے کے لیے دبائیں۔';
+
+  @override
+  String get whatsAppMessage =>
+      'السلام علیکم، میں نے ٹرسٹ ہائر پر آپ کا کام دیکھا۔';
 }

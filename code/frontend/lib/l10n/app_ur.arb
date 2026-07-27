@@ -153,5 +153,19 @@
   "justNow": "ابھی",
   "minutesAgo": "{count, plural, =1{1 منٹ پہلے} other{{count} منٹ پہلے}}",
   "hoursAgo": "{count, plural, =1{1 گھنٹہ پہلے} other{{count} گھنٹے پہلے}}",
-  "daysAgo": "{count, plural, =1{1 دن پہلے} other{{count} دن پہلے}}"
+  "daysAgo": "{count, plural, =1{1 دن پہلے} other{{count} دن پہلے}}",
+  "contact": "رابطہ",
+  "contactShow": "رابطہ دکھائیں",
+  "contactHiddenNotice": "رابطے کی تفصیل تبھی دکھائی جاتی ہے جب آپ خود مانگیں۔",
+  "callNumber": "کال کریں",
+  "whatsAppNumber": "واٹس ایپ",
+  "copyNumber": "نمبر کاپی کریں",
+  "numberCopied": "نمبر کاپی ہو گیا۔",
+  "couldNotOpenDialer": "فون ایپ نہیں کھل سکی۔ نمبر اوپر موجود ہے، آپ خود ملا سکتے ہیں۔",
+  "couldNotOpenWhatsApp": "واٹس ایپ نہیں کھل سکی۔ نمبر اوپر موجود ہے، آپ خود پیغام بھیج سکتے ہیں۔",
+  "noContactGiven": "اس کام کے ساتھ رابطے کی کوئی تفصیل نہیں۔",
+  "fieldContact": "فون نمبر",
+  "contactHint": "تاکہ لوگ آپ سے رابطہ کر سکیں۔ یہ بعد میں بھی ڈال سکتے ہیں۔",
+  "contactHelp": "صرف انہیں دکھایا جائے گا جو دیکھنے کے لیے دبائیں۔",
+  "whatsAppMessage": "السلام علیکم، میں نے ٹرسٹ ہائر پر آپ کا کام دیکھا۔"
 }

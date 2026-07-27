@@ -48,18 +48,21 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
 
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
+  final TextEditingController _contactController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     _titleController.text = _draft.title;
     _descriptionController.text = _draft.description;
+    _contactController.text = _draft.contactNumber;
   }
 
   @override
   void dispose() {
     _titleController.dispose();
     _descriptionController.dispose();
+    _contactController.dispose();
     _draft.dispose();
     _capture.dispose();
     super.dispose();
@@ -203,6 +206,18 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
                 textCapitalization: TextCapitalization.sentences,
                 maxLines: 3,
                 decoration: InputDecoration(hintText: strings.messageHint),
+              ),
+
+              const SizedBox(height: BrandSizing.spaceLg),
+              _FieldLabel(strings.fieldContact),
+              const SizedBox(height: BrandSizing.spaceXs),
+              Text(strings.contactHelp, style: theme.textTheme.labelSmall),
+              const SizedBox(height: BrandSizing.spaceSm),
+              TextField(
+                controller: _contactController,
+                onChanged: _draft.setContactNumber,
+                keyboardType: TextInputType.phone,
+                decoration: InputDecoration(hintText: strings.contactHint),
               ),
 
               const SizedBox(height: BrandSizing.spaceLg),

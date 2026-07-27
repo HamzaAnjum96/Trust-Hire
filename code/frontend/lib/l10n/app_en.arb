@@ -288,5 +288,19 @@
         "type": "int"
       }
     }
-  }
+  },
+  "contact": "Contact",
+  "contactShow": "Show Contact",
+  "contactHiddenNotice": "Contact details are shown only when you ask for them.",
+  "callNumber": "Call",
+  "whatsAppNumber": "WhatsApp",
+  "copyNumber": "Copy Number",
+  "numberCopied": "Number copied.",
+  "couldNotOpenDialer": "Could not open the phone app. The number is above, so you can dial it yourself.",
+  "couldNotOpenWhatsApp": "Could not open WhatsApp. The number is above, so you can message it yourself.",
+  "noContactGiven": "This job has no contact details.",
+  "fieldContact": "Phone number",
+  "contactHint": "So people can reach you. You can add this later.",
+  "contactHelp": "Shown only to people who tap to see it.",
+  "whatsAppMessage": "Salaam, I saw your job on Trust Hire."
 }
