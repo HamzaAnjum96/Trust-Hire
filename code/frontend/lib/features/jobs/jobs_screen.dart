@@ -112,10 +112,10 @@ class _JobRow extends StatelessWidget {
                   ),
               ],
             ),
-            if (job.shortDescription != null) ...[
+            if (job.supportingDescription != null) ...[
               const SizedBox(height: BrandSizing.spaceXs),
               Text(
-                job.shortDescription!,
+                job.supportingDescription!,
                 style: theme.textTheme.bodyMedium,
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,

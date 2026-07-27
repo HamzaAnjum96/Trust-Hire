@@ -1,0 +1,112 @@
+import 'package:flutter_test/flutter_test.dart';
+import 'package:trust_hire/features/map/location_controller.dart';
+import 'package:trust_hire/models/job.dart';
+import 'package:trust_hire/services/location_service.dart';
+
+/// A refused location is a normal state, not an error: the map still works,
+/// it just centres on the fallback. These tests pin that down without relying
+/// on a platform plugin.
+class _FakeLocationService implements LocationService {
+  _FakeLocationService(this.result);
+
+  final LocationResult result;
+  int calls = 0;
+
+  @override
+  Future<LocationResult> current() async {
+    calls++;
+    return result;
+  }
+}
+
+void main() {
+  const lahore = JobLocation(latitude: 31.5204, longitude: 74.3587);
+
+  test('starts with no position and nothing to explain', () {
+    final controller = LocationController(
+      _FakeLocationService(const LocationResult(LocationStatus.unknown)),
+    );
+
+    expect(controller.position, isNull);
+    expect(controller.explanation, isNull);
+    expect(controller.mapCentre, LocationService.fallback);
+  });
+
+  test('exposes the position once granted', () async {
+    const found = JobLocation(latitude: 31.55, longitude: 74.40);
+    final controller = LocationController(
+      _FakeLocationService(
+        const LocationResult(LocationStatus.available, found),
+      ),
+    );
+
+    await controller.request();
+
+    expect(controller.position, found);
+    expect(controller.mapCentre, found);
+    expect(controller.explanation, isNull);
+  });
+
+  test('falls back to Lahore and explains when refused', () async {
+    final controller = LocationController(
+      _FakeLocationService(const LocationResult(LocationStatus.denied)),
+    );
+
+    await controller.request();
+
+    expect(controller.position, isNull);
+    // The seed data is around Lahore, so the user still lands on something.
+    expect(controller.mapCentre, lahore);
+    expect(controller.explanation, contains('You can still move the map'));
+  });
+
+  test('every unavailable status explains what the user can still do',
+      () async {
+    for (final status in <LocationStatus>[
+      LocationStatus.denied,
+      LocationStatus.deniedForever,
+      LocationStatus.serviceDisabled,
+      LocationStatus.failed,
+    ]) {
+      final controller = LocationController(
+        _FakeLocationService(LocationResult(status)),
+      );
+      await controller.request();
+
+      expect(
+        controller.explanation,
+        isNotNull,
+        reason: '$status should be explained',
+      );
+      expect(
+        controller.explanation,
+        contains('choose an area manually'),
+        reason: '$status should say what is still possible',
+      );
+    }
+  });
+
+  test('an explanation stays dismissed', () async {
+    final controller = LocationController(
+      _FakeLocationService(const LocationResult(LocationStatus.denied)),
+    );
+
+    await controller.request();
+    expect(controller.explanation, isNotNull);
+
+    controller.dismissExplanation();
+    expect(controller.explanation, isNull);
+  });
+
+  test('concurrent requests do not stack up', () async {
+    final service = _FakeLocationService(
+      const LocationResult(LocationStatus.denied),
+    );
+    final controller = LocationController(service);
+
+    await Future.wait([controller.request(), controller.request()]);
+
+    expect(service.calls, 1);
+    expect(controller.isRequesting, isFalse);
+  });
+}

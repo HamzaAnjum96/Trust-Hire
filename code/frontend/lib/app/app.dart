@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../core/theme.dart';
+import '../features/map/location_controller.dart';
 import '../services/job_repository.dart';
 import '../services/local_store.dart';
 import 'app_shell.dart';
@@ -26,6 +27,11 @@ class TrustHireApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (_) => JobController(JobRepository(store))..load(),
+        ),
+        ChangeNotifierProvider(
+          // Location is requested on first launch so the map can open on the
+          // user rather than the fallback. A refusal is handled, not retried.
+          create: (_) => LocationController()..request(),
         ),
       ],
       child: Consumer<SettingsController>(

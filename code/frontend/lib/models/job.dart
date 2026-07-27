@@ -118,6 +118,18 @@ class Job {
     return 'Untitled job';
   }
 
+  /// The description to show *underneath* [displayTitle].
+  ///
+  /// Null when the heading was itself derived from the description, so a job
+  /// with no typed title does not print the same sentence twice.
+  String? get supportingDescription {
+    final t = title?.trim();
+    if (t == null || t.isEmpty) return null;
+
+    final d = shortDescription?.trim();
+    return (d == null || d.isEmpty) ? null : d;
+  }
+
   /// True when the job is scheduled for today.
   bool isToday(DateTime now) {
     final t = scheduledTime;

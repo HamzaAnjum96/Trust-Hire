@@ -64,6 +64,18 @@ void main() {
       expect(title.endsWith('…'), isTrue);
     });
 
+    test('does not repeat the description underneath itself', () {
+      // When the heading came from the description, printing it again below
+      // duplicates the same sentence on the card.
+      final derived = job(description: 'Bathroom drain blocked');
+      expect(derived.displayTitle, 'Bathroom drain blocked');
+      expect(derived.supportingDescription, isNull);
+
+      // With a real title, the description is genuinely additional.
+      final titled = job(title: 'Drain blocked', description: 'Upstairs bath');
+      expect(titled.supportingDescription, 'Upstairs bath');
+    });
+
     test('describes the media when there is no text at all', () {
       expect(job(voice: 'v.wav').displayTitle, 'Voice note job');
       expect(job(photos: const ['a.png']).displayTitle, 'Photo job');

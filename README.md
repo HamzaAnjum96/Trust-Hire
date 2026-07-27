@@ -142,6 +142,14 @@ CDN, or the app will not load without third-party network access:
 flutter build web --release --no-web-resources-cdn --base-href /Trust-Hire/
 ```
 
+**Map tiles.** The map uses OpenStreetMap's public tile servers, which need no
+API key — deliberate, so the app runs from a fresh checkout with no setup. That
+is fine for a POC but [not for production traffic](https://operations.osmfoundation.org/policies/tiles);
+a real deployment needs a paid or self-hosted tile provider. Tiles are the one
+part of the app that needs a network: everything else works offline, and when
+tiles cannot be fetched the map still positions jobs correctly over a plain
+background and says so.
+
 **Placeholder assets.** The bundled job photos and voice notes are generated,
 not real: `python3 tool/generate_placeholder_assets.py` rebuilds them. Photos
 are brand-palette graphics rather than stock photography, which section 16 of

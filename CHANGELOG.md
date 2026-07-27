@@ -12,6 +12,47 @@ that heading to the version and date, and open a fresh `[Unreleased]`.
 
 ## [Unreleased]
 
+### Sprint 1 — Map screen
+
+Definition of done: user can browse seeded jobs. Met — 38 tests pass, the
+analyzer is clean, and the built app renders pins, selection and previews.
+
+#### Added
+
+- The map, built on `flutter_map` with OpenStreetMap tiles. No API key is
+  needed, so the app runs from a fresh checkout with no setup.
+- Job markers styled per section 15 — Trust Burgundy by default, Deep Burgundy
+  with a Copper outline when selected, Copper for jobs created on this device.
+  The marker icon reflects the job's content (voice, photo, or neither), and
+  selection also enlarges the pin so colour is never the only cue.
+- Tapping a marker selects it, centres the map, draws the job's approximate
+  work area as a translucent circle, and raises a preview card with the
+  schedule, distance, area and media it carries.
+- Current location with a "Near Me" control, shown in Information Blue rather
+  than green. A refusal is a normal state, not an error: the map centres on
+  Lahore, hides distances, and explains what the user can still do.
+- Graceful degradation when map tiles cannot be fetched — markers stay
+  correctly positioned over the warm background and a notice explains it.
+- OpenStreetMap attribution, as its licence requires.
+- 15 further tests covering marker rendering, tap reporting, the work-area
+  circle, user-location display, and every location-refusal path against a
+  fake service.
+
+#### Fixed
+
+- The map rendered at zero height. Its `Stack` sized itself to the collapsed
+  preview switcher, its only non-positioned child. Widget tests had passed
+  because `find.text` locates widgets regardless of size, so the suite now
+  asserts the map's rendered dimensions too.
+- Job pins drew at glyph size rather than marker size — `CustomPaint` sizes to
+  its child when given one, so the pin and icon are now stacked instead of
+  nested.
+- The pin's head and point were separate subpaths, leaving the outline stroke
+  cutting a seam across the join. Now one continuous path.
+- Cards printed the same sentence twice for jobs with no typed title, where
+  the heading falls back to the description. `Job.supportingDescription`
+  returns the description only when it is genuinely additional.
+
 ### Sprint 0 — Repository setup
 
 Definition of done: application launches. Met — 23 tests pass, the analyzer is

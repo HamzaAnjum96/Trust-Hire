@@ -1,0 +1,209 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_map/flutter_map.dart';
+import 'package:latlong2/latlong.dart';
+
+import '../../core/tokens.dart';
+import '../../models/job.dart';
+import 'job_marker.dart';
+
+/// The map itself — tiles, job radii, markers and the user's position.
+///
+/// Kept free of app state so it can be reused by the create and edit flows in
+/// later sprints: it takes jobs and a selection, and reports taps back.
+class JobMap extends StatefulWidget {
+  const JobMap({
+    super.key,
+    required this.jobs,
+    required this.centre,
+    required this.onJobTapped,
+    required this.onMapTapped,
+    this.selectedJobId,
+    this.userLocation,
+    this.controller,
+    this.initialZoom = 13,
+    this.tileProvider,
+    this.onTilesUnavailable,
+  });
+
+  final List<Job> jobs;
+  final JobLocation centre;
+  final String? selectedJobId;
+  final JobLocation? userLocation;
+  final ValueChanged<Job> onJobTapped;
+  final VoidCallback onMapTapped;
+  final MapController? controller;
+  final double initialZoom;
+
+  /// Overrides where map tiles come from. Left null in the app, which uses
+  /// flutter_map's network provider; tests pass an offline provider so they
+  /// do not depend on tile servers.
+  final TileProvider? tileProvider;
+
+  /// Called once if map tiles cannot be fetched. The map keeps working —
+  /// markers stay correctly positioned over the plain background — so the
+  /// owner decides how to explain it.
+  final VoidCallback? onTilesUnavailable;
+
+  @override
+  State<JobMap> createState() => _JobMapState();
+}
+
+class _JobMapState extends State<JobMap> {
+  bool _reportedTileFailure = false;
+
+  void _onTileError() {
+    if (_reportedTileFailure || !mounted) return;
+    _reportedTileFailure = true;
+    widget.onTilesUnavailable?.call();
+  }
+
+  Job? get _selectedJob {
+    final id = widget.selectedJobId;
+    if (id == null) return null;
+    for (final job in widget.jobs) {
+      if (job.id == id) return job;
+    }
+    return null;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isLight = theme.brightness == Brightness.light;
+    final selected = _selectedJob;
+
+    return Stack(
+      children: [
+        FlutterMap(
+          mapController: widget.controller,
+          options: MapOptions(
+            initialCenter: LatLng(
+              widget.centre.latitude,
+              widget.centre.longitude,
+            ),
+            initialZoom: widget.initialZoom,
+            minZoom: 4,
+            maxZoom: 18,
+            backgroundColor:
+                isLight ? BrandColours.warmSand : BrandColours.darkSurface,
+            onTap: (_, _) => widget.onMapTapped(),
+            interactionOptions: const InteractionOptions(
+              // Rotation adds nothing here and makes one-handed panning
+              // fiddly, so it is off.
+              flags: InteractiveFlag.drag |
+                  InteractiveFlag.pinchZoom |
+                  InteractiveFlag.doubleTapZoom |
+                  InteractiveFlag.scrollWheelZoom,
+            ),
+          ),
+          children: [
+            TileLayer(
+              urlTemplate:
+                  'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+              userAgentPackageName: 'com.trusthire.trust_hire',
+              tileProvider: widget.tileProvider,
+              // Keep the map light and low-noise per section 15.
+              tileBuilder: isLight ? null : _darkenTile,
+              errorTileCallback: (_, _, _) => _onTileError(),
+              evictErrorTileStrategy: EvictErrorTileStrategy.notVisible,
+            ),
+
+            // The approximate work area of the selected job. Only the
+            // selected one is drawn — every radius at once turns the map into
+            // noise, which section 15 warns against.
+            if (selected != null)
+              CircleLayer(
+                circles: [
+                  CircleMarker(
+                    point: LatLng(
+                      selected.location.latitude,
+                      selected.location.longitude,
+                    ),
+                    radius: selected.radiusMetres,
+                    useRadiusInMeter: true,
+                    color: BrandColours.jobRadiusFill,
+                    borderColor: BrandColours.jobRadiusBorder,
+                    borderStrokeWidth: 1.5,
+                  ),
+                ],
+              ),
+
+            if (widget.userLocation != null)
+              MarkerLayer(
+                markers: [
+                  Marker(
+                    point: LatLng(
+                      widget.userLocation!.latitude,
+                      widget.userLocation!.longitude,
+                    ),
+                    width: UserLocationMarker.size,
+                    height: UserLocationMarker.size,
+                    child: const UserLocationMarker(),
+                  ),
+                ],
+              ),
+
+            MarkerLayer(
+              markers: [
+                for (final job in widget.jobs)
+                  Marker(
+                    point: LatLng(
+                      job.location.latitude,
+                      job.location.longitude,
+                    ),
+                    width: JobMarker.selectedSize,
+                    height: JobMarker.selectedSize,
+                    // Anchor the pin's point at the coordinate rather than
+                    // its centre, so it indicates the right spot.
+                    alignment: Alignment.topCenter,
+                    child: JobMarker(
+                      job: job,
+                      isSelected: job.id == widget.selectedJobId,
+                      onTap: () => widget.onJobTapped(job),
+                    ),
+                  ),
+              ],
+            ),
+          ],
+        ),
+
+
+        // OpenStreetMap requires visible attribution.
+        Positioned(
+          right: 0,
+          bottom: 0,
+          child: DecoratedBox(
+            decoration: BoxDecoration(
+              color: theme.colorScheme.surface.withValues(alpha: 0.8),
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(BrandRadius.small),
+              ),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+              child: Text(
+                '© OpenStreetMap',
+                style: theme.textTheme.labelSmall?.copyWith(fontSize: 10),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  /// Dark mode keeps the map warm rather than inverted-cold: a mild darkening
+  /// with the saturation left alone reads better than a true dark tile style
+  /// we would otherwise have to host.
+  Widget _darkenTile(BuildContext context, Widget tile, TileImage image) {
+    return ColorFiltered(
+      colorFilter: const ColorFilter.matrix(<double>[
+        0.72, 0, 0, 0, 0, //
+        0, 0.70, 0, 0, 0, //
+        0, 0, 0.72, 0, 0, //
+        0, 0, 0, 1, 0, //
+      ]),
+      child: tile,
+    );
+  }
+}
