@@ -60,7 +60,7 @@ it is for.
 
 | Folder | What belongs in it |
 | --- | --- |
-| `agile/sprint-planning/` | One document per sprint: sprint goal, committed scope, team capacity, risks and dependencies, definition of done. Name them `sprint-NN-planning.md`, zero-padded. |
+| `agile/sprint-planning/` | [`poc-sprint-plan.md`](documents/agile/sprint-planning/poc-sprint-plan.md) is the master plan for the POC — vision, goals, constraints, and Sprints 0–6. Alongside it, one document per sprint as it is planned in detail: sprint goal, committed scope, team capacity, risks and dependencies, definition of done. Name those `sprint-NN-planning.md`, zero-padded. |
 | `agile/backlog/` | Epics (`epic-<slug>.md`) and user stories (`story-<slug>.md`) with testable acceptance criteria. A story is *ready* when its criteria are testable and its open questions are resolved — only ready stories get pulled into planning. |
 | `agile/retrospectives/` | `sprint-NN-retro.md`, matching the sprint number. What went well, what did not, and **actions with named owners**. Carry unfinished actions forward explicitly. |
 | `brand-guidelines/` | Logo usage, colour palette, typography, tone of voice, imagery, asset library. Record colours with their hex value *and* intended use, plus contrast ratios for text pairings. Keep source assets next to exports. |

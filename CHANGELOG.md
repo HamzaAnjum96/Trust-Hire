@@ -35,6 +35,11 @@ that heading to the version and date, and open a fresh `[Unreleased]`.
   `deployment/pages/` until `code/frontend/package.json` exists, after which it
   builds the frontend and publishes its output instead.
 
+- POC sprint plan at `documents/agile/sprint-planning/poc-sprint-plan.md` —
+  vision, POC goals and exclusions, technical constraints (no backend, seed
+  JSON copied into local storage), the core job model, design and UX
+  principles, Sprints 0–6, stretch goals, and success criteria.
+
 ### Changed
 
 - Folder documentation consolidated into the top-level `README.md`; the
