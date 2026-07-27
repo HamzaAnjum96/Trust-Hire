@@ -40,6 +40,14 @@ that heading to the version and date, and open a fresh `[Unreleased]`.
   JSON copied into local storage), the core job model, design and UX
   principles, Sprints 0–6, stretch goals, and success criteria.
 
+- Brand guidelines at `documents/brand-guidelines/brand-guidelines.md` —
+  positioning, the burgundy/copper/warm-sand palette with functional colours,
+  typography and type scale, logo direction and usage, iconography, map
+  styling, photography and illustration direction, voice and tone,
+  terminology, component and form specs, motion, accessibility requirements,
+  dark mode, and example CSS and Tailwind design tokens. Section 35 is
+  incomplete in the source and is marked as awaiting text.
+
 ### Changed
 
 - Folder documentation consolidated into the top-level `README.md`; the
