@@ -127,7 +127,7 @@ re-deriving.
 | --- | --- | --- | --- |
 | 1 | Run `sweep_schema.sh` whenever the schema changes, and add the reason to `expected_uncovered` rather than leaving a rule silently uncovered. | Claude | Open |
 | 2 | Apply the same question to the Dart suite: pick the two or three tests a sprint depends on and check they fail when the thing they guard is removed. Done for the CNIC mask; not done for anything else. | Claude | Open |
-| 3 | Write down the screenshot procedure — base-href, the serving path, coordinate clicks — so it is not re-derived each sprint. | Claude | Open |
+| 3 | Write down the screenshot procedure — base-href, the serving path, coordinate clicks — so it is not re-derived each sprint. | Claude | **Done** — README, *Looking at the running app* |
 | 4 | Treat an assertion about the outside world (a phone prefix, a format standard) as a claim needing a source, not a test. | Claude | Open |
 | 5 | Get the Urdu catalogue read by a native speaker. **Carried, third time** — now 465 string pairs. | Hamza | Open |
 

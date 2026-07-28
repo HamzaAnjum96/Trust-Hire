@@ -350,6 +350,30 @@ CDN, or the app will not load without third-party network access:
 flutter build web --release --no-web-resources-cdn --base-href /Trust-Hire/
 ```
 
+**Looking at the running app.** Every integration bug in Phase 1 was found by
+looking at the app rather than by a failing test, so this is worth doing before
+closing a sprint — and worth not re-deriving each time, because four things
+about it are counter-intuitive:
+
+```bash
+# 1. --base-href means the build must be served *under that path*, not at /.
+#    Serving build/web at the root gives a boot screen that never advances and
+#    a 404 for flutter_bootstrap.js, which looks exactly like a broken build.
+mkdir -p /tmp/serve && ln -sfn "$PWD/build/web" /tmp/serve/Trust-Hire
+python3 -m http.server 8099 --directory /tmp/serve
+# → http://localhost:8099/Trust-Hire/
+```
+
+- **Give it 10–15 seconds.** CanvasKit is bundled rather than fetched, and the
+  boot screen sits there for a long time before the first frame.
+- **Flutter renders to a canvas, so there is no text to select.** Playwright's
+  `getByText` finds nothing and clicks silently do nothing — drive it with
+  `page.mouse.click(x, y)` read off a screenshot, and re-screenshot after each
+  step rather than assuming a click landed.
+- **Tiles never render in a sandbox** that blocks outbound image requests. The
+  map still positions its pins correctly over a plain background; a blank
+  basemap in a screenshot is the network, not the app.
+
 **Map tiles.** The map uses CARTO's Positron and Dark Matter basemaps — one
 purpose-built style per brightness rather than a filter over a shared raster,
 since darkening a standard map produces muddy greens and hurts label
