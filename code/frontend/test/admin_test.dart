@@ -8,6 +8,7 @@ import 'package:trust_hire/features/admin/admin_rules.dart';
 import 'package:trust_hire/features/wallet/wallet_rules.dart';
 import 'package:trust_hire/models/account.dart';
 import 'package:trust_hire/models/admin.dart';
+import 'package:trust_hire/models/verification.dart';
 import 'package:trust_hire/models/wallet.dart';
 import 'package:trust_hire/services/job_repository.dart';
 import 'package:trust_hire/services/local_store.dart';
@@ -277,7 +278,10 @@ void main() {
       final queue = rules.queue([
         const AccountReview(userId: 'b'),
         const AccountReview(userId: 'a'),
-        const AccountReview(userId: 'z', simNameMatches: false),
+        const AccountReview(
+          userId: 'z',
+          verification: Verification(simNameMatches: false),
+        ),
         const AccountReview(userId: 'c', status: ReviewStatus.approved),
       ]);
 
@@ -288,7 +292,10 @@ void main() {
       // Section 2 is explicit that false positives are expected — a worker on
       // a family member's SIM is the ordinary case. So the flag changes where
       // they sit in the queue and nothing else.
-      const flagged = AccountReview(userId: 'z', simNameMatches: false);
+      const flagged = AccountReview(
+        userId: 'z',
+        verification: Verification(simNameMatches: false),
+      );
 
       expect(flagged.isFlagged, isTrue);
       expect(flagged.status, ReviewStatus.pending);
@@ -308,9 +315,16 @@ void main() {
   });
 
   group('the CNIC shape check', () {
-    test('accepts the format and nothing else', () {
+    test('accepts thirteen digits, and nothing else', () {
       expect(rules.isPlausibleCnic('35202-1234567-1'), isTrue);
-      expect(rules.isPlausibleCnic('3520212345671'), isFalse);
+
+      // Punctuation is not the check. A keypad has no dash, and refusing
+      // thirteen correct digits over one is how a worker gets stuck on the
+      // first screen of verification. P1-9 moved this to `VerificationRules`,
+      // where the worker's own side of Section 2 lives, and it normalises
+      // before it matches — this delegates so the two cannot drift.
+      expect(rules.isPlausibleCnic('3520212345671'), isTrue);
+
       expect(rules.isPlausibleCnic('35202-123456-1'), isFalse);
       expect(rules.isPlausibleCnic('abcde-1234567-1'), isFalse);
       expect(rules.isPlausibleCnic(null), isFalse);

@@ -14,6 +14,7 @@ import '../services/media_store.dart';
 import '../features/onboarding/onboarding_screen.dart';
 import 'account_controller.dart';
 import 'admin_controller.dart';
+import 'verification_controller.dart';
 import 'app_shell.dart';
 import 'bid_controller.dart';
 import 'job_controller.dart';
@@ -81,6 +82,14 @@ class TrustHireApp extends StatelessWidget {
         ChangeNotifierProxyProvider<AccountController, AdminController>(
           create: (_) => AdminController(store)..load(),
           update: (_, account, admin) => admin!..setAccount(account.activeId),
+        ),
+        // Takes the account's *name* as well as its id: the SIM-name check
+        // compares the name on the card against it, and a controller that
+        // knew only an id would have nothing to compare.
+        ChangeNotifierProxyProvider<AccountController, VerificationController>(
+          create: (_) => VerificationController(store)..load(),
+          update: (_, account, verification) => verification!
+            ..setAccount(account.activeId, name: account.active.name ?? ''),
         ),
         ChangeNotifierProvider(
           // Deliberately not requested here. Asking for a permission before

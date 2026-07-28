@@ -1024,5 +1024,102 @@
   "adminPanelTile": "Approvals, disputes and the log",
   "@adminPanelTile": {
     "description": "What the admin panel holds, on the tile that opens it"
-  }
+  },
+  "verification": "Verification",
+  "verificationTile": "CNIC and phone",
+  "verificationSubtitle": "{done, plural, =0{Nothing submitted yet} =1{1 of 3 steps done} =2{2 of 3 steps done} other{All three steps done}}",
+  "@verificationSubtitle": {
+    "placeholders": {
+      "done": {
+        "type": "int"
+      }
+    }
+  },
+  "verificationIntro": "Two things, and neither is an identity check. Trust Hire confirms that a CNIC number is the right shape and that a phone answers a code. It does not look anybody up.",
+  "verificationWhyBother": "Hirers see whether a worker has been through this. It is not required to use the app, and skipping it does not hide your jobs.",
+  "verifyCnicHeading": "Your CNIC",
+  "verifyCnicNumber": "CNIC number",
+  "verifyCnicHint": "13 digits, with or without dashes",
+  "verifyNameOnCard": "Name, exactly as printed on the card",
+  "verifyDateOfBirth": "Date of birth",
+  "verifyChooseDate": "Choose",
+  "verifyCnicPhoto": "Photo of the card",
+  "verifyCnicPhotoNote": "No photo is uploaded in this demo. The step is here because the real one stores a picture, and a screen that hides that would be describing a different app.",
+  "verifyCnicSubmit": "Submit CNIC",
+  "verifyCnicBadNumber": "That is not 13 digits. Nothing was saved.",
+  "verifyCnicDone": "CNIC submitted",
+  "verifyCnicOnFile": "On file since {date}",
+  "@verifyCnicOnFile": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "verifyCnicMasked": "Stored as {masked}",
+  "@verifyCnicMasked": {
+    "placeholders": {
+      "masked": {
+        "type": "String"
+      }
+    }
+  },
+  "verifyCnicMaskExplain": "Only this much is kept. The whole number never leaves this screen — there is nothing the app could do with it, and holding one would be keeping a national identity number for no reason.",
+  "verifyCnicNotPlausible": "The card is on file, but the automated check could not confirm it. Someone will look.",
+  "verifyCnicPlausible": "The number is the right shape, and the card has a name and a date of birth.",
+  "verifyPhoneHeading": "Your phone",
+  "verifyPhoneNumber": "Mobile number",
+  "verifyPhoneHint": "03xx xxxxxxx",
+  "verifyPhoneBad": "That is not a Pakistani mobile number.",
+  "verifySendCode": "Send me a code",
+  "verifyResendCode": "Send another",
+  "verifyResendIn": "Send another in {seconds}s",
+  "@verifyResendIn": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "verifyCodeLabel": "The 6-digit code",
+  "verifyCodeSubmit": "Confirm",
+  "verifyCodeSentTo": "Sent to {phone}",
+  "@verifyCodeSentTo": {
+    "placeholders": {
+      "phone": {
+        "type": "String"
+      }
+    }
+  },
+  "verifyCodeWrong": "That code is not right. {left, plural, =1{1 try left} other{{left} tries left}}",
+  "@verifyCodeWrong": {
+    "placeholders": {
+      "left": {
+        "type": "int"
+      }
+    }
+  },
+  "verifyCodeExpired": "That code has run out. Ask for another.",
+  "verifyCodeSpent": "Too many tries. Ask for a new code.",
+  "verifyPhoneDone": "Phone confirmed",
+  "verifyPhoneConfirmedOn": "Confirmed {date}",
+  "@verifyPhoneConfirmedOn": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "verifyDemoSms": "In this demo the message appears here instead of arriving by SMS",
+  "verifyDemoSmsWhy": "There is no server yet to send from, so nothing leaves the device. Everything else about this step — the expiry, the tries, the wait before you can ask again — is real.",
+  "verifySimHeading": "Name on the SIM",
+  "verifySimMatched": "The name on your card matches the name on this account.",
+  "verifySimFlagged": "The name on your card does not match the name on this account. Someone will look at it — this is not a rejection, and using a family member's SIM is an ordinary reason for it.",
+  "verifySimNotWired": "A real check asks the network who a number is registered to. That is not wired up here, so this compares against your account name instead.",
+  "verifyLimitNoLookup": "Nobody has asked NADRA whether this card exists. That check is out of scope.",
+  "verifyLimitPhotoUnreviewed": "Your photo has not been looked at, and will not be unless a dispute is raised about you.",
+  "verifyLimitSimFlag": "A name mismatch is a reason for a person to look, not evidence of anything.",
+  "verifyStatusPending": "Waiting to be looked at",
+  "verifyStatusApproved": "Approved",
+  "verifyStatusSuspended": "Suspended"
 }

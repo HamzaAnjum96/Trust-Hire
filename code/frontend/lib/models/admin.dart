@@ -1,3 +1,5 @@
+import 'verification.dart';
+
 /// What an admin did.
 ///
 /// A closed list, because Section 12's requirement is that "every admin action
@@ -115,19 +117,22 @@ enum ReviewStatus {
 
 /// What an admin sees about an account before deciding on it.
 ///
-/// The verification signals are Section 2's, and they are **signals**: a CNIC
-/// whose number is the right shape, a phone that answered an OTP, and a
-/// name-match check that can disagree. None of them is an identity check, and
-/// the panel says so where it shows them — a false positive on the SIM match
-/// is a family member's phone, not a fraudster.
+/// Two things, kept apart because they belong to different people: the
+/// platform's decision ([status], [note], [decidedAt]) and what the account
+/// holder submitted ([verification]). The signals read through to the same
+/// [Verification] the worker's own screen writes — **one record, not a copy** —
+/// so a re-submission cannot leave the panel deciding on the old one.
+///
+/// Those signals are Section 2's, and they are **signals**: a CNIC whose number
+/// is the right shape, a phone that answered a code, and a name-match check
+/// that can disagree. None of them is an identity check, and the panel says so
+/// where it shows them — a false positive on the SIM match is a family
+/// member's phone, not a fraudster.
 class AccountReview {
   const AccountReview({
     required this.userId,
     this.status = ReviewStatus.pending,
-    this.cnicOnFile = false,
-    this.cnicPlausible = false,
-    this.phoneVerified = false,
-    this.simNameMatches = true,
+    this.verification = const Verification(),
     this.note,
     this.decidedAt,
   });
@@ -135,40 +140,37 @@ class AccountReview {
   final String userId;
   final ReviewStatus status;
 
-  /// A photo was uploaded. **Not** that anybody has looked at it — Section 2
-  /// is explicit that it "sits unreviewed unless a dispute is raised".
-  final bool cnicOnFile;
-
-  /// The number is the right shape. An automated check, not a lookup: Section
-  /// 13 rules out any live government database.
-  final bool cnicPlausible;
-
-  final bool phoneVerified;
-
-  /// False when the SIM's registered name does not match the CNIC.
-  ///
-  /// A flag for review, never an auto-rejection. Section 2 is explicit that
-  /// false positives are expected — a worker using a family member's SIM is
-  /// the ordinary case, not the fraud case.
-  final bool simNameMatches;
+  /// What was submitted, and what the automated checks made of it.
+  final Verification verification;
 
   final String? note;
   final DateTime? decidedAt;
 
-  bool get isFlagged => !simNameMatches;
+  /// A photo was uploaded. **Not** that anybody has looked at it — Section 2
+  /// is explicit that it "sits unreviewed unless a dispute is raised".
+  bool get cnicOnFile => verification.cnicOnFile;
+
+  /// The number is the right shape. An automated check, not a lookup: Section
+  /// 13 rules out any live government database.
+  bool get cnicPlausible => verification.cnicPlausible;
+
+  bool get phoneVerified => verification.phoneVerified;
+
+  /// False when the SIM's registered name does not match the CNIC.
+  bool get simNameMatches => verification.simNameMatches;
+
+  bool get isFlagged => verification.isFlagged;
   bool get needsDecision => status == ReviewStatus.pending;
 
   AccountReview copyWith({
     ReviewStatus? status,
+    Verification? verification,
     String? note,
     DateTime? decidedAt,
   }) => AccountReview(
     userId: userId,
     status: status ?? this.status,
-    cnicOnFile: cnicOnFile,
-    cnicPlausible: cnicPlausible,
-    phoneVerified: phoneVerified,
-    simNameMatches: simNameMatches,
+    verification: verification ?? this.verification,
     note: note ?? this.note,
     decidedAt: decidedAt ?? this.decidedAt,
   );
@@ -176,10 +178,7 @@ class AccountReview {
   factory AccountReview.fromJson(Map<String, dynamic> json) => AccountReview(
     userId: json['userId'] as String,
     status: ReviewStatus.fromId(json['status'] as String?),
-    cnicOnFile: json['cnicOnFile'] as bool? ?? false,
-    cnicPlausible: json['cnicPlausible'] as bool? ?? false,
-    phoneVerified: json['phoneVerified'] as bool? ?? false,
-    simNameMatches: json['simNameMatches'] as bool? ?? true,
+    verification: Verification.fromJson(json),
     note: json['note'] as String?,
     decidedAt: json['decidedAt'] == null
         ? null
@@ -189,10 +188,7 @@ class AccountReview {
   Map<String, dynamic> toJson() => <String, dynamic>{
     'userId': userId,
     'status': status.id,
-    'cnicOnFile': cnicOnFile,
-    'cnicPlausible': cnicPlausible,
-    'phoneVerified': phoneVerified,
-    'simNameMatches': simNameMatches,
+    ...verification.toJson(),
     'note': note,
     'decidedAt': decidedAt?.toIso8601String(),
   };

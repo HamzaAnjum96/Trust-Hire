@@ -495,10 +495,64 @@ Pointing the repositories at Supabase, sync, and the media pipeline:
 compression and retention (Section 3), and voice-note transcripts (see *A third
 decision* above). Needs somewhere hosted to point at, which is what defers it.
 
-### P1-9 — Verification
-CNIC upload and plausibility check, SMS OTP, CNIC-SIM name match. Last, because
-it depends on the backend and is the piece most constrained by real-world
-integrations.
+### P1-9 — Verification ✅
+CNIC upload and plausibility check, SMS OTP, CNIC-SIM name match.
+
+**One record, written by the person and read by the panel.** P1-7 built the
+admin's view of these signals; this is where they come from. The four booleans
+that used to sit loose on `AccountReview` are now a `Verification` — the same
+row, not a copy — because two copies disagree the first time somebody
+re-submits, and the one an approval was decided on would be whichever screen
+happened to read it.
+
+Decisions:
+
+- **The whole CNIC number never reaches storage.** `VerificationRules.mask` is
+  the only thing that produces a stored number, and it returns null for
+  anything it cannot parse — so there is no path where a malformed number is
+  kept whole because the mask did not recognise it. Section 13 rules out
+  looking a CNIC up, so holding a complete national identity number would be
+  keeping one for no reason anybody could name. A test asserts that nothing in
+  storage contains a run of five digits once timestamps are removed, and it was
+  checked by breaking the mask and watching it fail.
+- **Punctuation is not the check.** Thirteen digits are accepted with or
+  without dashes. A keypad has no dash, and refusing a correct number over one
+  is how somebody gets stuck on the first screen. This changed the admin
+  panel's behaviour too, which now delegates rather than keeping a second copy
+  of the pattern.
+- **A card the check cannot confirm is still stored, and flagged.** Section 2
+  sends those to a person rather than turning them away; an upload the app
+  silently discards is one the worker thinks succeeded.
+- **The SMS is the one thing that is not real, and the screen says so.**
+  Section 2 asks for delivery "genuinely implemented, not simulated" and it is
+  right to — a code that never leaves the device confirms nothing. There is no
+  provider to send through until P1-8b, so `SmsSender` is the seam and
+  `DemoSmsSender` hands the message back to the screen under a line saying it
+  stood in for an SMS. Everything else about the step is real: the expiry, the
+  five attempts, the thirty-second resend wait, and the fact that the attempt
+  count survives closing the app — otherwise a restart would be a fresh set of
+  guesses. **Record this as a partial conformance**, in the same shape as the
+  WCAG 1.2.1 transcript decision above.
+- **A new number drops the tick the old one earned.** Confirming one phone says
+  nothing about the next, and a verified mark beside a number nobody has ever
+  sent anything to is the one outcome this step must not produce.
+- **A late correct code is reported as expired, not wrong.** The honest answer
+  to "I typed it correctly and it said wrong" is that the code ran out, and a
+  screen that cannot tell those apart teaches people to distrust the message
+  that *is* their own fault.
+- **The name comparison is real; where the second name comes from is not.**
+  There is no SIM registry to ask, so the demo compares against the account
+  name and says so on screen. The comparison itself is written properly —
+  case, spacing, the several spellings of Muhammad, honorifics, a middle name
+  on one document and not the other — because it is what decides the flag.
+- **A check that did not run gets no verdict.** The device account has no name,
+  so on it the comparison cannot happen — and *not running is not a mismatch*.
+  Reporting one would fire the fraud flag on the single account that has done
+  nothing at all.
+- **A mismatch changes where somebody sits in a queue and nothing else.** Never
+  a rejection, and the caveat travels with the flag: `describeLimits` returns
+  the qualifications a screen must be showing, so a caveat cannot be dropped by
+  editing a layout.
 
 ## Carried over unchanged
 

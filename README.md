@@ -162,7 +162,7 @@ success criteria from
 [`documents/agile/sprint-planning/poc-sprint-plan.md`](documents/agile/sprint-planning/poc-sprint-plan.md),
 with the exception noted under *Map tiles* below.
 
-**Phase 1: P1-1 to P1-7 complete, plus the schema in P1-8a**, per
+**Phase 1: P1-1 to P1-7 complete, plus P1-8a and P1-9**, per
 [`documents/agile/sprint-planning/phase-1-sprint-plan.md`](documents/agile/sprint-planning/phase-1-sprint-plan.md).
 Roles, the fixed tag vocabulary, the visibility rule that decides which jobs
 reach which worker, Mode A bidding — a starting fare, counter-offers, and a
@@ -172,8 +172,9 @@ takes the platform's 5%, mutual rating with the worker's record public and the
 hirer's kept internal, and Mode B — a premium directory of workers at fixed
 prices, booked directly rather than bid on, and an admin panel whose every
 action lands in an audit log. P1-8a settles the PostgreSQL schema those rules
-will run on — see [The schema](#the-schema-codebackend) — and P1-8b onwards
-moves the repositories onto it and adds verification.
+will run on — see [The schema](#the-schema-codebackend) — and P1-9 adds
+verification: a CNIC stored masked, a phone confirmed by code, and the
+CNIC-SIM name comparison. P1-8b moves the repositories onto the schema.
 
 **Two ways to find work.** *Mode A* is the map: a hirer posts, workers offer,
 the hirer chooses, and the fare locks. *Mode B* is the directory: a worker pays
@@ -207,6 +208,26 @@ They are not accounts: no password, no verification, no privacy between them,
 and everything shares one browser's storage. The device account is left clean
 on purpose — it is what a first-time user sees.
 
+**Verification, and what it does not mean.** From the profile, a worker can
+submit a CNIC and confirm a phone. Three things about it are worth knowing
+before changing anything there, because all three are easy to undo by accident:
+
+- **The whole CNIC number never reaches storage.** `VerificationRules.mask` is
+  the only thing that produces a stored number, and it returns null rather than
+  falling back for anything it cannot parse — so there is no path that keeps a
+  complete national identity number. `verification_test.dart` fails if one ever
+  reaches `shared_preferences`.
+- **Delivery is the only simulated part, and the screen says so.** There is no
+  SMS provider until P1-8b, so `DemoSmsSender` shows the message it would have
+  sent under a line explaining that. The expiry, the five attempts, the resend
+  wait and the normalisation are all real. **Do not remove that line without
+  removing the simulation.**
+- **Every claim is shown with what it does not establish.** `describeLimits`
+  returns the caveats a screen has to be displaying, so they travel with the
+  signal rather than being layout somebody can delete. "Verified" over a check
+  that only confirms a number is thirteen digits long is the most misleading
+  thing this app could say.
+
 ```
 code/frontend/
 ├── lib/
@@ -223,12 +244,14 @@ code/frontend/
 │   │   ├── directory/    ← Mode B: listings, service menus, direct booking
 │   │   ├── premium/      ← subscriptions and the hirer discount, as rules
 │   │   ├── admin/        ← approvals, disputes, overrides and the audit log
+│   │   ├── verification/ ← Section 2: the CNIC, the phone, the name check
 │   │   ├── wallet/       ← tokens, commission, top-up
 │   │   ├── account/      ← the demo account switcher
 │   │   ├── profile/      ← role, trades, and the app's settings
 │   │   └── onboarding/   ← first-run intro and permission priming
 │   ├── l10n/         ← app_en.arb, app_ur.arb (generated AppStrings)
-│   ├── models/       ← Job, JobTag, Bid, Wallet, Rating, DemoAccount, listings
+│   ├── models/       ← Job, JobTag, Bid, Wallet, Rating, DemoAccount,
+│   │                    listings, Verification
 │   ├── services/     ← local storage, seed loading, repositories
 │   └── widgets/      ← shared UI (status pills, skeletons, empty states)
 ├── assets/

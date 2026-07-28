@@ -12,6 +12,69 @@ that heading to the version and date, and open a fresh `[Unreleased]`.
 
 ## [Unreleased]
 
+### 0.14.0 — P1-9, verification
+
+#### Added
+
+- **A verification screen**, from the profile: submit a CNIC, confirm a phone,
+  and see the CNIC-SIM name comparison once both exist. Nothing here is a gate
+  — a worker who does none of it keeps a working app, and the screen says so
+  before it asks for anything.
+- **CNIC submission**, with the automated plausibility check Section 2
+  describes: thirteen digits in the right shape, a name, and a date of birth
+  that belongs to a living adult. Accepted with or without dashes.
+- **Phone confirmation by code**, with a five-minute expiry, five attempts, and
+  a thirty-second wait before a resend to the same number. The attempt count is
+  stored, so closing the app is not a way to get a fresh set of guesses.
+- **The CNIC-SIM name check**, as a real comparison: case, spacing, the several
+  spellings of Muhammad, honorifics, and a middle name present on one document
+  and not the other. A mismatch moves the account up the admin queue and
+  changes nothing else.
+- **`SmsSender`**, the seam a real provider goes behind.
+
+#### Changed
+
+- **The verification signals are one record now, not four loose booleans.**
+  `AccountReview` carries a `Verification` — the same row the worker's own
+  screen writes — so the panel cannot end up deciding on a submission that has
+  since been replaced. The stored JSON is unchanged, so no seed migration was
+  needed.
+- **A CNIC number is accepted without its dashes.** The admin panel's shape
+  check used to refuse thirteen correct digits over punctuation; both sides now
+  delegate to one rule that normalises first. A keypad has no dash, and that
+  refusal is how somebody gets stuck on the first screen of verification.
+- **The seeded reviews carry phone numbers and real dates**, generated in one
+  place with the CNIC beside them. A test now fails if the two files disagree
+  — they did, for accounts created by the dispute fallback, which wrote a
+  masked number into one file and not the other.
+
+#### What is not real, and says so on screen
+
+Section 2 asks for a real SMS, and is right to: a code that never leaves the
+device confirms nothing about the phone. **Delivery is the one part that is
+simulated**, because there is no provider to send through until P1-8b. The demo
+shows the message it would have sent, under a line saying that is what it is
+doing. Everything else — expiry, attempts, the resend wait, the normalisation
+that makes four spellings of a number one number — is real. Record this as a
+partial conformance, in the same shape as the WCAG 1.2.1 transcript decision.
+
+#### Notes on the design
+
+- **The whole CNIC number never reaches storage.** The mask is the only thing
+  that produces a stored number and it returns null for anything it cannot
+  parse, so there is no path where a malformed number is kept whole. A test
+  asserts that nothing in storage holds a run of five digits once timestamps
+  are removed; it was checked by breaking the mask and watching the test fail.
+- **A new number drops the tick the old one earned.** A confirmed mark beside a
+  number nobody has sent anything to is the one outcome this step must not
+  produce.
+- **A late correct code is reported as expired, not wrong.** A screen that
+  cannot tell those apart teaches people to distrust the message that *is*
+  their own fault.
+- **A check that did not run gets no verdict.** The device account has no name
+  to compare against, and not running is not a mismatch — reporting one would
+  fire the fraud flag on the single account that has done nothing at all.
+
 ### P1-8a — The schema, and the tests that try to break it
 
 **Version 0.13.1+17 — the build number moves, the name does not.** Nothing

@@ -1107,6 +1107,30 @@ ADMIN_SEED_SEED = 20260815
 REVIEW_SAMPLE = 22
 
 
+def verification_for(name, rng):
+    """One submission, as both files describe it.
+
+    Built in one place so a review and the CNIC beside it cannot disagree
+    about what was submitted or when.
+    """
+    submitted_days_ago = rng.randint(20, 400)
+
+    return {
+        # Masked, because that is all the app ever holds. The whole number is
+        # not generated at all — there is nothing here to leak.
+        "cnicMasked": f"*****-*****{rng.randint(10, 99)}-{rng.randint(1, 9)}",
+        "cnicName": name,
+        "cnicDaysAgo": submitted_days_ago,
+        # The same fictional-number convention the job contacts use.
+        "phone": f"+92{rng.choice(MOBILE_PREFIXES)[1:]}"
+                 f"{rng.randint(1000000, 9999999)}",
+        # Confirmed after the card was submitted, never before: a "confirmed"
+        # date older than the account is the sort of detail that makes a demo
+        # look generated.
+        "phoneDaysAgo": rng.randint(1, max(1, submitted_days_ago - 1)),
+    }
+
+
 def build_admin(people, jobs, rng=None):
     """Approval records, a couple of CNICs, and two live disputes."""
     rng = rng or random.Random(ADMIN_SEED_SEED)
@@ -1124,6 +1148,10 @@ def build_admin(people, jobs, rng=None):
         has_cnic = index != 3
         phone_ok = index not in (3, 9)
 
+        record = verification_for(person["name"], rng)
+        masked = record["cnicMasked"]
+        submitted_days_ago = record["cnicDaysAgo"]
+
         reviews.append({
             "userId": person["id"],
             "status": "pending" if pending else (
@@ -1135,6 +1163,13 @@ def build_admin(people, jobs, rng=None):
             "cnicPlausible": has_cnic and index != 5,
             "phoneVerified": phone_ok,
             "simNameMatches": not flagged,
+            # The verification record proper, which is what the worker's own
+            # screen reads. Same row as the panel's — see `AccountReview`.
+            **({"cnicMasked": record["cnicMasked"],
+                "cnicName": record["cnicName"],
+                "cnicDaysAgo": record["cnicDaysAgo"]} if has_cnic else {}),
+            **({"phone": record["phone"],
+                "phoneDaysAgo": record["phoneDaysAgo"]} if phone_ok else {}),
             **({"note": "Repeated no-shows reported by hirers."}
                if index == 7 else {}),
         })
@@ -1144,10 +1179,9 @@ def build_admin(people, jobs, rng=None):
                 "userId": person["id"],
                 # Masked in storage. The app has no use for a full national
                 # identity number and Section 13 rules out looking one up.
-                "maskedNumber": f"*****-*****{rng.randint(10, 99)}-"
-                                f"{rng.randint(1, 9)}",
+                "maskedNumber": masked,
                 "nameOnCard": person["name"],
-                "submittedDaysAgo": rng.randint(20, 400),
+                "submittedDaysAgo": submitted_days_ago,
             })
 
     # Two disputes, both open, both about somebody in the sample — so the CNIC
@@ -1185,26 +1219,37 @@ def build_admin(people, jobs, rng=None):
 
         # A dispute is worthless without a document behind it, so make sure
         # the person complained about has one on file.
-        if not any(record["userId"] == about for record in cnics):
+        #
+        # **Both files or neither.** These are two views of one submission —
+        # the panel's and the worker's own screen's — and a review claiming a
+        # CNIC that the CNIC file does not carry is a demonstration of a bug.
+        # They were written separately once, and drifted immediately.
+        has_review = any(r["userId"] == about for r in reviews)
+        has_cnic_record = any(c["userId"] == about for c in cnics)
+
+        if not has_review or not has_cnic_record:
             named = next(
                 (p["name"] for p in people if p["id"] == about), "Unknown"
             )
-            cnics.append({
-                "userId": about,
-                "maskedNumber": f"*****-*****{rng.randint(10, 99)}-"
-                                f"{rng.randint(1, 9)}",
-                "nameOnCard": named,
-                "submittedDaysAgo": rng.randint(20, 400),
-            })
-        if not any(record["userId"] == about for record in reviews):
-            reviews.append({
-                "userId": about,
-                "status": "approved",
-                "cnicOnFile": True,
-                "cnicPlausible": True,
-                "phoneVerified": True,
-                "simNameMatches": True,
-            })
+            record = verification_for(named, rng)
+
+            if not has_cnic_record:
+                cnics.append({
+                    "userId": about,
+                    "maskedNumber": record["cnicMasked"],
+                    "nameOnCard": named,
+                    "submittedDaysAgo": record["cnicDaysAgo"],
+                })
+            if not has_review:
+                reviews.append({
+                    "userId": about,
+                    "status": "approved",
+                    "cnicOnFile": True,
+                    "cnicPlausible": True,
+                    "phoneVerified": True,
+                    "simNameMatches": True,
+                    **record,
+                })
 
     return reviews, cnics, disputes
 

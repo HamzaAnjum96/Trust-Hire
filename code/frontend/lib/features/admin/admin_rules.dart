@@ -1,4 +1,5 @@
 import '../../models/admin.dart';
+import '../verification/verification_rules.dart';
 
 /// Section 12, as rules — and Section 2's checks, which are the things an
 /// approval decision is actually made on.
@@ -10,18 +11,16 @@ import '../../models/admin.dart';
 class AdminRules {
   const AdminRules();
 
-  /// A Pakistani CNIC is thirteen digits, written `12345-1234567-1`.
-  ///
   /// **A shape check, not an identity check**, and the panel says so wherever
   /// it shows the result. Section 13 rules out any live NADRA lookup, so the
   /// most this can honestly claim is that somebody typed something the right
   /// length in the right pattern.
-  static final _cnicPattern = RegExp(r'^\d{5}-\d{7}-\d$');
-
-  bool isPlausibleCnic(String? number) {
-    if (number == null) return false;
-    return _cnicPattern.hasMatch(number.trim());
-  }
+  ///
+  /// Delegated to [VerificationRules], which is where the worker's side of
+  /// Section 2 lives. Two copies of a format check drift, and the one that
+  /// drifts is always the one the *other* screen uses.
+  bool isPlausibleCnic(String? number) =>
+      const VerificationRules().isPlausibleCnic(number);
 
   /// Whether an admin may pull up [userId]'s CNIC photo right now.
   ///

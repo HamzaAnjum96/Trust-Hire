@@ -1505,4 +1505,190 @@ class AppStringsEn extends AppStrings {
 
   @override
   String get adminPanelTile => 'Approvals, disputes and the log';
+
+  @override
+  String get verification => 'Verification';
+
+  @override
+  String get verificationTile => 'CNIC and phone';
+
+  @override
+  String verificationSubtitle(int done) {
+    String _temp0 = intl.Intl.pluralLogic(
+      done,
+      locale: localeName,
+      other: 'All three steps done',
+      two: '2 of 3 steps done',
+      one: '1 of 3 steps done',
+      zero: 'Nothing submitted yet',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get verificationIntro =>
+      'Two things, and neither is an identity check. Trust Hire confirms that a CNIC number is the right shape and that a phone answers a code. It does not look anybody up.';
+
+  @override
+  String get verificationWhyBother =>
+      'Hirers see whether a worker has been through this. It is not required to use the app, and skipping it does not hide your jobs.';
+
+  @override
+  String get verifyCnicHeading => 'Your CNIC';
+
+  @override
+  String get verifyCnicNumber => 'CNIC number';
+
+  @override
+  String get verifyCnicHint => '13 digits, with or without dashes';
+
+  @override
+  String get verifyNameOnCard => 'Name, exactly as printed on the card';
+
+  @override
+  String get verifyDateOfBirth => 'Date of birth';
+
+  @override
+  String get verifyChooseDate => 'Choose';
+
+  @override
+  String get verifyCnicPhoto => 'Photo of the card';
+
+  @override
+  String get verifyCnicPhotoNote =>
+      'No photo is uploaded in this demo. The step is here because the real one stores a picture, and a screen that hides that would be describing a different app.';
+
+  @override
+  String get verifyCnicSubmit => 'Submit CNIC';
+
+  @override
+  String get verifyCnicBadNumber => 'That is not 13 digits. Nothing was saved.';
+
+  @override
+  String get verifyCnicDone => 'CNIC submitted';
+
+  @override
+  String verifyCnicOnFile(String date) {
+    return 'On file since $date';
+  }
+
+  @override
+  String verifyCnicMasked(String masked) {
+    return 'Stored as $masked';
+  }
+
+  @override
+  String get verifyCnicMaskExplain =>
+      'Only this much is kept. The whole number never leaves this screen — there is nothing the app could do with it, and holding one would be keeping a national identity number for no reason.';
+
+  @override
+  String get verifyCnicNotPlausible =>
+      'The card is on file, but the automated check could not confirm it. Someone will look.';
+
+  @override
+  String get verifyCnicPlausible =>
+      'The number is the right shape, and the card has a name and a date of birth.';
+
+  @override
+  String get verifyPhoneHeading => 'Your phone';
+
+  @override
+  String get verifyPhoneNumber => 'Mobile number';
+
+  @override
+  String get verifyPhoneHint => '03xx xxxxxxx';
+
+  @override
+  String get verifyPhoneBad => 'That is not a Pakistani mobile number.';
+
+  @override
+  String get verifySendCode => 'Send me a code';
+
+  @override
+  String get verifyResendCode => 'Send another';
+
+  @override
+  String verifyResendIn(int seconds) {
+    return 'Send another in ${seconds}s';
+  }
+
+  @override
+  String get verifyCodeLabel => 'The 6-digit code';
+
+  @override
+  String get verifyCodeSubmit => 'Confirm';
+
+  @override
+  String verifyCodeSentTo(String phone) {
+    return 'Sent to $phone';
+  }
+
+  @override
+  String verifyCodeWrong(int left) {
+    String _temp0 = intl.Intl.pluralLogic(
+      left,
+      locale: localeName,
+      other: '$left tries left',
+      one: '1 try left',
+    );
+    return 'That code is not right. $_temp0';
+  }
+
+  @override
+  String get verifyCodeExpired => 'That code has run out. Ask for another.';
+
+  @override
+  String get verifyCodeSpent => 'Too many tries. Ask for a new code.';
+
+  @override
+  String get verifyPhoneDone => 'Phone confirmed';
+
+  @override
+  String verifyPhoneConfirmedOn(String date) {
+    return 'Confirmed $date';
+  }
+
+  @override
+  String get verifyDemoSms =>
+      'In this demo the message appears here instead of arriving by SMS';
+
+  @override
+  String get verifyDemoSmsWhy =>
+      'There is no server yet to send from, so nothing leaves the device. Everything else about this step — the expiry, the tries, the wait before you can ask again — is real.';
+
+  @override
+  String get verifySimHeading => 'Name on the SIM';
+
+  @override
+  String get verifySimMatched =>
+      'The name on your card matches the name on this account.';
+
+  @override
+  String get verifySimFlagged =>
+      'The name on your card does not match the name on this account. Someone will look at it — this is not a rejection, and using a family member\'s SIM is an ordinary reason for it.';
+
+  @override
+  String get verifySimNotWired =>
+      'A real check asks the network who a number is registered to. That is not wired up here, so this compares against your account name instead.';
+
+  @override
+  String get verifyLimitNoLookup =>
+      'Nobody has asked NADRA whether this card exists. That check is out of scope.';
+
+  @override
+  String get verifyLimitPhotoUnreviewed =>
+      'Your photo has not been looked at, and will not be unless a dispute is raised about you.';
+
+  @override
+  String get verifyLimitSimFlag =>
+      'A name mismatch is a reason for a person to look, not evidence of anything.';
+
+  @override
+  String get verifyStatusPending => 'Waiting to be looked at';
+
+  @override
+  String get verifyStatusApproved => 'Approved';
+
+  @override
+  String get verifyStatusSuspended => 'Suspended';
 }

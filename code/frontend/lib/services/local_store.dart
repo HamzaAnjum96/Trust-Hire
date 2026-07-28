@@ -142,6 +142,11 @@ class StoreKeys {
   /// Complaints about jobs. The only thing that unlocks a CNIC.
   static const disputes = 'trust_hire.disputes';
 
+  /// The verification code outstanding on this account, if any. Per account,
+  /// and stored rather than held in memory so that closing the app is not a
+  /// way to get a fresh set of guesses.
+  static const phoneChallenge = 'trust_hire.phone_challenge';
+
   /// The per-account name for a key.
   ///
   /// Role, trades, saved jobs and the wallet belong to a person rather than to
@@ -179,6 +184,7 @@ class StoreKeys {
     accountReviews,
     cnicRecords,
     disputes,
+    phoneChallenge,
     mediaIndex,
   ];
 }

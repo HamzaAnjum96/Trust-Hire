@@ -1,18 +1,18 @@
 [
   {
     "id": "dispute-01",
-    "jobId": "seed-176",
-    "aboutUserId": "user-009",
-    "raisedByUserId": "user-056",
-    "raisedHoursAgo": 51.5,
+    "jobId": "seed-054",
+    "aboutUserId": "user-002",
+    "raisedByUserId": "user-054",
+    "raisedHoursAgo": 8.7,
     "reason": "Worker did not turn up on the agreed day and stopped answering."
   },
   {
     "id": "dispute-02",
-    "jobId": "seed-063",
-    "aboutUserId": "user-003",
-    "raisedByUserId": "user-016",
-    "raisedHoursAgo": 49.2,
+    "jobId": "seed-047",
+    "aboutUserId": "user-047",
+    "raisedByUserId": "user-001",
+    "raisedHoursAgo": 54.5,
     "reason": "Hirer refused to pay the agreed fare after the work was finished."
   }
 ]

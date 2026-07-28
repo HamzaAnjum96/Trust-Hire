@@ -2599,6 +2599,294 @@ abstract class AppStrings {
   /// In en, this message translates to:
   /// **'Approvals, disputes and the log'**
   String get adminPanelTile;
+
+  /// No description provided for @verification.
+  ///
+  /// In en, this message translates to:
+  /// **'Verification'**
+  String get verification;
+
+  /// No description provided for @verificationTile.
+  ///
+  /// In en, this message translates to:
+  /// **'CNIC and phone'**
+  String get verificationTile;
+
+  /// No description provided for @verificationSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'{done, plural, =0{Nothing submitted yet} =1{1 of 3 steps done} =2{2 of 3 steps done} other{All three steps done}}'**
+  String verificationSubtitle(int done);
+
+  /// No description provided for @verificationIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'Two things, and neither is an identity check. Trust Hire confirms that a CNIC number is the right shape and that a phone answers a code. It does not look anybody up.'**
+  String get verificationIntro;
+
+  /// No description provided for @verificationWhyBother.
+  ///
+  /// In en, this message translates to:
+  /// **'Hirers see whether a worker has been through this. It is not required to use the app, and skipping it does not hide your jobs.'**
+  String get verificationWhyBother;
+
+  /// No description provided for @verifyCnicHeading.
+  ///
+  /// In en, this message translates to:
+  /// **'Your CNIC'**
+  String get verifyCnicHeading;
+
+  /// No description provided for @verifyCnicNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'CNIC number'**
+  String get verifyCnicNumber;
+
+  /// No description provided for @verifyCnicHint.
+  ///
+  /// In en, this message translates to:
+  /// **'13 digits, with or without dashes'**
+  String get verifyCnicHint;
+
+  /// No description provided for @verifyNameOnCard.
+  ///
+  /// In en, this message translates to:
+  /// **'Name, exactly as printed on the card'**
+  String get verifyNameOnCard;
+
+  /// No description provided for @verifyDateOfBirth.
+  ///
+  /// In en, this message translates to:
+  /// **'Date of birth'**
+  String get verifyDateOfBirth;
+
+  /// No description provided for @verifyChooseDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose'**
+  String get verifyChooseDate;
+
+  /// No description provided for @verifyCnicPhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Photo of the card'**
+  String get verifyCnicPhoto;
+
+  /// No description provided for @verifyCnicPhotoNote.
+  ///
+  /// In en, this message translates to:
+  /// **'No photo is uploaded in this demo. The step is here because the real one stores a picture, and a screen that hides that would be describing a different app.'**
+  String get verifyCnicPhotoNote;
+
+  /// No description provided for @verifyCnicSubmit.
+  ///
+  /// In en, this message translates to:
+  /// **'Submit CNIC'**
+  String get verifyCnicSubmit;
+
+  /// No description provided for @verifyCnicBadNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'That is not 13 digits. Nothing was saved.'**
+  String get verifyCnicBadNumber;
+
+  /// No description provided for @verifyCnicDone.
+  ///
+  /// In en, this message translates to:
+  /// **'CNIC submitted'**
+  String get verifyCnicDone;
+
+  /// No description provided for @verifyCnicOnFile.
+  ///
+  /// In en, this message translates to:
+  /// **'On file since {date}'**
+  String verifyCnicOnFile(String date);
+
+  /// No description provided for @verifyCnicMasked.
+  ///
+  /// In en, this message translates to:
+  /// **'Stored as {masked}'**
+  String verifyCnicMasked(String masked);
+
+  /// No description provided for @verifyCnicMaskExplain.
+  ///
+  /// In en, this message translates to:
+  /// **'Only this much is kept. The whole number never leaves this screen — there is nothing the app could do with it, and holding one would be keeping a national identity number for no reason.'**
+  String get verifyCnicMaskExplain;
+
+  /// No description provided for @verifyCnicNotPlausible.
+  ///
+  /// In en, this message translates to:
+  /// **'The card is on file, but the automated check could not confirm it. Someone will look.'**
+  String get verifyCnicNotPlausible;
+
+  /// No description provided for @verifyCnicPlausible.
+  ///
+  /// In en, this message translates to:
+  /// **'The number is the right shape, and the card has a name and a date of birth.'**
+  String get verifyCnicPlausible;
+
+  /// No description provided for @verifyPhoneHeading.
+  ///
+  /// In en, this message translates to:
+  /// **'Your phone'**
+  String get verifyPhoneHeading;
+
+  /// No description provided for @verifyPhoneNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Mobile number'**
+  String get verifyPhoneNumber;
+
+  /// No description provided for @verifyPhoneHint.
+  ///
+  /// In en, this message translates to:
+  /// **'03xx xxxxxxx'**
+  String get verifyPhoneHint;
+
+  /// No description provided for @verifyPhoneBad.
+  ///
+  /// In en, this message translates to:
+  /// **'That is not a Pakistani mobile number.'**
+  String get verifyPhoneBad;
+
+  /// No description provided for @verifySendCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Send me a code'**
+  String get verifySendCode;
+
+  /// No description provided for @verifyResendCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Send another'**
+  String get verifyResendCode;
+
+  /// No description provided for @verifyResendIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Send another in {seconds}s'**
+  String verifyResendIn(int seconds);
+
+  /// No description provided for @verifyCodeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'The 6-digit code'**
+  String get verifyCodeLabel;
+
+  /// No description provided for @verifyCodeSubmit.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm'**
+  String get verifyCodeSubmit;
+
+  /// No description provided for @verifyCodeSentTo.
+  ///
+  /// In en, this message translates to:
+  /// **'Sent to {phone}'**
+  String verifyCodeSentTo(String phone);
+
+  /// No description provided for @verifyCodeWrong.
+  ///
+  /// In en, this message translates to:
+  /// **'That code is not right. {left, plural, =1{1 try left} other{{left} tries left}}'**
+  String verifyCodeWrong(int left);
+
+  /// No description provided for @verifyCodeExpired.
+  ///
+  /// In en, this message translates to:
+  /// **'That code has run out. Ask for another.'**
+  String get verifyCodeExpired;
+
+  /// No description provided for @verifyCodeSpent.
+  ///
+  /// In en, this message translates to:
+  /// **'Too many tries. Ask for a new code.'**
+  String get verifyCodeSpent;
+
+  /// No description provided for @verifyPhoneDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone confirmed'**
+  String get verifyPhoneDone;
+
+  /// No description provided for @verifyPhoneConfirmedOn.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirmed {date}'**
+  String verifyPhoneConfirmedOn(String date);
+
+  /// No description provided for @verifyDemoSms.
+  ///
+  /// In en, this message translates to:
+  /// **'In this demo the message appears here instead of arriving by SMS'**
+  String get verifyDemoSms;
+
+  /// No description provided for @verifyDemoSmsWhy.
+  ///
+  /// In en, this message translates to:
+  /// **'There is no server yet to send from, so nothing leaves the device. Everything else about this step — the expiry, the tries, the wait before you can ask again — is real.'**
+  String get verifyDemoSmsWhy;
+
+  /// No description provided for @verifySimHeading.
+  ///
+  /// In en, this message translates to:
+  /// **'Name on the SIM'**
+  String get verifySimHeading;
+
+  /// No description provided for @verifySimMatched.
+  ///
+  /// In en, this message translates to:
+  /// **'The name on your card matches the name on this account.'**
+  String get verifySimMatched;
+
+  /// No description provided for @verifySimFlagged.
+  ///
+  /// In en, this message translates to:
+  /// **'The name on your card does not match the name on this account. Someone will look at it — this is not a rejection, and using a family member\'s SIM is an ordinary reason for it.'**
+  String get verifySimFlagged;
+
+  /// No description provided for @verifySimNotWired.
+  ///
+  /// In en, this message translates to:
+  /// **'A real check asks the network who a number is registered to. That is not wired up here, so this compares against your account name instead.'**
+  String get verifySimNotWired;
+
+  /// No description provided for @verifyLimitNoLookup.
+  ///
+  /// In en, this message translates to:
+  /// **'Nobody has asked NADRA whether this card exists. That check is out of scope.'**
+  String get verifyLimitNoLookup;
+
+  /// No description provided for @verifyLimitPhotoUnreviewed.
+  ///
+  /// In en, this message translates to:
+  /// **'Your photo has not been looked at, and will not be unless a dispute is raised about you.'**
+  String get verifyLimitPhotoUnreviewed;
+
+  /// No description provided for @verifyLimitSimFlag.
+  ///
+  /// In en, this message translates to:
+  /// **'A name mismatch is a reason for a person to look, not evidence of anything.'**
+  String get verifyLimitSimFlag;
+
+  /// No description provided for @verifyStatusPending.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting to be looked at'**
+  String get verifyStatusPending;
+
+  /// No description provided for @verifyStatusApproved.
+  ///
+  /// In en, this message translates to:
+  /// **'Approved'**
+  String get verifyStatusApproved;
+
+  /// No description provided for @verifyStatusSuspended.
+  ///
+  /// In en, this message translates to:
+  /// **'Suspended'**
+  String get verifyStatusSuspended;
 }
 
 class _AppStringsDelegate extends LocalizationsDelegate<AppStrings> {

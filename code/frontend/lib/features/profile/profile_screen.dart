@@ -18,8 +18,10 @@ import '../../l10n/app_localizations.dart';
 import '../wallet/wallet_screen.dart';
 import 'my_trades_screen.dart';
 import '../../app/admin_controller.dart';
+import '../../app/verification_controller.dart';
 import '../../app/premium_controller.dart';
 import '../admin/admin_screen.dart';
+import '../verification/verification_screen.dart';
 import '../account/account_switcher.dart';
 import '../directory/my_listing_screen.dart';
 import '../ratings/worker_standing_view.dart';
@@ -198,6 +200,7 @@ class ProfileScreen extends StatelessWidget {
     final saved = context.read<SavedJobsController>();
     final premium = context.read<PremiumController>();
     final admin = context.read<AdminController>();
+    final verification = context.read<VerificationController>();
 
     final confirmed = await showDialog<bool>(
       context: context,
@@ -239,8 +242,41 @@ class ProfileScreen extends StatelessWidget {
     saved.load();
     premium.load();
     admin.load();
+    verification.load();
 
     messenger.showSnackBar(SnackBar(content: Text(strings.seedRestored)));
+  }
+}
+
+/// Section 2, from the profile.
+///
+/// Above the trades rather than below the wallet: what a worker does is a
+/// setting, whether a hirer can see they have been through verification is
+/// closer to who they are. It is never a gate — the subtitle counts steps
+/// rather than saying "incomplete", because there is nothing here that has to
+/// be completed to use the app.
+class _VerificationTile extends StatelessWidget {
+  const _VerificationTile();
+
+  @override
+  Widget build(BuildContext context) {
+    final strings = AppStrings.of(context);
+    final verification = context.watch<VerificationController>();
+    final mine = verification.mine;
+
+    return ListTile(
+      contentPadding: EdgeInsets.zero,
+      leading: Icon(
+        mine.isComplete ? Icons.verified_user : Icons.badge_outlined,
+        color: mine.isFlagged
+            ? BrandColours.warningAmber
+            : (mine.isComplete ? BrandColours.successTeal : null),
+      ),
+      title: Text(strings.verificationTile),
+      subtitle: Text(strings.verificationSubtitle(mine.stepsDone)),
+      trailing: const Icon(Icons.chevron_right),
+      onTap: () => VerificationScreen.open(context),
+    );
   }
 }
 
@@ -411,6 +447,7 @@ class _RolePicker extends StatelessWidget {
             heading: strings.yourStanding,
           ),
           const SizedBox(height: BrandSizing.spaceSm),
+          const _VerificationTile(),
           ListTile(
             contentPadding: EdgeInsets.zero,
             leading: const Icon(Icons.construction_outlined),

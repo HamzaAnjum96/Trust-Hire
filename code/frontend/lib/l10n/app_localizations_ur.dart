@@ -1511,4 +1511,190 @@ class AppStringsUr extends AppStrings {
 
   @override
   String get adminPanelTile => 'منظوریاں، تنازعات اور ریکارڈ';
+
+  @override
+  String get verification => 'تصدیق';
+
+  @override
+  String get verificationTile => 'شناختی کارڈ اور فون';
+
+  @override
+  String verificationSubtitle(int done) {
+    String _temp0 = intl.Intl.pluralLogic(
+      done,
+      locale: localeName,
+      other: 'تینوں مرحلے مکمل',
+      two: '3 میں سے 2 مرحلے مکمل',
+      one: '3 میں سے 1 مرحلہ مکمل',
+      zero: 'ابھی کچھ جمع نہیں کرایا',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get verificationIntro =>
+      'دو چیزیں، اور ان میں سے کوئی بھی شناخت کی تصدیق نہیں۔ ٹرسٹ ہائر صرف یہ دیکھتا ہے کہ شناختی نمبر کی ساخت درست ہے اور فون کوڈ کا جواب دیتا ہے۔ کسی کا ریکارڈ نہیں دیکھا جاتا۔';
+
+  @override
+  String get verificationWhyBother =>
+      'کام دینے والے دیکھ سکتے ہیں کہ کارکن نے یہ مرحلہ کیا ہے یا نہیں۔ ایپ استعمال کرنے کے لیے یہ ضروری نہیں، اور نہ کرنے سے آپ کے کام چھپتے نہیں۔';
+
+  @override
+  String get verifyCnicHeading => 'آپ کا شناختی کارڈ';
+
+  @override
+  String get verifyCnicNumber => 'شناختی کارڈ نمبر';
+
+  @override
+  String get verifyCnicHint => '13 ہندسے، ڈیش کے ساتھ یا بغیر';
+
+  @override
+  String get verifyNameOnCard => 'نام، بالکل جیسے کارڈ پر لکھا ہے';
+
+  @override
+  String get verifyDateOfBirth => 'تاریخِ پیدائش';
+
+  @override
+  String get verifyChooseDate => 'منتخب کریں';
+
+  @override
+  String get verifyCnicPhoto => 'کارڈ کی تصویر';
+
+  @override
+  String get verifyCnicPhotoNote =>
+      'اس ڈیمو میں کوئی تصویر اپ لوڈ نہیں ہوتی۔ یہ مرحلہ اس لیے موجود ہے کہ اصل ایپ میں تصویر محفوظ ہوتی ہے، اور اسے چھپانا کسی اور ایپ کی تصویر دکھانا ہوتا۔';
+
+  @override
+  String get verifyCnicSubmit => 'شناختی کارڈ جمع کریں';
+
+  @override
+  String get verifyCnicBadNumber => 'یہ 13 ہندسے نہیں ہیں۔ کچھ محفوظ نہیں ہوا۔';
+
+  @override
+  String get verifyCnicDone => 'شناختی کارڈ جمع ہو گیا';
+
+  @override
+  String verifyCnicOnFile(String date) {
+    return '$date سے ریکارڈ میں';
+  }
+
+  @override
+  String verifyCnicMasked(String masked) {
+    return 'اس طرح محفوظ: $masked';
+  }
+
+  @override
+  String get verifyCnicMaskExplain =>
+      'صرف اتنا رکھا جاتا ہے۔ پورا نمبر اس اسکرین سے آگے نہیں جاتا — ایپ کو اس کی ضرورت نہیں، اور بلا وجہ قومی شناختی نمبر رکھنا مناسب نہیں۔';
+
+  @override
+  String get verifyCnicNotPlausible =>
+      'کارڈ ریکارڈ میں ہے، مگر خودکار جانچ تصدیق نہ کر سکی۔ کوئی شخص خود دیکھے گا۔';
+
+  @override
+  String get verifyCnicPlausible =>
+      'نمبر کی ساخت درست ہے، اور کارڈ پر نام اور تاریخِ پیدائش موجود ہیں۔';
+
+  @override
+  String get verifyPhoneHeading => 'آپ کا فون';
+
+  @override
+  String get verifyPhoneNumber => 'موبائل نمبر';
+
+  @override
+  String get verifyPhoneHint => '03xx xxxxxxx';
+
+  @override
+  String get verifyPhoneBad => 'یہ پاکستانی موبائل نمبر نہیں ہے۔';
+
+  @override
+  String get verifySendCode => 'مجھے کوڈ بھیجیں';
+
+  @override
+  String get verifyResendCode => 'دوبارہ بھیجیں';
+
+  @override
+  String verifyResendIn(int seconds) {
+    return '$seconds سیکنڈ بعد دوبارہ بھیجیں';
+  }
+
+  @override
+  String get verifyCodeLabel => '6 ہندسوں کا کوڈ';
+
+  @override
+  String get verifyCodeSubmit => 'تصدیق کریں';
+
+  @override
+  String verifyCodeSentTo(String phone) {
+    return '$phone پر بھیجا گیا';
+  }
+
+  @override
+  String verifyCodeWrong(int left) {
+    String _temp0 = intl.Intl.pluralLogic(
+      left,
+      locale: localeName,
+      other: '$left کوششیں باقی',
+      one: '1 کوشش باقی',
+    );
+    return 'یہ کوڈ درست نہیں۔ $_temp0';
+  }
+
+  @override
+  String get verifyCodeExpired => 'اس کوڈ کی مدت ختم ہو گئی۔ نیا منگوائیں۔';
+
+  @override
+  String get verifyCodeSpent => 'بہت زیادہ کوششیں۔ نیا کوڈ منگوائیں۔';
+
+  @override
+  String get verifyPhoneDone => 'فون کی تصدیق ہو گئی';
+
+  @override
+  String verifyPhoneConfirmedOn(String date) {
+    return '$date کو تصدیق ہوئی';
+  }
+
+  @override
+  String get verifyDemoSms =>
+      'اس ڈیمو میں پیغام ایس ایم ایس کے بجائے یہاں دکھایا جاتا ہے';
+
+  @override
+  String get verifyDemoSmsWhy =>
+      'ابھی کوئی سرور نہیں جہاں سے بھیجا جائے، اس لیے کچھ ڈیوائس سے باہر نہیں جاتا۔ باقی سب کچھ — مدت، کوششیں، دوبارہ منگوانے سے پہلے انتظار — اصل ہے۔';
+
+  @override
+  String get verifySimHeading => 'سِم پر نام';
+
+  @override
+  String get verifySimMatched =>
+      'آپ کے کارڈ کا نام اس اکاؤنٹ کے نام سے ملتا ہے۔';
+
+  @override
+  String get verifySimFlagged =>
+      'آپ کے کارڈ کا نام اس اکاؤنٹ کے نام سے نہیں ملتا۔ کوئی شخص اسے دیکھے گا — یہ انکار نہیں، اور گھر کے کسی فرد کی سِم استعمال کرنا اس کی عام وجہ ہے۔';
+
+  @override
+  String get verifySimNotWired =>
+      'اصل جانچ میں نیٹ ورک سے پوچھا جاتا ہے کہ نمبر کس کے نام رجسٹرڈ ہے۔ یہاں وہ سہولت موجود نہیں، اس لیے آپ کے اکاؤنٹ کے نام سے موازنہ کیا جاتا ہے۔';
+
+  @override
+  String get verifyLimitNoLookup =>
+      'کسی نے نادرا سے نہیں پوچھا کہ یہ کارڈ موجود ہے یا نہیں۔ یہ جانچ دائرۂ کار سے باہر ہے۔';
+
+  @override
+  String get verifyLimitPhotoUnreviewed =>
+      'آپ کی تصویر نہیں دیکھی گئی، اور اُس وقت تک نہیں دیکھی جائے گی جب تک آپ کے بارے میں کوئی تنازع نہ اٹھے۔';
+
+  @override
+  String get verifyLimitSimFlag =>
+      'نام کا فرق کسی شخص کے دیکھنے کی وجہ ہے، کسی بات کا ثبوت نہیں۔';
+
+  @override
+  String get verifyStatusPending => 'جائزے کا انتظار';
+
+  @override
+  String get verifyStatusApproved => 'منظور شدہ';
+
+  @override
+  String get verifyStatusSuspended => 'معطل';
 }

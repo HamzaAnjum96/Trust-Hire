@@ -70,8 +70,8 @@ void main() {
         StoreKeys.bids, // BidController
         StoreKeys.ratings, // RatingController
         StoreKeys.directory, // PremiumController
-        StoreKeys.accountReviews, // AdminController
-        StoreKeys.cnicRecords, // AdminController
+        StoreKeys.accountReviews, // AdminController, VerificationController
+        StoreKeys.cnicRecords, // AdminController, VerificationController
         StoreKeys.disputes, // AdminController
       };
 

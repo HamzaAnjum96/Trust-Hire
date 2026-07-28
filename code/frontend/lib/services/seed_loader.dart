@@ -177,11 +177,24 @@ class SeedLoader {
   /// Where each account stands with the platform, for the admin queue.
   Future<List<AccountReview>> loadReviews() async {
     final decoded = await _readJson(_reviewsAsset) as List<dynamic>;
-    return decoded
-        .cast<Map<String, dynamic>>()
-        .map(AccountReview.fromJson)
-        .toList(growable: false);
+    final now = DateTime.now();
+
+    return decoded.cast<Map<String, dynamic>>().map((json) {
+      // The seed stores *how long ago*, like every other dated thing in it, so
+      // a demo installed today reads as recent rather than as a snapshot of
+      // whenever the generator last ran.
+      return AccountReview.fromJson({
+        ...json,
+        if (json['cnicDaysAgo'] != null)
+          'cnicSubmittedAt': _daysAgo(now, json['cnicDaysAgo']),
+        if (json['phoneDaysAgo'] != null)
+          'phoneVerifiedAt': _daysAgo(now, json['phoneDaysAgo']),
+      });
+    }).toList(growable: false);
   }
+
+  static String _daysAgo(DateTime now, Object? days) =>
+      now.subtract(Duration(days: (days as num).round())).toIso8601String();
 
   Future<List<CnicRecord>> loadCnics() async {
     final decoded = await _readJson(_cnicsAsset) as List<dynamic>;

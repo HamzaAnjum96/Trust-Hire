@@ -123,7 +123,11 @@ void main() {
     expect(find.text('Demo accounts'), findsOneWidget);
     expect(find.text('What brings you here'), findsOneWidget);
 
-    await tester.drag(find.byType(ListView), const Offset(0, -400));
+    // Scrolled far enough to be about *order* rather than about how tall the
+    // list happens to be this sprint. A fixed drag makes this test fail every
+    // time the profile grows a row, which teaches whoever is looking at it to
+    // nudge the number rather than to check the claim.
+    await tester.scrollUntilVisible(find.text('Appearance'), 200);
     await settle(tester);
     expect(find.text('Appearance'), findsOneWidget);
   });
