@@ -12,6 +12,35 @@ that heading to the version and date, and open a fresh `[Unreleased]`.
 
 ## [Unreleased]
 
+### 0.14.2 — Two more promises nothing was holding up
+
+The sweep from 0.14.1, widened from 23 promises to 34. Two more survived, and
+both were the same shape as the first two: a rule the code enforces, a comment
+explaining why it matters, and no test that would notice its removal.
+
+#### Fixed
+
+- **A bystander was one deleted line from being offered somebody else's Mode B
+  booking.** `JobLifecycle.actionsFor` answers the direct-booking case *before*
+  the role switch, and that branch reads "the hirer, or else the worker" — so
+  without the bystander guard above it, anyone looking at a booking between two
+  other people would be shown Accept and Decline. The existing bystander test
+  loops over every status but only ever with an ordinary job, which is the one
+  shape that branch does not cover.
+- **An admin correction could have counted as an unpaid job.** `unpaidJobs`
+  counts commissions that left the wallet short, and nothing else — a
+  cancellation penalty or a staff adjustment is not work somebody took and
+  failed to pay for. Dropping the `kind` check pushed a corrected account
+  toward a lockout, and no test said so.
+
+#### Added
+
+- Eleven more mutations: the fare ceiling and the positive-fare floor, a
+  withdrawn offer leaving the hirer's list, the worker's inability to mark a
+  job complete, a finished job taking no further action, the balance being a
+  replay of the ledger, the premium lapse, the audio-only label, and saved jobs
+  being per account.
+
 ### 0.14.1 — Do the tests test anything?
 
 No new functionality. The schema sweep found two SQL checks that had been green

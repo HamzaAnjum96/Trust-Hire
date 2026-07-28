@@ -344,11 +344,12 @@ The first two gate the deploy.
 proves the app behaves as the suite describes; it cannot prove the suite
 describes anything, because a check aimed at a case that also violates a
 neighbouring rule passes whether or not the rule it names still exists. The
-sweep breaks each of the 23 load-bearing promises in turn — the fare lock, the
+sweep breaks each of the 34 load-bearing promises in turn — the fare lock, the
 5% commission, the debt lockout, the ratings asymmetry, the visibility rule,
 the location reveal, the CNIC mask, the audit log's write-first ordering — and
-reports any the suite does not notice. Two survived on its first run, and both
-were real gaps rather than noise.
+reports any the suite does not notice. Four survived — two on the first run and
+two more when the list was widened — and every one was a real gap rather than
+noise.
 
 Its sibling for the schema is `code/backend/tool/sweep_schema.sh`, which found
 two vacuous SQL checks the same way. **If you add a rule that decides money,

@@ -99,6 +99,42 @@ void main() {
       }
     });
 
+    test('including on somebody else\'s direct booking', () {
+      // **The case the loop above cannot reach.** A Mode B booking waiting on
+      // its worker is the one branch that answers before the role switch does,
+      // and it reads "hirer or else the worker" — so with the bystander guard
+      // gone it offers Accept and Decline to whoever is looking.
+      //
+      // Found by `tool/sweep_tests.py`: removing that guard left the whole
+      // suite green, because every bystander case tested was an ordinary job.
+      final booking = Job(
+        id: 'job-b',
+        location: somewhere,
+        createdAt: now,
+        tags: const {JobTag.cleaning},
+        postedBy: 'user-003',
+        bookedWorkerId: 'user-009',
+        listedFare: 3000,
+      );
+
+      expect(booking.isDirectBooking, isTrue);
+      expect(
+        lifecycle.actionsFor(booking, role: JobRole.bystander),
+        isEmpty,
+        reason: 'a booking between two other people is not yours to answer',
+      );
+
+      // And the two who *are* in it still get their buttons.
+      expect(
+        lifecycle.actionsFor(booking, role: JobRole.worker),
+        containsAll([JobAction.acceptBooking, JobAction.declineBooking]),
+      );
+      expect(
+        lifecycle.actionsFor(booking, role: JobRole.hirer),
+        [JobAction.cancel],
+      );
+    });
+
     test('the hirer moves the job forward', () {
       expect(
         lifecycle.actionsFor(

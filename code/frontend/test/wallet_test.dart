@@ -319,6 +319,46 @@ void main() {
       expect(rules.canTakeWork(wallet), isFalse);
     });
 
+    test('an admin deduction is not an unpaid job', () {
+      // **Only a commission counts.** An admin correcting a balance downward,
+      // or a cancellation penalty, can leave a worker short — but neither is a
+      // job they took and did not pay for, and counting them would push
+      // somebody toward a lockout for a mistake staff were putting right.
+      //
+      // Found by `tool/sweep_tests.py`: dropping the `kind` check from
+      // `unpaidJobs` left the whole suite green.
+      final corrected = walletWith([
+        entry(WalletEntryKind.topUp, 1000),
+        entry(WalletEntryKind.adminAdjustment, -1500, minute: 1),
+      ]);
+
+      expect(corrected.balance, -500, reason: 'the worker really is short');
+      expect(corrected.unpaidJobs, 0);
+      expect(rules.isLockedOut(corrected), isFalse);
+
+      // Two of them still do not add up to a lockout, however deep the hole.
+      final twice = walletWith([
+        entry(WalletEntryKind.adminAdjustment, -400),
+        entry(WalletEntryKind.cancellationPenalty, -400, minute: 1),
+      ]);
+
+      expect(twice.unpaidJobs, 0);
+      expect(rules.isLockedOut(twice), isFalse);
+    });
+
+    test('a commission charged while already short still counts once each', () {
+      // The half of the same rule that must keep working: two commissions in
+      // the red are two unpaid jobs, whatever else is in the ledger.
+      final wallet = walletWith([
+        entry(WalletEntryKind.adminAdjustment, -200),
+        entry(WalletEntryKind.commission, -300, minute: 1, jobId: 'j1'),
+        entry(WalletEntryKind.commission, -300, minute: 2, jobId: 'j2'),
+      ]);
+
+      expect(wallet.unpaidJobs, 2);
+      expect(rules.isLockedOut(wallet), isTrue);
+    });
+
     test('recovering in between resets the count', () {
       // The debt is what is owed now, not a record of every time the worker
       // has been short. Someone who paid up is not one strike from a lockout

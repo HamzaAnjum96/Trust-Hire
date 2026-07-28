@@ -288,6 +288,105 @@ MUTATIONS = [
         replace="        if (a.isFlagged != b.isFlagged) return a.isFlagged ? 1 : -1;",
         tests=["test/admin_test.dart"],
     ),
+    # --- Section 4: what a bid may be ---------------------------------------
+    Mutation(
+        name="fare-ceiling",
+        promise="a mistyped zero is caught before the hirer has to catch it",
+        path="lib/features/bidding/bidding_rules.dart",
+        find="    if (fare > ceiling) return BidRefusal.fareImplausible;",
+        replace="    if (false) return BidRefusal.fareImplausible;",
+        tests=["test/bidding_test.dart"],
+    ),
+    Mutation(
+        name="fare-must-be-positive",
+        promise="nobody offers to work for nothing",
+        path="lib/features/bidding/bidding_rules.dart",
+        find="    if (fare <= 0) return BidRefusal.fareNotPositive;",
+        replace="    if (false) return BidRefusal.fareNotPositive;",
+        tests=["test/bidding_test.dart"],
+    ),
+    Mutation(
+        name="withdrawn-offers-leave-the-list",
+        promise="a withdrawn offer is off the hirer's list",
+        path="lib/features/bidding/bidding_rules.dart",
+        find="    final open = bids.where((b) => b.status != BidStatus.withdrawn).toList();",
+        replace="    final open = bids.toList();",
+        tests=["test/bidding_test.dart"],
+    ),
+
+    # --- Section 7: who may do what to a job --------------------------------
+    Mutation(
+        name="worker-cannot-finish-a-job",
+        promise="only the hirer decides the work was done",
+        path="lib/features/lifecycle/job_lifecycle.dart",
+        find="      (JobRole.worker, _) => const [JobAction.cancel],",
+        replace="      (JobRole.worker, _) => const [JobAction.cancel, JobAction.markComplete],",
+        tests=["test/lifecycle_test.dart", "test/job_details_test.dart"],
+    ),
+    Mutation(
+        name="bystander-does-nothing",
+        promise="somebody uninvolved has no buttons at all",
+        path="lib/features/lifecycle/job_lifecycle.dart",
+        find="    if (role == JobRole.bystander) return const [];",
+        replace="    if (false) return const [];",
+        tests=["test/lifecycle_test.dart", "test/job_details_test.dart"],
+    ),
+    Mutation(
+        name="a-finished-job-is-finished",
+        promise="a job that has ended takes no further action",
+        path="lib/features/lifecycle/job_lifecycle.dart",
+        find="    if (!job.status.isLive) return const [];",
+        replace="    if (false) return const [];",
+        tests=["test/lifecycle_test.dart"],
+    ),
+
+    # --- Section 11: the ledger is the only stored state --------------------
+    Mutation(
+        name="balance-is-derived",
+        promise="the balance is a replay of the entries and nothing else",
+        path="lib/models/wallet.dart",
+        find="  int get balance => entries.fold(0, (sum, entry) => sum + entry.tokens);",
+        replace="  int get balance => 0;",
+        tests=["test/wallet_test.dart", "test/demo_history_test.dart"],
+    ),
+    Mutation(
+        name="debt-counts-commissions-only",
+        promise="an unpaid job is a commission that took the balance below zero",
+        path="lib/models/wallet.dart",
+        find="      if (entry.kind == WalletEntryKind.commission && running < 0) {",
+        replace="      if (running < 0) {",
+        tests=["test/wallet_test.dart", "test/demo_history_test.dart"],
+    ),
+
+    # --- Section 9: a subscription that has run out -------------------------
+    Mutation(
+        name="premium-lapses",
+        promise="a subscription that has run out stops being premium",
+        path="lib/models/premium.dart",
+        find="  bool isActiveAt(DateTime now) => now.isBefore(expiresAt);",
+        replace="  bool isActiveAt(DateTime now) => true;",
+        tests=["test/premium_test.dart"],
+    ),
+
+    # --- WCAG 1.2.1 ---------------------------------------------------------
+    Mutation(
+        name="audio-only-is-labelled",
+        promise="a job describable only by ear says so",
+        path="lib/models/job.dart",
+        find="  bool get isAudioOnly => hasVoiceNote && !hasTextDescription;",
+        replace="  bool get isAudioOnly => false;",
+        tests=["test/audio_alternative_test.dart", "test/job_details_test.dart"],
+    ),
+
+    # --- P1-5a: an account's things are that account's ----------------------
+    Mutation(
+        name="saved-jobs-are-per-account",
+        promise="switching account does not hand over somebody's saved jobs",
+        path="lib/features/jobs/saved_jobs_controller.dart",
+        find="  String get _key => StoreKeys.forAccount(StoreKeys.savedJobs, _userId);",
+        replace="  String get _key => StoreKeys.savedJobs;",
+        tests=["test/saved_jobs_test.dart", "test/account_test.dart"],
+    ),
 ]
 
 
