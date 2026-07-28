@@ -30,7 +30,9 @@ This plan builds toward that without standing one up yet:
   this possible. The sprints below extend those interfaces to the Phase 1 data
   dictionary and keep the local implementation behind them.
 - The backend arrives in **P1-8**, once the domain has settled. Introducing it
-  earlier would mean designing a schema against a model still in motion.
+  earlier would mean designing a schema against a model still in motion. The
+  schema itself landed first, as **P1-8a**, because it can be executed and
+  tested without anything hosted; the repositories move in **P1-8b**.
 - Until then the app runs on one device, which also means the POC stays
   demonstrable throughout rather than being broken for weeks mid-migration.
 
@@ -80,7 +82,7 @@ What the app does instead, from 0.3.1:
 
 This is a partial conformance and should be recorded as one. Real transcripts
 need speech recognition, which needs a server; they arrive with the backend in
-**P1-8**, where the media pipeline already lives.
+**P1-8b**, where the media pipeline already lives.
 
 ## Sprints
 
@@ -143,7 +145,7 @@ the copy rewritten to match**. Optional before/after proof, private by default.
 **Done when** a job runs end to end and no screen claims a privacy guarantee
 the app no longer offers.
 
-**Delivered**, except the before/after proof, which is deferred to **P1-8**:
+**Delivered**, except the before/after proof, which is deferred to **P1-8b**:
 it is media, and the compression and retention rules that govern media are
 already scheduled there. Keeping proof photos on-device with no retention
 policy would be the one place the app stores a picture of someone's home
@@ -267,7 +269,7 @@ Decisions:
   list reads as a failed switch.
 
 These are **not** accounts: no password, no verification, no privacy between
-them, and everything shares one browser's storage. P1-8 replaces the idea
+them, and everything shares one browser's storage. P1-8b replaces the idea
 entirely.
 
 ### P1-5b — A demo with a past ✅
@@ -435,11 +437,63 @@ Decisions:
   entries for actions nobody took would be the one place in the demo where the
   data is a lie about a person rather than a plausible example of one.
 
-### P1-8 — Backend
-Supabase schema from the settled domain, migration of the repositories, and
-sync. Media compression and retention (Section 3) belongs here — it is a
-server-side concern, and so are voice-note transcripts (see *A third decision*
-above).
+### P1-8a — The schema — done
+
+Four migrations under `code/backend/migrations/`, and a test file that tries to
+break every rule in them.
+
+**Split out of P1-8 deliberately.** The rest of that sprint — pointing the
+repositories at Supabase, sync, media retention — cannot be demonstrated from a
+static Pages deploy and would break "the POC stays demonstrable throughout" for
+however long it took. The schema does not: it is the part of a backend that can
+be settled, executed and checked with nothing hosted anywhere, and settling it
+first is what the sprint order was for. The app still runs entirely on-device
+and is untouched by this sprint.
+
+**The schema is where the rules live, not a place to put the same rows.** Nine
+of the app's load-bearing rules are re-stated as constraints, triggers and a
+view, because a rule enforced in Dart is a rule for as long as the only client
+is this Flutter app. The fare lock, one winning bid per job, the append-only
+ledger, the once-per-job commission, the CNIC door and the reason on an
+override each decide either what money moves or who reads somebody's identity
+document — and each is now refused by the database for every client there will
+ever be.
+
+Decisions:
+
+- **`auth.users` is the account; `profiles.id` is that id and nothing else.**
+  No second password or session table. Section 13a excludes authentication, and
+  running an identity store beside a managed one is how the two end up
+  disagreeing about who somebody is.
+- **The tag vocabulary is a lookup table, not a Postgres enum.** The list is
+  closed today, but adding to it is a product decision, and an enum makes that
+  a migration holding an exclusive lock.
+- **`worker_standing` is what a public screen reads.** It cannot leak a hirer's
+  rating because it never selects one — Section 10's asymmetry as a property of
+  the query rather than a rule every screen has to remember.
+- **No balance column anywhere.** Balance, debt and the lockout are replays of
+  `wallet_entries`. There is no second number to drift, which is the same
+  argument the app's wallet already makes, kept rather than re-litigated.
+- **A migration nobody ran is a guess.** `tool/verify_schema.sh` builds a
+  throwaway database, applies the migrations and runs the tests; it was run
+  against PostgreSQL 16 and everything below is a thing it actually observed.
+- **And a test nobody tried to break is a guess too.** `tool/sweep_schema.sh`
+  drops each of the 50 rules in turn and re-runs the suite; a rule whose
+  removal goes unnoticed is reported and fails the sweep. It found two checks
+  passing for the wrong reason — the star-range check was being refused by the
+  once-per-side rule before the range was consulted, and the tag-count check
+  was deferred past the assertion entirely — neither of which showed up as a
+  failing test. **This is the transferable one.** A green suite says the rules
+  it names were not violated; it does not say those rules exist.
+- **One rule cannot be provoked, and says so.** `bids_one_accepted_per_job` is
+  unreachable behind a stricter trigger, so the suite asserts the index still
+  exists and the sweep carries the reason in an allow-list. The alternative —
+  leaving it silently uncovered — is the gap the sweep was written to close.
+
+### P1-8b — The repositories, sync and media
+Pointing the repositories at Supabase, sync, and the media pipeline:
+compression and retention (Section 3), and voice-note transcripts (see *A third
+decision* above). Needs somewhere hosted to point at, which is what defers it.
 
 ### P1-9 — Verification
 CNIC upload and plausibility check, SMS OTP, CNIC-SIM name match. Last, because

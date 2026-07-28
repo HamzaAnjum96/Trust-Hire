@@ -41,6 +41,9 @@ Trust-Hire/
 │
 ├── code/                         ← all application source
 │   ├── backend/
+│   │   ├── migrations/           ← the PostgreSQL schema, applied in order
+│   │   ├── test/                 ← what the schema refuses
+│   │   └── tool/                 ← verify_schema.sh, sweep_schema.sh
 │   └── frontend/
 │
 └── deployment/                   ← deployment configuration and assets
@@ -89,7 +92,63 @@ halves.
 | Folder | What belongs in it |
 | --- | --- |
 | `code/frontend/` | The Flutter app — the whole POC lives here. Design tokens implement `documents/brand-guidelines/` rather than restating it. |
-| `code/backend/` | API layer, business logic, data access, migrations, backend tests. **Empty and out of scope for the POC**, which runs entirely on-device with no backend. Reserved for the post-POC cloud work. |
+| `code/backend/` | The PostgreSQL schema, and the tests that try to break it. Nothing is hosted and the app does not talk to it yet — the POC still runs entirely on-device. The API layer, data access and sync arrive in P1-8b. |
+
+### The schema (`code/backend/`)
+
+PostgreSQL 16, written to run on Supabase. Four migrations, applied in filename
+order, and no ORM: the file you read is the schema the server has.
+
+```
+code/backend/
+├── migrations/
+│   ├── 0001_identity.sql      ← tags, profiles, worker trades, verification
+│   ├── 0002_jobs.sql          ← jobs, their tags, their media, the fare lock
+│   ├── 0003_marketplace.sql   ← bids, ratings, the wallet, the directory
+│   └── 0004_oversight.sql     ← disputes, the audit log, the CNIC door
+├── test/
+│   └── schema_test.sql        ← 55 statements it must refuse, 11 it must not
+└── tool/
+    ├── verify_schema.sh       ← build a throwaway database, apply, test, drop
+    └── sweep_schema.sh        ← drop each rule in turn; does the suite notice?
+```
+
+**The rules live here, not only in Dart.** Nine of them decide what money moves
+or who reads somebody's identity document — the fare is written once at
+acceptance, one winning bid per job, the ledger is append-only, commission is
+charged once, a CNIC opens only while a dispute names that person, an override
+carries a reason. Those held in the app because `AdminController` and
+`Job.withAcceptedBid` are the only writers, which is a promise *one client*
+keeps. They are now constraints and triggers, which is the same promise kept
+for every client there will ever be.
+
+Two consequences worth knowing before changing anything here:
+
+- **There is no balance column.** Balance, debt and the lockout are replays of
+  `wallet_entries`, exactly as in the app. Nothing to drift, and nothing to
+  correct except by appending — which is what the append-only trigger says.
+- **`worker_standing` is the only thing a public screen should read.** It
+  cannot expose a hirer's rating because it never selects one, which makes the
+  ratings asymmetry a property of the query rather than a rule each screen has
+  to remember.
+
+**Running the checks** — needs a local PostgreSQL and permission to create a
+database. Both build and drop their own; neither touches anything else.
+
+```bash
+code/backend/tool/verify_schema.sh    # seconds
+code/backend/tool/sweep_schema.sh     # minutes — run it when the schema changes
+```
+
+**Why the second script exists.** `verify_schema.sh` proves the schema refuses
+what it should. It cannot prove the *tests* are doing the refusing: a check
+aimed at a row that also violates a neighbouring rule passes whether or not the
+rule it names still exists. The sweep drops each of the 50 rules in turn and
+re-runs the suite; anything whose removal goes unnoticed is reported and fails
+the run. It found two such checks on its first pass, both of which had been
+green from the moment they were written. If you add a rule, add a test that
+provokes *only* it — and if nothing can, say so in the sweep's
+`expected_uncovered` list with the reason, as `bids_one_accepted_per_job` does.
 
 ### The app (`code/frontend/`)
 
@@ -103,7 +162,7 @@ success criteria from
 [`documents/agile/sprint-planning/poc-sprint-plan.md`](documents/agile/sprint-planning/poc-sprint-plan.md),
 with the exception noted under *Map tiles* below.
 
-**Phase 1: P1-1 to P1-7 complete**, per
+**Phase 1: P1-1 to P1-7 complete, plus the schema in P1-8a**, per
 [`documents/agile/sprint-planning/phase-1-sprint-plan.md`](documents/agile/sprint-planning/phase-1-sprint-plan.md).
 Roles, the fixed tag vocabulary, the visibility rule that decides which jobs
 reach which worker, Mode A bidding — a starting fare, counter-offers, and a
@@ -112,7 +171,9 @@ including the mutual location reveal on acceptance, the token wallet that
 takes the platform's 5%, mutual rating with the worker's record public and the
 hirer's kept internal, and Mode B — a premium directory of workers at fixed
 prices, booked directly rather than bid on, and an admin panel whose every
-action lands in an audit log. P1-8 onwards adds the backend and verification.
+action lands in an audit log. P1-8a settles the PostgreSQL schema those rules
+will run on — see [The schema](#the-schema-codebackend) — and P1-8b onwards
+moves the repositories onto it and adds verification.
 
 **Two ways to find work.** *Mode A* is the map: a hirer posts, workers offer,
 the hirer chooses, and the fare locks. *Mode B* is the directory: a worker pays

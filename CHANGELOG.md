@@ -12,6 +12,70 @@ that heading to the version and date, and open a fresh `[Unreleased]`.
 
 ## [Unreleased]
 
+### P1-8a — The schema, and the tests that try to break it
+
+**Version 0.13.1+17 — the build number moves, the name does not.** Nothing
+under `code/frontend/` was touched, so the deployed app is byte-identical and
+claiming a new `0.14.0` would promise something to look at that is not there.
+The build number still increments, because it is what tells a redeploy of the
+same app apart from a deploy that failed. This sprint is `code/backend/` going
+from an empty folder to the schema the Phase 1 rules will run on; nothing is
+hosted, and the POC still runs entirely on-device.
+
+#### Added
+
+- **Four migrations** under `code/backend/migrations/`, for PostgreSQL 16 as
+  Supabase runs it. Identity and the tag vocabulary; jobs, their media and the
+  fare lock; bids, ratings, the wallet and the directory; disputes and the
+  audit log.
+- **Nine app rules restated as constraints, triggers and a view.** The agreed
+  fare is written once at acceptance and the chosen worker cannot be swapped
+  afterwards; one winning bid per job, and it must name the fare the job
+  records; the wallet ledger and the audit log refuse `update` and `delete`;
+  commission and the cancellation penalty are charged once per job and the
+  first-job credit once ever; only a completed job can be rated, once per side;
+  a CNIC opens only while a dispute names that person; an override without a
+  reason is refused. Each held in the app because one class was the only
+  writer — a promise one client keeps. They now hold for every client.
+- **`worker_standing`**, the view a public screen reads. It cannot expose a
+  hirer's rating because it never selects one, which makes Section 10's
+  asymmetry a property of the query rather than a rule each screen remembers.
+- **`code/backend/test/schema_test.sql`** — 55 statements the schema must
+  refuse, eleven it must allow, and five assertions about what the data then
+  says. Run against a throwaway database by `tool/verify_schema.sh`; every
+  result quoted here was observed rather than reasoned about.
+- **`code/backend/tool/sweep_schema.sh`**, which drops each of the 50 rules in
+  turn and re-runs the suite. A rule whose removal goes unnoticed is reported
+  and fails the sweep.
+
+#### Fixed
+
+Two tests that had been green since they were written, both found by the sweep
+rather than by anything failing:
+
+- **The star-range check was never reaching the star range.** Aimed at a job
+  that already had a worker rating, it was refused by the once-per-side rule
+  first, and would have gone on passing with `stars between 1 and 5` deleted.
+  It now uses a job with no rating on it, and there is a second check for zero.
+- **The tag-count check was being deferred past its own assertion.** The rule
+  is a deferred constraint trigger, so it fired at commit — after the block
+  that was supposed to catch it had already returned and reported a pass. The
+  test helpers now force pending constraints immediate before deciding.
+
+`must_fail` also no longer counts *any* error as a refusal: an error the server
+raised because it could not parse the statement is re-raised rather than
+recorded, so renaming a column cannot quietly turn every check that mentions it
+into a pass.
+
+#### Known gap
+
+`bids_one_accepted_per_job` has no behavioural test and cannot have one — every
+row it would refuse is refused earlier by the fare-agreement trigger. It stays
+because a trigger can be switched off and a unique index cannot, so the suite
+asserts the index still exists and the sweep carries the reason in an
+allow-list. Recorded rather than left silent, which is the whole point of
+having swept.
+
 ### 0.13.1 — Fixes, a cull, and a look back
 
 No new functionality. A pass over what the last four sprints left behind.
