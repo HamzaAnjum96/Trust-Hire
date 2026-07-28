@@ -1050,10 +1050,130 @@ def build_directory():
     return listings
 
 
+# ---------------------------------------------------------------------------
+# Admin (Section 12)
+#
+# The panel needs a queue to work through, a dispute to justify opening a
+# CNIC, and enough decided accounts that the list is not one card. The audit
+# log is deliberately **empty** — it is a record of what staff did, and seeding
+# it with actions nobody took would be the one place in the demo where the data
+# is a lie about a person.
+# ---------------------------------------------------------------------------
+ADMIN_SEED_SEED = 20260815
+
+# What the accounts an admin looks at look like. Only a slice of the sixty
+# seeded people: the rest are approved and uninteresting, and a review queue of
+# sixty is a screenshot rather than a workflow.
+REVIEW_SAMPLE = 22
+
+
+def build_admin(people, jobs, rng=None):
+    """Approval records, a couple of CNICs, and two live disputes."""
+    rng = rng or random.Random(ADMIN_SEED_SEED)
+
+    reviews = []
+    cnics = []
+
+    sample = people[:REVIEW_SAMPLE]
+
+    for index, person in enumerate(sample):
+        # A handful still waiting, one of them flagged, and the rest already
+        # approved — the shape of a queue somebody keeps on top of.
+        pending = index < 6
+        flagged = index in (1, 4)
+        has_cnic = index != 3
+        phone_ok = index not in (3, 9)
+
+        reviews.append({
+            "userId": person["id"],
+            "status": "pending" if pending else (
+                "suspended" if index == 7 else "approved"
+            ),
+            "cnicOnFile": has_cnic,
+            # The automated shape check from Section 2. Fails for one person,
+            # which is a typo rather than a fraud.
+            "cnicPlausible": has_cnic and index != 5,
+            "phoneVerified": phone_ok,
+            "simNameMatches": not flagged,
+            **({"note": "Repeated no-shows reported by hirers."}
+               if index == 7 else {}),
+        })
+
+        if has_cnic:
+            cnics.append({
+                "userId": person["id"],
+                # Masked in storage. The app has no use for a full national
+                # identity number and Section 13 rules out looking one up.
+                "maskedNumber": f"*****-*****{rng.randint(10, 99)}-"
+                                f"{rng.randint(1, 9)}",
+                "nameOnCard": person["name"],
+                "submittedDaysAgo": rng.randint(20, 400),
+            })
+
+    # Two disputes, both open, both about somebody in the sample — so the CNIC
+    # button is enabled for exactly two people and disabled for everybody else,
+    # which is the rule made visible.
+    finished = [job for job in jobs if job.get("status") == "completed"
+                and job.get("acceptedWorkerId")]
+    rng.shuffle(finished)
+
+    disputes = []
+    reasons = [
+        "Worker did not turn up on the agreed day and stopped answering.",
+        "Hirer refused to pay the agreed fare after the work was finished.",
+    ]
+
+    for offset, reason in enumerate(reasons):
+        if offset >= len(finished):
+            break
+        job = finished[offset]
+
+        # The first is about the worker, the second about the hirer — both
+        # sides can be complained about, and Section 10 collects the hirer
+        # ratings precisely because hirers cause trouble too.
+        about = job["acceptedWorkerId"] if offset == 0 else job["postedBy"]
+        raised_by = job["postedBy"] if offset == 0 else job["acceptedWorkerId"]
+
+        disputes.append({
+            "id": f"dispute-{offset + 1:02d}",
+            "jobId": job["id"],
+            "aboutUserId": about,
+            "raisedByUserId": raised_by,
+            "raisedHoursAgo": round(rng.uniform(2, 60), 1),
+            "reason": reason,
+        })
+
+        # A dispute is worthless without a document behind it, so make sure
+        # the person complained about has one on file.
+        if not any(record["userId"] == about for record in cnics):
+            named = next(
+                (p["name"] for p in people if p["id"] == about), "Unknown"
+            )
+            cnics.append({
+                "userId": about,
+                "maskedNumber": f"*****-*****{rng.randint(10, 99)}-"
+                                f"{rng.randint(1, 9)}",
+                "nameOnCard": named,
+                "submittedDaysAgo": rng.randint(20, 400),
+            })
+        if not any(record["userId"] == about for record in reviews):
+            reviews.append({
+                "userId": about,
+                "status": "approved",
+                "cnicOnFile": True,
+                "cnicPlausible": True,
+                "phoneVerified": True,
+                "simNameMatches": True,
+            })
+
+    return reviews, cnics, disputes
+
+
 def main() -> None:
     jobs, people = build()
     bids, ratings, accounts = add_history(jobs, people)
     listings = build_directory()
+    reviews, cnics, disputes = build_admin(people, jobs)
 
     SEED_DIR.mkdir(parents=True, exist_ok=True)
     for name, payload in [
@@ -1063,6 +1183,9 @@ def main() -> None:
         ("ratings.json", ratings),
         ("accounts.json", accounts),
         ("directory.json", listings),
+        ("reviews.json", reviews),
+        ("cnics.json", cnics),
+        ("disputes.json", disputes),
     ]:
         (SEED_DIR / name).write_text(
             json.dumps(payload, ensure_ascii=False, indent=2) + "\n"
@@ -1077,6 +1200,9 @@ def main() -> None:
 
     print(f"{len(jobs)} jobs, {len(people)} people, {len(cities)} cities")
     print(f"{len(bids)} bids, {len(ratings)} ratings, {len(accounts)} accounts")
+    waiting = sum(1 for r in reviews if r["status"] == "pending")
+    print(f"{len(reviews)} account reviews ({waiting} waiting), "
+          f"{len(cnics)} CNICs, {len(disputes)} disputes")
     live = sum(1 for l in listings if l["subscription"]["endsInDays"] > 0)
     print(f"{len(listings)} directory listings ({live} live, "
           f"{len(listings) - live} lapsed)")

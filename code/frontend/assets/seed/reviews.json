@@ -1,0 +1,195 @@
+[
+  {
+    "userId": "user-001",
+    "status": "pending",
+    "cnicOnFile": true,
+    "cnicPlausible": true,
+    "phoneVerified": true,
+    "simNameMatches": true
+  },
+  {
+    "userId": "user-002",
+    "status": "pending",
+    "cnicOnFile": true,
+    "cnicPlausible": true,
+    "phoneVerified": true,
+    "simNameMatches": false
+  },
+  {
+    "userId": "user-003",
+    "status": "pending",
+    "cnicOnFile": true,
+    "cnicPlausible": true,
+    "phoneVerified": true,
+    "simNameMatches": true
+  },
+  {
+    "userId": "user-004",
+    "status": "pending",
+    "cnicOnFile": false,
+    "cnicPlausible": false,
+    "phoneVerified": false,
+    "simNameMatches": true
+  },
+  {
+    "userId": "user-005",
+    "status": "pending",
+    "cnicOnFile": true,
+    "cnicPlausible": true,
+    "phoneVerified": true,
+    "simNameMatches": false
+  },
+  {
+    "userId": "user-006",
+    "status": "pending",
+    "cnicOnFile": true,
+    "cnicPlausible": false,
+    "phoneVerified": true,
+    "simNameMatches": true
+  },
+  {
+    "userId": "user-007",
+    "status": "approved",
+    "cnicOnFile": true,
+    "cnicPlausible": true,
+    "phoneVerified": true,
+    "simNameMatches": true
+  },
+  {
+    "userId": "user-008",
+    "status": "suspended",
+    "cnicOnFile": true,
+    "cnicPlausible": true,
+    "phoneVerified": true,
+    "simNameMatches": true,
+    "note": "Repeated no-shows reported by hirers."
+  },
+  {
+    "userId": "user-009",
+    "status": "approved",
+    "cnicOnFile": true,
+    "cnicPlausible": true,
+    "phoneVerified": true,
+    "simNameMatches": true
+  },
+  {
+    "userId": "user-010",
+    "status": "approved",
+    "cnicOnFile": true,
+    "cnicPlausible": true,
+    "phoneVerified": false,
+    "simNameMatches": true
+  },
+  {
+    "userId": "user-011",
+    "status": "approved",
+    "cnicOnFile": true,
+    "cnicPlausible": true,
+    "phoneVerified": true,
+    "simNameMatches": true
+  },
+  {
+    "userId": "user-012",
+    "status": "approved",
+    "cnicOnFile": true,
+    "cnicPlausible": true,
+    "phoneVerified": true,
+    "simNameMatches": true
+  },
+  {
+    "userId": "user-013",
+    "status": "approved",
+    "cnicOnFile": true,
+    "cnicPlausible": true,
+    "phoneVerified": true,
+    "simNameMatches": true
+  },
+  {
+    "userId": "user-014",
+    "status": "approved",
+    "cnicOnFile": true,
+    "cnicPlausible": true,
+    "phoneVerified": true,
+    "simNameMatches": true
+  },
+  {
+    "userId": "user-015",
+    "status": "approved",
+    "cnicOnFile": true,
+    "cnicPlausible": true,
+    "phoneVerified": true,
+    "simNameMatches": true
+  },
+  {
+    "userId": "user-016",
+    "status": "approved",
+    "cnicOnFile": true,
+    "cnicPlausible": true,
+    "phoneVerified": true,
+    "simNameMatches": true
+  },
+  {
+    "userId": "user-017",
+    "status": "approved",
+    "cnicOnFile": true,
+    "cnicPlausible": true,
+    "phoneVerified": true,
+    "simNameMatches": true
+  },
+  {
+    "userId": "user-018",
+    "status": "approved",
+    "cnicOnFile": true,
+    "cnicPlausible": true,
+    "phoneVerified": true,
+    "simNameMatches": true
+  },
+  {
+    "userId": "user-019",
+    "status": "approved",
+    "cnicOnFile": true,
+    "cnicPlausible": true,
+    "phoneVerified": true,
+    "simNameMatches": true
+  },
+  {
+    "userId": "user-020",
+    "status": "approved",
+    "cnicOnFile": true,
+    "cnicPlausible": true,
+    "phoneVerified": true,
+    "simNameMatches": true
+  },
+  {
+    "userId": "user-021",
+    "status": "approved",
+    "cnicOnFile": true,
+    "cnicPlausible": true,
+    "phoneVerified": true,
+    "simNameMatches": true
+  },
+  {
+    "userId": "user-022",
+    "status": "approved",
+    "cnicOnFile": true,
+    "cnicPlausible": true,
+    "phoneVerified": true,
+    "simNameMatches": true
+  },
+  {
+    "userId": "user-060",
+    "status": "approved",
+    "cnicOnFile": true,
+    "cnicPlausible": true,
+    "phoneVerified": true,
+    "simNameMatches": true
+  },
+  {
+    "userId": "user-045",
+    "status": "approved",
+    "cnicOnFile": true,
+    "cnicPlausible": true,
+    "phoneVerified": true,
+    "simNameMatches": true
+  }
+]

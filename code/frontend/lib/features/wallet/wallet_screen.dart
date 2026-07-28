@@ -135,6 +135,7 @@ class _EntryRow extends StatelessWidget {
               WalletEntryKind.loyaltyBonus => Icons.stars_outlined,
               WalletEntryKind.cancellationPenalty =>
                 Icons.remove_circle_outline,
+              WalletEntryKind.adminAdjustment => Icons.build_outlined,
             },
             size: 20,
             color: theme.colorScheme.onSurfaceVariant,

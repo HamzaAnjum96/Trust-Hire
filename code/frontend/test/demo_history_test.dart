@@ -174,7 +174,7 @@ void main() {
       final tradeCounts = <int>[];
 
       for (final account in DemoAccounts.roster) {
-        if (account.isDevice) continue;
+        if (!account.isSeeded) continue;
 
         final wallet = WalletController(store)..setAccount(account.id);
         final profile = ProfileController(store)..setAccount(account.id);
@@ -198,7 +198,7 @@ void main() {
       final store = await seeded();
 
       final locked = DemoAccounts.roster.where((account) {
-        if (account.isDevice) return false;
+        if (!account.isSeeded) return false;
         final wallet = WalletController(store)..setAccount(account.id);
         return wallet.isLockedOut;
       });
@@ -210,7 +210,7 @@ void main() {
       final store = await seeded();
 
       final clear = DemoAccounts.roster.where((account) {
-        if (account.isDevice) return false;
+        if (!account.isSeeded) return false;
         final wallet = WalletController(store)..setAccount(account.id);
         return wallet.canTakeWork && wallet.balance > 1000;
       });
@@ -222,7 +222,7 @@ void main() {
       final store = await seeded();
 
       final hirers = DemoAccounts.roster.where((account) {
-        if (account.isDevice) return false;
+        if (!account.isSeeded) return false;
         final profile = ProfileController(store)..setAccount(account.id);
         return !profile.isWorker;
       });
@@ -241,7 +241,7 @@ void main() {
       final fares = {for (final job in jobs) job.id: job.agreedFare};
 
       for (final account in DemoAccounts.roster) {
-        if (account.isDevice) continue;
+        if (!account.isSeeded) continue;
 
         final wallet = WalletController(store)..setAccount(account.id);
 
@@ -263,7 +263,7 @@ void main() {
       final store = await seeded();
 
       for (final account in DemoAccounts.roster) {
-        if (account.isDevice) continue;
+        if (!account.isSeeded) continue;
 
         final wallet = (WalletController(store)..setAccount(account.id)).wallet;
         final credits = wallet.entries.where(
@@ -364,7 +364,7 @@ void main() {
           .toSet();
 
       final personas = DemoAccounts.roster
-          .where((account) => !account.isDevice)
+          .where((account) => account.isSeeded)
           .map((account) => account.id)
           .toSet();
 
@@ -387,7 +387,7 @@ void main() {
       final byId = {for (final job in jobs) job.id: job};
 
       for (final account in DemoAccounts.roster) {
-        if (account.isDevice) continue;
+        if (!account.isSeeded) continue;
 
         final profile = (ProfileController(store)..setAccount(account.id))
             .profile;
@@ -414,7 +414,7 @@ void main() {
           .toSet();
 
       final personas = DemoAccounts.roster
-          .where((account) => !account.isDevice)
+          .where((account) => account.isSeeded)
           .map((account) => account.id)
           .toSet();
 

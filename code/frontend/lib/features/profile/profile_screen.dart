@@ -17,7 +17,9 @@ import '../../widgets/state_views.dart';
 import '../../l10n/app_localizations.dart';
 import '../wallet/wallet_screen.dart';
 import 'my_trades_screen.dart';
+import '../../app/admin_controller.dart';
 import '../../app/premium_controller.dart';
+import '../admin/admin_screen.dart';
 import '../account/account_switcher.dart';
 import '../directory/my_listing_screen.dart';
 import '../ratings/worker_standing_view.dart';
@@ -59,14 +61,31 @@ class ProfileScreen extends StatelessWidget {
             ),
             const SizedBox(height: BrandSizing.spaceSm),
             const AccountCard(),
+
+            // Straight after the account, because for the one account that
+            // has it this is the whole reason to be here — and burying it
+            // under the appearance controls would put the platform's own
+            // tools three screens below a light/dark switch.
+            const _AdminSection(),
+
             const SizedBox(height: BrandSizing.spaceXl),
 
             // Then, because it changes what the rest of the app shows: a
             // worker gets a feed filtered to their trades, a hirer gets the
             // jobs they posted.
-            Text(strings.whatBringsYouHere, style: theme.textTheme.titleLarge),
-            const SizedBox(height: BrandSizing.spaceSm),
-            const _RolePicker(),
+            //
+            // Not for staff. Trust Hire's own account is not looking for work
+            // and is not hiring, and offering it a wallet and a trade list
+            // would be four controls that mean nothing on the one account
+            // that has a different job entirely.
+            if (!context.watch<AccountController>().active.isAdmin) ...[
+              Text(
+                strings.whatBringsYouHere,
+                style: theme.textTheme.titleLarge,
+              ),
+              const SizedBox(height: BrandSizing.spaceSm),
+              const _RolePicker(),
+            ],
 
             const SizedBox(height: BrandSizing.spaceXl),
             Text(strings.navSettings, style: theme.textTheme.titleLarge),
@@ -241,6 +260,44 @@ class _WalletTile extends StatelessWidget {
       subtitle: Text(Format.fare(strings, wallet.balance)),
       trailing: const Icon(Icons.chevron_right),
       onTap: () => WalletScreen.open(context),
+    );
+  }
+}
+
+/// The admin panel, for the one account that has it.
+///
+/// Shown rather than hidden behind a gesture: this is a demonstration, and a
+/// feature nobody can find is a feature nobody can assess. It appears only
+/// while the active demo account is staff, which is a property of the account
+/// rather than a switch anybody can flip.
+class _AdminSection extends StatelessWidget {
+  const _AdminSection();
+
+  @override
+  Widget build(BuildContext context) {
+    final strings = AppStrings.of(context);
+    final theme = Theme.of(context);
+    final account = context.watch<AccountController>().active;
+
+    if (!account.isAdmin) return const SizedBox.shrink();
+
+    final admin = context.watch<AdminController>();
+    final waiting = admin.queue.length + admin.openDisputes.length;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        const SizedBox(height: BrandSizing.spaceLg),
+        Text(strings.adminPanel, style: theme.textTheme.titleLarge),
+        ListTile(
+          contentPadding: EdgeInsets.zero,
+          leading: const Icon(Icons.shield_outlined),
+          title: Text(strings.adminPanelTile),
+          subtitle: Text(strings.adminSubtitle(waiting)),
+          trailing: const Icon(Icons.chevron_right),
+          onTap: () => AdminScreen.open(context),
+        ),
+      ],
     );
   }
 }

@@ -1,0 +1,140 @@
+[
+  {
+    "userId": "user-001",
+    "maskedNumber": "*****-*****21-1",
+    "nameOnCard": "Sadia Iqbal",
+    "submittedDaysAgo": 387
+  },
+  {
+    "userId": "user-002",
+    "maskedNumber": "*****-*****76-9",
+    "nameOnCard": "Bilal Abbasi",
+    "submittedDaysAgo": 244
+  },
+  {
+    "userId": "user-003",
+    "maskedNumber": "*****-*****46-2",
+    "nameOnCard": "Hina Butt",
+    "submittedDaysAgo": 268
+  },
+  {
+    "userId": "user-005",
+    "maskedNumber": "*****-*****97-5",
+    "nameOnCard": "Asif Ansari",
+    "submittedDaysAgo": 301
+  },
+  {
+    "userId": "user-006",
+    "maskedNumber": "*****-*****96-1",
+    "nameOnCard": "Ayesha Noor",
+    "submittedDaysAgo": 395
+  },
+  {
+    "userId": "user-007",
+    "maskedNumber": "*****-*****95-9",
+    "nameOnCard": "Tariq Ahmed",
+    "submittedDaysAgo": 60
+  },
+  {
+    "userId": "user-008",
+    "maskedNumber": "*****-*****63-1",
+    "nameOnCard": "Noor Noor",
+    "submittedDaysAgo": 99
+  },
+  {
+    "userId": "user-009",
+    "maskedNumber": "*****-*****75-9",
+    "nameOnCard": "Usman Raza",
+    "submittedDaysAgo": 72
+  },
+  {
+    "userId": "user-010",
+    "maskedNumber": "*****-*****61-3",
+    "nameOnCard": "Maryam Ahmed",
+    "submittedDaysAgo": 241
+  },
+  {
+    "userId": "user-011",
+    "maskedNumber": "*****-*****13-1",
+    "nameOnCard": "Mehwish Butt",
+    "submittedDaysAgo": 193
+  },
+  {
+    "userId": "user-012",
+    "maskedNumber": "*****-*****78-9",
+    "nameOnCard": "Adnan Farooq",
+    "submittedDaysAgo": 164
+  },
+  {
+    "userId": "user-013",
+    "maskedNumber": "*****-*****44-1",
+    "nameOnCard": "Sana Raza",
+    "submittedDaysAgo": 126
+  },
+  {
+    "userId": "user-014",
+    "maskedNumber": "*****-*****51-1",
+    "nameOnCard": "Tariq Iqbal",
+    "submittedDaysAgo": 215
+  },
+  {
+    "userId": "user-015",
+    "maskedNumber": "*****-*****68-5",
+    "nameOnCard": "Hina Iqbal",
+    "submittedDaysAgo": 375
+  },
+  {
+    "userId": "user-016",
+    "maskedNumber": "*****-*****71-1",
+    "nameOnCard": "Bilal Awan",
+    "submittedDaysAgo": 308
+  },
+  {
+    "userId": "user-017",
+    "maskedNumber": "*****-*****67-9",
+    "nameOnCard": "Shahid Siddiqui",
+    "submittedDaysAgo": 320
+  },
+  {
+    "userId": "user-018",
+    "maskedNumber": "*****-*****66-1",
+    "nameOnCard": "Mehwish Qureshi",
+    "submittedDaysAgo": 66
+  },
+  {
+    "userId": "user-019",
+    "maskedNumber": "*****-*****71-7",
+    "nameOnCard": "Hina Butt",
+    "submittedDaysAgo": 335
+  },
+  {
+    "userId": "user-020",
+    "maskedNumber": "*****-*****64-4",
+    "nameOnCard": "Zubair Butt",
+    "submittedDaysAgo": 70
+  },
+  {
+    "userId": "user-021",
+    "maskedNumber": "*****-*****35-8",
+    "nameOnCard": "Salman Iqbal",
+    "submittedDaysAgo": 30
+  },
+  {
+    "userId": "user-022",
+    "maskedNumber": "*****-*****64-7",
+    "nameOnCard": "Imran Noor",
+    "submittedDaysAgo": 331
+  },
+  {
+    "userId": "user-060",
+    "maskedNumber": "*****-*****61-1",
+    "nameOnCard": "Asif Awan",
+    "submittedDaysAgo": 50
+  },
+  {
+    "userId": "user-045",
+    "maskedNumber": "*****-*****48-3",
+    "nameOnCard": "Maryam Farooq",
+    "submittedDaysAgo": 201
+  }
+]

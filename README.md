@@ -103,7 +103,7 @@ success criteria from
 [`documents/agile/sprint-planning/poc-sprint-plan.md`](documents/agile/sprint-planning/poc-sprint-plan.md),
 with the exception noted under *Map tiles* below.
 
-**Phase 1: P1-1 to P1-6 complete**, per
+**Phase 1: P1-1 to P1-7 complete**, per
 [`documents/agile/sprint-planning/phase-1-sprint-plan.md`](documents/agile/sprint-planning/phase-1-sprint-plan.md).
 Roles, the fixed tag vocabulary, the visibility rule that decides which jobs
 reach which worker, Mode A bidding — a starting fare, counter-offers, and a
@@ -111,8 +111,8 @@ fare locked when the hirer chooses — the job's life from posted to finished
 including the mutual location reveal on acceptance, the token wallet that
 takes the platform's 5%, mutual rating with the worker's record public and the
 hirer's kept internal, and Mode B — a premium directory of workers at fixed
-prices, booked directly rather than bid on. P1-7 onwards adds the admin panel,
-the backend and verification.
+prices, booked directly rather than bid on, and an admin panel whose every
+action lands in an audit log. P1-8 onwards adds the backend and verification.
 
 **Two ways to find work.** *Mode A* is the map: a hirer posts, workers offer,
 the hirer chooses, and the fare locks. *Mode B* is the directory: a worker pays
@@ -123,15 +123,15 @@ price, funded out of the platform's commission rather than the worker's
 earnings, so that using Trust Hire beats ringing somebody you found on it.
 
 **Demo accounts.** There is no sign-in — Section 13a excludes authentication
-from the POC — but the device can be any of six people, switched from the map
+from the POC — but the device can be any of seven people, switched from the map
 header, the app bar or the profile screen. Switching changes who owns which
 job, whose offers are yours, whose wallet is charged and which trades filter
 the feed, which is the only way to see bidding, the job lifecycle and mutual
 ratings work end to end on one device.
 
-The five besides the device account come from the seed, one per city, and are
-deliberately unlike each other so a demonstration can reach every state without
-editing storage by hand:
+Five of the others come from the seed, one per city, and are deliberately
+unlike each other so a demonstration can reach every state without editing
+storage by hand. The last is the platform itself:
 
 | Account | For showing |
 | --- | --- |
@@ -140,6 +140,7 @@ editing storage by hand:
 | **Bilal Awan**, Karachi | **Locked out** by debt — two unpaid commissions, so bidding refuses and says why. |
 | **Shahid Siddiqui**, Peshawar | Nearly new. One job done, the first-job credit still in the ledger. |
 | **Sadia Iqbal**, Mardan | The generalist, with the widest feed of the five. |
+| **Trust Hire staff** | The admin panel. Not a person in the seed, and the only account that has it. |
 
 They are not accounts: no password, no verification, no privacy between them,
 and everything shares one browser's storage. The device account is left clean
@@ -160,6 +161,7 @@ code/frontend/
 │   │   ├── ratings/      ← mutual rating, and a worker's public record
 │   │   ├── directory/    ← Mode B: listings, service menus, direct booking
 │   │   ├── premium/      ← subscriptions and the hirer discount, as rules
+│   │   ├── admin/        ← approvals, disputes, overrides and the audit log
 │   │   ├── wallet/       ← tokens, commission, top-up
 │   │   ├── account/      ← the demo account switcher
 │   │   ├── profile/      ← role, trades, and the app's settings

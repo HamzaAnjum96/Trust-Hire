@@ -1373,4 +1373,216 @@ class AppStringsEn extends AppStrings {
   @override
   String get bookingWhatNext =>
       'They will accept or decline. Nothing is charged either way.';
+
+  @override
+  String get walletAdminAdjustment => 'Adjusted by Trust Hire';
+
+  @override
+  String get adminPanel => 'Admin';
+
+  @override
+  String adminSubtitle(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count things waiting',
+      one: '1 thing waiting',
+      zero: 'Nothing waiting',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get adminTabUsers => 'Users';
+
+  @override
+  String get adminTabDisputes => 'Disputes';
+
+  @override
+  String get adminTabJobs => 'Jobs';
+
+  @override
+  String get adminTabLog => 'Log';
+
+  @override
+  String get adminQueueEmpty => 'Nothing to review';
+
+  @override
+  String get adminQueueEmptyMessage =>
+      'New accounts appear here when somebody signs up.';
+
+  @override
+  String get adminApprove => 'Approve';
+
+  @override
+  String get adminSuspend => 'Suspend';
+
+  @override
+  String get adminReinstate => 'Put back';
+
+  @override
+  String get statusPending => 'Waiting';
+
+  @override
+  String get statusApproved => 'Approved';
+
+  @override
+  String get statusSuspended => 'Suspended';
+
+  @override
+  String get signalCnicOnFile => 'CNIC uploaded';
+
+  @override
+  String get signalCnicMissing => 'No CNIC';
+
+  @override
+  String get signalCnicShape => 'Number looks right';
+
+  @override
+  String get signalPhoneVerified => 'Phone confirmed';
+
+  @override
+  String get signalPhoneUnverified => 'Phone not confirmed';
+
+  @override
+  String get signalSimMismatch => 'SIM name does not match the CNIC';
+
+  @override
+  String get signalCaveat =>
+      'These are plausibility checks, not identity checks. Trust Hire does not look anybody up on a government database.';
+
+  @override
+  String get simMismatchCaveat =>
+      'Often a family member\'s SIM. Look before deciding.';
+
+  @override
+  String get adminOpenCnic => 'Open the CNIC';
+
+  @override
+  String get adminCnicLocked =>
+      'The CNIC can only be opened while there is an open dispute about this person.';
+
+  @override
+  String get adminCnicOpened => 'Opened. This has been recorded in the log.';
+
+  @override
+  String get cnicNumberLabel => 'Number on file';
+
+  @override
+  String get cnicNameLabel => 'Name on the card';
+
+  @override
+  String get cnicNoPhoto => 'No photo is shipped with the demo.';
+
+  @override
+  String get adminNoDisputes => 'No disputes';
+
+  @override
+  String get adminNoDisputesMessage =>
+      'A dispute is raised against a job. It is also the only thing that unlocks a CNIC.';
+
+  @override
+  String disputeAbout(String name) {
+    return 'About $name';
+  }
+
+  @override
+  String disputeRaisedBy(String name) {
+    return 'Raised by $name';
+  }
+
+  @override
+  String get disputeOpen => 'Open';
+
+  @override
+  String get disputeClosed => 'Closed';
+
+  @override
+  String get adminCloseDispute => 'Close it';
+
+  @override
+  String get adminAdjustWallet => 'Adjust the balance';
+
+  @override
+  String get adminUnlockWallet => 'Unlock the account';
+
+  @override
+  String adminWalletLocked(String amount) {
+    return 'Locked out — $amount owed';
+  }
+
+  @override
+  String adminWalletBalance(String amount) {
+    return 'Balance $amount';
+  }
+
+  @override
+  String get adminNoteLabel => 'Why (recorded in the log)';
+
+  @override
+  String get adminNoteRequired =>
+      'An override needs a reason. That is what makes it reviewable.';
+
+  @override
+  String get adminApply => 'Do it';
+
+  @override
+  String get adminAmountLabel => 'How many tokens, plus or minus';
+
+  @override
+  String get adminLogEmpty => 'Nothing logged yet';
+
+  @override
+  String get adminLogEmptyMessage =>
+      'Every admin action lands here — what it was, who it was about, why, and when.';
+
+  @override
+  String get adminLogIntro =>
+      'Every admin action, oldest at the bottom. Nothing here can be edited or removed.';
+
+  @override
+  String get actionApproveUser => 'Approved an account';
+
+  @override
+  String get actionSuspendUser => 'Suspended an account';
+
+  @override
+  String get actionReinstateUser => 'Put an account back';
+
+  @override
+  String get actionViewCnic => 'Opened a CNIC';
+
+  @override
+  String get actionAdjustWallet => 'Adjusted a balance';
+
+  @override
+  String get actionUnlockWallet => 'Unlocked an account';
+
+  @override
+  String get actionCancelJob => 'Cancelled a job';
+
+  @override
+  String get actionCloseDispute => 'Closed a dispute';
+
+  @override
+  String get adminJobsIntro =>
+      'Every job on the platform, newest first, with its offers.';
+
+  @override
+  String adminOffersOn(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count offers',
+      one: '1 offer',
+      zero: 'No offers',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get accountStaffHelp => 'Trust Hire\'s own account — the admin panel';
+
+  @override
+  String get adminPanelTile => 'Approvals, disputes and the log';
 }

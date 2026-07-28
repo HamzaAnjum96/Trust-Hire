@@ -127,6 +127,21 @@ class StoreKeys {
   /// directory only one person can see is not a directory.
   static const directory = 'trust_hire.directory';
 
+  /// Every admin action ever taken, as a JSON list. Append-only in practice —
+  /// [AdminController] is the only writer and never removes an entry.
+  static const auditLog = 'trust_hire.audit_log';
+
+  /// Where each account stands with the platform, and the Section 2 signals
+  /// an approval decision is made on.
+  static const accountReviews = 'trust_hire.account_reviews';
+
+  /// Submitted CNICs. Reachable only through an open dispute — see
+  /// [AdminRules.mayOpenCnic].
+  static const cnicRecords = 'trust_hire.cnic_records';
+
+  /// Complaints about jobs. The only thing that unlocks a CNIC.
+  static const disputes = 'trust_hire.disputes';
+
   /// The per-account name for a key.
   ///
   /// Role, trades, saved jobs and the wallet belong to a person rather than to
@@ -160,6 +175,10 @@ class StoreKeys {
     activeAccount,
     tradesNoticeDismissed,
     directory,
+    auditLog,
+    accountReviews,
+    cnicRecords,
+    disputes,
     mediaIndex,
   ];
 }

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/services.dart' show rootBundle;
 
+import '../models/admin.dart';
 import '../models/app_user.dart';
 import '../models/bid.dart';
 import '../models/job.dart';
@@ -27,6 +28,9 @@ class SeedLoader {
   static const _ratingsAsset = 'assets/seed/ratings.json';
   static const _accountsAsset = 'assets/seed/accounts.json';
   static const _directoryAsset = 'assets/seed/directory.json';
+  static const _reviewsAsset = 'assets/seed/reviews.json';
+  static const _cnicsAsset = 'assets/seed/cnics.json';
+  static const _disputesAsset = 'assets/seed/disputes.json';
 
   Future<List<Job>> loadJobs() async {
     final decoded = await _readJson(_jobsAsset) as List<dynamic>;
@@ -170,12 +174,57 @@ class SeedLoader {
     }).toList(growable: false);
   }
 
+  /// Where each account stands with the platform, for the admin queue.
+  Future<List<AccountReview>> loadReviews() async {
+    final decoded = await _readJson(_reviewsAsset) as List<dynamic>;
+    return decoded
+        .cast<Map<String, dynamic>>()
+        .map(AccountReview.fromJson)
+        .toList(growable: false);
+  }
+
+  Future<List<CnicRecord>> loadCnics() async {
+    final decoded = await _readJson(_cnicsAsset) as List<dynamic>;
+    final now = DateTime.now();
+
+    return decoded.cast<Map<String, dynamic>>().map((json) {
+      return CnicRecord(
+        userId: json['userId'] as String,
+        maskedNumber: json['maskedNumber'] as String,
+        nameOnCard: json['nameOnCard'] as String,
+        submittedAt: now.subtract(
+          Duration(days: (json['submittedDaysAgo'] as num?)?.round() ?? 0),
+        ),
+      );
+    }).toList(growable: false);
+  }
+
+  Future<List<Dispute>> loadDisputes() async {
+    final decoded = await _readJson(_disputesAsset) as List<dynamic>;
+    final now = DateTime.now();
+
+    return decoded.cast<Map<String, dynamic>>().map((json) {
+      return Dispute(
+        id: json['id'] as String,
+        jobId: json['jobId'] as String,
+        aboutUserId: json['aboutUserId'] as String,
+        raisedByUserId: json['raisedByUserId'] as String,
+        raisedAt: _ago(json, now, key: 'raisedHoursAgo'),
+        reason: json['reason'] as String,
+      );
+    }).toList(growable: false);
+  }
+
   /// Resolves a seed file's `hoursAgo` against [now].
   ///
   /// Relative like the job times, and for the same reason: a wallet whose last
   /// entry is dated whenever the demo was packaged reads as abandoned.
-  DateTime _ago(Map<String, dynamic> json, DateTime now) => now.subtract(
-    Duration(minutes: (((json['hoursAgo'] as num?)?.toDouble() ?? 0) * 60).round()),
+  DateTime _ago(
+    Map<String, dynamic> json,
+    DateTime now, {
+    String key = 'hoursAgo',
+  }) => now.subtract(
+    Duration(minutes: (((json[key] as num?)?.toDouble() ?? 0) * 60).round()),
   );
 
   /// Reads and decodes a bundled JSON asset.

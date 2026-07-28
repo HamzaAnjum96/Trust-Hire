@@ -1379,4 +1379,216 @@ class AppStringsUr extends AppStrings {
   @override
   String get bookingWhatNext =>
       'وہ قبول یا مسترد کریں گے۔ دونوں صورتوں میں کوئی رقم نہیں کٹتی۔';
+
+  @override
+  String get walletAdminAdjustment => 'ٹرسٹ ہائر کی طرف سے درستی';
+
+  @override
+  String get adminPanel => 'ایڈمن';
+
+  @override
+  String adminSubtitle(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count چیزیں باقی',
+      one: '1 چیز باقی',
+      zero: 'کچھ باقی نہیں',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get adminTabUsers => 'صارفین';
+
+  @override
+  String get adminTabDisputes => 'تنازعات';
+
+  @override
+  String get adminTabJobs => 'کام';
+
+  @override
+  String get adminTabLog => 'ریکارڈ';
+
+  @override
+  String get adminQueueEmpty => 'دیکھنے کے لیے کچھ نہیں';
+
+  @override
+  String get adminQueueEmptyMessage =>
+      'نئے اکاؤنٹ یہاں آتے ہیں جب کوئی رجسٹر کرے۔';
+
+  @override
+  String get adminApprove => 'منظور کریں';
+
+  @override
+  String get adminSuspend => 'معطل کریں';
+
+  @override
+  String get adminReinstate => 'بحال کریں';
+
+  @override
+  String get statusPending => 'انتظار میں';
+
+  @override
+  String get statusApproved => 'منظور شدہ';
+
+  @override
+  String get statusSuspended => 'معطل';
+
+  @override
+  String get signalCnicOnFile => 'شناختی کارڈ موجود';
+
+  @override
+  String get signalCnicMissing => 'شناختی کارڈ نہیں';
+
+  @override
+  String get signalCnicShape => 'نمبر درست لگتا ہے';
+
+  @override
+  String get signalPhoneVerified => 'فون تصدیق شدہ';
+
+  @override
+  String get signalPhoneUnverified => 'فون کی تصدیق نہیں';
+
+  @override
+  String get signalSimMismatch => 'سم کا نام شناختی کارڈ سے نہیں ملتا';
+
+  @override
+  String get signalCaveat =>
+      'یہ صرف امکان کی جانچ ہے، شناخت کی تصدیق نہیں۔ ٹرسٹ ہائر کسی سرکاری ڈیٹابیس میں نہیں دیکھتا۔';
+
+  @override
+  String get simMismatchCaveat =>
+      'اکثر گھر کے کسی فرد کی سم ہوتی ہے۔ فیصلے سے پہلے دیکھ لیں۔';
+
+  @override
+  String get adminOpenCnic => 'شناختی کارڈ کھولیں';
+
+  @override
+  String get adminCnicLocked =>
+      'شناختی کارڈ صرف اُس وقت کھل سکتا ہے جب اس شخص کے بارے میں کوئی تنازع کھلا ہو۔';
+
+  @override
+  String get adminCnicOpened => 'کھول دیا گیا۔ یہ ریکارڈ میں درج ہو گیا ہے۔';
+
+  @override
+  String get cnicNumberLabel => 'درج نمبر';
+
+  @override
+  String get cnicNameLabel => 'کارڈ پر نام';
+
+  @override
+  String get cnicNoPhoto => 'نمونے کے ساتھ کوئی تصویر نہیں بھیجی جاتی۔';
+
+  @override
+  String get adminNoDisputes => 'کوئی تنازع نہیں';
+
+  @override
+  String get adminNoDisputesMessage =>
+      'تنازع کسی کام کے خلاف اٹھایا جاتا ہے۔ یہی شناختی کارڈ کھولنے کی واحد وجہ بھی ہے۔';
+
+  @override
+  String disputeAbout(String name) {
+    return '$name کے بارے میں';
+  }
+
+  @override
+  String disputeRaisedBy(String name) {
+    return '$name نے اٹھایا';
+  }
+
+  @override
+  String get disputeOpen => 'کھلا';
+
+  @override
+  String get disputeClosed => 'بند';
+
+  @override
+  String get adminCloseDispute => 'بند کریں';
+
+  @override
+  String get adminAdjustWallet => 'بیلنس درست کریں';
+
+  @override
+  String get adminUnlockWallet => 'اکاؤنٹ کھولیں';
+
+  @override
+  String adminWalletLocked(String amount) {
+    return 'بند ہے — $amount واجب الادا';
+  }
+
+  @override
+  String adminWalletBalance(String amount) {
+    return 'بیلنس $amount';
+  }
+
+  @override
+  String get adminNoteLabel => 'وجہ (ریکارڈ میں درج ہوگی)';
+
+  @override
+  String get adminNoteRequired =>
+      'درستی کے لیے وجہ ضروری ہے۔ اسی سے اس کا جائزہ لیا جا سکتا ہے۔';
+
+  @override
+  String get adminApply => 'کر دیں';
+
+  @override
+  String get adminAmountLabel => 'کتنے ٹوکن، جمع یا منفی';
+
+  @override
+  String get adminLogEmpty => 'ابھی کچھ درج نہیں';
+
+  @override
+  String get adminLogEmptyMessage =>
+      'ہر ایڈمن کارروائی یہاں آتی ہے — کیا، کس کے بارے میں، کیوں اور کب۔';
+
+  @override
+  String get adminLogIntro =>
+      'ہر ایڈمن کارروائی، پرانی نیچے۔ یہاں کچھ بدلا یا مٹایا نہیں جا سکتا۔';
+
+  @override
+  String get actionApproveUser => 'اکاؤنٹ منظور کیا';
+
+  @override
+  String get actionSuspendUser => 'اکاؤنٹ معطل کیا';
+
+  @override
+  String get actionReinstateUser => 'اکاؤنٹ بحال کیا';
+
+  @override
+  String get actionViewCnic => 'شناختی کارڈ کھولا';
+
+  @override
+  String get actionAdjustWallet => 'بیلنس درست کیا';
+
+  @override
+  String get actionUnlockWallet => 'اکاؤنٹ کھولا';
+
+  @override
+  String get actionCancelJob => 'کام منسوخ کیا';
+
+  @override
+  String get actionCloseDispute => 'تنازع بند کیا';
+
+  @override
+  String get adminJobsIntro =>
+      'پلیٹ فارم کے سارے کام، نئے پہلے، اپنی پیشکشوں کے ساتھ۔';
+
+  @override
+  String adminOffersOn(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count پیشکشیں',
+      one: '1 پیشکش',
+      zero: 'کوئی پیشکش نہیں',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get accountStaffHelp => 'ٹرسٹ ہائر کا اپنا اکاؤنٹ — ایڈمن پینل';
+
+  @override
+  String get adminPanelTile => 'منظوریاں، تنازعات اور ریکارڈ';
 }

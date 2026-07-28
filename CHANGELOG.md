@@ -12,6 +12,66 @@ that heading to the version and date, and open a fresh `[Unreleased]`.
 
 ## [Unreleased]
 
+### 0.13.0 — P1-7, the admin panel
+
+#### Added
+
+- **An admin panel**, in four tabs: an approval queue, disputes, every job on
+  the platform with its offers, and the audit log.
+- **The audit log.** Every admin action — what it was, who it was about, why,
+  and when — with wallet adjustments carrying their amount. Nothing in it can
+  be edited or removed.
+- **Approvals**, showing Section 2's verification signals: a CNIC on file, an
+  automated shape check on the number, a confirmed phone, and the SIM-name
+  match. Flagged accounts sort to the top of the queue.
+- **Wallet overrides.** Adjust a balance by hand, or unlock somebody the debt
+  rule has stopped, both of which land as ordinary entries in that worker's
+  own ledger.
+- **CNIC dispute lookup**, and **disputes** to justify it.
+- A seventh demo account, **Trust Hire staff** — the only one with the panel.
+  Its profile drops the role picker, trades, wallet and directory listing,
+  because the platform's own account is neither looking for work nor hiring.
+
+#### Notes on the design
+
+**Nothing changes without a line in the log.** Every mutating method on
+`AdminController` goes through one private `_perform`, which records the entry
+and *then* applies the change. There is no second path, so Section 12's
+requirement that "manual overrides remain traceable rather than being a black
+box" is structural rather than remembered — the same move the wallet's ledger
+makes, and for the same reason: a record that depends on somebody choosing to
+write it has holes exactly where somebody had a reason not to.
+
+The order is deliberate. If the change fails, the log carries a line for
+something that did not happen, which a human can investigate. The other order
+loses the line for something that did, which nobody can investigate.
+
+**An override with no reason does not happen at all.** Suspensions and wallet
+adjustments are refused without a note — an entry reading "adjusted balance by
+-4,000" with nothing beside it is the black box the log exists to prevent. A
+word is enough; the check stops an empty field, not bad writing.
+
+**A CNIC opens on an open dispute naming that person, or not at all.** Section
+2 says the photo "sits unreviewed unless a dispute is raised later". That is an
+access rule about a national identity document, so it lives in
+`AdminRules.mayOpenCnic` rather than in a screen that could be rebuilt without
+it. A dispute about somebody else does not open it; a settled one closes it
+again. A refusal writes nothing — logging one would put a line in the record
+saying somebody looked at a document they never saw. Numbers are stored masked;
+the app has no use for a full CNIC and Section 13 rules out looking one up.
+
+**A SIM-name mismatch is a flag, never a rejection**, and the panel says so
+next to it. Section 2 is explicit that false positives are expected — a worker
+on a family member's SIM is the ordinary case.
+
+**Job oversight is read-only.** An admin who could edit a job could change an
+agreed fare after the fact, and that number is the one the commission depends
+on.
+
+**The audit log is not seeded.** It records what staff did, and inventing
+entries for actions nobody took would be the one place in the demo where the
+data is a lie about a person rather than a plausible example of one.
+
 ### 0.12.0 — P1-6, Mode B: the directory and premium
 
 #### Added

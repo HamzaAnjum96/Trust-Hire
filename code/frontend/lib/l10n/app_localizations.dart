@@ -2365,6 +2365,360 @@ abstract class AppStrings {
   /// In en, this message translates to:
   /// **'They will accept or decline. Nothing is charged either way.'**
   String get bookingWhatNext;
+
+  /// Ledger label for a manual admin correction
+  ///
+  /// In en, this message translates to:
+  /// **'Adjusted by Trust Hire'**
+  String get walletAdminAdjustment;
+
+  /// No description provided for @adminPanel.
+  ///
+  /// In en, this message translates to:
+  /// **'Admin'**
+  String get adminPanel;
+
+  /// No description provided for @adminSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{Nothing waiting} =1{1 thing waiting} other{{count} things waiting}}'**
+  String adminSubtitle(int count);
+
+  /// No description provided for @adminTabUsers.
+  ///
+  /// In en, this message translates to:
+  /// **'Users'**
+  String get adminTabUsers;
+
+  /// No description provided for @adminTabDisputes.
+  ///
+  /// In en, this message translates to:
+  /// **'Disputes'**
+  String get adminTabDisputes;
+
+  /// No description provided for @adminTabJobs.
+  ///
+  /// In en, this message translates to:
+  /// **'Jobs'**
+  String get adminTabJobs;
+
+  /// No description provided for @adminTabLog.
+  ///
+  /// In en, this message translates to:
+  /// **'Log'**
+  String get adminTabLog;
+
+  /// No description provided for @adminQueueEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing to review'**
+  String get adminQueueEmpty;
+
+  /// No description provided for @adminQueueEmptyMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'New accounts appear here when somebody signs up.'**
+  String get adminQueueEmptyMessage;
+
+  /// No description provided for @adminApprove.
+  ///
+  /// In en, this message translates to:
+  /// **'Approve'**
+  String get adminApprove;
+
+  /// No description provided for @adminSuspend.
+  ///
+  /// In en, this message translates to:
+  /// **'Suspend'**
+  String get adminSuspend;
+
+  /// No description provided for @adminReinstate.
+  ///
+  /// In en, this message translates to:
+  /// **'Put back'**
+  String get adminReinstate;
+
+  /// No description provided for @statusPending.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting'**
+  String get statusPending;
+
+  /// No description provided for @statusApproved.
+  ///
+  /// In en, this message translates to:
+  /// **'Approved'**
+  String get statusApproved;
+
+  /// No description provided for @statusSuspended.
+  ///
+  /// In en, this message translates to:
+  /// **'Suspended'**
+  String get statusSuspended;
+
+  /// No description provided for @signalCnicOnFile.
+  ///
+  /// In en, this message translates to:
+  /// **'CNIC uploaded'**
+  String get signalCnicOnFile;
+
+  /// No description provided for @signalCnicMissing.
+  ///
+  /// In en, this message translates to:
+  /// **'No CNIC'**
+  String get signalCnicMissing;
+
+  /// No description provided for @signalCnicShape.
+  ///
+  /// In en, this message translates to:
+  /// **'Number looks right'**
+  String get signalCnicShape;
+
+  /// No description provided for @signalPhoneVerified.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone confirmed'**
+  String get signalPhoneVerified;
+
+  /// No description provided for @signalPhoneUnverified.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone not confirmed'**
+  String get signalPhoneUnverified;
+
+  /// No description provided for @signalSimMismatch.
+  ///
+  /// In en, this message translates to:
+  /// **'SIM name does not match the CNIC'**
+  String get signalSimMismatch;
+
+  /// No description provided for @signalCaveat.
+  ///
+  /// In en, this message translates to:
+  /// **'These are plausibility checks, not identity checks. Trust Hire does not look anybody up on a government database.'**
+  String get signalCaveat;
+
+  /// No description provided for @simMismatchCaveat.
+  ///
+  /// In en, this message translates to:
+  /// **'Often a family member\'s SIM. Look before deciding.'**
+  String get simMismatchCaveat;
+
+  /// No description provided for @adminOpenCnic.
+  ///
+  /// In en, this message translates to:
+  /// **'Open the CNIC'**
+  String get adminOpenCnic;
+
+  /// No description provided for @adminCnicLocked.
+  ///
+  /// In en, this message translates to:
+  /// **'The CNIC can only be opened while there is an open dispute about this person.'**
+  String get adminCnicLocked;
+
+  /// No description provided for @adminCnicOpened.
+  ///
+  /// In en, this message translates to:
+  /// **'Opened. This has been recorded in the log.'**
+  String get adminCnicOpened;
+
+  /// No description provided for @cnicNumberLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Number on file'**
+  String get cnicNumberLabel;
+
+  /// No description provided for @cnicNameLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Name on the card'**
+  String get cnicNameLabel;
+
+  /// No description provided for @cnicNoPhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'No photo is shipped with the demo.'**
+  String get cnicNoPhoto;
+
+  /// No description provided for @adminNoDisputes.
+  ///
+  /// In en, this message translates to:
+  /// **'No disputes'**
+  String get adminNoDisputes;
+
+  /// No description provided for @adminNoDisputesMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'A dispute is raised against a job. It is also the only thing that unlocks a CNIC.'**
+  String get adminNoDisputesMessage;
+
+  /// No description provided for @disputeAbout.
+  ///
+  /// In en, this message translates to:
+  /// **'About {name}'**
+  String disputeAbout(String name);
+
+  /// No description provided for @disputeRaisedBy.
+  ///
+  /// In en, this message translates to:
+  /// **'Raised by {name}'**
+  String disputeRaisedBy(String name);
+
+  /// No description provided for @disputeOpen.
+  ///
+  /// In en, this message translates to:
+  /// **'Open'**
+  String get disputeOpen;
+
+  /// No description provided for @disputeClosed.
+  ///
+  /// In en, this message translates to:
+  /// **'Closed'**
+  String get disputeClosed;
+
+  /// No description provided for @adminCloseDispute.
+  ///
+  /// In en, this message translates to:
+  /// **'Close it'**
+  String get adminCloseDispute;
+
+  /// No description provided for @adminAdjustWallet.
+  ///
+  /// In en, this message translates to:
+  /// **'Adjust the balance'**
+  String get adminAdjustWallet;
+
+  /// No description provided for @adminUnlockWallet.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlock the account'**
+  String get adminUnlockWallet;
+
+  /// No description provided for @adminWalletLocked.
+  ///
+  /// In en, this message translates to:
+  /// **'Locked out — {amount} owed'**
+  String adminWalletLocked(String amount);
+
+  /// No description provided for @adminWalletBalance.
+  ///
+  /// In en, this message translates to:
+  /// **'Balance {amount}'**
+  String adminWalletBalance(String amount);
+
+  /// No description provided for @adminNoteLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Why (recorded in the log)'**
+  String get adminNoteLabel;
+
+  /// No description provided for @adminNoteRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'An override needs a reason. That is what makes it reviewable.'**
+  String get adminNoteRequired;
+
+  /// No description provided for @adminApply.
+  ///
+  /// In en, this message translates to:
+  /// **'Do it'**
+  String get adminApply;
+
+  /// No description provided for @adminAmountLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'How many tokens, plus or minus'**
+  String get adminAmountLabel;
+
+  /// No description provided for @adminLogEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing logged yet'**
+  String get adminLogEmpty;
+
+  /// No description provided for @adminLogEmptyMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Every admin action lands here — what it was, who it was about, why, and when.'**
+  String get adminLogEmptyMessage;
+
+  /// No description provided for @adminLogIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'Every admin action, oldest at the bottom. Nothing here can be edited or removed.'**
+  String get adminLogIntro;
+
+  /// No description provided for @actionApproveUser.
+  ///
+  /// In en, this message translates to:
+  /// **'Approved an account'**
+  String get actionApproveUser;
+
+  /// No description provided for @actionSuspendUser.
+  ///
+  /// In en, this message translates to:
+  /// **'Suspended an account'**
+  String get actionSuspendUser;
+
+  /// No description provided for @actionReinstateUser.
+  ///
+  /// In en, this message translates to:
+  /// **'Put an account back'**
+  String get actionReinstateUser;
+
+  /// No description provided for @actionViewCnic.
+  ///
+  /// In en, this message translates to:
+  /// **'Opened a CNIC'**
+  String get actionViewCnic;
+
+  /// No description provided for @actionAdjustWallet.
+  ///
+  /// In en, this message translates to:
+  /// **'Adjusted a balance'**
+  String get actionAdjustWallet;
+
+  /// No description provided for @actionUnlockWallet.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlocked an account'**
+  String get actionUnlockWallet;
+
+  /// No description provided for @actionCancelJob.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancelled a job'**
+  String get actionCancelJob;
+
+  /// No description provided for @actionCloseDispute.
+  ///
+  /// In en, this message translates to:
+  /// **'Closed a dispute'**
+  String get actionCloseDispute;
+
+  /// No description provided for @adminJobsIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'Every job on the platform, newest first, with its offers.'**
+  String get adminJobsIntro;
+
+  /// No description provided for @adminOffersOn.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{No offers} =1{1 offer} other{{count} offers}}'**
+  String adminOffersOn(int count);
+
+  /// Subtitle for the staff demo account
+  ///
+  /// In en, this message translates to:
+  /// **'Trust Hire\'s own account — the admin panel'**
+  String get accountStaffHelp;
+
+  /// What the admin panel holds, on the tile that opens it
+  ///
+  /// In en, this message translates to:
+  /// **'Approvals, disputes and the log'**
+  String get adminPanelTile;
 }
 
 class _AppStringsDelegate extends LocalizationsDelegate<AppStrings> {

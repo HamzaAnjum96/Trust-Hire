@@ -147,8 +147,12 @@ class _AccountTile extends StatelessWidget {
 
     final subtitle = [
       if (account.isDevice) strings.accountYouHelp,
+      if (account.isAdmin) strings.accountStaffHelp,
       if (account.area != null) account.area!,
-      strings.accountPostings(posted),
+      // Staff post nothing and are not meant to. A count of zero next to the
+      // platform's own account reads as a person who has never got round to
+      // using it.
+      if (!account.isAdmin) strings.accountPostings(posted),
     ].join(' · ');
 
     return ListTile(
@@ -207,7 +211,12 @@ class AccountCard extends StatelessWidget {
           accountName(account, strings),
           style: theme.textTheme.titleMedium,
         ),
-        subtitle: Text(account.area ?? strings.accountYouHelp),
+        subtitle: Text(
+          account.area ??
+              (account.isAdmin
+                  ? strings.accountStaffHelp
+                  : strings.accountYouHelp),
+        ),
         trailing: const Icon(Icons.swap_horiz),
         onTap: () => AccountSheet.open(context),
       ),

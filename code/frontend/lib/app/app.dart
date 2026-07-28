@@ -13,6 +13,7 @@ import '../services/local_store.dart';
 import '../services/media_store.dart';
 import '../features/onboarding/onboarding_screen.dart';
 import 'account_controller.dart';
+import 'admin_controller.dart';
 import 'app_shell.dart';
 import 'bid_controller.dart';
 import 'job_controller.dart';
@@ -74,6 +75,12 @@ class TrustHireApp extends StatelessWidget {
           create: (_) => PremiumController(store)..load(),
           update: (_, account, premium) =>
               premium!..setAccount(account.activeId),
+        ),
+        // Follows the account so the audit log records which member of staff
+        // did a thing rather than an anonymous "admin".
+        ChangeNotifierProxyProvider<AccountController, AdminController>(
+          create: (_) => AdminController(store)..load(),
+          update: (_, account, admin) => admin!..setAccount(account.activeId),
         ),
         ChangeNotifierProvider(
           // Deliberately not requested here. Asking for a permission before

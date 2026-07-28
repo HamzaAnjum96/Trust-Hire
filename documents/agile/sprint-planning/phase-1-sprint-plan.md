@@ -381,9 +381,59 @@ hand-written destination lists. They drifted the moment a fifth destination
 arrived — the rail kept showing four, and tapping "Profile" on a desktop
 opened Activity. One list now, mapped into both.
 
-### P1-7 — Admin
+### P1-7 — Admin ✅
 User approvals, CNIC dispute lookup, wallet overrides, job oversight, audit
 logging.
+
+**Done when** no admin action can happen without appearing in the log.
+
+**Delivered.** Four tabs — approvals, disputes, every job with its offers, and
+the log. A seventh demo account, *Trust Hire staff*, is the only one that can
+reach it; its profile drops the role picker, trades, wallet and directory
+listing, because the platform's own account is neither looking for work nor
+hiring.
+
+**The definition of done is a design instruction, not a test plan.** Every
+mutating method on `AdminController` goes through one private `_perform`,
+which records the entry and *then* applies the change, and there is no second
+path. So "every admin action is logged" holds the way "the wallet cannot reach
+an inconsistent state" holds: not because tests check each case, but because
+the code has no way to do otherwise.
+
+The order is deliberate. A failed change leaves a line for something that did
+not happen, which a human can investigate; the other order loses the line for
+something that did, which nobody can.
+
+Decisions:
+
+- **An override with no reason does not happen at all.** Suspensions and
+  wallet adjustments are refused without a note. Section 12's own argument for
+  the log is that overrides should not be a black box, and "adjusted balance
+  by -4,000" with nothing beside it is that box. A word is enough — the check
+  stops an empty field, not bad writing.
+- **A CNIC opens on an open dispute naming that person, or not at all.** The
+  rule lives in `AdminRules.mayOpenCnic` rather than in a screen, because a
+  screen can be rebuilt without it. A dispute about somebody else does not
+  open it; a settled one closes it again. **A refusal writes nothing** — a
+  logged refusal would read as somebody having seen a document they did not.
+- **CNIC numbers are stored masked.** Enough to match a document against a
+  claim, and no more; Section 13 rules out looking one up in any case.
+- **A SIM-name mismatch is a flag, never a rejection**, and the caveat sits
+  next to it on the card. Section 2 expects false positives — a worker on a
+  family member's SIM is the ordinary case, and a flag that read as guilt
+  would get people rejected for lending their brother a phone.
+- **Job oversight is read-only.** An admin who could edit a job could change
+  an agreed fare after the fact, and that number is the one the commission
+  depends on.
+- **An unlock clears exactly what is owed, computed rather than typed.** An
+  admin unlocking somebody means "let them work", and making them work out the
+  figure first is a way to get it wrong.
+- **Overrides land in the worker's own ledger.** The wallet has no balance
+  field to overwrite, so a correction sits in their history next to the
+  charges it is putting right — where they can see it.
+- **The audit log is not seeded.** It records what staff did, and inventing
+  entries for actions nobody took would be the one place in the demo where the
+  data is a lie about a person rather than a plausible example of one.
 
 ### P1-8 — Backend
 Supabase schema from the settled domain, migration of the repositories, and

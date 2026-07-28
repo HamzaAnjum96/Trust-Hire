@@ -967,5 +967,115 @@
   "bookingWhatNext": "They will accept or decline. Nothing is charged either way.",
   "@bookingWhatNext": {
     "description": "What happens after a booking is sent"
+  },
+  "walletAdminAdjustment": "Adjusted by Trust Hire",
+  "@walletAdminAdjustment": {
+    "description": "Ledger label for a manual admin correction"
+  },
+  "adminPanel": "Admin",
+  "adminSubtitle": "{count, plural, =0{Nothing waiting} =1{1 thing waiting} other{{count} things waiting}}",
+  "@adminSubtitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "adminTabUsers": "Users",
+  "adminTabDisputes": "Disputes",
+  "adminTabJobs": "Jobs",
+  "adminTabLog": "Log",
+  "adminQueueEmpty": "Nothing to review",
+  "adminQueueEmptyMessage": "New accounts appear here when somebody signs up.",
+  "adminApprove": "Approve",
+  "adminSuspend": "Suspend",
+  "adminReinstate": "Put back",
+  "statusPending": "Waiting",
+  "statusApproved": "Approved",
+  "statusSuspended": "Suspended",
+  "signalCnicOnFile": "CNIC uploaded",
+  "signalCnicMissing": "No CNIC",
+  "signalCnicShape": "Number looks right",
+  "signalPhoneVerified": "Phone confirmed",
+  "signalPhoneUnverified": "Phone not confirmed",
+  "signalSimMismatch": "SIM name does not match the CNIC",
+  "signalCaveat": "These are plausibility checks, not identity checks. Trust Hire does not look anybody up on a government database.",
+  "simMismatchCaveat": "Often a family member's SIM. Look before deciding.",
+  "adminOpenCnic": "Open the CNIC",
+  "adminCnicLocked": "The CNIC can only be opened while there is an open dispute about this person.",
+  "adminCnicOpened": "Opened. This has been recorded in the log.",
+  "cnicNumberLabel": "Number on file",
+  "cnicNameLabel": "Name on the card",
+  "cnicNoPhoto": "No photo is shipped with the demo.",
+  "adminNoDisputes": "No disputes",
+  "adminNoDisputesMessage": "A dispute is raised against a job. It is also the only thing that unlocks a CNIC.",
+  "disputeAbout": "About {name}",
+  "@disputeAbout": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "disputeRaisedBy": "Raised by {name}",
+  "@disputeRaisedBy": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "disputeOpen": "Open",
+  "disputeClosed": "Closed",
+  "adminCloseDispute": "Close it",
+  "adminAdjustWallet": "Adjust the balance",
+  "adminUnlockWallet": "Unlock the account",
+  "adminWalletLocked": "Locked out — {amount} owed",
+  "@adminWalletLocked": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "adminWalletBalance": "Balance {amount}",
+  "@adminWalletBalance": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "adminNoteLabel": "Why (recorded in the log)",
+  "adminNoteRequired": "An override needs a reason. That is what makes it reviewable.",
+  "adminApply": "Do it",
+  "adminAmountLabel": "How many tokens, plus or minus",
+  "adminLogEmpty": "Nothing logged yet",
+  "adminLogEmptyMessage": "Every admin action lands here — what it was, who it was about, why, and when.",
+  "adminLogIntro": "Every admin action, oldest at the bottom. Nothing here can be edited or removed.",
+  "actionApproveUser": "Approved an account",
+  "actionSuspendUser": "Suspended an account",
+  "actionReinstateUser": "Put an account back",
+  "actionViewCnic": "Opened a CNIC",
+  "actionAdjustWallet": "Adjusted a balance",
+  "actionUnlockWallet": "Unlocked an account",
+  "actionCancelJob": "Cancelled a job",
+  "actionCloseDispute": "Closed a dispute",
+  "adminJobsIntro": "Every job on the platform, newest first, with its offers.",
+  "adminOffersOn": "{count, plural, =0{No offers} =1{1 offer} other{{count} offers}}",
+  "@adminOffersOn": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "accountStaffHelp": "Trust Hire's own account — the admin panel",
+  "@accountStaffHelp": {
+    "description": "Subtitle for the staff demo account"
+  },
+  "adminPanelTile": "Approvals, disputes and the log",
+  "@adminPanelTile": {
+    "description": "What the admin panel holds, on the tile that opens it"
   }
 }

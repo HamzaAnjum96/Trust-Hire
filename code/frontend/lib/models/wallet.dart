@@ -15,7 +15,15 @@ enum WalletEntryKind {
   loyaltyBonus,
 
   /// Charged when a worker accepts a job and then walks away.
-  cancellationPenalty;
+  cancellationPenalty,
+
+  /// Moved by an admin, by hand, with a reason recorded in the audit log.
+  ///
+  /// An ordinary entry rather than a correction that rewrites history: the
+  /// ledger is the only stored state, so an override lands in the worker's own
+  /// list next to the charges it is putting right. They can see it, which is
+  /// the point.
+  adminAdjustment;
 
   String get id => name;
 
@@ -28,6 +36,7 @@ enum WalletEntryKind {
     WalletEntryKind.firstJobCredit => strings.walletFirstJobCredit,
     WalletEntryKind.loyaltyBonus => strings.walletLoyaltyBonus,
     WalletEntryKind.cancellationPenalty => strings.walletCancellationPenalty,
+    WalletEntryKind.adminAdjustment => strings.walletAdminAdjustment,
   };
 }
 

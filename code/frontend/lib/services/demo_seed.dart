@@ -25,6 +25,34 @@ class DemoSeed {
     await _installRatings();
     await _installAccounts();
     await _installDirectory();
+    await _installAdmin();
+  }
+
+  /// The admin panel's data — who is waiting, whose CNIC is on file, and what
+  /// has been complained about.
+  ///
+  /// **The audit log is deliberately not seeded.** It records what staff did,
+  /// and inventing entries for actions nobody took would be the one place in
+  /// the demo where the data is a lie about a person rather than a plausible
+  /// example.
+  Future<void> _installAdmin() async {
+    final reviews = await _loader.loadReviews();
+    await _store.writeCollection(
+      StoreKeys.accountReviews,
+      reviews.map((review) => review.toJson()).toList(growable: false),
+    );
+
+    final cnics = await _loader.loadCnics();
+    await _store.writeCollection(
+      StoreKeys.cnicRecords,
+      cnics.map((record) => record.toJson()).toList(growable: false),
+    );
+
+    final disputes = await _loader.loadDisputes();
+    await _store.writeCollection(
+      StoreKeys.disputes,
+      disputes.map((dispute) => dispute.toJson()).toList(growable: false),
+    );
   }
 
   Future<void> _installDirectory() async {

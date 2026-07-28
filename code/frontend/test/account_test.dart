@@ -62,7 +62,7 @@ void main() {
       final byId = {for (final user in users) user['id'] as String: user};
 
       for (final account in DemoAccounts.roster) {
-        if (account.isDevice) continue;
+        if (!account.isSeeded) continue;
 
         final seeded = byId[account.id];
         expect(
@@ -84,7 +84,7 @@ void main() {
               .cast<Map<String, dynamic>>();
 
       for (final account in DemoAccounts.roster) {
-        if (account.isDevice) continue;
+        if (!account.isSeeded) continue;
 
         expect(
           jobs.where((job) => job['postedBy'] == account.id).length,
