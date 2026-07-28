@@ -10,6 +10,7 @@ import '../../models/job.dart';
 import '../../models/job_status.dart';
 import '../../app/rating_controller.dart';
 import '../../widgets/state_views.dart';
+import '../../widgets/status_pill.dart';
 import '../ratings/rating_sheet.dart';
 import 'job_lifecycle.dart';
 
@@ -139,6 +140,25 @@ class JobStatusPanel extends StatelessWidget {
           ],
         ),
 
+        // A Mode B job says which mode it came from, because the two behave
+        // differently and the difference is not otherwise visible: there are
+        // no offers to read, the price was fixed before anybody was asked, and
+        // the worker's only choice is yes or no. Saying "open" and nothing
+        // else would leave both sides waiting for a bidding screen that is
+        // never going to appear.
+        if (job.isDirectBooking) ...[
+          const SizedBox(height: BrandSizing.spaceSm),
+          NoticePanel(
+            icon: Icons.badge_outlined,
+            message: switch ((role, job.status)) {
+              (JobRole.worker, JobStatus.open) => strings.bookingRequest,
+              (JobRole.hirer, JobStatus.open) =>
+                strings.bookingAwaitingWorker,
+              _ => strings.bookedFrom,
+            },
+          ),
+        ],
+
         if (ending != null) ...[
           const SizedBox(height: BrandSizing.spaceSm),
           NoticePanel(message: ending, icon: Icons.info_outline),
@@ -232,40 +252,18 @@ class _StatusChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final strings = AppStrings.of(context);
-    final theme = Theme.of(context);
+    final label = status.label(strings);
 
-    final (background, foreground) = switch (status) {
-      JobStatus.open => (
-        theme.colorScheme.surfaceContainerHighest,
-        theme.colorScheme.onSurfaceVariant,
-      ),
-      JobStatus.accepted || JobStatus.inProgress => (
-        theme.colorScheme.primary,
-        theme.colorScheme.onPrimary,
-      ),
-      JobStatus.completed => (BrandColours.successTeal, BrandColours.white),
-      JobStatus.cancelled || JobStatus.expired => (
-        theme.colorScheme.surfaceContainerHighest,
-        theme.colorScheme.onSurfaceVariant,
-      ),
+    return switch (status) {
+      JobStatus.open => StatusPill.muted(context, label),
+      JobStatus.accepted ||
+      JobStatus.inProgress => StatusPill.emphasised(context, label),
+      JobStatus.completed => StatusPill.good(label),
+      // Not the error treatment: a job that was called off or ran out of time
+      // is over, not wrong, and colouring it like a failure would tell the
+      // person who cancelled it that they did something bad.
+      JobStatus.cancelled ||
+      JobStatus.expired => StatusPill.muted(context, label),
     };
-
-    return Container(
-      padding: const EdgeInsets.symmetric(
-        horizontal: BrandSizing.spaceSm + 2,
-        vertical: 4,
-      ),
-      decoration: BoxDecoration(
-        color: background,
-        borderRadius: BrandRadius.smallAll,
-      ),
-      child: Text(
-        status.label(strings),
-        style: theme.textTheme.labelSmall?.copyWith(
-          color: foreground,
-          fontWeight: FontWeight.w600,
-        ),
-      ),
-    );
   }
 }

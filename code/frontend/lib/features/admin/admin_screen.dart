@@ -12,6 +12,7 @@ import '../../l10n/app_localizations.dart';
 import '../../models/admin.dart';
 import '../../models/job.dart';
 import '../../widgets/state_views.dart';
+import '../../widgets/status_pill.dart';
 import 'admin_rules.dart';
 
 /// Section 12, in four tabs: who is waiting, what has gone wrong, what is
@@ -162,7 +163,18 @@ class _ReviewCard extends StatelessWidget {
                 Expanded(
                   child: Text(name, style: theme.textTheme.titleMedium),
                 ),
-                _StatusPill(status: review.status),
+                switch (review.status) {
+                  ReviewStatus.pending => StatusPill.muted(
+                    context,
+                    strings.statusPending,
+                  ),
+                  ReviewStatus.approved => StatusPill.good(
+                    strings.statusApproved,
+                  ),
+                  ReviewStatus.suspended => StatusPill.bad(
+                    strings.statusSuspended,
+                  ),
+                },
               ],
             ),
 
@@ -600,54 +612,6 @@ class _LogTab extends StatelessWidget {
     AdminAction.cancelJob => strings.actionCancelJob,
     AdminAction.closeDispute => strings.actionCloseDispute,
   };
-}
-
-class _StatusPill extends StatelessWidget {
-  const _StatusPill({required this.status});
-
-  final ReviewStatus status;
-
-  @override
-  Widget build(BuildContext context) {
-    final strings = AppStrings.of(context);
-    final theme = Theme.of(context);
-
-    final (label, background, foreground) = switch (status) {
-      ReviewStatus.pending => (
-        strings.statusPending,
-        theme.colorScheme.surfaceContainerHighest,
-        theme.colorScheme.onSurfaceVariant,
-      ),
-      ReviewStatus.approved => (
-        strings.statusApproved,
-        BrandColours.successTeal,
-        BrandColours.white,
-      ),
-      ReviewStatus.suspended => (
-        strings.statusSuspended,
-        BrandColours.errorRed,
-        BrandColours.white,
-      ),
-    };
-
-    return Container(
-      padding: const EdgeInsets.symmetric(
-        horizontal: BrandSizing.spaceSm,
-        vertical: 2,
-      ),
-      decoration: BoxDecoration(
-        color: background,
-        borderRadius: BrandRadius.smallAll,
-      ),
-      child: Text(
-        label,
-        style: theme.textTheme.labelSmall?.copyWith(
-          color: foreground,
-          fontWeight: FontWeight.w600,
-        ),
-      ),
-    );
-  }
 }
 
 class _Signal extends StatelessWidget {

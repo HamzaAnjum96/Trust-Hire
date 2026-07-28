@@ -13,6 +13,7 @@ import 'package:trust_hire/features/jobs/job_details_sheet.dart';
 import 'package:trust_hire/features/jobs/photo_gallery.dart';
 import 'package:trust_hire/features/jobs/saved_jobs_controller.dart';
 import 'package:trust_hire/models/job.dart';
+import 'package:trust_hire/models/job_status.dart';
 import 'package:trust_hire/services/job_repository.dart';
 import 'package:trust_hire/app/bid_controller.dart';
 import 'package:trust_hire/app/profile_controller.dart';
@@ -276,7 +277,14 @@ void main() {
     // worker is chosen the caption has to change with the behaviour, or the
     // app is reassuring people about something it has already given away.
     final (controller, media) = await buildControllers();
-    final anyJob = controller.jobs.first;
+    // Deliberately an *open* job, chosen by shape rather than taken off the
+    // top of the list: the seed now finishes a good share of its work, so
+    // "the newest job" is often one that already has somebody on it — and
+    // this test is about the moment the promise changes.
+    final anyJob = jobWhere(
+      controller,
+      (job) => job.status == JobStatus.open && !job.isDirectBooking,
+    );
 
     await openSheet(tester, controller, media, anyJob.id);
     await scrollTo(tester, find.text(strings.generalAreaNotice));

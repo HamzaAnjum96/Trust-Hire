@@ -196,6 +196,8 @@ class ProfileScreen extends StatelessWidget {
     final wallet = context.read<WalletController>();
     final profile = context.read<ProfileController>();
     final saved = context.read<SavedJobsController>();
+    final premium = context.read<PremiumController>();
+    final admin = context.read<AdminController>();
 
     final confirmed = await showDialog<bool>(
       context: context,
@@ -221,16 +223,22 @@ class ProfileScreen extends StatelessWidget {
 
     await controller.resetToSeed();
 
-    // The reset replaces the offers, ratings, wallets and trades as well as
-    // the jobs, and every one of those is already in memory somewhere. Without
-    // this the screen would show a restored map beside a wallet balance that
-    // no longer exists in storage — and the next write would put the stale one
-    // back.
+    // **Everything the seed writes has to be re-read here.** The reset
+    // replaces the offers, ratings, wallets, trades, directory listings and
+    // the admin panel's data as well as the jobs, and every one of those is
+    // already in memory somewhere. Without this the screen would show a
+    // restored map beside a wallet balance that no longer exists in storage —
+    // and the next write would put the stale one back.
+    //
+    // This list has to grow whenever `DemoSeed` learns to write something
+    // new; `demo_history_test.dart` fails if it does not.
     await bids.load();
     ratings.load();
     wallet.load();
     profile.load();
     saved.load();
+    premium.load();
+    admin.load();
 
     messenger.showSnackBar(SnackBar(content: Text(strings.seedRestored)));
   }

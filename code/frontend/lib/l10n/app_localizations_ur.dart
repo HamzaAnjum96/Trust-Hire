@@ -56,12 +56,6 @@ class AppStringsUr extends AppStrings {
       'کام لوڈ نہیں ہو سکے۔ دوبارہ کوشش کے لیے نیچے کھینچیں۔';
 
   @override
-  String get couldNotLoadJobsShort => 'کام لوڈ نہیں ہو سکے۔ دوبارہ کوشش کریں۔';
-
-  @override
-  String get tryAgain => 'دوبارہ کوشش کریں';
-
-  @override
   String get close => 'بند کریں';
 
   @override
@@ -160,16 +154,10 @@ class AppStringsUr extends AppStrings {
   String get showJobs => 'کام دکھائیں';
 
   @override
-  String get filterWhen => 'کب';
-
-  @override
   String get filterHowFar => 'کتنی دور';
 
   @override
   String get filterIncludes => 'اس میں کیا ہے';
-
-  @override
-  String get filterKind => 'کام کی قسم';
 
   @override
   String get filterKindWarning =>
@@ -197,9 +185,6 @@ class AppStringsUr extends AppStrings {
 
   @override
   String get detailWhen => 'کب';
-
-  @override
-  String get detailArea => 'علاقہ';
 
   @override
   String get detailPostedBy => 'لگانے والے';
@@ -330,10 +315,6 @@ class AppStringsUr extends AppStrings {
   @override
   String get addAtLeastOne =>
       'کم از کم ایک آواز کا پیغام، تصویر یا پیغام ڈالیں۔';
-
-  @override
-  String get addSomethingFirst =>
-      'پہلے آواز کا پیغام، تصویر یا چھوٹا پیغام ڈالیں۔';
 
   @override
   String get couldNotSave => 'آپ کا کام محفوظ نہیں ہو سکا۔ دوبارہ کوشش کریں۔';
@@ -552,12 +533,6 @@ class AppStringsUr extends AppStrings {
       'السلام علیکم، میں نے ٹرسٹ ہائر پر آپ کا کام دیکھا۔';
 
   @override
-  String get save => 'محفوظ کریں';
-
-  @override
-  String get saved => 'محفوظ شدہ';
-
-  @override
   String get saveThisJob => 'یہ کام محفوظ کریں';
 
   @override
@@ -568,12 +543,6 @@ class AppStringsUr extends AppStrings {
 
   @override
   String get jobUnsaved => 'محفوظ شدہ سے ہٹا دیا گیا۔';
-
-  @override
-  String get savedJobs => 'محفوظ کام';
-
-  @override
-  String get myPostings => 'میرے لگائے ہوئے کام';
 
   @override
   String get noSavedJobs => 'ابھی کچھ محفوظ نہیں';
@@ -592,28 +561,6 @@ class AppStringsUr extends AppStrings {
 
   @override
   String get postedTab => 'لگائے ہوئے';
-
-  @override
-  String savedCount(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count محفوظ',
-      one: '1 محفوظ',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String postedCount(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count لگائے',
-      one: '1 لگایا',
-    );
-    return '$_temp0';
-  }
 
   @override
   String get savedJobGone => 'آپ کا محفوظ کیا ہوا ایک کام اب موجود نہیں۔';
@@ -654,9 +601,6 @@ class AppStringsUr extends AppStrings {
 
   @override
   String get onboardNotNow => 'ابھی نہیں';
-
-  @override
-  String get onboardStart => 'شروع کریں';
 
   @override
   String onboardStepOf(int step, int total) {
@@ -735,9 +679,6 @@ class AppStringsUr extends AppStrings {
 
   @override
   String get tagsRequired => 'کم از کم ایک قسم چنیں۔';
-
-  @override
-  String get tagsAtMost => 'زیادہ سے زیادہ 3 چن سکتے ہیں۔';
 
   @override
   String get roleWorker => 'کام کی تلاش میں';
@@ -947,10 +888,6 @@ class AppStringsUr extends AppStrings {
       'یہ ٹھیک جگہ ہے، کیونکہ آپ دونوں مل کر کام کر رہے ہیں۔';
 
   @override
-  String get exactLocationWithWorker =>
-      'آپ نے کسی کو منتخب کر لیا ہے، اس لیے اب آپ دونوں ایک دوسرے کی ٹھیک جگہ دیکھ سکتے ہیں۔';
-
-  @override
   String get jobFinished => 'یہ کام مکمل ہو چکا ہے۔';
 
   @override
@@ -964,11 +901,6 @@ class AppStringsUr extends AppStrings {
 
   @override
   String get walletBalance => 'بیلنس';
-
-  @override
-  String tokens(String count) {
-    return '$count ٹوکن';
-  }
 
   @override
   String get walletTopUp => 'ٹوکن ڈالے';
@@ -1120,9 +1052,6 @@ class AppStringsUr extends AppStrings {
     );
     return '$_temp0';
   }
-
-  @override
-  String get accountIsActive => 'ابھی فعال';
 
   @override
   String get yourStanding => 'آپ کا ریکارڈ';
@@ -1300,12 +1229,6 @@ class AppStringsUr extends AppStrings {
       'کوئی رقم نہیں کٹتی۔ یہ نمونہ ہے اور کارڈ کی تفصیل نہیں لیتا۔';
 
   @override
-  String get premiumSubscribe => 'فہرست شروع کریں';
-
-  @override
-  String get premiumRenew => 'مزید وقت بڑھائیں';
-
-  @override
   String get premiumStarted => 'آپ ڈائریکٹری میں آ گئے۔';
 
   @override
@@ -1365,9 +1288,6 @@ class AppStringsUr extends AppStrings {
 
   @override
   String get remoteOnlyLabel => 'میں دور سے کام کرتا ہوں، سفر نہیں';
-
-  @override
-  String get headlineLabel => 'اپنے بارے میں ایک سطر (اختیاری)';
 
   @override
   String get listingNeedsService =>

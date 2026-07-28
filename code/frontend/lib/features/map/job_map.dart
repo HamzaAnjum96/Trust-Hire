@@ -29,6 +29,7 @@ class JobMap extends StatefulWidget {
     this.onTilesUnavailable,
     this.onClusterTapped,
     this.myAccountId,
+    this.openingFit,
   });
 
   final List<Job> jobs;
@@ -53,6 +54,17 @@ class JobMap extends StatefulWidget {
   /// Called when a group of overlapping jobs is tapped. The map zooms to it so
   /// the individual pins separate.
   final void Function(JobCluster cluster)? onClusterTapped;
+
+  /// Where the camera opens, resolved by flutter_map during its **own** first
+  /// layout rather than moved into place afterwards.
+  ///
+  /// The distinction is the whole reason this parameter exists. A camera moved
+  /// from a post-frame callback means the map lays out at one position and
+  /// arrives at its real one a frame later, and a tile layer that has already
+  /// decided which tiles it wants does not reliably notice — leaving a blank
+  /// map until the first pan or zoom made it think again. Given as a fit, the
+  /// first layout is already the right one.
+  final CameraFit? openingFit;
 
   /// The demo account whose pins get the copper treatment. Passed in rather
   /// than read from a provider: the map is given its jobs, its centre and its
@@ -154,6 +166,7 @@ class _JobMapState extends State<JobMap> {
                 widget.centre.longitude,
               ),
               initialZoom: widget.initialZoom,
+              initialCameraFit: widget.openingFit,
               minZoom: 4,
               maxZoom: 18,
               backgroundColor: mapTheme.backgroundColour,

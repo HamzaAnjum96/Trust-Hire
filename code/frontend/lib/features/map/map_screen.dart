@@ -41,8 +41,11 @@ class _MapScreenState extends State<MapScreen> {
   String? _selectedJobId;
   bool _tilesUnavailable = false;
 
-  /// Set once the camera has been framed around the jobs on first load.
-  bool _framed = false;
+  /// The opening camera, worked out once the jobs are known.
+  ///
+  /// Held rather than applied, and handed to [JobMap] as the map's *initial*
+  /// fit — see [_openingFit] for why that matters.
+  CameraFit? _openingFit;
 
   @override
   void dispose() {
@@ -82,24 +85,29 @@ class _MapScreenState extends State<MapScreen> {
   /// notices float *over* the map, so an evenly-fitted pin ends up behind
   /// them. These clear the tallest realistic stack at the top and the "Post a
   /// Job" button at the bottom.
-  void _fitToJobs(List<Job> jobs) {
+  static CameraFit? _fitAround(List<Job> jobs) {
     final bounds = boundsOf(jobs);
-    if (bounds == null) return;
+    if (bounds == null) return null;
 
-    _mapController.fitCamera(
-      CameraFit.bounds(
-        bounds: bounds,
-        padding: const EdgeInsets.fromLTRB(
-          BrandSizing.spaceLg,
-          // Header (~64) plus the filter row (~48) plus room for one notice.
-          240,
-          BrandSizing.spaceLg,
-          // Clear of the "Post a Job" button.
-          140,
-        ),
-        maxZoom: 14,
+    return CameraFit.bounds(
+      bounds: bounds,
+      padding: const EdgeInsets.fromLTRB(
+        BrandSizing.spaceLg,
+        // Header (~64) plus the filter row (~48) plus room for one notice.
+        240,
+        BrandSizing.spaceLg,
+        // Clear of the "Post a Job" button.
+        140,
       ),
+      maxZoom: 14,
     );
+  }
+
+  /// The same fit, applied now. For the "show all jobs" button, which the
+  /// user presses long after the map has a size.
+  void _fitToJobs(List<Job> jobs) {
+    final fit = _fitAround(jobs);
+    if (fit != null) _mapController.fitCamera(fit);
   }
 
   /// How far from the opening point a job can be and still count as "here".
@@ -111,7 +119,7 @@ class _MapScreenState extends State<MapScreen> {
   /// thing that happens on launch.
   static const _nearbyMetres = 60000.0;
 
-  /// Frames the first load on the work near the opening point.
+  /// Works out the opening camera, once, as soon as there are jobs.
   ///
   /// The fixed opening camera used to work because the seed surrounded it.
   /// Since P1-1 a worker sees a subset, sometimes with none of it in the
@@ -120,22 +128,28 @@ class _MapScreenState extends State<MapScreen> {
   /// So: fit to the jobs around wherever the map is starting — the device
   /// position when it is known, the fallback city when it is not. If there is
   /// nothing near, fit everything instead, because a distant pin the user can
-  /// see beats a correct view of nothing. Runs once, and never fights a user
-  /// who has since panned.
+  /// see beats a correct view of nothing.
+  ///
+  /// **Computed here and handed to the map, rather than applied to it after
+  /// the fact.** This used to move the camera from a post-frame callback,
+  /// which meant the map's first layout happened at one place and its real
+  /// position arrived a frame later — and a tile layer that has already
+  /// decided which tiles it wants does not always notice. The symptom was a
+  /// map that stayed blank until the first pan or zoom, because that was the
+  /// first event that made it think again. `initialCameraFit` is resolved by
+  /// flutter_map during its own first layout, when the size is genuinely
+  /// known, so there is no second position and nothing to miss.
+  ///
+  /// Runs once. Recomputing would fight a user who has since panned.
   void _frameOnFirstLoad(List<Job> jobs, {JobLocation? from}) {
-    if (_framed || jobs.isEmpty) return;
-    _framed = true;
+    if (_openingFit != null || jobs.isEmpty) return;
 
     final origin = from ?? LocationService.fallback;
     final nearby = jobs
         .where((job) => origin.distanceTo(job.location) <= _nearbyMetres)
         .toList(growable: false);
 
-    final target = nearby.isEmpty ? jobs : nearby;
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted) _fitToJobs(target);
-    });
+    _openingFit = _fitAround(nearby.isEmpty ? jobs : nearby);
   }
 
   void _onTilesUnavailable() {
@@ -210,6 +224,7 @@ class _MapScreenState extends State<MapScreen> {
           selectedJobId: _selectedJobId,
           location: location,
           mapController: _mapController,
+          openingFit: _openingFit,
           tilesUnavailable: _tilesUnavailable,
           onJobTapped: _selectJob,
           onMapTapped: _clearSelection,
@@ -242,6 +257,7 @@ class _Discovery extends StatelessWidget {
     required this.selectedJobId,
     required this.location,
     required this.mapController,
+    required this.openingFit,
     required this.tilesUnavailable,
     required this.onJobTapped,
     required this.onMapTapped,
@@ -259,6 +275,11 @@ class _Discovery extends StatelessWidget {
   final String? selectedJobId;
   final LocationController location;
   final MapController mapController;
+
+  /// The camera the map opens at, resolved by flutter_map at its own first
+  /// layout. Null until the jobs have loaded.
+  final CameraFit? openingFit;
+
   final bool tilesUnavailable;
   final ValueChanged<Job> onJobTapped;
   final VoidCallback onMapTapped;
@@ -278,6 +299,7 @@ class _Discovery extends StatelessWidget {
       selectedJobId: selectedJobId,
       location: location,
       mapController: mapController,
+      openingFit: openingFit,
       tilesUnavailable: tilesUnavailable,
       // The preview card is the handset's answer to "what is this pin?". With
       // a rail beside the map that question is already answered, and a card
@@ -395,6 +417,7 @@ class _MapBody extends StatelessWidget {
     required this.selectedJobId,
     required this.location,
     required this.mapController,
+    required this.openingFit,
     required this.tilesUnavailable,
     required this.onJobTapped,
     required this.onMapTapped,
@@ -419,6 +442,11 @@ class _MapBody extends StatelessWidget {
   final String? selectedJobId;
   final LocationController location;
   final MapController mapController;
+
+  /// The camera the map opens at, resolved by flutter_map at its own first
+  /// layout. Null until the jobs have loaded.
+  final CameraFit? openingFit;
+
   final bool tilesUnavailable;
   final ValueChanged<Job> onJobTapped;
   final VoidCallback onMapTapped;
@@ -458,6 +486,7 @@ class _MapBody extends StatelessWidget {
             selectedJobId: selectedJobId,
             userLocation: location.position,
             controller: mapController,
+            openingFit: openingFit,
             onJobTapped: onJobTapped,
             onMapTapped: onMapTapped,
             onTilesUnavailable: onTilesUnavailable,

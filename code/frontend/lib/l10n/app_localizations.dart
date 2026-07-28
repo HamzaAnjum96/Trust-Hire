@@ -170,18 +170,6 @@ abstract class AppStrings {
   /// **'Could not load jobs. Pull down to try again.'**
   String get couldNotLoadJobs;
 
-  /// No description provided for @couldNotLoadJobsShort.
-  ///
-  /// In en, this message translates to:
-  /// **'Could not load jobs. Try again.'**
-  String get couldNotLoadJobsShort;
-
-  /// No description provided for @tryAgain.
-  ///
-  /// In en, this message translates to:
-  /// **'Try Again'**
-  String get tryAgain;
-
   /// No description provided for @close.
   ///
   /// In en, this message translates to:
@@ -362,12 +350,6 @@ abstract class AppStrings {
   /// **'Show Jobs'**
   String get showJobs;
 
-  /// No description provided for @filterWhen.
-  ///
-  /// In en, this message translates to:
-  /// **'When'**
-  String get filterWhen;
-
   /// No description provided for @filterHowFar.
   ///
   /// In en, this message translates to:
@@ -379,12 +361,6 @@ abstract class AppStrings {
   /// In en, this message translates to:
   /// **'What it includes'**
   String get filterIncludes;
-
-  /// No description provided for @filterKind.
-  ///
-  /// In en, this message translates to:
-  /// **'Kind of work'**
-  String get filterKind;
 
   /// No description provided for @filterKindWarning.
   ///
@@ -433,12 +409,6 @@ abstract class AppStrings {
   /// In en, this message translates to:
   /// **'When'**
   String get detailWhen;
-
-  /// No description provided for @detailArea.
-  ///
-  /// In en, this message translates to:
-  /// **'Area'**
-  String get detailArea;
 
   /// No description provided for @detailPostedBy.
   ///
@@ -667,12 +637,6 @@ abstract class AppStrings {
   /// In en, this message translates to:
   /// **'Add at least one voice note, photo, or message.'**
   String get addAtLeastOne;
-
-  /// No description provided for @addSomethingFirst.
-  ///
-  /// In en, this message translates to:
-  /// **'Add a voice note, photo, or short message first.'**
-  String get addSomethingFirst;
 
   /// No description provided for @couldNotSave.
   ///
@@ -1004,18 +968,6 @@ abstract class AppStrings {
   /// **'Salaam, I saw your job on Trust Hire.'**
   String get whatsAppMessage;
 
-  /// No description provided for @save.
-  ///
-  /// In en, this message translates to:
-  /// **'Save'**
-  String get save;
-
-  /// No description provided for @saved.
-  ///
-  /// In en, this message translates to:
-  /// **'Saved'**
-  String get saved;
-
   /// No description provided for @saveThisJob.
   ///
   /// In en, this message translates to:
@@ -1039,18 +991,6 @@ abstract class AppStrings {
   /// In en, this message translates to:
   /// **'Removed from saved.'**
   String get jobUnsaved;
-
-  /// No description provided for @savedJobs.
-  ///
-  /// In en, this message translates to:
-  /// **'Saved jobs'**
-  String get savedJobs;
-
-  /// No description provided for @myPostings.
-  ///
-  /// In en, this message translates to:
-  /// **'My postings'**
-  String get myPostings;
 
   /// No description provided for @noSavedJobs.
   ///
@@ -1087,18 +1027,6 @@ abstract class AppStrings {
   /// In en, this message translates to:
   /// **'Posted'**
   String get postedTab;
-
-  /// No description provided for @savedCount.
-  ///
-  /// In en, this message translates to:
-  /// **'{count, plural, =1{1 saved} other{{count} saved}}'**
-  String savedCount(int count);
-
-  /// No description provided for @postedCount.
-  ///
-  /// In en, this message translates to:
-  /// **'{count, plural, =1{1 posted} other{{count} posted}}'**
-  String postedCount(int count);
 
   /// No description provided for @savedJobGone.
   ///
@@ -1171,12 +1099,6 @@ abstract class AppStrings {
   /// In en, this message translates to:
   /// **'Not Now'**
   String get onboardNotNow;
-
-  /// No description provided for @onboardStart.
-  ///
-  /// In en, this message translates to:
-  /// **'Start'**
-  String get onboardStart;
 
   /// No description provided for @onboardStepOf.
   ///
@@ -1327,12 +1249,6 @@ abstract class AppStrings {
   /// In en, this message translates to:
   /// **'Choose at least one kind of work.'**
   String get tagsRequired;
-
-  /// No description provided for @tagsAtMost.
-  ///
-  /// In en, this message translates to:
-  /// **'You can choose up to 3.'**
-  String get tagsAtMost;
 
   /// No description provided for @roleWorker.
   ///
@@ -1670,12 +1586,6 @@ abstract class AppStrings {
   /// **'This is the exact spot, shared because you two are working together.'**
   String get exactLocationShown;
 
-  /// Explains the reveal to the hirer
-  ///
-  /// In en, this message translates to:
-  /// **'You chose someone, so you can both see each other\'s exact location now.'**
-  String get exactLocationWithWorker;
-
   /// Notice on a completed job
   ///
   /// In en, this message translates to:
@@ -1705,12 +1615,6 @@ abstract class AppStrings {
   /// In en, this message translates to:
   /// **'Balance'**
   String get walletBalance;
-
-  /// No description provided for @tokens.
-  ///
-  /// In en, this message translates to:
-  /// **'{count} tokens'**
-  String tokens(String count);
 
   /// Ledger entry: bought tokens
   ///
@@ -1933,12 +1837,6 @@ abstract class AppStrings {
   /// In en, this message translates to:
   /// **'{count, plural, =0{No jobs posted} =1{1 job posted} other{{count} jobs posted}}'**
   String accountPostings(int count);
-
-  /// No description provided for @accountIsActive.
-  ///
-  /// In en, this message translates to:
-  /// **'Currently active'**
-  String get accountIsActive;
 
   /// Heading for your own rating, completed count and fare average
   ///
@@ -2210,18 +2108,6 @@ abstract class AppStrings {
   /// **'Nothing is charged. This is a demonstration and takes no card details.'**
   String get premiumSimulated;
 
-  /// No description provided for @premiumSubscribe.
-  ///
-  /// In en, this message translates to:
-  /// **'Start listing'**
-  String get premiumSubscribe;
-
-  /// No description provided for @premiumRenew.
-  ///
-  /// In en, this message translates to:
-  /// **'Add more time'**
-  String get premiumRenew;
-
   /// No description provided for @premiumStarted.
   ///
   /// In en, this message translates to:
@@ -2341,12 +2227,6 @@ abstract class AppStrings {
   /// In en, this message translates to:
   /// **'I work remotely, no travel'**
   String get remoteOnlyLabel;
-
-  /// No description provided for @headlineLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'One line about you (optional)'**
-  String get headlineLabel;
 
   /// No description provided for @listingNeedsService.
   ///

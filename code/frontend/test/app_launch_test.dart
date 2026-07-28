@@ -35,6 +35,35 @@ void main() {
     }
   }
 
+  testWidgets('the map opens already framed, not moved into place', (
+    tester,
+  ) async {
+    // **A regression guard for a blank map.** The opening camera used to be
+    // applied with `fitCamera` from a post-frame callback, so the map laid
+    // itself out at one position and arrived at its real one a frame later —
+    // and a tile layer that has already chosen its tiles does not reliably
+    // notice. The symptom was a map that stayed empty until the first pan or
+    // zoom, which was the first event that made it think again.
+    //
+    // The fix is to hand flutter_map the fit and let it resolve during its own
+    // first layout. So this asserts the *mechanism* rather than the resulting
+    // camera: a fitted camera would look identical either way once the frames
+    // have run, which is exactly why the bug survived a green suite.
+    final store = await LocalStore.open();
+    await (SettingsController(store)..load()).markIntroSeen();
+
+    await tester.useCompactSurface();
+    await tester.pumpWidget(TrustHireApp(store: store));
+    await settle(tester);
+
+    final map = tester.widget<JobMap>(find.byType(JobMap));
+    expect(
+      map.openingFit,
+      isNotNull,
+      reason: 'the map must be given its opening camera, not moved to it',
+    );
+  });
+
   testWidgets('app launches and seeds jobs into local storage', (tester) async {
     final store = await LocalStore.open();
     // The intro is covered in onboarding_test; these assert the

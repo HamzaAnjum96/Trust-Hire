@@ -61,7 +61,7 @@ it is for.
 | --- | --- |
 | `agile/sprint-planning/` | [`poc-sprint-plan.md`](documents/agile/sprint-planning/poc-sprint-plan.md) is the master plan for the POC — vision, goals, constraints, and Sprints 0–6 as originally scoped — the build ran to Sprint 13. [`phase-1-sprint-plan.md`](documents/agile/sprint-planning/phase-1-sprint-plan.md) plans what follows it, P1-1 to P1-9. Alongside them, one document per sprint as it is planned in detail: sprint goal, committed scope, team capacity, risks and dependencies, definition of done. Name those `sprint-NN-planning.md`, zero-padded. |
 | `agile/backlog/` | Epics (`epic-<slug>.md`) and user stories (`story-<slug>.md`) with testable acceptance criteria. A story is *ready* when its criteria are testable and its open questions are resolved — only ready stories get pulled into planning. |
-| `agile/retrospectives/` | `sprint-NN-retro.md`, matching the sprint number. What went well, what did not, and **actions with named owners**. Carry unfinished actions forward explicitly. |
+| `agile/retrospectives/` | `sprint-NN-retro.md`, matching the sprint number, or `phase-N-retro.md` for a whole phase — [`phase-1-retro.md`](documents/agile/retrospectives/phase-1-retro.md) is the first. What went well, what did not, and **actions with named owners**. Carry unfinished actions forward explicitly. Write it at the end of the sprint; a retro covering seven of them at once is archaeology. |
 | `brand-guidelines/` | [`brand-guidelines.md`](documents/brand-guidelines/brand-guidelines.md) is the source of truth: positioning, the burgundy/copper/sand palette, typography, logo direction, iconography, map styling, voice and tone, component specs, motion, accessibility, dark mode, and design tokens. Anything user-facing should be traceable back to it. Add new colours with their hex value *and* intended use; keep source assets next to exports. |
 | `product/` | [`roadmap.md`](documents/product/roadmap.md) sets out what comes after the POC. [`phase-1-system-logic.md`](documents/product/phase-1-system-logic.md) specifies a fuller two-sided marketplace, and [`poc-vs-phase-1.md`](documents/product/poc-vs-phase-1.md) reconciles the two — **read that before building against either**. [`ux-audit-response.md`](documents/product/ux-audit-response.md) answers the UI/UX audit finding by finding: done, scheduled, or declined with a reason. Alongside them: vision, PRDs (`prd-<slug>.md`), personas, success metrics. State non-goals as clearly as goals, and number requirements so backlog stories can reference them. |
 | `design/` | User flows, wireframes, mockups, design-system and accessibility decisions. Link the live design tool **and** commit a dated export — links rot. Record the reasoning, not just the picture. |
@@ -169,9 +169,9 @@ code/frontend/
 │   ├── l10n/         ← app_en.arb, app_ur.arb (generated AppStrings)
 │   ├── models/       ← Job, JobTag, Bid, Wallet, Rating, DemoAccount, listings
 │   ├── services/     ← local storage, seed loading, repositories
-│   └── widgets/      ← shared UI
+│   └── widgets/      ← shared UI (status pills, skeletons, empty states)
 ├── assets/
-│   ├── seed/         ← jobs, users, offers, ratings, accounts, directory
+│   ├── seed/         ← jobs, users, offers, ratings, accounts, directory, admin
 │   ├── images/       ← placeholder job photos
 │   ├── audio/        ← placeholder voice notes
 │   └── fonts/        ← Inter, Noto Sans Arabic, Noto Nastaliq Urdu
@@ -192,7 +192,7 @@ people; the second gives them a history. Keeping them apart means regenerating
 the history leaves every job where it was, posted by the same person — so the
 five names pinned in `DemoAccounts.roster` stay correct.
 
-Four things to know if you grow it further:
+Five things to know if you grow it further:
 
 - **Read it through `SeedLoader`**, which decodes the bytes itself.
   `rootBundle.loadString` sends anything over 50 KB to a background isolate
@@ -208,6 +208,18 @@ Four things to know if you grow it further:
   would have shown them, and `test/demo_history_test.dart` checks the
   agreements — accepted fare against the bid behind it, ratings only on
   finished work, every commission 5% of a real agreed fare.
+- **Ask whether it can be *reached*, not only whether it is coherent.** The
+  history pass draws from jobs posted by other people, so for three sprints
+  the demo accounts' own postings had no offers on them at all — the hirer's
+  side of Mode A was unreachable from four of the five accounts while every
+  coherence test passed. There is now a test per persona for offers, a
+  finished-and-rated posting, and more than one state.
+
+**Restoring the seed reloads eight controllers.** Everything `DemoSeed` writes
+is already held in memory somewhere, so the reset handler in `profile_screen.dart`
+has to re-read all of it — otherwise the app shows a restored map beside stale
+balances, and the next write puts the stale ones back. `demo_history_test.dart`
+fails if the seed grows a key that list does not cover.
 
 **The web shell.** `web/index.html` and `web/manifest.json` are the product's
 only presence outside the app — the browser tab, the shared link, the installed

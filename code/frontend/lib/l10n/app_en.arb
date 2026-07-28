@@ -29,8 +29,6 @@
   },
   "loadingJobs": "Loading nearby jobs…",
   "couldNotLoadJobs": "Could not load jobs. Pull down to try again.",
-  "couldNotLoadJobsShort": "Could not load jobs. Try again.",
-  "tryAgain": "Try Again",
   "close": "Close",
   "dismiss": "Dismiss",
   "showAllJobs": "Show all jobs",
@@ -68,10 +66,8 @@
   "clearAll": "Clear All",
   "clearFilters": "Clear Filters",
   "showJobs": "Show Jobs",
-  "filterWhen": "When",
   "filterHowFar": "How far",
   "filterIncludes": "What it includes",
-  "filterKind": "Kind of work",
   "filterKindWarning": "Jobs that did not say what kind they are will be hidden.",
   "noJobsYet": "No jobs yet",
   "postTheFirstJob": "Post the first job to see it here.",
@@ -87,7 +83,6 @@
   },
   "onThisDevice": "Your posting",
   "detailWhen": "When",
-  "detailArea": "Area",
   "detailPostedBy": "Posted by",
   "detailKindOfWork": "Kind of work",
   "generalAreaNotice": "This is the general area. The exact spot is shared once a worker is chosen.",
@@ -143,7 +138,6 @@
   "whenIsWorkNeeded": "When is the work needed?",
   "whatTime": "What time?",
   "addAtLeastOne": "Add at least one voice note, photo, or message.",
-  "addSomethingFirst": "Add a voice note, photo, or short message first.",
   "couldNotSave": "Could not save your job. Try again.",
   "saveJob": "Save Job",
   "saveChanges": "Save Changes",
@@ -286,36 +280,16 @@
   "contactHint": "So people can reach you. You can add this later.",
   "contactHelp": "Shown only to people who tap to see it.",
   "whatsAppMessage": "Salaam, I saw your job on Trust Hire.",
-  "save": "Save",
-  "saved": "Saved",
   "saveThisJob": "Save this job",
   "removeFromSaved": "Remove from saved",
   "jobSaved": "Saved. Find it under Saved.",
   "jobUnsaved": "Removed from saved.",
-  "savedJobs": "Saved jobs",
-  "myPostings": "My postings",
   "noSavedJobs": "Nothing saved yet",
   "noSavedJobsMessage": "Tap the bookmark on a job to keep it here.",
   "noPostings": "You have not posted any work yet",
   "noPostingsMessage": "Anything you post shows up here.",
   "savedTab": "Saved",
   "postedTab": "Posted",
-  "savedCount": "{count, plural, =1{1 saved} other{{count} saved}}",
-  "@savedCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "postedCount": "{count, plural, =1{1 posted} other{{count} posted}}",
-  "@postedCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
   "savedJobGone": "A job you saved is no longer here.",
   "onboardWelcomeTitle": "Nearby work, made simple",
   "onboardWelcomeBody": "Trust Hire shows work happening near you, on a map. No account, nothing to fill in.",
@@ -328,7 +302,6 @@
   "onboardSkip": "Skip",
   "onboardAllowLocation": "Share My Location",
   "onboardNotNow": "Not Now",
-  "onboardStart": "Start",
   "onboardStepOf": "Step {step} of {total}",
   "@onboardStepOf": {
     "placeholders": {
@@ -364,7 +337,6 @@
   "fieldTags": "Kind of work",
   "tagsHelp": "Choose 1 to 3. This decides who sees your job.",
   "tagsRequired": "Choose at least one kind of work.",
-  "tagsAtMost": "You can choose up to 3.",
   "roleWorker": "Looking for work",
   "roleHirer": "Hiring someone",
   "myTrades": "My trades",
@@ -477,10 +449,10 @@
   "@changeMyOffer": {
     "description": "Button when this device has already bid"
   },
-  "yourOffer": "Your offer: {amount}",
+  "yourOffer": "You offered {fare}",
   "@yourOffer": {
     "placeholders": {
-      "amount": {
+      "fare": {
         "type": "String"
       }
     }
@@ -553,7 +525,7 @@
   "@cannotBidAccepted": {
     "description": "Why bidding is closed"
   },
-  "offerWithdrawn": "Your offer was withdrawn.",
+  "offerWithdrawn": "Withdrawn",
   "@offerWithdrawn": {
     "description": "Confirmation after withdrawing a bid"
   },
@@ -605,10 +577,6 @@
   "@exactLocationShown": {
     "description": "Shown on an accepted job's map"
   },
-  "exactLocationWithWorker": "You chose someone, so you can both see each other's exact location now.",
-  "@exactLocationWithWorker": {
-    "description": "Explains the reveal to the hirer"
-  },
   "jobFinished": "This work is finished.",
   "@jobFinished": {
     "description": "Notice on a completed job"
@@ -628,14 +596,6 @@
   "walletBalance": "Balance",
   "@walletBalance": {
     "description": "Label above the token balance"
-  },
-  "tokens": "{count} tokens",
-  "@tokens": {
-    "placeholders": {
-      "count": {
-        "type": "String"
-      }
-    }
   },
   "walletTopUp": "Top-up",
   "@walletTopUp": {
@@ -819,7 +779,6 @@
       }
     }
   },
-  "accountIsActive": "Currently active",
   "yourStanding": "Your record",
   "@yourStanding": {
     "description": "Heading for your own rating, completed count and fare average"
@@ -830,17 +789,8 @@
   },
   "noOffers": "No offers yet",
   "noOffersMessage": "Open a job and name your price. Offers you make show up here.",
-  "yourOffer": "You offered {fare}",
-  "@yourOffer": {
-    "placeholders": {
-      "fare": {
-        "type": "String"
-      }
-    }
-  },
   "offerWaiting": "Waiting",
   "offerNotChosen": "Not chosen",
-  "offerWithdrawn": "Withdrawn",
   "acceptBooking": "Accept this booking",
   "declineBooking": "Decline",
   "declineBookingTitle": "Decline this booking?",
@@ -936,8 +886,6 @@
   "premiumMonthly": "Monthly",
   "premiumYearly": "Yearly",
   "premiumSimulated": "Nothing is charged. This is a demonstration and takes no card details.",
-  "premiumSubscribe": "Start listing",
-  "premiumRenew": "Add more time",
   "premiumStarted": "You are in the directory.",
   "addService": "Add a service",
   "serviceTitleLabel": "What is it",
@@ -958,7 +906,6 @@
   "credentialKindMembership": "Membership",
   "howFarYouTravel": "How far you travel",
   "remoteOnlyLabel": "I work remotely, no travel",
-  "headlineLabel": "One line about you (optional)",
   "listingNeedsService": "Add at least one service before hirers can find you.",
   "someone": "Someone",
   "@someone": {

@@ -9,6 +9,7 @@ import '../../l10n/app_localizations.dart';
 import '../../models/bid.dart';
 import '../../models/job.dart';
 import '../../widgets/state_views.dart';
+import '../../widgets/status_pill.dart';
 import '../ratings/worker_standing_view.dart';
 
 /// What the hirer sees on their own job: every offer, and the choice.
@@ -142,9 +143,9 @@ class _OfferRow extends StatelessWidget {
                   ),
                 ),
                 if (isChosen)
-                  _StatusChip(label: strings.chosen, emphasised: true)
+                  StatusPill.emphasised(context, strings.chosen)
                 else if (isPassedOver)
-                  _StatusChip(label: strings.notChosen),
+                  StatusPill.muted(context, strings.notChosen),
               ],
             ),
 
@@ -171,40 +172,6 @@ class _OfferRow extends StatelessWidget {
               ),
             ],
           ],
-        ),
-      ),
-    );
-  }
-}
-
-class _StatusChip extends StatelessWidget {
-  const _StatusChip({required this.label, this.emphasised = false});
-
-  final String label;
-  final bool emphasised;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
-    return Container(
-      padding: const EdgeInsets.symmetric(
-        horizontal: BrandSizing.spaceSm,
-        vertical: 2,
-      ),
-      decoration: BoxDecoration(
-        color: emphasised
-            ? theme.colorScheme.primary
-            : theme.colorScheme.surfaceContainerHighest,
-        borderRadius: BrandRadius.smallAll,
-      ),
-      child: Text(
-        label,
-        style: theme.textTheme.labelSmall?.copyWith(
-          color: emphasised
-              ? theme.colorScheme.onPrimary
-              : theme.colorScheme.onSurfaceVariant,
-          fontWeight: FontWeight.w600,
         ),
       ),
     );

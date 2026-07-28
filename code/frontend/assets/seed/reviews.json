@@ -175,21 +175,5 @@
     "cnicPlausible": true,
     "phoneVerified": true,
     "simNameMatches": true
-  },
-  {
-    "userId": "user-060",
-    "status": "approved",
-    "cnicOnFile": true,
-    "cnicPlausible": true,
-    "phoneVerified": true,
-    "simNameMatches": true
-  },
-  {
-    "userId": "user-045",
-    "status": "approved",
-    "cnicOnFile": true,
-    "cnicPlausible": true,
-    "phoneVerified": true,
-    "simNameMatches": true
   }
 ]

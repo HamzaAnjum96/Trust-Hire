@@ -249,7 +249,17 @@ class _ServiceRow extends StatelessWidget {
 class _ServiceArea extends StatelessWidget {
   const _ServiceArea();
 
-  static const _options = <double>[3000, 8000, 15000, 30000];
+  /// The distances offered, with the default among them.
+  ///
+  /// It has to be: a worker who has never touched this has
+  /// [DirectoryListing.defaultServiceRadiusMetres], and a row of chips with
+  /// none of them selected tells them their radius is unset when it is not.
+  static const _options = <double>[
+    3000,
+    DirectoryListing.defaultServiceRadiusMetres,
+    20000,
+    40000,
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -272,8 +282,17 @@ class _ServiceArea extends StatelessWidget {
           const SizedBox(height: BrandSizing.spaceXs),
           Wrap(
             spacing: BrandSizing.spaceSm,
+            runSpacing: BrandSizing.spaceXs,
             children: [
-              for (final metres in _options)
+              // The presets, plus whatever this worker actually has if it is
+              // not one of them — the seeded listings carry distances a
+              // person picked rather than a menu offered, and dropping their
+              // own figure off the row would make the control look like it
+              // had forgotten.
+              for (final metres in {
+                ..._options,
+                listing.serviceRadiusMetres,
+              }.toList()..sort())
                 ChoiceChip(
                   label: Text(Format.distance(strings, metres)),
                   selected: listing.serviceRadiusMetres == metres,

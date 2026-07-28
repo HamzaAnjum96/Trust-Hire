@@ -55,12 +55,6 @@ class AppStringsEn extends AppStrings {
   String get couldNotLoadJobs => 'Could not load jobs. Pull down to try again.';
 
   @override
-  String get couldNotLoadJobsShort => 'Could not load jobs. Try again.';
-
-  @override
-  String get tryAgain => 'Try Again';
-
-  @override
   String get close => 'Close';
 
   @override
@@ -159,16 +153,10 @@ class AppStringsEn extends AppStrings {
   String get showJobs => 'Show Jobs';
 
   @override
-  String get filterWhen => 'When';
-
-  @override
   String get filterHowFar => 'How far';
 
   @override
   String get filterIncludes => 'What it includes';
-
-  @override
-  String get filterKind => 'Kind of work';
 
   @override
   String get filterKindWarning =>
@@ -196,9 +184,6 @@ class AppStringsEn extends AppStrings {
 
   @override
   String get detailWhen => 'When';
-
-  @override
-  String get detailArea => 'Area';
 
   @override
   String get detailPostedBy => 'Posted by';
@@ -328,10 +313,6 @@ class AppStringsEn extends AppStrings {
 
   @override
   String get addAtLeastOne => 'Add at least one voice note, photo, or message.';
-
-  @override
-  String get addSomethingFirst =>
-      'Add a voice note, photo, or short message first.';
 
   @override
   String get couldNotSave => 'Could not save your job. Try again.';
@@ -548,12 +529,6 @@ class AppStringsEn extends AppStrings {
   String get whatsAppMessage => 'Salaam, I saw your job on Trust Hire.';
 
   @override
-  String get save => 'Save';
-
-  @override
-  String get saved => 'Saved';
-
-  @override
   String get saveThisJob => 'Save this job';
 
   @override
@@ -564,12 +539,6 @@ class AppStringsEn extends AppStrings {
 
   @override
   String get jobUnsaved => 'Removed from saved.';
-
-  @override
-  String get savedJobs => 'Saved jobs';
-
-  @override
-  String get myPostings => 'My postings';
 
   @override
   String get noSavedJobs => 'Nothing saved yet';
@@ -588,28 +557,6 @@ class AppStringsEn extends AppStrings {
 
   @override
   String get postedTab => 'Posted';
-
-  @override
-  String savedCount(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count saved',
-      one: '1 saved',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String postedCount(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count posted',
-      one: '1 posted',
-    );
-    return '$_temp0';
-  }
 
   @override
   String get savedJobGone => 'A job you saved is no longer here.';
@@ -650,9 +597,6 @@ class AppStringsEn extends AppStrings {
 
   @override
   String get onboardNotNow => 'Not Now';
-
-  @override
-  String get onboardStart => 'Start';
 
   @override
   String onboardStepOf(int step, int total) {
@@ -730,9 +674,6 @@ class AppStringsEn extends AppStrings {
 
   @override
   String get tagsRequired => 'Choose at least one kind of work.';
-
-  @override
-  String get tagsAtMost => 'You can choose up to 3.';
 
   @override
   String get roleWorker => 'Looking for work';
@@ -941,10 +882,6 @@ class AppStringsEn extends AppStrings {
       'This is the exact spot, shared because you two are working together.';
 
   @override
-  String get exactLocationWithWorker =>
-      'You chose someone, so you can both see each other\'s exact location now.';
-
-  @override
   String get jobFinished => 'This work is finished.';
 
   @override
@@ -958,11 +895,6 @@ class AppStringsEn extends AppStrings {
 
   @override
   String get walletBalance => 'Balance';
-
-  @override
-  String tokens(String count) {
-    return '$count tokens';
-  }
 
   @override
   String get walletTopUp => 'Top-up';
@@ -1114,9 +1046,6 @@ class AppStringsEn extends AppStrings {
     );
     return '$_temp0';
   }
-
-  @override
-  String get accountIsActive => 'Currently active';
 
   @override
   String get yourStanding => 'Your record';
@@ -1294,12 +1223,6 @@ class AppStringsEn extends AppStrings {
       'Nothing is charged. This is a demonstration and takes no card details.';
 
   @override
-  String get premiumSubscribe => 'Start listing';
-
-  @override
-  String get premiumRenew => 'Add more time';
-
-  @override
   String get premiumStarted => 'You are in the directory.';
 
   @override
@@ -1359,9 +1282,6 @@ class AppStringsEn extends AppStrings {
 
   @override
   String get remoteOnlyLabel => 'I work remotely, no travel';
-
-  @override
-  String get headlineLabel => 'One line about you (optional)';
 
   @override
   String get listingNeedsService =>

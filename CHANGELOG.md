@@ -12,6 +12,50 @@ that heading to the version and date, and open a fresh `[Unreleased]`.
 
 ## [Unreleased]
 
+### 0.13.1 — Fixes, a cull, and a look back
+
+No new functionality. A pass over what the last four sprints left behind.
+
+#### Fixed
+
+- **A map that stayed blank until the first pan or zoom.** The opening camera
+  was applied with `fitCamera` from a post-frame callback, so the map laid
+  itself out at one position and arrived at its real one a frame later — and a
+  tile layer that has already chosen its tiles does not reliably notice. It is
+  now handed to flutter_map as `initialCameraFit` and resolved during the
+  map's own first layout, so there is no second position to miss.
+- **The demo accounts' own postings had no offers on them.** The history
+  generator drew from jobs posted by *other* people, so switching to a demo
+  account and opening "Posted" showed bare open jobs with nothing to decide —
+  the hirer's side of Mode A was unreachable from four of the five accounts.
+  Each persona now gets the four states by hand: something to choose between,
+  something finished and rated, something under way, and something called off.
+- **Wallets are now built from every completion**, not from the one loop that
+  happened to create it. A persona who finished another persona's job was
+  never charged for it.
+- **Restoring the seed left the directory and admin panel stale.** Both are
+  seeded now and neither was reloaded.
+- **A direct booking never said it was one.** The status panel showed "open"
+  and nothing else, leaving both sides waiting for a bidding screen that was
+  never going to appear.
+- **The service-radius chips could show nothing selected** while a radius was
+  set — the default was not among the presets, and no seeded listing was.
+
+#### Changed
+
+- Three near-identical status pills across three files became one
+  `StatusPill`. They had already diverged by two pixels of padding, which is
+  the shape a brand change goes wrong in.
+- Twenty dead strings removed from both catalogues. An unused string is a
+  promise the catalogue makes and the app does not keep — and one more line
+  for the native reviewer who has not read the Urdu yet.
+
+#### Added to the record
+
+- [`documents/agile/retrospectives/phase-1-retro.md`](documents/agile/retrospectives/phase-1-retro.md)
+  — the first retrospective, covering P1-1 to P1-7 with six actions and named
+  owners. Its first finding is that it should have been seven documents.
+
 ### 0.13.0 — P1-7, the admin panel
 
 #### Added

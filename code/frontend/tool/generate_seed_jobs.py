@@ -588,6 +588,7 @@ def add_history(jobs, people):
 
     bids = []
     ratings = []
+    completions = []
     counters = {"bid": 0, "rating": 0, "entry": 0}
 
     def next_id(kind: str) -> str:
@@ -671,6 +672,20 @@ def add_history(jobs, people):
         job["status"] = status
         job["acceptedWorkerId"] = worker
         job["agreedFare"] = chosen["fare"]
+
+        # Recorded here rather than at each call site, so a worker is charged
+        # for **every** job they finished — including one they did for another
+        # demo account. Building the ledger from a single list is what stops
+        # the wallet and the job list disagreeing about how much work somebody
+        # has done.
+        if status == "completed":
+            completions.append({
+                "worker": worker,
+                "jobId": job["id"],
+                "fare": chosen["fare"],
+                "hoursAgo": hours_ago,
+            })
+
         return chosen
 
     def rate(job, side, hours_ago):
@@ -721,55 +736,17 @@ def add_history(jobs, people):
 
         raise RuntimeError("ran out of jobs to give the personas a history")
 
-    wallets = {}
-
     for person_id, persona in PERSONAS.items():
-        entries = [
-            {
-                "id": next_id("entry"),
-                "kind": kind,
-                "tokens": tokens,
-                "hoursAgo": hours,
-            }
-            for kind, tokens, hours in persona["wallet"]
-        ]
-
         if persona["works"]:
-            # Jobs this persona did. Each one finished, rated, and charged for,
-            # in that order, so the ledger reads as a history rather than a
-            # list of numbers somebody typed.
-            finished = []
+            # Jobs this persona did.
             for _ in range(persona["wins"]):
                 job = claim(persona["trades"])
                 done_at = rng.uniform(2, job["createdHoursAgo"] * 0.6)
                 finish(job, person_id, status="completed", hours_ago=done_at)
-                finished.append((job, done_at))
-
-            finished.sort(key=lambda pair: -pair[1])
-
-            for index, (job, done_at) in enumerate(finished):
                 rate(job, "worker", done_at * 0.8)
                 # Not every hirer bothers, and not every worker rates back.
                 if rng.random() < 0.65:
                     rate(job, "hirer", done_at * 0.7)
-
-                charge = commission_on(job["agreedFare"])
-                if index == 0:
-                    # Section 11's first-job credit, capped at what is owed.
-                    entries.append({
-                        "id": next_id("entry"),
-                        "kind": "firstJobCredit",
-                        "tokens": min(FIRST_JOB_CREDIT, charge),
-                        "hoursAgo": round(done_at, 1),
-                        "jobId": job["id"],
-                    })
-                entries.append({
-                    "id": next_id("entry"),
-                    "kind": "commission",
-                    "tokens": -charge,
-                    "hoursAgo": round(done_at, 1),
-                    "jobId": job["id"],
-                })
 
             # Offers that went nowhere. The demo needs these: a worker's own
             # list is mostly the jobs they did not get, and until now that
@@ -807,53 +784,72 @@ def add_history(jobs, people):
                         rng.uniform(0.5, job["createdHoursAgo"]),
                     )
 
-        wallets[person_id] = entries
+    # --- The demo accounts' own postings -----------------------------------
+    #
+    # Every persona posts as well as works, and their postings were the one
+    # thing the random pass never touched — it draws from jobs posted by
+    # *other* people, so switching to a demo account and opening "Posted"
+    # showed a handful of bare open jobs with nothing to decide. The hirer's
+    # side of Mode A was therefore unreachable from four of the five accounts.
+    #
+    # So each of them gets the same four states by hand, in this order, which
+    # is what somebody demonstrating the hirer's side needs to be able to
+    # point at: something to choose between, something finished and rated,
+    # something under way, and something called off.
+    def persona_for(job, exclude):
+        """A demo account who could have seen this job, if any."""
+        for person_id, persona in PERSONAS.items():
+            if person_id == exclude or not persona["works"]:
+                continue
+            if can_reach(person_id, job):
+                return person_id
+        return other_than(job, exclude)
 
-    # The hirer's own postings, in every state a posting can be in. Hers are
-    # picked out by hand rather than left to the random pass, because "open
-    # with offers on it", "finished" and "called off" are the three things
-    # somebody demonstrating the hirer's side needs to be able to point at.
-    hina = [job for job in jobs if job["postedBy"] == "user-003"]
-    if len(hina) >= 4:
-        for _ in range(rng.randint(2, 3)):
+    def offers_on(job, count):
+        for _ in range(count):
             place_bid(
-                hina[0],
-                other_than(hina[0], "user-003"),
+                job,
+                other_than(job, job["postedBy"]),
                 "offered",
-                rng.uniform(0.5, hina[0]["createdHoursAgo"]),
+                rng.uniform(0.5, job["createdHoursAgo"]),
             )
-        # Whoever in the switcher could actually have seen it — so the demo
-        # can show one demo account working for another, without inventing an
-        # offer Section 8 would never have delivered.
-        def persona_for(job):
-            for person_id in PERSONAS:
-                if can_reach(person_id, job):
-                    return person_id
-            return other_than(job, "user-003")
 
-        worker = persona_for(hina[1])
-        done = finish(
-            hina[1],
-            worker,
-            status="completed",
-            hours_ago=hina[1]["createdHoursAgo"] * 0.4,
-        )
-        rate(hina[1], "worker", hina[1]["createdHoursAgo"] * 0.3)
-        if worker in wallets:
-            wallets[worker].append({
-                "id": next_id("entry"),
-                "kind": "commission",
-                "tokens": -commission_on(done["fare"]),
-                "hoursAgo": round(hina[1]["createdHoursAgo"] * 0.3, 1),
-                "jobId": hina[1]["id"],
-            })
-        finish(
-            hina[2],
-            persona_for(hina[2]),
-            status="inProgress",
-            hours_ago=hina[2]["createdHoursAgo"] * 0.5,
-        )
-        hina[3]["status"] = "cancelled"
+    for person_id in PERSONAS:
+        mine = [job for job in jobs if job["postedBy"] == person_id]
+        if not mine:
+            continue
+
+        # Open, with a choice to make. Always first, because it is the screen
+        # the hirer's side is really about.
+        offers_on(mine[0], rng.randint(2, 4))
+
+        if len(mine) > 1:
+            # Finished, and rated in both directions — so the persona's own
+            # record as a hirer exists too, not only their workers'.
+            job = mine[1]
+            done_at = job["createdHoursAgo"] * 0.4
+            finish(
+                job,
+                persona_for(job, person_id),
+                status="completed",
+                hours_ago=done_at,
+            )
+            rate(job, "worker", done_at * 0.8)
+            rate(job, "hirer", done_at * 0.7)
+
+        if len(mine) > 2:
+            # Under way, with the offers that lost sitting behind it.
+            job = mine[2]
+            finish(
+                job,
+                persona_for(job, person_id),
+                status=rng.choice(["inProgress", "accepted"]),
+                hours_ago=job["createdHoursAgo"] * 0.5,
+            )
+
+        if len(mine) > 3:
+            # Called off. Rare, and the one state with nothing to do next.
+            mine[3]["status"] = "cancelled"
 
     # --- Everybody else ----------------------------------------------------
     #
@@ -891,15 +887,59 @@ def add_history(jobs, people):
                     rng.uniform(0.2, job["createdHoursAgo"]),
                 )
 
-    accounts = [
-        {
+    # --- The ledgers -------------------------------------------------------
+    #
+    # Built last, from every completion in the run, so a persona is charged for
+    # all the work they did rather than for the subset one loop happened to
+    # create. Section 11's rules are applied in order — oldest first — because
+    # the first-job credit and the debt count both depend on the sequence.
+    accounts = []
+
+    for person_id, persona in PERSONAS.items():
+        entries = [
+            {
+                "id": next_id("entry"),
+                "kind": kind,
+                "tokens": tokens,
+                "hoursAgo": hours,
+            }
+            for kind, tokens, hours in persona["wallet"]
+        ]
+
+        theirs = sorted(
+            (done for done in completions if done["worker"] == person_id),
+            key=lambda done: -done["hoursAgo"],
+        )
+
+        for index, done in enumerate(theirs):
+            charge = commission_on(done["fare"])
+            if charge <= 0:
+                continue
+
+            if index == 0:
+                # Section 11's first-job credit, capped at what is owed.
+                entries.append({
+                    "id": next_id("entry"),
+                    "kind": "firstJobCredit",
+                    "tokens": min(FIRST_JOB_CREDIT, charge),
+                    "hoursAgo": round(done["hoursAgo"], 1),
+                    "jobId": done["jobId"],
+                })
+
+            entries.append({
+                "id": next_id("entry"),
+                "kind": "commission",
+                "tokens": -charge,
+                "hoursAgo": round(done["hoursAgo"], 1),
+                "jobId": done["jobId"],
+            })
+
+        accounts.append({
             "id": person_id,
             "role": persona["role"],
             "trades": persona["trades"],
-            "wallet": sorted(wallets[person_id], key=lambda e: -e["hoursAgo"]),
-        }
-        for person_id, persona in PERSONAS.items()
-    ]
+            "wallet": sorted(entries, key=lambda e: -e["hoursAgo"]),
+        })
 
     bids.sort(key=lambda bid: -bid["hoursAgo"])
     ratings.sort(key=lambda rating: -rating["hoursAgo"])

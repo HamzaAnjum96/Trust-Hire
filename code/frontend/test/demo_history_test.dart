@@ -51,6 +51,81 @@ void main() {
     return store;
   }
 
+  group('what the seed writes', () {
+    test('is exactly this set, and the reset screen reloads all of it',
+        () async {
+      // **A tripwire, not a description.** Restoring the seed replaces every
+      // key below, and each one is already held in memory by some controller.
+      // The reset handler in `profile_screen.dart` has to re-read all of them
+      // or the app shows a restored map beside stale balances — and the next
+      // write puts the stale ones back.
+      //
+      // Nothing can make a widget method enumerate itself, so this fails when
+      // the seed grows a key instead. If you are reading this because the test
+      // broke: add the new key's controller to `_confirmReset`, then add the
+      // key here.
+      const reloadedOnReset = <String>{
+        StoreKeys.jobs, // JobController
+        StoreKeys.users, // JobController
+        StoreKeys.bids, // BidController
+        StoreKeys.ratings, // RatingController
+        StoreKeys.directory, // PremiumController
+        StoreKeys.accountReviews, // AdminController
+        StoreKeys.cnicRecords, // AdminController
+        StoreKeys.disputes, // AdminController
+      };
+
+      // Per-account keys are written suffixed, and read back by the
+      // controllers that follow the active account — ProfileController and
+      // WalletController, both of which the reset handler reloads.
+      const perAccount = <String>{StoreKeys.role, StoreKeys.workerProfile,
+          StoreKeys.wallet};
+
+      final store = await LocalStore.open();
+      await JobRepository(store, MediaStore(store)).ensureSeeded();
+
+      for (final key in reloadedOnReset) {
+        expect(
+          store.readCollection(key) ?? store.readString(key),
+          isNotNull,
+          reason: '$key is expected to be seeded but was not written',
+        );
+      }
+
+      // And the seed writes nothing outside that set except the flag, the
+      // per-account keys, and the preferences the seed never touches.
+      final known = {
+        ...reloadedOnReset,
+        StoreKeys.seeded,
+        StoreKeys.activeAccount,
+        StoreKeys.introSeen,
+        StoreKeys.themeMode,
+        StoreKeys.language,
+        StoreKeys.savedJobs,
+        StoreKeys.tradesNoticeDismissed,
+        StoreKeys.mediaIndex,
+        ...perAccount,
+      };
+
+      final written = SharedPreferences.getInstance();
+      final prefs = await written;
+      final unexpected = prefs
+          .getKeys()
+          .where((key) => key.startsWith(StoreKeys.prefix))
+          // Per-account keys are `<key>#<account>`.
+          .map((key) => key.split('#').first)
+          .where((key) => !known.contains(key))
+          .toSet();
+
+      expect(
+        unexpected,
+        isEmpty,
+        reason: 'the seed writes $unexpected, which no controller reloads on '
+            'a restore — see _confirmReset in profile_screen.dart',
+      );
+    });
+  });
+
   group('the demo has a past', () {
     test('work in every state, so no screen is unreachable', () async {
       final store = await seeded();
@@ -161,6 +236,112 @@ void main() {
           ratings.standingFor(worker, jobs: jobs).hasHistory,
           isTrue,
           reason: '$worker was rated but has no finished jobs',
+        );
+      }
+    });
+  });
+
+  group("the demo accounts' own postings", () {
+    // The gap this closes: the random pass draws from jobs posted by *other*
+    // people, so for a long time a persona's own postings were bare open jobs
+    // with nothing on them. Switching to a demo account and opening "Posted"
+    // showed the hirer's side of Mode A with no decision to make — which is
+    // the half of Mode A that the hirer's side *is*.
+    test('have offers to choose between', () async {
+      final store = await seeded();
+      final jobs = await JobRepository(store, MediaStore(store)).fetchJobs();
+      final bids = await BidRepository(store).fetchBids();
+
+      final offersOn = <String, int>{};
+      for (final bid in bids) {
+        offersOn[bid.jobId] = (offersOn[bid.jobId] ?? 0) + 1;
+      }
+
+      for (final account in DemoAccounts.roster) {
+        if (!account.isSeeded) continue;
+
+        final mine = jobs
+            .where((job) => job.isPostedBy(account.id))
+            .toList(growable: false);
+
+        expect(mine, isNotEmpty, reason: '${account.name} posted nothing');
+        expect(
+          mine.where((job) => (offersOn[job.id] ?? 0) > 0).length,
+          greaterThan(1),
+          reason: '${account.name} has almost nothing to review',
+        );
+      }
+    });
+
+    test('include something finished and rated', () async {
+      final store = await seeded();
+      final jobs = await JobRepository(store, MediaStore(store)).fetchJobs();
+      final ratings = (RatingController(store)..load()).all;
+      final rated = ratings.map((rating) => rating.jobId).toSet();
+
+      for (final account in DemoAccounts.roster) {
+        if (!account.isSeeded) continue;
+
+        final mine = jobs.where((job) => job.isPostedBy(account.id));
+
+        expect(
+          mine.where(
+            (job) => job.status == JobStatus.completed && rated.contains(job.id),
+          ),
+          isNotEmpty,
+          reason: '${account.name} has no finished, rated posting',
+        );
+      }
+    });
+
+    test('and reach more than one state between them', () async {
+      // Open, finished, and one under way at minimum — the three a hirer
+      // needs to be able to point at.
+      final store = await seeded();
+      final jobs = await JobRepository(store, MediaStore(store)).fetchJobs();
+
+      for (final account in DemoAccounts.roster) {
+        if (!account.isSeeded) continue;
+
+        final states = jobs
+            .where((job) => job.isPostedBy(account.id))
+            .map((job) => job.status)
+            .toSet();
+
+        expect(
+          states.length,
+          greaterThanOrEqualTo(3),
+          reason: '${account.name}\'s postings are all in one state',
+        );
+      }
+    });
+
+    test('and every commission matches a job that worker finished', () async {
+      // The ledgers are built from one list of completions, so a persona is
+      // charged for all their work rather than for whichever loop happened to
+      // create it. This is the check that the two still agree.
+      final store = await seeded();
+      final jobs = await JobRepository(store, MediaStore(store)).fetchJobs();
+
+      for (final account in DemoAccounts.roster) {
+        if (!account.isSeeded) continue;
+
+        final wallet = (WalletController(store)..setAccount(account.id)).wallet;
+        final charged = wallet.entries
+            .where((entry) => entry.kind == WalletEntryKind.commission)
+            .map((entry) => entry.jobId)
+            .toSet();
+
+        final finished = jobs
+            .where((job) => job.isCompletedBy(account.id))
+            .map((job) => job.id)
+            .toSet();
+
+        expect(
+          charged,
+          finished,
+          reason: '${account.name} was charged for work they did not do, '
+              'or did work they were not charged for',
         );
       }
     });
