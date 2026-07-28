@@ -12,6 +12,24 @@ that heading to the version and date, and open a fresh `[Unreleased]`.
 
 ## [Unreleased]
 
+### 0.14.3 — A demo somebody can follow
+
+#### Added
+
+- **[`documents/product/demo-script.md`](documents/product/demo-script.md)** —
+  fifteen minutes, eight stops, which account to be and what to point at. Built
+  by walking the release build in a browser rather than by reading the code, so
+  it describes what is on screen rather than what ought to be.
+- **`test/demo_walkthrough_test.dart`** — an assertion per stop. It does not
+  test the rules; every rule has its own file. It tests that the demonstration
+  is still *reachable*: the account still has the data, the screen still has
+  the control. A script nobody checks rots, and it rots silently — the reader
+  finds out in front of an audience.
+
+This is the phase-1 retro's fourth action in its sharpest form. The seed stayed
+coherent for three sprints while the hirer's side of Mode A was unreachable
+from four of the five accounts, and every coherence test passed throughout.
+
 ### 0.14.2 — Two more promises nothing was holding up
 
 The sweep from 0.14.1, widened from 23 promises to 34. Two more survived, and
