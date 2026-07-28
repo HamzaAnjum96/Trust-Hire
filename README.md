@@ -261,7 +261,7 @@ code/frontend/
 │   └── fonts/        ← Inter, Noto Sans Arabic, Noto Nastaliq Urdu
 ├── web/              ← the web shell: metadata, manifest, boot screen, icons
 ├── test/
-└── tool/             ← dev scripts (seed data, placeholder assets, app icons)
+└── tool/             ← dev scripts (seed data, assets, icons, the test sweep)
 ```
 
 **The seed data.** `assets/seed/` holds 183 jobs across 25 Pakistani cities and
@@ -335,9 +335,25 @@ visible version a stale cache and a failed deploy look identical.
 ```bash
 flutter analyze
 flutter test
+python3 tool/sweep_tests.py     # minutes — run it when a rule changes
 ```
 
-Both gate the deploy. The suite includes an accessibility audit
+The first two gate the deploy.
+
+**`sweep_tests.py` asks whether the tests test anything.** `flutter test`
+proves the app behaves as the suite describes; it cannot prove the suite
+describes anything, because a check aimed at a case that also violates a
+neighbouring rule passes whether or not the rule it names still exists. The
+sweep breaks each of the 23 load-bearing promises in turn — the fare lock, the
+5% commission, the debt lockout, the ratings asymmetry, the visibility rule,
+the location reveal, the CNIC mask, the audit log's write-first ordering — and
+reports any the suite does not notice. Two survived on its first run, and both
+were real gaps rather than noise.
+
+Its sibling for the schema is `code/backend/tool/sweep_schema.sh`, which found
+two vacuous SQL checks the same way. **If you add a rule that decides money,
+visibility, or who sees somebody's identity document, add a mutation for it.**
+A promise nothing can break is a promise nothing is holding up. The suite includes an accessibility audit
 (`test/accessibility_test.dart`) that runs Flutter's tap-target, semantic-label
 and text-contrast guidelines against the live app, and checks the palette's
 contrast ratios against WCAG AA — so a regression there fails the build rather

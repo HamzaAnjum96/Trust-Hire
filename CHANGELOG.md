@@ -12,6 +12,45 @@ that heading to the version and date, and open a fresh `[Unreleased]`.
 
 ## [Unreleased]
 
+### 0.14.1 — Do the tests test anything?
+
+No new functionality. The schema sweep found two SQL checks that had been green
+since they were written and could never have failed; this asks the same
+question of the 553-test Dart suite.
+
+#### Added
+
+- **`code/frontend/tool/sweep_tests.py`** — breaks each of 23 load-bearing
+  promises in turn and reports any the suite does not notice. Aimed rather than
+  exhaustive: mutating every operator would take an hour and report mostly
+  noise, so each mutation names a promise the product actually makes.
+- **Two tests for promises that had none.** Both were found by the sweep, and
+  neither would ever have failed:
+  - **General work cannot be switched off.** The whole of Section 8 rests on
+    it — a worker with no tags has an empty feed forever and no screen would
+    explain why — and nothing tested it.
+  - **A change that fails still leaves the line saying it was tried.**
+    `AdminController._perform` writes the log *then* applies the change, so a
+    failure leaves something a human can investigate rather than nothing. Every
+    other test of the log was a happy path, where both orders look identical.
+    The new one uses a store that refuses one key.
+
+#### What the sweep also settled
+
+`WorkerProfile.withoutTag`'s early return for the default tag is
+belt-and-braces: deleting it changes nothing observable, because the
+constructor puts the tag back. The mutation is aimed at the constructor now,
+which is where the rule actually lives — the same distinction the schema sweep
+had to make for `bids_one_accepted_per_job`.
+
+#### Noted, not fixed
+
+`AdminController` updates its in-memory review before attempting the write, so
+a failed write leaves the screen and the disk disagreeing until the next load.
+Out of scope for a run that added no functionality, and the honest fix trades
+it for a UI that does not update until storage confirms. The new test asserts
+against storage and says why in a comment beside it.
+
 ### 0.14.0 — P1-9, verification
 
 #### Added

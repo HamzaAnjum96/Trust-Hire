@@ -186,6 +186,46 @@ void main() {
       );
     });
 
+    test('a change that fails still leaves the line that says it was tried',
+        () async {
+      // **The order inside `_perform` is the whole point of this test.** It
+      // records the entry and *then* applies the change. If the change fails,
+      // the log carries a line for something that did not happen — which a
+      // human reading it can investigate. The other order loses the line for
+      // something that did, and there is nothing left to investigate with.
+      //
+      // Found by `tool/sweep_tests.py`: the two statements could be swapped
+      // and the whole suite stayed green, because every other test here is
+      // about the happy path, where both orders look identical.
+      final store = _StoreThatCannotWrite(
+        await SharedPreferences.getInstance(),
+        refusing: StoreKeys.accountReviews,
+      );
+      final panel = AdminController(store)..load();
+
+      await expectLater(
+        panel.suspend('user-009', note: 'Reported by two hirers.'),
+        throwsA(isA<Exception>()),
+      );
+
+      // Asserted against storage rather than against the controller. The
+      // in-memory review is updated before its write is attempted, so after a
+      // failure the screen and the disk disagree until the next load — real,
+      // and a separate problem from this one. What matters here is what
+      // somebody investigating afterwards would find on disk.
+      expect(
+        store.readCollection(StoreKeys.accountReviews) ?? const [],
+        isEmpty,
+        reason: 'the suspension is what failed; it must not have persisted',
+      );
+      expect(
+        store.readCollection(StoreKeys.auditLog),
+        hasLength(1),
+        reason: 'the log is written before the change, not after it',
+      );
+      expect(panel.log.single.action, AdminAction.suspendUser);
+    });
+
     test('newest first, because that is how a log is read', () async {
       final panel = await admin();
       await panel.approve('a');
@@ -369,4 +409,27 @@ void main() {
       }
     });
   });
+}
+
+/// A store that refuses to write one key.
+///
+/// Standing in for a disk that is full, a quota that is exhausted, or a
+/// browser that has revoked storage — the ordinary reasons a write fails
+/// halfway through an operation. Only that one key fails, so the audit log's
+/// own write still succeeds and the test can ask what survived.
+class _StoreThatCannotWrite extends LocalStore {
+  _StoreThatCannotWrite(super.prefs, {required this.refusing});
+
+  final String refusing;
+
+  @override
+  Future<void> writeCollection(
+    String key,
+    List<Map<String, dynamic>> value,
+  ) async {
+    if (key == refusing) {
+      throw Exception('storage refused a write to $key');
+    }
+    await super.writeCollection(key, value);
+  }
 }

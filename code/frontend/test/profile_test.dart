@@ -54,6 +54,51 @@ void main() {
       expect(profile.specialities, isEmpty);
     });
 
+    test('general work cannot be switched off', () async {
+      // **The whole of Section 8 rests on this.** A worker with no tags has an
+      // empty feed forever, and nothing on any screen would explain why — the
+      // jobs would simply stop arriving. The trades screen renders the default
+      // as selected and inert, but that is presentation; the refusal lives on
+      // the model so that a screen built without it still cannot do the damage.
+      //
+      // Found by `tool/sweep_tests.py`: the guard could be deleted and the
+      // whole suite stayed green.
+      final store = await LocalStore.open();
+      final profile = ProfileController(store)..load();
+
+      for (final tag in JobTag.defaultWorkerTags) {
+        await profile.toggleTag(tag);
+        expect(
+          profile.tags,
+          contains(tag),
+          reason: 'tapping the default tag must not remove it',
+        );
+      }
+
+      expect(profile.tags, JobTag.defaultWorkerTags);
+
+      // And it survives the trip through storage, so a restart cannot be the
+      // thing that empties somebody's feed.
+      final reopened = ProfileController(store)..load();
+      expect(reopened.tags, contains(JobTag.misc));
+    });
+
+    test('adding a trade widens the feed rather than narrowing it', () async {
+      // The other half of the same promise: a part-time specialist still needs
+      // to see general jobs, and quietly dropping the default because somebody
+      // once tapped "Plumbing" would take work away without saying so.
+      final store = await LocalStore.open();
+      final profile = ProfileController(store)..load();
+
+      await profile.toggleTag(JobTag.plumbing);
+
+      expect(profile.tags, containsAll([JobTag.misc, JobTag.plumbing]));
+      expect(profile.specialities, {JobTag.plumbing});
+
+      await profile.toggleTag(JobTag.plumbing);
+      expect(profile.tags, JobTag.defaultWorkerTags);
+    });
+
     test('the role survives a restart', () async {
       final store = await LocalStore.open();
       await (ProfileController(store)..load()).setRole(UserRole.hirer);
