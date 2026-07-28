@@ -118,6 +118,11 @@ in P1-8.
 
 ## Actions
 
+> **Statuses here are as at the end of P1-7.** They are carried forward, with
+> what happened to each, in
+> [`p1-8a-p1-9-retro.md`](p1-8a-p1-9-retro.md#from-the-last-retro) — read that
+> for the current position rather than this table.
+
 | # | Action | Owner | Status |
 | --- | --- | --- | --- |
 | 1 | Write the retro at the **end of each sprint**, not at the end of the phase. Ten lines is enough. | Claude | Open |

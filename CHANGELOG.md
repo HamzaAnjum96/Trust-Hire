@@ -75,6 +75,14 @@ partial conformance, in the same shape as the WCAG 1.2.1 transcript decision.
   to compare against, and not running is not a mismatch — reporting one would
   fire the fraud flag on the single account that has done nothing at all.
 
+#### Added to the record
+
+- [`documents/agile/retrospectives/p1-8a-p1-9-retro.md`](documents/agile/retrospectives/p1-8a-p1-9-retro.md)
+  — written the day both sprints landed, which is the first retro's own top
+  action. It carries the six earlier actions forward with what became of each:
+  the GitHub Pages setup is done, and "make one structure derive from the
+  other" caught a live disagreement about whether a CNIC needs its dashes.
+
 ### P1-8a — The schema, and the tests that try to break it
 
 **Version 0.13.1+17 — the build number moves, the name does not.** Nothing
