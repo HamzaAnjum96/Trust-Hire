@@ -4,267 +4,260 @@
     "city": "Mardan",
     "province": "Khyber Pakhtunkhwa",
     "area": "Sheikh Maltoon",
-    "title": "Blocked drain in the bathroom",
+    "title": "Cushion covers to stitch",
     "tags": [
-      "plumbing"
+      "tailoring"
     ],
-    "startingFare": 2000,
+    "startingFare": 3500,
     "location": {
-      "latitude": 34.2015,
-      "longitude": 72.0506
+      "latitude": 34.1943,
+      "longitude": 72.0495
     },
-    "radiusMetres": 1500,
-    "scheduledDayOffset": 0,
-    "scheduledHour": 10,
-    "scheduledMinute": 0,
-    "photos": [
-      "assets/images/jobs/plumbing-01.png",
-      "assets/images/jobs/plumbing-02.png"
-    ],
+    "radiusMetres": 1000,
     "postedBy": "user-001",
-    "createdHoursAgo": 47.6,
-    "contact": "0301 5731683"
+    "createdHoursAgo": 11.7
   },
   {
     "id": "seed-002",
-    "city": "Mardan",
-    "province": "Khyber Pakhtunkhwa",
-    "area": "Sheikh Maltoon",
-    "title": "Deep clean before moving in",
+    "city": "Rawalpindi",
+    "province": "Punjab",
+    "area": "Satellite Town",
+    "title": "New wiring in one room",
     "tags": [
-      "cleaning"
+      "electrical"
     ],
-    "startingFare": 1500,
-    "shortDescription": "Empty flat, two bedrooms.",
+    "startingFare": 2000,
     "location": {
-      "latitude": 34.2017,
-      "longitude": 72.0353
+      "latitude": 33.6327,
+      "longitude": 73.0642
     },
-    "radiusMetres": 1500,
+    "radiusMetres": 1000,
     "scheduledDayOffset": 2,
-    "scheduledHour": 16,
+    "scheduledHour": 15,
     "scheduledMinute": 0,
     "postedBy": "user-002",
-    "createdHoursAgo": 1.9,
-    "contact": "0347 7725076"
+    "createdHoursAgo": 52.7,
+    "contact": "0333 1245552"
   },
   {
     "id": "seed-003",
     "city": "Islamabad",
     "province": "Islamabad Capital Territory",
-    "area": "F-7",
-    "tags": [
-      "driving"
-    ],
-    "startingFare": 12000,
-    "location": {
-      "latitude": 33.7042,
-      "longitude": 73.0644
-    },
-    "radiusMetres": 500,
-    "scheduledDayOffset": 5,
-    "scheduledHour": 7,
-    "scheduledMinute": 0,
-    "voiceNote": "assets/audio/voice-02.wav",
-    "voiceNoteSeconds": 5.0,
-    "postedBy": "user-003",
-    "createdHoursAgo": 13.1,
-    "contact": "0301 7794242"
-  },
-  {
-    "id": "seed-004",
-    "city": "Larkana",
-    "province": "Sindh",
-    "area": "Jinnah Bagh",
-    "title": "Outside wall and gate",
-    "tags": [
-      "painting"
-    ],
-    "startingFare": 13000,
-    "location": {
-      "latitude": 27.5566,
-      "longitude": 68.2111
-    },
-    "radiusMetres": 2500,
-    "postedBy": "user-004",
-    "createdHoursAgo": 71.4,
-    "status": "completed",
-    "acceptedWorkerId": "user-019",
-    "agreedFare": 12000
-  },
-  {
-    "id": "seed-005",
-    "city": "Faisalabad",
-    "province": "Punjab",
-    "area": "Ghulam Muhammad Abad",
-    "title": "AC not cooling",
-    "tags": [
-      "applianceRepair"
-    ],
-    "shortDescription": "Split unit in the bedroom. Runs but blows warm air.",
-    "location": {
-      "latitude": 31.4318,
-      "longitude": 73.0773
-    },
-    "radiusMetres": 2500,
-    "scheduledDayOffset": 1,
-    "scheduledHour": 9,
-    "scheduledMinute": 0,
-    "photos": [
-      "assets/images/jobs/ac-repair-01.png"
-    ],
-    "postedBy": "user-005",
-    "createdHoursAgo": 73.4,
-    "contact": "0300 7254317",
-    "status": "completed",
-    "acceptedWorkerId": "user-008",
-    "agreedFare": 8000
-  },
-  {
-    "id": "seed-006",
-    "city": "Quetta",
-    "province": "Balochistan",
-    "area": "Satellite Town",
-    "tags": [
-      "misc"
-    ],
-    "location": {
-      "latitude": 30.1882,
-      "longitude": 66.9954
-    },
-    "radiusMetres": 1000,
-    "scheduledDayOffset": 3,
-    "scheduledHour": 17,
-    "scheduledMinute": 30,
-    "voiceNote": "assets/audio/voice-06.wav",
-    "voiceNoteSeconds": 7.2,
-    "postedBy": "user-006",
-    "createdHoursAgo": 21.0,
-    "status": "inProgress",
-    "acceptedWorkerId": "user-019",
-    "agreedFare": 2000
-  },
-  {
-    "id": "seed-007",
-    "city": "Multan",
-    "province": "Punjab",
-    "area": "Cantt",
-    "title": "House shift within the same area",
-    "tags": [
-      "moving"
-    ],
-    "startingFare": 7000,
-    "shortDescription": "One truckload, ground floor to ground floor.",
-    "location": {
-      "latitude": 30.206,
-      "longitude": 71.4681
-    },
-    "radiusMetres": 500,
-    "scheduledDayOffset": 2,
-    "scheduledHour": 8,
-    "scheduledMinute": 0,
-    "voiceNote": "assets/audio/voice-01.wav",
-    "voiceNoteSeconds": 11.7,
-    "postedBy": "user-007",
-    "createdHoursAgo": 70.1,
-    "contact": "0347 1706143"
-  },
-  {
-    "id": "seed-008",
-    "city": "Lahore",
-    "province": "Punjab",
-    "area": "Gulberg",
-    "title": "English conversation practice",
+    "area": "G-11",
+    "title": "Quran teacher for two children",
     "tags": [
       "tutoring"
     ],
-    "startingFare": 17000,
-    "shortDescription": "For an interview next month.",
     "location": {
-      "latitude": 31.5308,
-      "longitude": 74.3659
+      "latitude": 33.6768,
+      "longitude": 72.9949
     },
     "radiusMetres": 600,
-    "scheduledDayOffset": 5,
-    "scheduledHour": 16,
+    "scheduledDayOffset": 1,
+    "scheduledHour": 10,
     "scheduledMinute": 30,
-    "postedBy": "user-008",
-    "createdHoursAgo": 67.6,
-    "contact": "0332 8963169",
+    "voiceNote": "assets/audio/voice-01.wav",
+    "voiceNoteSeconds": 5.7,
+    "postedBy": "user-003",
+    "createdHoursAgo": 10.3,
+    "contact": "0333 9962329"
+  },
+  {
+    "id": "seed-004",
+    "city": "Karachi",
+    "province": "Sindh",
+    "area": "Saddar",
+    "title": "Airport drop at 4am",
+    "tags": [
+      "driving"
+    ],
+    "startingFare": 10000,
+    "shortDescription": "Two people and three bags.",
+    "location": {
+      "latitude": 24.8509,
+      "longitude": 67.0173
+    },
+    "radiusMetres": 2000,
+    "scheduledDayOffset": 0,
+    "scheduledHour": 17,
+    "scheduledMinute": 30,
+    "postedBy": "user-004",
+    "createdHoursAgo": 94.5,
     "status": "completed",
-    "acceptedWorkerId": "user-056",
-    "agreedFare": 15000
+    "acceptedWorkerId": "user-019",
+    "agreedFare": 10000
+  },
+  {
+    "id": "seed-005",
+    "city": "Peshawar",
+    "province": "Khyber Pakhtunkhwa",
+    "area": "Hayatabad",
+    "title": "Microwave stopped heating",
+    "tags": [
+      "applianceRepair"
+    ],
+    "location": {
+      "latitude": 33.9927,
+      "longitude": 71.4237
+    },
+    "radiusMetres": 2000,
+    "scheduledDayOffset": 0,
+    "scheduledHour": 15,
+    "scheduledMinute": 0,
+    "postedBy": "user-005",
+    "createdHoursAgo": 17.5,
+    "contact": "0345 1235033"
+  },
+  {
+    "id": "seed-006",
+    "city": "Gujranwala",
+    "province": "Punjab",
+    "area": "Satellite Town",
+    "tags": [
+      "legal"
+    ],
+    "startingFare": 19000,
+    "location": {
+      "latitude": 32.1599,
+      "longitude": 74.177
+    },
+    "radiusMetres": 500,
+    "scheduledDayOffset": 3,
+    "scheduledHour": 18,
+    "scheduledMinute": 0,
+    "voiceNote": "assets/audio/voice-05.wav",
+    "voiceNoteSeconds": 10.1,
+    "postedBy": "user-006",
+    "createdHoursAgo": 68.0,
+    "contact": "0311 4595274",
+    "status": "inProgress",
+    "acceptedWorkerId": "user-034",
+    "agreedFare": 20000
+  },
+  {
+    "id": "seed-007",
+    "city": "Lahore",
+    "province": "Punjab",
+    "area": "Township",
+    "title": "Driver needed for the day",
+    "tags": [
+      "driving"
+    ],
+    "startingFare": 8000,
+    "shortDescription": "School run in the morning and the office at five.",
+    "location": {
+      "latitude": 31.4343,
+      "longitude": 74.3031
+    },
+    "radiusMetres": 1500,
+    "scheduledDayOffset": 0,
+    "scheduledHour": 10,
+    "scheduledMinute": 30,
+    "voiceNote": "assets/audio/voice-01.wav",
+    "voiceNoteSeconds": 8.2,
+    "postedBy": "user-007",
+    "createdHoursAgo": 74.5
+  },
+  {
+    "id": "seed-008",
+    "city": "Gujranwala",
+    "province": "Punjab",
+    "area": "Satellite Town",
+    "title": "Maths tutor for class 9",
+    "tags": [
+      "tutoring"
+    ],
+    "startingFare": 8000,
+    "shortDescription": "Three evenings a week at home.",
+    "location": {
+      "latitude": 32.1757,
+      "longitude": 74.1911
+    },
+    "radiusMetres": 800,
+    "scheduledDayOffset": 1,
+    "scheduledHour": 8,
+    "scheduledMinute": 0,
+    "postedBy": "user-008",
+    "createdHoursAgo": 42.7,
+    "contact": "0333 1235000",
+    "status": "completed",
+    "acceptedWorkerId": "user-014",
+    "agreedFare": 9000
   },
   {
     "id": "seed-009",
     "city": "Lahore",
     "province": "Punjab",
-    "area": "Johar Town",
-    "title": "Mehndi artist for a small function",
+    "area": "Shadman",
     "tags": [
-      "beauty"
+      "cleaning"
     ],
-    "startingFare": 4500,
-    "shortDescription": "Around twenty guests.",
+    "startingFare": 2500,
     "location": {
-      "latitude": 31.4589,
-      "longitude": 74.2614
+      "latitude": 31.5499,
+      "longitude": 74.312
     },
-    "radiusMetres": 600,
-    "scheduledDayOffset": 0,
-    "scheduledHour": 14,
-    "scheduledMinute": 0,
+    "radiusMetres": 2000,
+    "scheduledDayOffset": 1,
+    "scheduledHour": 7,
+    "scheduledMinute": 30,
+    "voiceNote": "assets/audio/voice-01.wav",
+    "voiceNoteSeconds": 7.1,
+    "photos": [
+      "assets/images/jobs/cleaning-01.png"
+    ],
     "postedBy": "user-009",
-    "createdHoursAgo": 50.9,
-    "contact": "0333 6556188"
+    "createdHoursAgo": 84.5
   },
   {
     "id": "seed-010",
-    "city": "Lahore",
+    "city": "Faisalabad",
     "province": "Punjab",
-    "area": "DHA Phase 4",
+    "area": "Peoples Colony",
+    "title": "Bathroom floor retiling",
     "tags": [
       "masonry",
       "construction"
     ],
-    "startingFare": 55000,
+    "startingFare": 30000,
+    "shortDescription": "Old tiles cracked, need lifting and replacing.",
     "location": {
-      "latitude": 31.4753,
-      "longitude": 74.3874
+      "latitude": 31.4088,
+      "longitude": 73.109
     },
-    "radiusMetres": 1000,
-    "voiceNote": "assets/audio/voice-04.wav",
-    "voiceNoteSeconds": 11.8,
-    "photos": [
-      "assets/images/jobs/masonry-01.png"
-    ],
+    "radiusMetres": 2000,
+    "scheduledDayOffset": 3,
+    "scheduledHour": 10,
+    "scheduledMinute": 0,
     "postedBy": "user-010",
-    "createdHoursAgo": 89.5,
-    "contact": "0347 9235043"
+    "createdHoursAgo": 37.3,
+    "contact": "0345 8614897",
+    "status": "completed",
+    "acceptedWorkerId": "user-058",
+    "agreedFare": 40000
   },
   {
     "id": "seed-011",
-    "city": "Lahore",
+    "city": "Rawalpindi",
     "province": "Punjab",
-    "area": "Shadman",
-    "title": "Odd jobs before guests arrive",
+    "area": "Satellite Town",
+    "title": "Haircut at home for two children",
     "tags": [
-      "misc"
+      "beauty"
     ],
-    "startingFare": 5000,
+    "startingFare": 25000,
     "location": {
-      "latitude": 31.5388,
-      "longitude": 74.3128
+      "latitude": 33.6423,
+      "longitude": 73.0731
     },
-    "radiusMetres": 800,
+    "radiusMetres": 1000,
     "scheduledDayOffset": 0,
     "scheduledHour": 8,
     "scheduledMinute": 0,
+    "voiceNote": "assets/audio/voice-04.wav",
+    "voiceNoteSeconds": 9.5,
     "postedBy": "user-011",
-    "createdHoursAgo": 65.8,
-    "status": "completed",
-    "acceptedWorkerId": "user-009",
-    "agreedFare": 7000
+    "createdHoursAgo": 65.8
   },
   {
     "id": "seed-012",
@@ -340,8 +333,8 @@
     "createdHoursAgo": 43.6,
     "contact": "0301 5405230",
     "status": "completed",
-    "acceptedWorkerId": "user-019",
-    "agreedFare": 3000
+    "acceptedWorkerId": "user-005",
+    "agreedFare": 2500
   },
   {
     "id": "seed-015",
@@ -365,20 +358,23 @@
     ],
     "postedBy": "user-015",
     "createdHoursAgo": 8.2,
-    "contact": "0333 1593821"
+    "contact": "0333 1593821",
+    "status": "inProgress",
+    "acceptedWorkerId": "user-019",
+    "agreedFare": 1000
   },
   {
     "id": "seed-016",
     "city": "Karachi",
     "province": "Sindh",
-    "area": "Gulshan-e-Iqbal",
+    "area": "North Nazimabad",
     "tags": [
       "moving"
     ],
     "startingFare": 9000,
     "location": {
-      "latitude": 24.9289,
-      "longitude": 67.0977
+      "latitude": 24.9374,
+      "longitude": 67.0344
     },
     "radiusMetres": 2500,
     "scheduledDayOffset": 1,
@@ -394,15 +390,15 @@
     "id": "seed-017",
     "city": "Peshawar",
     "province": "Khyber Pakhtunkhwa",
-    "area": "Saddar",
+    "area": "Hayatabad",
     "title": "English conversation practice",
     "tags": [
       "tutoring"
     ],
     "shortDescription": "For an interview next month.",
     "location": {
-      "latitude": 34.007,
-      "longitude": 71.5469
+      "latitude": 33.9964,
+      "longitude": 71.4289
     },
     "radiusMetres": 2000,
     "scheduledDayOffset": 2,
@@ -476,7 +472,10 @@
     "radiusMetres": 500,
     "postedBy": "user-020",
     "createdHoursAgo": 7.2,
-    "contact": "0321 9790182"
+    "contact": "0321 9790182",
+    "status": "accepted",
+    "acceptedWorkerId": "user-030",
+    "agreedFare": 3500
   },
   {
     "id": "seed-021",
@@ -541,9 +540,9 @@
     "scheduledMinute": 0,
     "postedBy": "user-023",
     "createdHoursAgo": 56.8,
-    "status": "inProgress",
-    "acceptedWorkerId": "user-038",
-    "agreedFare": 1500
+    "status": "accepted",
+    "acceptedWorkerId": "user-007",
+    "agreedFare": 2000
   },
   {
     "id": "seed-024",
@@ -564,8 +563,8 @@
     "postedBy": "user-024",
     "createdHoursAgo": 55.0,
     "status": "accepted",
-    "acceptedWorkerId": "user-041",
-    "agreedFare": 18000
+    "acceptedWorkerId": "user-048",
+    "agreedFare": 17000
   },
   {
     "id": "seed-025",
@@ -629,9 +628,7 @@
     "radiusMetres": 2500,
     "postedBy": "user-027",
     "createdHoursAgo": 62.2,
-    "status": "completed",
-    "acceptedWorkerId": "user-026",
-    "agreedFare": 2500
+    "status": "cancelled"
   },
   {
     "id": "seed-028",
@@ -681,7 +678,10 @@
     "voiceNote": "assets/audio/voice-06.wav",
     "voiceNoteSeconds": 4.4,
     "postedBy": "user-029",
-    "createdHoursAgo": 8.0
+    "createdHoursAgo": 8.0,
+    "status": "completed",
+    "acceptedWorkerId": "user-008",
+    "agreedFare": 8000
   },
   {
     "id": "seed-030",
@@ -731,8 +731,8 @@
     "postedBy": "user-031",
     "createdHoursAgo": 78.1,
     "status": "inProgress",
-    "acceptedWorkerId": "user-011",
-    "agreedFare": 7000
+    "acceptedWorkerId": "user-034",
+    "agreedFare": 10000
   },
   {
     "id": "seed-032",
@@ -774,10 +774,7 @@
     "scheduledMinute": 30,
     "postedBy": "user-033",
     "createdHoursAgo": 25.8,
-    "contact": "0345 5166262",
-    "status": "inProgress",
-    "acceptedWorkerId": "user-023",
-    "agreedFare": 35000
+    "contact": "0345 5166262"
   },
   {
     "id": "seed-034",
@@ -827,10 +824,7 @@
     "scheduledMinute": 30,
     "postedBy": "user-035",
     "createdHoursAgo": 68.9,
-    "contact": "0311 7699006",
-    "status": "completed",
-    "acceptedWorkerId": "user-006",
-    "agreedFare": 30000
+    "contact": "0311 7699006"
   },
   {
     "id": "seed-036",
@@ -878,10 +872,7 @@
     "voiceNoteSeconds": 12.5,
     "postedBy": "user-037",
     "createdHoursAgo": 6.8,
-    "contact": "0311 4297504",
-    "status": "completed",
-    "acceptedWorkerId": "user-056",
-    "agreedFare": 25000
+    "contact": "0311 4297504"
   },
   {
     "id": "seed-038",
@@ -903,7 +894,10 @@
     "scheduledMinute": 0,
     "postedBy": "user-038",
     "createdHoursAgo": 55.4,
-    "contact": "0300 1352318"
+    "contact": "0300 1352318",
+    "status": "completed",
+    "acceptedWorkerId": "user-050",
+    "agreedFare": 1500
   },
   {
     "id": "seed-039",
@@ -925,10 +919,7 @@
     ],
     "postedBy": "user-039",
     "createdHoursAgo": 45.9,
-    "contact": "0300 9704271",
-    "status": "completed",
-    "acceptedWorkerId": "user-046",
-    "agreedFare": 5000
+    "contact": "0300 9704271"
   },
   {
     "id": "seed-040",
@@ -1115,7 +1106,7 @@
     "contact": "0300 3086023",
     "status": "completed",
     "acceptedWorkerId": "user-001",
-    "agreedFare": 1500
+    "agreedFare": 3000
   },
   {
     "id": "seed-048",
@@ -1135,7 +1126,10 @@
     "scheduledHour": 16,
     "scheduledMinute": 30,
     "postedBy": "user-048",
-    "createdHoursAgo": 9.2
+    "createdHoursAgo": 9.2,
+    "status": "inProgress",
+    "acceptedWorkerId": "user-014",
+    "agreedFare": 2000
   },
   {
     "id": "seed-049",
@@ -1181,7 +1175,10 @@
     "scheduledMinute": 30,
     "postedBy": "user-050",
     "createdHoursAgo": 40.9,
-    "contact": "0301 9634287"
+    "contact": "0301 9634287",
+    "status": "completed",
+    "acceptedWorkerId": "user-042",
+    "agreedFare": 20000
   },
   {
     "id": "seed-051",
@@ -1203,10 +1200,7 @@
     "voiceNoteSeconds": 6.7,
     "postedBy": "user-051",
     "createdHoursAgo": 73.0,
-    "contact": "0300 3772011",
-    "status": "accepted",
-    "acceptedWorkerId": "user-019",
-    "agreedFare": 3000
+    "contact": "0300 3772011"
   },
   {
     "id": "seed-052",
@@ -1228,7 +1222,8 @@
     "voiceNoteSeconds": 5.0,
     "postedBy": "user-052",
     "createdHoursAgo": 87.5,
-    "contact": "0347 2794611"
+    "contact": "0347 2794611",
+    "status": "cancelled"
   },
   {
     "id": "seed-053",
@@ -1252,7 +1247,10 @@
     "voiceNoteSeconds": 13.5,
     "postedBy": "user-053",
     "createdHoursAgo": 82.9,
-    "contact": "0301 3401504"
+    "contact": "0301 3401504",
+    "status": "inProgress",
+    "acceptedWorkerId": "user-049",
+    "agreedFare": 4500
   },
   {
     "id": "seed-054",
@@ -1278,8 +1276,8 @@
     "createdHoursAgo": 67.9,
     "contact": "0300 3330372",
     "status": "completed",
-    "acceptedWorkerId": "user-002",
-    "agreedFare": 4000
+    "acceptedWorkerId": "user-048",
+    "agreedFare": 3500
   },
   {
     "id": "seed-055",
@@ -1299,7 +1297,10 @@
     "voiceNoteSeconds": 5.8,
     "postedBy": "user-055",
     "createdHoursAgo": 21.7,
-    "contact": "0347 6319958"
+    "contact": "0347 6319958",
+    "status": "completed",
+    "acceptedWorkerId": "user-023",
+    "agreedFare": 6000
   },
   {
     "id": "seed-056",
@@ -1326,7 +1327,7 @@
     "contact": "0301 1188997",
     "status": "completed",
     "acceptedWorkerId": "user-016",
-    "agreedFare": 45000
+    "agreedFare": 50000
   },
   {
     "id": "seed-057",
@@ -1372,7 +1373,8 @@
     "radiusMetres": 1000,
     "postedBy": "user-058",
     "createdHoursAgo": 46.2,
-    "contact": "0300 7443868"
+    "contact": "0300 7443868",
+    "status": "cancelled"
   },
   {
     "id": "seed-059",
@@ -1417,13 +1419,16 @@
       "assets/images/jobs/plumbing-01.png"
     ],
     "postedBy": "user-060",
-    "createdHoursAgo": 79.2
+    "createdHoursAgo": 79.2,
+    "status": "completed",
+    "acceptedWorkerId": "user-044",
+    "agreedFare": 2000
   },
   {
     "id": "seed-061",
-    "city": "Peshawar",
+    "city": "Mardan",
     "province": "Khyber Pakhtunkhwa",
-    "area": "Hayatabad",
+    "area": "Sheikh Maltoon",
     "title": "Blocked drain in the bathroom",
     "tags": [
       "plumbing"
@@ -1431,8 +1436,8 @@
     "startingFare": 1500,
     "shortDescription": "Water is not going down. It has been two days.",
     "location": {
-      "latitude": 33.9815,
-      "longitude": 71.4276
+      "latitude": 34.2103,
+      "longitude": 72.0496
     },
     "radiusMetres": 500,
     "postedBy": "user-001",
@@ -1440,7 +1445,7 @@
     "contact": "0345 6621864",
     "status": "completed",
     "acceptedWorkerId": "user-016",
-    "agreedFare": 1500
+    "agreedFare": 2000
   },
   {
     "id": "seed-062",
@@ -1459,13 +1464,14 @@
     "radiusMetres": 2000,
     "postedBy": "user-002",
     "createdHoursAgo": 21.3,
-    "contact": "0332 1655706"
+    "contact": "0332 1655706",
+    "status": "cancelled"
   },
   {
     "id": "seed-063",
-    "city": "Faisalabad",
-    "province": "Punjab",
-    "area": "Peoples Colony",
+    "city": "Islamabad",
+    "province": "Islamabad Capital Territory",
+    "area": "G-11",
     "title": "Blocked drain in the bathroom",
     "tags": [
       "plumbing"
@@ -1473,8 +1479,8 @@
     "startingFare": 3500,
     "shortDescription": "Water is not going down. It has been two days.",
     "location": {
-      "latitude": 31.4098,
-      "longitude": 73.1155
+      "latitude": 33.6662,
+      "longitude": 72.9969
     },
     "radiusMetres": 1200,
     "voiceNote": "assets/audio/voice-06.wav",
@@ -1487,7 +1493,7 @@
     "createdHoursAgo": 58.7,
     "status": "completed",
     "acceptedWorkerId": "user-016",
-    "agreedFare": 4000
+    "agreedFare": 3500
   },
   {
     "id": "seed-064",
@@ -1512,7 +1518,10 @@
     "voiceNoteSeconds": 7.4,
     "postedBy": "user-004",
     "createdHoursAgo": 27.9,
-    "contact": "0333 6277972"
+    "contact": "0333 6277972",
+    "status": "inProgress",
+    "acceptedWorkerId": "user-060",
+    "agreedFare": 2500
   },
   {
     "id": "seed-065",
@@ -1538,7 +1547,7 @@
     "contact": "0321 1317212",
     "status": "completed",
     "acceptedWorkerId": "user-001",
-    "agreedFare": 6000
+    "agreedFare": 8000
   },
   {
     "id": "seed-066",
@@ -1590,7 +1599,9 @@
     "postedBy": "user-007",
     "createdHoursAgo": 38.6,
     "contact": "0345 6479399",
-    "status": "cancelled"
+    "status": "inProgress",
+    "acceptedWorkerId": "user-057",
+    "agreedFare": 16000
   },
   {
     "id": "seed-068",
@@ -1623,9 +1634,9 @@
   },
   {
     "id": "seed-069",
-    "city": "Karachi",
-    "province": "Sindh",
-    "area": "Saddar",
+    "city": "Lahore",
+    "province": "Punjab",
+    "area": "Gulberg",
     "title": "AC not cooling",
     "tags": [
       "applianceRepair"
@@ -1633,8 +1644,8 @@
     "startingFare": 2000,
     "shortDescription": "Split unit in the bedroom. Runs but blows warm air.",
     "location": {
-      "latitude": 24.8593,
-      "longitude": 67.0091
+      "latitude": 31.5143,
+      "longitude": 74.3534
     },
     "radiusMetres": 1200,
     "scheduledDayOffset": 3,
@@ -1644,8 +1655,8 @@
     "createdHoursAgo": 70.9,
     "contact": "0347 3165463",
     "status": "completed",
-    "acceptedWorkerId": "user-060",
-    "agreedFare": 2000
+    "acceptedWorkerId": "user-013",
+    "agreedFare": 2500
   },
   {
     "id": "seed-070",
@@ -1691,8 +1702,8 @@
     "createdHoursAgo": 81.2,
     "contact": "0321 4018461",
     "status": "accepted",
-    "acceptedWorkerId": "user-018",
-    "agreedFare": 10000
+    "acceptedWorkerId": "user-023",
+    "agreedFare": 14000
   },
   {
     "id": "seed-072",
@@ -1790,16 +1801,16 @@
   },
   {
     "id": "seed-076",
-    "city": "Gujranwala",
-    "province": "Punjab",
-    "area": "Satellite Town",
+    "city": "Karachi",
+    "province": "Sindh",
+    "area": "Saddar",
     "title": "Microwave stopped heating",
     "tags": [
       "applianceRepair"
     ],
     "location": {
-      "latitude": 32.1659,
-      "longitude": 74.1802
+      "latitude": 24.8684,
+      "longitude": 67.0082
     },
     "radiusMetres": 1000,
     "scheduledDayOffset": 1,
@@ -1810,21 +1821,21 @@
     "contact": "0301 2862164",
     "status": "completed",
     "acceptedWorkerId": "user-009",
-    "agreedFare": 4500
+    "agreedFare": 3000
   },
   {
     "id": "seed-077",
-    "city": "Lahore",
-    "province": "Punjab",
-    "area": "Shadman",
+    "city": "Peshawar",
+    "province": "Khyber Pakhtunkhwa",
+    "area": "University Town",
     "title": "Toilet flush broken",
     "tags": [
       "plumbing"
     ],
     "startingFare": 3000,
     "location": {
-      "latitude": 31.5525,
-      "longitude": 74.3149
+      "latitude": 34.0007,
+      "longitude": 71.4839
     },
     "radiusMetres": 1500,
     "scheduledDayOffset": 1,
@@ -1838,7 +1849,7 @@
     "contact": "0301 6294546",
     "status": "completed",
     "acceptedWorkerId": "user-016",
-    "agreedFare": 3000
+    "agreedFare": 3500
   },
   {
     "id": "seed-078",
@@ -1885,7 +1896,9 @@
     "postedBy": "user-019",
     "createdHoursAgo": 83.6,
     "contact": "0332 1287459",
-    "status": "cancelled"
+    "status": "completed",
+    "acceptedWorkerId": "user-027",
+    "agreedFare": 800
   },
   {
     "id": "seed-080",
@@ -1989,10 +2002,7 @@
     "voiceNoteSeconds": 5.4,
     "postedBy": "user-023",
     "createdHoursAgo": 50.3,
-    "contact": "0321 1315449",
-    "status": "completed",
-    "acceptedWorkerId": "user-014",
-    "agreedFare": 20000
+    "contact": "0321 1315449"
   },
   {
     "id": "seed-084",
@@ -2059,10 +2069,7 @@
     "scheduledMinute": 0,
     "postedBy": "user-026",
     "createdHoursAgo": 48.4,
-    "contact": "0301 8711100",
-    "status": "accepted",
-    "acceptedWorkerId": "user-016",
-    "agreedFare": 5000
+    "contact": "0301 8711100"
   },
   {
     "id": "seed-087",
@@ -2085,10 +2092,7 @@
     "scheduledMinute": 30,
     "postedBy": "user-027",
     "createdHoursAgo": 38.3,
-    "contact": "0300 5925556",
-    "status": "completed",
-    "acceptedWorkerId": "user-030",
-    "agreedFare": 3500
+    "contact": "0300 5925556"
   },
   {
     "id": "seed-088",
@@ -2108,7 +2112,10 @@
     "radiusMetres": 1500,
     "postedBy": "user-028",
     "createdHoursAgo": 16.6,
-    "contact": "0333 7943979"
+    "contact": "0333 7943979",
+    "status": "completed",
+    "acceptedWorkerId": "user-010",
+    "agreedFare": 16000
   },
   {
     "id": "seed-089",
@@ -2150,7 +2157,10 @@
     "radiusMetres": 2500,
     "postedBy": "user-030",
     "createdHoursAgo": 73.6,
-    "contact": "0347 7728084"
+    "contact": "0347 7728084",
+    "status": "completed",
+    "acceptedWorkerId": "user-013",
+    "agreedFare": 30000
   },
   {
     "id": "seed-091",
@@ -2221,7 +2231,10 @@
     "scheduledMinute": 0,
     "postedBy": "user-033",
     "createdHoursAgo": 7.3,
-    "contact": "0347 3889203"
+    "contact": "0347 3889203",
+    "status": "completed",
+    "acceptedWorkerId": "user-026",
+    "agreedFare": 20000
   },
   {
     "id": "seed-094",
@@ -2359,8 +2372,7 @@
     "voiceNoteSeconds": 10.4,
     "postedBy": "user-039",
     "createdHoursAgo": 36.0,
-    "contact": "0321 6975988",
-    "status": "cancelled"
+    "contact": "0321 6975988"
   },
   {
     "id": "seed-100",
@@ -2386,7 +2398,7 @@
     "contact": "0345 5516942",
     "status": "completed",
     "acceptedWorkerId": "user-001",
-    "agreedFare": 5000
+    "agreedFare": 6000
   },
   {
     "id": "seed-101",
@@ -2406,7 +2418,10 @@
     "radiusMetres": 500,
     "postedBy": "user-041",
     "createdHoursAgo": 38.5,
-    "contact": "0345 4352602"
+    "contact": "0345 4352602",
+    "status": "completed",
+    "acceptedWorkerId": "user-060",
+    "agreedFare": 16000
   },
   {
     "id": "seed-102",
@@ -2430,7 +2445,8 @@
     "voiceNoteSeconds": 10.7,
     "postedBy": "user-042",
     "createdHoursAgo": 62.6,
-    "contact": "0347 6221706"
+    "contact": "0347 6221706",
+    "status": "cancelled"
   },
   {
     "id": "seed-103",
@@ -2455,8 +2471,7 @@
     "voiceNoteSeconds": 7.5,
     "postedBy": "user-043",
     "createdHoursAgo": 31.0,
-    "contact": "0311 4540343",
-    "status": "cancelled"
+    "contact": "0311 4540343"
   },
   {
     "id": "seed-104",
@@ -2506,7 +2521,7 @@
     "contact": "0301 1498837",
     "status": "completed",
     "acceptedWorkerId": "user-016",
-    "agreedFare": 2000
+    "agreedFare": 1500
   },
   {
     "id": "seed-106",
@@ -2569,7 +2584,10 @@
     "voiceNoteSeconds": 12.0,
     "postedBy": "user-048",
     "createdHoursAgo": 46.8,
-    "contact": "0332 5467834"
+    "contact": "0332 5467834",
+    "status": "completed",
+    "acceptedWorkerId": "user-029",
+    "agreedFare": 4500
   },
   {
     "id": "seed-109",
@@ -2592,10 +2610,7 @@
     "scheduledMinute": 30,
     "postedBy": "user-049",
     "createdHoursAgo": 37.6,
-    "contact": "0300 7941461",
-    "status": "completed",
-    "acceptedWorkerId": "user-051",
-    "agreedFare": 4000
+    "contact": "0300 7941461"
   },
   {
     "id": "seed-110",
@@ -2712,7 +2727,10 @@
     "voiceNoteSeconds": 11.7,
     "postedBy": "user-054",
     "createdHoursAgo": 28.2,
-    "contact": "0321 6964061"
+    "contact": "0321 6964061",
+    "status": "completed",
+    "acceptedWorkerId": "user-051",
+    "agreedFare": 6000
   },
   {
     "id": "seed-115",
@@ -2804,9 +2822,9 @@
     "scheduledMinute": 0,
     "postedBy": "user-058",
     "createdHoursAgo": 54.2,
-    "status": "accepted",
-    "acceptedWorkerId": "user-057",
-    "agreedFare": 2500
+    "status": "completed",
+    "acceptedWorkerId": "user-036",
+    "agreedFare": 4000
   },
   {
     "id": "seed-119",
@@ -2858,24 +2876,24 @@
   },
   {
     "id": "seed-121",
-    "city": "Islamabad",
-    "province": "Islamabad Capital Territory",
-    "area": "I-8",
+    "city": "Mardan",
+    "province": "Khyber Pakhtunkhwa",
+    "area": "Sheikh Maltoon",
     "title": "Airport drop at 4am",
     "tags": [
       "driving"
     ],
     "startingFare": 6000,
     "location": {
-      "latitude": 33.6601,
-      "longitude": 73.0721
+      "latitude": 34.2002,
+      "longitude": 72.044
     },
     "radiusMetres": 1500,
     "postedBy": "user-001",
     "createdHoursAgo": 1.8,
     "status": "inProgress",
     "acceptedWorkerId": "user-017",
-    "agreedFare": 7000
+    "agreedFare": 8000
   },
   {
     "id": "seed-122",
@@ -2902,23 +2920,23 @@
   },
   {
     "id": "seed-123",
-    "city": "Lahore",
-    "province": "Punjab",
-    "area": "Johar Town",
+    "city": "Islamabad",
+    "province": "Islamabad Capital Territory",
+    "area": "Bahria Enclave",
     "title": "Haircut at home for two children",
     "tags": [
       "beauty"
     ],
     "startingFare": 10000,
     "location": {
-      "latitude": 31.4791,
-      "longitude": 74.2801
+      "latitude": 33.7044,
+      "longitude": 73.1834
     },
     "radiusMetres": 1500,
     "postedBy": "user-003",
     "createdHoursAgo": 91.9,
     "status": "accepted",
-    "acceptedWorkerId": "user-013",
+    "acceptedWorkerId": "user-015",
     "agreedFare": 12000
   },
   {
@@ -2969,8 +2987,8 @@
     "createdHoursAgo": 37.6,
     "contact": "0301 6712390",
     "status": "completed",
-    "acceptedWorkerId": "user-045",
-    "agreedFare": 11000
+    "acceptedWorkerId": "user-044",
+    "agreedFare": 9000
   },
   {
     "id": "seed-126",
@@ -3041,17 +3059,17 @@
   },
   {
     "id": "seed-129",
-    "city": "Gujranwala",
+    "city": "Lahore",
     "province": "Punjab",
-    "area": "Model Town",
+    "area": "Shadman",
     "title": "Odd jobs before guests arrive",
     "tags": [
       "misc"
     ],
     "startingFare": 2500,
     "location": {
-      "latitude": 32.1452,
-      "longitude": 74.1926
+      "latitude": 31.5369,
+      "longitude": 74.3214
     },
     "radiusMetres": 800,
     "postedBy": "user-009",
@@ -3195,17 +3213,17 @@
   },
   {
     "id": "seed-136",
-    "city": "Bahawalpur",
-    "province": "Punjab",
-    "area": "Model Town A",
+    "city": "Karachi",
+    "province": "Sindh",
+    "area": "Korangi",
     "title": "Windows and grilles",
     "tags": [
       "cleaning"
     ],
     "startingFare": 3500,
     "location": {
-      "latitude": 29.4076,
-      "longitude": 71.6904
+      "latitude": 24.83,
+      "longitude": 67.1363
     },
     "radiusMetres": 500,
     "scheduledDayOffset": 0,
@@ -3218,21 +3236,21 @@
     "contact": "0347 3471863",
     "status": "accepted",
     "acceptedWorkerId": "user-001",
-    "agreedFare": 4500
+    "agreedFare": 2500
   },
   {
     "id": "seed-137",
-    "city": "Multan",
-    "province": "Punjab",
-    "area": "Gulgasht Colony",
+    "city": "Peshawar",
+    "province": "Khyber Pakhtunkhwa",
+    "area": "Saddar",
     "title": "Odd jobs before guests arrive",
     "tags": [
       "misc"
     ],
     "startingFare": 5000,
     "location": {
-      "latitude": 30.2214,
-      "longitude": 71.4847
+      "latitude": 34.0059,
+      "longitude": 71.5601
     },
     "radiusMetres": 800,
     "postedBy": "user-017",
@@ -3240,7 +3258,7 @@
     "contact": "0333 9926751",
     "status": "accepted",
     "acceptedWorkerId": "user-009",
-    "agreedFare": 7000
+    "agreedFare": 6000
   },
   {
     "id": "seed-138",
@@ -3286,8 +3304,8 @@
     "createdHoursAgo": 24.9,
     "contact": "0300 8821277",
     "status": "completed",
-    "acceptedWorkerId": "user-014",
-    "agreedFare": 5000
+    "acceptedWorkerId": "user-048",
+    "agreedFare": 6000
   },
   {
     "id": "seed-140",
@@ -3353,8 +3371,8 @@
     "createdHoursAgo": 10.6,
     "contact": "0345 6320594",
     "status": "completed",
-    "acceptedWorkerId": "user-058",
-    "agreedFare": 9000
+    "acceptedWorkerId": "user-006",
+    "agreedFare": 8000
   },
   {
     "id": "seed-143",
@@ -3377,7 +3395,10 @@
     "scheduledMinute": 0,
     "postedBy": "user-023",
     "createdHoursAgo": 71.0,
-    "contact": "0332 3226216"
+    "contact": "0332 3226216",
+    "status": "inProgress",
+    "acceptedWorkerId": "user-036",
+    "agreedFare": 3000
   },
   {
     "id": "seed-144",
@@ -3422,10 +3443,7 @@
     "voiceNote": "assets/audio/voice-03.wav",
     "voiceNoteSeconds": 10.6,
     "postedBy": "user-025",
-    "createdHoursAgo": 3.9,
-    "status": "accepted",
-    "acceptedWorkerId": "user-030",
-    "agreedFare": 2000
+    "createdHoursAgo": 3.9
   },
   {
     "id": "seed-146",
@@ -3465,10 +3483,7 @@
     "scheduledHour": 14,
     "scheduledMinute": 0,
     "postedBy": "user-027",
-    "createdHoursAgo": 86.6,
-    "status": "completed",
-    "acceptedWorkerId": "user-047",
-    "agreedFare": 2500
+    "createdHoursAgo": 86.6
   },
   {
     "id": "seed-148",
@@ -3567,7 +3582,10 @@
     "voiceNoteSeconds": 11.0,
     "postedBy": "user-031",
     "createdHoursAgo": 28.3,
-    "contact": "0321 4059261"
+    "contact": "0321 4059261",
+    "status": "completed",
+    "acceptedWorkerId": "user-047",
+    "agreedFare": 19000
   },
   {
     "id": "seed-152",
@@ -3621,7 +3639,10 @@
       "assets/images/jobs/masonry-01.png"
     ],
     "postedBy": "user-033",
-    "createdHoursAgo": 94.8
+    "createdHoursAgo": 94.8,
+    "status": "accepted",
+    "acceptedWorkerId": "user-047",
+    "agreedFare": 55000
   },
   {
     "id": "seed-154",
@@ -3645,8 +3666,7 @@
     "voiceNoteSeconds": 7.0,
     "postedBy": "user-034",
     "createdHoursAgo": 88.2,
-    "contact": "0345 2667133",
-    "status": "cancelled"
+    "contact": "0345 2667133"
   },
   {
     "id": "seed-155",
@@ -3718,7 +3738,10 @@
     "voiceNoteSeconds": 9.2,
     "postedBy": "user-037",
     "createdHoursAgo": 82.4,
-    "contact": "0301 3574489"
+    "contact": "0301 3574489",
+    "status": "completed",
+    "acceptedWorkerId": "user-018",
+    "agreedFare": 4000
   },
   {
     "id": "seed-158",
@@ -3768,9 +3791,9 @@
     "postedBy": "user-039",
     "createdHoursAgo": 56.8,
     "contact": "0345 7685122",
-    "status": "accepted",
-    "acceptedWorkerId": "user-045",
-    "agreedFare": 115000
+    "status": "completed",
+    "acceptedWorkerId": "user-046",
+    "agreedFare": 75000
   },
   {
     "id": "seed-160",
@@ -3821,9 +3844,9 @@
     "postedBy": "user-041",
     "createdHoursAgo": 13.4,
     "contact": "0311 7432450",
-    "status": "inProgress",
-    "acceptedWorkerId": "user-005",
-    "agreedFare": 1500
+    "status": "accepted",
+    "acceptedWorkerId": "user-032",
+    "agreedFare": 1000
   },
   {
     "id": "seed-162",
@@ -3892,8 +3915,8 @@
     "postedBy": "user-044",
     "createdHoursAgo": 64.3,
     "status": "accepted",
-    "acceptedWorkerId": "user-030",
-    "agreedFare": 1500
+    "acceptedWorkerId": "user-038",
+    "agreedFare": 1000
   },
   {
     "id": "seed-165",
@@ -3916,9 +3939,9 @@
     "postedBy": "user-045",
     "createdHoursAgo": 3.8,
     "contact": "0311 5336901",
-    "status": "accepted",
-    "acceptedWorkerId": "user-046",
-    "agreedFare": 1500
+    "status": "inProgress",
+    "acceptedWorkerId": "user-007",
+    "agreedFare": 2000
   },
   {
     "id": "seed-166",
@@ -3946,7 +3969,7 @@
     "contact": "0333 3098739",
     "status": "completed",
     "acceptedWorkerId": "user-001",
-    "agreedFare": 8000
+    "agreedFare": 7000
   },
   {
     "id": "seed-167",
@@ -4036,9 +4059,9 @@
     "postedBy": "user-050",
     "createdHoursAgo": 27.1,
     "contact": "0321 9484614",
-    "status": "completed",
-    "acceptedWorkerId": "user-058",
-    "agreedFare": 6000
+    "status": "accepted",
+    "acceptedWorkerId": "user-027",
+    "agreedFare": 4500
   },
   {
     "id": "seed-171",
@@ -4060,8 +4083,7 @@
     "voiceNote": "assets/audio/voice-04.wav",
     "voiceNoteSeconds": 5.8,
     "postedBy": "user-051",
-    "createdHoursAgo": 86.5,
-    "status": "cancelled"
+    "createdHoursAgo": 86.5
   },
   {
     "id": "seed-172",
@@ -4080,7 +4102,10 @@
     },
     "radiusMetres": 600,
     "postedBy": "user-052",
-    "createdHoursAgo": 25.9
+    "createdHoursAgo": 25.9,
+    "status": "inProgress",
+    "acceptedWorkerId": "user-057",
+    "agreedFare": 19000
   },
   {
     "id": "seed-173",
@@ -4156,9 +4181,9 @@
     "postedBy": "user-055",
     "createdHoursAgo": 94.1,
     "contact": "0300 5035277",
-    "status": "inProgress",
-    "acceptedWorkerId": "user-030",
-    "agreedFare": 2500
+    "status": "completed",
+    "acceptedWorkerId": "user-009",
+    "agreedFare": 3000
   },
   {
     "id": "seed-176",
@@ -4179,7 +4204,7 @@
     "contact": "0300 2502272",
     "status": "completed",
     "acceptedWorkerId": "user-009",
-    "agreedFare": 8000
+    "agreedFare": 3000
   },
   {
     "id": "seed-177",
@@ -4224,7 +4249,10 @@
     "voiceNoteSeconds": 6.0,
     "postedBy": "user-058",
     "createdHoursAgo": 32.7,
-    "contact": "0333 6030618"
+    "contact": "0333 6030618",
+    "status": "completed",
+    "acceptedWorkerId": "user-015",
+    "agreedFare": 6000
   },
   {
     "id": "seed-179",
@@ -4249,9 +4277,9 @@
     "postedBy": "user-059",
     "createdHoursAgo": 41.8,
     "contact": "0300 8592062",
-    "status": "accepted",
-    "acceptedWorkerId": "user-030",
-    "agreedFare": 8000
+    "status": "completed",
+    "acceptedWorkerId": "user-026",
+    "agreedFare": 3000
   },
   {
     "id": "seed-180",
@@ -4271,13 +4299,16 @@
     "voiceNote": "assets/audio/voice-05.wav",
     "voiceNoteSeconds": 9.7,
     "postedBy": "user-060",
-    "createdHoursAgo": 83.4
+    "createdHoursAgo": 83.4,
+    "status": "completed",
+    "acceptedWorkerId": "user-059",
+    "agreedFare": 5000
   },
   {
     "id": "seed-181",
-    "city": "Lahore",
-    "province": "Punjab",
-    "area": "Walled City",
+    "city": "Mardan",
+    "province": "Khyber Pakhtunkhwa",
+    "area": "Sheikh Maltoon",
     "title": "Rent agreement to check",
     "tags": [
       "legal"
@@ -4285,8 +4316,8 @@
     "startingFare": 11000,
     "shortDescription": "Landlord sent a new agreement. Need someone to read it before I sign.",
     "location": {
-      "latitude": 31.589,
-      "longitude": 74.3123
+      "latitude": 34.2054,
+      "longitude": 72.0519
     },
     "radiusMetres": 1000,
     "openToAllLocations": true,
@@ -4320,16 +4351,13 @@
     "scheduledMinute": 0,
     "postedBy": "user-002",
     "createdHoursAgo": 37.3,
-    "contact": "0311 7596789",
-    "status": "inProgress",
-    "acceptedWorkerId": "user-057",
-    "agreedFare": 13000
+    "contact": "0311 7596789"
   },
   {
     "id": "seed-183",
-    "city": "Lahore",
-    "province": "Punjab",
-    "area": "Gulberg",
+    "city": "Islamabad",
+    "province": "Islamabad Capital Territory",
+    "area": "G-11",
     "title": "Typing up handwritten notes",
     "tags": [
       "misc"
@@ -4337,8 +4365,8 @@
     "startingFare": 7000,
     "shortDescription": "About forty pages. Can be sent by phone.",
     "location": {
-      "latitude": 31.519,
-      "longitude": 74.3594
+      "latitude": 33.6678,
+      "longitude": 72.9964
     },
     "radiusMetres": 1000,
     "openToAllLocations": true,

@@ -338,13 +338,52 @@ def round_fare(amount: float) -> int:
 def build(job_count: int = 180):
     rng = random.Random(RANDOM_SEED)
 
+    # Names are drawn without repeating, and never "Noor Noor".
+    #
+    # Two people sharing a name is ordinary life and a problem in a demo: the
+    # admin queue shows a list of names, one of the five personas is in it, and
+    # a second row reading "Hina Butt" makes it ambiguous which person a
+    # decision was about. A first name that is also the family name reads as a
+    # bug in the generator, which it was.
     people = []
+
+    # **The five in the switcher are named here, not by the generator.** Their
+    # names and areas are duplicated in `DemoAccounts.roster` so the switcher
+    # can be drawn before the seed loads, and letting the RNG name them meant
+    # every regeneration renamed the demo's cast — and silently invalidated the
+    # README, the demo script, and anything anybody had written down.
+    # `account_test.dart` checks the two still agree.
+    used = {persona["name"] for persona in PERSONAS.values()}
+
     for index in range(1, 61):
+        person_id = f"user-{index:03d}"
+        persona = PERSONAS.get(person_id)
+
+        if persona is not None:
+            name = persona["name"]
+        else:
+            # Names are drawn without repeating, and never "Noor Noor".
+            #
+            # Two people sharing a name is ordinary life and a problem in a
+            # demo: the admin queue is a list of names, one of the five
+            # personas is in it, and a second row reading "Hina Butt" makes it
+            # ambiguous which person a decision was about. A first name that is
+            # also the family name reads as a bug in the generator, which it
+            # was.
+            while True:
+                first = rng.choice(FIRST_NAMES)
+                last = rng.choice(LAST_NAMES)
+                name = f"{first} {last}"
+                if first != last and name not in used:
+                    used.add(name)
+                    break
+
         people.append({
-            "id": f"user-{index:03d}",
-            "name": f"{rng.choice(FIRST_NAMES)} {rng.choice(LAST_NAMES)}",
-            # Filled in below, once we know where their job is.
-            "area": None,
+            "id": person_id,
+            "name": name,
+            # Filled in below, once we know where their job is — except for a
+            # persona, whose area is pinned with their name.
+            "area": persona["area"] if persona is not None else None,
         })
 
     jobs = []
@@ -458,6 +497,43 @@ def build(job_count: int = 180):
             area_name, _, _ = rng.choice(areas)
             person["area"] = f"{area_name}, {city_name}"
 
+    # **A persona's postings are where the persona is.**
+    #
+    # Jobs are handed out round-robin, which scatters each person's across the
+    # country — invisible for the fifty-five names nobody switches to, and
+    # wrong for the five in the switcher. Switching to a hirer in Islamabad and
+    # finding her four postings in Sukkur, Lahore and Faisalabad makes the map
+    # useless as a demonstration: it opens framed on jobs a thousand kilometres
+    # apart, and none of them is near the person you are being.
+    #
+    # Re-homed here rather than by biasing the assignment above, so the rest of
+    # the seed — which cities are busy, how many jobs each has — is unchanged.
+    areas_by_city = {name: areas for name, _, _, areas in CITIES}
+
+    for person in people:
+        if person["id"] not in PERSONAS:
+            continue
+
+        city_name = person["area"].split(", ")[-1]
+        areas = areas_by_city.get(city_name)
+        if not areas:
+            continue
+
+        province = next(p for n, p, _, _ in CITIES if n == city_name)
+
+        for job in jobs:
+            if job["postedBy"] != person["id"]:
+                continue
+
+            area_name, lat, lng = rng.choice(areas)
+            job["city"] = city_name
+            job["province"] = province
+            job["area"] = area_name
+            job["location"] = {
+                "latitude": round(lat + jitter(rng, 0.01), 4),
+                "longitude": round(lng + jitter(rng, 0.01), 4),
+            }
+
     return jobs, people
 
 
@@ -485,6 +561,8 @@ PERSONAS = {
     # charged commission — and postings in every state, including one that was
     # called off.
     "user-003": {
+        "name": "Hina Butt",
+        "area": "F-7, Islamabad",
         "role": "hirer",
         "trades": [],
         "wallet": [],
@@ -493,6 +571,8 @@ PERSONAS = {
     # The busy worker. Well rated, paid up, and the one whose record makes an
     # offer look like a safe choice.
     "user-009": {
+        "name": "Usman Raza",
+        "area": "Johar Town, Lahore",
         "role": "worker",
         "trades": ["electrical", "applianceRepair"],
         "wallet": [
@@ -507,6 +587,8 @@ PERSONAS = {
     # The worker who owes money. Two commissions charged while already short,
     # which is Section 11's lockout: the bidding screen refuses and says why.
     "user-016": {
+        "name": "Bilal Awan",
+        "area": "Gulshan-e-Iqbal, Karachi",
         "role": "worker",
         "trades": ["plumbing", "masonry"],
         "wallet": [
@@ -520,6 +602,8 @@ PERSONAS = {
     # Almost new. One job finished, the Rs. 500 first-job credit still visible
     # in the ledger, and a balance close to nothing.
     "user-017": {
+        "name": "Shahid Siddiqui",
+        "area": "Saddar, Peshawar",
         "role": "worker",
         "trades": ["driving"],
         "wallet": [
@@ -533,6 +617,8 @@ PERSONAS = {
     # The generalist. Most trades of anybody, so the feed she sees is the
     # widest one in the demo.
     "user-001": {
+        "name": "Sadia Iqbal",
+        "area": "Sheikh Maltoon, Mardan",
         "role": "worker",
         "trades": ["cleaning", "cooking", "tailoring", "gardening"],
         "wallet": [

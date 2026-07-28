@@ -75,6 +75,70 @@ void main() {
       }
     });
 
+    test('and nobody in the seed shares a name with anybody else', () async {
+      // A demo where two rows read "Hina Butt" makes it ambiguous which person
+      // an admin decision was about — and one of the five personas is in that
+      // list. Two people sharing a name is ordinary life and a problem here.
+      //
+      // "Noor Noor" is the other half: a first name that is also the family
+      // name reads as a bug in the generator, because it was one.
+      final users =
+          (await SeedFacts.readJsonAsset('assets/seed/users.json')
+                  as List<dynamic>)
+              .cast<Map<String, dynamic>>();
+
+      final names = users.map((user) => user['name'] as String).toList();
+
+      expect(
+        names.toSet(),
+        hasLength(names.length),
+        reason: 'two people in the seed share a name',
+      );
+
+      for (final name in names) {
+        final words = name.split(' ');
+        expect(
+          words.first,
+          isNot(words.last),
+          reason: '$name has the same first and family name',
+        );
+      }
+    });
+
+    test('a persona posts where they live', () async {
+      // Switching to a hirer in Islamabad and finding her postings in Sukkur
+      // makes the map useless as a demonstration: it opens framed on jobs a
+      // thousand kilometres apart and none of them is near the person you are
+      // being. Jobs are handed out round-robin, so this needs saying.
+      final users =
+          (await SeedFacts.readJsonAsset('assets/seed/users.json')
+                  as List<dynamic>)
+              .cast<Map<String, dynamic>>();
+      final jobs =
+          (await SeedFacts.readJsonAsset('assets/seed/jobs.json')
+                  as List<dynamic>)
+              .cast<Map<String, dynamic>>();
+
+      final byId = {for (final user in users) user['id'] as String: user};
+
+      for (final account in DemoAccounts.roster) {
+        if (!account.isSeeded) continue;
+
+        final city = (byId[account.id]!['area'] as String).split(', ').last;
+        final theirs = jobs.where((job) => job['postedBy'] == account.id);
+
+        expect(theirs, isNotEmpty);
+        for (final job in theirs) {
+          expect(
+            job['city'],
+            city,
+            reason: '${account.name} lives in $city but posted in '
+                '${job['city']}',
+          );
+        }
+      }
+    });
+
     test('every persona has jobs to show', () async {
       // A switcher that lands you on an empty "my postings" list looks like a
       // failed switch. Each persona is chosen for having posted work.

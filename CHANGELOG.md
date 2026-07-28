@@ -12,6 +12,35 @@ that heading to the version and date, and open a fresh `[Unreleased]`.
 
 ## [Unreleased]
 
+### 0.14.4 — The cast stops moving about
+
+Three seed defects, all found by walking the app for the demo script rather
+than by anything failing.
+
+#### Fixed
+
+- **A worker called "Noor Noor", and two people sharing a name.** One of the
+  duplicated names was Hina Butt, who is also a demo persona — so the admin
+  queue listed two of her and a decision about one was ambiguous. Names are now
+  drawn without repeating, and a first name is never also the family name.
+- **The five personas were named by the random seed.** Every regeneration
+  renamed the demo's cast and silently invalidated the README, the demo script,
+  and anything anybody had written down. Their names and areas are pinned in
+  the generator now, next to the rest of what each persona is *for*.
+  `account_test.dart` already checked the roster and the seed agree; this makes
+  them agree by construction rather than by luck.
+- **A hirer in Islamabad had postings in Sukkur.** Jobs are handed out
+  round-robin, which scatters each person's across the country — invisible for
+  the fifty-five names nobody switches to, and wrong for the five in the
+  switcher. Switching to a persona now shows a map framed on their own city
+  instead of on jobs a thousand kilometres apart.
+
+#### Added
+
+- Tests for all three, in `account_test.dart`: no repeated names, no name
+  whose first word is its last, and every persona posting in the city they
+  live in.
+
 ### 0.14.3 — A demo somebody can follow
 
 #### Added

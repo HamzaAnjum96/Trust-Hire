@@ -1,6 +1,6 @@
 [
   {
-    "id": "bid-0224",
+    "id": "bid-0226",
     "jobId": "seed-148",
     "workerId": "user-014",
     "fare": 7000,
@@ -8,16 +8,7 @@
     "status": "passedOver"
   },
   {
-    "id": "bid-0192",
-    "jobId": "seed-124",
-    "workerId": "user-060",
-    "fare": 4000,
-    "hoursAgo": 91.9,
-    "status": "offered",
-    "message": "Live nearby, can be there in 20 minutes."
-  },
-  {
-    "id": "bid-0226",
+    "id": "bid-0228",
     "jobId": "seed-148",
     "workerId": "user-010",
     "fare": 6000,
@@ -26,25 +17,7 @@
     "message": "I have the tools with me."
   },
   {
-    "id": "bid-0113",
-    "jobId": "seed-136",
-    "workerId": "user-040",
-    "fare": 2500,
-    "hoursAgo": 84.8,
-    "status": "passedOver",
-    "message": "Tomorrow morning suits me better."
-  },
-  {
-    "id": "bid-0112",
-    "jobId": "seed-136",
-    "workerId": "user-001",
-    "fare": 4500,
-    "hoursAgo": 84.5,
-    "status": "accepted",
-    "message": "Can come today."
-  },
-  {
-    "id": "bid-0268",
+    "id": "bid-0270",
     "jobId": "seed-057",
     "workerId": "user-023",
     "fare": 10000,
@@ -52,42 +25,33 @@
     "status": "passedOver"
   },
   {
-    "id": "bid-0364",
-    "jobId": "seed-157",
-    "workerId": "user-008",
-    "fare": 4000,
-    "hoursAgo": 80.4,
+    "id": "bid-0110",
+    "jobId": "seed-136",
+    "workerId": "user-007",
+    "fare": 3500,
+    "hoursAgo": 82.7,
+    "status": "passedOver"
+  },
+  {
+    "id": "bid-0136",
+    "jobId": "seed-177",
+    "workerId": "user-020",
+    "fare": 6000,
+    "hoursAgo": 82.2,
     "status": "offered",
-    "message": "Done this many times."
+    "message": "Tomorrow morning suits me better."
   },
   {
-    "id": "bid-0300",
-    "jobId": "seed-147",
-    "workerId": "user-047",
-    "fare": 2500,
-    "hoursAgo": 79.0,
-    "status": "accepted"
-  },
-  {
-    "id": "bid-0034",
-    "jobId": "seed-081",
-    "workerId": "user-041",
-    "fare": 60000,
-    "hoursAgo": 78.9,
-    "status": "passedOver",
+    "id": "bid-0135",
+    "jobId": "seed-177",
+    "workerId": "user-044",
+    "fare": 7000,
+    "hoursAgo": 79.5,
+    "status": "offered",
     "message": "Can bring my own material."
   },
   {
-    "id": "bid-0095",
-    "jobId": "seed-123",
-    "workerId": "user-043",
-    "fare": 12000,
-    "hoursAgo": 78.3,
-    "status": "passedOver",
-    "message": "Can come today."
-  },
-  {
-    "id": "bid-0270",
+    "id": "bid-0272",
     "jobId": "seed-057",
     "workerId": "user-040",
     "fare": 9000,
@@ -105,16 +69,24 @@
     "message": "Done this many times."
   },
   {
-    "id": "bid-0017",
-    "jobId": "seed-175",
-    "workerId": "user-038",
-    "fare": 2000,
-    "hoursAgo": 76.6,
-    "status": "passedOver",
-    "message": "Tomorrow morning suits me better."
+    "id": "bid-0369",
+    "jobId": "seed-031",
+    "workerId": "user-034",
+    "fare": 10000,
+    "hoursAgo": 76.5,
+    "status": "accepted",
+    "message": "Live nearby, can be there in 20 minutes."
   },
   {
-    "id": "bid-0267",
+    "id": "bid-0091",
+    "jobId": "seed-123",
+    "workerId": "user-015",
+    "fare": 12000,
+    "hoursAgo": 76.4,
+    "status": "accepted"
+  },
+  {
+    "id": "bid-0269",
     "jobId": "seed-057",
     "workerId": "user-025",
     "fare": 9000,
@@ -122,48 +94,71 @@
     "status": "accepted"
   },
   {
-    "id": "bid-0103",
-    "jobId": "seed-129",
+    "id": "bid-0180",
+    "jobId": "seed-116",
+    "workerId": "user-031",
+    "fare": 4500,
+    "hoursAgo": 73.3,
+    "status": "offered",
+    "message": "Done this many times."
+  },
+  {
+    "id": "bid-0052",
+    "jobId": "seed-070",
     "workerId": "user-016",
-    "fare": 3000,
-    "hoursAgo": 72.8,
-    "status": "accepted",
+    "fare": 90000,
+    "hoursAgo": 72.7,
+    "status": "offered"
+  },
+  {
+    "id": "bid-0070",
+    "jobId": "seed-166",
+    "workerId": "user-021",
+    "fare": 11000,
+    "hoursAgo": 72.3,
+    "status": "passedOver",
     "message": "Tomorrow morning suits me better."
   },
   {
-    "id": "bid-0032",
-    "jobId": "seed-081",
-    "workerId": "user-033",
-    "fare": 55000,
+    "id": "bid-0318",
+    "jobId": "seed-090",
+    "workerId": "user-013",
+    "fare": 30000,
+    "hoursAgo": 72.1,
+    "status": "accepted"
+  },
+  {
+    "id": "bid-0053",
+    "jobId": "seed-070",
+    "workerId": "user-027",
+    "fare": 90000,
     "hoursAgo": 71.9,
-    "status": "passedOver",
-    "message": "Free after 2pm."
+    "status": "offered"
   },
   {
-    "id": "bid-0040",
-    "jobId": "seed-105",
-    "workerId": "user-006",
-    "fare": 2000,
-    "hoursAgo": 71.5,
-    "status": "passedOver",
-    "message": "Price includes the parts."
+    "id": "bid-0131",
+    "jobId": "seed-046",
+    "workerId": "user-043",
+    "fare": 6000,
+    "hoursAgo": 70.8,
+    "status": "offered",
+    "message": "Live nearby, can be there in 20 minutes."
   },
   {
-    "id": "bid-0015",
-    "jobId": "seed-175",
-    "workerId": "user-030",
-    "fare": 2500,
-    "hoursAgo": 69.3,
+    "id": "bid-0219",
+    "jobId": "seed-089",
+    "workerId": "user-051",
+    "fare": 5000,
+    "hoursAgo": 70.7,
+    "status": "offered"
+  },
+  {
+    "id": "bid-0025",
+    "jobId": "seed-053",
+    "workerId": "user-049",
+    "fare": 4500,
+    "hoursAgo": 69.8,
     "status": "accepted",
-    "message": "Can come today."
-  },
-  {
-    "id": "bid-0096",
-    "jobId": "seed-123",
-    "workerId": "user-058",
-    "fare": 10000,
-    "hoursAgo": 68.0,
-    "status": "passedOver",
     "message": "Price includes the parts."
   },
   {
@@ -176,43 +171,77 @@
     "message": "Price includes the parts."
   },
   {
-    "id": "bid-0018",
-    "jobId": "seed-175",
-    "workerId": "user-009",
-    "fare": 3000,
-    "hoursAgo": 67.3,
-    "status": "passedOver",
-    "message": "Price includes the parts."
-  },
-  {
-    "id": "bid-0190",
-    "jobId": "seed-124",
-    "workerId": "user-020",
-    "fare": 3500,
-    "hoursAgo": 66.4,
-    "status": "offered",
-    "message": "Can come today."
-  },
-  {
-    "id": "bid-0031",
-    "jobId": "seed-081",
-    "workerId": "user-016",
-    "fare": 70000,
-    "hoursAgo": 66.1,
-    "status": "accepted",
-    "message": "Price includes the parts."
-  },
-  {
-    "id": "bid-0062",
-    "jobId": "seed-071",
+    "id": "bid-0322",
+    "jobId": "seed-180",
     "workerId": "user-059",
-    "fare": 10000,
-    "hoursAgo": 66.1,
+    "fare": 5000,
+    "hoursAgo": 67.8,
+    "status": "accepted"
+  },
+  {
+    "id": "bid-0068",
+    "jobId": "seed-065",
+    "workerId": "user-059",
+    "fare": 9000,
+    "hoursAgo": 67.7,
+    "status": "passedOver",
+    "message": "Live nearby, can be there in 20 minutes."
+  },
+  {
+    "id": "bid-0374",
+    "jobId": "seed-157",
+    "workerId": "user-022",
+    "fare": 6000,
+    "hoursAgo": 67.4,
     "status": "passedOver",
     "message": "Free after 2pm."
   },
   {
-    "id": "bid-0241",
+    "id": "bid-0039",
+    "jobId": "seed-105",
+    "workerId": "user-053",
+    "fare": 2000,
+    "hoursAgo": 66.9,
+    "status": "passedOver",
+    "message": "Free after 2pm."
+  },
+  {
+    "id": "bid-0094",
+    "jobId": "seed-009",
+    "workerId": "user-013",
+    "fare": 2000,
+    "hoursAgo": 66.9,
+    "status": "offered",
+    "message": "Tomorrow morning suits me better."
+  },
+  {
+    "id": "bid-0371",
+    "jobId": "seed-031",
+    "workerId": "user-044",
+    "fare": 9000,
+    "hoursAgo": 66.8,
+    "status": "passedOver",
+    "message": "Live nearby, can be there in 20 minutes."
+  },
+  {
+    "id": "bid-0124",
+    "jobId": "seed-061",
+    "workerId": "user-016",
+    "fare": 2000,
+    "hoursAgo": 66.7,
+    "status": "accepted",
+    "message": "Tomorrow morning suits me better."
+  },
+  {
+    "id": "bid-0127",
+    "jobId": "seed-079",
+    "workerId": "user-002",
+    "fare": 1000,
+    "hoursAgo": 66.7,
+    "status": "passedOver"
+  },
+  {
+    "id": "bid-0243",
     "jobId": "seed-174",
     "workerId": "user-033",
     "fare": 5000,
@@ -221,7 +250,7 @@
     "message": "Live nearby, can be there in 20 minutes."
   },
   {
-    "id": "bid-0223",
+    "id": "bid-0225",
     "jobId": "seed-148",
     "workerId": "user-025",
     "fare": 6000,
@@ -230,25 +259,25 @@
     "message": "Price includes the parts."
   },
   {
-    "id": "bid-0060",
-    "jobId": "seed-071",
-    "workerId": "user-018",
-    "fare": 10000,
-    "hoursAgo": 64.2,
-    "status": "accepted",
-    "message": "Live nearby, can be there in 20 minutes."
-  },
-  {
-    "id": "bid-0070",
-    "jobId": "seed-065",
-    "workerId": "user-043",
-    "fare": 7000,
-    "hoursAgo": 64.0,
+    "id": "bid-0029",
+    "jobId": "seed-053",
+    "workerId": "user-009",
+    "fare": 4500,
+    "hoursAgo": 64.5,
     "status": "passedOver",
-    "message": "I have the tools with me."
+    "message": "Done this many times."
   },
   {
-    "id": "bid-0276",
+    "id": "bid-0015",
+    "jobId": "seed-054",
+    "workerId": "user-030",
+    "fare": 3500,
+    "hoursAgo": 64.3,
+    "status": "passedOver",
+    "message": "Tomorrow morning suits me better."
+  },
+  {
+    "id": "bid-0278",
     "jobId": "seed-068",
     "workerId": "user-013",
     "fare": 30000,
@@ -256,33 +285,24 @@
     "status": "offered"
   },
   {
-    "id": "bid-0094",
-    "jobId": "seed-123",
-    "workerId": "user-013",
-    "fare": 12000,
-    "hoursAgo": 63.5,
+    "id": "bid-0352",
+    "jobId": "seed-006",
+    "workerId": "user-049",
+    "fare": 25000,
+    "hoursAgo": 63.1,
+    "status": "passedOver",
+    "message": "Can come today."
+  },
+  {
+    "id": "bid-0350",
+    "jobId": "seed-006",
+    "workerId": "user-034",
+    "fare": 20000,
+    "hoursAgo": 62.8,
     "status": "accepted"
   },
   {
-    "id": "bid-0073",
-    "jobId": "seed-166",
-    "workerId": "user-001",
-    "fare": 8000,
-    "hoursAgo": 62.9,
-    "status": "accepted",
-    "message": "Price includes the parts."
-  },
-  {
-    "id": "bid-0363",
-    "jobId": "seed-031",
-    "workerId": "user-002",
-    "fare": 8000,
-    "hoursAgo": 62.3,
-    "status": "passedOver",
-    "message": "Can bring my own material."
-  },
-  {
-    "id": "bid-0279",
+    "id": "bid-0281",
     "jobId": "seed-059",
     "workerId": "user-057",
     "fare": 13000,
@@ -291,34 +311,58 @@
     "message": "Tomorrow morning suits me better."
   },
   {
-    "id": "bid-0333",
-    "jobId": "seed-008",
-    "workerId": "user-056",
-    "fare": 15000,
-    "hoursAgo": 61.0,
-    "status": "accepted",
-    "message": "Can bring my own material."
-  },
-  {
-    "id": "bid-0054",
-    "jobId": "seed-070",
-    "workerId": "user-016",
-    "fare": 110000,
-    "hoursAgo": 60.3,
-    "status": "offered",
-    "message": "I have the tools with me."
-  },
-  {
-    "id": "bid-0058",
-    "jobId": "seed-045",
-    "workerId": "user-044",
-    "fare": 8000,
-    "hoursAgo": 59.9,
+    "id": "bid-0326",
+    "jobId": "seed-143",
+    "workerId": "user-022",
+    "fare": 3500,
+    "hoursAgo": 61.6,
     "status": "passedOver",
     "message": "Done this many times."
   },
   {
-    "id": "bid-0271",
+    "id": "bid-0101",
+    "jobId": "seed-129",
+    "workerId": "user-058",
+    "fare": 2000,
+    "hoursAgo": 61.2,
+    "status": "passedOver"
+  },
+  {
+    "id": "bid-0026",
+    "jobId": "seed-053",
+    "workerId": "user-002",
+    "fare": 5000,
+    "hoursAgo": 60.5,
+    "status": "passedOver",
+    "message": "I have the tools with me."
+  },
+  {
+    "id": "bid-0197",
+    "jobId": "seed-124",
+    "workerId": "user-024",
+    "fare": 3500,
+    "hoursAgo": 60.3,
+    "status": "offered"
+  },
+  {
+    "id": "bid-0359",
+    "jobId": "seed-153",
+    "workerId": "user-008",
+    "fare": 65000,
+    "hoursAgo": 60.0,
+    "status": "passedOver"
+  },
+  {
+    "id": "bid-0093",
+    "jobId": "seed-009",
+    "workerId": "user-058",
+    "fare": 2000,
+    "hoursAgo": 59.9,
+    "status": "offered",
+    "message": "Free after 2pm."
+  },
+  {
+    "id": "bid-0273",
     "jobId": "seed-160",
     "workerId": "user-060",
     "fare": 13000,
@@ -327,25 +371,25 @@
     "message": "Can come today."
   },
   {
-    "id": "bid-0184",
-    "jobId": "seed-106",
-    "workerId": "user-028",
-    "fare": 3000,
-    "hoursAgo": 59.4,
+    "id": "bid-0126",
+    "jobId": "seed-079",
+    "workerId": "user-027",
+    "fare": 800,
+    "hoursAgo": 58.8,
+    "status": "accepted",
+    "message": "Price includes the parts."
+  },
+  {
+    "id": "bid-0163",
+    "jobId": "seed-131",
+    "workerId": "user-034",
+    "fare": 2000,
+    "hoursAgo": 58.8,
     "status": "offered",
-    "message": "Free after 2pm."
+    "message": "Done this many times."
   },
   {
-    "id": "bid-0004",
-    "jobId": "seed-011",
-    "workerId": "user-040",
-    "fare": 6000,
-    "hoursAgo": 59.0,
-    "status": "passedOver",
-    "message": "Tomorrow morning suits me better."
-  },
-  {
-    "id": "bid-0280",
+    "id": "bid-0282",
     "jobId": "seed-140",
     "workerId": "user-019",
     "fare": 8000,
@@ -353,42 +397,24 @@
     "status": "offered"
   },
   {
-    "id": "bid-0036",
-    "jobId": "seed-056",
-    "workerId": "user-005",
-    "fare": 30000,
-    "hoursAgo": 57.9,
-    "status": "passedOver",
-    "message": "Done this many times."
-  },
-  {
-    "id": "bid-0013",
-    "jobId": "seed-113",
-    "workerId": "user-006",
-    "fare": 6000,
-    "hoursAgo": 57.7,
-    "status": "passedOver",
-    "message": "Tomorrow morning suits me better."
+    "id": "bid-0351",
+    "jobId": "seed-006",
+    "workerId": "user-060",
+    "fare": 20000,
+    "hoursAgo": 58.6,
+    "status": "passedOver"
   },
   {
     "id": "bid-0097",
-    "jobId": "seed-123",
-    "workerId": "user-020",
-    "fare": 12000,
-    "hoursAgo": 57.6,
+    "jobId": "seed-069",
+    "workerId": "user-043",
+    "fare": 2500,
+    "hoursAgo": 58.3,
     "status": "passedOver",
-    "message": "Price includes the parts."
+    "message": "Can come today."
   },
   {
-    "id": "bid-0318",
-    "jobId": "seed-090",
-    "workerId": "user-004",
-    "fare": 30000,
-    "hoursAgo": 57.5,
-    "status": "offered"
-  },
-  {
-    "id": "bid-0249",
+    "id": "bid-0251",
     "jobId": "seed-155",
     "workerId": "user-058",
     "fare": 3500,
@@ -397,16 +423,16 @@
     "message": "Live nearby, can be there in 20 minutes."
   },
   {
-    "id": "bid-0367",
-    "jobId": "seed-157",
-    "workerId": "user-035",
-    "fare": 6000,
-    "hoursAgo": 57.3,
-    "status": "offered",
-    "message": "Can bring my own material."
+    "id": "bid-0100",
+    "jobId": "seed-129",
+    "workerId": "user-016",
+    "fare": 3000,
+    "hoursAgo": 57.1,
+    "status": "accepted",
+    "message": "Tomorrow morning suits me better."
   },
   {
-    "id": "bid-0225",
+    "id": "bid-0227",
     "jobId": "seed-148",
     "workerId": "user-018",
     "fare": 8000,
@@ -415,7 +441,7 @@
     "message": "Tomorrow morning suits me better."
   },
   {
-    "id": "bid-0274",
+    "id": "bid-0276",
     "jobId": "seed-112",
     "workerId": "user-015",
     "fare": 16000,
@@ -423,33 +449,41 @@
     "status": "offered"
   },
   {
-    "id": "bid-0014",
-    "jobId": "seed-113",
-    "workerId": "user-040",
-    "fare": 7000,
+    "id": "bid-0047",
+    "jobId": "seed-159",
+    "workerId": "user-016",
+    "fare": 95000,
+    "hoursAgo": 56.2,
+    "status": "passedOver",
+    "message": "Tomorrow morning suits me better."
+  },
+  {
+    "id": "bid-0058",
+    "jobId": "seed-071",
+    "workerId": "user-017",
+    "fare": 12000,
     "hoursAgo": 56.1,
     "status": "passedOver"
   },
   {
-    "id": "bid-0047",
-    "jobId": "seed-159",
-    "workerId": "user-031",
-    "fare": 95000,
+    "id": "bid-0317",
+    "jobId": "seed-007",
+    "workerId": "user-056",
+    "fare": 6000,
     "hoursAgo": 56.1,
-    "status": "passedOver",
-    "message": "Free after 2pm."
+    "status": "offered",
+    "message": "Price includes the parts."
   },
   {
-    "id": "bid-0022",
-    "jobId": "seed-054",
-    "workerId": "user-002",
+    "id": "bid-0028",
+    "jobId": "seed-053",
+    "workerId": "user-041",
     "fare": 4000,
-    "hoursAgo": 55.7,
-    "status": "accepted",
-    "message": "Can come today."
+    "hoursAgo": 55.9,
+    "status": "passedOver"
   },
   {
-    "id": "bid-0265",
+    "id": "bid-0267",
     "jobId": "seed-096",
     "workerId": "user-024",
     "fare": 30000,
@@ -457,58 +491,50 @@
     "status": "passedOver"
   },
   {
-    "id": "bid-0314",
-    "jobId": "seed-007",
-    "workerId": "user-056",
-    "fare": 6000,
-    "hoursAgo": 55.1,
-    "status": "offered",
-    "message": "Price includes the parts."
-  },
-  {
-    "id": "bid-0024",
-    "jobId": "seed-164",
-    "workerId": "user-030",
-    "fare": 1500,
-    "hoursAgo": 54.7,
+    "id": "bid-0036",
+    "jobId": "seed-056",
+    "workerId": "user-016",
+    "fare": 50000,
+    "hoursAgo": 54.8,
     "status": "accepted",
-    "message": "I have the tools with me."
-  },
-  {
-    "id": "bid-0128",
-    "jobId": "seed-061",
-    "workerId": "user-045",
-    "fare": 1000,
-    "hoursAgo": 54.7,
-    "status": "passedOver",
     "message": "Can bring my own material."
   },
   {
-    "id": "bid-0044",
+    "id": "bid-0027",
+    "jobId": "seed-053",
+    "workerId": "user-013",
+    "fare": 5000,
+    "hoursAgo": 54.7,
+    "status": "passedOver",
+    "message": "I have the tools with me."
+  },
+  {
+    "id": "bid-0324",
+    "jobId": "seed-180",
+    "workerId": "user-055",
+    "fare": 5000,
+    "hoursAgo": 54.7,
+    "status": "passedOver",
+    "message": "Can come today."
+  },
+  {
+    "id": "bid-0041",
     "jobId": "seed-023",
-    "workerId": "user-027",
-    "fare": 1500,
-    "hoursAgo": 54.6,
+    "workerId": "user-060",
+    "fare": 2000,
+    "hoursAgo": 54.4,
     "status": "passedOver"
   },
   {
-    "id": "bid-0025",
-    "jobId": "seed-164",
-    "workerId": "user-038",
-    "fare": 1000,
-    "hoursAgo": 53.7,
+    "id": "bid-0035",
+    "jobId": "seed-081",
+    "workerId": "user-032",
+    "fare": 75000,
+    "hoursAgo": 54.2,
     "status": "passedOver"
   },
   {
-    "id": "bid-0320",
-    "jobId": "seed-090",
-    "workerId": "user-020",
-    "fare": 30000,
-    "hoursAgo": 53.3,
-    "status": "offered"
-  },
-  {
-    "id": "bid-0269",
+    "id": "bid-0271",
     "jobId": "seed-057",
     "workerId": "user-018",
     "fare": 10000,
@@ -517,23 +543,51 @@
     "message": "Live nearby, can be there in 20 minutes."
   },
   {
-    "id": "bid-0168",
-    "jobId": "seed-027",
-    "workerId": "user-017",
-    "fare": 2500,
-    "hoursAgo": 52.5,
+    "id": "bid-0017",
+    "jobId": "seed-054",
+    "workerId": "user-009",
+    "fare": 4000,
+    "hoursAgo": 52.4,
+    "status": "passedOver",
+    "message": "Can bring my own material."
+  },
+  {
+    "id": "bid-0248",
+    "jobId": "seed-004",
+    "workerId": "user-019",
+    "fare": 10000,
+    "hoursAgo": 52.0,
+    "status": "accepted",
+    "message": "Price includes the parts."
+  },
+  {
+    "id": "bid-0137",
+    "jobId": "seed-177",
+    "workerId": "user-055",
+    "fare": 9000,
+    "hoursAgo": 51.9,
+    "status": "offered",
+    "message": "Can bring my own material."
+  },
+  {
+    "id": "bid-0358",
+    "jobId": "seed-153",
+    "workerId": "user-010",
+    "fare": 65000,
+    "hoursAgo": 51.9,
     "status": "passedOver"
   },
   {
-    "id": "bid-0313",
-    "jobId": "seed-007",
-    "workerId": "user-036",
-    "fare": 7000,
-    "hoursAgo": 52.5,
-    "status": "offered"
+    "id": "bid-0040",
+    "jobId": "seed-023",
+    "workerId": "user-007",
+    "fare": 2000,
+    "hoursAgo": 51.8,
+    "status": "accepted",
+    "message": "Price includes the parts."
   },
   {
-    "id": "bid-0275",
+    "id": "bid-0277",
     "jobId": "seed-068",
     "workerId": "user-023",
     "fare": 45000,
@@ -542,87 +596,86 @@
     "message": "I have the tools with me."
   },
   {
-    "id": "bid-0009",
-    "jobId": "seed-176",
-    "workerId": "user-009",
-    "fare": 8000,
-    "hoursAgo": 51.4,
-    "status": "accepted",
+    "id": "bid-0373",
+    "jobId": "seed-157",
+    "workerId": "user-057",
+    "fare": 5000,
+    "hoursAgo": 51.7,
+    "status": "passedOver",
     "message": "Done this many times."
   },
   {
-    "id": "bid-0012",
-    "jobId": "seed-113",
-    "workerId": "user-009",
-    "fare": 6000,
-    "hoursAgo": 50.7,
+    "id": "bid-0140",
+    "jobId": "seed-130",
+    "workerId": "user-047",
+    "fare": 7000,
+    "hoursAgo": 50.4,
+    "status": "offered",
+    "message": "Price includes the parts."
+  },
+  {
+    "id": "bid-0037",
+    "jobId": "seed-105",
+    "workerId": "user-016",
+    "fare": 1500,
+    "hoursAgo": 50.2,
     "status": "accepted",
     "message": "Tomorrow morning suits me better."
   },
   {
-    "id": "bid-0126",
-    "jobId": "seed-061",
-    "workerId": "user-016",
-    "fare": 1500,
-    "hoursAgo": 50.2,
-    "status": "accepted"
+    "id": "bid-0066",
+    "jobId": "seed-065",
+    "workerId": "user-013",
+    "fare": 7000,
+    "hoursAgo": 49.8,
+    "status": "passedOver"
   },
   {
-    "id": "bid-0035",
-    "jobId": "seed-056",
-    "workerId": "user-016",
-    "fare": 45000,
-    "hoursAgo": 50.1,
-    "status": "accepted",
-    "message": "Live nearby, can be there in 20 minutes."
+    "id": "bid-0323",
+    "jobId": "seed-180",
+    "workerId": "user-001",
+    "fare": 5000,
+    "hoursAgo": 49.8,
+    "status": "passedOver"
   },
   {
-    "id": "bid-0299",
-    "jobId": "seed-005",
-    "workerId": "user-008",
-    "fare": 8000,
-    "hoursAgo": 49.9,
-    "status": "accepted",
-    "message": "Can come today."
-  },
-  {
-    "id": "bid-0118",
-    "jobId": "seed-077",
-    "workerId": "user-046",
+    "id": "bid-0111",
+    "jobId": "seed-136",
+    "workerId": "user-002",
     "fare": 3500,
-    "hoursAgo": 49.6,
+    "hoursAgo": 49.1,
     "status": "passedOver",
-    "message": "Free after 2pm."
+    "message": "Can bring my own material."
   },
   {
-    "id": "bid-0117",
-    "jobId": "seed-077",
-    "workerId": "user-016",
-    "fare": 3000,
-    "hoursAgo": 49.3,
+    "id": "bid-0372",
+    "jobId": "seed-157",
+    "workerId": "user-018",
+    "fare": 4000,
+    "hoursAgo": 48.8,
     "status": "accepted",
+    "message": "Can bring my own material."
+  },
+  {
+    "id": "bid-0098",
+    "jobId": "seed-069",
+    "workerId": "user-058",
+    "fare": 2000,
+    "hoursAgo": 48.7,
+    "status": "passedOver",
     "message": "Price includes the parts."
   },
   {
-    "id": "bid-0030",
-    "jobId": "seed-053",
-    "workerId": "user-042",
-    "fare": 5000,
-    "hoursAgo": 49.2,
+    "id": "bid-0141",
+    "jobId": "seed-130",
+    "workerId": "user-055",
+    "fare": 8000,
+    "hoursAgo": 48.7,
     "status": "offered",
     "message": "I have the tools with me."
   },
   {
-    "id": "bid-0099",
-    "jobId": "seed-009",
-    "workerId": "user-004",
-    "fare": 4500,
-    "hoursAgo": 48.9,
-    "status": "offered",
-    "message": "Done this many times."
-  },
-  {
-    "id": "bid-0229",
+    "id": "bid-0231",
     "jobId": "seed-094",
     "workerId": "user-011",
     "fare": 1500,
@@ -631,16 +684,32 @@
     "message": "Can come today."
   },
   {
-    "id": "bid-0301",
-    "jobId": "seed-147",
-    "workerId": "user-049",
-    "fare": 2500,
-    "hoursAgo": 48.0,
-    "status": "passedOver",
-    "message": "Live nearby, can be there in 20 minutes."
+    "id": "bid-0006",
+    "jobId": "seed-176",
+    "workerId": "user-014",
+    "fare": 4000,
+    "hoursAgo": 48.3,
+    "status": "passedOver"
   },
   {
-    "id": "bid-0228",
+    "id": "bid-0069",
+    "jobId": "seed-166",
+    "workerId": "user-001",
+    "fare": 7000,
+    "hoursAgo": 48.3,
+    "status": "accepted",
+    "message": "Free after 2pm."
+  },
+  {
+    "id": "bid-0109",
+    "jobId": "seed-136",
+    "workerId": "user-001",
+    "fare": 2500,
+    "hoursAgo": 48.1,
+    "status": "accepted"
+  },
+  {
+    "id": "bid-0230",
     "jobId": "seed-094",
     "workerId": "user-044",
     "fare": 2000,
@@ -649,118 +718,121 @@
     "message": "Price includes the parts."
   },
   {
-    "id": "bid-0110",
-    "jobId": "seed-076",
-    "workerId": "user-004",
-    "fare": 9000,
-    "hoursAgo": 47.7,
-    "status": "passedOver"
-  },
-  {
-    "id": "bid-0114",
-    "jobId": "seed-136",
-    "workerId": "user-002",
-    "fare": 4000,
-    "hoursAgo": 47.3,
-    "status": "passedOver"
-  },
-  {
-    "id": "bid-0188",
-    "jobId": "seed-086",
-    "workerId": "user-016",
-    "fare": 5000,
-    "hoursAgo": 47.3,
-    "status": "accepted",
-    "message": "Price includes the parts."
-  },
-  {
-    "id": "bid-0059",
-    "jobId": "seed-045",
-    "workerId": "user-039",
-    "fare": 8000,
-    "hoursAgo": 47.1,
-    "status": "passedOver"
-  },
-  {
-    "id": "bid-0072",
-    "jobId": "seed-065",
+    "id": "bid-0214",
+    "jobId": "seed-150",
     "workerId": "user-006",
-    "fare": 8000,
-    "hoursAgo": 46.8,
-    "status": "passedOver",
-    "message": "Can come today."
-  },
-  {
-    "id": "bid-0135",
-    "jobId": "seed-046",
-    "workerId": "user-012",
-    "fare": 8000,
-    "hoursAgo": 46.1,
+    "fare": 4000,
+    "hoursAgo": 47.5,
     "status": "offered",
-    "message": "Tomorrow morning suits me better."
+    "message": "I have the tools with me."
   },
   {
-    "id": "bid-0109",
-    "jobId": "seed-076",
-    "workerId": "user-009",
-    "fare": 4500,
-    "hoursAgo": 45.8,
-    "status": "accepted"
-  },
-  {
-    "id": "bid-0177",
-    "jobId": "seed-116",
-    "workerId": "user-047",
-    "fare": 3000,
-    "hoursAgo": 45.7,
-    "status": "offered",
-    "message": "Live nearby, can be there in 20 minutes."
-  },
-  {
-    "id": "bid-0200",
-    "jobId": "seed-039",
-    "workerId": "user-046",
-    "fare": 5000,
-    "hoursAgo": 45.4,
-    "status": "accepted",
-    "message": "Done this many times."
-  },
-  {
-    "id": "bid-0355",
-    "jobId": "seed-083",
-    "workerId": "user-060",
-    "fare": 18000,
-    "hoursAgo": 45.4,
+    "id": "bid-0038",
+    "jobId": "seed-105",
+    "workerId": "user-019",
+    "fare": 2000,
+    "hoursAgo": 47.4,
     "status": "passedOver"
   },
   {
-    "id": "bid-0023",
-    "jobId": "seed-054",
-    "workerId": "user-009",
-    "fare": 4000,
-    "hoursAgo": 45.3,
-    "status": "passedOver",
+    "id": "bid-0193",
+    "jobId": "seed-086",
+    "workerId": "user-060",
+    "fare": 2000,
+    "hoursAgo": 47.2,
+    "status": "offered",
     "message": "Free after 2pm."
   },
   {
-    "id": "bid-0146",
-    "jobId": "seed-074",
-    "workerId": "user-034",
-    "fare": 3000,
-    "hoursAgo": 45.1,
+    "id": "bid-0092",
+    "jobId": "seed-009",
+    "workerId": "user-007",
+    "fare": 2000,
+    "hoursAgo": 46.6,
     "status": "offered",
+    "message": "Done this many times."
+  },
+  {
+    "id": "bid-0054",
+    "jobId": "seed-045",
+    "workerId": "user-017",
+    "fare": 8000,
+    "hoursAgo": 46.5,
+    "status": "accepted",
+    "message": "Can come today."
+  },
+  {
+    "id": "bid-0071",
+    "jobId": "seed-166",
+    "workerId": "user-051",
+    "fare": 8000,
+    "hoursAgo": 46.4,
+    "status": "passedOver"
+  },
+  {
+    "id": "bid-0010",
+    "jobId": "seed-113",
+    "workerId": "user-042",
+    "fare": 6000,
+    "hoursAgo": 46.1,
+    "status": "passedOver",
+    "message": "Price includes the parts."
+  },
+  {
+    "id": "bid-0055",
+    "jobId": "seed-045",
+    "workerId": "user-019",
+    "fare": 8000,
+    "hoursAgo": 46.1,
+    "status": "passedOver"
+  },
+  {
+    "id": "bid-0057",
+    "jobId": "seed-071",
+    "workerId": "user-023",
+    "fare": 14000,
+    "hoursAgo": 46.1,
+    "status": "accepted",
+    "message": "Free after 2pm."
+  },
+  {
+    "id": "bid-0033",
+    "jobId": "seed-107",
+    "workerId": "user-033",
+    "fare": 2000,
+    "hoursAgo": 45.7,
+    "status": "offered",
+    "message": "Free after 2pm."
+  },
+  {
+    "id": "bid-0073",
+    "jobId": "seed-100",
+    "workerId": "user-001",
+    "fare": 6000,
+    "hoursAgo": 45.6,
+    "status": "accepted",
+    "message": "I have the tools with me."
+  },
+  {
+    "id": "bid-0102",
+    "jobId": "seed-129",
+    "workerId": "user-060",
+    "fare": 2500,
+    "hoursAgo": 45.4,
+    "status": "passedOver",
     "message": "Live nearby, can be there in 20 minutes."
   },
   {
-    "id": "bid-0147",
-    "jobId": "seed-074",
-    "workerId": "user-031",
-    "fare": 3000,
+    "id": "bid-0088",
+    "jobId": "seed-063",
+    "workerId": "user-012",
+    "fare": 3500,
     "hoursAgo": 45.0,
-    "status": "offered"
+    "status": "passedOver",
+    "message": "Done this many times."
   },
   {
-    "id": "bid-0264",
+    "id": "bid-0266",
     "jobId": "seed-096",
     "workerId": "user-045",
     "fare": 20000,
@@ -769,15 +841,24 @@
     "message": "I have the tools with me."
   },
   {
-    "id": "bid-0071",
-    "jobId": "seed-065",
-    "workerId": "user-056",
-    "fare": 8000,
+    "id": "bid-0020",
+    "jobId": "seed-164",
+    "workerId": "user-052",
+    "fare": 1500,
     "hoursAgo": 44.7,
+    "status": "passedOver",
+    "message": "Can bring my own material."
+  },
+  {
+    "id": "bid-0012",
+    "jobId": "seed-175",
+    "workerId": "user-008",
+    "fare": 3000,
+    "hoursAgo": 44.6,
     "status": "passedOver"
   },
   {
-    "id": "bid-0232",
+    "id": "bid-0234",
     "jobId": "seed-085",
     "workerId": "user-046",
     "fare": 8000,
@@ -786,7 +867,24 @@
     "message": "Done this many times."
   },
   {
-    "id": "bid-0258",
+    "id": "bid-0316",
+    "jobId": "seed-007",
+    "workerId": "user-035",
+    "fare": 7000,
+    "hoursAgo": 44.3,
+    "status": "offered"
+  },
+  {
+    "id": "bid-0018",
+    "jobId": "seed-164",
+    "workerId": "user-038",
+    "fare": 1000,
+    "hoursAgo": 43.9,
+    "status": "accepted",
+    "message": "Free after 2pm."
+  },
+  {
+    "id": "bid-0260",
     "jobId": "seed-030",
     "workerId": "user-029",
     "fare": 3000,
@@ -795,82 +893,25 @@
     "message": "Price includes the parts."
   },
   {
-    "id": "bid-0183",
-    "jobId": "seed-051",
-    "workerId": "user-019",
-    "fare": 3000,
-    "hoursAgo": 43.8,
+    "id": "bid-0079",
+    "jobId": "seed-024",
+    "workerId": "user-048",
+    "fare": 17000,
+    "hoursAgo": 43.0,
     "status": "accepted",
     "message": "Tomorrow morning suits me better."
   },
   {
-    "id": "bid-0189",
-    "jobId": "seed-086",
-    "workerId": "user-002",
-    "fare": 4500,
-    "hoursAgo": 43.6,
-    "status": "passedOver"
-  },
-  {
-    "id": "bid-0010",
-    "jobId": "seed-176",
-    "workerId": "user-058",
-    "fare": 2500,
-    "hoursAgo": 43.4,
-    "status": "passedOver"
-  },
-  {
-    "id": "bid-0180",
-    "jobId": "seed-146",
-    "workerId": "user-031",
-    "fare": 7000,
-    "hoursAgo": 43.0,
-    "status": "offered",
-    "message": "Done this many times."
-  },
-  {
-    "id": "bid-0083",
-    "jobId": "seed-024",
-    "workerId": "user-041",
-    "fare": 18000,
-    "hoursAgo": 42.9,
-    "status": "accepted"
-  },
-  {
-    "id": "bid-0352",
-    "jobId": "seed-083",
-    "workerId": "user-014",
-    "fare": 20000,
-    "hoursAgo": 42.9,
-    "status": "accepted"
-  },
-  {
-    "id": "bid-0076",
-    "jobId": "seed-118",
-    "workerId": "user-057",
-    "fare": 2500,
-    "hoursAgo": 42.6,
-    "status": "accepted",
-    "message": "Price includes the parts."
-  },
-  {
-    "id": "bid-0077",
-    "jobId": "seed-118",
-    "workerId": "user-013",
-    "fare": 3500,
+    "id": "bid-0310",
+    "jobId": "seed-038",
+    "workerId": "user-018",
+    "fare": 1500,
     "hoursAgo": 42.5,
-    "status": "passedOver"
+    "status": "passedOver",
+    "message": "Free after 2pm."
   },
   {
-    "id": "bid-0322",
-    "jobId": "seed-108",
-    "workerId": "user-010",
-    "fare": 3500,
-    "hoursAgo": 42.5,
-    "status": "offered"
-  },
-  {
-    "id": "bid-0234",
+    "id": "bid-0236",
     "jobId": "seed-097",
     "workerId": "user-045",
     "fare": 14000,
@@ -879,110 +920,41 @@
     "message": "Can bring my own material."
   },
   {
-    "id": "bid-0100",
-    "jobId": "seed-009",
-    "workerId": "user-002",
-    "fare": 5000,
-    "hoursAgo": 42.2,
-    "status": "offered",
-    "message": "I have the tools with me."
-  },
-  {
-    "id": "bid-0055",
-    "jobId": "seed-070",
-    "workerId": "user-041",
-    "fare": 80000,
-    "hoursAgo": 41.9,
-    "status": "offered"
-  },
-  {
-    "id": "bid-0179",
-    "jobId": "seed-116",
-    "workerId": "user-008",
-    "fare": 3000,
-    "hoursAgo": 41.9,
-    "status": "offered",
-    "message": "I have the tools with me."
-  },
-  {
-    "id": "bid-0122",
-    "jobId": "seed-001",
-    "workerId": "user-056",
-    "fare": 2000,
-    "hoursAgo": 41.8,
-    "status": "offered"
-  },
-  {
-    "id": "bid-0105",
-    "jobId": "seed-129",
-    "workerId": "user-056",
-    "fare": 3000,
-    "hoursAgo": 41.5,
-    "status": "passedOver"
-  },
-  {
-    "id": "bid-0145",
-    "jobId": "seed-156",
+    "id": "bid-0308",
+    "jobId": "seed-038",
     "workerId": "user-050",
-    "fare": 10000,
-    "hoursAgo": 41.5,
-    "status": "offered",
-    "message": "Free after 2pm."
-  },
-  {
-    "id": "bid-0079",
-    "jobId": "seed-118",
-    "workerId": "user-001",
-    "fare": 2500,
-    "hoursAgo": 41.2,
-    "status": "passedOver",
-    "message": "Free after 2pm."
-  },
-  {
-    "id": "bid-0217",
-    "jobId": "seed-089",
-    "workerId": "user-035",
-    "fare": 5000,
-    "hoursAgo": 41.2,
-    "status": "offered"
-  },
-  {
-    "id": "bid-0057",
-    "jobId": "seed-045",
-    "workerId": "user-017",
-    "fare": 8000,
-    "hoursAgo": 41.1,
+    "fare": 1500,
+    "hoursAgo": 42.2,
     "status": "accepted",
-    "message": "Can bring my own material."
-  },
-  {
-    "id": "bid-0359",
-    "jobId": "seed-179",
-    "workerId": "user-054",
-    "fare": 2500,
-    "hoursAgo": 40.9,
-    "status": "passedOver"
-  },
-  {
-    "id": "bid-0104",
-    "jobId": "seed-129",
-    "workerId": "user-021",
-    "fare": 3000,
-    "hoursAgo": 40.8,
-    "status": "passedOver",
     "message": "Done this many times."
   },
   {
-    "id": "bid-0003",
-    "jobId": "seed-011",
-    "workerId": "user-009",
-    "fare": 7000,
-    "hoursAgo": 40.3,
-    "status": "accepted",
+    "id": "bid-0014",
+    "jobId": "seed-054",
+    "workerId": "user-048",
+    "fare": 3500,
+    "hoursAgo": 41.6,
+    "status": "accepted"
+  },
+  {
+    "id": "bid-0096",
+    "jobId": "seed-069",
+    "workerId": "user-013",
+    "fare": 2500,
+    "hoursAgo": 41.2,
+    "status": "accepted"
+  },
+  {
+    "id": "bid-0107",
+    "jobId": "seed-076",
+    "workerId": "user-052",
+    "fare": 1000,
+    "hoursAgo": 40.6,
+    "status": "passedOver",
     "message": "Can bring my own material."
   },
   {
-    "id": "bid-0257",
+    "id": "bid-0259",
     "jobId": "seed-030",
     "workerId": "user-053",
     "fare": 5000,
@@ -991,25 +963,7 @@
     "message": "Can bring my own material."
   },
   {
-    "id": "bid-0038",
-    "jobId": "seed-056",
-    "workerId": "user-024",
-    "fare": 50000,
-    "hoursAgo": 39.7,
-    "status": "passedOver",
-    "message": "Can come today."
-  },
-  {
-    "id": "bid-0120",
-    "jobId": "seed-137",
-    "workerId": "user-009",
-    "fare": 7000,
-    "hoursAgo": 39.7,
-    "status": "accepted",
-    "message": "Live nearby, can be there in 20 minutes."
-  },
-  {
-    "id": "bid-0266",
+    "id": "bid-0268",
     "jobId": "seed-096",
     "workerId": "user-043",
     "fare": 30000,
@@ -1018,34 +972,68 @@
     "message": "Tomorrow morning suits me better."
   },
   {
-    "id": "bid-0246",
-    "jobId": "seed-004",
-    "workerId": "user-019",
-    "fare": 12000,
-    "hoursAgo": 39.3,
-    "status": "accepted",
+    "id": "bid-0099",
+    "jobId": "seed-069",
+    "workerId": "user-020",
+    "fare": 2500,
+    "hoursAgo": 39.1,
+    "status": "passedOver",
     "message": "Price includes the parts."
   },
   {
-    "id": "bid-0357",
-    "jobId": "seed-179",
-    "workerId": "user-038",
-    "fare": 1500,
-    "hoursAgo": 39.3,
+    "id": "bid-0215",
+    "jobId": "seed-150",
+    "workerId": "user-053",
+    "fare": 6000,
+    "hoursAgo": 39.1,
+    "status": "offered"
+  },
+  {
+    "id": "bid-0146",
+    "jobId": "seed-156",
+    "workerId": "user-034",
+    "fare": 9000,
+    "hoursAgo": 39.0,
+    "status": "offered",
+    "message": "Live nearby, can be there in 20 minutes."
+  },
+  {
+    "id": "bid-0194",
+    "jobId": "seed-086",
+    "workerId": "user-004",
+    "fare": 8000,
+    "hoursAgo": 39.0,
+    "status": "offered",
+    "message": "Price includes the parts."
+  },
+  {
+    "id": "bid-0115",
+    "jobId": "seed-077",
+    "workerId": "user-013",
+    "fare": 3000,
+    "hoursAgo": 38.9,
     "status": "passedOver",
     "message": "Free after 2pm."
   },
   {
-    "id": "bid-0167",
-    "jobId": "seed-027",
-    "workerId": "user-055",
-    "fare": 2500,
+    "id": "bid-0147",
+    "jobId": "seed-156",
+    "workerId": "user-031",
+    "fare": 9000,
     "hoursAgo": 38.9,
-    "status": "passedOver",
-    "message": "Price includes the parts."
+    "status": "offered"
   },
   {
-    "id": "bid-0231",
+    "id": "bid-0362",
+    "jobId": "seed-083",
+    "workerId": "user-055",
+    "fare": 20000,
+    "hoursAgo": 38.9,
+    "status": "offered",
+    "message": "I have the tools with me."
+  },
+  {
+    "id": "bid-0233",
     "jobId": "seed-117",
     "workerId": "user-014",
     "fare": 8000,
@@ -1054,42 +1042,25 @@
     "message": "Tomorrow morning suits me better."
   },
   {
-    "id": "bid-0125",
-    "jobId": "seed-001",
-    "workerId": "user-057",
+    "id": "bid-0078",
+    "jobId": "seed-014",
+    "workerId": "user-001",
     "fare": 2500,
-    "hoursAgo": 38.6,
-    "status": "offered",
+    "hoursAgo": 38.3,
+    "status": "passedOver",
+    "message": "Can come today."
+  },
+  {
+    "id": "bid-0370",
+    "jobId": "seed-031",
+    "workerId": "user-055",
+    "fare": 8000,
+    "hoursAgo": 38.3,
+    "status": "passedOver",
     "message": "Price includes the parts."
   },
   {
-    "id": "bid-0029",
-    "jobId": "seed-053",
-    "workerId": "user-009",
-    "fare": 4500,
-    "hoursAgo": 38.4,
-    "status": "offered",
-    "message": "Can bring my own material."
-  },
-  {
-    "id": "bid-0092",
-    "jobId": "seed-063",
-    "workerId": "user-016",
-    "fare": 4000,
-    "hoursAgo": 38.4,
-    "status": "accepted"
-  },
-  {
-    "id": "bid-0080",
-    "jobId": "seed-014",
-    "workerId": "user-019",
-    "fare": 3000,
-    "hoursAgo": 38.3,
-    "status": "accepted",
-    "message": "Done this many times."
-  },
-  {
-    "id": "bid-0237",
+    "id": "bid-0239",
     "jobId": "seed-138",
     "workerId": "user-056",
     "fare": 3000,
@@ -1098,24 +1069,7 @@
     "message": "Free after 2pm."
   },
   {
-    "id": "bid-0121",
-    "jobId": "seed-137",
-    "workerId": "user-041",
-    "fare": 6000,
-    "hoursAgo": 38.0,
-    "status": "passedOver"
-  },
-  {
-    "id": "bid-0149",
-    "jobId": "seed-133",
-    "workerId": "user-051",
-    "fare": 16000,
-    "hoursAgo": 38.0,
-    "status": "offered",
-    "message": "Can bring my own material."
-  },
-  {
-    "id": "bid-0238",
+    "id": "bid-0240",
     "jobId": "seed-138",
     "workerId": "user-025",
     "fare": 3500,
@@ -1124,16 +1078,24 @@
     "message": "Tomorrow morning suits me better."
   },
   {
-    "id": "bid-0354",
-    "jobId": "seed-083",
-    "workerId": "user-056",
-    "fare": 20000,
-    "hoursAgo": 37.7,
-    "status": "passedOver",
-    "message": "I have the tools with me."
+    "id": "bid-0149",
+    "jobId": "seed-072",
+    "workerId": "user-051",
+    "fare": 4500,
+    "hoursAgo": 37.8,
+    "status": "offered",
+    "message": "Can bring my own material."
   },
   {
-    "id": "bid-0242",
+    "id": "bid-0196",
+    "jobId": "seed-124",
+    "workerId": "user-022",
+    "fare": 4000,
+    "hoursAgo": 37.6,
+    "status": "offered"
+  },
+  {
+    "id": "bid-0244",
     "jobId": "seed-174",
     "workerId": "user-019",
     "fare": 7000,
@@ -1142,243 +1104,173 @@
     "message": "Live nearby, can be there in 20 minutes."
   },
   {
-    "id": "bid-0063",
-    "jobId": "seed-071",
-    "workerId": "user-017",
-    "fare": 10000,
-    "hoursAgo": 37.1,
+    "id": "bid-0201",
+    "jobId": "seed-010",
+    "workerId": "user-020",
+    "fare": 30000,
+    "hoursAgo": 37.2,
+    "status": "passedOver"
+  },
+  {
+    "id": "bid-0348",
+    "jobId": "seed-101",
+    "workerId": "user-032",
+    "fare": 16000,
+    "hoursAgo": 37.2,
     "status": "passedOver",
-    "message": "Live nearby, can be there in 20 minutes."
-  },
-  {
-    "id": "bid-0098",
-    "jobId": "seed-009",
-    "workerId": "user-059",
-    "fare": 6000,
-    "hoursAgo": 36.9,
-    "status": "offered",
-    "message": "Live nearby, can be there in 20 minutes."
-  },
-  {
-    "id": "bid-0039",
-    "jobId": "seed-105",
-    "workerId": "user-016",
-    "fare": 2000,
-    "hoursAgo": 36.6,
-    "status": "accepted",
-    "message": "Tomorrow morning suits me better."
-  },
-  {
-    "id": "bid-0123",
-    "jobId": "seed-001",
-    "workerId": "user-057",
-    "fare": 2000,
-    "hoursAgo": 35.9,
-    "status": "offered",
-    "message": "Can bring my own material."
-  },
-  {
-    "id": "bid-0165",
-    "jobId": "seed-027",
-    "workerId": "user-026",
-    "fare": 2500,
-    "hoursAgo": 35.9,
-    "status": "accepted"
-  },
-  {
-    "id": "bid-0319",
-    "jobId": "seed-090",
-    "workerId": "user-029",
-    "fare": 25000,
-    "hoursAgo": 35.9,
-    "status": "offered",
-    "message": "I have the tools with me."
-  },
-  {
-    "id": "bid-0016",
-    "jobId": "seed-175",
-    "workerId": "user-045",
-    "fare": 2500,
-    "hoursAgo": 35.8,
-    "status": "passedOver",
-    "message": "Tomorrow morning suits me better."
-  },
-  {
-    "id": "bid-0042",
-    "jobId": "seed-023",
-    "workerId": "user-038",
-    "fare": 1500,
-    "hoursAgo": 35.8,
-    "status": "accepted",
     "message": "Free after 2pm."
   },
   {
-    "id": "bid-0124",
-    "jobId": "seed-001",
-    "workerId": "user-007",
+    "id": "bid-0016",
+    "jobId": "seed-054",
+    "workerId": "user-002",
+    "fare": 3000,
+    "hoursAgo": 37.0,
+    "status": "passedOver",
+    "message": "Can come today."
+  },
+  {
+    "id": "bid-0119",
+    "jobId": "seed-137",
+    "workerId": "user-042",
+    "fare": 5000,
+    "hoursAgo": 37.0,
+    "status": "passedOver",
+    "message": "Tomorrow morning suits me better."
+  },
+  {
+    "id": "bid-0198",
+    "jobId": "seed-010",
+    "workerId": "user-058",
+    "fare": 40000,
+    "hoursAgo": 36.2,
+    "status": "accepted"
+  },
+  {
+    "id": "bid-0321",
+    "jobId": "seed-108",
+    "workerId": "user-055",
+    "fare": 3500,
+    "hoursAgo": 35.9,
+    "status": "passedOver"
+  },
+  {
+    "id": "bid-0077",
+    "jobId": "seed-014",
+    "workerId": "user-005",
     "fare": 2500,
-    "hoursAgo": 35.8,
+    "hoursAgo": 35.7,
+    "status": "accepted",
+    "message": "Can bring my own material."
+  },
+  {
+    "id": "bid-0307",
+    "jobId": "seed-099",
+    "workerId": "user-007",
+    "fare": 9000,
+    "hoursAgo": 35.6,
+    "status": "offered"
+  },
+  {
+    "id": "bid-0331",
+    "jobId": "seed-050",
+    "workerId": "user-058",
+    "fare": 30000,
+    "hoursAgo": 35.0,
+    "status": "passedOver",
+    "message": "Free after 2pm."
+  },
+  {
+    "id": "bid-0011",
+    "jobId": "seed-175",
+    "workerId": "user-009",
+    "fare": 3000,
+    "hoursAgo": 34.9,
+    "status": "accepted",
+    "message": "Live nearby, can be there in 20 minutes."
+  },
+  {
+    "id": "bid-0046",
+    "jobId": "seed-159",
+    "workerId": "user-007",
+    "fare": 115000,
+    "hoursAgo": 34.8,
+    "status": "passedOver",
+    "message": "Done this many times."
+  },
+  {
+    "id": "bid-0329",
+    "jobId": "seed-050",
+    "workerId": "user-042",
+    "fare": 20000,
+    "hoursAgo": 34.8,
+    "status": "accepted",
+    "message": "I have the tools with me."
+  },
+  {
+    "id": "bid-0151",
+    "jobId": "seed-067",
+    "workerId": "user-051",
+    "fare": 12000,
+    "hoursAgo": 34.4,
+    "status": "passedOver"
+  },
+  {
+    "id": "bid-0105",
+    "jobId": "seed-076",
+    "workerId": "user-009",
+    "fare": 3000,
+    "hoursAgo": 34.2,
+    "status": "accepted",
+    "message": "Done this many times."
+  },
+  {
+    "id": "bid-0205",
+    "jobId": "seed-115",
+    "workerId": "user-039",
+    "fare": 6000,
+    "hoursAgo": 34.0,
     "status": "offered",
     "message": "Price includes the parts."
   },
   {
-    "id": "bid-0041",
-    "jobId": "seed-105",
-    "workerId": "user-044",
-    "fare": 2500,
-    "hoursAgo": 35.7,
-    "status": "passedOver",
-    "message": "Live nearby, can be there in 20 minutes."
-  },
-  {
-    "id": "bid-0347",
-    "jobId": "seed-101",
-    "workerId": "user-060",
-    "fare": 18000,
-    "hoursAgo": 35.7,
-    "status": "offered",
-    "message": "Done this many times."
-  },
-  {
-    "id": "bid-0056",
-    "jobId": "seed-070",
-    "workerId": "user-025",
-    "fare": 100000,
-    "hoursAgo": 35.4,
-    "status": "offered",
-    "message": "Done this many times."
-  },
-  {
-    "id": "bid-0356",
-    "jobId": "seed-179",
-    "workerId": "user-030",
-    "fare": 8000,
-    "hoursAgo": 35.4,
-    "status": "accepted"
-  },
-  {
-    "id": "bid-0353",
-    "jobId": "seed-083",
-    "workerId": "user-037",
-    "fare": 17000,
-    "hoursAgo": 35.3,
-    "status": "passedOver",
-    "message": "I have the tools with me."
-  },
-  {
-    "id": "bid-0161",
-    "jobId": "seed-131",
-    "workerId": "user-019",
-    "fare": 1500,
-    "hoursAgo": 35.2,
-    "status": "offered",
-    "message": "Can bring my own material."
-  },
-  {
-    "id": "bid-0361",
-    "jobId": "seed-031",
-    "workerId": "user-011",
-    "fare": 7000,
-    "hoursAgo": 35.0,
-    "status": "accepted"
-  },
-  {
-    "id": "bid-0317",
-    "jobId": "seed-090",
-    "workerId": "user-025",
-    "fare": 35000,
-    "hoursAgo": 34.8,
-    "status": "offered"
-  },
-  {
-    "id": "bid-0127",
-    "jobId": "seed-061",
-    "workerId": "user-058",
-    "fare": 1500,
-    "hoursAgo": 34.7,
-    "status": "passedOver",
-    "message": "Done this many times."
-  },
-  {
-    "id": "bid-0069",
-    "jobId": "seed-065",
-    "workerId": "user-001",
-    "fare": 6000,
-    "hoursAgo": 34.6,
-    "status": "accepted"
-  },
-  {
-    "id": "bid-0158",
-    "jobId": "seed-109",
-    "workerId": "user-051",
-    "fare": 4000,
-    "hoursAgo": 34.3,
-    "status": "accepted",
-    "message": "Done this many times."
-  },
-  {
-    "id": "bid-0207",
-    "jobId": "seed-098",
-    "workerId": "user-040",
-    "fare": 6000,
-    "hoursAgo": 34.1,
-    "status": "offered",
-    "message": "Can bring my own material."
-  },
-  {
-    "id": "bid-0198",
-    "jobId": "seed-115",
-    "workerId": "user-002",
-    "fare": 9000,
-    "hoursAgo": 33.9,
-    "status": "offered"
-  },
-  {
-    "id": "bid-0045",
+    "id": "bid-0043",
     "jobId": "seed-023",
     "workerId": "user-016",
-    "fare": 2500,
+    "fare": 1500,
+    "hoursAgo": 33.9,
+    "status": "passedOver",
+    "message": "Price includes the parts."
+  },
+  {
+    "id": "bid-0328",
+    "jobId": "seed-143",
+    "workerId": "user-021",
+    "fare": 2000,
     "hoursAgo": 33.8,
     "status": "passedOver",
     "message": "Done this many times."
   },
   {
-    "id": "bid-0026",
-    "jobId": "seed-164",
-    "workerId": "user-031",
-    "fare": 1500,
-    "hoursAgo": 33.4,
+    "id": "bid-0117",
+    "jobId": "seed-137",
+    "workerId": "user-038",
+    "fare": 7000,
+    "hoursAgo": 33.6,
     "status": "passedOver",
-    "message": "Done this many times."
+    "message": "Free after 2pm."
   },
   {
-    "id": "bid-0102",
-    "jobId": "seed-069",
-    "workerId": "user-060",
-    "fare": 2000,
-    "hoursAgo": 33.4,
-    "status": "accepted",
-    "message": "Live nearby, can be there in 20 minutes."
-  },
-  {
-    "id": "bid-0151",
-    "jobId": "seed-182",
-    "workerId": "user-051",
-    "fare": 9000,
-    "hoursAgo": 33.3,
-    "status": "passedOver"
-  },
-  {
-    "id": "bid-0037",
-    "jobId": "seed-056",
-    "workerId": "user-013",
-    "fare": 30000,
-    "hoursAgo": 33.1,
+    "id": "bid-0074",
+    "jobId": "seed-100",
+    "workerId": "user-042",
+    "fare": 4000,
+    "hoursAgo": 32.7,
     "status": "passedOver",
     "message": "Tomorrow morning suits me better."
   },
   {
-    "id": "bid-0256",
+    "id": "bid-0258",
     "jobId": "seed-030",
     "workerId": "user-011",
     "fare": 3500,
@@ -1387,34 +1279,33 @@
     "message": "Can come today."
   },
   {
-    "id": "bid-0210",
-    "jobId": "seed-150",
-    "workerId": "user-056",
-    "fare": 6000,
-    "hoursAgo": 32.5,
-    "status": "offered",
+    "id": "bid-0065",
+    "jobId": "seed-065",
+    "workerId": "user-001",
+    "fare": 8000,
+    "hoursAgo": 32.3,
+    "status": "accepted"
+  },
+  {
+    "id": "bid-0118",
+    "jobId": "seed-137",
+    "workerId": "user-010",
+    "fare": 5000,
+    "hoursAgo": 32.2,
+    "status": "passedOver",
     "message": "Free after 2pm."
   },
   {
-    "id": "bid-0197",
-    "jobId": "seed-115",
-    "workerId": "user-031",
-    "fare": 9000,
-    "hoursAgo": 32.4,
-    "status": "offered",
+    "id": "bid-0056",
+    "jobId": "seed-045",
+    "workerId": "user-060",
+    "fare": 8000,
+    "hoursAgo": 32.0,
+    "status": "passedOver",
     "message": "Done this many times."
   },
   {
-    "id": "bid-0129",
-    "jobId": "seed-061",
-    "workerId": "user-055",
-    "fare": 1500,
-    "hoursAgo": 32.3,
-    "status": "passedOver",
-    "message": "Price includes the parts."
-  },
-  {
-    "id": "bid-0254",
+    "id": "bid-0256",
     "jobId": "seed-111",
     "workerId": "user-047",
     "fare": 10000,
@@ -1423,25 +1314,25 @@
     "message": "Can come today."
   },
   {
-    "id": "bid-0061",
-    "jobId": "seed-071",
+    "id": "bid-0145",
+    "jobId": "seed-167",
     "workerId": "user-050",
-    "fare": 12000,
-    "hoursAgo": 30.9,
-    "status": "passedOver",
-    "message": "I have the tools with me."
-  },
-  {
-    "id": "bid-0214",
-    "jobId": "seed-084",
-    "workerId": "user-028",
-    "fare": 4500,
-    "hoursAgo": 30.8,
+    "fare": 20000,
+    "hoursAgo": 31.4,
     "status": "offered",
     "message": "Free after 2pm."
   },
   {
-    "id": "bid-0250",
+    "id": "bid-0344",
+    "jobId": "seed-178",
+    "workerId": "user-015",
+    "fare": 6000,
+    "hoursAgo": 31.0,
+    "status": "accepted",
+    "message": "Done this many times."
+  },
+  {
+    "id": "bid-0252",
     "jobId": "seed-155",
     "workerId": "user-015",
     "fare": 3500,
@@ -1450,15 +1341,33 @@
     "message": "Tomorrow morning suits me better."
   },
   {
-    "id": "bid-0093",
+    "id": "bid-0090",
     "jobId": "seed-063",
-    "workerId": "user-022",
-    "fare": 3000,
+    "workerId": "user-010",
+    "fare": 3500,
     "hoursAgo": 30.6,
     "status": "passedOver"
   },
   {
-    "id": "bid-0263",
+    "id": "bid-0346",
+    "jobId": "seed-101",
+    "workerId": "user-060",
+    "fare": 16000,
+    "hoursAgo": 30.6,
+    "status": "accepted",
+    "message": "Tomorrow morning suits me better."
+  },
+  {
+    "id": "bid-0305",
+    "jobId": "seed-099",
+    "workerId": "user-044",
+    "fare": 7000,
+    "hoursAgo": 30.5,
+    "status": "offered",
+    "message": "Tomorrow morning suits me better."
+  },
+  {
+    "id": "bid-0265",
     "jobId": "seed-096",
     "workerId": "user-038",
     "fare": 25000,
@@ -1467,7 +1376,7 @@
     "message": "Can come today."
   },
   {
-    "id": "bid-0239",
+    "id": "bid-0241",
     "jobId": "seed-138",
     "workerId": "user-046",
     "fare": 3000,
@@ -1476,15 +1385,16 @@
     "message": "Free after 2pm."
   },
   {
-    "id": "bid-0208",
-    "jobId": "seed-098",
-    "workerId": "user-019",
-    "fare": 6000,
+    "id": "bid-0032",
+    "jobId": "seed-107",
+    "workerId": "user-009",
+    "fare": 3000,
     "hoursAgo": 30.0,
-    "status": "offered"
+    "status": "offered",
+    "message": "Live nearby, can be there in 20 minutes."
   },
   {
-    "id": "bid-0283",
+    "id": "bid-0285",
     "jobId": "seed-078",
     "workerId": "user-050",
     "fare": 9000,
@@ -1493,16 +1403,7 @@
     "message": "Live nearby, can be there in 20 minutes."
   },
   {
-    "id": "bid-0049",
-    "jobId": "seed-159",
-    "workerId": "user-016",
-    "fare": 110000,
-    "hoursAgo": 29.6,
-    "status": "passedOver",
-    "message": "Can bring my own material."
-  },
-  {
-    "id": "bid-0282",
+    "id": "bid-0284",
     "jobId": "seed-140",
     "workerId": "user-038",
     "fare": 10000,
@@ -1511,25 +1412,60 @@
     "message": "I have the tools with me."
   },
   {
-    "id": "bid-0203",
-    "jobId": "seed-039",
-    "workerId": "user-033",
-    "fare": 4500,
-    "hoursAgo": 29.3,
+    "id": "bid-0330",
+    "jobId": "seed-050",
+    "workerId": "user-043",
+    "fare": 30000,
+    "hoursAgo": 29.4,
     "status": "passedOver",
     "message": "Tomorrow morning suits me better."
   },
   {
-    "id": "bid-0155",
-    "jobId": "seed-021",
-    "workerId": "user-060",
-    "fare": 19000,
+    "id": "bid-0357",
+    "jobId": "seed-153",
+    "workerId": "user-047",
+    "fare": 55000,
     "hoursAgo": 29.1,
-    "status": "offered",
-    "message": "Done this many times."
+    "status": "accepted",
+    "message": "Price includes the parts."
   },
   {
-    "id": "bid-0284",
+    "id": "bid-0087",
+    "jobId": "seed-063",
+    "workerId": "user-016",
+    "fare": 3500,
+    "hoursAgo": 28.7,
+    "status": "accepted",
+    "message": "Can come today."
+  },
+  {
+    "id": "bid-0116",
+    "jobId": "seed-137",
+    "workerId": "user-009",
+    "fare": 6000,
+    "hoursAgo": 28.7,
+    "status": "accepted",
+    "message": "Can bring my own material."
+  },
+  {
+    "id": "bid-0067",
+    "jobId": "seed-065",
+    "workerId": "user-055",
+    "fare": 9000,
+    "hoursAgo": 28.5,
+    "status": "passedOver",
+    "message": "Can come today."
+  },
+  {
+    "id": "bid-0206",
+    "jobId": "seed-115",
+    "workerId": "user-026",
+    "fare": 9000,
+    "hoursAgo": 28.5,
+    "status": "offered"
+  },
+  {
+    "id": "bid-0286",
     "jobId": "seed-078",
     "workerId": "user-054",
     "fare": 6000,
@@ -1538,7 +1474,7 @@
     "message": "Free after 2pm."
   },
   {
-    "id": "bid-0286",
+    "id": "bid-0288",
     "jobId": "seed-078",
     "workerId": "user-020",
     "fare": 8000,
@@ -1546,7 +1482,15 @@
     "status": "passedOver"
   },
   {
-    "id": "bid-0240",
+    "id": "bid-0089",
+    "jobId": "seed-063",
+    "workerId": "user-053",
+    "fare": 3500,
+    "hoursAgo": 28.4,
+    "status": "passedOver"
+  },
+  {
+    "id": "bid-0242",
     "jobId": "seed-138",
     "workerId": "user-008",
     "fare": 4000,
@@ -1555,7 +1499,16 @@
     "message": "Can come today."
   },
   {
-    "id": "bid-0288",
+    "id": "bid-0128",
+    "jobId": "seed-060",
+    "workerId": "user-044",
+    "fare": 2000,
+    "hoursAgo": 28.3,
+    "status": "accepted",
+    "message": "Live nearby, can be there in 20 minutes."
+  },
+  {
+    "id": "bid-0290",
     "jobId": "seed-073",
     "workerId": "user-056",
     "fare": 2500,
@@ -1564,129 +1517,112 @@
     "message": "Can bring my own material."
   },
   {
-    "id": "bid-0327",
-    "jobId": "seed-143",
+    "id": "bid-0142",
+    "jobId": "seed-167",
+    "workerId": "user-002",
+    "fare": 19000,
+    "hoursAgo": 27.4,
+    "status": "offered"
+  },
+  {
+    "id": "bid-0347",
+    "jobId": "seed-101",
     "workerId": "user-014",
-    "fare": 2000,
-    "hoursAgo": 27.9,
-    "status": "offered",
-    "message": "Can come today."
-  },
-  {
-    "id": "bid-0011",
-    "jobId": "seed-176",
-    "workerId": "user-038",
-    "fare": 1000,
-    "hoursAgo": 27.8,
-    "status": "passedOver",
-    "message": "Free after 2pm."
-  },
-  {
-    "id": "bid-0119",
-    "jobId": "seed-077",
-    "workerId": "user-010",
-    "fare": 3000,
-    "hoursAgo": 27.8,
-    "status": "passedOver",
-    "message": "Free after 2pm."
-  },
-  {
-    "id": "bid-0215",
-    "jobId": "seed-084",
-    "workerId": "user-046",
-    "fare": 4500,
-    "hoursAgo": 27.5,
-    "status": "offered",
-    "message": "Free after 2pm."
-  },
-  {
-    "id": "bid-0166",
-    "jobId": "seed-027",
-    "workerId": "user-006",
-    "fare": 3500,
+    "fare": 11000,
     "hoursAgo": 27.1,
     "status": "passedOver",
-    "message": "Can come today."
+    "message": "Price includes the parts."
   },
   {
-    "id": "bid-0081",
-    "jobId": "seed-014",
-    "workerId": "user-053",
+    "id": "bid-0366",
+    "jobId": "seed-125",
+    "workerId": "user-052",
+    "fare": 9000,
+    "hoursAgo": 26.9,
+    "status": "passedOver"
+  },
+  {
+    "id": "bid-0361",
+    "jobId": "seed-064",
+    "workerId": "user-019",
     "fare": 2500,
-    "hoursAgo": 26.6,
+    "hoursAgo": 26.7,
+    "status": "passedOver",
+    "message": "Can bring my own material."
+  },
+  {
+    "id": "bid-0364",
+    "jobId": "seed-125",
+    "workerId": "user-044",
+    "fare": 9000,
+    "hoursAgo": 26.7,
+    "status": "accepted",
+    "message": "Free after 2pm."
+  },
+  {
+    "id": "bid-0009",
+    "jobId": "seed-113",
+    "workerId": "user-046",
+    "fare": 6000,
+    "hoursAgo": 26.4,
+    "status": "passedOver",
+    "message": "Live nearby, can be there in 20 minutes."
+  },
+  {
+    "id": "bid-0302",
+    "jobId": "seed-151",
+    "workerId": "user-047",
+    "fare": 19000,
+    "hoursAgo": 25.9,
+    "status": "accepted"
+  },
+  {
+    "id": "bid-0045",
+    "jobId": "seed-159",
+    "workerId": "user-013",
+    "fare": 85000,
+    "hoursAgo": 25.8,
+    "status": "passedOver",
+    "message": "Done this many times."
+  },
+  {
+    "id": "bid-0309",
+    "jobId": "seed-038",
+    "workerId": "user-015",
+    "fare": 2000,
+    "hoursAgo": 25.8,
     "status": "passedOver",
     "message": "Free after 2pm."
   },
   {
-    "id": "bid-0159",
-    "jobId": "seed-109",
-    "workerId": "user-037",
-    "fare": 3500,
-    "hoursAgo": 26.6,
-    "status": "passedOver",
-    "message": "I have the tools with me."
+    "id": "bid-0158",
+    "jobId": "seed-114",
+    "workerId": "user-051",
+    "fare": 6000,
+    "hoursAgo": 25.7,
+    "status": "accepted",
+    "message": "Done this many times."
   },
   {
-    "id": "bid-0324",
-    "jobId": "seed-035",
-    "workerId": "user-006",
-    "fare": 30000,
-    "hoursAgo": 26.5,
+    "id": "bid-0325",
+    "jobId": "seed-143",
+    "workerId": "user-036",
+    "fare": 3000,
+    "hoursAgo": 25.5,
     "status": "accepted",
     "message": "Can come today."
   },
   {
-    "id": "bid-0329",
-    "jobId": "seed-050",
-    "workerId": "user-052",
-    "fare": 25000,
-    "hoursAgo": 26.4,
-    "status": "offered"
-  },
-  {
-    "id": "bid-0111",
-    "jobId": "seed-076",
-    "workerId": "user-019",
-    "fare": 4500,
-    "hoursAgo": 26.2,
-    "status": "passedOver"
-  },
-  {
-    "id": "bid-0101",
-    "jobId": "seed-009",
-    "workerId": "user-058",
-    "fare": 4000,
-    "hoursAgo": 26.1,
-    "status": "offered"
-  },
-  {
-    "id": "bid-0027",
-    "jobId": "seed-164",
-    "workerId": "user-009",
-    "fare": 1500,
-    "hoursAgo": 25.8,
-    "status": "passedOver",
-    "message": "Tomorrow morning suits me better."
-  },
-  {
-    "id": "bid-0312",
-    "jobId": "seed-022",
-    "workerId": "user-027",
+    "id": "bid-0186",
+    "jobId": "seed-051",
+    "workerId": "user-010",
     "fare": 6000,
-    "hoursAgo": 25.7,
+    "hoursAgo": 25.3,
     "status": "offered",
-    "message": "Tomorrow morning suits me better."
+    "message": "Can come today."
   },
   {
-    "id": "bid-0078",
-    "jobId": "seed-118",
-    "workerId": "user-012",
-    "fare": 4000,
-    "hoursAgo": 25.4,
-    "status": "passedOver"
-  },
-  {
-    "id": "bid-0255",
+    "id": "bid-0257",
     "jobId": "seed-111",
     "workerId": "user-010",
     "fare": 6000,
@@ -1695,41 +1631,34 @@
     "message": "Can bring my own material."
   },
   {
-    "id": "bid-0199",
-    "jobId": "seed-115",
-    "workerId": "user-041",
+    "id": "bid-0081",
+    "jobId": "seed-141",
+    "workerId": "user-001",
+    "fare": 5000,
+    "hoursAgo": 25.2,
+    "status": "offered",
+    "message": "Free after 2pm."
+  },
+  {
+    "id": "bid-0108",
+    "jobId": "seed-076",
+    "workerId": "user-025",
     "fare": 7000,
     "hoursAgo": 24.9,
-    "status": "offered",
-    "message": "Live nearby, can be there in 20 minutes."
-  },
-  {
-    "id": "bid-0201",
-    "jobId": "seed-039",
-    "workerId": "user-008",
-    "fare": 4500,
-    "hoursAgo": 24.9,
-    "status": "passedOver"
-  },
-  {
-    "id": "bid-0153",
-    "jobId": "seed-021",
-    "workerId": "user-052",
-    "fare": 13000,
-    "hoursAgo": 24.6,
-    "status": "offered"
-  },
-  {
-    "id": "bid-0202",
-    "jobId": "seed-039",
-    "workerId": "user-053",
-    "fare": 4500,
-    "hoursAgo": 24.6,
     "status": "passedOver",
-    "message": "Price includes the parts."
+    "message": "Can bring my own material."
   },
   {
-    "id": "bid-0290",
+    "id": "bid-0312",
+    "jobId": "seed-139",
+    "workerId": "user-048",
+    "fare": 6000,
+    "hoursAgo": 24.7,
+    "status": "accepted",
+    "message": "Tomorrow morning suits me better."
+  },
+  {
+    "id": "bid-0292",
     "jobId": "seed-073",
     "workerId": "user-049",
     "fare": 3000,
@@ -1738,69 +1667,33 @@
     "message": "I have the tools with me."
   },
   {
-    "id": "bid-0360",
-    "jobId": "seed-125",
-    "workerId": "user-045",
-    "fare": 11000,
-    "hoursAgo": 24.6,
-    "status": "accepted",
-    "message": "Free after 2pm."
+    "id": "bid-0333",
+    "jobId": "seed-008",
+    "workerId": "user-014",
+    "fare": 9000,
+    "hoursAgo": 24.5,
+    "status": "accepted"
   },
   {
-    "id": "bid-0116",
-    "jobId": "seed-017",
-    "workerId": "user-019",
+    "id": "bid-0170",
+    "jobId": "seed-103",
+    "workerId": "user-020",
     "fare": 7000,
     "hoursAgo": 23.9,
     "status": "offered",
-    "message": "Live nearby, can be there in 20 minutes."
-  },
-  {
-    "id": "bid-0348",
-    "jobId": "seed-101",
-    "workerId": "user-014",
-    "fare": 19000,
-    "hoursAgo": 23.5,
-    "status": "offered",
-    "message": "Tomorrow morning suits me better."
-  },
-  {
-    "id": "bid-0065",
-    "jobId": "seed-170",
-    "workerId": "user-059",
-    "fare": 7000,
-    "hoursAgo": 23.1,
-    "status": "passedOver",
     "message": "Done this many times."
   },
   {
-    "id": "bid-0115",
-    "jobId": "seed-017",
-    "workerId": "user-040",
+    "id": "bid-0106",
+    "jobId": "seed-076",
+    "workerId": "user-056",
     "fare": 2500,
-    "hoursAgo": 23.0,
-    "status": "offered",
-    "message": "Can come today."
-  },
-  {
-    "id": "bid-0196",
-    "jobId": "seed-115",
-    "workerId": "user-024",
-    "fare": 8000,
-    "hoursAgo": 23.0,
-    "status": "offered"
-  },
-  {
-    "id": "bid-0216",
-    "jobId": "seed-084",
-    "workerId": "user-030",
-    "fare": 6000,
-    "hoursAgo": 23.0,
-    "status": "offered",
+    "hoursAgo": 23.5,
+    "status": "passedOver",
     "message": "I have the tools with me."
   },
   {
-    "id": "bid-0235",
+    "id": "bid-0237",
     "jobId": "seed-097",
     "workerId": "user-058",
     "fare": 16000,
@@ -1808,59 +1701,60 @@
     "status": "offered"
   },
   {
-    "id": "bid-0307",
-    "jobId": "seed-151",
-    "workerId": "user-019",
-    "fare": 20000,
-    "hoursAgo": 22.9,
-    "status": "offered",
+    "id": "bid-0327",
+    "jobId": "seed-143",
+    "workerId": "user-056",
+    "fare": 3500,
+    "hoursAgo": 22.8,
+    "status": "passedOver",
     "message": "Can come today."
   },
   {
-    "id": "bid-0328",
-    "jobId": "seed-143",
-    "workerId": "user-014",
-    "fare": 3000,
-    "hoursAgo": 22.9,
+    "id": "bid-0212",
+    "jobId": "seed-098",
+    "workerId": "user-056",
+    "fare": 6000,
+    "hoursAgo": 22.7,
     "status": "offered",
     "message": "Free after 2pm."
   },
   {
-    "id": "bid-0362",
-    "jobId": "seed-031",
-    "workerId": "user-008",
-    "fare": 11000,
-    "hoursAgo": 22.9,
-    "status": "passedOver"
-  },
-  {
-    "id": "bid-0306",
-    "jobId": "seed-151",
-    "workerId": "user-057",
-    "fare": 15000,
-    "hoursAgo": 22.1,
-    "status": "offered",
+    "id": "bid-0034",
+    "jobId": "seed-081",
+    "workerId": "user-016",
+    "fare": 70000,
+    "hoursAgo": 22.4,
+    "status": "accepted",
     "message": "Live nearby, can be there in 20 minutes."
   },
   {
-    "id": "bid-0195",
-    "jobId": "seed-172",
-    "workerId": "user-048",
-    "fare": 17000,
+    "id": "bid-0021",
+    "jobId": "seed-164",
+    "workerId": "user-009",
+    "fare": 1000,
     "hoursAgo": 22.0,
-    "status": "offered",
-    "message": "Free after 2pm."
+    "status": "passedOver",
+    "message": "Live nearby, can be there in 20 minutes."
   },
   {
-    "id": "bid-0205",
-    "jobId": "seed-087",
-    "workerId": "user-037",
-    "fare": 3500,
-    "hoursAgo": 21.9,
-    "status": "passedOver"
+    "id": "bid-0083",
+    "jobId": "seed-134",
+    "workerId": "user-001",
+    "fare": 1000,
+    "hoursAgo": 22.0,
+    "status": "offered"
   },
   {
-    "id": "bid-0285",
+    "id": "bid-0319",
+    "jobId": "seed-108",
+    "workerId": "user-029",
+    "fare": 4500,
+    "hoursAgo": 22.0,
+    "status": "accepted",
+    "message": "I have the tools with me."
+  },
+  {
+    "id": "bid-0287",
     "jobId": "seed-078",
     "workerId": "user-025",
     "fare": 7000,
@@ -1869,7 +1763,7 @@
     "message": "Tomorrow morning suits me better."
   },
   {
-    "id": "bid-0227",
+    "id": "bid-0229",
     "jobId": "seed-094",
     "workerId": "user-060",
     "fare": 3000,
@@ -1878,7 +1772,16 @@
     "message": "Done this many times."
   },
   {
-    "id": "bid-0221",
+    "id": "bid-0152",
+    "jobId": "seed-067",
+    "workerId": "user-060",
+    "fare": 12000,
+    "hoursAgo": 21.2,
+    "status": "passedOver",
+    "message": "Price includes the parts."
+  },
+  {
+    "id": "bid-0223",
     "jobId": "seed-019",
     "workerId": "user-051",
     "fare": 5000,
@@ -1887,7 +1790,7 @@
     "message": "Tomorrow morning suits me better."
   },
   {
-    "id": "bid-0298",
+    "id": "bid-0300",
     "jobId": "seed-028",
     "workerId": "user-030",
     "fare": 11000,
@@ -1895,180 +1798,252 @@
     "status": "passedOver"
   },
   {
-    "id": "bid-0365",
-    "jobId": "seed-157",
-    "workerId": "user-012",
-    "fare": 4500,
-    "hoursAgo": 21.1,
-    "status": "offered"
-  },
-  {
-    "id": "bid-0085",
-    "jobId": "seed-141",
-    "workerId": "user-001",
+    "id": "bid-0314",
+    "jobId": "seed-139",
+    "workerId": "user-024",
     "fare": 5000,
-    "hoursAgo": 20.8,
-    "status": "offered",
-    "message": "Can bring my own material."
-  },
-  {
-    "id": "bid-0152",
-    "jobId": "seed-182",
-    "workerId": "user-060",
-    "fare": 9000,
-    "hoursAgo": 20.5,
+    "hoursAgo": 21.2,
     "status": "passedOver",
-    "message": "Price includes the parts."
-  },
-  {
-    "id": "bid-0020",
-    "jobId": "seed-006",
-    "workerId": "user-059",
-    "fare": 5000,
-    "hoursAgo": 20.4,
-    "status": "passedOver",
-    "message": "Live nearby, can be there in 20 minutes."
-  },
-  {
-    "id": "bid-0178",
-    "jobId": "seed-116",
-    "workerId": "user-014",
-    "fare": 3000,
-    "hoursAgo": 20.3,
-    "status": "offered"
-  },
-  {
-    "id": "bid-0316",
-    "jobId": "seed-007",
-    "workerId": "user-004",
-    "fare": 6000,
-    "hoursAgo": 20.3,
-    "status": "offered",
-    "message": "Can come today."
-  },
-  {
-    "id": "bid-0358",
-    "jobId": "seed-179",
-    "workerId": "user-041",
-    "fare": 8000,
-    "hoursAgo": 20.2,
-    "status": "passedOver"
-  },
-  {
-    "id": "bid-0212",
-    "jobId": "seed-173",
-    "workerId": "user-006",
-    "fare": 12000,
-    "hoursAgo": 20.1,
-    "status": "offered",
     "message": "I have the tools with me."
   },
   {
-    "id": "bid-0310",
-    "jobId": "seed-022",
-    "workerId": "user-044",
-    "fare": 7000,
-    "hoursAgo": 19.7,
-    "status": "offered"
-  },
-  {
-    "id": "bid-0033",
-    "jobId": "seed-081",
-    "workerId": "user-050",
-    "fare": 70000,
-    "hoursAgo": 18.9,
-    "status": "passedOver",
-    "message": "Live nearby, can be there in 20 minutes."
-  },
-  {
-    "id": "bid-0331",
-    "jobId": "seed-026",
-    "workerId": "user-058",
-    "fare": 8000,
-    "hoursAgo": 18.8,
-    "status": "offered",
-    "message": "Free after 2pm."
-  },
-  {
-    "id": "bid-0075",
-    "jobId": "seed-100",
-    "workerId": "user-001",
-    "fare": 5000,
-    "hoursAgo": 18.5,
+    "id": "bid-0114",
+    "jobId": "seed-077",
+    "workerId": "user-016",
+    "fare": 3500,
+    "hoursAgo": 21.1,
     "status": "accepted",
     "message": "I have the tools with me."
   },
   {
-    "id": "bid-0325",
-    "jobId": "seed-035",
+    "id": "bid-0112",
+    "jobId": "seed-017",
+    "workerId": "user-020",
+    "fare": 2000,
+    "hoursAgo": 20.9,
+    "status": "offered",
+    "message": "Can come today."
+  },
+  {
+    "id": "bid-0365",
+    "jobId": "seed-125",
     "workerId": "user-055",
-    "fare": 40000,
-    "hoursAgo": 18.5,
-    "status": "passedOver"
+    "fare": 13000,
+    "hoursAgo": 20.9,
+    "status": "passedOver",
+    "message": "Free after 2pm."
   },
   {
-    "id": "bid-0064",
-    "jobId": "seed-170",
-    "workerId": "user-058",
-    "fare": 6000,
-    "hoursAgo": 17.5,
-    "status": "accepted"
-  },
-  {
-    "id": "bid-0315",
-    "jobId": "seed-007",
-    "workerId": "user-041",
-    "fare": 5000,
-    "hoursAgo": 17.3,
-    "status": "offered",
-    "message": "Price includes the parts."
-  },
-  {
-    "id": "bid-0140",
-    "jobId": "seed-055",
-    "workerId": "user-015",
-    "fare": 5000,
-    "hoursAgo": 16.8,
-    "status": "offered",
+    "id": "bid-0349",
+    "jobId": "seed-101",
+    "workerId": "user-004",
+    "fare": 17000,
+    "hoursAgo": 20.8,
+    "status": "passedOver",
     "message": "Tomorrow morning suits me better."
   },
   {
-    "id": "bid-0326",
-    "jobId": "seed-143",
-    "workerId": "user-048",
-    "fare": 2500,
-    "hoursAgo": 16.7,
-    "status": "offered"
-  },
-  {
-    "id": "bid-0311",
-    "jobId": "seed-022",
-    "workerId": "user-015",
-    "fare": 9000,
-    "hoursAgo": 16.1,
+    "id": "bid-0082",
+    "jobId": "seed-141",
+    "workerId": "user-004",
+    "fare": 7000,
+    "hoursAgo": 20.7,
     "status": "offered",
     "message": "I have the tools with me."
   },
   {
-    "id": "bid-0141",
-    "jobId": "seed-055",
-    "workerId": "user-047",
-    "fare": 4000,
-    "hoursAgo": 16.0,
-    "status": "offered",
-    "message": "Price includes the parts."
+    "id": "bid-0072",
+    "jobId": "seed-047",
+    "workerId": "user-001",
+    "fare": 3000,
+    "hoursAgo": 20.5,
+    "status": "accepted"
   },
   {
-    "id": "bid-0137",
-    "jobId": "seed-177",
-    "workerId": "user-031",
+    "id": "bid-0238",
+    "jobId": "seed-002",
+    "workerId": "user-019",
+    "fare": 2500,
+    "hoursAgo": 20.2,
+    "status": "offered",
+    "message": "Live nearby, can be there in 20 minutes."
+  },
+  {
+    "id": "bid-0159",
+    "jobId": "seed-114",
+    "workerId": "user-037",
+    "fare": 5000,
+    "hoursAgo": 20.0,
+    "status": "passedOver",
+    "message": "I have the tools with me."
+  },
+  {
+    "id": "bid-0367",
+    "jobId": "seed-125",
+    "workerId": "user-048",
+    "fare": 12000,
+    "hoursAgo": 19.6,
+    "status": "passedOver"
+  },
+  {
+    "id": "bid-0213",
+    "jobId": "seed-150",
+    "workerId": "user-041",
+    "fare": 4000,
+    "hoursAgo": 19.3,
+    "status": "offered"
+  },
+  {
+    "id": "bid-0217",
+    "jobId": "seed-084",
+    "workerId": "user-014",
+    "fare": 5000,
+    "hoursAgo": 18.9,
+    "status": "offered",
+    "message": "I have the tools with me."
+  },
+  {
+    "id": "bid-0332",
+    "jobId": "seed-026",
+    "workerId": "user-056",
     "fare": 7000,
-    "hoursAgo": 15.8,
+    "hoursAgo": 18.9,
+    "status": "offered",
+    "message": "Can bring my own material."
+  },
+  {
+    "id": "bid-0320",
+    "jobId": "seed-108",
+    "workerId": "user-047",
+    "fare": 3000,
+    "hoursAgo": 18.3,
+    "status": "passedOver"
+  },
+  {
+    "id": "bid-0161",
+    "jobId": "seed-109",
+    "workerId": "user-019",
+    "fare": 2500,
+    "hoursAgo": 18.2,
+    "status": "offered",
+    "message": "Can bring my own material."
+  },
+  {
+    "id": "bid-0061",
+    "jobId": "seed-170",
+    "workerId": "user-037",
+    "fare": 7000,
+    "hoursAgo": 18.1,
+    "status": "passedOver",
+    "message": "Can come today."
+  },
+  {
+    "id": "bid-0044",
+    "jobId": "seed-159",
+    "workerId": "user-046",
+    "fare": 75000,
+    "hoursAgo": 18.0,
+    "status": "accepted",
+    "message": "Free after 2pm."
+  },
+  {
+    "id": "bid-0138",
+    "jobId": "seed-055",
+    "workerId": "user-023",
+    "fare": 6000,
+    "hoursAgo": 17.6,
+    "status": "accepted"
+  },
+  {
+    "id": "bid-0315",
+    "jobId": "seed-139",
+    "workerId": "user-027",
+    "fare": 4000,
+    "hoursAgo": 17.6,
+    "status": "passedOver",
+    "message": "Tomorrow morning suits me better."
+  },
+  {
+    "id": "bid-0207",
+    "jobId": "seed-115",
+    "workerId": "user-023",
+    "fare": 10000,
+    "hoursAgo": 17.5,
     "status": "offered",
     "message": "Free after 2pm."
   },
   {
-    "id": "bid-0297",
+    "id": "bid-0209",
+    "jobId": "seed-087",
+    "workerId": "user-022",
+    "fare": 4000,
+    "hoursAgo": 17.4,
+    "status": "offered",
+    "message": "Price includes the parts."
+  },
+  {
+    "id": "bid-0155",
+    "jobId": "seed-182",
+    "workerId": "user-060",
+    "fare": 12000,
+    "hoursAgo": 16.2,
+    "status": "offered",
+    "message": "Done this many times."
+  },
+  {
+    "id": "bid-0019",
+    "jobId": "seed-164",
+    "workerId": "user-027",
+    "fare": 1500,
+    "hoursAgo": 16.0,
+    "status": "passedOver"
+  },
+  {
+    "id": "bid-0303",
+    "jobId": "seed-151",
+    "workerId": "user-049",
+    "fare": 19000,
+    "hoursAgo": 16.0,
+    "status": "passedOver",
+    "message": "Live nearby, can be there in 20 minutes."
+  },
+  {
+    "id": "bid-0192",
+    "jobId": "seed-043",
+    "workerId": "user-046",
+    "fare": 11000,
+    "hoursAgo": 15.8,
+    "status": "offered"
+  },
+  {
+    "id": "bid-0031",
+    "jobId": "seed-005",
+    "workerId": "user-023",
+    "fare": 3000,
+    "hoursAgo": 15.6,
+    "status": "offered",
+    "message": "Can come today."
+  },
+  {
+    "id": "bid-0306",
+    "jobId": "seed-099",
+    "workerId": "user-020",
+    "fare": 8000,
+    "hoursAgo": 15.6,
+    "status": "offered",
+    "message": "Price includes the parts."
+  },
+  {
+    "id": "bid-0313",
+    "jobId": "seed-139",
+    "workerId": "user-044",
+    "fare": 5000,
+    "hoursAgo": 15.6,
+    "status": "passedOver",
+    "message": "Can come today."
+  },
+  {
+    "id": "bid-0299",
     "jobId": "seed-028",
     "workerId": "user-007",
     "fare": 8000,
@@ -2077,69 +2052,68 @@
     "message": "Price includes the parts."
   },
   {
-    "id": "bid-0074",
-    "jobId": "seed-047",
-    "workerId": "user-001",
-    "fare": 1500,
-    "hoursAgo": 14.8,
-    "status": "accepted",
-    "message": "I have the tools with me."
-  },
-  {
-    "id": "bid-0086",
-    "jobId": "seed-141",
-    "workerId": "user-045",
-    "fare": 5000,
-    "hoursAgo": 14.6,
-    "status": "offered",
-    "message": "Done this many times."
-  },
-  {
-    "id": "bid-0066",
-    "jobId": "seed-170",
-    "workerId": "user-017",
-    "fare": 7000,
-    "hoursAgo": 14.5,
-    "status": "passedOver",
-    "message": "Live nearby, can be there in 20 minutes."
-  },
-  {
-    "id": "bid-0323",
-    "jobId": "seed-108",
-    "workerId": "user-006",
-    "fare": 2500,
-    "hoursAgo": 14.5,
-    "status": "offered",
-    "message": "Tomorrow morning suits me better."
-  },
-  {
-    "id": "bid-0350",
-    "jobId": "seed-012",
-    "workerId": "user-047",
-    "fare": 70000,
-    "hoursAgo": 14.5,
+    "id": "bid-0113",
+    "jobId": "seed-017",
+    "workerId": "user-018",
+    "fare": 2000,
+    "hoursAgo": 15.3,
     "status": "offered",
     "message": "Tomorrow morning suits me better."
   },
   {
     "id": "bid-0204",
-    "jobId": "seed-087",
-    "workerId": "user-030",
-    "fare": 3500,
-    "hoursAgo": 14.2,
-    "status": "accepted",
-    "message": "Can bring my own material."
+    "jobId": "seed-172",
+    "workerId": "user-020",
+    "fare": 17000,
+    "hoursAgo": 15.1,
+    "status": "passedOver",
+    "message": "Done this many times."
   },
   {
-    "id": "bid-0185",
+    "id": "bid-0190",
+    "jobId": "seed-043",
+    "workerId": "user-002",
+    "fare": 11000,
+    "hoursAgo": 14.9,
+    "status": "offered",
+    "message": "Price includes the parts."
+  },
+  {
+    "id": "bid-0060",
+    "jobId": "seed-170",
+    "workerId": "user-054",
+    "fare": 7000,
+    "hoursAgo": 14.5,
+    "status": "passedOver",
+    "message": "I have the tools with me."
+  },
+  {
+    "id": "bid-0187",
     "jobId": "seed-033",
-    "workerId": "user-023",
-    "fare": 35000,
-    "hoursAgo": 14.1,
-    "status": "accepted"
+    "workerId": "user-028",
+    "fare": 30000,
+    "hoursAgo": 14.4,
+    "status": "offered"
   },
   {
-    "id": "bid-0230",
+    "id": "bid-0203",
+    "jobId": "seed-172",
+    "workerId": "user-007",
+    "fare": 15000,
+    "hoursAgo": 14.4,
+    "status": "passedOver"
+  },
+  {
+    "id": "bid-0007",
+    "jobId": "seed-176",
+    "workerId": "user-051",
+    "fare": 3500,
+    "hoursAgo": 14.1,
+    "status": "passedOver",
+    "message": "Price includes the parts."
+  },
+  {
+    "id": "bid-0232",
     "jobId": "seed-013",
     "workerId": "user-028",
     "fare": 2500,
@@ -2148,7 +2122,67 @@
     "message": "Can come today."
   },
   {
-    "id": "bid-0296",
+    "id": "bid-0311",
+    "jobId": "seed-038",
+    "workerId": "user-053",
+    "fare": 1500,
+    "hoursAgo": 14.1,
+    "status": "passedOver"
+  },
+  {
+    "id": "bid-0345",
+    "jobId": "seed-178",
+    "workerId": "user-039",
+    "fare": 5000,
+    "hoursAgo": 14.0,
+    "status": "passedOver",
+    "message": "Price includes the parts."
+  },
+  {
+    "id": "bid-0042",
+    "jobId": "seed-023",
+    "workerId": "user-033",
+    "fare": 2000,
+    "hoursAgo": 13.9,
+    "status": "passedOver"
+  },
+  {
+    "id": "bid-0059",
+    "jobId": "seed-170",
+    "workerId": "user-027",
+    "fare": 4500,
+    "hoursAgo": 13.9,
+    "status": "accepted",
+    "message": "Tomorrow morning suits me better."
+  },
+  {
+    "id": "bid-0139",
+    "jobId": "seed-055",
+    "workerId": "user-032",
+    "fare": 4000,
+    "hoursAgo": 13.9,
+    "status": "passedOver",
+    "message": "I have the tools with me."
+  },
+  {
+    "id": "bid-0368",
+    "jobId": "seed-011",
+    "workerId": "user-025",
+    "fare": 25000,
+    "hoursAgo": 13.9,
+    "status": "offered",
+    "message": "Tomorrow morning suits me better."
+  },
+  {
+    "id": "bid-0153",
+    "jobId": "seed-182",
+    "workerId": "user-052",
+    "fare": 8000,
+    "hoursAgo": 13.8,
+    "status": "offered"
+  },
+  {
+    "id": "bid-0298",
     "jobId": "seed-028",
     "workerId": "user-030",
     "fare": 7000,
@@ -2157,7 +2191,24 @@
     "message": "Live nearby, can be there in 20 minutes."
   },
   {
-    "id": "bid-0273",
+    "id": "bid-0130",
+    "jobId": "seed-044",
+    "workerId": "user-030",
+    "fare": 2500,
+    "hoursAgo": 13.7,
+    "status": "offered"
+  },
+  {
+    "id": "bid-0062",
+    "jobId": "seed-170",
+    "workerId": "user-017",
+    "fare": 6000,
+    "hoursAgo": 13.5,
+    "status": "passedOver",
+    "message": "I have the tools with me."
+  },
+  {
+    "id": "bid-0275",
     "jobId": "seed-144",
     "workerId": "user-034",
     "fare": 1000,
@@ -2166,25 +2217,58 @@
     "message": "Can bring my own material."
   },
   {
-    "id": "bid-0043",
-    "jobId": "seed-023",
-    "workerId": "user-041",
-    "fare": 2000,
+    "id": "bid-0075",
+    "jobId": "seed-118",
+    "workerId": "user-036",
+    "fare": 4000,
     "hoursAgo": 13.4,
-    "status": "passedOver",
-    "message": "Can come today."
+    "status": "accepted",
+    "message": "I have the tools with me."
   },
   {
-    "id": "bid-0048",
-    "jobId": "seed-159",
-    "workerId": "user-026",
-    "fare": 85000,
+    "id": "bid-0360",
+    "jobId": "seed-064",
+    "workerId": "user-060",
+    "fare": 2500,
     "hoursAgo": 13.4,
-    "status": "passedOver",
-    "message": "Can bring my own material."
+    "status": "accepted"
   },
   {
-    "id": "bid-0245",
+    "id": "bid-0334",
+    "jobId": "seed-161",
+    "workerId": "user-032",
+    "fare": 1000,
+    "hoursAgo": 13.3,
+    "status": "accepted",
+    "message": "Tomorrow morning suits me better."
+  },
+  {
+    "id": "bid-0013",
+    "jobId": "seed-175",
+    "workerId": "user-043",
+    "fare": 2500,
+    "hoursAgo": 13.2,
+    "status": "passedOver",
+    "message": "Price includes the parts."
+  },
+  {
+    "id": "bid-0338",
+    "jobId": "seed-088",
+    "workerId": "user-010",
+    "fare": 16000,
+    "hoursAgo": 13.2,
+    "status": "accepted"
+  },
+  {
+    "id": "bid-0164",
+    "jobId": "seed-131",
+    "workerId": "user-021",
+    "fare": 1500,
+    "hoursAgo": 12.8,
+    "status": "offered"
+  },
+  {
+    "id": "bid-0247",
     "jobId": "seed-041",
     "workerId": "user-053",
     "fare": 3500,
@@ -2192,34 +2276,16 @@
     "status": "offered"
   },
   {
-    "id": "bid-0191",
-    "jobId": "seed-124",
-    "workerId": "user-048",
-    "fare": 3500,
-    "hoursAgo": 12.7,
-    "status": "offered",
-    "message": "Can bring my own material."
+    "id": "bid-0200",
+    "jobId": "seed-010",
+    "workerId": "user-034",
+    "fare": 35000,
+    "hoursAgo": 12.6,
+    "status": "passedOver",
+    "message": "Free after 2pm."
   },
   {
-    "id": "bid-0193",
-    "jobId": "seed-172",
-    "workerId": "user-044",
-    "fare": 20000,
-    "hoursAgo": 12.7,
-    "status": "offered",
-    "message": "Can bring my own material."
-  },
-  {
-    "id": "bid-0334",
-    "jobId": "seed-161",
-    "workerId": "user-005",
-    "fare": 1500,
-    "hoursAgo": 12.7,
-    "status": "accepted",
-    "message": "I have the tools with me."
-  },
-  {
-    "id": "bid-0261",
+    "id": "bid-0263",
     "jobId": "seed-158",
     "workerId": "user-020",
     "fare": 4500,
@@ -2227,33 +2293,16 @@
     "status": "passedOver"
   },
   {
-    "id": "bid-0082",
-    "jobId": "seed-014",
-    "workerId": "user-001",
-    "fare": 3500,
-    "hoursAgo": 12.2,
+    "id": "bid-0335",
+    "jobId": "seed-161",
+    "workerId": "user-023",
+    "fare": 2000,
+    "hoursAgo": 12.1,
     "status": "passedOver",
     "message": "Free after 2pm."
   },
   {
-    "id": "bid-0187",
-    "jobId": "seed-043",
-    "workerId": "user-019",
-    "fare": 6000,
-    "hoursAgo": 12.1,
-    "status": "offered"
-  },
-  {
-    "id": "bid-0346",
-    "jobId": "seed-101",
-    "workerId": "user-054",
-    "fare": 17000,
-    "hoursAgo": 12.0,
-    "status": "offered",
-    "message": "Can bring my own material."
-  },
-  {
-    "id": "bid-0281",
+    "id": "bid-0283",
     "jobId": "seed-140",
     "workerId": "user-034",
     "fare": 10000,
@@ -2262,7 +2311,25 @@
     "message": "I have the tools with me."
   },
   {
-    "id": "bid-0253",
+    "id": "bid-0005",
+    "jobId": "seed-176",
+    "workerId": "user-009",
+    "fare": 3000,
+    "hoursAgo": 11.8,
+    "status": "accepted",
+    "message": "Done this many times."
+  },
+  {
+    "id": "bid-0150",
+    "jobId": "seed-067",
+    "workerId": "user-057",
+    "fare": 16000,
+    "hoursAgo": 11.8,
+    "status": "accepted",
+    "message": "Tomorrow morning suits me better."
+  },
+  {
+    "id": "bid-0255",
     "jobId": "seed-111",
     "workerId": "user-027",
     "fare": 9000,
@@ -2271,33 +2338,102 @@
     "message": "Free after 2pm."
   },
   {
-    "id": "bid-0008",
-    "jobId": "seed-040",
-    "workerId": "user-017",
-    "fare": 1500,
+    "id": "bid-0342",
+    "jobId": "seed-018",
+    "workerId": "user-035",
+    "fare": 3500,
     "hoursAgo": 11.7,
-    "status": "passedOver"
+    "status": "offered"
+  },
+  {
+    "id": "bid-0008",
+    "jobId": "seed-113",
+    "workerId": "user-009",
+    "fare": 6000,
+    "hoursAgo": 11.6,
+    "status": "accepted",
+    "message": "Free after 2pm."
+  },
+  {
+    "id": "bid-0218",
+    "jobId": "seed-084",
+    "workerId": "user-053",
+    "fare": 4500,
+    "hoursAgo": 11.6,
+    "status": "offered",
+    "message": "Can bring my own material."
+  },
+  {
+    "id": "bid-0129",
+    "jobId": "seed-044",
+    "workerId": "user-015",
+    "fare": 3000,
+    "hoursAgo": 11.5,
+    "status": "offered",
+    "message": "Price includes the parts."
+  },
+  {
+    "id": "bid-0123",
+    "jobId": "seed-001",
+    "workerId": "user-031",
+    "fare": 4500,
+    "hoursAgo": 11.4,
+    "status": "offered",
+    "message": "Live nearby, can be there in 20 minutes."
+  },
+  {
+    "id": "bid-0363",
+    "jobId": "seed-179",
+    "workerId": "user-026",
+    "fare": 3000,
+    "hoursAgo": 11.4,
+    "status": "accepted"
   },
   {
     "id": "bid-0148",
-    "jobId": "seed-133",
+    "jobId": "seed-072",
     "workerId": "user-053",
-    "fare": 19000,
-    "hoursAgo": 11.4,
+    "fare": 6000,
+    "hoursAgo": 11.3,
     "status": "offered",
     "message": "I have the tools with me."
   },
   {
-    "id": "bid-0150",
-    "jobId": "seed-182",
-    "workerId": "user-057",
-    "fare": 13000,
-    "hoursAgo": 11.4,
-    "status": "accepted",
-    "message": "Tomorrow morning suits me better."
+    "id": "bid-0162",
+    "jobId": "seed-131",
+    "workerId": "user-060",
+    "fare": 2000,
+    "hoursAgo": 11.0,
+    "status": "offered",
+    "message": "Can bring my own material."
   },
   {
-    "id": "bid-0252",
+    "id": "bid-0202",
+    "jobId": "seed-172",
+    "workerId": "user-057",
+    "fare": 19000,
+    "hoursAgo": 11.0,
+    "status": "accepted",
+    "message": "Free after 2pm."
+  },
+  {
+    "id": "bid-0353",
+    "jobId": "seed-012",
+    "workerId": "user-046",
+    "fare": 55000,
+    "hoursAgo": 11.0,
+    "status": "offered"
+  },
+  {
+    "id": "bid-0337",
+    "jobId": "seed-161",
+    "workerId": "user-054",
+    "fare": 1500,
+    "hoursAgo": 10.9,
+    "status": "passedOver"
+  },
+  {
+    "id": "bid-0254",
     "jobId": "seed-036",
     "workerId": "user-053",
     "fare": 20000,
@@ -2306,7 +2442,7 @@
     "message": "Done this many times."
   },
   {
-    "id": "bid-0260",
+    "id": "bid-0262",
     "jobId": "seed-158",
     "workerId": "user-053",
     "fare": 4000,
@@ -2315,23 +2451,24 @@
     "message": "Live nearby, can be there in 20 minutes."
   },
   {
-    "id": "bid-0337",
-    "jobId": "seed-161",
-    "workerId": "user-053",
-    "fare": 1500,
-    "hoursAgo": 10.7,
+    "id": "bid-0080",
+    "jobId": "seed-024",
+    "workerId": "user-001",
+    "fare": 20000,
+    "hoursAgo": 10.5,
     "status": "passedOver"
   },
   {
-    "id": "bid-0338",
-    "jobId": "seed-088",
-    "workerId": "user-054",
-    "fare": 16000,
-    "hoursAgo": 10.7,
-    "status": "offered"
+    "id": "bid-0121",
+    "jobId": "seed-001",
+    "workerId": "user-058",
+    "fare": 3000,
+    "hoursAgo": 10.5,
+    "status": "offered",
+    "message": "Can come today."
   },
   {
-    "id": "bid-0272",
+    "id": "bid-0274",
     "jobId": "seed-152",
     "workerId": "user-026",
     "fare": 10000,
@@ -2340,16 +2477,7 @@
     "message": "Can come today."
   },
   {
-    "id": "bid-0046",
-    "jobId": "seed-159",
-    "workerId": "user-045",
-    "fare": 115000,
-    "hoursAgo": 10.4,
-    "status": "accepted",
-    "message": "Can bring my own material."
-  },
-  {
-    "id": "bid-0262",
+    "id": "bid-0264",
     "jobId": "seed-158",
     "workerId": "user-033",
     "fare": 5000,
@@ -2357,24 +2485,7 @@
     "status": "passedOver"
   },
   {
-    "id": "bid-0342",
-    "jobId": "seed-142",
-    "workerId": "user-012",
-    "fare": 6000,
-    "hoursAgo": 10.4,
-    "status": "passedOver",
-    "message": "Can come today."
-  },
-  {
-    "id": "bid-0090",
-    "jobId": "seed-003",
-    "workerId": "user-018",
-    "fare": 9000,
-    "hoursAgo": 10.1,
-    "status": "offered"
-  },
-  {
-    "id": "bid-0222",
+    "id": "bid-0224",
     "jobId": "seed-019",
     "workerId": "user-037",
     "fare": 5000,
@@ -2382,24 +2493,7 @@
     "status": "offered"
   },
   {
-    "id": "bid-0067",
-    "jobId": "seed-092",
-    "workerId": "user-017",
-    "fare": 7000,
-    "hoursAgo": 9.8,
-    "status": "offered"
-  },
-  {
-    "id": "bid-0154",
-    "jobId": "seed-021",
-    "workerId": "user-060",
-    "fare": 15000,
-    "hoursAgo": 9.5,
-    "status": "offered",
-    "message": "Tomorrow morning suits me better."
-  },
-  {
-    "id": "bid-0220",
+    "id": "bid-0222",
     "jobId": "seed-162",
     "workerId": "user-013",
     "fare": 9000,
@@ -2408,16 +2502,7 @@
     "message": "I have the tools with me."
   },
   {
-    "id": "bid-0343",
-    "jobId": "seed-142",
-    "workerId": "user-044",
-    "fare": 5000,
-    "hoursAgo": 9.5,
-    "status": "passedOver",
-    "message": "I have the tools with me."
-  },
-  {
-    "id": "bid-0295",
+    "id": "bid-0297",
     "jobId": "seed-028",
     "workerId": "user-029",
     "fare": 7000,
@@ -2426,41 +2511,60 @@
     "message": "Tomorrow morning suits me better."
   },
   {
-    "id": "bid-0336",
-    "jobId": "seed-161",
-    "workerId": "user-004",
-    "fare": 2000,
-    "hoursAgo": 9.2,
-    "status": "passedOver",
-    "message": "Free after 2pm."
+    "id": "bid-0104",
+    "jobId": "seed-016",
+    "workerId": "user-018",
+    "fare": 12000,
+    "hoursAgo": 9.3,
+    "status": "offered",
+    "message": "Tomorrow morning suits me better."
   },
   {
-    "id": "bid-0194",
-    "jobId": "seed-172",
-    "workerId": "user-058",
-    "fare": 15000,
+    "id": "bid-0120",
+    "jobId": "seed-001",
+    "workerId": "user-053",
+    "fare": 4500,
+    "hoursAgo": 9.3,
+    "status": "offered",
+    "message": "Tomorrow morning suits me better."
+  },
+  {
+    "id": "bid-0199",
+    "jobId": "seed-010",
+    "workerId": "user-006",
+    "fare": 35000,
+    "hoursAgo": 9.1,
+    "status": "passedOver",
+    "message": "I have the tools with me."
+  },
+  {
+    "id": "bid-0304",
+    "jobId": "seed-099",
+    "workerId": "user-022",
+    "fare": 11000,
+    "hoursAgo": 9.1,
+    "status": "offered",
+    "message": "Live nearby, can be there in 20 minutes."
+  },
+  {
+    "id": "bid-0004",
+    "jobId": "seed-040",
+    "workerId": "user-056",
+    "fare": 2500,
+    "hoursAgo": 9.0,
+    "status": "passedOver",
+    "message": "Tomorrow morning suits me better."
+  },
+  {
+    "id": "bid-0354",
+    "jobId": "seed-012",
+    "workerId": "user-030",
+    "fare": 65000,
     "hoursAgo": 9.0,
     "status": "offered"
   },
   {
-    "id": "bid-0084",
-    "jobId": "seed-024",
-    "workerId": "user-001",
-    "fare": 20000,
-    "hoursAgo": 8.9,
-    "status": "passedOver",
-    "message": "Can come today."
-  },
-  {
-    "id": "bid-0309",
-    "jobId": "seed-139",
-    "workerId": "user-014",
-    "fare": 5000,
-    "hoursAgo": 8.9,
-    "status": "accepted"
-  },
-  {
-    "id": "bid-0287",
+    "id": "bid-0289",
     "jobId": "seed-073",
     "workerId": "user-049",
     "fare": 3500,
@@ -2469,24 +2573,7 @@
     "message": "Done this many times."
   },
   {
-    "id": "bid-0341",
-    "jobId": "seed-142",
-    "workerId": "user-014",
-    "fare": 6000,
-    "hoursAgo": 8.8,
-    "status": "passedOver"
-  },
-  {
-    "id": "bid-0087",
-    "jobId": "seed-134",
-    "workerId": "user-001",
-    "fare": 800,
-    "hoursAgo": 8.5,
-    "status": "offered",
-    "message": "Live nearby, can be there in 20 minutes."
-  },
-  {
-    "id": "bid-0243",
+    "id": "bid-0245",
     "jobId": "seed-041",
     "workerId": "user-055",
     "fare": 3500,
@@ -2494,15 +2581,7 @@
     "status": "offered"
   },
   {
-    "id": "bid-0211",
-    "jobId": "seed-173",
-    "workerId": "user-041",
-    "fare": 11000,
-    "hoursAgo": 8.3,
-    "status": "offered"
-  },
-  {
-    "id": "bid-0289",
+    "id": "bid-0291",
     "jobId": "seed-073",
     "workerId": "user-025",
     "fare": 2000,
@@ -2510,33 +2589,66 @@
     "status": "offered"
   },
   {
-    "id": "bid-0186",
-    "jobId": "seed-033",
-    "workerId": "user-048",
-    "fare": 35000,
-    "hoursAgo": 8.1,
-    "status": "passedOver",
+    "id": "bid-0177",
+    "jobId": "seed-082",
+    "workerId": "user-047",
+    "fare": 6000,
+    "hoursAgo": 8.2,
+    "status": "offered",
     "message": "Live nearby, can be there in 20 minutes."
   },
   {
-    "id": "bid-0305",
-    "jobId": "seed-029",
-    "workerId": "user-007",
-    "fare": 4500,
-    "hoursAgo": 7.9,
-    "status": "offered",
+    "id": "bid-0003",
+    "jobId": "seed-040",
+    "workerId": "user-009",
+    "fare": 2500,
+    "hoursAgo": 8.1,
+    "status": "accepted",
     "message": "Can bring my own material."
   },
   {
-    "id": "bid-0209",
-    "jobId": "seed-098",
-    "workerId": "user-058",
-    "fare": 4500,
+    "id": "bid-0134",
+    "jobId": "seed-128",
+    "workerId": "user-014",
+    "fare": 8000,
+    "hoursAgo": 8.1,
+    "status": "offered"
+  },
+  {
+    "id": "bid-0063",
+    "jobId": "seed-092",
+    "workerId": "user-017",
+    "fare": 11000,
+    "hoursAgo": 8.0,
+    "status": "offered"
+  },
+  {
+    "id": "bid-0355",
+    "jobId": "seed-012",
+    "workerId": "user-030",
+    "fare": 55000,
+    "hoursAgo": 8.0,
+    "status": "offered"
+  },
+  {
+    "id": "bid-0086",
+    "jobId": "seed-003",
+    "workerId": "user-005",
+    "fare": 2500,
     "hoursAgo": 7.8,
     "status": "offered"
   },
   {
-    "id": "bid-0248",
+    "id": "bid-0216",
+    "jobId": "seed-173",
+    "workerId": "user-052",
+    "fare": 18000,
+    "hoursAgo": 7.8,
+    "status": "offered",
+    "message": "Can come today."
+  },
+  {
+    "id": "bid-0250",
     "jobId": "seed-120",
     "workerId": "user-015",
     "fare": 3000,
@@ -2545,25 +2657,88 @@
     "message": "Free after 2pm."
   },
   {
-    "id": "bid-0019",
-    "jobId": "seed-006",
-    "workerId": "user-019",
+    "id": "bid-0064",
+    "jobId": "seed-092",
+    "workerId": "user-059",
+    "fare": 7000,
+    "hoursAgo": 7.7,
+    "status": "offered",
+    "message": "Free after 2pm."
+  },
+  {
+    "id": "bid-0085",
+    "jobId": "seed-003",
+    "workerId": "user-048",
+    "fare": 4500,
+    "hoursAgo": 7.7,
+    "status": "offered",
+    "message": "Can come today."
+  },
+  {
+    "id": "bid-0179",
+    "jobId": "seed-082",
+    "workerId": "user-008",
+    "fare": 6000,
+    "hoursAgo": 7.6,
+    "status": "offered",
+    "message": "I have the tools with me."
+  },
+  {
+    "id": "bid-0184",
+    "jobId": "seed-048",
+    "workerId": "user-007",
     "fare": 2000,
     "hoursAgo": 7.6,
-    "status": "accepted",
+    "status": "passedOver",
+    "message": "Can bring my own material."
+  },
+  {
+    "id": "bid-0185",
+    "jobId": "seed-048",
+    "workerId": "user-028",
+    "fare": 5000,
+    "hoursAgo": 7.5,
+    "status": "passedOver",
+    "message": "Can come today."
+  },
+  {
+    "id": "bid-0336",
+    "jobId": "seed-161",
+    "workerId": "user-056",
+    "fare": 2000,
+    "hoursAgo": 7.5,
+    "status": "passedOver",
+    "message": "Done this many times."
+  },
+  {
+    "id": "bid-0023",
+    "jobId": "seed-015",
+    "workerId": "user-045",
+    "fare": 1500,
+    "hoursAgo": 7.2,
+    "status": "passedOver",
     "message": "Price includes the parts."
   },
   {
-    "id": "bid-0143",
-    "jobId": "seed-156",
-    "workerId": "user-058",
-    "fare": 10000,
-    "hoursAgo": 7.3,
-    "status": "offered",
-    "message": "Tomorrow morning suits me better."
+    "id": "bid-0168",
+    "jobId": "seed-093",
+    "workerId": "user-052",
+    "fare": 25000,
+    "hoursAgo": 7.2,
+    "status": "passedOver",
+    "message": "Can come today."
   },
   {
-    "id": "bid-0244",
+    "id": "bid-0095",
+    "jobId": "seed-009",
+    "workerId": "user-037",
+    "fare": 2500,
+    "hoursAgo": 7.0,
+    "status": "offered",
+    "message": "Free after 2pm."
+  },
+  {
+    "id": "bid-0246",
     "jobId": "seed-041",
     "workerId": "user-059",
     "fare": 3000,
@@ -2572,7 +2747,7 @@
     "message": "Can bring my own material."
   },
   {
-    "id": "bid-0251",
+    "id": "bid-0253",
     "jobId": "seed-036",
     "workerId": "user-012",
     "fare": 20000,
@@ -2581,7 +2756,7 @@
     "message": "Live nearby, can be there in 20 minutes."
   },
   {
-    "id": "bid-0277",
+    "id": "bid-0279",
     "jobId": "seed-066",
     "workerId": "user-028",
     "fare": 40000,
@@ -2590,25 +2765,7 @@
     "message": "Done this many times."
   },
   {
-    "id": "bid-0303",
-    "jobId": "seed-029",
-    "workerId": "user-055",
-    "fare": 5000,
-    "hoursAgo": 7.0,
-    "status": "offered",
-    "message": "Tomorrow morning suits me better."
-  },
-  {
-    "id": "bid-0021",
-    "jobId": "seed-006",
-    "workerId": "user-009",
-    "fare": 1500,
-    "hoursAgo": 6.9,
-    "status": "passedOver",
-    "message": "Price includes the parts."
-  },
-  {
-    "id": "bid-0218",
+    "id": "bid-0220",
     "jobId": "seed-162",
     "workerId": "user-060",
     "fare": 13000,
@@ -2617,7 +2774,7 @@
     "message": "Can bring my own material."
   },
   {
-    "id": "bid-0294",
+    "id": "bid-0296",
     "jobId": "seed-042",
     "workerId": "user-047",
     "fare": 3000,
@@ -2626,7 +2783,49 @@
     "message": "Done this many times."
   },
   {
-    "id": "bid-0219",
+    "id": "bid-0356",
+    "jobId": "seed-012",
+    "workerId": "user-023",
+    "fare": 45000,
+    "hoursAgo": 6.9,
+    "status": "offered"
+  },
+  {
+    "id": "bid-0133",
+    "jobId": "seed-128",
+    "workerId": "user-057",
+    "fare": 7000,
+    "hoursAgo": 6.6,
+    "status": "offered",
+    "message": "Can come today."
+  },
+  {
+    "id": "bid-0173",
+    "jobId": "seed-020",
+    "workerId": "user-004",
+    "fare": 5000,
+    "hoursAgo": 6.6,
+    "status": "passedOver"
+  },
+  {
+    "id": "bid-0183",
+    "jobId": "seed-048",
+    "workerId": "user-014",
+    "fare": 2000,
+    "hoursAgo": 6.6,
+    "status": "accepted",
+    "message": "Can come today."
+  },
+  {
+    "id": "bid-0188",
+    "jobId": "seed-033",
+    "workerId": "user-006",
+    "fare": 20000,
+    "hoursAgo": 6.5,
+    "status": "offered"
+  },
+  {
+    "id": "bid-0221",
     "jobId": "seed-162",
     "workerId": "user-028",
     "fare": 8000,
@@ -2634,105 +2833,95 @@
     "status": "passedOver"
   },
   {
-    "id": "bid-0366",
-    "jobId": "seed-157",
-    "workerId": "user-030",
-    "fare": 4000,
-    "hoursAgo": 6.4,
-    "status": "offered",
-    "message": "Price includes the parts."
-  },
-  {
-    "id": "bid-0308",
-    "jobId": "seed-032",
-    "workerId": "user-046",
-    "fare": 6000,
-    "hoursAgo": 6.3,
-    "status": "offered"
-  },
-  {
-    "id": "bid-0340",
-    "jobId": "seed-142",
-    "workerId": "user-058",
-    "fare": 9000,
-    "hoursAgo": 6.3,
-    "status": "accepted",
-    "message": "Can bring my own material."
-  },
-  {
-    "id": "bid-0175",
-    "jobId": "seed-082",
-    "workerId": "user-026",
-    "fare": 6000,
+    "id": "bid-0022",
+    "jobId": "seed-015",
+    "workerId": "user-019",
+    "fare": 1000,
     "hoursAgo": 6.1,
-    "status": "offered",
-    "message": "Can bring my own material."
-  },
-  {
-    "id": "bid-0133",
-    "jobId": "seed-037",
-    "workerId": "user-015",
-    "fare": 25000,
-    "hoursAgo": 6.0,
-    "status": "passedOver",
-    "message": "Price includes the parts."
-  },
-  {
-    "id": "bid-0163",
-    "jobId": "seed-093",
-    "workerId": "user-034",
-    "fare": 25000,
-    "hoursAgo": 5.9,
-    "status": "offered",
+    "status": "accepted",
     "message": "Done this many times."
   },
   {
-    "id": "bid-0139",
-    "jobId": "seed-055",
-    "workerId": "user-040",
+    "id": "bid-0122",
+    "jobId": "seed-001",
+    "workerId": "user-045",
     "fare": 4500,
-    "hoursAgo": 5.7,
+    "hoursAgo": 6.1,
     "status": "offered",
-    "message": "Price includes the parts."
+    "message": "Tomorrow morning suits me better."
   },
   {
-    "id": "bid-0330",
-    "jobId": "seed-026",
-    "workerId": "user-021",
-    "fare": 8000,
+    "id": "bid-0208",
+    "jobId": "seed-115",
+    "workerId": "user-008",
+    "fare": 6000,
+    "hoursAgo": 6.0,
+    "status": "offered",
+    "message": "Tomorrow morning suits me better."
+  },
+  {
+    "id": "bid-0340",
+    "jobId": "seed-018",
+    "workerId": "user-030",
+    "fare": 4000,
+    "hoursAgo": 6.0,
+    "status": "offered"
+  },
+  {
+    "id": "bid-0172",
+    "jobId": "seed-020",
+    "workerId": "user-001",
+    "fare": 4500,
+    "hoursAgo": 5.7,
+    "status": "passedOver"
+  },
+  {
+    "id": "bid-0143",
+    "jobId": "seed-167",
+    "workerId": "user-058",
+    "fare": 20000,
     "hoursAgo": 5.6,
     "status": "offered",
     "message": "Tomorrow morning suits me better."
   },
   {
-    "id": "bid-0144",
-    "jobId": "seed-156",
-    "workerId": "user-023",
+    "id": "bid-0343",
+    "jobId": "seed-018",
+    "workerId": "user-043",
+    "fare": 4500,
+    "hoursAgo": 5.6,
+    "status": "offered",
+    "message": "I have the tools with me."
+  },
+  {
+    "id": "bid-0030",
+    "jobId": "seed-005",
+    "workerId": "user-009",
     "fare": 8000,
     "hoursAgo": 5.5,
     "status": "offered",
+    "message": "Price includes the parts."
+  },
+  {
+    "id": "bid-0189",
+    "jobId": "seed-043",
+    "workerId": "user-035",
+    "fare": 10000,
+    "hoursAgo": 5.5,
+    "status": "offered",
+    "message": "Price includes the parts."
+  },
+  {
+    "id": "bid-0301",
+    "jobId": "seed-029",
+    "workerId": "user-008",
+    "fare": 8000,
+    "hoursAgo": 5.5,
+    "status": "accepted",
     "message": "Can come today."
   },
   {
-    "id": "bid-0176",
-    "jobId": "seed-082",
-    "workerId": "user-058",
-    "fare": 8000,
-    "hoursAgo": 5.5,
-    "status": "offered",
-    "message": "Live nearby, can be there in 20 minutes."
-  },
-  {
-    "id": "bid-0006",
-    "jobId": "seed-040",
-    "workerId": "user-020",
-    "fare": 1500,
-    "hoursAgo": 5.4,
-    "status": "passedOver",
-    "message": "Can bring my own material."
-  },
-  {
-    "id": "bid-0278",
+    "id": "bid-0280",
     "jobId": "seed-066",
     "workerId": "user-029",
     "fare": 35000,
@@ -2740,93 +2929,42 @@
     "status": "passedOver"
   },
   {
-    "id": "bid-0345",
-    "jobId": "seed-101",
-    "workerId": "user-051",
-    "fare": 15000,
-    "hoursAgo": 5.4,
-    "status": "offered",
-    "message": "Can bring my own material."
-  },
-  {
-    "id": "bid-0332",
-    "jobId": "seed-026",
-    "workerId": "user-058",
-    "fare": 8000,
-    "hoursAgo": 5.3,
-    "status": "offered",
-    "message": "Can come today."
-  },
-  {
-    "id": "bid-0028",
-    "jobId": "seed-015",
-    "workerId": "user-009",
-    "fare": 1500,
-    "hoursAgo": 5.1,
-    "status": "offered"
-  },
-  {
-    "id": "bid-0335",
-    "jobId": "seed-161",
-    "workerId": "user-053",
-    "fare": 1500,
-    "hoursAgo": 5.1,
-    "status": "passedOver"
-  },
-  {
-    "id": "bid-0107",
-    "jobId": "seed-016",
-    "workerId": "user-008",
+    "id": "bid-0154",
+    "jobId": "seed-182",
+    "workerId": "user-060",
     "fare": 9000,
-    "hoursAgo": 5.0,
-    "status": "offered"
-  },
-  {
-    "id": "bid-0007",
-    "jobId": "seed-040",
-    "workerId": "user-035",
-    "fare": 1500,
-    "hoursAgo": 4.9,
-    "status": "passedOver",
-    "message": "I have the tools with me."
-  },
-  {
-    "id": "bid-0108",
-    "jobId": "seed-016",
-    "workerId": "user-024",
-    "fare": 10000,
-    "hoursAgo": 4.9,
-    "status": "offered",
-    "message": "Free after 2pm."
-  },
-  {
-    "id": "bid-0142",
-    "jobId": "seed-156",
-    "workerId": "user-050",
-    "fare": 8000,
-    "hoursAgo": 4.9,
-    "status": "offered"
-  },
-  {
-    "id": "bid-0089",
-    "jobId": "seed-003",
-    "workerId": "user-007",
-    "fare": 16000,
-    "hoursAgo": 4.8,
+    "hoursAgo": 5.3,
     "status": "offered",
     "message": "Tomorrow morning suits me better."
   },
   {
-    "id": "bid-0138",
-    "jobId": "seed-055",
-    "workerId": "user-010",
-    "fare": 4500,
-    "hoursAgo": 4.8,
+    "id": "bid-0156",
+    "jobId": "seed-021",
+    "workerId": "user-028",
+    "fare": 15000,
+    "hoursAgo": 5.2,
     "status": "offered",
-    "message": "I have the tools with me."
+    "message": "Done this many times."
   },
   {
-    "id": "bid-0293",
+    "id": "bid-0132",
+    "jobId": "seed-128",
+    "workerId": "user-041",
+    "fare": 11000,
+    "hoursAgo": 5.0,
+    "status": "offered"
+  },
+  {
+    "id": "bid-0167",
+    "jobId": "seed-093",
+    "workerId": "user-055",
+    "fare": 20000,
+    "hoursAgo": 4.8,
+    "status": "passedOver",
+    "message": "Price includes the parts."
+  },
+  {
+    "id": "bid-0295",
     "jobId": "seed-042",
     "workerId": "user-035",
     "fare": 3000,
@@ -2835,25 +2973,7 @@
     "message": "Can come today."
   },
   {
-    "id": "bid-0131",
-    "jobId": "seed-037",
-    "workerId": "user-056",
-    "fare": 25000,
-    "hoursAgo": 4.7,
-    "status": "accepted",
-    "message": "Tomorrow morning suits me better."
-  },
-  {
-    "id": "bid-0132",
-    "jobId": "seed-037",
-    "workerId": "user-044",
-    "fare": 19000,
-    "hoursAgo": 4.7,
-    "status": "passedOver",
-    "message": "Can come today."
-  },
-  {
-    "id": "bid-0259",
+    "id": "bid-0261",
     "jobId": "seed-132",
     "workerId": "user-019",
     "fare": 7000,
@@ -2862,146 +2982,95 @@
     "message": "Can come today."
   },
   {
-    "id": "bid-0344",
-    "jobId": "seed-018",
-    "workerId": "user-013",
-    "fare": 3500,
+    "id": "bid-0165",
+    "jobId": "seed-093",
+    "workerId": "user-026",
+    "fare": 20000,
     "hoursAgo": 4.5,
-    "status": "offered",
-    "message": "Can come today."
-  },
-  {
-    "id": "bid-0174",
-    "jobId": "seed-082",
-    "workerId": "user-019",
-    "fare": 9000,
-    "hoursAgo": 4.2,
-    "status": "offered",
-    "message": "Price includes the parts."
-  },
-  {
-    "id": "bid-0136",
-    "jobId": "seed-128",
-    "workerId": "user-031",
-    "fare": 8000,
-    "hoursAgo": 4.1,
-    "status": "offered",
-    "message": "Tomorrow morning suits me better."
-  },
-  {
-    "id": "bid-0349",
-    "jobId": "seed-169",
-    "workerId": "user-051",
-    "fare": 8000,
-    "hoursAgo": 4.1,
-    "status": "offered",
-    "message": "Free after 2pm."
-  },
-  {
-    "id": "bid-0206",
-    "jobId": "seed-034",
-    "workerId": "user-013",
-    "fare": 40000,
-    "hoursAgo": 4.0,
-    "status": "offered",
-    "message": "Free after 2pm."
-  },
-  {
-    "id": "bid-0005",
-    "jobId": "seed-040",
-    "workerId": "user-009",
-    "fare": 2500,
-    "hoursAgo": 3.7,
     "status": "accepted"
   },
   {
-    "id": "bid-0088",
-    "jobId": "seed-134",
-    "workerId": "user-020",
-    "fare": 800,
-    "hoursAgo": 3.6,
+    "id": "bid-0144",
+    "jobId": "seed-167",
+    "workerId": "user-023",
+    "fare": 16000,
+    "hoursAgo": 4.2,
     "status": "offered",
     "message": "Can come today."
   },
   {
-    "id": "bid-0173",
-    "jobId": "seed-145",
-    "workerId": "user-004",
-    "fare": 3000,
-    "hoursAgo": 3.6,
-    "status": "passedOver"
-  },
-  {
-    "id": "bid-0304",
-    "jobId": "seed-029",
-    "workerId": "user-020",
-    "fare": 3000,
-    "hoursAgo": 3.6,
-    "status": "offered",
-    "message": "Price includes the parts."
-  },
-  {
-    "id": "bid-0106",
-    "jobId": "seed-016",
-    "workerId": "user-031",
-    "fare": 10000,
-    "hoursAgo": 3.4,
+    "id": "bid-0178",
+    "jobId": "seed-082",
+    "workerId": "user-014",
+    "fare": 6000,
+    "hoursAgo": 3.7,
     "status": "offered"
   },
   {
-    "id": "bid-0351",
-    "jobId": "seed-012",
-    "workerId": "user-028",
-    "fare": 65000,
-    "hoursAgo": 3.4,
-    "status": "offered",
-    "message": "Price includes the parts."
-  },
-  {
-    "id": "bid-0053",
-    "jobId": "seed-165",
-    "workerId": "user-016",
-    "fare": 2000,
-    "hoursAgo": 3.2,
+    "id": "bid-0166",
+    "jobId": "seed-093",
+    "workerId": "user-006",
+    "fare": 30000,
+    "hoursAgo": 3.6,
     "status": "passedOver",
-    "message": "Done this many times."
+    "message": "Can come today."
   },
   {
-    "id": "bid-0068",
-    "jobId": "seed-092",
-    "workerId": "user-044",
-    "fare": 10000,
-    "hoursAgo": 3.2,
-    "status": "offered"
-  },
-  {
-    "id": "bid-0156",
-    "jobId": "seed-095",
-    "workerId": "user-028",
-    "fare": 14000,
-    "hoursAgo": 3.2,
+    "id": "bid-0341",
+    "jobId": "seed-018",
+    "workerId": "user-005",
+    "fare": 5000,
+    "hoursAgo": 3.6,
     "status": "offered",
-    "message": "Done this many times."
+    "message": "Free after 2pm."
   },
   {
-    "id": "bid-0172",
-    "jobId": "seed-145",
-    "workerId": "user-001",
-    "fare": 2500,
-    "hoursAgo": 3.2,
-    "status": "passedOver"
+    "id": "bid-0182",
+    "jobId": "seed-146",
+    "workerId": "user-049",
+    "fare": 7000,
+    "hoursAgo": 3.4,
+    "status": "offered",
+    "message": "Can come today."
   },
   {
-    "id": "bid-0321",
-    "jobId": "seed-108",
+    "id": "bid-0339",
+    "jobId": "seed-142",
+    "workerId": "user-006",
+    "fare": 8000,
+    "hoursAgo": 3.4,
+    "status": "accepted",
+    "message": "Free after 2pm."
+  },
+  {
+    "id": "bid-0171",
+    "jobId": "seed-020",
     "workerId": "user-030",
-    "fare": 3000,
-    "hoursAgo": 3.0,
-    "status": "offered",
+    "fare": 3500,
+    "hoursAgo": 3.3,
+    "status": "accepted",
     "message": "I have the tools with me."
   },
   {
-    "id": "bid-0247",
+    "id": "bid-0048",
+    "jobId": "seed-165",
+    "workerId": "user-007",
+    "fare": 2000,
+    "hoursAgo": 3.1,
+    "status": "accepted",
+    "message": "Can bring my own material."
+  },
+  {
+    "id": "bid-0195",
+    "jobId": "seed-124",
+    "workerId": "user-007",
+    "fare": 4000,
+    "hoursAgo": 3.1,
+    "status": "offered",
+    "message": "Done this many times."
+  },
+  {
+    "id": "bid-0249",
     "jobId": "seed-120",
     "workerId": "user-032",
     "fare": 4000,
@@ -3010,7 +3079,33 @@
     "message": "Live nearby, can be there in 20 minutes."
   },
   {
-    "id": "bid-0292",
+    "id": "bid-0191",
+    "jobId": "seed-043",
+    "workerId": "user-040",
+    "fare": 7000,
+    "hoursAgo": 2.8,
+    "status": "offered",
+    "message": "I have the tools with me."
+  },
+  {
+    "id": "bid-0084",
+    "jobId": "seed-134",
+    "workerId": "user-048",
+    "fare": 1000,
+    "hoursAgo": 2.7,
+    "status": "offered",
+    "message": "I have the tools with me."
+  },
+  {
+    "id": "bid-0051",
+    "jobId": "seed-165",
+    "workerId": "user-016",
+    "fare": 2000,
+    "hoursAgo": 2.6,
+    "status": "passedOver"
+  },
+  {
+    "id": "bid-0294",
     "jobId": "seed-042",
     "workerId": "user-026",
     "fare": 2500,
@@ -3018,42 +3113,43 @@
     "status": "offered"
   },
   {
-    "id": "bid-0052",
+    "id": "bid-0049",
     "jobId": "seed-165",
-    "workerId": "user-018",
-    "fare": 2500,
-    "hoursAgo": 2.5,
-    "status": "passedOver"
+    "workerId": "user-026",
+    "fare": 2000,
+    "hoursAgo": 2.2,
+    "status": "passedOver",
+    "message": "Can bring my own material."
+  },
+  {
+    "id": "bid-0076",
+    "jobId": "seed-118",
+    "workerId": "user-001",
+    "fare": 3500,
+    "hoursAgo": 2.2,
+    "status": "passedOver",
+    "message": "Live nearby, can be there in 20 minutes."
+  },
+  {
+    "id": "bid-0210",
+    "jobId": "seed-034",
+    "workerId": "user-031",
+    "fare": 35000,
+    "hoursAgo": 2.2,
+    "status": "offered",
+    "message": "Tomorrow morning suits me better."
   },
   {
     "id": "bid-0050",
     "jobId": "seed-165",
-    "workerId": "user-046",
-    "fare": 1500,
-    "hoursAgo": 2.4,
-    "status": "accepted",
-    "message": "Done this many times."
-  },
-  {
-    "id": "bid-0182",
-    "jobId": "seed-048",
-    "workerId": "user-056",
-    "fare": 3000,
-    "hoursAgo": 2.3,
-    "status": "offered",
-    "message": "Can bring my own material."
-  },
-  {
-    "id": "bid-0051",
-    "jobId": "seed-165",
-    "workerId": "user-050",
-    "fare": 2000,
+    "workerId": "user-033",
+    "fare": 2500,
     "hoursAgo": 2.1,
     "status": "passedOver",
     "message": "Price includes the parts."
   },
   {
-    "id": "bid-0291",
+    "id": "bid-0293",
     "jobId": "seed-042",
     "workerId": "user-026",
     "fare": 3500,
@@ -3062,93 +3158,85 @@
     "message": "Done this many times."
   },
   {
-    "id": "bid-0302",
-    "jobId": "seed-029",
-    "workerId": "user-022",
+    "id": "bid-0024",
+    "jobId": "seed-015",
+    "workerId": "user-009",
     "fare": 9000,
-    "hoursAgo": 2.1,
-    "status": "offered",
-    "message": "Tomorrow morning suits me better."
+    "hoursAgo": 1.7,
+    "status": "passedOver",
+    "message": "Price includes the parts."
   },
   {
-    "id": "bid-0171",
-    "jobId": "seed-145",
-    "workerId": "user-030",
-    "fare": 2000,
-    "hoursAgo": 2.0,
+    "id": "bid-0125",
+    "jobId": "seed-121",
+    "workerId": "user-017",
+    "fare": 8000,
+    "hoursAgo": 1.7,
     "status": "accepted",
     "message": "I have the tools with me."
   },
   {
-    "id": "bid-0091",
-    "jobId": "seed-003",
-    "workerId": "user-040",
-    "fare": 14000,
+    "id": "bid-0157",
+    "jobId": "seed-163",
+    "workerId": "user-002",
+    "fare": 2500,
+    "hoursAgo": 1.7,
+    "status": "offered"
+  },
+  {
+    "id": "bid-0175",
+    "jobId": "seed-145",
+    "workerId": "user-026",
+    "fare": 2000,
     "hoursAgo": 1.7,
     "status": "offered",
     "message": "Can bring my own material."
   },
   {
-    "id": "bid-0157",
-    "jobId": "seed-058",
-    "workerId": "user-002",
-    "fare": 15000,
-    "hoursAgo": 1.5,
-    "status": "offered"
-  },
-  {
-    "id": "bid-0164",
-    "jobId": "seed-093",
-    "workerId": "user-021",
-    "fare": 19000,
-    "hoursAgo": 1.4,
-    "status": "offered"
-  },
-  {
-    "id": "bid-0162",
-    "jobId": "seed-093",
-    "workerId": "user-060",
+    "id": "bid-0211",
+    "jobId": "seed-034",
+    "workerId": "user-058",
     "fare": 25000,
-    "hoursAgo": 1.3,
+    "hoursAgo": 1.7,
+    "status": "offered"
+  },
+  {
+    "id": "bid-0181",
+    "jobId": "seed-146",
+    "workerId": "user-043",
+    "fare": 6000,
+    "hoursAgo": 1.6,
     "status": "offered",
     "message": "Can bring my own material."
   },
   {
-    "id": "bid-0160",
-    "jobId": "seed-131",
-    "workerId": "user-036",
-    "fare": 2500,
-    "hoursAgo": 1.2,
-    "status": "offered"
-  },
-  {
-    "id": "bid-0213",
-    "jobId": "seed-173",
-    "workerId": "user-049",
-    "fare": 18000,
-    "hoursAgo": 1.2,
+    "id": "bid-0176",
+    "jobId": "seed-145",
+    "workerId": "user-058",
+    "fare": 3000,
+    "hoursAgo": 1.5,
     "status": "offered",
     "message": "Live nearby, can be there in 20 minutes."
   },
   {
-    "id": "bid-0134",
-    "jobId": "seed-149",
-    "workerId": "user-053",
-    "fare": 11000,
-    "hoursAgo": 1.1,
+    "id": "bid-0169",
+    "jobId": "seed-103",
+    "workerId": "user-039",
+    "fare": 6000,
+    "hoursAgo": 1.2,
     "status": "offered"
   },
   {
-    "id": "bid-0130",
-    "jobId": "seed-121",
-    "workerId": "user-017",
-    "fare": 7000,
-    "hoursAgo": 1.0,
-    "status": "accepted",
-    "message": "I have the tools with me."
+    "id": "bid-0174",
+    "jobId": "seed-145",
+    "workerId": "user-019",
+    "fare": 3500,
+    "hoursAgo": 1.2,
+    "status": "offered",
+    "message": "Price includes the parts."
   },
   {
-    "id": "bid-0233",
+    "id": "bid-0235",
     "jobId": "seed-097",
     "workerId": "user-005",
     "fare": 14000,
@@ -3157,46 +3245,19 @@
     "message": "Can bring my own material."
   },
   {
-    "id": "bid-0236",
-    "jobId": "seed-002",
-    "workerId": "user-019",
-    "fare": 2000,
-    "hoursAgo": 0.8,
-    "status": "offered",
-    "message": "Live nearby, can be there in 20 minutes."
-  },
-  {
-    "id": "bid-0339",
-    "jobId": "seed-088",
-    "workerId": "user-013",
-    "fare": 18000,
-    "hoursAgo": 0.8,
-    "status": "offered",
-    "message": "Tomorrow morning suits me better."
-  },
-  {
-    "id": "bid-0170",
-    "jobId": "seed-020",
-    "workerId": "user-050",
+    "id": "bid-0160",
+    "jobId": "seed-109",
+    "workerId": "user-036",
     "fare": 3500,
-    "hoursAgo": 0.5,
-    "status": "offered",
-    "message": "Done this many times."
-  },
-  {
-    "id": "bid-0169",
-    "jobId": "seed-020",
-    "workerId": "user-039",
-    "fare": 4000,
-    "hoursAgo": 0.4,
+    "hoursAgo": 0.7,
     "status": "offered"
   },
   {
-    "id": "bid-0181",
-    "jobId": "seed-048",
-    "workerId": "user-043",
-    "fare": 10000,
-    "hoursAgo": 0.4,
+    "id": "bid-0103",
+    "jobId": "seed-016",
+    "workerId": "user-054",
+    "fare": 7000,
+    "hoursAgo": 0.5,
     "status": "offered",
     "message": "Can come today."
   }

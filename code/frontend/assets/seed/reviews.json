@@ -93,7 +93,7 @@
     "phoneVerified": true,
     "simNameMatches": true,
     "cnicMasked": "*****-*****58-7",
-    "cnicName": "Noor Noor",
+    "cnicName": "Maryam Ahmed",
     "cnicDaysAgo": 266,
     "phone": "+923332662339",
     "phoneDaysAgo": 102,
@@ -120,7 +120,7 @@
     "phoneVerified": false,
     "simNameMatches": true,
     "cnicMasked": "*****-*****37-7",
-    "cnicName": "Maryam Ahmed",
+    "cnicName": "Mehwish Butt",
     "cnicDaysAgo": 295
   },
   {
@@ -131,7 +131,7 @@
     "phoneVerified": true,
     "simNameMatches": true,
     "cnicMasked": "*****-*****28-1",
-    "cnicName": "Mehwish Butt",
+    "cnicName": "Adnan Farooq",
     "cnicDaysAgo": 56,
     "phone": "+923111585325",
     "phoneDaysAgo": 43
@@ -144,7 +144,7 @@
     "phoneVerified": true,
     "simNameMatches": true,
     "cnicMasked": "*****-*****84-7",
-    "cnicName": "Adnan Farooq",
+    "cnicName": "Sana Raza",
     "cnicDaysAgo": 302,
     "phone": "+923009404563",
     "phoneDaysAgo": 193
@@ -157,7 +157,7 @@
     "phoneVerified": true,
     "simNameMatches": true,
     "cnicMasked": "*****-*****66-8",
-    "cnicName": "Sana Raza",
+    "cnicName": "Tariq Iqbal",
     "cnicDaysAgo": 30,
     "phone": "+923219153292",
     "phoneDaysAgo": 15
@@ -170,7 +170,7 @@
     "phoneVerified": true,
     "simNameMatches": true,
     "cnicMasked": "*****-*****65-3",
-    "cnicName": "Tariq Iqbal",
+    "cnicName": "Hina Iqbal",
     "cnicDaysAgo": 138,
     "phone": "+923325844053",
     "phoneDaysAgo": 50
@@ -183,7 +183,7 @@
     "phoneVerified": true,
     "simNameMatches": true,
     "cnicMasked": "*****-*****94-7",
-    "cnicName": "Hina Iqbal",
+    "cnicName": "Mehwish Qureshi",
     "cnicDaysAgo": 164,
     "phone": "+923009847133",
     "phoneDaysAgo": 72
@@ -222,7 +222,7 @@
     "phoneVerified": true,
     "simNameMatches": true,
     "cnicMasked": "*****-*****53-1",
-    "cnicName": "Mehwish Qureshi",
+    "cnicName": "Zubair Butt",
     "cnicDaysAgo": 270,
     "phone": "+923213744605",
     "phoneDaysAgo": 207
@@ -235,7 +235,7 @@
     "phoneVerified": true,
     "simNameMatches": true,
     "cnicMasked": "*****-*****17-9",
-    "cnicName": "Hina Butt",
+    "cnicName": "Salman Iqbal",
     "cnicDaysAgo": 41,
     "phone": "+923453699249",
     "phoneDaysAgo": 23
@@ -248,7 +248,7 @@
     "phoneVerified": true,
     "simNameMatches": true,
     "cnicMasked": "*****-*****43-6",
-    "cnicName": "Zubair Butt",
+    "cnicName": "Imran Noor",
     "cnicDaysAgo": 40,
     "phone": "+923453652903",
     "phoneDaysAgo": 19
@@ -261,7 +261,7 @@
     "phoneVerified": true,
     "simNameMatches": true,
     "cnicMasked": "*****-*****25-5",
-    "cnicName": "Salman Iqbal",
+    "cnicName": "Maryam Malik",
     "cnicDaysAgo": 347,
     "phone": "+923323492568",
     "phoneDaysAgo": 296
@@ -274,22 +274,35 @@
     "phoneVerified": true,
     "simNameMatches": true,
     "cnicMasked": "*****-*****14-2",
-    "cnicName": "Imran Noor",
+    "cnicName": "Adnan Shah",
     "cnicDaysAgo": 136,
     "phone": "+923335848016",
     "phoneDaysAgo": 123
   },
   {
-    "userId": "user-047",
+    "userId": "user-048",
     "status": "approved",
     "cnicOnFile": true,
     "cnicPlausible": true,
     "phoneVerified": true,
     "simNameMatches": true,
-    "cnicMasked": "*****-*****63-5",
-    "cnicName": "Uzma Butt",
-    "cnicDaysAgo": 244,
-    "phone": "+923339156434",
-    "phoneDaysAgo": 17
+    "cnicMasked": "*****-*****39-8",
+    "cnicName": "Rabia Sheikh",
+    "cnicDaysAgo": 310,
+    "phone": "+923211598960",
+    "phoneDaysAgo": 137
+  },
+  {
+    "userId": "user-056",
+    "status": "approved",
+    "cnicOnFile": true,
+    "cnicPlausible": true,
+    "phoneVerified": true,
+    "simNameMatches": true,
+    "cnicMasked": "*****-*****55-1",
+    "cnicName": "Usman Shah",
+    "cnicDaysAgo": 53,
+    "phone": "+923327854611",
+    "phoneDaysAgo": 28
   }
 ]
