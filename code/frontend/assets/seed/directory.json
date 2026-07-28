@@ -1,0 +1,405 @@
+[
+  {
+    "workerId": "user-001",
+    "headline": "Home and office cleaning, two-person team",
+    "remoteOnly": false,
+    "serviceRadiusMetres": 12000,
+    "subscription": {
+      "plan": "yearly",
+      "startedDaysAgo": 365,
+      "endsInDays": 240
+    },
+    "services": [
+      {
+        "id": "svc-01-1",
+        "tag": "cleaning",
+        "title": "Whole-house clean",
+        "priceRupees": 4500,
+        "description": "Three rooms, kitchen and bathrooms."
+      },
+      {
+        "id": "svc-01-2",
+        "tag": "cleaning",
+        "title": "Kitchen deep clean",
+        "priceRupees": 2500
+      },
+      {
+        "id": "svc-01-3",
+        "tag": "cleaning",
+        "title": "Sofa and carpet shampoo",
+        "priceRupees": 3500,
+        "description": "Per room."
+      }
+    ],
+    "credentials": [
+      {
+        "id": "cred-01-1",
+        "kind": "experience",
+        "title": "Nine years cleaning homes and offices"
+      }
+    ]
+  },
+  {
+    "workerId": "user-004",
+    "headline": "Property and family matters",
+    "remoteOnly": true,
+    "serviceRadiusMetres": 10000,
+    "subscription": {
+      "plan": "yearly",
+      "startedDaysAgo": 365,
+      "endsInDays": 300
+    },
+    "services": [
+      {
+        "id": "svc-02-1",
+        "tag": "legal",
+        "title": "First consultation",
+        "priceRupees": 1500,
+        "description": "Half an hour, by phone or in person."
+      },
+      {
+        "id": "svc-02-2",
+        "tag": "legal",
+        "title": "Property paper check",
+        "priceRupees": 6000,
+        "description": "Sale deed, mutation and encumbrance."
+      },
+      {
+        "id": "svc-02-3",
+        "tag": "legal",
+        "title": "Rent agreement drafting",
+        "priceRupees": 4000
+      }
+    ],
+    "credentials": [
+      {
+        "id": "cred-02-1",
+        "kind": "qualification",
+        "title": "LLB",
+        "issuer": "University of the Punjab",
+        "year": 2014
+      },
+      {
+        "id": "cred-02-2",
+        "kind": "membership",
+        "title": "Punjab Bar Council",
+        "year": 2015
+      }
+    ]
+  },
+  {
+    "workerId": "user-008",
+    "headline": "Bridal and party makeup, home visits",
+    "remoteOnly": false,
+    "serviceRadiusMetres": 15000,
+    "subscription": {
+      "plan": "monthly",
+      "startedDaysAgo": 30,
+      "endsInDays": 95
+    },
+    "services": [
+      {
+        "id": "svc-03-1",
+        "tag": "beauty",
+        "title": "Bridal makeup",
+        "priceRupees": 25000,
+        "description": "Includes trial and hair."
+      },
+      {
+        "id": "svc-03-2",
+        "tag": "beauty",
+        "title": "Party makeup",
+        "priceRupees": 6000
+      },
+      {
+        "id": "svc-03-3",
+        "tag": "beauty",
+        "title": "Home haircut",
+        "priceRupees": 1200
+      }
+    ],
+    "credentials": [
+      {
+        "id": "cred-03-1",
+        "kind": "certification",
+        "title": "Advanced bridal makeup",
+        "issuer": "Depilex",
+        "year": 2019
+      },
+      {
+        "id": "cred-03-2",
+        "kind": "experience",
+        "title": "Six years, over 200 brides"
+      }
+    ]
+  },
+  {
+    "workerId": "user-011",
+    "headline": "GP, home visits in the evening",
+    "remoteOnly": false,
+    "serviceRadiusMetres": 8000,
+    "subscription": {
+      "plan": "yearly",
+      "startedDaysAgo": 365,
+      "endsInDays": 180
+    },
+    "services": [
+      {
+        "id": "svc-04-1",
+        "tag": "medical",
+        "title": "Home visit",
+        "priceRupees": 3000,
+        "description": "Evenings and weekends."
+      },
+      {
+        "id": "svc-04-2",
+        "tag": "medical",
+        "title": "Follow-up visit",
+        "priceRupees": 1500
+      }
+    ],
+    "credentials": [
+      {
+        "id": "cred-04-1",
+        "kind": "qualification",
+        "title": "MBBS",
+        "issuer": "King Edward Medical University",
+        "year": 2012
+      },
+      {
+        "id": "cred-04-2",
+        "kind": "membership",
+        "title": "PMDC registered",
+        "year": 2013
+      }
+    ]
+  },
+  {
+    "workerId": "user-013",
+    "headline": "Matric and FSc maths and physics",
+    "remoteOnly": false,
+    "serviceRadiusMetres": 6000,
+    "subscription": {
+      "plan": "monthly",
+      "startedDaysAgo": 30,
+      "endsInDays": 60
+    },
+    "services": [
+      {
+        "id": "svc-05-1",
+        "tag": "tutoring",
+        "title": "One hour, at your home",
+        "priceRupees": 1500
+      },
+      {
+        "id": "svc-05-2",
+        "tag": "tutoring",
+        "title": "Monthly, three days a week",
+        "priceRupees": 15000,
+        "description": "Twelve sessions."
+      },
+      {
+        "id": "svc-05-3",
+        "tag": "tutoring",
+        "title": "Online session",
+        "priceRupees": 1000,
+        "description": "One hour."
+      }
+    ],
+    "credentials": [
+      {
+        "id": "cred-05-1",
+        "kind": "qualification",
+        "title": "MSc Physics",
+        "issuer": "Punjab University",
+        "year": 2017
+      },
+      {
+        "id": "cred-05-2",
+        "kind": "experience",
+        "title": "Seven years teaching Matric and FSc"
+      }
+    ]
+  },
+  {
+    "workerId": "user-020",
+    "headline": "Licensed electrician, wiring and generators",
+    "remoteOnly": false,
+    "serviceRadiusMetres": 20000,
+    "subscription": {
+      "plan": "yearly",
+      "startedDaysAgo": 365,
+      "endsInDays": 150
+    },
+    "services": [
+      {
+        "id": "svc-06-1",
+        "tag": "electrical",
+        "title": "Call-out and diagnosis",
+        "priceRupees": 1500,
+        "description": "Deducted from the repair if you go ahead."
+      },
+      {
+        "id": "svc-06-2",
+        "tag": "electrical",
+        "title": "Full house rewiring survey",
+        "priceRupees": 5000
+      },
+      {
+        "id": "svc-06-3",
+        "tag": "electrical",
+        "title": "Generator service",
+        "priceRupees": 4500
+      }
+    ],
+    "credentials": [
+      {
+        "id": "cred-06-1",
+        "kind": "certification",
+        "title": "Electrical wiring",
+        "issuer": "TEVTA",
+        "year": 2016
+      }
+    ]
+  },
+  {
+    "workerId": "user-026",
+    "headline": "Ladies' stitching, measured at your home",
+    "remoteOnly": false,
+    "serviceRadiusMetres": 10000,
+    "subscription": {
+      "plan": "yearly",
+      "startedDaysAgo": 365,
+      "endsInDays": 400
+    },
+    "services": [
+      {
+        "id": "svc-07-1",
+        "tag": "tailoring",
+        "title": "Shalwar kameez, stitched",
+        "priceRupees": 2500
+      },
+      {
+        "id": "svc-07-2",
+        "tag": "tailoring",
+        "title": "Bridal outfit",
+        "priceRupees": 18000,
+        "description": "Two fittings included."
+      },
+      {
+        "id": "svc-07-3",
+        "tag": "tailoring",
+        "title": "Alterations",
+        "priceRupees": 800,
+        "description": "Per garment."
+      }
+    ],
+    "credentials": [
+      {
+        "id": "cred-07-1",
+        "kind": "experience",
+        "title": "Fifteen years stitching"
+      }
+    ]
+  },
+  {
+    "workerId": "user-031",
+    "headline": "Night guard, ex-services",
+    "remoteOnly": false,
+    "serviceRadiusMetres": 25000,
+    "subscription": {
+      "plan": "monthly",
+      "startedDaysAgo": 30,
+      "endsInDays": 30
+    },
+    "services": [
+      {
+        "id": "svc-08-1",
+        "tag": "security",
+        "title": "Night shift, per night",
+        "priceRupees": 2500,
+        "description": "Twelve hours, 8pm to 8am."
+      },
+      {
+        "id": "svc-08-2",
+        "tag": "security",
+        "title": "Monthly, six nights a week",
+        "priceRupees": 55000
+      }
+    ],
+    "credentials": [
+      {
+        "id": "cred-08-1",
+        "kind": "experience",
+        "title": "Twelve years, Pakistan Army"
+      }
+    ]
+  },
+  {
+    "workerId": "user-036",
+    "headline": "Home cook, daily meals for families",
+    "remoteOnly": false,
+    "serviceRadiusMetres": 7000,
+    "subscription": {
+      "plan": "yearly",
+      "startedDaysAgo": 365,
+      "endsInDays": 210
+    },
+    "services": [
+      {
+        "id": "svc-09-1",
+        "tag": "cooking",
+        "title": "Daily cooking, monthly",
+        "priceRupees": 25000,
+        "description": "Two meals a day, six days a week."
+      },
+      {
+        "id": "svc-09-2",
+        "tag": "cooking",
+        "title": "Dinner party, up to ten people",
+        "priceRupees": 12000
+      }
+    ],
+    "credentials": [
+      {
+        "id": "cred-09-1",
+        "kind": "experience",
+        "title": "Eleven years cooking for families"
+      }
+    ]
+  },
+  {
+    "workerId": "user-017",
+    "headline": "Airport runs and out-of-city trips",
+    "remoteOnly": false,
+    "serviceRadiusMetres": 30000,
+    "subscription": {
+      "plan": "monthly",
+      "startedDaysAgo": 30,
+      "endsInDays": -14
+    },
+    "services": [
+      {
+        "id": "svc-10-1",
+        "tag": "driving",
+        "title": "Airport drop",
+        "priceRupees": 2500,
+        "description": "Any time, own car."
+      },
+      {
+        "id": "svc-10-2",
+        "tag": "driving",
+        "title": "Full day with car",
+        "priceRupees": 9000,
+        "description": "Within the city."
+      }
+    ],
+    "credentials": [
+      {
+        "id": "cred-10-1",
+        "kind": "experience",
+        "title": "Eight years driving, clean licence"
+      }
+    ]
+  }
+]

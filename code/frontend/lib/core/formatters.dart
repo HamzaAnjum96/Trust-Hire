@@ -74,6 +74,13 @@ class Format {
     return strings.dayAt(DateFormat.MMMd(locale).format(time), clock);
   }
 
+  /// A calendar date on its own — "12 Aug" — for a subscription's end.
+  ///
+  /// No clock time: a subscription runs out on a day, and a minute would be
+  /// false precision about something the worker cannot act on that finely.
+  static String day(AppStrings strings, DateTime date) =>
+      DateFormat.MMMd(_localeOf(strings)).format(date);
+
   /// How long ago a job was posted.
   static String posted(AppStrings strings, DateTime createdAt, DateTime now) {
     final elapsed = now.difference(createdAt);

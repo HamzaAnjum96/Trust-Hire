@@ -1,6 +1,8 @@
 import 'package:uuid/uuid.dart';
 
+import '../../models/job.dart';
 import '../../models/wallet.dart';
+import '../premium/premium_rules.dart';
 
 /// Section 11, as arithmetic.
 ///
@@ -40,7 +42,26 @@ class WalletRules {
   /// in favour of the person being charged.
   int commissionOn(int agreedFare) => (agreedFare * commissionPercent) ~/ 100;
 
+  /// The commission on a finished job, whichever mode it came from.
+  ///
+  /// A Mode B booking is charged half — the platform funds the hirer's 2.5%
+  /// discount out of its own take, so the worker's take-home is the same as it
+  /// would have been in Mode A. [PremiumRules.hirerDiscountTenthsPercent] has
+  /// the arithmetic and the spec contradiction it resolves.
+  int commissionFor(Job job) => _commission(
+    agreedFare: job.agreedFare ?? 0,
+    listedFare: job.listedFare,
+  );
+
+  int _commission({required int agreedFare, int? listedFare}) =>
+      listedFare == null
+      ? commissionOn(agreedFare)
+      : const PremiumRules().commissionOnBooking(listedFare);
+
   /// What to record when a job completes.
+  ///
+  /// [listedFare] is set only for a Mode B booking, where it is the price the
+  /// worker listed and the commission is charged at half the usual rate.
   ///
   /// The credit is a separate entry from the commission rather than a
   /// discount applied to it, so the worker's history shows both the full 5%
@@ -52,8 +73,12 @@ class WalletRules {
     required String jobId,
     required int agreedFare,
     required DateTime now,
+    int? listedFare,
   }) {
-    final commission = commissionOn(agreedFare);
+    final commission = _commission(
+      agreedFare: agreedFare,
+      listedFare: listedFare,
+    );
     if (commission <= 0) return const [];
 
     final entries = <WalletEntry>[

@@ -1975,6 +1975,396 @@ abstract class AppStrings {
   /// In en, this message translates to:
   /// **'Not chosen'**
   String get offerNotChosen;
+
+  /// No description provided for @acceptBooking.
+  ///
+  /// In en, this message translates to:
+  /// **'Accept this booking'**
+  String get acceptBooking;
+
+  /// No description provided for @declineBooking.
+  ///
+  /// In en, this message translates to:
+  /// **'Decline'**
+  String get declineBooking;
+
+  /// No description provided for @declineBookingTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Decline this booking?'**
+  String get declineBookingTitle;
+
+  /// No description provided for @declineBookingExplanation.
+  ///
+  /// In en, this message translates to:
+  /// **'The person who booked you will be told, and can book someone else. Nothing is charged for declining.'**
+  String get declineBookingExplanation;
+
+  /// No description provided for @bookingRequest.
+  ///
+  /// In en, this message translates to:
+  /// **'Booked directly with you'**
+  String get bookingRequest;
+
+  /// No description provided for @bookingAwaitingWorker.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting for the worker to accept'**
+  String get bookingAwaitingWorker;
+
+  /// No description provided for @bookedFrom.
+  ///
+  /// In en, this message translates to:
+  /// **'Booked from the directory'**
+  String get bookedFrom;
+
+  /// No description provided for @navDirectory.
+  ///
+  /// In en, this message translates to:
+  /// **'Directory'**
+  String get navDirectory;
+
+  /// No description provided for @directoryTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Book a professional'**
+  String get directoryTitle;
+
+  /// No description provided for @directoryIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'Set prices, no haggling. Book someone directly and they say yes or no.'**
+  String get directoryIntro;
+
+  /// No description provided for @directoryEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Nobody listed here yet'**
+  String get directoryEmpty;
+
+  /// No description provided for @directoryEmptyMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'The directory holds workers who list fixed prices. Try another kind of work, or post a job on the map instead.'**
+  String get directoryEmptyMessage;
+
+  /// No description provided for @directoryAllWork.
+  ///
+  /// In en, this message translates to:
+  /// **'All work'**
+  String get directoryAllWork;
+
+  /// No description provided for @fromPrice.
+  ///
+  /// In en, this message translates to:
+  /// **'From {amount}'**
+  String fromPrice(String amount);
+
+  /// No description provided for @serviceMenu.
+  ///
+  /// In en, this message translates to:
+  /// **'What they do'**
+  String get serviceMenu;
+
+  /// No description provided for @credentialsHeading.
+  ///
+  /// In en, this message translates to:
+  /// **'Qualifications and experience'**
+  String get credentialsHeading;
+
+  /// No description provided for @credentialsUnverified.
+  ///
+  /// In en, this message translates to:
+  /// **'Given by the worker. Trust Hire has not checked these.'**
+  String get credentialsUnverified;
+
+  /// No description provided for @serviceAreaHeading.
+  ///
+  /// In en, this message translates to:
+  /// **'Where they work'**
+  String get serviceAreaHeading;
+
+  /// No description provided for @serviceAreaRadius.
+  ///
+  /// In en, this message translates to:
+  /// **'Travels up to {distance}'**
+  String serviceAreaRadius(String distance);
+
+  /// No description provided for @serviceAreaRemote.
+  ///
+  /// In en, this message translates to:
+  /// **'Works remotely — no travel needed'**
+  String get serviceAreaRemote;
+
+  /// No description provided for @bookThis.
+  ///
+  /// In en, this message translates to:
+  /// **'Book this'**
+  String get bookThis;
+
+  /// No description provided for @bookingTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Book {service}'**
+  String bookingTitle(String service);
+
+  /// No description provided for @bookingListPrice.
+  ///
+  /// In en, this message translates to:
+  /// **'Their price'**
+  String get bookingListPrice;
+
+  /// No description provided for @bookingYouPay.
+  ///
+  /// In en, this message translates to:
+  /// **'You pay'**
+  String get bookingYouPay;
+
+  /// No description provided for @bookingSaving.
+  ///
+  /// In en, this message translates to:
+  /// **'You save {amount} by booking here.'**
+  String bookingSaving(String amount);
+
+  /// No description provided for @bookingDiscountWhy.
+  ///
+  /// In en, this message translates to:
+  /// **'Trust Hire gives you half of its own fee back. The worker is paid the same either way.'**
+  String get bookingDiscountWhy;
+
+  /// No description provided for @bookingConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Send this booking'**
+  String get bookingConfirm;
+
+  /// No description provided for @bookingSent.
+  ///
+  /// In en, this message translates to:
+  /// **'Booking sent. {name} will accept or decline.'**
+  String bookingSent(String name);
+
+  /// No description provided for @bookingUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'This listing has changed. Open it again to see the current prices.'**
+  String get bookingUnavailable;
+
+  /// No description provided for @myListing.
+  ///
+  /// In en, this message translates to:
+  /// **'My directory listing'**
+  String get myListing;
+
+  /// No description provided for @myListingSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{Nothing listed} =1{1 service listed} other{{count} services listed}}'**
+  String myListingSubtitle(int count);
+
+  /// No description provided for @premiumHeading.
+  ///
+  /// In en, this message translates to:
+  /// **'Be found in the directory'**
+  String get premiumHeading;
+
+  /// No description provided for @premiumPitch.
+  ///
+  /// In en, this message translates to:
+  /// **'Hirers search the directory and book you at your own price — no bidding. Listing is a subscription.'**
+  String get premiumPitch;
+
+  /// No description provided for @premiumActive.
+  ///
+  /// In en, this message translates to:
+  /// **'Listed until {date}'**
+  String premiumActive(String date);
+
+  /// No description provided for @premiumDaysLeft.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{Ends today} =1{1 day left} other{{count} days left}}'**
+  String premiumDaysLeft(int count);
+
+  /// No description provided for @premiumLapsed.
+  ///
+  /// In en, this message translates to:
+  /// **'Your listing has ended. Jobs already booked are unaffected, and you can still bid as normal.'**
+  String get premiumLapsed;
+
+  /// No description provided for @premiumMonthly.
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly'**
+  String get premiumMonthly;
+
+  /// No description provided for @premiumYearly.
+  ///
+  /// In en, this message translates to:
+  /// **'Yearly'**
+  String get premiumYearly;
+
+  /// No description provided for @premiumSimulated.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing is charged. This is a demonstration and takes no card details.'**
+  String get premiumSimulated;
+
+  /// No description provided for @premiumSubscribe.
+  ///
+  /// In en, this message translates to:
+  /// **'Start listing'**
+  String get premiumSubscribe;
+
+  /// No description provided for @premiumRenew.
+  ///
+  /// In en, this message translates to:
+  /// **'Add more time'**
+  String get premiumRenew;
+
+  /// No description provided for @premiumStarted.
+  ///
+  /// In en, this message translates to:
+  /// **'You are in the directory.'**
+  String get premiumStarted;
+
+  /// No description provided for @addService.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a service'**
+  String get addService;
+
+  /// No description provided for @serviceTitleLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'What is it'**
+  String get serviceTitleLabel;
+
+  /// No description provided for @servicePriceLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Your price, in rupees'**
+  String get servicePriceLabel;
+
+  /// No description provided for @serviceDescriptionLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Anything else about it (optional)'**
+  String get serviceDescriptionLabel;
+
+  /// No description provided for @serviceKindLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'What kind of work'**
+  String get serviceKindLabel;
+
+  /// No description provided for @saveService.
+  ///
+  /// In en, this message translates to:
+  /// **'Add it'**
+  String get saveService;
+
+  /// No description provided for @removeService.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove'**
+  String get removeService;
+
+  /// No description provided for @noServicesYet.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing listed yet'**
+  String get noServicesYet;
+
+  /// No description provided for @noServicesYetMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Add what you do and what you charge. Hirers book these at the price you set.'**
+  String get noServicesYetMessage;
+
+  /// No description provided for @addCredential.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a qualification'**
+  String get addCredential;
+
+  /// No description provided for @credentialTitleLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'What it is'**
+  String get credentialTitleLabel;
+
+  /// No description provided for @credentialIssuerLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Who gave it (optional)'**
+  String get credentialIssuerLabel;
+
+  /// No description provided for @credentialYearLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Year (optional)'**
+  String get credentialYearLabel;
+
+  /// No description provided for @credentialKindQualification.
+  ///
+  /// In en, this message translates to:
+  /// **'Qualification'**
+  String get credentialKindQualification;
+
+  /// No description provided for @credentialKindCertification.
+  ///
+  /// In en, this message translates to:
+  /// **'Certificate'**
+  String get credentialKindCertification;
+
+  /// No description provided for @credentialKindExperience.
+  ///
+  /// In en, this message translates to:
+  /// **'Experience'**
+  String get credentialKindExperience;
+
+  /// No description provided for @credentialKindMembership.
+  ///
+  /// In en, this message translates to:
+  /// **'Membership'**
+  String get credentialKindMembership;
+
+  /// No description provided for @howFarYouTravel.
+  ///
+  /// In en, this message translates to:
+  /// **'How far you travel'**
+  String get howFarYouTravel;
+
+  /// No description provided for @remoteOnlyLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'I work remotely, no travel'**
+  String get remoteOnlyLabel;
+
+  /// No description provided for @headlineLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'One line about you (optional)'**
+  String get headlineLabel;
+
+  /// No description provided for @listingNeedsService.
+  ///
+  /// In en, this message translates to:
+  /// **'Add at least one service before hirers can find you.'**
+  String get listingNeedsService;
+
+  /// Stands in for a name the app does not have
+  ///
+  /// In en, this message translates to:
+  /// **'Someone'**
+  String get someone;
+
+  /// What happens after a booking is sent
+  ///
+  /// In en, this message translates to:
+  /// **'They will accept or decline. Nothing is charged either way.'**
+  String get bookingWhatNext;
 }
 
 class _AppStringsDelegate extends LocalizationsDelegate<AppStrings> {

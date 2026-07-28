@@ -7,6 +7,7 @@ import '../models/bid.dart';
 import '../models/job.dart';
 import '../models/job_status.dart';
 import '../models/job_tag.dart';
+import '../models/premium.dart';
 import '../models/rating.dart';
 import '../models/wallet.dart';
 import '../models/worker_profile.dart';
@@ -25,6 +26,7 @@ class SeedLoader {
   static const _bidsAsset = 'assets/seed/bids.json';
   static const _ratingsAsset = 'assets/seed/ratings.json';
   static const _accountsAsset = 'assets/seed/accounts.json';
+  static const _directoryAsset = 'assets/seed/directory.json';
 
   Future<List<Job>> loadJobs() async {
     final decoded = await _readJson(_jobsAsset) as List<dynamic>;
@@ -117,6 +119,53 @@ class SeedLoader {
               )
               .toList(),
         ),
+      );
+    }).toList(growable: false);
+  }
+
+  /// The Mode B directory: who is listed, what they charge, and until when.
+  ///
+  /// Subscription dates are relative like everything else here. A listing that
+  /// expired on the day the demo was packaged would show the whole directory
+  /// as lapsed a month later, which is the one state Section 9 wants to be
+  /// rare.
+  Future<List<DirectoryListing>> loadDirectory() async {
+    final decoded = await _readJson(_directoryAsset) as List<dynamic>;
+    final now = DateTime.now();
+
+    return decoded.cast<Map<String, dynamic>>().map((json) {
+      final subscription = json['subscription'] as Map<String, dynamic>?;
+
+      return DirectoryListing(
+        workerId: json['workerId'] as String,
+        headline: json['headline'] as String?,
+        remoteOnly: json['remoteOnly'] as bool? ?? false,
+        serviceRadiusMetres:
+            (json['serviceRadiusMetres'] as num?)?.toDouble() ??
+            DirectoryListing.defaultServiceRadiusMetres,
+        subscription: subscription == null
+            ? null
+            : Subscription(
+                plan: SubscriptionPlan.fromId(subscription['plan'] as String?),
+                startedAt: now.subtract(
+                  Duration(
+                    days: (subscription['startedDaysAgo'] as num?)?.round() ?? 0,
+                  ),
+                ),
+                expiresAt: now.add(
+                  Duration(
+                    days: (subscription['endsInDays'] as num?)?.round() ?? 0,
+                  ),
+                ),
+              ),
+        services: (json['services'] as List<dynamic>? ?? const [])
+            .cast<Map<String, dynamic>>()
+            .map(ServiceOffering.fromJson)
+            .toList(growable: false),
+        credentials: (json['credentials'] as List<dynamic>? ?? const [])
+            .cast<Map<String, dynamic>>()
+            .map(WorkerCredential.fromJson)
+            .toList(growable: false),
       );
     }).toList(growable: false);
   }

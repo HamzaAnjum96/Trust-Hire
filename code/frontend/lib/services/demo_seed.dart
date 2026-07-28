@@ -24,6 +24,15 @@ class DemoSeed {
     await _installBids();
     await _installRatings();
     await _installAccounts();
+    await _installDirectory();
+  }
+
+  Future<void> _installDirectory() async {
+    final listings = await _loader.loadDirectory();
+    await _store.writeCollection(
+      StoreKeys.directory,
+      listings.map((listing) => listing.toJson()).toList(growable: false),
+    );
   }
 
   Future<void> _installBids() async {

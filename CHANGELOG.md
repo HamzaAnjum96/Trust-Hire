@@ -12,6 +12,68 @@ that heading to the version and date, and open a fresh `[Unreleased]`.
 
 ## [Unreleased]
 
+### 0.12.0 — P1-6, Mode B: the directory and premium
+
+#### Added
+
+- **A directory**, as a destination of its own. Section 9's second discovery
+  mode: the map answers *where is there work*, the directory answers *who can
+  do this and what do they charge*. Filter by kind of work, read somebody's
+  record and their menu, book a fixed price.
+- **Premium listings.** A worker subscribes monthly or yearly (simulated, and
+  the screen says so), then builds a service menu at fixed prices, sets how far
+  they will travel — or marks themselves remote-only — writes a headline, and
+  adds qualifications.
+- **Direct booking.** A booking creates a job addressed to one worker and to
+  nobody else, at the price already shown. The worker accepts or declines;
+  from there it runs the same lifecycle as any other job.
+- Ten seeded listings across nine kinds of work — a lawyer, a GP, a tutor, a
+  makeup artist, a night guard and others — **one of them deliberately
+  lapsed**, so the lapse state is reachable without waiting a month.
+
+#### Changed
+
+- The bottom bar and the side rail now build from **one** destination list.
+  They used to hold two hand-written copies, which drifted the moment a fifth
+  destination arrived: the rail kept showing four, and tapping "Profile" on a
+  desktop opened Activity.
+
+#### Notes on the design
+
+**The 2.5% discount, and a contradiction in the spec.** Section 9 says the
+platform "keeps 2.5% and passes the other 2.5% back to the hirer", that "the
+worker's cost is unaffected", and that workers "still pay the standard 5%
+commission regardless of mode". Those three cannot all be true. On a Rs. 3,000
+service:
+
+| | Hirer pays | Worker charged | Worker nets |
+| --- | --- | --- | --- |
+| Mode A | 3,000 | 150 | **2,850** |
+| Mode B at 5% | 2,925 | 150 | 2,775 |
+| Mode B at 2.5% | 2,925 | 75 | **2,850** |
+
+Only the third leaves the worker unaffected and has the platform splitting
+*its own* take, which is what the leakage argument needs — booking in the app
+must be cheaper than booking the same worker outside it, and it cannot be the
+worker who funds that or they will simply raise their listed price. So a Mode B
+commission is half the usual rate. The reasoning and the arithmetic are in
+`PremiumRules.hirerDiscountTenthsPercent`, tested in `premium_test.dart`, and
+the literal-5% reading is one constant away if it is ever wanted.
+
+**A direct request is not broadcast.** `JobVisibility` sends a booked job to
+its worker whatever their tags say and however far away it is — they set their
+own radius when they listed — and to nobody else at all. A declined booking is
+cancelled rather than reopened: the hirer chose one person, and putting it back
+on the map would broadcast what they asked not to broadcast.
+
+**Declining is not walking away.** No cancellation penalty: nothing was agreed,
+nobody was left waiting on the day, and Section 9 makes availability the
+worker's call. Charging for it would make being available something a worker
+has to pay to have. A booking also never expires on the map's seven-day clock.
+
+**Credentials are self-declared, and every screen showing them says so.**
+Section 2 verifies a CNIC and a phone number; it does not verify a degree.
+
 ### 0.11.0 — The demo gets a past
 
 #### Added

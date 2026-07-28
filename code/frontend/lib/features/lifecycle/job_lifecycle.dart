@@ -19,6 +19,14 @@ enum JobAction {
 
   /// Either side calls it off.
   cancel,
+
+  /// The worker a Mode B job was booked from says yes. Section 9: a direct
+  /// request is theirs to accept or decline "based on availability".
+  acceptBooking,
+
+  /// And says no. Distinct from [cancel] because nothing was ever agreed —
+  /// nobody has been let down, and nothing is owed.
+  declineBooking,
 }
 
 /// The rules about moving a job through its life (Section 7).
@@ -41,6 +49,11 @@ class JobLifecycle {
   JobRole roleFor(Job job, {required String viewerId}) {
     if (job.isPostedBy(viewerId)) return JobRole.hirer;
     if (job.acceptedWorkerId == viewerId) return JobRole.worker;
+    // A booking that has not been answered yet. The worker is already the
+    // only person it concerns, so they get the worker's view rather than a
+    // bystander's — otherwise the one job addressed to them personally would
+    // be the one they could do nothing with.
+    if (job.bookedWorkerId == viewerId) return JobRole.worker;
     return JobRole.bystander;
   }
 
@@ -53,6 +66,14 @@ class JobLifecycle {
   List<JobAction> actionsFor(Job job, {required JobRole role}) {
     if (role == JobRole.bystander) return const [];
     if (!job.status.isLive) return const [];
+
+    // A booking waiting on its worker. The hirer can withdraw it; the worker
+    // answers it. Neither can do anything else until they have.
+    if (job.isDirectBooking && job.status == JobStatus.open) {
+      return role == JobRole.hirer
+          ? const [JobAction.cancel]
+          : const [JobAction.acceptBooking, JobAction.declineBooking];
+    }
 
     return switch ((role, job.status)) {
       (JobRole.hirer, JobStatus.open) => const [JobAction.cancel],
@@ -87,6 +108,12 @@ class JobLifecycle {
       JobAction.confirmArrival => JobStatus.inProgress,
       JobAction.markComplete => JobStatus.completed,
       JobAction.cancel => JobStatus.cancelled,
+      JobAction.acceptBooking => JobStatus.accepted,
+      // Cancelled rather than back to open: it was never an open job. A
+      // declined request that reverted to the map would broadcast work the
+      // hirer chose one person for, which is the opposite of what they asked
+      // for — they can book somebody else, and that is a new booking.
+      JobAction.declineBooking => JobStatus.cancelled,
     };
   }
 
@@ -96,6 +123,10 @@ class JobLifecycle {
   /// job is between two people and the clock stops mattering.
   bool hasExpired(Job job, {required DateTime now}) {
     if (job.status != JobStatus.open) return false;
+    // A direct request sits with one person rather than on the map. Expiring
+    // it on the map's schedule would cancel a booking whose worker simply has
+    // not opened the app, and the hirer can withdraw it whenever they like.
+    if (job.isDirectBooking) return false;
     return now.difference(job.createdAt) > openJobLifetime;
   }
 

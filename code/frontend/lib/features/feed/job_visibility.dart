@@ -36,6 +36,12 @@ class JobVisibility {
     required WorkerProfile worker,
     JobLocation? from,
   }) {
+    // Section 9: a directory booking is "a direct request to that one worker
+    // (not broadcast)". It reaches them whatever their tags say and however
+    // far away it is — they chose their own radius when they listed — and it
+    // reaches nobody else at all, which is the half that matters.
+    if (job.isDirectBooking) return job.bookedWorkerId == worker.userId;
+
     if (!overlaps(job.tags, worker.tags)) return false;
     return isWithinGeofence(job, from: from);
   }
@@ -73,10 +79,23 @@ class JobVisibility {
     required WorkerProfile worker,
     JobLocation? from,
   }) {
+    if (job.isDirectBooking) {
+      return job.bookedWorkerId == worker.userId
+          ? null
+          : VisibilityFailure.bookedElsewhere;
+    }
     if (!overlaps(job.tags, worker.tags)) return VisibilityFailure.noTagOverlap;
     if (!isWithinGeofence(job, from: from)) return VisibilityFailure.tooFar;
     return null;
   }
 }
 
-enum VisibilityFailure { noTagOverlap, tooFar }
+enum VisibilityFailure {
+  noTagOverlap,
+  tooFar,
+
+  /// A Mode B booking addressed to somebody else. Not a near miss like the
+  /// other two — there is nothing this worker could change that would make a
+  /// direct request to another person reach them.
+  bookedElsewhere,
+}

@@ -36,15 +36,23 @@ class JobStatusPanel extends StatelessWidget {
     final me = context.read<AccountController>().activeId;
     final role = lifecycle.roleFor(job, viewerId: me);
 
-    if (action == JobAction.cancel) {
+    if (action == JobAction.cancel || action == JobAction.declineBooking) {
+      final isDecline = action == JobAction.declineBooking;
+
       final confirmed = await showDialog<bool>(
         context: context,
         builder: (dialogContext) => AlertDialog(
           shape: const RoundedRectangleBorder(
             borderRadius: BrandRadius.largeAll,
           ),
-          title: Text(strings.cancelJob),
-          content: Text(strings.cancelJobExplanation),
+          title: Text(
+            isDecline ? strings.declineBookingTitle : strings.cancelJob,
+          ),
+          content: Text(
+            isDecline
+                ? strings.declineBookingExplanation
+                : strings.cancelJobExplanation,
+          ),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(dialogContext).pop(false),
@@ -52,10 +60,12 @@ class JobStatusPanel extends StatelessWidget {
             ),
             TextButton(
               style: TextButton.styleFrom(
-                foregroundColor: BrandColours.errorRed,
+                foregroundColor: isDecline ? null : BrandColours.errorRed,
               ),
               onPressed: () => Navigator.of(dialogContext).pop(true),
-              child: Text(strings.cancelJob),
+              child: Text(
+                isDecline ? strings.declineBooking : strings.cancelJob,
+              ),
             ),
           ],
         ),
@@ -69,16 +79,27 @@ class JobStatusPanel extends StatelessWidget {
     final next = lifecycle.resultOf(action, job: job, role: role);
     if (next == null) return;
 
-    await jobs.saveJob(job.withStatus(next));
+    // Accepting a booking also records *who* accepted it. Nothing else here
+    // changes more than the status, which is why this is the one branch.
+    final updated = action == JobAction.acceptBooking
+        ? job.withBookingAccepted()
+        : job.withStatus(next);
+
+    await jobs.saveJob(updated);
 
     // The money follows the status, and only after it is saved. If the write
     // above fails, nobody has been charged for a job that did not finish.
     // Both wallet calls are idempotent by job id, so a retry cannot charge
     // twice — see WalletController.
-    final fare = job.agreedFare;
-    if (next == JobStatus.completed && fare != null) {
-      await wallet.recordCompletion(jobId: job.id, agreedFare: fare);
-    } else if (next == JobStatus.cancelled && role == JobRole.worker) {
+    if (next == JobStatus.completed && job.agreedFare != null) {
+      await wallet.recordCompletionOf(updated);
+    } else if (next == JobStatus.cancelled &&
+        role == JobRole.worker &&
+        // Declining a booking is not walking away from work: nothing was ever
+        // agreed, nobody has been left waiting on the day, and Section 9 makes
+        // it the worker's call. Charging for it would make availability
+        // something a worker has to pay to have.
+        action != JobAction.declineBooking) {
       // Only the worker is penalised. Section 11 charges the person who
       // accepted a job and then walked away from it.
       await wallet.recordWorkerCancellation(jobId: job.id);
@@ -140,6 +161,13 @@ class JobStatusPanel extends StatelessWidget {
               ),
               child: Text(strings.cancelJob),
             )
+          // Declining is not a failure and is not charged for, so it gets a
+          // plain outline rather than the red one cancelling wears.
+          else if (action == JobAction.declineBooking)
+            OutlinedButton(
+              onPressed: () => _run(context, action),
+              child: Text(strings.declineBooking),
+            )
           else
             FilledButton(
               onPressed: () => _run(context, action),
@@ -147,6 +175,8 @@ class JobStatusPanel extends StatelessWidget {
                 JobAction.confirmArrival => strings.confirmArrival,
                 JobAction.markComplete => strings.markComplete,
                 JobAction.cancel => strings.cancelJob,
+                JobAction.acceptBooking => strings.acceptBooking,
+                JobAction.declineBooking => strings.declineBooking,
               }),
             ),
         ],

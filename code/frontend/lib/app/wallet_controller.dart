@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 
 import '../features/wallet/wallet_rules.dart';
 import '../models/account.dart';
+import '../models/job.dart';
 import '../models/wallet.dart';
 import '../services/local_store.dart';
 
@@ -65,11 +66,16 @@ class WalletController extends ChangeNotifier {
 
   /// The commission and any first-job credit for a finished job.
   ///
+  /// [listedFare] is set only for a Mode B booking, where the commission is
+  /// half the usual rate — the platform funds the hirer's discount out of its
+  /// own take. See [PremiumRules.hirerDiscountTenthsPercent].
+  ///
   /// Idempotent by job: a completion that gets recorded twice — a retry, a
   /// double tap — must not charge twice.
   Future<void> recordCompletion({
     required String jobId,
     required int agreedFare,
+    int? listedFare,
     DateTime? at,
   }) async {
     if (_hasEntryFor(jobId, WalletEntryKind.commission)) return;
@@ -79,10 +85,20 @@ class WalletController extends ChangeNotifier {
         wallet: _wallet,
         jobId: jobId,
         agreedFare: agreedFare,
+        listedFare: listedFare,
         now: at ?? DateTime.now(),
       ),
     );
   }
+
+  /// The same, for a job you already have.
+  Future<void> recordCompletionOf(Job job, {DateTime? at}) =>
+      recordCompletion(
+        jobId: job.id,
+        agreedFare: job.agreedFare ?? 0,
+        listedFare: job.listedFare,
+        at: at,
+      );
 
   /// The penalty for accepting a job and then walking away.
   Future<void> recordWorkerCancellation({

@@ -317,9 +317,69 @@ whose Offers tab said zero — not in the test suite, which passed throughout.
 Seeding moved to `bootstrap()`, ahead of the first frame, and the tests that
 pump the whole app now go through the same function.
 
-### P1-6 — Mode B: directory and premium
+### P1-6 — Mode B: directory and premium ✅
 Premium subscription, service menus at fixed prices, worker-set service radius,
 credentials showcase, direct booking, and the 2.5% hirer discount.
+
+**Done when** a hirer can find somebody by what they do, book them at a fixed
+price, and that booking reaches nobody else.
+
+**Delivered.** A destination of its own rather than a filter on the map: the
+map answers *where is there work* and the directory answers *who can do this
+and what do they charge*, and folding one into the other would make both
+worse. Ten seeded listings across nine kinds of work give it something to show
+from a fresh install.
+
+**The one real contradiction in Section 9, resolved.** The spec says the
+platform "keeps 2.5% and passes the other 2.5% back to the hirer", that "the
+worker's cost is unaffected", and that workers "still pay the standard 5%
+commission regardless of mode". Those three cannot all hold. On a Rs. 3,000
+service:
+
+| | Hirer pays | Worker charged | Worker nets |
+| --- | --- | --- | --- |
+| Mode A | 3,000 | 150 | **2,850** |
+| Mode B at 5% | 2,925 | 150 | 2,775 |
+| Mode B at 2.5% | 2,925 | 75 | **2,850** |
+
+Only the third leaves the worker unaffected *and* has the platform splitting
+its own take — which is what the leakage argument requires, since a worker who
+funds the discount will simply raise their listed price and the discount stops
+existing. **So a Mode B commission is half the usual rate.** It is one constant
+in `PremiumRules` if the literal reading is ever preferred.
+
+Other decisions the spec left open:
+
+- **A declined booking is cancelled, not reopened.** The hirer chose one
+  person; putting it back on the map would broadcast the thing they asked not
+  to broadcast. They can book somebody else, and that is a new booking.
+- **Declining costs nothing.** Nothing was agreed and nobody was left waiting
+  on the day, so the cancellation penalty does not apply. Charging for it
+  would make availability something a worker has to pay to have.
+- **A booking never expires.** Seven days of nobody bidding means a job nobody
+  wants; seven days of an unanswered booking means one person has not opened
+  the app, and cancelling it for them would be the platform making their
+  excuses.
+- **A listing with no services is hidden**, even while paid for. A name with
+  nothing to book is a dead end for the hirer and a bad first impression for
+  the worker; the "add a service" notice says so on their own screen.
+- **The directory is ordered by nothing the platform can sell.** Cheapest
+  first would push people into undercutting each other and "featured" would
+  make the order a second thing to pay for. Section 9 already charges for
+  being on the shelf; charging twice is how a directory becomes a racket.
+- **Prices are Rs. 1,000 a month or Rs. 10,000 a year.** The spec names none.
+  A month is roughly one small job, and the year is ten months' money for
+  twelve — enough of a discount to be worth committing to, not so much that
+  the monthly price looks like a trap.
+- **The subscription is not the first thing asked for.** A worker can build
+  their menu and set their radius before spending anything. A screen that
+  leads with a price asks somebody to buy before they know what they are
+  buying, and this audience is being asked for real money on a promise.
+
+**Found by building it.** The bottom bar and the side rail held two
+hand-written destination lists. They drifted the moment a fifth destination
+arrived — the rail kept showing four, and tapping "Profile" on a desktop
+opened Activity. One list now, mapped into both.
 
 ### P1-7 — Admin
 User approvals, CNIC dispute lookup, wallet overrides, job oversight, audit

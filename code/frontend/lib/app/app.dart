@@ -16,6 +16,7 @@ import 'account_controller.dart';
 import 'app_shell.dart';
 import 'bid_controller.dart';
 import 'job_controller.dart';
+import 'premium_controller.dart';
 import 'rating_controller.dart';
 import 'wallet_controller.dart';
 import 'profile_controller.dart';
@@ -69,6 +70,11 @@ class TrustHireApp extends StatelessWidget {
               wallet!..setAccount(account.activeId),
         ),
         ChangeNotifierProvider(create: (_) => RatingController(store)..load()),
+        ChangeNotifierProxyProvider<AccountController, PremiumController>(
+          create: (_) => PremiumController(store)..load(),
+          update: (_, account, premium) =>
+              premium!..setAccount(account.activeId),
+        ),
         ChangeNotifierProvider(
           // Deliberately not requested here. Asking for a permission before
           // explaining what it is for is what section 19 warns against, so

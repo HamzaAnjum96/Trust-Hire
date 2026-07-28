@@ -9,6 +9,7 @@ import '../features/map/location_controller.dart';
 import '../services/location_service.dart';
 import '../features/jobs/jobs_screen.dart';
 import '../features/jobs/my_jobs_screen.dart';
+import '../features/directory/directory_screen.dart';
 import '../features/map/map_screen.dart';
 import '../features/profile/profile_screen.dart';
 import '../l10n/app_localizations.dart';
@@ -27,35 +28,35 @@ class AppShell extends StatefulWidget {
 class _AppShellState extends State<AppShell> {
   int _index = 0;
 
-  /// Built per call rather than held as a constant: the labels change with
-  /// the interface language.
-  List<NavigationDestination> _destinations(AppStrings strings) => [
-    NavigationDestination(
-      icon: const Icon(Icons.map_outlined),
-      selectedIcon: const Icon(Icons.map),
-      label: strings.navMap,
-    ),
-    NavigationDestination(
-      icon: const Icon(Icons.work_outline),
-      selectedIcon: const Icon(Icons.work),
-      label: strings.navJobs,
-    ),
-    // "Activity", not "Saved": the screen behind it has always held both
-    // saved and posted jobs, and naming it after one of its two tabs sent
-    // anyone looking for their own postings to the wrong place.
-    NavigationDestination(
-      icon: const Icon(Icons.bookmark_border),
-      selectedIcon: const Icon(Icons.bookmark),
-      label: strings.navActivity,
+  /// The destinations, once.
+  ///
+  /// The bottom bar and the side rail take different widget types, so they
+  /// used to hold two hand-written lists — which drifted the moment a fifth
+  /// destination arrived: the rail kept showing four, and tapping "Profile"
+  /// on a desktop opened Activity. One list, mapped twice.
+  ///
+  /// Built per call rather than held as a constant, because the labels change
+  /// with the interface language.
+  List<_Destination> _destinations(AppStrings strings) => [
+    _Destination(Icons.map_outlined, Icons.map, strings.navMap),
+    _Destination(Icons.work_outline, Icons.work, strings.navJobs),
+    // Mode B, and a destination rather than a filter on the map. Section 9
+    // calls it "a second, parallel discovery mode": the map answers where
+    // there is work, the directory answers who can do a thing and what they
+    // charge. Folding one into the other would make both worse.
+    _Destination(Icons.badge_outlined, Icons.badge, strings.navDirectory),
+    // "Activity", not "Saved": the screen behind it has always held saved,
+    // posted and offered jobs, and naming it after one of its three tabs sent
+    // anyone looking for the others to the wrong place.
+    _Destination(
+      Icons.bookmark_border,
+      Icons.bookmark,
+      strings.navActivity,
     ),
     // "Profile", not "Settings": role and trades decide what the rest of the
     // app shows, which is not a setting — and a marketplace with no profile
     // destination has nowhere to put trust signals later.
-    NavigationDestination(
-      icon: const Icon(Icons.person_outline),
-      selectedIcon: const Icon(Icons.person),
-      label: strings.navProfile,
-    ),
+    _Destination(Icons.person_outline, Icons.person, strings.navProfile),
   ];
 
   void _openCreateJob() {
@@ -76,7 +77,7 @@ class _AppShellState extends State<AppShell> {
   /// destination except the one that is about the user rather than the work.
   bool get _showsPostAction => _index != _profileIndex;
 
-  static const _profileIndex = 3;
+  static const _profileIndex = 4;
 
   @override
   Widget build(BuildContext context) {
@@ -89,6 +90,7 @@ class _AppShellState extends State<AppShell> {
       children: const [
         MapScreen(),
         JobsScreen(),
+        DirectoryScreen(),
         MyJobsScreen(),
         ProfileScreen(),
       ],
@@ -104,6 +106,7 @@ class _AppShellState extends State<AppShell> {
           children: [
             _NavigationRail(
               index: _index,
+              destinations: _destinations(strings),
               onSelected: (value) => setState(() => _index = value),
               // Extended labels need the room; a tablet does not have it.
               extended: layout == LayoutSize.expanded,
@@ -147,7 +150,10 @@ class _AppShellState extends State<AppShell> {
       bottomNavigationBar: NavigationBar(
         selectedIndex: _index,
         onDestinationSelected: (value) => setState(() => _index = value),
-        destinations: _destinations(strings),
+        destinations: [
+          for (final destination in _destinations(strings))
+            destination.forBar,
+        ],
       ),
     );
   }
@@ -164,9 +170,11 @@ class _NavigationRail extends StatelessWidget {
     required this.index,
     required this.onSelected,
     required this.extended,
+    required this.destinations,
     this.action,
   });
 
+  final List<_Destination> destinations;
   final int index;
   final ValueChanged<int> onSelected;
   final bool extended;
@@ -174,8 +182,6 @@ class _NavigationRail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final strings = AppStrings.of(context);
-
     return LayoutBuilder(
       builder: (context, constraints) => SingleChildScrollView(
         child: ConstrainedBox(
@@ -195,26 +201,7 @@ class _NavigationRail extends StatelessWidget {
                       child: action,
                     ),
               destinations: [
-                NavigationRailDestination(
-                  icon: const Icon(Icons.map_outlined),
-                  selectedIcon: const Icon(Icons.map),
-                  label: Text(strings.navMap),
-                ),
-                NavigationRailDestination(
-                  icon: const Icon(Icons.work_outline),
-                  selectedIcon: const Icon(Icons.work),
-                  label: Text(strings.navJobs),
-                ),
-                NavigationRailDestination(
-                  icon: const Icon(Icons.bookmark_border),
-                  selectedIcon: const Icon(Icons.bookmark),
-                  label: Text(strings.navActivity),
-                ),
-                NavigationRailDestination(
-                  icon: const Icon(Icons.person_outline),
-                  selectedIcon: const Icon(Icons.person),
-                  label: Text(strings.navProfile),
-                ),
+                for (final destination in destinations) destination.forRail,
               ],
             ),
           ),
@@ -222,4 +209,25 @@ class _NavigationRail extends StatelessWidget {
       ),
     );
   }
+}
+
+/// One place the app can be, in whichever navigation control is on screen.
+class _Destination {
+  const _Destination(this.icon, this.selectedIcon, this.label);
+
+  final IconData icon;
+  final IconData selectedIcon;
+  final String label;
+
+  NavigationDestination get forBar => NavigationDestination(
+    icon: Icon(icon),
+    selectedIcon: Icon(selectedIcon),
+    label: label,
+  );
+
+  NavigationRailDestination get forRail => NavigationRailDestination(
+    icon: Icon(icon),
+    selectedIcon: Icon(selectedIcon),
+    label: Text(label),
+  );
 }

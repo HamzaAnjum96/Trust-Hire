@@ -122,6 +122,11 @@ class StoreKeys {
   /// Set once the worker has closed the "add a trade" notice. Per account.
   static const tradesNoticeDismissed = 'trust_hire.trades_notice_dismissed';
 
+  /// Every directory listing — subscription, service menu, credentials and
+  /// service area — as a JSON list. Shared rather than per account: a
+  /// directory only one person can see is not a directory.
+  static const directory = 'trust_hire.directory';
+
   /// The per-account name for a key.
   ///
   /// Role, trades, saved jobs and the wallet belong to a person rather than to
@@ -154,6 +159,7 @@ class StoreKeys {
     workerProfile,
     activeAccount,
     tradesNoticeDismissed,
+    directory,
     mediaIndex,
   ];
 }

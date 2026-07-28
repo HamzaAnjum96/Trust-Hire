@@ -79,6 +79,8 @@ class Job {
     this.contactNumber,
     this.postedBy,
     this.isLocal = false,
+    this.bookedWorkerId,
+    this.listedFare,
   });
 
   final String id;
@@ -137,6 +139,19 @@ class Job {
   bool isCompletedBy(String workerId) =>
       status == JobStatus.completed && acceptedWorkerId == workerId;
 
+  /// The booked worker says yes.
+  ///
+  /// Section 9: a Mode B booking is not negotiated, so the fare was fixed when
+  /// the hirer booked it and acceptance only records who is doing it. Returns
+  /// the job unchanged when there is nobody to accept — the same shape as
+  /// [withAcceptedBid], because a stale button is a race rather than an error.
+  Job withBookingAccepted() {
+    final worker = bookedWorkerId;
+    if (worker == null || isAccepted) return this;
+
+    return _rebuild(acceptedWorkerId: worker, status: JobStatus.accepted);
+  }
+
   /// This job at a new point in its life.
   ///
   /// Separate from [copyWith] on purpose: editing a job and moving it forward
@@ -193,6 +208,30 @@ class Job {
   /// user had already posted.
   bool isPostedBy(String accountId) =>
       (postedBy ?? (isLocal ? DemoAccounts.deviceId : null)) == accountId;
+
+  /// The worker this job was booked from, for a Mode B booking.
+  ///
+  /// Section 9: a directory booking "creates a job record flagged as a direct
+  /// request to that one worker (not broadcast)". So this is not a preference
+  /// — it is the difference between a job that goes to everybody and a job
+  /// that goes to one person, and [JobVisibility] treats it that way.
+  final String? bookedWorkerId;
+
+  /// The price the worker listed the service at, before the hirer's discount.
+  ///
+  /// Kept alongside [agreedFare] rather than derived from it, because the
+  /// commission is charged on this number and recovering it by dividing back
+  /// through a rounded percentage would drift by a rupee or two — on the one
+  /// figure a worker is entitled to check.
+  final int? listedFare;
+
+  /// Whether this job came from the directory rather than from the map.
+  bool get isDirectBooking => bookedWorkerId != null;
+
+  /// What the hirer saved by booking in the app, or null in Mode A.
+  int? get hirerSaving => (listedFare == null || agreedFare == null)
+      ? null
+      : listedFare! - agreedFare!;
 
   /// Whether the job carries anything a person can actually understand it by.
   /// Used to keep posting flexible without allowing entirely empty jobs.
@@ -348,6 +387,8 @@ class Job {
       contactNumber: contactNumber,
       postedBy: postedBy,
       isLocal: isLocal,
+      bookedWorkerId: bookedWorkerId,
+      listedFare: listedFare,
     );
   }
 
@@ -406,6 +447,8 @@ class Job {
           : (contactNumber ?? this.contactNumber),
       postedBy: postedBy,
       isLocal: isLocal,
+      bookedWorkerId: bookedWorkerId,
+      listedFare: listedFare,
     );
   }
 
@@ -477,5 +520,7 @@ class Job {
     'contactNumber': contactNumber,
     'postedBy': postedBy,
     'isLocal': isLocal,
+    'bookedWorkerId': bookedWorkerId,
+    'listedFare': listedFare,
   };
 }

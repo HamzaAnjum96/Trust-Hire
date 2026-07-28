@@ -911,9 +911,149 @@ def balance_of(entries) -> int:
     return sum(entry["tokens"] for entry in entries)
 
 
+# ---------------------------------------------------------------------------
+# The directory (Mode B)
+#
+# Section 9's second discovery mode needs people in it or the screen is an
+# empty state with a subscription pitch underneath. These are professionals
+# rather than tradesmen — the spec names doctors, lawyers, consultants,
+# barbers, MUAs and coaches — offering fixed prices instead of taking bids.
+#
+# One of them is deliberately **lapsed**: their listing is gone from the
+# directory but still theirs to renew, which is the whole of the spec's lapse
+# handling and is otherwise a state nobody can reach without waiting a month.
+# ---------------------------------------------------------------------------
+DIRECTORY = [
+    # id, tag, headline, radius km (0 = remote only), [(title, price, note)],
+    # [(kind, credential, issuer, year)], days of subscription left
+    ("user-001", "cleaning", "Home and office cleaning, two-person team", 12, [
+        ("Whole-house clean", 4500, "Three rooms, kitchen and bathrooms."),
+        ("Kitchen deep clean", 2500, None),
+        ("Sofa and carpet shampoo", 3500, "Per room."),
+    ], [
+        ("experience", "Nine years cleaning homes and offices", None, None),
+    ], 240),
+    ("user-004", "legal", "Property and family matters", 0, [
+        ("First consultation", 1500, "Half an hour, by phone or in person."),
+        ("Property paper check", 6000, "Sale deed, mutation and encumbrance."),
+        ("Rent agreement drafting", 4000, None),
+    ], [
+        ("qualification", "LLB", "University of the Punjab", 2014),
+        ("membership", "Punjab Bar Council", None, 2015),
+    ], 300),
+    ("user-008", "beauty", "Bridal and party makeup, home visits", 15, [
+        ("Bridal makeup", 25000, "Includes trial and hair."),
+        ("Party makeup", 6000, None),
+        ("Home haircut", 1200, None),
+    ], [
+        ("certification", "Advanced bridal makeup", "Depilex", 2019),
+        ("experience", "Six years, over 200 brides", None, None),
+    ], 95),
+    ("user-011", "medical", "GP, home visits in the evening", 8, [
+        ("Home visit", 3000, "Evenings and weekends."),
+        ("Follow-up visit", 1500, None),
+    ], [
+        ("qualification", "MBBS", "King Edward Medical University", 2012),
+        ("membership", "PMDC registered", None, 2013),
+    ], 180),
+    ("user-013", "tutoring", "Matric and FSc maths and physics", 6, [
+        ("One hour, at your home", 1500, None),
+        ("Monthly, three days a week", 15000, "Twelve sessions."),
+        ("Online session", 1000, "One hour."),
+    ], [
+        ("qualification", "MSc Physics", "Punjab University", 2017),
+        ("experience", "Seven years teaching Matric and FSc", None, None),
+    ], 60),
+    ("user-020", "electrical", "Licensed electrician, wiring and generators", 20, [
+        ("Call-out and diagnosis", 1500, "Deducted from the repair if you go ahead."),
+        ("Full house rewiring survey", 5000, None),
+        ("Generator service", 4500, None),
+    ], [
+        ("certification", "Electrical wiring", "TEVTA", 2016),
+    ], 150),
+    ("user-026", "tailoring", "Ladies' stitching, measured at your home", 10, [
+        ("Shalwar kameez, stitched", 2500, None),
+        ("Bridal outfit", 18000, "Two fittings included."),
+        ("Alterations", 800, "Per garment."),
+    ], [
+        ("experience", "Fifteen years stitching", None, None),
+    ], 400),
+    ("user-031", "security", "Night guard, ex-services", 25, [
+        ("Night shift, per night", 2500, "Twelve hours, 8pm to 8am."),
+        ("Monthly, six nights a week", 55000, None),
+    ], [
+        ("experience", "Twelve years, Pakistan Army", None, None),
+    ], 30),
+    ("user-036", "cooking", "Home cook, daily meals for families", 7, [
+        ("Daily cooking, monthly", 25000, "Two meals a day, six days a week."),
+        ("Dinner party, up to ten people", 12000, None),
+    ], [
+        ("experience", "Eleven years cooking for families", None, None),
+    ], 210),
+    # Lapsed a fortnight ago. Still theirs, gone from the directory.
+    ("user-017", "driving", "Airport runs and out-of-city trips", 30, [
+        ("Airport drop", 2500, "Any time, own car."),
+        ("Full day with car", 9000, "Within the city."),
+    ], [
+        ("experience", "Eight years driving, clean licence", None, None),
+    ], -14),
+]
+
+
+def build_directory():
+    """The Mode B listings, as `assets/seed/directory.json`.
+
+    Times are relative like everything else in the seed — a subscription
+    expiring on a date the demo was packaged would show every listing as
+    lapsed a month later.
+    """
+    listings = []
+
+    for index, entry in enumerate(DIRECTORY, start=1):
+        worker, tag, headline, radius_km, services, credentials, days = entry
+
+        listings.append({
+            "workerId": worker,
+            "headline": headline,
+            "remoteOnly": radius_km == 0,
+            "serviceRadiusMetres": (radius_km or 10) * 1000,
+            "subscription": {
+                "plan": "yearly" if days > 120 else "monthly",
+                # Backdated far enough that the end date is the interesting
+                # part; the app only ever asks whether it is live now.
+                "startedDaysAgo": 365 if days > 120 else 30,
+                "endsInDays": days,
+            },
+            "services": [
+                {
+                    "id": f"svc-{index:02d}-{position}",
+                    "tag": tag,
+                    "title": title,
+                    "priceRupees": price,
+                    **({"description": note} if note else {}),
+                }
+                for position, (title, price, note) in enumerate(services, 1)
+            ],
+            "credentials": [
+                {
+                    "id": f"cred-{index:02d}-{position}",
+                    "kind": kind,
+                    "title": title,
+                    **({"issuer": issuer} if issuer else {}),
+                    **({"year": year} if year else {}),
+                }
+                for position, (kind, title, issuer, year)
+                in enumerate(credentials, 1)
+            ],
+        })
+
+    return listings
+
+
 def main() -> None:
     jobs, people = build()
     bids, ratings, accounts = add_history(jobs, people)
+    listings = build_directory()
 
     SEED_DIR.mkdir(parents=True, exist_ok=True)
     for name, payload in [
@@ -922,6 +1062,7 @@ def main() -> None:
         ("bids.json", bids),
         ("ratings.json", ratings),
         ("accounts.json", accounts),
+        ("directory.json", listings),
     ]:
         (SEED_DIR / name).write_text(
             json.dumps(payload, ensure_ascii=False, indent=2) + "\n"
@@ -936,6 +1077,9 @@ def main() -> None:
 
     print(f"{len(jobs)} jobs, {len(people)} people, {len(cities)} cities")
     print(f"{len(bids)} bids, {len(ratings)} ratings, {len(accounts)} accounts")
+    live = sum(1 for l in listings if l["subscription"]["endsInDays"] > 0)
+    print(f"{len(listings)} directory listings ({live} live, "
+          f"{len(listings) - live} lapsed)")
     print("  jobs by status: " + ", ".join(
         f"{count} {state}" for state, count in sorted(statuses.items())
     ))

@@ -103,15 +103,24 @@ success criteria from
 [`documents/agile/sprint-planning/poc-sprint-plan.md`](documents/agile/sprint-planning/poc-sprint-plan.md),
 with the exception noted under *Map tiles* below.
 
-**Phase 1: P1-1 to P1-5 complete**, per
+**Phase 1: P1-1 to P1-6 complete**, per
 [`documents/agile/sprint-planning/phase-1-sprint-plan.md`](documents/agile/sprint-planning/phase-1-sprint-plan.md).
 Roles, the fixed tag vocabulary, the visibility rule that decides which jobs
 reach which worker, Mode A bidding — a starting fare, counter-offers, and a
 fare locked when the hirer chooses — the job's life from posted to finished
 including the mutual location reveal on acceptance, the token wallet that
-takes the platform's 5%, and mutual rating with the worker's record public and
-the hirer's kept internal. P1-6 onwards adds the premium directory, the admin
-panel and the backend.
+takes the platform's 5%, mutual rating with the worker's record public and the
+hirer's kept internal, and Mode B — a premium directory of workers at fixed
+prices, booked directly rather than bid on. P1-7 onwards adds the admin panel,
+the backend and verification.
+
+**Two ways to find work.** *Mode A* is the map: a hirer posts, workers offer,
+the hirer chooses, and the fare locks. *Mode B* is the directory: a worker pays
+to be listed, publishes a menu at fixed prices, and a hirer books one of them
+directly — no bidding, and the booking reaches that one worker rather than
+being broadcast. Booking in the app is 2.5% cheaper than the worker's own
+price, funded out of the platform's commission rather than the worker's
+earnings, so that using Trust Hire beats ringing somebody you found on it.
 
 **Demo accounts.** There is no sign-in — Section 13a excludes authentication
 from the POC — but the device can be any of six people, switched from the map
@@ -149,16 +158,18 @@ code/frontend/
 │   │   ├── bidding/      ← offers, and the hirer's choice
 │   │   ├── lifecycle/    ← a job's statuses and the location reveal
 │   │   ├── ratings/      ← mutual rating, and a worker's public record
+│   │   ├── directory/    ← Mode B: listings, service menus, direct booking
+│   │   ├── premium/      ← subscriptions and the hirer discount, as rules
 │   │   ├── wallet/       ← tokens, commission, top-up
 │   │   ├── account/      ← the demo account switcher
 │   │   ├── profile/      ← role, trades, and the app's settings
 │   │   └── onboarding/   ← first-run intro and permission priming
 │   ├── l10n/         ← app_en.arb, app_ur.arb (generated AppStrings)
-│   ├── models/       ← Job, JobTag, Bid, Wallet, Rating, DemoAccount, AppUser
+│   ├── models/       ← Job, JobTag, Bid, Wallet, Rating, DemoAccount, listings
 │   ├── services/     ← local storage, seed loading, repositories
 │   └── widgets/      ← shared UI
 ├── assets/
-│   ├── seed/         ← jobs, users, offers, ratings, accounts — copied on first run
+│   ├── seed/         ← jobs, users, offers, ratings, accounts, directory
 │   ├── images/       ← placeholder job photos
 │   ├── audio/        ← placeholder voice notes
 │   └── fonts/        ← Inter, Noto Sans Arabic, Noto Nastaliq Urdu

@@ -1142,4 +1142,241 @@ class AppStringsUr extends AppStrings {
 
   @override
   String get offerNotChosen => 'منتخب نہیں ہوئی';
+
+  @override
+  String get acceptBooking => 'یہ بکنگ قبول کریں';
+
+  @override
+  String get declineBooking => 'انکار کریں';
+
+  @override
+  String get declineBookingTitle => 'یہ بکنگ مسترد کریں؟';
+
+  @override
+  String get declineBookingExplanation =>
+      'بک کرنے والے کو بتا دیا جائے گا اور وہ کسی اور کو بک کر سکتے ہیں۔ انکار پر کوئی رقم نہیں کٹتی۔';
+
+  @override
+  String get bookingRequest => 'براہِ راست آپ سے بک کیا گیا';
+
+  @override
+  String get bookingAwaitingWorker => 'کارکن کے قبول کرنے کا انتظار ہے';
+
+  @override
+  String get bookedFrom => 'ڈائریکٹری سے بک کیا گیا';
+
+  @override
+  String get navDirectory => 'ڈائریکٹری';
+
+  @override
+  String get directoryTitle => 'ماہر بک کریں';
+
+  @override
+  String get directoryIntro =>
+      'قیمت پہلے سے طے، کوئی مول تول نہیں۔ براہِ راست بک کریں، وہ ہاں یا نہ کہیں گے۔';
+
+  @override
+  String get directoryEmpty => 'ابھی یہاں کوئی درج نہیں';
+
+  @override
+  String get directoryEmptyMessage =>
+      'ڈائریکٹری میں وہ کارکن ہوتے ہیں جو مقررہ قیمت لکھتے ہیں۔ کوئی اور کام دیکھیں، یا نقشے پر کام لگا دیں۔';
+
+  @override
+  String get directoryAllWork => 'ہر قسم کا کام';
+
+  @override
+  String fromPrice(String amount) {
+    return '$amount سے';
+  }
+
+  @override
+  String get serviceMenu => 'وہ کیا کرتے ہیں';
+
+  @override
+  String get credentialsHeading => 'قابلیت اور تجربہ';
+
+  @override
+  String get credentialsUnverified =>
+      'کارکن کا بتایا ہوا۔ ٹرسٹ ہائر نے اس کی تصدیق نہیں کی۔';
+
+  @override
+  String get serviceAreaHeading => 'وہ کہاں کام کرتے ہیں';
+
+  @override
+  String serviceAreaRadius(String distance) {
+    return '$distance تک جاتے ہیں';
+  }
+
+  @override
+  String get serviceAreaRemote => 'دور سے کام کرتے ہیں — آنے کی ضرورت نہیں';
+
+  @override
+  String get bookThis => 'یہ بک کریں';
+
+  @override
+  String bookingTitle(String service) {
+    return '$service بک کریں';
+  }
+
+  @override
+  String get bookingListPrice => 'ان کی قیمت';
+
+  @override
+  String get bookingYouPay => 'آپ دیں گے';
+
+  @override
+  String bookingSaving(String amount) {
+    return 'یہاں بک کرنے پر آپ کے $amount بچے۔';
+  }
+
+  @override
+  String get bookingDiscountWhy =>
+      'ٹرسٹ ہائر اپنی فیس کا آدھا آپ کو واپس دیتا ہے۔ کارکن کو دونوں صورتوں میں اتنا ہی ملتا ہے۔';
+
+  @override
+  String get bookingConfirm => 'بکنگ بھیجیں';
+
+  @override
+  String bookingSent(String name) {
+    return 'بکنگ بھیج دی گئی۔ $name قبول یا مسترد کریں گے۔';
+  }
+
+  @override
+  String get bookingUnavailable =>
+      'یہ فہرست بدل گئی ہے۔ موجودہ قیمتیں دیکھنے کے لیے دوبارہ کھولیں۔';
+
+  @override
+  String get myListing => 'میری ڈائریکٹری فہرست';
+
+  @override
+  String myListingSubtitle(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count خدمات درج ہیں',
+      one: '1 خدمت درج ہے',
+      zero: 'کچھ درج نہیں',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get premiumHeading => 'ڈائریکٹری میں نظر آئیں';
+
+  @override
+  String get premiumPitch =>
+      'لوگ ڈائریکٹری میں ڈھونڈ کر آپ کو آپ ہی کی قیمت پر بک کرتے ہیں — بولی نہیں۔ اس کے لیے سبسکرپشن ہے۔';
+
+  @override
+  String premiumActive(String date) {
+    return '$date تک درج ہیں';
+  }
+
+  @override
+  String premiumDaysLeft(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count دن باقی',
+      one: '1 دن باقی',
+      zero: 'آج ختم',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get premiumLapsed =>
+      'آپ کی فہرست ختم ہو گئی۔ پہلے سے بک شدہ کام پر اثر نہیں پڑا، اور آپ پہلے کی طرح بولی دے سکتے ہیں۔';
+
+  @override
+  String get premiumMonthly => 'ماہانہ';
+
+  @override
+  String get premiumYearly => 'سالانہ';
+
+  @override
+  String get premiumSimulated =>
+      'کوئی رقم نہیں کٹتی۔ یہ نمونہ ہے اور کارڈ کی تفصیل نہیں لیتا۔';
+
+  @override
+  String get premiumSubscribe => 'فہرست شروع کریں';
+
+  @override
+  String get premiumRenew => 'مزید وقت بڑھائیں';
+
+  @override
+  String get premiumStarted => 'آپ ڈائریکٹری میں آ گئے۔';
+
+  @override
+  String get addService => 'خدمت شامل کریں';
+
+  @override
+  String get serviceTitleLabel => 'یہ کیا ہے';
+
+  @override
+  String get servicePriceLabel => 'آپ کی قیمت، روپوں میں';
+
+  @override
+  String get serviceDescriptionLabel => 'اس کے بارے میں کچھ اور (اختیاری)';
+
+  @override
+  String get serviceKindLabel => 'کس قسم کا کام';
+
+  @override
+  String get saveService => 'شامل کریں';
+
+  @override
+  String get removeService => 'ہٹا دیں';
+
+  @override
+  String get noServicesYet => 'ابھی کچھ درج نہیں';
+
+  @override
+  String get noServicesYetMessage =>
+      'لکھیں کہ آپ کیا کرتے ہیں اور کتنے لیتے ہیں۔ لوگ اسی قیمت پر بک کریں گے۔';
+
+  @override
+  String get addCredential => 'قابلیت شامل کریں';
+
+  @override
+  String get credentialTitleLabel => 'یہ کیا ہے';
+
+  @override
+  String get credentialIssuerLabel => 'کس نے دی (اختیاری)';
+
+  @override
+  String get credentialYearLabel => 'سال (اختیاری)';
+
+  @override
+  String get credentialKindQualification => 'قابلیت';
+
+  @override
+  String get credentialKindCertification => 'سرٹیفکیٹ';
+
+  @override
+  String get credentialKindExperience => 'تجربہ';
+
+  @override
+  String get credentialKindMembership => 'رکنیت';
+
+  @override
+  String get howFarYouTravel => 'آپ کتنی دور جاتے ہیں';
+
+  @override
+  String get remoteOnlyLabel => 'میں دور سے کام کرتا ہوں، سفر نہیں';
+
+  @override
+  String get headlineLabel => 'اپنے بارے میں ایک سطر (اختیاری)';
+
+  @override
+  String get listingNeedsService =>
+      'لوگوں کے ڈھونڈنے سے پہلے کم از کم ایک خدمت شامل کریں۔';
+
+  @override
+  String get someone => 'کوئی';
+
+  @override
+  String get bookingWhatNext =>
+      'وہ قبول یا مسترد کریں گے۔ دونوں صورتوں میں کوئی رقم نہیں کٹتی۔';
 }

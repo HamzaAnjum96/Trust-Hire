@@ -1136,4 +1136,241 @@ class AppStringsEn extends AppStrings {
 
   @override
   String get offerNotChosen => 'Not chosen';
+
+  @override
+  String get acceptBooking => 'Accept this booking';
+
+  @override
+  String get declineBooking => 'Decline';
+
+  @override
+  String get declineBookingTitle => 'Decline this booking?';
+
+  @override
+  String get declineBookingExplanation =>
+      'The person who booked you will be told, and can book someone else. Nothing is charged for declining.';
+
+  @override
+  String get bookingRequest => 'Booked directly with you';
+
+  @override
+  String get bookingAwaitingWorker => 'Waiting for the worker to accept';
+
+  @override
+  String get bookedFrom => 'Booked from the directory';
+
+  @override
+  String get navDirectory => 'Directory';
+
+  @override
+  String get directoryTitle => 'Book a professional';
+
+  @override
+  String get directoryIntro =>
+      'Set prices, no haggling. Book someone directly and they say yes or no.';
+
+  @override
+  String get directoryEmpty => 'Nobody listed here yet';
+
+  @override
+  String get directoryEmptyMessage =>
+      'The directory holds workers who list fixed prices. Try another kind of work, or post a job on the map instead.';
+
+  @override
+  String get directoryAllWork => 'All work';
+
+  @override
+  String fromPrice(String amount) {
+    return 'From $amount';
+  }
+
+  @override
+  String get serviceMenu => 'What they do';
+
+  @override
+  String get credentialsHeading => 'Qualifications and experience';
+
+  @override
+  String get credentialsUnverified =>
+      'Given by the worker. Trust Hire has not checked these.';
+
+  @override
+  String get serviceAreaHeading => 'Where they work';
+
+  @override
+  String serviceAreaRadius(String distance) {
+    return 'Travels up to $distance';
+  }
+
+  @override
+  String get serviceAreaRemote => 'Works remotely — no travel needed';
+
+  @override
+  String get bookThis => 'Book this';
+
+  @override
+  String bookingTitle(String service) {
+    return 'Book $service';
+  }
+
+  @override
+  String get bookingListPrice => 'Their price';
+
+  @override
+  String get bookingYouPay => 'You pay';
+
+  @override
+  String bookingSaving(String amount) {
+    return 'You save $amount by booking here.';
+  }
+
+  @override
+  String get bookingDiscountWhy =>
+      'Trust Hire gives you half of its own fee back. The worker is paid the same either way.';
+
+  @override
+  String get bookingConfirm => 'Send this booking';
+
+  @override
+  String bookingSent(String name) {
+    return 'Booking sent. $name will accept or decline.';
+  }
+
+  @override
+  String get bookingUnavailable =>
+      'This listing has changed. Open it again to see the current prices.';
+
+  @override
+  String get myListing => 'My directory listing';
+
+  @override
+  String myListingSubtitle(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count services listed',
+      one: '1 service listed',
+      zero: 'Nothing listed',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get premiumHeading => 'Be found in the directory';
+
+  @override
+  String get premiumPitch =>
+      'Hirers search the directory and book you at your own price — no bidding. Listing is a subscription.';
+
+  @override
+  String premiumActive(String date) {
+    return 'Listed until $date';
+  }
+
+  @override
+  String premiumDaysLeft(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count days left',
+      one: '1 day left',
+      zero: 'Ends today',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get premiumLapsed =>
+      'Your listing has ended. Jobs already booked are unaffected, and you can still bid as normal.';
+
+  @override
+  String get premiumMonthly => 'Monthly';
+
+  @override
+  String get premiumYearly => 'Yearly';
+
+  @override
+  String get premiumSimulated =>
+      'Nothing is charged. This is a demonstration and takes no card details.';
+
+  @override
+  String get premiumSubscribe => 'Start listing';
+
+  @override
+  String get premiumRenew => 'Add more time';
+
+  @override
+  String get premiumStarted => 'You are in the directory.';
+
+  @override
+  String get addService => 'Add a service';
+
+  @override
+  String get serviceTitleLabel => 'What is it';
+
+  @override
+  String get servicePriceLabel => 'Your price, in rupees';
+
+  @override
+  String get serviceDescriptionLabel => 'Anything else about it (optional)';
+
+  @override
+  String get serviceKindLabel => 'What kind of work';
+
+  @override
+  String get saveService => 'Add it';
+
+  @override
+  String get removeService => 'Remove';
+
+  @override
+  String get noServicesYet => 'Nothing listed yet';
+
+  @override
+  String get noServicesYetMessage =>
+      'Add what you do and what you charge. Hirers book these at the price you set.';
+
+  @override
+  String get addCredential => 'Add a qualification';
+
+  @override
+  String get credentialTitleLabel => 'What it is';
+
+  @override
+  String get credentialIssuerLabel => 'Who gave it (optional)';
+
+  @override
+  String get credentialYearLabel => 'Year (optional)';
+
+  @override
+  String get credentialKindQualification => 'Qualification';
+
+  @override
+  String get credentialKindCertification => 'Certificate';
+
+  @override
+  String get credentialKindExperience => 'Experience';
+
+  @override
+  String get credentialKindMembership => 'Membership';
+
+  @override
+  String get howFarYouTravel => 'How far you travel';
+
+  @override
+  String get remoteOnlyLabel => 'I work remotely, no travel';
+
+  @override
+  String get headlineLabel => 'One line about you (optional)';
+
+  @override
+  String get listingNeedsService =>
+      'Add at least one service before hirers can find you.';
+
+  @override
+  String get someone => 'Someone';
+
+  @override
+  String get bookingWhatNext =>
+      'They will accept or decline. Nothing is charged either way.';
 }

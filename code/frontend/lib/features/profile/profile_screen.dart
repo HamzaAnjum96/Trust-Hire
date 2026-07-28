@@ -17,7 +17,9 @@ import '../../widgets/state_views.dart';
 import '../../l10n/app_localizations.dart';
 import '../wallet/wallet_screen.dart';
 import 'my_trades_screen.dart';
+import '../../app/premium_controller.dart';
 import '../account/account_switcher.dart';
+import '../directory/my_listing_screen.dart';
 import '../ratings/worker_standing_view.dart';
 import '../../app/account_controller.dart';
 
@@ -243,6 +245,37 @@ class _WalletTile extends StatelessWidget {
   }
 }
 
+/// The way into Mode B, from the worker's side.
+///
+/// Under the wallet, because that is the order the money runs in: a worker
+/// pays commission out of the wallet whatever they do, and pays for a listing
+/// only if they choose to be found rather than to go looking.
+class _ListingTile extends StatelessWidget {
+  const _ListingTile();
+
+  @override
+  Widget build(BuildContext context) {
+    final strings = AppStrings.of(context);
+    final premium = context.watch<PremiumController>();
+
+    return ListTile(
+      contentPadding: EdgeInsets.zero,
+      leading: Icon(
+        premium.isPremium ? Icons.badge : Icons.badge_outlined,
+        color: premium.isPremium ? BrandColours.copper : null,
+      ),
+      title: Text(strings.myListing),
+      subtitle: Text(
+        premium.hasLapsed
+            ? strings.premiumLapsed
+            : strings.myListingSubtitle(premium.mine.services.length),
+      ),
+      trailing: const Icon(Icons.chevron_right),
+      onTap: () => MyListingScreen.open(context),
+    );
+  }
+}
+
 /// The build, at the foot of settings — where people look for it.
 class _VersionLine extends StatelessWidget {
   const _VersionLine();
@@ -322,6 +355,7 @@ class _RolePicker extends StatelessWidget {
             onTap: () => MyTradesScreen.open(context),
           ),
           const _WalletTile(),
+          const _ListingTile(),
         ],
       ],
     );
