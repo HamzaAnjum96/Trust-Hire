@@ -154,7 +154,10 @@ void main() {
       // a space. Counting words has no such blind spot.
       final literal = RegExp(r"'([^'\\\$]{8,})'");
       final prose = RegExp(r'^[A-Za-z][^,;:]*( [a-z]+){2,}');
-      final developerFacing = RegExp(r'debugPrint\(|Error\(|assert\(');
+      // `throw` joins these for the same reason `Error(` is here: an
+      // exception message is read in a stack trace, never on a screen.
+      final developerFacing =
+          RegExp(r'debugPrint\(|Error\(|assert\(|throw ');
       // Comments are prose by nature and are not shipped to anyone.
       final comment = RegExp(r'^\s*(///?|\*)');
 

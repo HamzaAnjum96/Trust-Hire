@@ -92,7 +92,7 @@ halves.
 | Folder | What belongs in it |
 | --- | --- |
 | `code/frontend/` | The Flutter app — the whole POC lives here. Design tokens implement `documents/brand-guidelines/` rather than restating it. |
-| `code/backend/` | The PostgreSQL schema, and the tests that try to break it. Nothing is hosted and the app does not talk to it yet — the POC still runs entirely on-device. The API layer, data access and sync arrive in P1-8b. |
+| `code/backend/` | The PostgreSQL schema, and the tests that try to break it. **Nothing is hosted.** The app talks to a mock that enforces the same rules — see [The backend that is not there](#the-backend-that-is-not-there) — so the POC still runs entirely on-device. |
 
 ### The schema (`code/backend/`)
 
@@ -149,6 +149,44 @@ the run. It found two such checks on its first pass, both of which had been
 green from the moment they were written. If you add a rule, add a test that
 provokes *only* it — and if nothing can, say so in the sweep's
 `expected_uncovered` list with the reason, as `bids_one_accepted_per_job` does.
+
+### The backend that is not there
+
+There is no Supabase project and no credentials, so P1-8b delivered the **seam**
+and a stand-in behind it. Swapping in a real client means implementing one
+interface, `RemoteApi`, and nothing above it changes.
+
+```
+lib/services/backend/
+├── remote_api.dart     ← what crosses the wire, and how a refusal is described
+└── mock_backend.dart   ← in-memory, and it says no
+lib/features/sync/
+└── sync_rules.dart     ← the outbox, and who wins when two copies disagree
+lib/app/sync_controller.dart
+```
+
+**The mock refuses what the schema refuses**, and that is the whole reason it is
+worth having. A mock that accepts whatever it is handed is a dictionary with
+latency: the sync layer above it looks correct while being unable to cope with
+the one thing a server does, which is say no. `MockBackend.rulesEnforcedHere`
+maps every refusal it can give to the migration that rule comes from, and a test
+fails if a code is added without one.
+
+Four things to know before changing anything here:
+
+- **The app is offline-first, and that is not a concession to the mock.** A
+  local write lands locally and immediately; the queue reconciles afterwards.
+  The people this is for lose signal in the middle of a job.
+- **A permanent refusal must leave the queue.** A write the server will refuse
+  identically forever sits at the head of an ordered outbox and stops
+  everything behind it — a queue that looks busy and delivers nothing. Only
+  `unreachable` is retried.
+- **And it is never dropped silently.** Somebody believes that change happened,
+  so refusals surface on the profile with the reason.
+- **The server assigns the time.** A device's clock is somebody's phone.
+  `madeAt` orders the queue and never decides which write wins.
+
+Turn the connection off from **Profile → Backend** to see all of it.
 
 ### The app (`code/frontend/`)
 
@@ -245,6 +283,7 @@ code/frontend/
 │   │   ├── premium/      ← subscriptions and the hirer discount, as rules
 │   │   ├── admin/        ← approvals, disputes, overrides and the audit log
 │   │   ├── verification/ ← Section 2: the CNIC, the phone, the name check
+│   │   ├── sync/         ← the outbox, and who wins when copies disagree
 │   │   ├── wallet/       ← tokens, commission, top-up
 │   │   ├── account/      ← the demo account switcher
 │   │   ├── profile/      ← role, trades, and the app's settings
@@ -253,6 +292,7 @@ code/frontend/
 │   ├── models/       ← Job, JobTag, Bid, Wallet, Rating, DemoAccount,
 │   │                    listings, Verification
 │   ├── services/     ← local storage, seed loading, repositories
+│   │   └── backend/  ← the RemoteApi seam, and the mock behind it
 │   └── widgets/      ← shared UI (status pills, skeletons, empty states)
 ├── assets/
 │   ├── seed/         ← jobs, users, offers, ratings, accounts, directory, admin

@@ -490,10 +490,60 @@ Decisions:
   exists and the sweep carries the reason in an allow-list. The alternative —
   leaving it silently uncovered — is the gap the sweep was written to close.
 
-### P1-8b — The repositories, sync and media
-Pointing the repositories at Supabase, sync, and the media pipeline:
-compression and retention (Section 3), and voice-note transcripts (see *A third
-decision* above). Needs somewhere hosted to point at, which is what defers it.
+### P1-8b — The backend seam and sync — done, against a mock
+
+Planned as "point the repositories at Supabase". There is no Supabase project
+and no credentials, so what landed is the **seam** plus a stand-in behind it:
+`RemoteApi`, `MockBackend`, an outbox and `SyncRules`. Swapping in a real client
+means implementing one interface.
+
+**The mock refuses what the schema refuses.** This is the decision the sprint
+turns on. A mock that accepts whatever it is handed is a dictionary with
+latency: the sync layer above it would look correct while being unable to cope
+with the one thing a server actually does, which is say no. So `MockBackend`
+enforces the fare lock, the swapped worker, one accepted bid per job, the
+append-only ledger and audit log, the once-per-job commission, and the rating
+rules — and `rulesEnforcedHere` names the migration each one comes from, with a
+test that every refusal it can return is on that list.
+
+Decisions:
+
+- **The app stays offline-first, and that is not a concession to the mock.**
+  The people this is for lose signal in the middle of a job. A local write
+  lands locally and immediately; the queue reconciles afterwards. A design
+  where the network is the source of truth would have to be undone later.
+- **A permanent refusal leaves the queue.** The sharpest rule here. A write the
+  server will refuse identically forever sits at the head of an ordered outbox
+  and stops everything behind it from ever being sent — a queue that looks busy
+  and delivers nothing. So a refusal is classified, and only "unreachable" is
+  retried.
+- **And it is never dropped silently.** Somebody believes that change happened.
+  Refusals surface on the profile with the reason in their own language.
+- **The server assigns the time.** A device's clock is somebody's phone, and
+  phones are wrong — often by more than the gap between two edits. `madeAt`
+  orders the outbox and tells somebody how long they have been waiting; it
+  never decides which of two writes wins.
+- **The server wins on anything it has already locked.** An offline edit made
+  against version 1 of a job whose fare is now set is working from something
+  that is no longer true, however recently it was made.
+- **The queue is ordered oldest-first and never regrouped by kind.** Accepting
+  an offer and locking a job's fare make sense in one sequence only; sending
+  all the jobs and then all the bids would offer the server a job whose
+  accepted bid never arrived.
+- **A refusal travels as a code, not a sentence.** Caught by
+  `localisation_test.dart`, which refused the first version for putting English
+  prose on the wire — a server that sends display text decides what language
+  the app speaks, and this one speaks two.
+
+**What is deliberately not done.** Pulling is implemented and tested but not
+applied back into the repositories: deciding what happens when a demo account's
+seeded history meets a server's copy of it has nothing to be right about while
+there is no server holding a second copy. `SyncRules.merge` is where it goes.
+
+### P1-8c — Media, and a real backend
+Still waiting on somewhere hosted: media compression and retention (Section 3),
+voice-note transcripts, the before/after proof deferred from P1-3, and real SMS
+delivery from P1-9. All four are behind an interface that exists.
 
 ### P1-9 — Verification ✅
 CNIC upload and plausibility check, SMS OTP, CNIC-SIM name match.

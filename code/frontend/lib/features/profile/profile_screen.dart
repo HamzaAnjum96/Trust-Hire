@@ -13,11 +13,15 @@ import '../../core/app_version.dart';
 import '../../core/layout.dart';
 import '../../core/tokens.dart';
 import '../../models/worker_profile.dart';
+import '../../services/backend/mock_backend.dart';
+import '../../services/backend/remote_api.dart';
 import '../../widgets/state_views.dart';
+import '../../widgets/status_pill.dart';
 import '../../l10n/app_localizations.dart';
 import '../wallet/wallet_screen.dart';
 import 'my_trades_screen.dart';
 import '../../app/admin_controller.dart';
+import '../../app/sync_controller.dart';
 import '../../app/verification_controller.dart';
 import '../../app/premium_controller.dart';
 import '../admin/admin_screen.dart';
@@ -172,6 +176,9 @@ class ProfileScreen extends StatelessWidget {
               label: Text(strings.restoreSeedData),
             ),
 
+            const SizedBox(height: BrandSizing.spaceXl),
+            const _BackendSection(),
+
             const _VersionLine(),
           ],
         ),
@@ -278,6 +285,131 @@ class _VerificationTile extends StatelessWidget {
       onTap: () => VerificationScreen.open(context),
     );
   }
+}
+
+/// The backend seam, made visible.
+///
+/// There is no server, and a seam nobody can see is a claim rather than a
+/// demonstration — so this shows the queue, lets somebody switch the stand-in
+/// off, and lists anything the server would not take. **The refusals are the
+/// part worth showing:** an offline app that quietly discards a change the
+/// server rejects is the failure mode this whole layer exists to avoid.
+class _BackendSection extends StatelessWidget {
+  const _BackendSection();
+
+  @override
+  Widget build(BuildContext context) {
+    final strings = AppStrings.of(context);
+    final theme = Theme.of(context);
+    final sync = context.watch<SyncController>();
+    final backend = context.read<MockBackend>();
+
+    final state = sync.state();
+    final label = switch (state) {
+      SyncState.settled => strings.syncSettled,
+      SyncState.sending => strings.syncSending,
+      SyncState.offline => strings.syncOffline,
+      SyncState.needsAttention => strings.syncNeedsAttention,
+    };
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Text(strings.backendSection, style: theme.textTheme.titleLarge),
+        const SizedBox(height: BrandSizing.spaceXs),
+        Text(strings.backendExplain, style: theme.textTheme.labelSmall),
+        const SizedBox(height: BrandSizing.spaceMd),
+
+        Row(
+          children: [
+            switch (state) {
+              SyncState.settled => StatusPill.good(label),
+              SyncState.needsAttention => StatusPill.bad(label),
+              _ => StatusPill.muted(context, label),
+            },
+            const SizedBox(width: BrandSizing.spaceSm),
+            Expanded(
+              child: Text(
+                strings.syncWaiting(sync.outbox.length),
+                style: theme.textTheme.labelMedium,
+              ),
+            ),
+          ],
+        ),
+
+        const SizedBox(height: BrandSizing.spaceXs),
+        Text(
+          sync.lastPulledAt == null
+              ? strings.syncNeverPulled
+              : strings.syncLastPulled(
+                  Format.day(strings, sync.lastPulledAt!),
+                ),
+          style: theme.textTheme.labelSmall,
+        ),
+
+        const SizedBox(height: BrandSizing.spaceSm),
+        SwitchListTile(
+          contentPadding: EdgeInsets.zero,
+          title: Text(strings.syncPretendOffline),
+          value: backend.offline,
+          onChanged: (value) {
+            backend.offline = value;
+            // The switch belongs to the mock, which is not a listenable — so
+            // ask the controller to re-evaluate rather than leaving the pill
+            // describing a connection that has just changed.
+            sync.load();
+          },
+        ),
+        OutlinedButton.icon(
+          onPressed: () async {
+            await sync.push();
+            await sync.pull();
+          },
+          icon: const Icon(Icons.sync),
+          label: Text(strings.syncNow),
+        ),
+
+        if (sync.needAttention.isNotEmpty) ...[
+          const SizedBox(height: BrandSizing.spaceMd),
+          Text(strings.syncRefusals, style: theme.textTheme.titleMedium),
+          const SizedBox(height: BrandSizing.spaceSm),
+          for (final refusal in sync.needAttention)
+            Padding(
+              padding: const EdgeInsets.only(bottom: BrandSizing.spaceSm),
+              child: NoticePanel(
+                message: _wordFor(strings, refusal.code),
+                icon: Icons.error_outline,
+                tone: NoticeTone.warning,
+              ),
+            ),
+          TextButton(
+            onPressed: sync.acknowledge,
+            child: Text(strings.syncAcknowledge),
+          ),
+        ],
+      ],
+    );
+  }
+
+  /// The wording for a refusal.
+  ///
+  /// Here rather than on the wire: a server that sends prose decides what
+  /// language the app speaks, and this one speaks two.
+  static String _wordFor(AppStrings strings, RefusalCode code) =>
+      switch (code) {
+        RefusalCode.fareIsLocked => strings.refusalFareIsLocked,
+        RefusalCode.workerCannotBeSwapped => strings.refusalWorkerSwapped,
+        RefusalCode.nobodyWorksForThemselves => strings.refusalOwnJob,
+        RefusalCode.anotherOfferWasAccepted => strings.refusalAnotherOfferWon,
+        RefusalCode.offerDoesNotMatchTheJob => strings.refusalOfferMismatch,
+        RefusalCode.recordIsAppendOnly => strings.refusalAppendOnly,
+        RefusalCode.commissionAlreadyCharged =>
+          strings.refusalCommissionCharged,
+        RefusalCode.jobIsNotFinished => strings.refusalJobNotFinished,
+        RefusalCode.alreadyRatedFromThatSide => strings.refusalAlreadyRated,
+        RefusalCode.changedElsewhere => strings.refusalChangedElsewhere,
+        RefusalCode.unreachable => strings.refusalUnreachable,
+      };
 }
 
 /// The wallet, from the profile.

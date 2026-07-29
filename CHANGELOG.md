@@ -12,6 +12,63 @@ that heading to the version and date, and open a fresh `[Unreleased]`.
 
 ## [Unreleased]
 
+### 0.15.0 — P1-8b, the backend seam and sync
+
+There is no Supabase project and no credentials, so this is the **seam** plus a
+stand-in behind it. Swapping in a real client means implementing `RemoteApi`.
+
+#### Added
+
+- **`RemoteApi`**, and `MockBackend` behind it: in-memory, with server-assigned
+  timestamps and versions, a latency setting and a switch that makes it
+  unreachable.
+- **An outbox.** Local writes queue and survive being closed while offline —
+  the queue exists because the network is not there, and an app closed while
+  offline would otherwise lose exactly the writes it was protecting.
+- **`SyncRules`** — the conflict decisions, as pure functions.
+- **A Backend panel on the profile**, with the queue, a "pretend there is no
+  connection" switch, and any refusals. A seam nobody can see is a claim rather
+  than a demonstration.
+- **Six mutations** in `sweep_tests.py` for the promises above.
+
+#### The decision the sprint turns on
+
+**The mock refuses what the schema refuses.** A mock that accepts whatever it is
+handed is a dictionary with latency: the sync layer would look correct while
+being unable to cope with the one thing a server does, which is say no. So the
+fare lock, the swapped worker, one accepted bid per job, the append-only ledger
+and audit log, the once-per-job commission and the rating rules are all enforced
+at the mock — and `rulesEnforcedHere` names the migration each comes from, with
+a test that every refusal it can return is on that list.
+
+#### Other calls worth recording
+
+- **A permanent refusal leaves the queue**, and is reported. One that will be
+  refused identically forever otherwise sits at the head of an ordered outbox
+  and stops everything behind it from ever being sent.
+- **The server assigns the time.** A device's clock is somebody's phone, and
+  phones are wrong by more than the gap between two edits.
+- **The queue is ordered oldest-first and never regrouped by kind**, because
+  accepting an offer and locking a job's fare make sense in one sequence only.
+- **A refusal travels as a code, not a sentence** — caught by
+  `localisation_test.dart`, which refused the first version of this for putting
+  English prose on the wire. A server that sends display text decides what
+  language the app speaks, and this one speaks two.
+
+#### Changed
+
+- `localisation_test.dart` now exempts `throw` lines for the same reason it
+  already exempted `Error(`: an exception message is read in a stack trace,
+  never on a screen.
+
+#### Not done, deliberately
+
+Pulling is implemented and tested but not applied back into the repositories.
+Deciding what happens when a demo account's seeded history meets a server's copy
+of it has nothing to be right about while no server holds a second copy.
+`SyncRules.merge` is where it goes. Media, transcripts and real SMS are P1-8c
+and all wait on the same thing.
+
 ### 0.14.4 — The cast stops moving about
 
 Three seed defects, all found by walking the app for the demo script rather

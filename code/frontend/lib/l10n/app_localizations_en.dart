@@ -1691,4 +1691,98 @@ class AppStringsEn extends AppStrings {
 
   @override
   String get verifyStatusSuspended => 'Suspended';
+
+  @override
+  String get backendSection => 'Backend';
+
+  @override
+  String get backendExplain =>
+      'There is no server yet. This is a stand-in that behaves like one — it refuses the same things the real database would, and it can be switched off so you can see what happens when the network goes.';
+
+  @override
+  String get syncSettled => 'Everything is saved';
+
+  @override
+  String get syncSending => 'Sending';
+
+  @override
+  String get syncOffline => 'No connection — your work is safe';
+
+  @override
+  String get syncNeedsAttention => 'Something needs you';
+
+  @override
+  String syncWaiting(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count changes waiting',
+      one: '1 change waiting',
+      zero: 'Nothing waiting',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get syncNow => 'Sync now';
+
+  @override
+  String get syncPretendOffline => 'Pretend there is no connection';
+
+  @override
+  String get syncRefusals => 'Changes that did not go through';
+
+  @override
+  String get syncAcknowledge => 'I have read these';
+
+  @override
+  String get syncNeverPulled => 'Nothing fetched yet';
+
+  @override
+  String syncLastPulled(String when) {
+    return 'Last fetched $when';
+  }
+
+  @override
+  String get refusalFareIsLocked =>
+      'The fare was fixed when the offer was accepted, so it could not be changed.';
+
+  @override
+  String get refusalWorkerSwapped =>
+      'Somebody had already been chosen for this job.';
+
+  @override
+  String get refusalOwnJob =>
+      'A job cannot be taken by the person who posted it.';
+
+  @override
+  String get refusalAnotherOfferWon =>
+      'Another offer on this job had already been accepted.';
+
+  @override
+  String get refusalOfferMismatch =>
+      'This offer does not match what the job records.';
+
+  @override
+  String get refusalAppendOnly =>
+      'This is a record of something that happened. It can be added to, never changed.';
+
+  @override
+  String get refusalCommissionCharged =>
+      'Commission had already been charged for this job.';
+
+  @override
+  String get refusalJobNotFinished => 'Only a finished job can be rated.';
+
+  @override
+  String get refusalAlreadyRated =>
+      'This job had already been rated from your side.';
+
+  @override
+  String get refusalChangedElsewhere =>
+      'Somebody else changed this while you were offline, so your change was not applied.';
+
+  @override
+  String get refusalUnreachable =>
+      'This has not been sent yet. It is saved on this device.';
 }

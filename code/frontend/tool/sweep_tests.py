@@ -387,6 +387,59 @@ MUTATIONS = [
         replace="  String get _key => StoreKeys.savedJobs;",
         tests=["test/saved_jobs_test.dart", "test/account_test.dart"],
     ),
+    # --- P1-8b: the backend seam --------------------------------------------
+    Mutation(
+        name="permanent-refusal-leaves-the-queue",
+        promise="a write the server will never take stops blocking the ones behind it",
+        path="lib/features/sync/sync_rules.dart",
+        find="    if (!refusal.isWorthRetrying) return OutboxDecision.reportAndDrop;",
+        replace="    if (!refusal.isWorthRetrying) return OutboxDecision.retry;",
+        tests=["test/backend_test.dart"],
+    ),
+    Mutation(
+        name="offline-keeps-the-queue",
+        promise="losing the connection loses no work",
+        path="lib/app/sync_controller.dart",
+        find="      _outbox = [for (final write in ordered) write.retried()];",
+        replace="      _outbox = const [];",
+        tests=["test/backend_test.dart"],
+    ),
+    Mutation(
+        name="outbox-order",
+        promise="writes are offered oldest first, so a bid never precedes its job",
+        path="lib/features/sync/sync_rules.dart",
+        find="      ..sort((a, b) => a.madeAt.compareTo(b.madeAt));",
+        replace="      ..sort((a, b) => b.madeAt.compareTo(a.madeAt));",
+        tests=["test/backend_test.dart"],
+    ),
+    Mutation(
+        name="server-wins-on-a-locked-field",
+        promise="an offline edit made against an old version does not overwrite the server",
+        path="lib/features/sync/sync_rules.dart",
+        find="    if (local.baseVersion != remote.version) return false;",
+        replace="    if (false) return false;",
+        tests=["test/backend_test.dart"],
+    ),
+    Mutation(
+        name="the-fare-lock-holds-at-the-server-too",
+        promise="the server refuses a rewritten fare, not only the app",
+        path="lib/services/backend/mock_backend.dart",
+        find="""    if (was != null && now != was) {
+      return RefusalCode.fareIsLocked;
+    }""",
+        replace="""    if (false) {
+      return RefusalCode.fareIsLocked;
+    }""",
+        tests=["test/backend_test.dart"],
+    ),
+    Mutation(
+        name="append-only-at-the-server",
+        promise="the server refuses an edit to a ledger or audit entry",
+        path="lib/services/backend/mock_backend.dart",
+        find="        if (existing != null) return RefusalCode.recordIsAppendOnly;",
+        replace="        if (false) return RefusalCode.recordIsAppendOnly;",
+        tests=["test/backend_test.dart"],
+    ),
 ]
 
 

@@ -1121,5 +1121,43 @@
   "verifyLimitSimFlag": "A name mismatch is a reason for a person to look, not evidence of anything.",
   "verifyStatusPending": "Waiting to be looked at",
   "verifyStatusApproved": "Approved",
-  "verifyStatusSuspended": "Suspended"
+  "verifyStatusSuspended": "Suspended",
+  "backendSection": "Backend",
+  "backendExplain": "There is no server yet. This is a stand-in that behaves like one — it refuses the same things the real database would, and it can be switched off so you can see what happens when the network goes.",
+  "syncSettled": "Everything is saved",
+  "syncSending": "Sending",
+  "syncOffline": "No connection — your work is safe",
+  "syncNeedsAttention": "Something needs you",
+  "syncWaiting": "{count, plural, =0{Nothing waiting} =1{1 change waiting} other{{count} changes waiting}}",
+  "@syncWaiting": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "syncNow": "Sync now",
+  "syncPretendOffline": "Pretend there is no connection",
+  "syncRefusals": "Changes that did not go through",
+  "syncAcknowledge": "I have read these",
+  "syncNeverPulled": "Nothing fetched yet",
+  "syncLastPulled": "Last fetched {when}",
+  "@syncLastPulled": {
+    "placeholders": {
+      "when": {
+        "type": "String"
+      }
+    }
+  },
+  "refusalFareIsLocked": "The fare was fixed when the offer was accepted, so it could not be changed.",
+  "refusalWorkerSwapped": "Somebody had already been chosen for this job.",
+  "refusalOwnJob": "A job cannot be taken by the person who posted it.",
+  "refusalAnotherOfferWon": "Another offer on this job had already been accepted.",
+  "refusalOfferMismatch": "This offer does not match what the job records.",
+  "refusalAppendOnly": "This is a record of something that happened. It can be added to, never changed.",
+  "refusalCommissionCharged": "Commission had already been charged for this job.",
+  "refusalJobNotFinished": "Only a finished job can be rated.",
+  "refusalAlreadyRated": "This job had already been rated from your side.",
+  "refusalChangedElsewhere": "Somebody else changed this while you were offline, so your change was not applied.",
+  "refusalUnreachable": "This has not been sent yet. It is saved on this device."
 }

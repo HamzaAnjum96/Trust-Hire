@@ -147,6 +147,17 @@ class StoreKeys {
   /// way to get a fresh set of guesses.
   static const phoneChallenge = 'trust_hire.phone_challenge';
 
+  /// Local writes the server has not accepted yet.
+  ///
+  /// Stored rather than held in memory for the obvious reason: the queue exists
+  /// because the network is not there, and an app that is closed while offline
+  /// would otherwise lose exactly the writes the queue was protecting.
+  static const outbox = 'trust_hire.outbox';
+
+  /// The server timestamp of the newest record pulled, so the next pull can
+  /// ask for what changed rather than for everything.
+  static const lastPulledAt = 'trust_hire.last_pulled_at';
+
   /// The per-account name for a key.
   ///
   /// Role, trades, saved jobs and the wallet belong to a person rather than to
@@ -185,6 +196,8 @@ class StoreKeys {
     cnicRecords,
     disputes,
     phoneChallenge,
+    outbox,
+    lastPulledAt,
     mediaIndex,
   ];
 }

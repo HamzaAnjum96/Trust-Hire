@@ -186,7 +186,31 @@ Three things to say, and they matter more than the screen:
 
 ---
 
-## Stop 8 — The parts that are not the app
+## Stop 8 — The backend that is not there
+
+**Go:** Profile, and scroll to the bottom.
+
+There is no server. What is here is the seam one goes behind, and a stand-in
+that behaves like one in the ways that matter.
+
+1. **Turn on "Pretend there is no connection", then do something** — accept an
+   offer, post a job. It works. It always works: a local write lands locally
+   and immediately, because the people this is for lose signal in the middle of
+   a job.
+2. **The pill says "No connection — your work is safe", with a count waiting.**
+   Nothing is lost and nothing is blocked.
+3. **Turn the connection back on and press Sync now.** The queue drains.
+4. **The part worth dwelling on:** the stand-in *refuses* things — the same
+   things the real database would, listed in `MockBackend.rulesEnforcedHere`
+   against the migration each comes from. A refusal it will give again forever
+   leaves the queue rather than blocking everything behind it, and it is shown
+   to the person in their own language rather than being dropped. An offline
+   app that quietly discards a change the server rejected is the failure this
+   whole layer exists to avoid.
+
+---
+
+## Stop 9 — The parts that are not the app
 
 Worth two minutes at the end, because they are where most of the argument is:
 

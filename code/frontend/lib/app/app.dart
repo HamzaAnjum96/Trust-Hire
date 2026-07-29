@@ -10,10 +10,12 @@ import '../features/map/location_controller.dart';
 import '../services/bid_repository.dart';
 import '../services/job_repository.dart';
 import '../services/local_store.dart';
+import '../services/backend/mock_backend.dart';
 import '../services/media_store.dart';
 import '../features/onboarding/onboarding_screen.dart';
 import 'account_controller.dart';
 import 'admin_controller.dart';
+import 'sync_controller.dart';
 import 'verification_controller.dart';
 import 'app_shell.dart';
 import 'bid_controller.dart';
@@ -90,6 +92,13 @@ class TrustHireApp extends StatelessWidget {
           create: (_) => VerificationController(store)..load(),
           update: (_, account, verification) => verification!
             ..setAccount(account.activeId, name: account.active.name ?? ''),
+        ),
+        // The backend seam. One mock instance, so the offline switch in the
+        // profile and the outbox are talking about the same thing.
+        Provider<MockBackend>(create: (_) => MockBackend()),
+        ChangeNotifierProvider(
+          create: (context) =>
+              SyncController(store, context.read<MockBackend>())..load(),
         ),
         ChangeNotifierProvider(
           // Deliberately not requested here. Asking for a permission before

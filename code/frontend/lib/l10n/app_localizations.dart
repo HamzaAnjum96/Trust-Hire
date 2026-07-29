@@ -2887,6 +2887,150 @@ abstract class AppStrings {
   /// In en, this message translates to:
   /// **'Suspended'**
   String get verifyStatusSuspended;
+
+  /// No description provided for @backendSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Backend'**
+  String get backendSection;
+
+  /// No description provided for @backendExplain.
+  ///
+  /// In en, this message translates to:
+  /// **'There is no server yet. This is a stand-in that behaves like one — it refuses the same things the real database would, and it can be switched off so you can see what happens when the network goes.'**
+  String get backendExplain;
+
+  /// No description provided for @syncSettled.
+  ///
+  /// In en, this message translates to:
+  /// **'Everything is saved'**
+  String get syncSettled;
+
+  /// No description provided for @syncSending.
+  ///
+  /// In en, this message translates to:
+  /// **'Sending'**
+  String get syncSending;
+
+  /// No description provided for @syncOffline.
+  ///
+  /// In en, this message translates to:
+  /// **'No connection — your work is safe'**
+  String get syncOffline;
+
+  /// No description provided for @syncNeedsAttention.
+  ///
+  /// In en, this message translates to:
+  /// **'Something needs you'**
+  String get syncNeedsAttention;
+
+  /// No description provided for @syncWaiting.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{Nothing waiting} =1{1 change waiting} other{{count} changes waiting}}'**
+  String syncWaiting(int count);
+
+  /// No description provided for @syncNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Sync now'**
+  String get syncNow;
+
+  /// No description provided for @syncPretendOffline.
+  ///
+  /// In en, this message translates to:
+  /// **'Pretend there is no connection'**
+  String get syncPretendOffline;
+
+  /// No description provided for @syncRefusals.
+  ///
+  /// In en, this message translates to:
+  /// **'Changes that did not go through'**
+  String get syncRefusals;
+
+  /// No description provided for @syncAcknowledge.
+  ///
+  /// In en, this message translates to:
+  /// **'I have read these'**
+  String get syncAcknowledge;
+
+  /// No description provided for @syncNeverPulled.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing fetched yet'**
+  String get syncNeverPulled;
+
+  /// No description provided for @syncLastPulled.
+  ///
+  /// In en, this message translates to:
+  /// **'Last fetched {when}'**
+  String syncLastPulled(String when);
+
+  /// No description provided for @refusalFareIsLocked.
+  ///
+  /// In en, this message translates to:
+  /// **'The fare was fixed when the offer was accepted, so it could not be changed.'**
+  String get refusalFareIsLocked;
+
+  /// No description provided for @refusalWorkerSwapped.
+  ///
+  /// In en, this message translates to:
+  /// **'Somebody had already been chosen for this job.'**
+  String get refusalWorkerSwapped;
+
+  /// No description provided for @refusalOwnJob.
+  ///
+  /// In en, this message translates to:
+  /// **'A job cannot be taken by the person who posted it.'**
+  String get refusalOwnJob;
+
+  /// No description provided for @refusalAnotherOfferWon.
+  ///
+  /// In en, this message translates to:
+  /// **'Another offer on this job had already been accepted.'**
+  String get refusalAnotherOfferWon;
+
+  /// No description provided for @refusalOfferMismatch.
+  ///
+  /// In en, this message translates to:
+  /// **'This offer does not match what the job records.'**
+  String get refusalOfferMismatch;
+
+  /// No description provided for @refusalAppendOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'This is a record of something that happened. It can be added to, never changed.'**
+  String get refusalAppendOnly;
+
+  /// No description provided for @refusalCommissionCharged.
+  ///
+  /// In en, this message translates to:
+  /// **'Commission had already been charged for this job.'**
+  String get refusalCommissionCharged;
+
+  /// No description provided for @refusalJobNotFinished.
+  ///
+  /// In en, this message translates to:
+  /// **'Only a finished job can be rated.'**
+  String get refusalJobNotFinished;
+
+  /// No description provided for @refusalAlreadyRated.
+  ///
+  /// In en, this message translates to:
+  /// **'This job had already been rated from your side.'**
+  String get refusalAlreadyRated;
+
+  /// No description provided for @refusalChangedElsewhere.
+  ///
+  /// In en, this message translates to:
+  /// **'Somebody else changed this while you were offline, so your change was not applied.'**
+  String get refusalChangedElsewhere;
+
+  /// No description provided for @refusalUnreachable.
+  ///
+  /// In en, this message translates to:
+  /// **'This has not been sent yet. It is saved on this device.'**
+  String get refusalUnreachable;
 }
 
 class _AppStringsDelegate extends LocalizationsDelegate<AppStrings> {

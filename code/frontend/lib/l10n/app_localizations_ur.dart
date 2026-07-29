@@ -1697,4 +1697,98 @@ class AppStringsUr extends AppStrings {
 
   @override
   String get verifyStatusSuspended => 'معطل';
+
+  @override
+  String get backendSection => 'بیک اینڈ';
+
+  @override
+  String get backendExplain =>
+      'ابھی کوئی سرور نہیں۔ یہ اس کی جگہ کام کرتا ہے — وہی چیزیں مسترد کرتا ہے جو اصل ڈیٹابیس کرتا، اور اسے بند کیا جا سکتا ہے تاکہ آپ دیکھ سکیں کہ نیٹ ورک نہ ہونے پر کیا ہوتا ہے۔';
+
+  @override
+  String get syncSettled => 'سب کچھ محفوظ ہے';
+
+  @override
+  String get syncSending => 'بھیجا جا رہا ہے';
+
+  @override
+  String get syncOffline => 'کنکشن نہیں — آپ کا کام محفوظ ہے';
+
+  @override
+  String get syncNeedsAttention => 'آپ کی توجہ درکار ہے';
+
+  @override
+  String syncWaiting(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count تبدیلیاں باقی',
+      one: '1 تبدیلی باقی',
+      zero: 'کچھ باقی نہیں',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get syncNow => 'ابھی سِنک کریں';
+
+  @override
+  String get syncPretendOffline => 'فرض کریں کنکشن نہیں ہے';
+
+  @override
+  String get syncRefusals => 'وہ تبدیلیاں جو نہیں ہو سکیں';
+
+  @override
+  String get syncAcknowledge => 'میں نے پڑھ لیا';
+
+  @override
+  String get syncNeverPulled => 'ابھی کچھ نہیں لیا گیا';
+
+  @override
+  String syncLastPulled(String when) {
+    return 'آخری بار $when کو لیا گیا';
+  }
+
+  @override
+  String get refusalFareIsLocked =>
+      'پیشکش قبول ہوتے وقت اجرت طے ہو گئی تھی، اس لیے اسے بدلا نہیں جا سکا۔';
+
+  @override
+  String get refusalWorkerSwapped =>
+      'اس کام کے لیے پہلے ہی کسی کو منتخب کیا جا چکا تھا۔';
+
+  @override
+  String get refusalOwnJob => 'جو شخص کام پوسٹ کرے وہ خود اسے نہیں لے سکتا۔';
+
+  @override
+  String get refusalAnotherOfferWon =>
+      'اس کام پر کوئی اور پیشکش پہلے ہی قبول ہو چکی تھی۔';
+
+  @override
+  String get refusalOfferMismatch =>
+      'یہ پیشکش کام کے ریکارڈ سے میل نہیں کھاتی۔';
+
+  @override
+  String get refusalAppendOnly =>
+      'یہ اس بات کا ریکارڈ ہے جو ہو چکی۔ اس میں اضافہ ہو سکتا ہے، تبدیلی نہیں۔';
+
+  @override
+  String get refusalCommissionCharged =>
+      'اس کام کا کمیشن پہلے ہی وصول ہو چکا تھا۔';
+
+  @override
+  String get refusalJobNotFinished =>
+      'صرف مکمل ہونے والے کام کی درجہ بندی ہو سکتی ہے۔';
+
+  @override
+  String get refusalAlreadyRated =>
+      'آپ کی طرف سے اس کام کی درجہ بندی پہلے ہو چکی تھی۔';
+
+  @override
+  String get refusalChangedElsewhere =>
+      'جب آپ آف لائن تھے کسی اور نے یہ بدل دیا، اس لیے آپ کی تبدیلی لاگو نہیں ہوئی۔';
+
+  @override
+  String get refusalUnreachable =>
+      'یہ ابھی بھیجا نہیں گیا۔ آپ کی ڈیوائس پر محفوظ ہے۔';
 }
