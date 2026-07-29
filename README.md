@@ -370,6 +370,13 @@ deployed web app is served from a URL with no commit in it, so without a
 visible version a stale cache and a failed deploy look identical.
 `test/version_test.dart` fails the build if the two ever disagree.
 
+**Layout.** Navigation follows Material's window size classes, with one
+departure: **a rail needs height as well as width.** Below 520px the bottom bar
+is used however wide the window is, because five labelled destinations plus the
+posting action is about 450px of rail — and on a phone held sideways the last
+destination fell below the fold with nothing on screen to say the rail
+scrolled. `LayoutSize.fromSize` is where that lives.
+
 **Checks**
 
 ```bash

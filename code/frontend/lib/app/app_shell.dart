@@ -110,18 +110,52 @@ class _AppShellState extends State<AppShell> {
               onSelected: (value) => setState(() => _index = value),
               // Extended labels need the room; a tablet does not have it.
               extended: layout == LayoutSize.expanded,
+              // **Labelled wherever there is room for a label.** A bare "+"
+              // above a navigation rail reads as part of the furniture; the
+              // one thing this app is for should say what it does. On a
+              // tablet-width rail there is no room for the word, so the icon
+              // keeps its tooltip and the destinations carry the meaning.
               action: _showsPostAction
-                  ? FloatingActionButton(
-                      onPressed: _openCreateJob,
-                      backgroundColor: theme.colorScheme.primary,
-                      foregroundColor: theme.colorScheme.onPrimary,
-                      elevation: 2,
-                      tooltip: strings.postAJob,
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BrandRadius.mediumAll,
-                      ),
-                      child: const Icon(Icons.add),
-                    )
+                  ? (layout == LayoutSize.expanded
+                        ? FloatingActionButton.extended(
+                            onPressed: _openCreateJob,
+                            backgroundColor: theme.colorScheme.primary,
+                            foregroundColor: theme.colorScheme.onPrimary,
+                            elevation: 2,
+                            shape: const RoundedRectangleBorder(
+                              borderRadius: BrandRadius.mediumAll,
+                            ),
+                            icon: const Icon(Icons.add),
+                            label: Text(
+                              strings.postAJob,
+                              style: BrandType.button,
+                            ),
+                          )
+                        : Column(
+                            children: [
+                              FloatingActionButton(
+                                onPressed: _openCreateJob,
+                                backgroundColor: theme.colorScheme.primary,
+                                foregroundColor: theme.colorScheme.onPrimary,
+                                elevation: 2,
+                                tooltip: strings.postAJob,
+                                shape: const RoundedRectangleBorder(
+                                  borderRadius: BrandRadius.mediumAll,
+                                ),
+                                child: const Icon(Icons.add),
+                              ),
+                              const SizedBox(height: BrandSizing.spaceXs),
+                              // Every destination below this carries a label.
+                              // A bare "+" at the top of a labelled column
+                              // reads as furniture rather than as the app's
+                              // one primary action.
+                              Text(
+                                strings.postAJob,
+                                textAlign: TextAlign.center,
+                                style: theme.textTheme.labelSmall,
+                              ),
+                            ],
+                          ))
                   : null,
             ),
             const VerticalDivider(width: 1, thickness: 1),

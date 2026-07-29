@@ -295,21 +295,37 @@ class _JobMapState extends State<JobMap> {
         ),
 
         // OpenStreetMap requires visible attribution.
+        //
+        // **Bottom left, not bottom right.** The right is where the posting
+        // button and the map's own controls live, and a licence notice sitting
+        // under a floating button is a licence notice nobody can read — which
+        // is the one thing this must not be.
         Positioned(
-          right: 0,
+          left: 0,
           bottom: 0,
           child: DecoratedBox(
             decoration: BoxDecoration(
               color: theme.colorScheme.surface.withValues(alpha: 0.8),
               borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(BrandRadius.small),
+                topRight: Radius.circular(BrandRadius.small),
               ),
             ),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-              child: Text(
-                mapTheme.attribution,
-                style: theme.textTheme.labelSmall?.copyWith(fontSize: 10),
+              // Wrapped, never clipped. On a 320px phone the line ran off the
+              // edge and the notice read "© CART" — a licence attribution that
+              // is cut in half is not one.
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  // Clamped: a zero-width surface makes this negative, which
+                  // is not a constraint. `accessibility_test.dart` caught it.
+                  maxWidth: (MediaQuery.sizeOf(context).width - 24)
+                      .clamp(0.0, double.infinity),
+                ),
+                child: Text(
+                  mapTheme.attribution,
+                  style: theme.textTheme.labelSmall?.copyWith(fontSize: 10),
+                ),
               ),
             ),
           ),

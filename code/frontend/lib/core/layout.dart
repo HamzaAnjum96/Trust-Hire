@@ -23,8 +23,32 @@ enum LayoutSize {
   static const mediumFrom = 600.0;
   static const expandedFrom = 1024.0;
 
+  /// A rail needs vertical room, not only horizontal.
+  ///
+  /// Five destinations with labels, plus the posting action above them, is
+  /// around 450px of rail. On a phone held sideways — 740x380, an ordinary
+  /// shape — the last destination fell below the fold: the rail scrolled, but
+  /// nothing on screen said so, so **Profile was simply unreachable** for
+  /// anyone who did not think to drag a navigation bar.
+  ///
+  /// Width alone is Material's window size class and this is a departure from
+  /// it, made deliberately: the class describes the window, and what matters
+  /// here is whether the navigation fits inside it.
+  static const railNeedsHeight = 520.0;
+
   static LayoutSize of(BuildContext context) =>
-      fromWidth(MediaQuery.sizeOf(context).width);
+      fromSize(MediaQuery.sizeOf(context));
+
+  static LayoutSize fromSize(Size size) {
+    final byWidth = fromWidth(size.width);
+    if (byWidth == LayoutSize.compact) return byWidth;
+
+    // Too short for a rail, however wide. The bottom bar always fits, because
+    // it grows sideways rather than downward.
+    if (size.height < railNeedsHeight) return LayoutSize.compact;
+
+    return byWidth;
+  }
 
   static LayoutSize fromWidth(double width) {
     if (width >= expandedFrom) return LayoutSize.expanded;

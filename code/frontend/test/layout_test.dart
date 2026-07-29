@@ -64,6 +64,33 @@ void main() {
     });
   });
 
+  group('a rail needs height, not only width', () {
+    test('a short wide window keeps the bottom bar', () {
+      // A phone held sideways. Five destinations with labels plus the posting
+      // action is about 450px of rail; at 380 the last one fell below the fold
+      // and nothing said so, so Profile was simply unreachable for anyone who
+      // did not think to drag a navigation bar.
+      expect(LayoutSize.fromSize(const Size(740, 380)), LayoutSize.compact);
+      expect(LayoutSize.fromSize(const Size(1200, 400)), LayoutSize.compact);
+    });
+
+    test('and a tall one still gets it', () {
+      expect(LayoutSize.fromSize(const Size(740, 900)), LayoutSize.medium);
+      expect(LayoutSize.fromSize(const Size(1200, 900)), LayoutSize.expanded);
+    });
+
+    test('the boundary is where the rail stops fitting', () {
+      expect(
+        LayoutSize.fromSize(const Size(800, LayoutSize.railNeedsHeight)),
+        LayoutSize.medium,
+      );
+      expect(
+        LayoutSize.fromSize(const Size(800, LayoutSize.railNeedsHeight - 1)),
+        LayoutSize.compact,
+      );
+    });
+  });
+
   group('navigation', () {
     testWidgets('a handset keeps the bottom bar', (tester) async {
       await tester.useCompactSurface();

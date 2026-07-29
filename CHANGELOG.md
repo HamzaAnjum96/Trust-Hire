@@ -12,6 +12,46 @@ that heading to the version and date, and open a fresh `[Unreleased]`.
 
 ## [Unreleased]
 
+### 0.15.2 — A UI pass, and two things that were genuinely broken
+
+Both reported, both reproduced at sizes the suite had never been run at. Found
+by opening the built app at five window shapes rather than by anything failing.
+
+#### Fixed
+
+- **A navigation destination was unreachable.** On a phone held sideways
+  (740×380) the rail needs about 450px for five labelled destinations plus the
+  posting action, and had 380. It scrolled, but nothing on screen said so, so
+  **Profile simply could not be got to.** `LayoutSize` now asks for height as
+  well as width — below 520px the bottom bar is used however wide the window
+  is, because a bar grows sideways rather than downward.
+- **The trades notice sat on top of the map's fullscreen button.** Two tappable
+  things in the same place, one of them invisible. The notice column now clears
+  the control gutter — but only on windows short enough for the two to actually
+  meet, because applying it always cost a quarter of the width on a 320px phone
+  and left the notice reading one word per line.
+- **The map attribution ran underneath the posting button** and was clipped by
+  the right edge, so on a narrow phone it read "© CART". It has moved to the
+  bottom left, where nothing floats, and wraps rather than clipping. It is a
+  licence requirement; half of one is not one.
+- **The posting action was a bare "+" on tablet and desktop.** Every
+  destination beneath it carries a label, so an unlabelled icon read as
+  furniture — which is, I think, what "post a job only shows on the map" was
+  describing. It is labelled at every size now.
+
+#### Changed
+
+- **The filter chips fade at the trailing edge instead of being cut in half.**
+  There are five or six and a phone fits three, so every launch showed a chip
+  sliced mid-word with nothing to suggest the row scrolled. The fade follows
+  the reading direction, so in Urdu it fades on the left.
+
+#### Notes
+
+`accessibility_test.dart` caught a negative `BoxConstraints` in the first
+version of the attribution fix — a zero-width surface made `width - 24` less
+than nothing. Clamped, with the reason beside it.
+
 ### 0.15.1 — The queue nothing was filling
 
 **0.15.0 shipped an outbox that nothing wrote to.** The seam, the rules, the

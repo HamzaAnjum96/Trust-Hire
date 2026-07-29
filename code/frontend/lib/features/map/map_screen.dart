@@ -529,51 +529,62 @@ class _MapBody extends StatelessWidget {
         // once — no location *and* no tiles, or no matches *and* no trades —
         // and separate Positioned widgets at the same offset would print one
         // on top of the other.
+        // **Capped at a third of the height.** Two notices can be true at once,
+        // and on a short window they covered most of the map — the one thing
+        // the app is for. Past the cap the column scrolls rather than growing.
         Positioned(
           left: BrandSizing.spaceMd,
           right: BrandSizing.spaceMd,
           top: padding.top + 116,
           child: _OverlayWidth(
-            child: Column(
-              spacing: BrandSizing.spaceSm,
-              children: [
-                if (locationExplanation != null)
-                  _MapNotice(
-                    icon: Icons.location_off_outlined,
-                    message: locationExplanation,
-                    onDismiss: location.dismissExplanation,
-                  ),
-                if (tilesUnavailable)
-                  _MapNotice(
-                    icon: Icons.cloud_off,
-                    message: strings.mapImagesNotLoading,
-                  ),
-                if (jobs.isEmpty && totalJobCount > 0)
-                  _MapNotice(
-                    icon: Icons.search_off,
-                    message: strings.noJobsMatchHere,
-                    onDismiss: filters.clear,
-                  ),
+            clearsMapControls: true,
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                maxHeight: MediaQuery.sizeOf(context).height / 3,
+              ),
+              child: SingleChildScrollView(
+                child: Column(
+                  spacing: BrandSizing.spaceSm,
+                  children: [
+                    if (locationExplanation != null)
+                      _MapNotice(
+                        icon: Icons.location_off_outlined,
+                        message: locationExplanation,
+                        onDismiss: location.dismissExplanation,
+                      ),
+                    if (tilesUnavailable)
+                      _MapNotice(
+                        icon: Icons.cloud_off,
+                        message: strings.mapImagesNotLoading,
+                      ),
+                    if (jobs.isEmpty && totalJobCount > 0)
+                      _MapNotice(
+                        icon: Icons.search_off,
+                        message: strings.noJobsMatchHere,
+                        onDismiss: filters.clear,
+                      ),
 
-                // Not a filter and not an error: the tag rule is holding jobs
-                // back, and the only thing that changes it is adding a trade.
-                // Shown just for a worker who has never added one, so it stops
-                // appearing as soon as it stops being news.
-                //
-                // Dismissible, though closing it changes nothing about the
-                // rule. It sits over the map — the thing the app is for — and
-                // somebody who has read it and is happy on general work should
-                // not have to read it again on every launch. The way back is
-                // the trades screen, which the profile always links to.
-                if (hiddenByTags > 0 && !profile.tradesNoticeDismissed)
-                  _MapNotice(
-                    icon: Icons.construction_outlined,
-                    message: strings.noJobsForTradesHelp,
-                    actionLabel: strings.addATrade,
-                    onAction: () => MyTradesScreen.open(context),
-                    onDismiss: profile.dismissTradesNotice,
-                  ),
-              ],
+                    // Not a filter and not an error: the tag rule is holding jobs
+                    // back, and the only thing that changes it is adding a trade.
+                    // Shown just for a worker who has never added one, so it stops
+                    // appearing as soon as it stops being news.
+                    //
+                    // Dismissible, though closing it changes nothing about the
+                    // rule. It sits over the map — the thing the app is for — and
+                    // somebody who has read it and is happy on general work should
+                    // not have to read it again on every launch. The way back is
+                    // the trades screen, which the profile always links to.
+                    if (hiddenByTags > 0 && !profile.tradesNoticeDismissed)
+                      _MapNotice(
+                        icon: Icons.construction_outlined,
+                        message: strings.noJobsForTradesHelp,
+                        actionLabel: strings.addATrade,
+                        onAction: () => MyTradesScreen.open(context),
+                        onDismiss: profile.dismissTradesNotice,
+                      ),
+                  ],
+                ),
+              ),
             ),
           ),
         ),
@@ -714,18 +725,57 @@ class _MapHeader extends StatelessWidget {
 /// title. Leading-aligned rather than centred so the header, the filters and
 /// the notices read as one stack.
 class _OverlayWidth extends StatelessWidget {
-  const _OverlayWidth({required this.child});
+  const _OverlayWidth({required this.child, this.clearsMapControls = false});
 
   final Widget child;
 
+  /// Whether this overlay can grow far enough down the screen to reach the
+  /// map's own buttons.
+  ///
+  /// True only for the notices. The header and the filter chips are a fixed
+  /// two rows at the top and could never get near the bottom-right controls,
+  /// so narrowing *them* would cost width to prevent a collision that cannot
+  /// happen.
+  final bool clearsMapControls;
+
+  /// What the map's controls occupy on the right, plus the gap they need to
+  /// read as separate from anything beside them.
+  ///
+  /// **The notices must never reach this.** On a phone held sideways the
+  /// trades notice grew wide enough to sit underneath the fullscreen button —
+  /// two tappable things in the same place, one of them invisible.
+  static const controlGutter = 48.0 + BrandSizing.spaceMd * 2;
+
+  /// Below this, the notice column can reach the controls; above it, it
+  /// cannot.
+  ///
+  /// The notices start about 116px down and are capped at a third of the
+  /// height; the controls sit about 200px up from the bottom. Those two meet
+  /// when `116 + h/3 > h - 200`, which is a little under 480. Rounded up, and
+  /// applied only there — on a tall phone the gutter would cost a quarter of
+  /// the width of a narrow screen to avoid a collision that cannot happen,
+  /// which is how the notice ended up one word per line at 320px.
+  static const controlsAreInTheWayBelow = 480.0;
+
   @override
   Widget build(BuildContext context) {
-    return Align(
-      alignment: AlignmentDirectional.topStart,
-      child: ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: BrandSizing.readableWidth),
-        child: child,
-      ),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final crowded =
+            MediaQuery.sizeOf(context).height < controlsAreInTheWayBelow;
+        final available = constraints.maxWidth -
+            (clearsMapControls && crowded ? controlGutter : 0.0);
+
+        return Align(
+          alignment: AlignmentDirectional.topStart,
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              maxWidth: available.clamp(0.0, BrandSizing.readableWidth),
+            ),
+            child: child,
+          ),
+        );
+      },
     );
   }
 }
@@ -929,11 +979,12 @@ class JobPreviewCard extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
-              if (job.isPostedBy(context.watch<AccountController>().activeId))
-                ...[
-                  const SizedBox(width: BrandSizing.spaceSm),
-                  const _LocalBadge(),
-                ],
+              if (job.isPostedBy(
+                context.watch<AccountController>().activeId,
+              )) ...[
+                const SizedBox(width: BrandSizing.spaceSm),
+                const _LocalBadge(),
+              ],
             ],
           ),
           if (job.supportingDescription != null) ...[
