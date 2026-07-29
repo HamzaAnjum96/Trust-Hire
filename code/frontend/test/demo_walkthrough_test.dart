@@ -15,7 +15,13 @@ import 'package:trust_hire/app/verification_controller.dart';
 import 'package:trust_hire/app/wallet_controller.dart';
 import 'package:trust_hire/features/wallet/wallet_rules.dart';
 import 'package:trust_hire/models/account.dart';
+import 'package:trust_hire/app/sync_controller.dart';
 import 'package:trust_hire/models/bid.dart';
+import 'package:trust_hire/models/job.dart';
+import 'package:trust_hire/models/job_tag.dart';
+import 'package:trust_hire/services/backend/mock_backend.dart';
+import 'package:trust_hire/services/backend/remote_api.dart';
+import 'package:trust_hire/services/seed_loader.dart';
 import 'package:trust_hire/models/job_status.dart';
 import 'package:trust_hire/services/bid_repository.dart';
 import 'package:trust_hire/services/job_repository.dart';
@@ -245,6 +251,91 @@ void main() {
       // Nothing is seeded into the log, so the demo starts from an empty one
       // and every line in it was made by whoever is demonstrating.
       expect(admin.log, isEmpty);
+    });
+  });
+
+  group('stop 8 — the backend that is not there', () {
+    testWidgets('posting with the connection off queues, and then drains',
+        (tester) async {
+      // **The stop that was fiction when it was written.** 0.15.0 shipped the
+      // outbox, the panel and the rules, and nothing in `lib/` ever enqueued —
+      // so the script's "turn the connection off and do something, the pill
+      // says a change is waiting" would have failed in front of whoever
+      // followed it. This test is why the script has one assertion per stop,
+      // and it was added after the stop rather than with it.
+      final store = await ready();
+      final backend = MockBackend()..offline = true;
+      final sync = SyncController(store, backend)..load();
+
+      final jobs = JobRepository(
+        store,
+        MediaStore(store),
+        const SeedLoader(),
+        sync.enqueue,
+      );
+
+      await jobs.saveJob(
+        Job(
+          id: 'demo-1',
+          location: const JobLocation(latitude: 33.7104, longitude: 73.0551),
+          createdAt: DateTime(2026, 7, 28),
+          tags: const {JobTag.plumbing},
+          title: 'Tap dripping',
+          postedBy: DemoAccounts.deviceId,
+        ),
+      );
+      await tester.pump();
+
+      // The save worked. It always works — that is the promise.
+      expect((await jobs.fetchJobs()).any((job) => job.id == 'demo-1'), isTrue);
+      expect(sync.outbox, hasLength(1));
+
+      await sync.push();
+      expect(sync.state(now: DateTime(2026, 7, 28)), SyncState.offline);
+
+      backend.offline = false;
+      await sync.push();
+      expect(sync.outbox, isEmpty);
+      expect(sync.state(now: DateTime(2026, 7, 28)), SyncState.settled);
+    });
+
+    testWidgets('and a refusal is shown rather than dropped', (tester) async {
+      final store = await ready();
+      final backend = MockBackend();
+      final sync = SyncController(store, backend)..load();
+
+      // Somebody accepted this job's offer elsewhere while we were away.
+      await backend.push([
+        PendingWrite(
+          entity: RemoteEntity.job,
+          id: 'demo-1',
+          data: const {
+            'postedBy': 'user-003',
+            'acceptedWorkerId': 'user-009',
+            'agreedFare': 1800,
+          },
+          madeAt: DateTime(2026, 7, 28),
+        ),
+      ]);
+
+      await sync.enqueue(
+        PendingWrite(
+          entity: RemoteEntity.job,
+          id: 'demo-1',
+          data: const {
+            'postedBy': 'user-003',
+            'acceptedWorkerId': 'user-009',
+            'agreedFare': 4000,
+          },
+          madeAt: DateTime(2026, 7, 28),
+          baseVersion: 1,
+        ),
+      );
+      await sync.push();
+
+      expect(sync.needAttention, hasLength(1));
+      expect(sync.needAttention.single.code, RefusalCode.fareIsLocked);
+      await tester.pump();
     });
   });
 

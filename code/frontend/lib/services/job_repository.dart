@@ -1,5 +1,6 @@
 import '../models/app_user.dart';
 import '../models/job.dart';
+import 'backend/remote_api.dart';
 import 'demo_seed.dart';
 import 'local_store.dart';
 import 'media_store.dart';
@@ -8,18 +9,29 @@ import 'seed_loader.dart';
 /// Reads and writes jobs against local storage.
 ///
 /// On first run the seed JSON is copied into the store; from then on every
-/// read and write goes to the local copy only. There is no network call
-/// anywhere in this class — the POC works fully offline by design.
+/// read and write goes to the local copy only.
+///
+/// **Local first, always.** A write lands here and is then handed to the
+/// outbox — see [QueueWrite] — which offers it to the server afterwards.
+/// Nothing in this class waits for a network, because the people this is for
+/// lose signal in the middle of a job.
 class JobRepository {
   JobRepository(
     this._store,
     this._mediaStore, [
     this._seedLoader = const SeedLoader(),
+    this._queue,
   ]);
 
   final LocalStore _store;
   final MediaStore _mediaStore;
   final SeedLoader _seedLoader;
+
+  /// Where a write goes once it is safely on the device. Null in tests that
+  /// are about storage rather than about syncing, and in the seed pass —
+  /// **the seed is not a change somebody made**, and queuing 183 jobs on first
+  /// launch would hand a new user an outbox they never filled.
+  final QueueWrite? _queue;
 
   /// Copies the seed data into local storage if this is a first run.
   ///
@@ -84,6 +96,14 @@ class JobRepository {
     }
 
     await _persist(jobs);
+    await _queue?.call(
+      PendingWrite(
+        entity: RemoteEntity.job,
+        id: job.id,
+        data: job.toJson(),
+        madeAt: DateTime.now(),
+      ),
+    );
 
     // Editing can drop a photo or replace a recording; the blob it used is
     // then unreferenced and would otherwise sit in storage forever.

@@ -12,6 +12,37 @@ that heading to the version and date, and open a fresh `[Unreleased]`.
 
 ## [Unreleased]
 
+### 0.15.1 — The queue nothing was filling
+
+**0.15.0 shipped an outbox that nothing wrote to.** The seam, the rules, the
+panel and twenty-four tests were all real; no code in `lib/` ever called
+`enqueue`. The panel said *Nothing waiting* and always would have, and the demo
+script's stop 8 — "turn the connection off and post a job, the pill says a
+change is waiting" — described something that could not happen. Whoever
+followed it would have found that out in front of an audience, which is the
+exact failure `demo_walkthrough_test.dart` exists to prevent. That test had no
+assertion for stop 8, because the stop was added after the test was written.
+
+#### Fixed
+
+- **Repositories write through to the outbox.** `JobRepository` and
+  `BidRepository` take an optional `QueueWrite` and call it after the local
+  write lands. Posting a job or making an offer now queues, offline or not.
+- **Seeding does not queue.** The seed is not a change somebody made, and
+  handing a new user an outbox of 183 jobs they never posted would be worse
+  than the bug.
+- **Accepting an offer queues one write, not a dozen.** Acceptance rewrites
+  every bid on the job; only the ones that changed go to the server.
+- Stop 8 of the demo script now describes what the screen actually shows, which
+  it did not: the pill reads *Sending · 1 change waiting* until a sync is
+  attempted, and *No connection* only after one fails.
+
+#### Added
+
+- Four tests that a real write reaches the queue, and two walkthrough
+  assertions for stop 8 — including the offline post-then-drain cycle, which is
+  the demonstration itself.
+
 ### 0.15.0 — P1-8b, the backend seam and sync
 
 There is no Supabase project and no credentials, so this is the **seam** plus a

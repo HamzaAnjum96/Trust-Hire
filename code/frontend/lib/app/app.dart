@@ -9,6 +9,7 @@ import '../features/jobs/saved_jobs_controller.dart';
 import '../features/map/location_controller.dart';
 import '../services/bid_repository.dart';
 import '../services/job_repository.dart';
+import '../services/seed_loader.dart';
 import '../services/local_store.dart';
 import '../services/backend/mock_backend.dart';
 import '../services/media_store.dart';
@@ -37,12 +38,28 @@ class TrustHireApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         Provider<MediaStore>(create: (_) => MediaStore(store)),
+
+        // The backend seam, and the queue that feeds it. **Before the
+        // repositories**, because they write through it: a change lands
+        // locally and is handed on afterwards, never the other way round.
+        Provider<MockBackend>(create: (_) => MockBackend()),
+        ChangeNotifierProvider(
+          create: (context) =>
+              SyncController(store, context.read<MockBackend>())..load(),
+        ),
+
         ChangeNotifierProvider(
           create: (_) => SettingsController(store)..load(),
         ),
         ChangeNotifierProvider(
-          create: (_) =>
-              JobController(JobRepository(store, MediaStore(store)))..load(),
+          create: (context) => JobController(
+            JobRepository(
+              store,
+              MediaStore(store),
+              const SeedLoader(),
+              context.read<SyncController>().enqueue,
+            ),
+          )..load(),
         ),
         ChangeNotifierProvider(create: (_) => JobFilterController()),
 
@@ -65,7 +82,9 @@ class TrustHireApp extends StatelessWidget {
               profile!..setAccount(account.activeId),
         ),
         ChangeNotifierProxyProvider<AccountController, BidController>(
-          create: (_) => BidController(BidRepository(store))..load(),
+          create: (context) => BidController(
+            BidRepository(store, context.read<SyncController>().enqueue),
+          )..load(),
           update: (_, account, bids) => bids!..setAccount(account.activeId),
         ),
         ChangeNotifierProxyProvider<AccountController, WalletController>(
@@ -92,13 +111,6 @@ class TrustHireApp extends StatelessWidget {
           create: (_) => VerificationController(store)..load(),
           update: (_, account, verification) => verification!
             ..setAccount(account.activeId, name: account.active.name ?? ''),
-        ),
-        // The backend seam. One mock instance, so the offline switch in the
-        // profile and the outbox are talking about the same thing.
-        Provider<MockBackend>(create: (_) => MockBackend()),
-        ChangeNotifierProvider(
-          create: (context) =>
-              SyncController(store, context.read<MockBackend>())..load(),
         ),
         ChangeNotifierProvider(
           // Deliberately not requested here. Asking for a permission before

@@ -257,6 +257,15 @@ abstract class RemoteApi {
   Future<PushOutcome> push(List<PendingWrite> writes);
 }
 
+/// Where a repository hands a local write on to the outbox.
+///
+/// A function rather than an interface so a repository depends on nothing: it
+/// writes locally, calls this, and is finished. **The call must never be
+/// awaited on the critical path in a way that can fail** — a person on a bus
+/// with no signal is the ordinary case, and a save that waits for a network is
+/// a save that does not happen.
+typedef QueueWrite = Future<void> Function(PendingWrite write);
+
 /// Thrown when the network is not there.
 ///
 /// Its own type rather than a generic exception, because "unreachable" is the

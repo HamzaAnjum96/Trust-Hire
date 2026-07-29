@@ -193,14 +193,16 @@ Three things to say, and they matter more than the screen:
 There is no server. What is here is the seam one goes behind, and a stand-in
 that behaves like one in the ways that matter.
 
-1. **Turn on "Pretend there is no connection", then do something** — accept an
-   offer, post a job. It works. It always works: a local write lands locally
-   and immediately, because the people this is for lose signal in the middle of
-   a job.
-2. **The pill says "No connection — your work is safe", with a count waiting.**
-   Nothing is lost and nothing is blocked.
-3. **Turn the connection back on and press Sync now.** The queue drains.
-4. **The part worth dwelling on:** the stand-in *refuses* things — the same
+1. **Turn on "Pretend there is no connection", then post a job.** Pick a kind
+   of work, give it a title, save. It works — it always works. A local write
+   lands locally and immediately, because the people this is for lose signal in
+   the middle of a job.
+2. **Come back to Profile → Backend.** It says *1 change waiting*.
+3. **Press Sync now while still offline.** The pill changes to *No connection —
+   your work is safe*. Nothing is lost and nothing is blocked.
+4. **Turn the connection back on and press Sync now again.** *Everything is
+   saved · Nothing waiting*, with a "last fetched" date.
+5. **The part worth dwelling on:** the stand-in *refuses* things — the same
    things the real database would, listed in `MockBackend.rulesEnforcedHere`
    against the migration each comes from. A refusal it will give again forever
    leaves the queue rather than blocking everything behind it, and it is shown

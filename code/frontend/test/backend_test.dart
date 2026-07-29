@@ -5,7 +5,15 @@ import 'package:trust_hire/app/sync_controller.dart';
 import 'package:trust_hire/features/sync/sync_rules.dart';
 import 'package:trust_hire/services/backend/mock_backend.dart';
 import 'package:trust_hire/services/backend/remote_api.dart';
+import 'package:trust_hire/models/account.dart';
+import 'package:trust_hire/models/bid.dart';
+import 'package:trust_hire/models/job.dart';
+import 'package:trust_hire/models/job_tag.dart';
+import 'package:trust_hire/services/bid_repository.dart';
+import 'package:trust_hire/services/job_repository.dart';
 import 'package:trust_hire/services/local_store.dart';
+import 'package:trust_hire/services/media_store.dart';
+import 'package:trust_hire/services/seed_loader.dart';
 
 /// P1-8b, against a backend that is not there.
 ///
@@ -514,6 +522,137 @@ void main() {
         sync.state(now: madeAt.add(const Duration(minutes: 11))),
         SyncState.needsAttention,
       );
+    });
+  });
+
+  group('a real write reaches the queue', () {
+    // **The gap this closes.** 0.15.0 shipped the outbox, the panel and the
+    // rules, and nothing in `lib/` ever called `enqueue` — so the queue was
+    // always empty, the panel always said "Nothing waiting", and the demo
+    // script's instruction to "turn the connection off and do something" would
+    // have failed in front of whoever followed it.
+    //
+    // The unit tests all passed, because every one of them enqueued by hand.
+
+    test('posting a job queues it', () async {
+      final store = await LocalStore.open();
+      final backend = MockBackend();
+      final sync = SyncController(store, backend)..load();
+
+      final jobs = JobRepository(
+        store,
+        MediaStore(store),
+        const SeedLoader(),
+        sync.enqueue,
+      );
+      await jobs.ensureSeeded();
+
+      // Seeding is not a change somebody made. A new user must not be handed
+      // an outbox of 183 jobs they never posted.
+      expect(sync.outbox, isEmpty);
+
+      await jobs.saveJob(
+        Job(
+          id: 'mine-1',
+          location: const JobLocation(latitude: 33.7, longitude: 73.0),
+          createdAt: DateTime(2026, 7, 28),
+          tags: const {JobTag.plumbing},
+          title: 'Tap dripping',
+          postedBy: DemoAccounts.deviceId,
+        ),
+      );
+
+      expect(sync.outbox, hasLength(1));
+      expect(sync.outbox.single.entity, RemoteEntity.job);
+      expect(sync.outbox.single.id, 'mine-1');
+    });
+
+    test('and making an offer queues that', () async {
+      final store = await LocalStore.open();
+      final backend = MockBackend();
+      final sync = SyncController(store, backend)..load();
+
+      final bids = BidRepository(store, sync.enqueue);
+      await bids.saveBid(
+        Bid(
+          id: 'bid-1',
+          jobId: 'job-1',
+          workerId: 'user-009',
+          fare: 1800,
+          createdAt: DateTime(2026, 7, 28),
+        ),
+      );
+
+      expect(sync.outbox.single.entity, RemoteEntity.bid);
+    });
+
+    test('accepting queues the offers that changed, not every offer', () async {
+      // Accepting rewrites every bid on the job. Queueing all of them would
+      // offer the server a dozen writes for one act.
+      final store = await LocalStore.open();
+      final backend = MockBackend();
+      final sync = SyncController(store, backend)..load();
+
+      final bids = BidRepository(store, sync.enqueue);
+      final made = DateTime(2026, 7, 28);
+
+      await bids.saveAll([
+        Bid(id: 'b1', jobId: 'j1', workerId: 'w1', fare: 1800, createdAt: made),
+        Bid(id: 'b2', jobId: 'j1', workerId: 'w2', fare: 1600, createdAt: made),
+      ]);
+      expect(sync.outbox, hasLength(2));
+
+      await bids.saveAll([
+        Bid(
+          id: 'b1',
+          jobId: 'j1',
+          workerId: 'w1',
+          fare: 1800,
+          createdAt: made,
+          status: BidStatus.accepted,
+        ),
+      ]);
+
+      expect(sync.outbox, hasLength(3), reason: 'one more, not two');
+      expect(sync.outbox.last.id, 'b1');
+    });
+
+    test('a job posted with no connection is still queued', () async {
+      // The whole point. The save must not wait for a network, and must not
+      // fail because there is not one.
+      final store = await LocalStore.open();
+      final backend = MockBackend()..offline = true;
+      final sync = SyncController(store, backend)..load();
+
+      final jobs = JobRepository(
+        store,
+        MediaStore(store),
+        const SeedLoader(),
+        sync.enqueue,
+      );
+      await jobs.ensureSeeded();
+
+      await jobs.saveJob(
+        Job(
+          id: 'mine-1',
+          location: const JobLocation(latitude: 33.7, longitude: 73.0),
+          createdAt: DateTime(2026, 7, 28),
+          tags: const {JobTag.plumbing},
+          title: 'Tap dripping',
+          postedBy: DemoAccounts.deviceId,
+        ),
+      );
+
+      expect((await jobs.fetchJobs()).any((j) => j.id == 'mine-1'), isTrue);
+      expect(sync.outbox, hasLength(1));
+
+      await sync.push();
+      expect(sync.outbox, hasLength(1), reason: 'kept, not lost');
+
+      backend.offline = false;
+      await sync.push();
+      expect(sync.outbox, isEmpty);
+      expect(backend.rowFor(RemoteEntity.job, 'mine-1'), isNotNull);
     });
   });
 

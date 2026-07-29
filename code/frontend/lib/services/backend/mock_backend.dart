@@ -45,11 +45,6 @@ class MockBackend implements RemoteApi {
   int pulls = 0;
   int pushes = 0;
 
-  /// The rules this refuses, and what each stands in for.
-  ///
-  /// Kept as data rather than as comments so a test can assert the list is the
-  /// one the schema has. A mock that drifts from the thing it mocks is worse
-  /// than no mock: it makes the app pass against a server that does not exist.
   /// Every refusal this can return, and the constraint it stands in for.
   ///
   /// Kept as data rather than as comments so a test can check the list is
