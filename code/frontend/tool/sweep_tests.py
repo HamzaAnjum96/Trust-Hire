@@ -440,6 +440,30 @@ MUTATIONS = [
         replace="        if (false) return RefusalCode.recordIsAppendOnly;",
         tests=["test/backend_test.dart"],
     ),
+    # This one was added *because* the sweep's own discipline caught the test
+    # that was meant to protect it. The first version asserted the chip was no
+    # wider than `MetaChip.maxWidth` — the very constant being mutated — so it
+    # passed with the cap set to infinity. Compared against the screen instead.
+    Mutation(
+        name="meta-chip-cap",
+        promise="a long area name is cut rather than taking the whole line",
+        path="lib/widgets/meta_chip.dart",
+        find="  static const maxWidth = 220.0;",
+        replace="  static const maxWidth = double.infinity;",
+        tests=["test/meta_chip_test.dart"],
+    ),
+    # And so was this one. The check first compared the text's bottom edge to
+    # the height of the *window*, which it never exceeded — the sentence was
+    # falling out of the scrolling panel, not off the display. Same lesson:
+    # measure against the thing that is actually doing the constraining.
+    Mutation(
+        name="intro-fits-a-short-window",
+        promise="the sentence explaining what the app is fits without scrolling",
+        path="lib/features/onboarding/onboarding_screen.dart",
+        find="    final isShort = MediaQuery.sizeOf(context).height < _shortWindow;",
+        replace="    final isShort = false;",
+        tests=["test/surfaces_test.dart"],
+    ),
 ]
 
 

@@ -74,11 +74,16 @@ class WorkerStandingView extends StatelessWidget {
                   : theme.colorScheme.outline,
             ),
             const SizedBox(width: BrandSizing.spaceXs),
-            Text(
-              standing.hasRating
-                  ? standing.averageStars!.toStringAsFixed(1)
-                  : strings.notRatedYet,
-              style: theme.textTheme.titleMedium,
+            // Flexible, because this is a number in English and a phrase in
+            // Urdu. "Not rated yet" is three short words; its translation is
+            // long enough to run off a 390px phone, which it did.
+            Flexible(
+              child: Text(
+                standing.hasRating
+                    ? standing.averageStars!.toStringAsFixed(1)
+                    : strings.notRatedYet,
+                style: theme.textTheme.titleMedium,
+              ),
             ),
           ],
         ),

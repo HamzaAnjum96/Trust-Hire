@@ -6,6 +6,7 @@ import '../../core/formatters.dart';
 import '../../core/tokens.dart';
 import '../../l10n/app_localizations.dart';
 import '../../models/job.dart';
+import '../../widgets/meta_chip.dart';
 
 /// One job in a list.
 ///
@@ -113,20 +114,20 @@ class JobRow extends StatelessWidget {
                   // said. A row is for scanning; the sheet lists all three
                   // for the worker actually deciding whether to bid.
                   if (job.supportingTags.isNotEmpty)
-                    _Meta(
+                    MetaChip(
                       icon: job.supportingTags.first.icon,
                       label: job.supportingTags.first.label(strings),
                     ),
                   // Where, before when. Once the jobs span a country, a row
                   // that says only what and when is a row a worker cannot use.
                   if (job.area != null)
-                    _Meta(icon: Icons.place_outlined, label: job.area!),
-                  _Meta(
+                    MetaChip(icon: Icons.place_outlined, label: job.area!),
+                  MetaChip(
                     icon: Icons.schedule,
                     label: Format.scheduled(strings, job.scheduledTime, now),
                   ),
                   if (job.hasVoiceNote)
-                    _Meta(
+                    MetaChip(
                       icon: Icons.mic,
                       // Distinguishes "has a voice note as well" from "the
                       // voice note is all there is", which decides whether
@@ -136,7 +137,7 @@ class JobRow extends StatelessWidget {
                           : strings.voiceNote,
                     ),
                   if (job.hasPhotos)
-                    _Meta(
+                    MetaChip(
                       icon: Icons.photo_library_outlined,
                       label: strings.photoCount(job.photoPaths.length),
                     ),
@@ -162,38 +163,3 @@ class JobRow extends StatelessWidget {
   }
 }
 
-class _Meta extends StatelessWidget {
-  const _Meta({required this.icon, required this.label});
-
-  final IconData icon;
-  final String label;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
-    // Capped and ellipsised rather than free to size itself. A Wrap gives a
-    // child the full line width and lets it overflow past that, and
-    // "Ghulam Muhammad Abad, Faisalabad" in the 380px results rail is wider
-    // than the line — which paints the yellow-and-black overflow stripes over
-    // a job row.
-    return ConstrainedBox(
-      constraints: const BoxConstraints(maxWidth: 220),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(icon, size: 16, color: theme.colorScheme.onSurfaceVariant),
-          const SizedBox(width: BrandSizing.spaceXs + 2),
-          Flexible(
-            child: Text(
-              label,
-              style: theme.textTheme.labelSmall,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}

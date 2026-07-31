@@ -64,7 +64,7 @@ it is for.
 | --- | --- |
 | `agile/sprint-planning/` | [`poc-sprint-plan.md`](documents/agile/sprint-planning/poc-sprint-plan.md) is the master plan for the POC — vision, goals, constraints, and Sprints 0–6 as originally scoped — the build ran to Sprint 13. [`phase-1-sprint-plan.md`](documents/agile/sprint-planning/phase-1-sprint-plan.md) plans what follows it, P1-1 to P1-9. Alongside them, one document per sprint as it is planned in detail: sprint goal, committed scope, team capacity, risks and dependencies, definition of done. Name those `sprint-NN-planning.md`, zero-padded. |
 | `agile/backlog/` | Epics (`epic-<slug>.md`) and user stories (`story-<slug>.md`) with testable acceptance criteria. A story is *ready* when its criteria are testable and its open questions are resolved — only ready stories get pulled into planning. |
-| `agile/retrospectives/` | `sprint-NN-retro.md`, matching the sprint number, or `phase-N-retro.md` for a whole phase — [`phase-1-retro.md`](documents/agile/retrospectives/phase-1-retro.md) covers P1-1 to P1-7 and [`p1-8a-p1-9-retro.md`](documents/agile/retrospectives/p1-8a-p1-9-retro.md) the two after it, which is where the carried actions' current status lives. What went well, what did not, and **actions with named owners**. Carry unfinished actions forward explicitly. Write it at the end of the sprint; a retro covering seven of them at once is archaeology. |
+| `agile/retrospectives/` | `sprint-NN-retro.md`, matching the sprint number, or `phase-N-retro.md` for a whole phase — [`phase-1-retro.md`](documents/agile/retrospectives/phase-1-retro.md) covers P1-1 to P1-7 and [`p1-8a-p1-9-retro.md`](documents/agile/retrospectives/p1-8a-p1-9-retro.md) the two after it, and [`0-15-x-retro.md`](documents/agile/retrospectives/0-15-x-retro.md) the three UI and refactor rounds after *that* — which is where the carried actions' current status lives. What went well, what did not, and **actions with named owners**. Carry unfinished actions forward explicitly. Write it at the end of the sprint; a retro covering seven of them at once is archaeology. |
 | `brand-guidelines/` | [`brand-guidelines.md`](documents/brand-guidelines/brand-guidelines.md) is the source of truth: positioning, the burgundy/copper/sand palette, typography, logo direction, iconography, map styling, voice and tone, component specs, motion, accessibility, dark mode, and design tokens. Anything user-facing should be traceable back to it. Add new colours with their hex value *and* intended use; keep source assets next to exports. |
 | `product/` | [`roadmap.md`](documents/product/roadmap.md) sets out what comes after the POC. [`phase-1-system-logic.md`](documents/product/phase-1-system-logic.md) specifies a fuller two-sided marketplace, and [`poc-vs-phase-1.md`](documents/product/poc-vs-phase-1.md) reconciles the two — **read that before building against either**. [`demo-script.md`](documents/product/demo-script.md) walks somebody through the built app in about fifteen minutes, stop by stop — and every stop is checked by `test/demo_walkthrough_test.dart`, so the script cannot rot quietly. [`ux-audit-response.md`](documents/product/ux-audit-response.md) answers the UI/UX audit finding by finding: done, scheduled, or declined with a reason. Alongside them: vision, PRDs (`prd-<slug>.md`), personas, success metrics. State non-goals as clearly as goals, and number requirements so backlog stories can reference them. |
 | `design/` | User flows, wireframes, mockups, design-system and accessibility decisions. Link the live design tool **and** commit a dated export — links rot. Record the reasoning, not just the picture. |
@@ -272,7 +272,7 @@ code/frontend/
 │   ├── app/          ← app root, shell, controllers
 │   ├── core/         ← brand tokens, theme, breakpoints, formatters
 │   ├── features/
-│   │   ├── map/          ← the map — the primary surface
+│   │   ├── map/          ← the map — the primary surface, and its overlays
 │   │   ├── jobs/         ← job list, details, saved and posted
 │   │   ├── create_job/   ← posting and editing
 │   │   ├── feed/         ← the visibility rule: which jobs reach whom
@@ -293,7 +293,8 @@ code/frontend/
 │   │                    listings, Verification
 │   ├── services/     ← local storage, seed loading, repositories
 │   │   └── backend/  ← the RemoteApi seam, and the mock behind it
-│   └── widgets/      ← shared UI (status pills, skeletons, empty states)
+│   └── widgets/      ← shared UI (status pills, skeletons, empty states,
+│                        meta chips)
 ├── assets/
 │   ├── seed/         ← jobs, users, offers, ratings, accounts, directory, admin
 │   ├── images/       ← placeholder job photos
@@ -401,11 +402,26 @@ noise.
 Its sibling for the schema is `code/backend/tool/sweep_schema.sh`, which found
 two vacuous SQL checks the same way. **If you add a rule that decides money,
 visibility, or who sees somebody's identity document, add a mutation for it.**
-A promise nothing can break is a promise nothing is holding up. The suite includes an accessibility audit
+A promise nothing can break is a promise nothing is holding up. **And run the
+mutation before believing the test** — one written to protect the meta chip's
+width cap asserted the chip was no wider than the constant being mutated, so it
+passed with the cap set to infinity. A test whose subject is also its expected
+value measures nothing.
+
+The suite includes an accessibility audit
 (`test/accessibility_test.dart`) that runs Flutter's tap-target, semantic-label
 and text-contrast guidelines against the live app, and checks the palette's
 contrast ratios against WCAG AA — so a regression there fails the build rather
 than shipping.
+
+**`test/surfaces_test.dart` runs every screen at six window shapes, in both
+themes and both languages.** It asserts almost nothing about what is on screen
+— that is each feature's own test file's job — only that every combination
+renders without throwing, which in a debug build means without overflowing, and
+that every navigation destination can still be reached. It exists because four
+bugs shipped while the suite was green: every test ran at one of two sizes, in
+one theme, in one language, and the bugs were in between. **If a screen only
+works at 390×844 in English, this is the file that says so.**
 
 **Building for the web** — CanvasKit must be bundled rather than fetched from a
 CDN, or the app will not load without third-party network access:

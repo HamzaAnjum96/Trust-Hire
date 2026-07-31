@@ -48,11 +48,7 @@ class _AppShellState extends State<AppShell> {
     // "Activity", not "Saved": the screen behind it has always held saved,
     // posted and offered jobs, and naming it after one of its three tabs sent
     // anyone looking for the others to the wrong place.
-    _Destination(
-      Icons.bookmark_border,
-      Icons.bookmark,
-      strings.navActivity,
-    ),
+    _Destination(Icons.bookmark_border, Icons.bookmark, strings.navActivity),
     // "Profile", not "Settings": role and trades decide what the rest of the
     // app shows, which is not a setting — and a marketplace with no profile
     // destination has nowhere to put trust signals later.
@@ -82,7 +78,6 @@ class _AppShellState extends State<AppShell> {
   @override
   Widget build(BuildContext context) {
     final strings = AppStrings.of(context);
-    final theme = Theme.of(context);
     final layout = LayoutSize.of(context);
 
     final body = IndexedStack(
@@ -110,52 +105,13 @@ class _AppShellState extends State<AppShell> {
               onSelected: (value) => setState(() => _index = value),
               // Extended labels need the room; a tablet does not have it.
               extended: layout == LayoutSize.expanded,
-              // **Labelled wherever there is room for a label.** A bare "+"
-              // above a navigation rail reads as part of the furniture; the
-              // one thing this app is for should say what it does. On a
-              // tablet-width rail there is no room for the word, so the icon
-              // keeps its tooltip and the destinations carry the meaning.
               action: _showsPostAction
-                  ? (layout == LayoutSize.expanded
-                        ? FloatingActionButton.extended(
-                            onPressed: _openCreateJob,
-                            backgroundColor: theme.colorScheme.primary,
-                            foregroundColor: theme.colorScheme.onPrimary,
-                            elevation: 2,
-                            shape: const RoundedRectangleBorder(
-                              borderRadius: BrandRadius.mediumAll,
-                            ),
-                            icon: const Icon(Icons.add),
-                            label: Text(
-                              strings.postAJob,
-                              style: BrandType.button,
-                            ),
-                          )
-                        : Column(
-                            children: [
-                              FloatingActionButton(
-                                onPressed: _openCreateJob,
-                                backgroundColor: theme.colorScheme.primary,
-                                foregroundColor: theme.colorScheme.onPrimary,
-                                elevation: 2,
-                                tooltip: strings.postAJob,
-                                shape: const RoundedRectangleBorder(
-                                  borderRadius: BrandRadius.mediumAll,
-                                ),
-                                child: const Icon(Icons.add),
-                              ),
-                              const SizedBox(height: BrandSizing.spaceXs),
-                              // Every destination below this carries a label.
-                              // A bare "+" at the top of a labelled column
-                              // reads as furniture rather than as the app's
-                              // one primary action.
-                              Text(
-                                strings.postAJob,
-                                textAlign: TextAlign.center,
-                                style: theme.textTheme.labelSmall,
-                              ),
-                            ],
-                          ))
+                  ? _PostJobButton(
+                      onPressed: _openCreateJob,
+                      shape: layout == LayoutSize.expanded
+                          ? _PostJobShape.wide
+                          : _PostJobShape.stacked,
+                    )
                   : null,
             ),
             const VerticalDivider(width: 1, thickness: 1),
@@ -168,35 +124,100 @@ class _AppShellState extends State<AppShell> {
     return Scaffold(
       body: body,
       floatingActionButton: _showsPostAction
-          ? FloatingActionButton.extended(
-              onPressed: _openCreateJob,
-              backgroundColor: theme.colorScheme.primary,
-              foregroundColor: theme.colorScheme.onPrimary,
-              elevation: 2,
-              shape: const RoundedRectangleBorder(
-                borderRadius: BrandRadius.mediumAll,
-              ),
-              icon: const Icon(Icons.add),
-              // Section 21 — say what the action does, never "Submit".
-              label: Text(strings.postAJob, style: BrandType.button),
-            )
+          ? _PostJobButton(onPressed: _openCreateJob, shape: _PostJobShape.wide)
           : null,
       bottomNavigationBar: NavigationBar(
         selectedIndex: _index,
         onDestinationSelected: (value) => setState(() => _index = value),
         destinations: [
-          for (final destination in _destinations(strings))
-            destination.forBar,
+          for (final destination in _destinations(strings)) destination.forBar,
         ],
       ),
     );
   }
 }
 
+/// How much room the posting action has.
+enum _PostJobShape {
+  /// Icon and label side by side. The bottom bar and an extended rail.
+  wide,
+
+  /// Icon above a label, matching the destinations under it. A rail too
+  /// narrow for a word beside an icon.
+  stacked,
+}
+
+/// The app's one primary action, in one place.
+///
+/// **It had grown three copies** — the bottom bar, the extended rail and the
+/// narrow rail — each repeating the same five lines of brand styling, and the
+/// third was added the day after a report that the button was hard to find.
+/// Three copies of a thing that must look identical is how one of them ends up
+/// not.
+///
+/// Always labelled. An unlabelled "+" above five labelled destinations reads as
+/// furniture rather than as the thing the app is for, which is what the report
+/// was describing.
+class _PostJobButton extends StatelessWidget {
+  const _PostJobButton({required this.onPressed, required this.shape});
+
+  final VoidCallback onPressed;
+  final _PostJobShape shape;
+
+  @override
+  Widget build(BuildContext context) {
+    final strings = AppStrings.of(context);
+    final theme = Theme.of(context);
+
+    Widget button({Widget? child, Widget? icon, Widget? label}) => icon == null
+        ? FloatingActionButton(
+            onPressed: onPressed,
+            backgroundColor: theme.colorScheme.primary,
+            foregroundColor: theme.colorScheme.onPrimary,
+            elevation: 2,
+            tooltip: strings.postAJob,
+            shape: const RoundedRectangleBorder(
+              borderRadius: BrandRadius.mediumAll,
+            ),
+            child: child,
+          )
+        : FloatingActionButton.extended(
+            onPressed: onPressed,
+            backgroundColor: theme.colorScheme.primary,
+            foregroundColor: theme.colorScheme.onPrimary,
+            elevation: 2,
+            shape: const RoundedRectangleBorder(
+              borderRadius: BrandRadius.mediumAll,
+            ),
+            icon: icon,
+            label: label!,
+          );
+
+    return switch (shape) {
+      // Section 21 — say what the action does, never "Submit".
+      _PostJobShape.wide => button(
+        icon: const Icon(Icons.add),
+        label: Text(strings.postAJob, style: BrandType.button),
+      ),
+      _PostJobShape.stacked => Column(
+        children: [
+          button(child: const Icon(Icons.add)),
+          const SizedBox(height: BrandSizing.spaceXs),
+          Text(
+            strings.postAJob,
+            textAlign: TextAlign.center,
+            style: theme.textTheme.labelSmall,
+          ),
+        ],
+      ),
+    };
+  }
+}
+
 /// The side navigation used from the medium breakpoint upward.
 ///
 /// Its own widget so the shell's build stays readable, and so the rail's
-/// scroll behaviour is contained: at 600px height with four destinations and
+/// scroll behaviour is contained: at 600px height with five destinations and
 /// a button, the rail can overflow, and a navigation control that clips is
 /// worse than one that scrolls.
 class _NavigationRail extends StatelessWidget {

@@ -57,44 +57,58 @@ class EmptyView extends StatelessWidget {
     final theme = Theme.of(context);
     final isLight = theme.brightness == Brightness.light;
 
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(BrandSizing.spaceLg),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              width: 88,
-              height: 88,
-              decoration: BoxDecoration(
-                color: isLight
-                    ? BrandColours.warmSand
-                    : BrandColours.darkElevated,
-                shape: BoxShape.circle,
-              ),
-              child: Icon(
-                icon,
-                size: 36,
-                color: isLight ? BrandColours.copper : BrandColours.darkCopper,
-              ),
+    // **Scrollable, not just centred.** An empty state is the one thing on the
+    // screen, so a fixed column that is four pixels too tall has nowhere to
+    // put them — which is what happened on a phone held sideways, where the
+    // app bar, the tabs and the navigation bar leave about 210px. Centred
+    // while it fits, scrolled when it does not.
+    return SingleChildScrollView(
+      child: ConstrainedBox(
+        constraints: BoxConstraints(
+          minHeight: MediaQuery.sizeOf(context).height * 0.25,
+        ),
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(BrandSizing.spaceLg),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  width: 88,
+                  height: 88,
+                  decoration: BoxDecoration(
+                    color: isLight
+                        ? BrandColours.warmSand
+                        : BrandColours.darkElevated,
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(
+                    icon,
+                    size: 36,
+                    color: isLight
+                        ? BrandColours.copper
+                        : BrandColours.darkCopper,
+                  ),
+                ),
+                const SizedBox(height: BrandSizing.spaceLg),
+                Text(
+                  title,
+                  style: theme.textTheme.titleLarge,
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: BrandSizing.spaceSm),
+                Text(
+                  message,
+                  style: theme.textTheme.bodyMedium,
+                  textAlign: TextAlign.center,
+                ),
+                if (action != null) ...[
+                  const SizedBox(height: BrandSizing.spaceLg),
+                  action!,
+                ],
+              ],
             ),
-            const SizedBox(height: BrandSizing.spaceLg),
-            Text(
-              title,
-              style: theme.textTheme.titleLarge,
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: BrandSizing.spaceSm),
-            Text(
-              message,
-              style: theme.textTheme.bodyMedium,
-              textAlign: TextAlign.center,
-            ),
-            if (action != null) ...[
-              const SizedBox(height: BrandSizing.spaceLg),
-              action!,
-            ],
-          ],
+          ),
         ),
       ),
     );

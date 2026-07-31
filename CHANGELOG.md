@@ -12,6 +12,71 @@ that heading to the version and date, and open a fresh `[Unreleased]`.
 
 ## [Unreleased]
 
+### 0.15.3 — A matrix, a de-duplication, and a test that measured nothing
+
+The bugfix half found three defects by running every screen at six window
+shapes in two themes and two languages. The refactor half found a fourth by
+putting two near-identical widgets side by side and reading the difference.
+
+#### Added
+
+- **`test/surfaces_test.dart` — every screen, at every shape, in both themes
+  and both languages.** 24 rendering cases plus a reachability check per shape.
+  It asserts almost nothing about *what* is on screen; it asserts that each
+  combination renders without throwing, which in a debug build means without
+  overflowing. The four bugs fixed in 0.15.2 were all found by hand at sizes no
+  test had ever used — this is that check, automated, so the next one is not.
+- **`lib/widgets/meta_chip.dart`** — the icon-and-label pair under a job, in
+  one place instead of two.
+- **`lib/features/map/map_overlays.dart`** — the header, notices, width cap and
+  buttons that float over the map, split out of `map_screen.dart`.
+
+#### Fixed
+
+- **`EmptyView` overflowed by 4px on a phone held sideways.** An empty state
+  that paints overflow stripes is a worse empty state than a scrollable one.
+- **`WorkerStandingView` overflowed by 8px in Urdu on a 390px phone**, because
+  "ابھی تک درجہ بندی نہیں" is a good deal longer than "Not rated yet". The
+  rating label flexes now.
+- **The map's preview card had no width cap on its meta chips.** The job row's
+  copy of the same widget capped and ellipsised; the preview card's copy, added
+  later, did neither — the reason for the cap lived only in a comment on the
+  first copy. One widget now, so there is one behaviour.
+- **The intro's opening sentence was below the fold on a phone held sideways.**
+  At 380px the 96px medallion and the display-sized heading filled the panel on
+  their own, so the line explaining what Trust Hire *is* sat under the dots and
+  the Next button, with nothing indicating there was more. It scrolled, so
+  nothing overflowed and nothing failed — the same defect as the rail that hid
+  Profile, in the one screen where a new user has no idea anything is missing.
+  Below 520px the decoration gives way instead of the words. Found by opening
+  the built app; the matrix had been marking the intro as seen, so it covered
+  every screen except the first one anybody meets.
+
+#### Changed
+
+- **The posting button was three copies of the same five lines** — bottom bar,
+  extended rail, narrow rail — and the third was added the day after a report
+  that the button was hard to find. One `_PostJobButton` with a shape enum.
+- **The map's two floating controls were two widgets** identical but for what
+  went in the middle. One `MapButton` with a busy flag.
+- **`map_screen.dart` is down from 1086 lines to 808.**
+
+#### A note on the sweep
+
+**Two of the three tests written this round were vacuous on the first attempt,
+and both were caught by running the mutation before believing the test.**
+
+- The meta-chip test asserted the chip was no wider than `MetaChip.maxWidth` —
+  the very constant under test — so it passed with the cap set to infinity.
+- The intro test compared the sentence's bottom edge to the height of the
+  *window*, which it never exceeded: the text was falling out of the scrolling
+  panel, not off the display. It passed with the fix removed.
+
+Same mistake twice, in one afternoon, by someone who had just written the tool
+that catches it: **measure against the thing that is actually constraining, not
+against the thing you are testing.** Both are now registered as mutations — the
+sweep is at 42.
+
 ### 0.15.2 — A UI pass, and two things that were genuinely broken
 
 Both reported, both reproduced at sizes the suite had never been run at. Found

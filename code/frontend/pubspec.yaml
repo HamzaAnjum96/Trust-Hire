@@ -5,7 +5,7 @@ publish_to: 'none'
 # Source of truth for the app version. Mirrored in lib/core/app_version.dart,
 # which test/version_test.dart checks against this line. Bump both on every
 # push that changes the app.
-version: 0.15.2+25
+version: 0.15.3+26
 
 environment:
   sdk: ^3.12.2

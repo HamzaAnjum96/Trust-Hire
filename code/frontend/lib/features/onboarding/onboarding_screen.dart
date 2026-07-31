@@ -188,28 +188,55 @@ class _Panel extends StatelessWidget {
   final String body;
   final String? footnote;
 
+  /// Below this the panel is drawn small. The same number `LayoutSize` uses to
+  /// decide a window is too short for a navigation rail — a window that cannot
+  /// hold a rail cannot hold a 96px medallion above a display-sized heading
+  /// either.
+  static const _shortWindow = 520.0;
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isLight = theme.brightness == Brightness.light;
+
+    // **A phone held sideways has about 380px, and the full-size panel needs
+    // more than that before it reaches the body text.** It scrolls, so nothing
+    // overflows and nothing failed — but the first thing a new user reads was
+    // below the fold with no hint that there was a fold, which is the same
+    // defect as the navigation rail that hid Profile.
+    //
+    // So the decoration gives way rather than the words: a smaller medallion
+    // and tighter gaps, and the sentence fits.
+    final isShort = MediaQuery.sizeOf(context).height < _shortWindow;
+    final medallion = isShort ? 56.0 : 96.0;
+    final gap = isShort ? BrandSizing.spaceMd : BrandSizing.spaceXl;
 
     return SingleChildScrollView(
       padding: const EdgeInsets.symmetric(horizontal: BrandSizing.spaceLg),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SizedBox(height: BrandSizing.spaceXl),
+          SizedBox(height: gap),
           Container(
-            width: 96,
-            height: 96,
+            width: medallion,
+            height: medallion,
             decoration: BoxDecoration(
               color: isLight ? BrandColours.white : BrandColours.darkSurface,
               shape: BoxShape.circle,
             ),
-            child: Icon(icon, size: 44, color: theme.colorScheme.primary),
+            child: Icon(
+              icon,
+              size: isShort ? 28 : 44,
+              color: theme.colorScheme.primary,
+            ),
           ),
-          const SizedBox(height: BrandSizing.spaceXl),
-          Text(title, style: theme.textTheme.displayMedium),
+          SizedBox(height: gap),
+          Text(
+            title,
+            style: isShort
+                ? theme.textTheme.headlineSmall
+                : theme.textTheme.displayMedium,
+          ),
           const SizedBox(height: BrandSizing.spaceMd),
           Text(body, style: theme.textTheme.bodyLarge),
           if (footnote != null) ...[
