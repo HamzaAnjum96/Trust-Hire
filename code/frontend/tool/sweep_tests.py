@@ -464,6 +464,39 @@ MUTATIONS = [
         replace="    final isShort = false;",
         tests=["test/surfaces_test.dart"],
     ),
+    # The rule this protects was written and tested when Mode B was built, and
+    # then had no callers for two sprints — no listing recorded where its
+    # worker was, so the radius was decorative. A mutation would have caught
+    # nothing back then; the promise had no test, it had a test with no subject.
+    Mutation(
+        name="the-directory-respects-a-worker's-radius",
+        promise="a worker who travels 8km is not shown to a hirer 75km away",
+        path="lib/features/premium/premium_rules.dart",
+        find="    return workerAt.distanceTo(hirerAt) <= listing.serviceRadiusMetres;",
+        replace="    return true;",
+        tests=["test/premium_test.dart"],
+    ),
+    Mutation(
+        name="directory-search-excludes",
+        promise="searching the directory narrows it",
+        path="lib/features/premium/premium_rules.dart",
+        find="    if (needle.isEmpty) return true;",
+        replace="    if (true) return true;",
+        tests=["test/premium_test.dart"],
+    ),
+    # Not a rule about money or visibility, but the same failure mode: the seed
+    # had a second hand-written copy of `fromJson`, and when the model grew a
+    # field the copy silently dropped it. Everything still loaded.
+    Mutation(
+        name="the-seed-keeps-a-worker's-base",
+        promise="a seeded listing carries the place its radius is measured from",
+        path="lib/models/premium.dart",
+        find="""        base: json['base'] == null
+            ? null
+            : JobLocation.fromJson(json['base'] as Map<String, dynamic>),""",
+        replace="        base: null,",
+        tests=["test/premium_test.dart"],
+    ),
 ]
 
 

@@ -221,6 +221,53 @@ void main() {
         reason: 'a directory with no service menus demonstrates nothing',
       );
     });
+
+    testWidgets('and it leaves out the people who would not travel to you',
+        (tester) async {
+      // The script says the directory applies each worker's own radius. It is
+      // seeded across the whole country, so standing in Karachi must exclude
+      // somebody — otherwise the claim is true of an empty rule.
+      final store = await ready();
+      final premium = PremiumController(store)..load();
+      await tester.pump();
+
+      const karachi = JobLocation(latitude: 24.8607, longitude: 67.0111);
+
+      final everyone = premium.directory(onlyWithinReach: false);
+      final nearby = premium.directory(hirerAt: karachi);
+
+      expect(
+        nearby.length,
+        lessThan(everyone.length),
+        reason: 'a hirer in Karachi still saw every worker in Pakistan',
+      );
+      expect(
+        nearby,
+        isNotEmpty,
+        reason: 'and the demo needs somebody left to book',
+      );
+    });
+
+    testWidgets('and typing narrows it', (tester) async {
+      // The script asks the presenter to type "kitchen".
+      final store = await ready();
+      final premium = PremiumController(store)..load();
+      await tester.pump();
+
+      final found = premium.directory(query: 'kitchen');
+
+      expect(
+        found,
+        isNotEmpty,
+        reason: 'the script tells the presenter to type kitchen; something '
+            'has to come back',
+      );
+      expect(
+        found.length,
+        lessThan(premium.directory().length),
+        reason: 'a search that returns everything is not a search',
+      );
+    });
   });
 
   group('stop 6 — Trust Hire staff, and oversight', () {

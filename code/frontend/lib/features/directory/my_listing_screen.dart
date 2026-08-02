@@ -9,6 +9,7 @@ import '../../core/tokens.dart';
 import '../../l10n/app_localizations.dart';
 import '../../models/job_tag.dart';
 import '../../models/premium.dart';
+import '../map/location_controller.dart';
 import '../../widgets/state_views.dart';
 
 /// The worker's side of Mode B: pay to be listed, then say what you do and
@@ -264,7 +265,9 @@ class _ServiceArea extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final strings = AppStrings.of(context);
+    final theme = Theme.of(context);
     final premium = context.watch<PremiumController>();
+    final location = context.watch<LocationController>();
     final listing = premium.mine;
 
     return Column(
@@ -277,7 +280,58 @@ class _ServiceArea extends StatelessWidget {
           onChanged: (value) => premium.setServiceArea(remoteOnly: value),
         ),
         if (!listing.remoteOnly) ...[
+          // **Where the radius is measured from.** Without it the number
+          // below is decorative: "I travel 12 km" from nowhere in particular
+          // cannot exclude anybody, so the listing shows to the whole country
+          // and the worker gets enquiries from four provinces away.
+          const SizedBox(height: BrandSizing.spaceSm),
+          Text(strings.whereYouWorkFrom, style: theme.textTheme.titleSmall),
           const SizedBox(height: BrandSizing.spaceXs),
+          Text(
+            strings.whereYouWorkFromHelp,
+            style: theme.textTheme.labelSmall?.copyWith(
+              color: theme.colorScheme.onSurfaceVariant,
+            ),
+          ),
+          const SizedBox(height: BrandSizing.spaceXs),
+          Row(
+            children: [
+              Icon(
+                listing.base == null
+                    ? Icons.location_off_outlined
+                    : Icons.place_outlined,
+                size: 18,
+                color: theme.colorScheme.onSurfaceVariant,
+              ),
+              const SizedBox(width: BrandSizing.spaceSm),
+              Expanded(
+                child: Text(
+                  listing.base == null
+                      ? strings.workFromNotSet
+                      : strings.workFromSet,
+                  style: theme.textTheme.bodyMedium,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: BrandSizing.spaceXs),
+          Align(
+            alignment: AlignmentDirectional.centerStart,
+            child: OutlinedButton.icon(
+              onPressed: location.isRequesting
+                  ? null
+                  : () async {
+                      await location.request();
+                      final position = location.position;
+                      if (position == null || !context.mounted) return;
+                      await premium.setServiceArea(base: position);
+                    },
+              icon: const Icon(Icons.my_location, size: 18),
+              label: Text(strings.useMyLocation),
+            ),
+          ),
+
+          const SizedBox(height: BrandSizing.spaceMd),
           Text(strings.howFarYouTravel),
           const SizedBox(height: BrandSizing.spaceXs),
           Wrap(

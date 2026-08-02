@@ -52,6 +52,21 @@ class Format {
     );
   }
 
+  /// A bare distance, with no phrasing around it.
+  ///
+  /// [radius] says "12 km area", which is right for the circle a job covers
+  /// and wrong for everything else — the directory borrowed it once and
+  /// produced "Travels up to 12 km area". This is the same number without an
+  /// opinion about what it measures, so the sentence around it can supply one.
+  static String span(AppStrings strings, double metres) {
+    if (metres < 1000) return strings.metresPlain(metres.round());
+
+    final km = (metres / 100).round() / 10;
+    return strings.kilometresPlain(
+      km.toStringAsFixed(km.truncateToDouble() == km ? 0 : 1),
+    );
+  }
+
   /// When the work needs to happen, relative to [now] where that reads better.
   static String scheduled(AppStrings strings, DateTime? time, DateTime now) {
     if (time == null) return strings.anyTime;

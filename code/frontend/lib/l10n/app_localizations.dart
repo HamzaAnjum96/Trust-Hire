@@ -818,6 +818,18 @@ abstract class AppStrings {
   /// **'{km} km away'**
   String kilometresAway(String km);
 
+  /// No description provided for @metresPlain.
+  ///
+  /// In en, this message translates to:
+  /// **'{metres} m'**
+  String metresPlain(int metres);
+
+  /// No description provided for @kilometresPlain.
+  ///
+  /// In en, this message translates to:
+  /// **'{km} km'**
+  String kilometresPlain(String km);
+
   /// No description provided for @metresArea.
   ///
   /// In en, this message translates to:
@@ -1952,6 +1964,78 @@ abstract class AppStrings {
   /// **'All work'**
   String get directoryAllWork;
 
+  /// No description provided for @searchDirectory.
+  ///
+  /// In en, this message translates to:
+  /// **'Search by name or service'**
+  String get searchDirectory;
+
+  /// No description provided for @directoryOrderLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Order'**
+  String get directoryOrderLabel;
+
+  /// No description provided for @directoryOrderByName.
+  ///
+  /// In en, this message translates to:
+  /// **'By name'**
+  String get directoryOrderByName;
+
+  /// No description provided for @directoryOrderByDistance.
+  ///
+  /// In en, this message translates to:
+  /// **'Nearest first'**
+  String get directoryOrderByDistance;
+
+  /// No description provided for @directoryOrderByPrice.
+  ///
+  /// In en, this message translates to:
+  /// **'Cheapest first'**
+  String get directoryOrderByPrice;
+
+  /// No description provided for @directoryWithinReach.
+  ///
+  /// In en, this message translates to:
+  /// **'Only people who travel to me'**
+  String get directoryWithinReach;
+
+  /// No description provided for @directoryWithinReachOff.
+  ///
+  /// In en, this message translates to:
+  /// **'Showing everyone, including people who do not travel this far.'**
+  String get directoryWithinReachOff;
+
+  /// No description provided for @directoryNoMatch.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing matches that'**
+  String get directoryNoMatch;
+
+  /// No description provided for @directoryNoMatchMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Try fewer words, another kind of work, or turn off \"Only people who travel to me\".'**
+  String get directoryNoMatchMessage;
+
+  /// No description provided for @directoryCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{No one} =1{1 person} other{{count} people}}'**
+  String directoryCount(int count);
+
+  /// No description provided for @travelsUpTo.
+  ///
+  /// In en, this message translates to:
+  /// **'Travels up to {distance}'**
+  String travelsUpTo(String distance);
+
+  /// No description provided for @worksRemotely.
+  ///
+  /// In en, this message translates to:
+  /// **'Works remotely'**
+  String get worksRemotely;
+
   /// No description provided for @fromPrice.
   ///
   /// In en, this message translates to:
@@ -2227,6 +2311,36 @@ abstract class AppStrings {
   /// In en, this message translates to:
   /// **'I work remotely, no travel'**
   String get remoteOnlyLabel;
+
+  /// No description provided for @whereYouWorkFrom.
+  ///
+  /// In en, this message translates to:
+  /// **'Where you travel from'**
+  String get whereYouWorkFrom;
+
+  /// No description provided for @whereYouWorkFromHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Your radius is measured from here. Only the area is shown, never an address.'**
+  String get whereYouWorkFromHelp;
+
+  /// No description provided for @useMyLocation.
+  ///
+  /// In en, this message translates to:
+  /// **'Use my current location'**
+  String get useMyLocation;
+
+  /// No description provided for @workFromNotSet.
+  ///
+  /// In en, this message translates to:
+  /// **'Not set — you appear to everyone, wherever they are'**
+  String get workFromNotSet;
+
+  /// No description provided for @workFromSet.
+  ///
+  /// In en, this message translates to:
+  /// **'Set. People further than your radius will not see you.'**
+  String get workFromSet;
 
   /// No description provided for @listingNeedsService.
   ///

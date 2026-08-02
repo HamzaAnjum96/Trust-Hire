@@ -222,6 +222,15 @@ being broadcast. Booking in the app is 2.5% cheaper than the worker's own
 price, funded out of the platform's commission rather than the worker's
 earnings, so that using Trust Hire beats ringing somebody you found on it.
 
+**Both modes are location-first.** The map only shows a worker jobs within
+reach of them; the directory only shows a hirer workers who would travel to
+them, measured from a base on each listing against the radius that worker set.
+That second half is newer than it looks — the rule existed and was tested from
+P1-6, but nothing recorded where a worker was, so for two sprints it excluded
+nobody. A hirer can still ask to see everyone, and a hirer who has declined
+location sees everyone by default: **declining a permission should cost you
+sorting, not access.**
+
 **Demo accounts.** There is no sign-in — Section 13a excludes authentication
 from the POC — but the device can be any of seven people, switched from the map
 header, the app bar or the profile screen. Switching changes who owns which
@@ -294,7 +303,7 @@ code/frontend/
 │   ├── services/     ← local storage, seed loading, repositories
 │   │   └── backend/  ← the RemoteApi seam, and the mock behind it
 │   └── widgets/      ← shared UI (status pills, skeletons, empty states,
-│                        meta chips)
+│                        meta chips, fading scroll rows)
 ├── assets/
 │   ├── seed/         ← jobs, users, offers, ratings, accounts, directory, admin
 │   ├── images/       ← placeholder job photos

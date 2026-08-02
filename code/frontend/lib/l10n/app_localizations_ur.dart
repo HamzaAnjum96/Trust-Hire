@@ -415,6 +415,16 @@ class AppStringsUr extends AppStrings {
   }
 
   @override
+  String metresPlain(int metres) {
+    return '$metres میٹر';
+  }
+
+  @override
+  String kilometresPlain(String km) {
+    return '$km کلومیٹر';
+  }
+
+  @override
   String metresArea(int metres) {
     return '$metres میٹر کا علاقہ';
   }
@@ -1115,6 +1125,55 @@ class AppStringsUr extends AppStrings {
   String get directoryAllWork => 'ہر قسم کا کام';
 
   @override
+  String get searchDirectory => 'نام یا کام سے تلاش کریں';
+
+  @override
+  String get directoryOrderLabel => 'ترتیب';
+
+  @override
+  String get directoryOrderByName => 'نام کے اعتبار سے';
+
+  @override
+  String get directoryOrderByDistance => 'قریب ترین پہلے';
+
+  @override
+  String get directoryOrderByPrice => 'سب سے کم قیمت پہلے';
+
+  @override
+  String get directoryWithinReach => 'صرف وہ لوگ جو میرے پاس آتے ہیں';
+
+  @override
+  String get directoryWithinReachOff =>
+      'سب دکھائے جا رہے ہیں، وہ بھی جو اتنی دور نہیں آتے۔';
+
+  @override
+  String get directoryNoMatch => 'اس سے کچھ نہیں ملا';
+
+  @override
+  String get directoryNoMatchMessage =>
+      'کم الفاظ آزمائیں، کام کی دوسری قسم دیکھیں، یا \"صرف وہ لوگ جو میرے پاس آتے ہیں\" بند کر دیں۔';
+
+  @override
+  String directoryCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count افراد',
+      one: '1 فرد',
+      zero: 'کوئی نہیں',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String travelsUpTo(String distance) {
+    return '$distance تک آتے ہیں';
+  }
+
+  @override
+  String get worksRemotely => 'دور سے کام کرتے ہیں';
+
+  @override
   String fromPrice(String amount) {
     return '$amount سے';
   }
@@ -1288,6 +1347,24 @@ class AppStringsUr extends AppStrings {
 
   @override
   String get remoteOnlyLabel => 'میں دور سے کام کرتا ہوں، سفر نہیں';
+
+  @override
+  String get whereYouWorkFrom => 'آپ کہاں سے آتے ہیں';
+
+  @override
+  String get whereYouWorkFromHelp =>
+      'آپ کا فاصلہ یہیں سے ناپا جاتا ہے۔ صرف علاقہ دکھایا جاتا ہے، پتہ کبھی نہیں۔';
+
+  @override
+  String get useMyLocation => 'میری موجودہ جگہ استعمال کریں';
+
+  @override
+  String get workFromNotSet =>
+      'مقرر نہیں — آپ سب کو نظر آتے ہیں، چاہے وہ کہیں بھی ہوں';
+
+  @override
+  String get workFromSet =>
+      'مقرر ہو گیا۔ آپ کے دائرے سے دور لوگ آپ کو نہیں دیکھیں گے۔';
 
   @override
   String get listingNeedsService =>

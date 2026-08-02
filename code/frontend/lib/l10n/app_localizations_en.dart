@@ -413,6 +413,16 @@ class AppStringsEn extends AppStrings {
   }
 
   @override
+  String metresPlain(int metres) {
+    return '$metres m';
+  }
+
+  @override
+  String kilometresPlain(String km) {
+    return '$km km';
+  }
+
+  @override
   String metresArea(int metres) {
     return '$metres m area';
   }
@@ -1109,6 +1119,55 @@ class AppStringsEn extends AppStrings {
   String get directoryAllWork => 'All work';
 
   @override
+  String get searchDirectory => 'Search by name or service';
+
+  @override
+  String get directoryOrderLabel => 'Order';
+
+  @override
+  String get directoryOrderByName => 'By name';
+
+  @override
+  String get directoryOrderByDistance => 'Nearest first';
+
+  @override
+  String get directoryOrderByPrice => 'Cheapest first';
+
+  @override
+  String get directoryWithinReach => 'Only people who travel to me';
+
+  @override
+  String get directoryWithinReachOff =>
+      'Showing everyone, including people who do not travel this far.';
+
+  @override
+  String get directoryNoMatch => 'Nothing matches that';
+
+  @override
+  String get directoryNoMatchMessage =>
+      'Try fewer words, another kind of work, or turn off \"Only people who travel to me\".';
+
+  @override
+  String directoryCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count people',
+      one: '1 person',
+      zero: 'No one',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String travelsUpTo(String distance) {
+    return 'Travels up to $distance';
+  }
+
+  @override
+  String get worksRemotely => 'Works remotely';
+
+  @override
   String fromPrice(String amount) {
     return 'From $amount';
   }
@@ -1282,6 +1341,24 @@ class AppStringsEn extends AppStrings {
 
   @override
   String get remoteOnlyLabel => 'I work remotely, no travel';
+
+  @override
+  String get whereYouWorkFrom => 'Where you travel from';
+
+  @override
+  String get whereYouWorkFromHelp =>
+      'Your radius is measured from here. Only the area is shown, never an address.';
+
+  @override
+  String get useMyLocation => 'Use my current location';
+
+  @override
+  String get workFromNotSet =>
+      'Not set — you appear to everyone, wherever they are';
+
+  @override
+  String get workFromSet =>
+      'Set. People further than your radius will not see you.';
 
   @override
   String get listingNeedsService =>

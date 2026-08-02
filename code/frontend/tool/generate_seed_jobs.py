@@ -1126,7 +1126,24 @@ DIRECTORY = [
 ]
 
 
-def build_directory():
+AREA_POINTS = {
+    f"{area}, {city}": (lat, lng)
+    for city, _province, _weight, areas in CITIES
+    for area, lat, lng in areas
+}
+
+
+def area_point(area):
+    """Where an "Area, City" string is, roughly.
+
+    The directory's service radius is measured from here. Approximate on
+    purpose — an area centre, not an address: a worker advertising a service
+    is not publishing where they sleep.
+    """
+    return AREA_POINTS.get(area)
+
+
+def build_directory(people):
     """The Mode B listings, as `assets/seed/directory.json`.
 
     Times are relative like everything else in the seed — a subscription
@@ -1134,15 +1151,29 @@ def build_directory():
     lapsed a month later.
     """
     listings = []
+    areas = {person["id"]: person.get("area") for person in people}
 
     for index, entry in enumerate(DIRECTORY, start=1):
         worker, tag, headline, radius_km, services, credentials, days = entry
+
+        # **The radius needs somewhere to be measured from.** Without a base
+        # a worker who travels 12 km was shown to a hirer in another province,
+        # because nothing knew 12 km from where.
+        point = area_point(areas.get(worker))
+        if point is None and radius_km != 0:
+            raise SystemExit(
+                f"{worker} is in the directory with a service radius but "
+                f"their area {areas.get(worker)!r} is not a known place — "
+                "the radius would mean nothing"
+            )
 
         listings.append({
             "workerId": worker,
             "headline": headline,
             "remoteOnly": radius_km == 0,
             "serviceRadiusMetres": (radius_km or 10) * 1000,
+            **({"base": {"latitude": point[0], "longitude": point[1]}}
+               if point is not None else {}),
             "subscription": {
                 "plan": "yearly" if days > 120 else "monthly",
                 # Backdated far enough that the end date is the interesting
@@ -1343,7 +1374,7 @@ def build_admin(people, jobs, rng=None):
 def main() -> None:
     jobs, people = build()
     bids, ratings, accounts = add_history(jobs, people)
-    listings = build_directory()
+    listings = build_directory(people)
     reviews, cnics, disputes = build_admin(people, jobs)
 
     SEED_DIR.mkdir(parents=True, exist_ok=True)

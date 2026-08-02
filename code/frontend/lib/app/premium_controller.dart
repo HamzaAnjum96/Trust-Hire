@@ -70,20 +70,36 @@ class PremiumController extends ChangeNotifier {
   List<DirectoryListing> directory({
     JobTag? tag,
     JobLocation? hirerAt,
-    Map<String, JobLocation>? workerLocations,
+    bool onlyWithinReach = true,
+    DirectoryOrder order = DirectoryOrder.byName,
+    String? query,
+    Map<String, String> names = const <String, String>{},
     DateTime? now,
   }) => rules.directory(
     _listings.values,
     now: now ?? DateTime.now(),
     tag: tag,
     hirerAt: hirerAt,
-    workerLocations: workerLocations,
+    onlyWithinReach: onlyWithinReach,
+    order: order,
+    query: query,
+    names: names,
   );
+
+  /// How far a worker is from the hirer, for the card. Null when either end
+  /// has not said where it is.
+  double? distanceTo(DirectoryListing listing, {JobLocation? hirerAt}) =>
+      rules.distanceFrom(listing, hirerAt: hirerAt);
 
   /// Every tag anybody in the directory actually offers, so the filter row
   /// never shows a category with nothing behind it.
+  ///
+  /// **Deliberately ignores the hirer's position and their search.** This
+  /// feeds the chip row, and a chip row that empties as you type is a filter
+  /// fighting the filter above it — the row should say what the directory
+  /// holds, not what the current query left of it.
   Set<JobTag> get directoryTags => {
-    for (final listing in directory()) ...listing.tags,
+    for (final listing in directory(onlyWithinReach: false)) ...listing.tags,
   };
 
   /// Buys or extends premium. Simulated — Section 13a excludes real payment
@@ -164,11 +180,16 @@ class PremiumController extends ChangeNotifier {
     );
   }
 
-  Future<void> setServiceArea({double? radiusMetres, bool? remoteOnly}) async {
+  Future<void> setServiceArea({
+    double? radiusMetres,
+    bool? remoteOnly,
+    JobLocation? base,
+  }) async {
     await _save(
       mine.copyWith(
         serviceRadiusMetres: radiusMetres,
         remoteOnly: remoteOnly,
+        base: base,
       ),
     );
   }

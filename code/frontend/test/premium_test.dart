@@ -55,6 +55,7 @@ void main() {
     List<ServiceOffering>? services,
     double radiusMetres = 10000,
     bool remoteOnly = false,
+    JobLocation? base,
   }) => DirectoryListing(
     workerId: 'w1',
     subscription: daysLeft == null
@@ -67,6 +68,7 @@ void main() {
     services: services ?? [service()],
     serviceRadiusMetres: radiusMetres,
     remoteOnly: remoteOnly,
+    base: base,
   );
 
   group('the hirer discount', () {
@@ -192,16 +194,14 @@ void main() {
       // to cast; here the worker decides how far to go.
       expect(
         rules.reaches(
-          listing(radiusMetres: 8000),
-          workerAt: islamabad,
+          listing(radiusMetres: 8000, base: islamabad),
           hirerAt: muzaffarabad,
         ),
         isFalse,
       );
       expect(
         rules.reaches(
-          listing(radiusMetres: 200000),
-          workerAt: islamabad,
+          listing(radiusMetres: 200000, base: islamabad),
           hirerAt: muzaffarabad,
         ),
         isTrue,
@@ -211,8 +211,7 @@ void main() {
     test('remote work ignores it entirely', () {
       expect(
         rules.reaches(
-          listing(radiusMetres: 1, remoteOnly: true),
-          workerAt: islamabad,
+          listing(radiusMetres: 1, remoteOnly: true, base: islamabad),
           hirerAt: muzaffarabad,
         ),
         isTrue,
@@ -223,8 +222,180 @@ void main() {
       // Same call the Mode A geofence makes: somebody who declined location
       // should lose sorting, not lose access.
       expect(
-        rules.reaches(listing(), workerAt: islamabad, hirerAt: null),
+        rules.reaches(listing(base: islamabad), hirerAt: null),
         isTrue,
+      );
+
+      // And the other way round: a worker who has never said where they are
+      // keeps the shelf they paid for.
+      expect(
+        rules.reaches(listing(), hirerAt: muzaffarabad),
+        isTrue,
+        reason: 'a listing with no base must not vanish from the directory',
+      );
+    });
+  });
+
+  group('the directory a hirer actually sees', () {
+    ServiceOffering named(String id, String title, int price, JobTag tag) =>
+        ServiceOffering(id: id, tag: tag, title: title, priceRupees: price);
+
+    DirectoryListing at(
+      String id, {
+      JobLocation? base,
+      double radiusMetres = 10000,
+      bool remoteOnly = false,
+      List<ServiceOffering>? services,
+      String? headline,
+    }) => DirectoryListing(
+      workerId: id,
+      subscription: Subscription(
+        plan: SubscriptionPlan.monthly,
+        startedAt: now.subtract(const Duration(days: 30)),
+        expiresAt: now.add(const Duration(days: 30)),
+      ),
+      services: services ?? [service()],
+      serviceRadiusMetres: radiusMetres,
+      remoteOnly: remoteOnly,
+      headline: headline,
+      base: base,
+    );
+
+    // Islamabad and Muzaffarabad are about 75 km apart.
+    final near = at('near', base: islamabad, radiusMetres: 100000);
+    final far = at('far', base: islamabad, radiusMetres: 8000);
+    final remote = at('remote', base: islamabad, remoteOnly: true);
+
+    test('leaves out the people who would not come', () {
+      // **The bug this closes.** `reaches` was written and tested when Mode B
+      // was built, and then had no caller for two sprints, because no listing
+      // recorded where its worker was. A barber in Karachi appeared to a
+      // hirer in Peshawar with "travels up to 10 km" written underneath.
+      final shown = rules.directory(
+        [near, far, remote],
+        now: now,
+        hirerAt: muzaffarabad,
+      );
+
+      expect(
+        shown.map((l) => l.workerId),
+        ['near', 'remote'],
+        reason: 'somebody who travels 8 km cannot reach a hirer 75 km away',
+      );
+    });
+
+    test('but shows them when the hirer asks to see everyone', () {
+      final shown = rules.directory(
+        [near, far, remote],
+        now: now,
+        hirerAt: muzaffarabad,
+        onlyWithinReach: false,
+      );
+
+      expect(shown, hasLength(3));
+    });
+
+    test('a hirer who declined location loses sorting, not access', () {
+      // The same call the Mode A geofence makes. Emptying the directory would
+      // punish the permission refusal rather than work around it.
+      expect(
+        rules.directory([near, far, remote], now: now, hirerAt: null),
+        hasLength(3),
+      );
+    });
+
+    test('and so does a worker who never said where they are', () {
+      final unplaced = at('unplaced', radiusMetres: 1);
+
+      expect(
+        rules.directory([unplaced], now: now, hirerAt: muzaffarabad),
+        hasLength(1),
+        reason: 'a listing with no base must keep the shelf it paid for',
+      );
+    });
+
+    test('search reaches the name, the headline and the menu', () {
+      final byHeadline = at('a', headline: 'Property and family matters');
+      final byService = at(
+        'b',
+        services: [named('s1', 'Kitchen deep clean', 2500, JobTag.cleaning)],
+      );
+      final byName = at('c');
+      final names = {'c': 'Sadia Iqbal'};
+
+      List<String> found(String query) => rules
+          .directory(
+            [byHeadline, byService, byName],
+            now: now,
+            query: query,
+            names: names,
+          )
+          .map((l) => l.workerId)
+          .toList();
+
+      expect(found('property'), ['a'], reason: 'the headline');
+      expect(found('kitchen'), ['b'], reason: 'a service title');
+      expect(found('sadia'), ['c'], reason: "the worker's name");
+      expect(found('  KITCHEN  '), ['b'], reason: 'trimmed and case-folded');
+      expect(found(''), hasLength(3), reason: 'an empty query is not a filter');
+    });
+
+    test('the default order is not one the platform could sell', () {
+      // Cheapest first would teach workers to undercut each other, and
+      // "featured" would charge twice for the same shelf. The default is
+      // whatever order the caller supplied.
+      final cheap = at(
+        'cheap',
+        services: [named('s1', 'A', 500, JobTag.beauty)],
+      );
+      final dear = at('dear', services: [named('s2', 'B', 9000, JobTag.beauty)]);
+
+      expect(
+        rules.directory([dear, cheap], now: now).map((l) => l.workerId),
+        ['dear', 'cheap'],
+        reason: 'the input order survived, so nothing re-ranked it',
+      );
+    });
+
+    test('but a hirer may ask for one', () {
+      final cheap = at(
+        'cheap',
+        services: [named('s1', 'A', 500, JobTag.beauty)],
+      );
+      final dear = at('dear', services: [named('s2', 'B', 9000, JobTag.beauty)]);
+      final noMenu = at('noMenu', services: []);
+
+      expect(
+        rules
+            .directory(
+              [dear, noMenu, cheap],
+              now: now,
+              order: DirectoryOrder.byPrice,
+            )
+            .map((l) => l.workerId),
+        ['cheap', 'dear'],
+        reason: 'a listing with no menu has no price, and sorts out entirely '
+            'because an empty menu keeps it out of the directory',
+      );
+    });
+
+    test('nearest first puts the unplaceable last, never first', () {
+      // Unknown is not near. Sorting a worker with no base to the top would
+      // make the label a lie in exactly the case the hirer cannot check.
+      final close = at('close', base: muzaffarabad, radiusMetres: 100000);
+      final distant = at('distant', base: islamabad, radiusMetres: 100000);
+      final unplaced = at('unplaced', radiusMetres: 100000);
+
+      expect(
+        rules
+            .directory(
+              [unplaced, distant, close],
+              now: now,
+              hirerAt: muzaffarabad,
+              order: DirectoryOrder.byDistance,
+            )
+            .map((l) => l.workerId),
+        ['close', 'distant', 'unplaced'],
       );
     });
   });
@@ -426,6 +597,43 @@ void main() {
     });
   });
 
+  group('a worker setting their own service area', () {
+    test('the base is stored, and it narrows who can see them', () async {
+      // The seed ships a base for everybody; a listing somebody creates in the
+      // app would have none, so the radius they pick would do nothing. This is
+      // the path a real worker takes.
+      final store = await LocalStore.open();
+      final premium = PremiumController(store)..load();
+
+      await premium.setServiceArea(radiusMetres: 8000, base: islamabad);
+
+      final reopened = PremiumController(store)..load();
+      expect(reopened.mine.base, islamabad, reason: 'it did not survive a restart');
+      expect(reopened.mine.serviceRadiusMetres, 8000);
+
+      expect(
+        rules.reaches(reopened.mine, hirerAt: muzaffarabad),
+        isFalse,
+        reason: 'the radius they picked must now exclude somebody',
+      );
+    });
+
+    test('changing the radius later does not lose the base', () async {
+      // `setServiceArea` takes three optional arguments and is called with one
+      // at a time from three different controls on the screen. A copyWith that
+      // treated the missing ones as "clear" would wipe the base every time
+      // somebody tapped a distance chip.
+      final store = await LocalStore.open();
+      final premium = PremiumController(store)..load();
+
+      await premium.setServiceArea(base: islamabad);
+      await premium.setServiceArea(radiusMetres: 20000);
+
+      expect(premium.mine.base, islamabad);
+      expect(premium.mine.serviceRadiusMetres, 20000);
+    });
+  });
+
   group('the seeded directory', () {
     Future<PremiumController> seeded() async {
       final store = await LocalStore.open();
@@ -439,6 +647,48 @@ void main() {
 
       expect(directory.length, greaterThan(4));
       expect(premium.directoryTags.length, greaterThan(4));
+    });
+
+    test('everybody who travels says where they travel from', () async {
+      // The radius is meaningless without it, and a listing that claims
+      // "travels up to 12 km" from nowhere in particular is worse than one
+      // that claims nothing. The generator refuses to emit one; this is the
+      // check that the seed on disk actually came from that generator.
+      final premium = await seeded();
+
+      for (final listing in premium.directory(onlyWithinReach: false)) {
+        if (listing.remoteOnly) continue;
+        expect(
+          listing.base,
+          isNotNull,
+          reason: '${listing.workerId} has a service radius and no base',
+        );
+      }
+    });
+
+    test('and that place is inside Pakistan', () async {
+      // Cheap, and it catches the one mistake this kind of generator actually
+      // makes: latitude and longitude the wrong way round. Swapped, every
+      // base lands in the Indian Ocean or western China, every distance is
+      // wrong by a thousand kilometres, and the directory still renders
+      // perfectly.
+      final premium = await seeded();
+
+      for (final listing in premium.directory(onlyWithinReach: false)) {
+        final base = listing.base;
+        if (base == null) continue;
+
+        expect(
+          base.latitude,
+          inInclusiveRange(23.5, 37.1),
+          reason: '${listing.workerId} is not at a Pakistani latitude',
+        );
+        expect(
+          base.longitude,
+          inInclusiveRange(60.8, 77.9),
+          reason: '${listing.workerId} is not at a Pakistani longitude',
+        );
+      }
     });
 
     test('everybody listed has a price on everything', () async {

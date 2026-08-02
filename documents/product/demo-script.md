@@ -133,9 +133,20 @@ number.
   platform's commission rather than the worker's earnings, so using Trust Hire
   beats ringing somebody you found on it. The worker is paid the same either
   way.
+- **It only lists people who would come to you.** Each worker sets how far
+  they travel, measured from their own area, and the directory applies it.
+  Untick "Only people who travel to me" to see the rest — a hirer booking a
+  lawyer has a good reason to look wider.
 - **The order is not for sale.** Section 9 already charges for the shelf;
-  charging again for the position on it makes it a racket.
+  charging again for the position on it makes it a racket. The hirer can
+  reorder it themselves — nearest, cheapest — because a sort somebody asked
+  for is not an advertisement.
 - **An unrated worker shows no stars**, not a zero. New is not bad.
+
+**Try:** type `kitchen` in the search box. It reaches names, headlines and the
+titles on each menu, but deliberately not the category chips above it — those
+are already a filter, and matching both would make typing and tapping quietly
+different searches.
 
 ---
 

@@ -5,6 +5,7 @@ import '../../models/job_tag.dart';
 import 'job_filter.dart';
 import 'job_filter_controller.dart';
 import '../../l10n/app_localizations.dart';
+import '../../widgets/fading_row.dart';
 
 /// Quick filters: the two the sprint plan names, plus a way into the rest.
 ///
@@ -77,36 +78,9 @@ class QuickFilterBar extends StatelessWidget {
       );
     }
 
-    // **A chip cut in half by the edge of the screen looks broken; a chip
-    // fading out looks like more.** There are five or six of these and a phone
-    // fits three, so on every launch the row was clipped mid-word with nothing
-    // to say it scrolled. The fade is the affordance.
-    final rightToLeft = Directionality.of(context) == TextDirection.rtl;
-
-    return SizedBox(
-      height: BrandSizing.touchTargetMinimum,
-      child: ShaderMask(
-        // Follows the reading direction, so in Urdu the row fades on the left
-        // — which is where it runs off.
-        shaderCallback: (bounds) => LinearGradient(
-          begin: rightToLeft
-              ? AlignmentDirectional.centerEnd.resolve(TextDirection.ltr)
-              : Alignment.centerLeft,
-          end: rightToLeft ? Alignment.centerLeft : Alignment.centerRight,
-          stops: const [0.0, 0.9, 1.0],
-          colors: const [Colors.black, Colors.black, Colors.transparent],
-        ).createShader(bounds),
-        blendMode: BlendMode.dstIn,
-        child: ListView.separated(
-          scrollDirection: Axis.horizontal,
-          padding: const EdgeInsets.symmetric(horizontal: BrandSizing.spaceMd),
-          itemCount: chips.length,
-          separatorBuilder: (_, _) =>
-              const SizedBox(width: BrandSizing.spaceSm),
-          itemBuilder: (_, index) => Center(child: chips[index]),
-        ),
-      ),
-    );
+    // A row that runs off the screen says so by fading rather than by
+    // clipping a chip mid-word. See [FadingRow].
+    return FadingRow(children: chips);
   }
 }
 

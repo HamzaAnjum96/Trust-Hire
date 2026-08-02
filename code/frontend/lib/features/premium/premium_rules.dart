@@ -2,6 +2,26 @@ import '../../models/job.dart';
 import '../../models/job_tag.dart';
 import '../../models/premium.dart';
 
+/// How a hirer has asked to see the directory.
+///
+/// **The reader's choice, never the platform's.** [byName] is the default and
+/// stays the default: a directory that arrives sorted by price teaches workers
+/// to undercut each other, and one sorted by anything purchasable is an
+/// advertisement wearing a sort control. Offering the same orders as *options*
+/// costs none of that, because the hirer is the one who asked.
+enum DirectoryOrder {
+  /// Alphabetical. Arbitrary, and arbitrary is the point.
+  byName,
+
+  /// Closest first. Only meaningful once the hirer's position is known;
+  /// workers with no base sort last rather than first.
+  byDistance,
+
+  /// Cheapest first, by the lowest price on the menu. A worker with no menu
+  /// sorts last rather than sorting as free.
+  byPrice,
+}
+
 /// Section 9, as rules.
 ///
 /// Pure functions over plain data, like visibility, bidding, the lifecycle and
@@ -94,48 +114,126 @@ class PremiumRules {
     return listing.hasServices;
   }
 
-  /// Whether [listing]'s worker will travel to [to] from [from].
+  /// Whether [listing]'s worker will travel to [hirerAt].
   ///
-  /// An unknown viewer position stands the radius down rather than emptying
-  /// the directory — the same call the Mode A geofence makes, and for the
-  /// same reason: somebody who declined location should lose sorting, not
-  /// lose access.
-  bool reaches(
-    DirectoryListing listing, {
-    required JobLocation? workerAt,
-    required JobLocation? hirerAt,
-  }) {
+  /// An unknown position on *either* side stands the radius down rather than
+  /// emptying the directory — the same call the Mode A geofence makes, and
+  /// for the same reason: somebody who declined location should lose sorting,
+  /// not lose access. A worker who never said where they are keeps the shelf
+  /// they paid for.
+  ///
+  /// **Measured from the listing's own base**, which is why
+  /// [DirectoryListing.base] exists. This used to take the worker's position
+  /// as a separate argument, alongside a `workerLocations` map threaded down
+  /// from the caller — and every caller passed null, because there was
+  /// nowhere for a worker's location to be stored. The rule was tested and
+  /// unreachable.
+  bool reaches(DirectoryListing listing, {required JobLocation? hirerAt}) {
     if (listing.remoteOnly) return true;
+
+    final workerAt = listing.base;
     if (workerAt == null || hirerAt == null) return true;
 
     return workerAt.distanceTo(hirerAt) <= listing.serviceRadiusMetres;
   }
 
+  /// How far [listing]'s worker is from [hirerAt], or null when either end is
+  /// unknown. Null means "do not claim a distance", never zero.
+  double? distanceFrom(DirectoryListing listing, {JobLocation? hirerAt}) {
+    final workerAt = listing.base;
+    if (workerAt == null || hirerAt == null) return null;
+
+    return workerAt.distanceTo(hirerAt);
+  }
+
   /// The directory, filtered and ordered.
   ///
-  /// Ordered by nothing the platform can sell. Cheapest first would push
-  /// people into undercutting each other, and "featured" would make the order
-  /// a second thing to pay for — Section 9 already charges for being present,
-  /// and charging twice for the same shelf is how a directory becomes a
-  /// racket. Alphabetical by name is arbitrary, and arbitrary is the point.
+  /// **The default order is nothing the platform can sell.** Cheapest first
+  /// would push people into undercutting each other, and "featured" would make
+  /// the order a second thing to pay for — Section 9 already charges for being
+  /// present, and charging twice for the same shelf is how a directory becomes
+  /// a racket. So the default is the order the caller supplied, which is
+  /// alphabetical: arbitrary, and arbitrary is the point.
+  ///
+  /// A hirer may still *ask* for a different order, and [DirectoryOrder] is
+  /// how. That is not the same thing: a sort the reader chose is a tool, and a
+  /// sort the platform chose is an advertisement. Nothing here is ever ordered
+  /// by who paid the most.
   List<DirectoryListing> directory(
     Iterable<DirectoryListing> listings, {
     required DateTime now,
     JobTag? tag,
     JobLocation? hirerAt,
-    Map<String, JobLocation>? workerLocations,
+    bool onlyWithinReach = true,
+    DirectoryOrder order = DirectoryOrder.byName,
+    String? query,
+    Map<String, String> names = const <String, String>{},
   }) {
-    return listings
-        .where((listing) => appearsInDirectory(listing, now: now))
-        .where((listing) => tag == null || listing.tags.contains(tag))
-        .where(
-          (listing) => reaches(
-            listing,
-            workerAt: workerLocations?[listing.workerId],
-            hirerAt: hirerAt,
-          ),
-        )
-        .toList(growable: false);
+    final matched =
+        listings
+            .where((listing) => appearsInDirectory(listing, now: now))
+            .where((listing) => tag == null || listing.tags.contains(tag))
+            .where(
+              (listing) =>
+                  !onlyWithinReach || reaches(listing, hirerAt: hirerAt),
+            )
+            .where(
+              (listing) =>
+                  matchesQuery(listing, query, name: names[listing.workerId]),
+            )
+            .toList();
+
+    switch (order) {
+      case DirectoryOrder.byName:
+        break;
+      case DirectoryOrder.byDistance:
+        // A worker with no base sorts last rather than first. Unknown is not
+        // near, and putting it at the top would make "nearest" a lie in
+        // exactly the cases the hirer cannot check.
+        matched.sort((a, b) {
+          final da = distanceFrom(a, hirerAt: hirerAt);
+          final db = distanceFrom(b, hirerAt: hirerAt);
+          if (da == null && db == null) return 0;
+          if (da == null) return 1;
+          if (db == null) return -1;
+          return da.compareTo(db);
+        });
+      case DirectoryOrder.byPrice:
+        // Same reasoning: no menu means no price to compare, so it sorts last
+        // instead of sorting as free.
+        matched.sort((a, b) {
+          final pa = a.fromPrice;
+          final pb = b.fromPrice;
+          if (pa == null && pb == null) return 0;
+          if (pa == null) return 1;
+          if (pb == null) return -1;
+          return pa.compareTo(pb);
+        });
+    }
+
+    return List.unmodifiable(matched);
+  }
+
+  /// Whether [listing] matches what the hirer typed.
+  ///
+  /// Reaches the worker's name, their headline and the titles on their menu —
+  /// the three things actually shown on the card. **Not the tag labels**,
+  /// which the chip row above already filters by; matching those too would
+  /// make typing "cleaning" and tapping Cleaning quietly different searches.
+  ///
+  /// An empty query matches everything, so the caller never has to special-
+  /// case a blank field.
+  bool matchesQuery(DirectoryListing listing, String? query, {String? name}) {
+    final needle = query?.trim().toLowerCase() ?? '';
+    if (needle.isEmpty) return true;
+
+    bool has(String? text) => (text ?? '').toLowerCase().contains(needle);
+
+    return has(name) ||
+        has(listing.headline) ||
+        listing.services.any(
+          (service) => has(service.title) || has(service.description),
+        );
   }
 
   /// Whether a hirer may book [service] from [listing] right now.

@@ -138,39 +138,35 @@ class SeedLoader {
     final now = DateTime.now();
 
     return decoded.cast<Map<String, dynamic>>().map((json) {
+      // **Turn the relative dates absolute, then hand the whole thing to the
+      // model.** This used to rebuild the listing field by field, which meant
+      // the seed had a second, hand-written copy of `fromJson` that nobody
+      // updated when the model grew — `base` was added, the directory kept
+      // loading, and every seeded worker silently had no location. The same
+      // shape as `loadReviews` below, for the same reason.
       final subscription = json['subscription'] as Map<String, dynamic>?;
 
-      return DirectoryListing(
-        workerId: json['workerId'] as String,
-        headline: json['headline'] as String?,
-        remoteOnly: json['remoteOnly'] as bool? ?? false,
-        serviceRadiusMetres:
-            (json['serviceRadiusMetres'] as num?)?.toDouble() ??
-            DirectoryListing.defaultServiceRadiusMetres,
-        subscription: subscription == null
-            ? null
-            : Subscription(
-                plan: SubscriptionPlan.fromId(subscription['plan'] as String?),
-                startedAt: now.subtract(
+      return DirectoryListing.fromJson({
+        ...json,
+        if (subscription != null)
+          'subscription': <String, dynamic>{
+            ...subscription,
+            'startedAt': now
+                .subtract(
                   Duration(
                     days: (subscription['startedDaysAgo'] as num?)?.round() ?? 0,
                   ),
-                ),
-                expiresAt: now.add(
+                )
+                .toIso8601String(),
+            'expiresAt': now
+                .add(
                   Duration(
                     days: (subscription['endsInDays'] as num?)?.round() ?? 0,
                   ),
-                ),
-              ),
-        services: (json['services'] as List<dynamic>? ?? const [])
-            .cast<Map<String, dynamic>>()
-            .map(ServiceOffering.fromJson)
-            .toList(growable: false),
-        credentials: (json['credentials'] as List<dynamic>? ?? const [])
-            .cast<Map<String, dynamic>>()
-            .map(WorkerCredential.fromJson)
-            .toList(growable: false),
-      );
+                )
+                .toIso8601String(),
+          },
+      });
     }).toList(growable: false);
   }
 

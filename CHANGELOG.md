@@ -12,6 +12,62 @@ that heading to the version and date, and open a fresh `[Unreleased]`.
 
 ## [Unreleased]
 
+### 0.16.0 — Mode B becomes location-first
+
+The directory was the one screen in a location-first product that ignored
+location entirely. A barber in Karachi appeared to a hirer in Peshawar with
+"travels up to 10 km" written underneath.
+
+#### Added
+
+- **The directory only shows people who would actually come.** A worker's
+  service radius now has somewhere to be measured *from* —
+  `DirectoryListing.base`, seeded for every listed worker and settable by a
+  worker on their own listing. The rule that uses it, `PremiumRules.reaches`,
+  was written and tested when Mode B was built in P1-6, and **had no callers
+  for two sprints**: it took the worker's position as an argument that every
+  caller passed as null, because no listing recorded one. It reads the
+  listing's own base now, and the `workerLocations` map that existed to carry
+  the missing data is gone.
+- **A checkbox to see everyone anyway.** Somebody booking a lawyer, or
+  planning ahead for another city, has a good reason to look wider — so this
+  is a default, not a law.
+- **Search, over names, headlines and service titles.** Deliberately *not*
+  over the tag labels: the chip row above already filters by those, and
+  matching both would make typing "cleaning" and tapping Cleaning quietly
+  different searches.
+- **An order control** — by name, nearest first, or cheapest first. The
+  default stays alphabetical, because a directory that arrives sorted by price
+  teaches workers to undercut each other and one sorted by anything
+  purchasable is an advertisement wearing a sort control. A sort the *reader*
+  asked for is a different thing. "Nearest first" is offered but disabled
+  until location is known, rather than appearing later where nobody would look
+  for it.
+- **How far away each person is, and how far they travel**, on every card.
+- **A count**, so a short list reads as an answer rather than a failed load.
+- **`lib/widgets/fading_row.dart`** — the trailing-edge fade the job filters
+  got in 0.15.2, now shared. The directory's eight categories had been clipped
+  mid-word by the screen edge ever since.
+
+#### Fixed
+
+- **The seed loader silently dropped any field the model gained.**
+  `loadDirectory` rebuilt each listing field by field — a second, hand-written
+  copy of `fromJson` — so adding `base` to the model left every seeded worker
+  with no location and nothing failing. It converts the relative dates and
+  hands the rest to the model now, which is what `loadReviews` beside it
+  already did.
+- **"Travels up to 12 km area."** `Format.radius` is phrased for the circle a
+  job covers; the directory borrowed it. `Format.span` is the same number
+  without an opinion about what it measures.
+
+#### Changed
+
+- `PremiumRules.reaches` takes only the hirer's position. `directory()` gained
+  `onlyWithinReach`, `order`, `query` and `names`, and lost `workerLocations`.
+- The sweep is at 45 promises, three of them new: that the radius excludes
+  somebody, that search narrows, and that a seeded listing keeps its base.
+
 ### 0.15.3 — A matrix, a de-duplication, and a test that measured nothing
 
 The bugfix half found three defects by running every screen at six window

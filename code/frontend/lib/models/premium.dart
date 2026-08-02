@@ -1,3 +1,4 @@
+import 'job.dart' show JobLocation;
 import 'job_tag.dart';
 
 /// How long a subscription was bought for.
@@ -190,6 +191,7 @@ class DirectoryListing {
     this.serviceRadiusMetres = defaultServiceRadiusMetres,
     this.remoteOnly = false,
     this.headline,
+    this.base,
   });
 
   /// Section 9 gives no number. 10 km is the middle of the Mode A geofence
@@ -222,6 +224,24 @@ class DirectoryListing {
   /// asked to write.
   final String? headline;
 
+  /// Where [serviceRadiusMetres] is measured *from* — roughly, the worker's
+  /// own area.
+  ///
+  /// **Without this the radius was decorative.** A worker could set "I travel
+  /// 12 km" on their listing and the directory would still show them to a
+  /// hirer four hundred kilometres away, because nothing knew 12 km from
+  /// where. [PremiumRules.reaches] existed, and was tested, and had no callers
+  /// for exactly this reason.
+  ///
+  /// Approximate on purpose, and to the same standard as everything else
+  /// positional in this app: an area centre, not an address. A worker is
+  /// advertising, not publishing where they sleep.
+  ///
+  /// Null for a listing that has never said — treated as reaching everybody,
+  /// because a worker who has not answered should lose sorting rather than
+  /// lose the shelf they paid for.
+  final JobLocation? base;
+
   bool get hasServices => services.isNotEmpty;
 
   Set<JobTag> get tags => services.map((service) => service.tag).toSet();
@@ -247,6 +267,7 @@ class DirectoryListing {
     bool? remoteOnly,
     String? headline,
     bool clearHeadline = false,
+    JobLocation? base,
   }) => DirectoryListing(
     workerId: workerId,
     subscription: clearSubscription
@@ -257,6 +278,7 @@ class DirectoryListing {
     serviceRadiusMetres: serviceRadiusMetres ?? this.serviceRadiusMetres,
     remoteOnly: remoteOnly ?? this.remoteOnly,
     headline: clearHeadline ? null : (headline ?? this.headline),
+    base: base ?? this.base,
   );
 
   factory DirectoryListing.fromJson(Map<String, dynamic> json) =>
@@ -280,6 +302,9 @@ class DirectoryListing {
             defaultServiceRadiusMetres,
         remoteOnly: json['remoteOnly'] as bool? ?? false,
         headline: json['headline'] as String?,
+        base: json['base'] == null
+            ? null
+            : JobLocation.fromJson(json['base'] as Map<String, dynamic>),
       );
 
   Map<String, dynamic> toJson() => <String, dynamic>{
@@ -290,5 +315,6 @@ class DirectoryListing {
     'serviceRadiusMetres': serviceRadiusMetres,
     'remoteOnly': remoteOnly,
     'headline': headline,
+    'base': base?.toJson(),
   };
 }

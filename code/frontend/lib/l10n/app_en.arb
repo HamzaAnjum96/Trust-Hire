@@ -182,6 +182,22 @@
       }
     }
   },
+  "metresPlain": "{metres} m",
+  "@metresPlain": {
+    "placeholders": {
+      "metres": {
+        "type": "int"
+      }
+    }
+  },
+  "kilometresPlain": "{km} km",
+  "@kilometresPlain": {
+    "placeholders": {
+      "km": {
+        "type": "String"
+      }
+    }
+  },
   "metresArea": "{metres} m area",
   "@metresArea": {
     "placeholders": {
@@ -804,6 +820,32 @@
   "directoryEmpty": "Nobody listed here yet",
   "directoryEmptyMessage": "The directory holds workers who list fixed prices. Try another kind of work, or post a job on the map instead.",
   "directoryAllWork": "All work",
+  "searchDirectory": "Search by name or service",
+  "directoryOrderLabel": "Order",
+  "directoryOrderByName": "By name",
+  "directoryOrderByDistance": "Nearest first",
+  "directoryOrderByPrice": "Cheapest first",
+  "directoryWithinReach": "Only people who travel to me",
+  "directoryWithinReachOff": "Showing everyone, including people who do not travel this far.",
+  "directoryNoMatch": "Nothing matches that",
+  "directoryNoMatchMessage": "Try fewer words, another kind of work, or turn off \"Only people who travel to me\".",
+  "directoryCount": "{count, plural, =0{No one} =1{1 person} other{{count} people}}",
+  "@directoryCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "travelsUpTo": "Travels up to {distance}",
+  "@travelsUpTo": {
+    "placeholders": {
+      "distance": {
+        "type": "String"
+      }
+    }
+  },
+  "worksRemotely": "Works remotely",
   "fromPrice": "From {amount}",
   "@fromPrice": {
     "placeholders": {
@@ -906,6 +948,11 @@
   "credentialKindMembership": "Membership",
   "howFarYouTravel": "How far you travel",
   "remoteOnlyLabel": "I work remotely, no travel",
+  "whereYouWorkFrom": "Where you travel from",
+  "whereYouWorkFromHelp": "Your radius is measured from here. Only the area is shown, never an address.",
+  "useMyLocation": "Use my current location",
+  "workFromNotSet": "Not set — you appear to everyone, wherever they are",
+  "workFromSet": "Set. People further than your radius will not see you.",
   "listingNeedsService": "Add at least one service before hirers can find you.",
   "someone": "Someone",
   "@someone": {
