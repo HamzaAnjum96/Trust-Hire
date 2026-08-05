@@ -61,6 +61,9 @@ enum NotificationKind {
 
   /// An admin rejected it, or flagged it for a name mismatch.
   verificationRejected,
+
+  /// The other side wrote something on a job's thread.
+  messageReceived,
 }
 
 /// One line in the feed.
@@ -111,7 +114,10 @@ class AppNotification {
     NotificationKind.jobCancelled ||
     NotificationKind.walletLocked ||
     NotificationKind.verificationApproved ||
-    NotificationKind.verificationRejected => true,
+    NotificationKind.verificationRejected ||
+    // Somebody is waiting for an answer. That is the definition of worth
+    // interrupting for.
+    NotificationKind.messageReceived => true,
     _ => false,
   };
 }

@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
-import 'package:provider/provider.dart';
 import 'package:trust_hire/app/job_controller.dart';
 import 'package:trust_hire/app/profile_controller.dart';
 import 'package:trust_hire/app/wallet_controller.dart';
-import 'package:trust_hire/core/theme.dart';
 import 'package:trust_hire/features/jobs/job_details_sheet.dart';
 import 'package:trust_hire/features/jobs/saved_jobs_controller.dart';
-import 'package:trust_hire/l10n/app_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trust_hire/app/bid_controller.dart';
@@ -20,10 +17,10 @@ import 'package:trust_hire/models/worker_profile.dart';
 import 'package:trust_hire/services/bid_repository.dart';
 import 'package:trust_hire/services/job_repository.dart';
 import 'package:trust_hire/services/local_store.dart';
+
+import 'support/harness.dart';
 import 'package:trust_hire/services/media_store.dart';
 import 'package:trust_hire/models/account.dart';
-import 'package:trust_hire/app/account_controller.dart';
-import 'package:trust_hire/app/rating_controller.dart';
 
 /// Section 4: the hirer posts a starting fare, workers counter, the hirer
 /// chooses, and the fare is locked at that moment.
@@ -583,24 +580,16 @@ Future<_Harness> _harness(
   final saved = SavedJobsController(store)..load();
 
   await tester.pumpWidget(
-    MultiProvider(
-      providers: [
-        ChangeNotifierProvider.value(value: jobController),
-        ChangeNotifierProvider.value(value: bidController),
-        ChangeNotifierProvider(create: (_) => AccountController(store)..load()),
-        ChangeNotifierProvider(create: (_) => RatingController(store)..load()),
-        ChangeNotifierProvider.value(value: profile),
-        ChangeNotifierProvider.value(value: wallet),
-        ChangeNotifierProvider.value(value: saved),
-        Provider<MediaStore>.value(value: media),
-      ],
-      child: MaterialApp(
-        localizationsDelegates: AppStrings.localizationsDelegates,
-        supportedLocales: AppStrings.supportedLocales,
-        theme: BrandTheme.light,
-        home: Scaffold(
-          body: JobDetailsSheet(jobId: jobs.first.id, mediaStore: media),
-        ),
+    appHarness(
+      store: store,
+      media: media,
+      jobs: jobController,
+      bids: bidController,
+      profile: profile,
+      wallet: wallet,
+      saved: saved,
+      child: Scaffold(
+        body: JobDetailsSheet(jobId: jobs.first.id, mediaStore: media),
       ),
     ),
   );

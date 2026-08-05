@@ -104,10 +104,10 @@ code/backend/
 ├── migrations/
 │   ├── 0001_identity.sql      ← tags, profiles, worker trades, verification
 │   ├── 0002_jobs.sql          ← jobs, their tags, their media, the fare lock
-│   ├── 0003_marketplace.sql   ← bids, ratings, the wallet, the directory
+│   ├── 0003_marketplace.sql   ← bids, ratings, the wallet, messages, the directory
 │   └── 0004_oversight.sql     ← disputes, the audit log, the CNIC door
 ├── test/
-│   └── schema_test.sql        ← 55 statements it must refuse, 11 it must not
+│   └── schema_test.sql        ← 61 statements it must refuse, 13 it must not
 └── tool/
     ├── verify_schema.sh       ← build a throwaway database, apply, test, drop
     └── sweep_schema.sh        ← drop each rule in turn; does the suite notice?
@@ -244,6 +244,14 @@ The filter deciding who hears about a job is the whole privacy boundary — the
 feed is built from *every* job and bid on the device, because that is all a
 local-first app has — so it carries a mutation in the sweep.
 
+**And the two people can talk.** A thread opens on each job the moment a worker
+is attached — the same moment each side gets the other's exact location, on the
+same argument. It does *not* open during bidding: a channel to every bidder is
+nine conversations the hirer never asked for, and the obvious way to take a deal
+off the platform before the platform has done anything. A thread goes read-only
+when a job is called off rather than disappearing, because that is exactly when
+somebody wants to read back what was agreed.
+
 **Demo accounts.** There is no sign-in — Section 13a excludes authentication
 from the POC — but the device can be any of seven people, switched from the map
 header, the app bar or the profile screen. Switching changes who owns which
@@ -305,6 +313,7 @@ code/frontend/
 │   │   ├── premium/      ← subscriptions and the hirer discount, as rules
 │   │   ├── admin/        ← approvals, disputes, overrides and the audit log
 │   │   ├── verification/ ← Section 2: the CNIC, the phone, the name check
+│   │   ├── messaging/    ← the thread attached to a job, once it has a worker
 │   │   ├── notifications/← the derived feed: what happened, to whom
 │   │   ├── sync/         ← the outbox, and who wins when copies disagree
 │   │   ├── wallet/       ← tokens, commission, top-up
@@ -318,6 +327,8 @@ code/frontend/
 │   │   └── backend/  ← the RemoteApi seam, and the mock behind it
 │   └── widgets/      ← shared UI (status pills, skeletons, empty states,
 │                        meta chips, fading scroll rows)
+├── test/
+│   └── support/      ← harness.dart: every provider, around one screen
 ├── assets/
 │   ├── seed/         ← jobs, users, offers, ratings, accounts, directory, admin
 │   ├── images/       ← placeholder job photos

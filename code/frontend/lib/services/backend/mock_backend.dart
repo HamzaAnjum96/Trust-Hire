@@ -72,6 +72,8 @@ class MockBackend implements RemoteApi {
         'ledgers_are_append_only (0003_marketplace.sql)',
     RefusalCode.commissionAlreadyCharged:
         'wallet_one_commission_per_job (0003_marketplace.sql)',
+    RefusalCode.messageCannotBeEdited:
+        'messages_body_is_immutable (0003_marketplace.sql)',
     RefusalCode.changedElsewhere: 'row version: no SQL equivalent',
     RefusalCode.unreachable: 'network: no SQL equivalent',
   };
@@ -171,10 +173,27 @@ class MockBackend implements RemoteApi {
       case RemoteEntity.rating:
         return _ratingRuleBrokenBy(write);
 
+      case RemoteEntity.message:
+        return _messageRuleBrokenBy(write, existing);
+
       case RemoteEntity.review:
       case RemoteEntity.dispute:
         return null;
     }
+  }
+
+  /// **What was said cannot change.** A message is only ever edited to add a
+  /// read receipt; anything else is somebody rewriting a conversation after
+  /// the fact, which is exactly what makes a thread worth keeping.
+  RefusalCode? _messageRuleBrokenBy(PendingWrite write, RemoteRecord? existing) {
+    if (existing == null) return null;
+
+    final changedBody = write.data['body'] != existing.data['body'];
+    final changedSender = write.data['senderId'] != existing.data['senderId'];
+
+    return changedBody || changedSender
+        ? RefusalCode.messageCannotBeEdited
+        : null;
   }
 
   RefusalCode? _jobRuleBrokenBy(PendingWrite write, RemoteRecord? existing) {

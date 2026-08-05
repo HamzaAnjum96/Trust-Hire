@@ -171,6 +171,23 @@ carries a count.
 
 ---
 
+## Stop 5c — Arranging it
+
+**Still Usman.** **Go:** Activity → Messages.
+
+- **A thread per job**, so what was agreed sits with the work it was about. Two
+  people can hire each other twice; one rolling conversation would mix them.
+- **It opened when the offer was accepted** — the same moment each side got the
+  other's exact location. Open any job still taking offers and there is no
+  thread: a channel to every bidder would be nine conversations the hirer never
+  asked for, and the easiest way to take the deal off the platform.
+- **Send something.** It appears immediately and says "Sent"; it will say
+  "Read" once the other side opens it. Switch to that person and it does.
+- **A cancelled job keeps its thread, read-only.** That is the case where
+  somebody most wants to look back at what was said.
+
+---
+
 ## Stop 6 — Oversight
 
 **Be:** Trust Hire staff. **Go:** Profile → the admin panel.

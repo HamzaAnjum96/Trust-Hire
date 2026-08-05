@@ -1,29 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_test/flutter_test.dart';
-import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trust_hire/app/job_controller.dart';
-import 'package:trust_hire/core/theme.dart';
 import 'package:trust_hire/features/jobs/job_details_sheet.dart';
 import 'package:trust_hire/features/jobs/my_jobs_screen.dart';
 import 'package:trust_hire/features/jobs/saved_jobs_controller.dart';
 import 'package:trust_hire/l10n/app_localizations.dart';
 import 'package:trust_hire/models/job.dart';
 import 'package:trust_hire/services/job_repository.dart';
-import 'package:trust_hire/app/bid_controller.dart';
-import 'package:trust_hire/app/profile_controller.dart';
-import 'package:trust_hire/app/wallet_controller.dart';
-import 'package:trust_hire/app/rating_controller.dart';
-import 'package:trust_hire/app/premium_controller.dart';
-import 'package:trust_hire/app/verification_controller.dart';
-import 'package:trust_hire/app/notification_controller.dart';
-import 'package:trust_hire/services/bid_repository.dart';
 import 'package:trust_hire/services/local_store.dart';
+
+import 'support/harness.dart';
 import 'package:trust_hire/services/media_store.dart';
 
 import 'support/test_strings.dart';
-import 'package:trust_hire/app/account_controller.dart';
 
 /// Until now there was nowhere to come back to: a worker who found a job had
 /// to find it again, and a poster had no home for what they had offered.
@@ -161,46 +152,12 @@ void main() {
       final store = await LocalStore.open();
 
       await tester.pumpWidget(
-        MultiProvider(
-          providers: [
-            ChangeNotifierProvider.value(value: jobs),
-            ChangeNotifierProvider.value(value: saved),
-            ChangeNotifierProvider(
-              create: (_) => AccountController(store)..load(),
-            ),
-            // The details sheet grew a bidding block in P1-2, and it reads
-            // both of these.
-            ChangeNotifierProvider(
-              create: (_) => BidController(BidRepository(store))..load(),
-            ),
-            ChangeNotifierProvider(
-              create: (_) => ProfileController(store)..load(),
-            ),
-            ChangeNotifierProvider(
-              create: (_) => WalletController(store)..load(),
-            ),
-            // The Activity screen leads with the Updates tab from 0.17.0, and
-            // the feed is derived from these four.
-            ChangeNotifierProvider(
-              create: (_) => RatingController(store)..load(),
-            ),
-            ChangeNotifierProvider(
-              create: (_) => PremiumController(store)..load(),
-            ),
-            ChangeNotifierProvider(
-              create: (_) => VerificationController(store)..load(),
-            ),
-            ChangeNotifierProvider(
-              create: (_) => NotificationController(store)..load(),
-            ),
-            Provider<MediaStore>.value(value: media),
-          ],
-          child: MaterialApp(
-            localizationsDelegates: AppStrings.localizationsDelegates,
-            supportedLocales: AppStrings.supportedLocales,
-            theme: BrandTheme.light,
-            home: child,
-          ),
+        appHarness(
+          store: store,
+          media: media,
+          jobs: jobs,
+          saved: saved,
+          child: child,
         ),
       );
       for (var i = 0; i < 8; i++) {

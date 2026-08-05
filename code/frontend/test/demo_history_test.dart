@@ -73,6 +73,7 @@ void main() {
         StoreKeys.accountReviews, // AdminController, VerificationController
         StoreKeys.cnicRecords, // AdminController, VerificationController
         StoreKeys.disputes, // AdminController
+        StoreKeys.messages, // MessageController
       };
 
       // Per-account keys are written suffixed, and read back by the

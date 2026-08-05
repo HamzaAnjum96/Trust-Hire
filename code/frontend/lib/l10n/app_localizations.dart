@@ -593,7 +593,7 @@ abstract class AppStrings {
   /// No description provided for @messageHint.
   ///
   /// In en, this message translates to:
-  /// **'Anything else worth knowing.'**
+  /// **'Write a message'**
   String get messageHint;
 
   /// No description provided for @fieldArea.
@@ -2059,6 +2059,120 @@ abstract class AppStrings {
   /// In en, this message translates to:
   /// **'Your account has been suspended — see CNIC and phone'**
   String get notifVerificationRejected;
+
+  /// No description provided for @refusalMessageEdited.
+  ///
+  /// In en, this message translates to:
+  /// **'A message cannot be changed after it is sent.'**
+  String get refusalMessageEdited;
+
+  /// No description provided for @you.
+  ///
+  /// In en, this message translates to:
+  /// **'You'**
+  String get you;
+
+  /// No description provided for @messagesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Messages'**
+  String get messagesTitle;
+
+  /// No description provided for @messagesTab.
+  ///
+  /// In en, this message translates to:
+  /// **'Messages'**
+  String get messagesTab;
+
+  /// No description provided for @sendMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Send'**
+  String get sendMessage;
+
+  /// No description provided for @messageThreadWith.
+  ///
+  /// In en, this message translates to:
+  /// **'With {name}'**
+  String messageThreadWith(String name);
+
+  /// No description provided for @messagesEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No messages yet'**
+  String get messagesEmpty;
+
+  /// No description provided for @messagesEmptyMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Anything you agree here stays with the job, so both of you can look it up later.'**
+  String get messagesEmptyMessage;
+
+  /// No description provided for @noThreads.
+  ///
+  /// In en, this message translates to:
+  /// **'No conversations yet'**
+  String get noThreads;
+
+  /// No description provided for @noThreadsMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'A thread opens once a job is accepted — the same moment you each get the other\'s location.'**
+  String get noThreadsMessage;
+
+  /// No description provided for @messagesNotYetOpen.
+  ///
+  /// In en, this message translates to:
+  /// **'Messages open once somebody is chosen for this job.'**
+  String get messagesNotYetOpen;
+
+  /// No description provided for @messagesClosed.
+  ///
+  /// In en, this message translates to:
+  /// **'This job is over, so the thread is read-only.'**
+  String get messagesClosed;
+
+  /// No description provided for @messagesNotYours.
+  ///
+  /// In en, this message translates to:
+  /// **'This conversation is between the hirer and the worker.'**
+  String get messagesNotYours;
+
+  /// No description provided for @messageTooLong.
+  ///
+  /// In en, this message translates to:
+  /// **'That is too long to send. Try splitting it up.'**
+  String get messageTooLong;
+
+  /// No description provided for @openMessages.
+  ///
+  /// In en, this message translates to:
+  /// **'Messages'**
+  String get openMessages;
+
+  /// No description provided for @openMessagesWithCount.
+  ///
+  /// In en, this message translates to:
+  /// **'Messages · {count} new'**
+  String openMessagesWithCount(int count);
+
+  /// No description provided for @notifMessageReceived.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} sent you a message'**
+  String notifMessageReceived(String name);
+
+  /// No description provided for @messageReadReceipt.
+  ///
+  /// In en, this message translates to:
+  /// **'Read'**
+  String get messageReadReceipt;
+
+  /// No description provided for @messageSentReceipt.
+  ///
+  /// In en, this message translates to:
+  /// **'Sent'**
+  String get messageSentReceipt;
 
   /// No description provided for @navDirectory.
   ///

@@ -183,6 +183,65 @@ create trigger wallet_entries_no_update
   for each row execute function ledgers_are_append_only();
 
 -- ---------------------------------------------------------------------------
+-- Messages: the thread attached to a job
+-- ---------------------------------------------------------------------------
+
+-- A thread per job rather than per pair of people. Two people can hire each
+-- other more than once, and one rolling conversation would mix "are you coming
+-- at nine?" about last month's tap with this week's wiring, with no way to tell
+-- which job either sentence was about.
+create table messages (
+  id            uuid primary key,
+  job_id        uuid not null references jobs (id) on delete cascade,
+  sender_id     uuid not null references profiles (id) on delete cascade,
+
+  body          text not null,
+  sent_at       timestamptz not null default now(),
+
+  -- When the person it was addressed to opened the thread. The one field on a
+  -- message that is allowed to change after it is written.
+  read_at       timestamptz,
+
+  -- Nothing blank. An empty bubble is not a message, and refusing it here
+  -- means nothing downstream has to handle one.
+  constraint messages_body_is_not_empty check (length(btrim(body)) > 0),
+  constraint messages_body_is_bounded  check (length(body) <= 1000),
+
+  -- A receipt cannot predate the message it is for.
+  constraint messages_read_after_sent  check (read_at is null or read_at >= sent_at)
+);
+
+create index messages_thread on messages (job_id, sent_at);
+create index messages_unread on messages (job_id, sender_id) where read_at is null;
+
+-- **What was said cannot change.** A conversation people can rewrite afterwards
+-- is not a record of one, which is the whole reason to keep it. Deliberately
+-- narrower than the ledger's rule: a read receipt is an ordinary update, so
+-- this refuses a changed body or sender rather than refusing every update.
+create or replace function messages_body_is_immutable() returns trigger
+  language plpgsql as $$
+begin
+  if new.body is distinct from old.body
+     or new.sender_id is distinct from old.sender_id
+     or new.job_id is distinct from old.job_id then
+    raise exception
+      'a message cannot be edited after it is sent: only its read receipt '
+      'may change';
+  end if;
+
+  return new;
+end;
+$$;
+
+create trigger messages_no_rewriting
+  before update on messages
+  for each row execute function messages_body_is_immutable();
+
+comment on table messages is
+  'One thread per job, opening when the job gains a worker — the same moment '
+  'the two sides get each other exact location.';
+
+-- ---------------------------------------------------------------------------
 -- The directory (Section 9)
 -- ---------------------------------------------------------------------------
 

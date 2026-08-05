@@ -9,6 +9,7 @@ import '../models/job.dart';
 import '../models/job_status.dart';
 import '../models/job_tag.dart';
 import '../models/premium.dart';
+import '../models/message.dart';
 import '../models/rating.dart';
 import '../models/wallet.dart';
 import '../models/worker_profile.dart';
@@ -28,6 +29,7 @@ class SeedLoader {
   static const _ratingsAsset = 'assets/seed/ratings.json';
   static const _accountsAsset = 'assets/seed/accounts.json';
   static const _directoryAsset = 'assets/seed/directory.json';
+  static const _messagesAsset = 'assets/seed/messages.json';
   static const _reviewsAsset = 'assets/seed/reviews.json';
   static const _cnicsAsset = 'assets/seed/cnics.json';
   static const _disputesAsset = 'assets/seed/disputes.json';
@@ -78,6 +80,28 @@ class SeedLoader {
                 ),
               ),
       );
+    }).toList(growable: false);
+  }
+
+  /// The conversations attached to jobs that got as far as having one.
+  ///
+  /// Relative like everything else, and read into the same [Message] the app
+  /// writes — see `loadDirectory` for why this delegates rather than rebuilding
+  /// the model field by field.
+  Future<List<Message>> loadMessages() async {
+    final decoded = await _readJson(_messagesAsset) as List<dynamic>;
+    final now = DateTime.now();
+
+    DateTime hoursBefore(num hours) =>
+        now.subtract(Duration(minutes: (hours * 60).round()));
+
+    return decoded.cast<Map<String, dynamic>>().map((json) {
+      return Message.fromJson({
+        ...json,
+        'sentAt': hoursBefore(json['hoursAgo'] as num).toIso8601String(),
+        if (json['readHoursAgo'] != null)
+          'readAt': hoursBefore(json['readHoursAgo'] as num).toIso8601String(),
+      });
     }).toList(growable: false);
   }
 

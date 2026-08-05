@@ -21,6 +21,7 @@ import '../../l10n/app_localizations.dart';
 import '../wallet/wallet_screen.dart';
 import 'my_trades_screen.dart';
 import '../../app/admin_controller.dart';
+import '../../app/message_controller.dart';
 import '../../app/sync_controller.dart';
 import '../../app/verification_controller.dart';
 import '../../app/premium_controller.dart';
@@ -208,6 +209,7 @@ class ProfileScreen extends StatelessWidget {
     final premium = context.read<PremiumController>();
     final admin = context.read<AdminController>();
     final verification = context.read<VerificationController>();
+    final messages = context.read<MessageController>();
 
     final confirmed = await showDialog<bool>(
       context: context,
@@ -250,6 +252,7 @@ class ProfileScreen extends StatelessWidget {
     premium.load();
     admin.load();
     verification.load();
+    await messages.load();
 
     messenger.showSnackBar(SnackBar(content: Text(strings.seedRestored)));
   }
@@ -407,6 +410,7 @@ class _BackendSection extends StatelessWidget {
           strings.refusalCommissionCharged,
         RefusalCode.jobIsNotFinished => strings.refusalJobNotFinished,
         RefusalCode.alreadyRatedFromThatSide => strings.refusalAlreadyRated,
+        RefusalCode.messageCannotBeEdited => strings.refusalMessageEdited,
         RefusalCode.changedElsewhere => strings.refusalChangedElsewhere,
         RefusalCode.unreachable => strings.refusalUnreachable,
       };

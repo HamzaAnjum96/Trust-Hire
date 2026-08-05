@@ -37,6 +37,9 @@ expected_uncovered=(
   "drop index jobs_accepted_worker"
   "drop index jobs_booked_worker"
   "drop index disputes_open"
+  # A partial index over unread messages. Speeds up the thread list; enforces
+  # nothing, so nothing can fail when it is gone.
+  "drop index messages_unread"
 )
 
 if [ -z "${TRUST_HIRE_PSQL_USER+x}" ]; then

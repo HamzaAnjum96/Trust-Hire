@@ -647,6 +647,55 @@ BID_MESSAGES = [
     "Tomorrow morning suits me better.",
 ]
 
+# What two people actually say to each other once a job is agreed. Written as
+# exchanges rather than as a bag of lines, because a thread assembled from
+# random sentences reads as two people talking past each other — which is worse
+# for a demo than having no thread at all.
+#
+# Each entry is a list of (who, what), where "h" is the hirer and "w" the
+# worker. The first message is always the one that follows an acceptance.
+CONVERSATIONS = [
+    [
+        ("h", "Assalam o alaikum. Are you free tomorrow morning?"),
+        ("w", "Walaikum assalam. Yes, I can come by 9."),
+        ("h", "Perfect. The gate is the green one, second from the corner."),
+        ("w", "Got it. I will call when I reach."),
+    ],
+    [
+        ("w", "Should I bring my own material or will you arrange it?"),
+        ("h", "Please bring it, I will pay separately for that."),
+        ("w", "Okay. It will be around 800 for the parts."),
+        ("h", "That is fine."),
+    ],
+    [
+        ("h", "Can you come a bit earlier? Around 8 if possible."),
+        ("w", "8 is difficult, I have another job. 10 works."),
+        ("h", "10 is okay."),
+    ],
+    [
+        ("w", "I am on the way, about 20 minutes."),
+        ("h", "No rush, I am home all afternoon."),
+    ],
+    [
+        ("h", "Done, thank you. Work was clean."),
+        ("w", "Thank you sir. Call me any time if it gives trouble again."),
+    ],
+    [
+        ("w", "The pipe under the sink also needs changing, I saw it today."),
+        ("h", "How much extra would that be?"),
+        ("w", "About 1,200 with the part. Your choice, it can wait a month."),
+        ("h", "Let us do it next week then."),
+    ],
+    [
+        ("h", "Sorry, something came up. Can we push to Friday?"),
+        ("w", "No problem, Friday is fine."),
+    ],
+    [
+        ("w", "Reached the gate."),
+        ("h", "Coming out now."),
+    ],
+]
+
 RATING_NOTES = [
     None, None, None, None,
     "Arrived on time.",
@@ -1163,6 +1212,63 @@ def area_point(area):
     return AREA_POINTS.get(area)
 
 
+def build_messages(jobs, rng):
+    """The conversations attached to jobs that got as far as having one.
+
+    **Only where a thread would exist in the app.** `MessagingRules.isOpen`
+    opens a thread when a job has a worker, so seeding one onto an open job
+    would put data in the demo that the product itself cannot produce.
+
+    Timestamps run forward from the moment the job was accepted, spaced by
+    minutes rather than by a random spread — a conversation whose replies
+    arrive before the questions is worse than no conversation.
+    """
+    messages = []
+    counter = 0
+
+    for job in jobs:
+        worker = job.get("acceptedWorkerId")
+        decided = job.get("statusChangedHoursAgo")
+        if worker is None or decided is None:
+            continue
+
+        # Not every job has a conversation. Somebody who rang instead, or who
+        # had nothing to arrange, is the ordinary case.
+        if rng.random() > 0.55:
+            continue
+
+        script = rng.choice(CONVERSATIONS)
+        # Start a little after the decision, then walk forward. `decided` is
+        # hours *ago*, so later means a smaller number.
+        at = decided - rng.uniform(0.05, 0.5)
+
+        for index, (who, body) in enumerate(script):
+            if at <= 0:
+                break
+
+            counter += 1
+            sender = job["postedBy"] if who == "h" else worker
+            entry = {
+                "id": f"msg-{counter:04d}",
+                "jobId": job["id"],
+                "senderId": sender,
+                "body": body,
+                "hoursAgo": round(at, 2),
+            }
+
+            # The last message from the other side is sometimes still unread,
+            # which is what makes the badge and the "new" highlight reachable
+            # in a demo rather than theoretical.
+            is_last = index == len(script) - 1
+            if not (is_last and rng.random() < 0.4):
+                entry["readHoursAgo"] = round(max(at - 0.05, 0.01), 2)
+
+            messages.append(entry)
+            at -= rng.uniform(0.08, 0.9)
+
+    return messages
+
+
 def build_directory(people):
     """The Mode B listings, as `assets/seed/directory.json`.
 
@@ -1395,6 +1501,7 @@ def main() -> None:
     jobs, people = build()
     bids, ratings, accounts = add_history(jobs, people)
     listings = build_directory(people)
+    messages = build_messages(jobs, random.Random(20260805))
     reviews, cnics, disputes = build_admin(people, jobs)
 
     SEED_DIR.mkdir(parents=True, exist_ok=True)
@@ -1405,6 +1512,7 @@ def main() -> None:
         ("ratings.json", ratings),
         ("accounts.json", accounts),
         ("directory.json", listings),
+        ("messages.json", messages),
         ("reviews.json", reviews),
         ("cnics.json", cnics),
         ("disputes.json", disputes),

@@ -523,6 +523,30 @@ MUTATIONS = [
             id: 'bid-${bid.id}-passed',""",
         tests=["test/notification_test.dart"],
     ),
+
+    # --- 0.18.0: messaging ---------------------------------------------------
+    # Every message on the device sits in one list. This check is the only
+    # thing between a private conversation and a public one.
+    Mutation(
+        name="a-thread-is-between-two-people",
+        promise="a bystander cannot read or write somebody else's conversation",
+        path="lib/features/messaging/messaging_rules.dart",
+        find="      JobRole.bystander;",
+        replace="      JobRole.bystander || true;",
+        tests=["test/messaging_test.dart", "test/notification_test.dart"],
+    ),
+    # Opening a channel to every bidder turns a job with nine offers into nine
+    # conversations the hirer never asked for, and is the obvious way to take a
+    # deal off the platform before the platform has done anything for it.
+    Mutation(
+        name="no-thread-before-somebody-is-chosen",
+        promise="messaging opens on acceptance, not during bidding",
+        path="lib/features/messaging/messaging_rules.dart",
+        find="""  bool isOpen(Job job) =>
+      job.acceptedWorkerId != null || job.bookedWorkerId != null;""",
+        replace="  bool isOpen(Job job) => true;",
+        tests=["test/messaging_test.dart"],
+    ),
 ]
 
 

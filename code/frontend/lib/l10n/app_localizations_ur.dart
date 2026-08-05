@@ -291,7 +291,7 @@ class AppStringsUr extends AppStrings {
   String get fieldMessage => 'پیغام';
 
   @override
-  String get messageHint => 'اور کوئی بات جو بتانی ہو۔';
+  String get messageHint => 'پیغام لکھیں';
 
   @override
   String get fieldArea => 'علاقہ';
@@ -1193,6 +1193,74 @@ class AppStringsUr extends AppStrings {
   @override
   String get notifVerificationRejected =>
       'آپ کا اکاؤنٹ معطل کر دیا گیا — شناختی کارڈ اور فون دیکھیں';
+
+  @override
+  String get refusalMessageEdited => 'پیغام بھیجنے کے بعد بدلا نہیں جا سکتا۔';
+
+  @override
+  String get you => 'آپ';
+
+  @override
+  String get messagesTitle => 'پیغامات';
+
+  @override
+  String get messagesTab => 'پیغامات';
+
+  @override
+  String get sendMessage => 'بھیجیں';
+
+  @override
+  String messageThreadWith(String name) {
+    return '$name کے ساتھ';
+  }
+
+  @override
+  String get messagesEmpty => 'ابھی کوئی پیغام نہیں';
+
+  @override
+  String get messagesEmptyMessage =>
+      'جو کچھ یہاں طے ہو گا وہ اسی کام کے ساتھ رہے گا، تاکہ دونوں بعد میں دیکھ سکیں۔';
+
+  @override
+  String get noThreads => 'ابھی کوئی گفتگو نہیں';
+
+  @override
+  String get noThreadsMessage =>
+      'کام قبول ہوتے ہی گفتگو کھل جاتی ہے — اسی وقت جب آپ دونوں کو ایک دوسرے کی جگہ ملتی ہے۔';
+
+  @override
+  String get messagesNotYetOpen =>
+      'جب اس کام کے لیے کوئی چن لیا جائے گا تب پیغامات کھلیں گے۔';
+
+  @override
+  String get messagesClosed =>
+      'یہ کام ختم ہو چکا، اس لیے گفتگو صرف پڑھی جا سکتی ہے۔';
+
+  @override
+  String get messagesNotYours =>
+      'یہ گفتگو کام دینے والے اور کام کرنے والے کے درمیان ہے۔';
+
+  @override
+  String get messageTooLong => 'یہ بہت لمبا ہے۔ تھوڑا تھوڑا کر کے بھیجیں۔';
+
+  @override
+  String get openMessages => 'پیغامات';
+
+  @override
+  String openMessagesWithCount(int count) {
+    return 'پیغامات · $count نئے';
+  }
+
+  @override
+  String notifMessageReceived(String name) {
+    return '$name نے آپ کو پیغام بھیجا';
+  }
+
+  @override
+  String get messageReadReceipt => 'پڑھ لیا';
+
+  @override
+  String get messageSentReceipt => 'بھیج دیا';
 
   @override
   String get navDirectory => 'ڈائریکٹری';

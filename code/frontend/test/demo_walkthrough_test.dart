@@ -11,7 +11,10 @@ import 'package:trust_hire/app/bid_controller.dart';
 import 'package:trust_hire/app/bootstrap.dart';
 import 'package:trust_hire/app/job_controller.dart';
 import 'package:trust_hire/app/premium_controller.dart';
+import 'package:trust_hire/app/message_controller.dart';
 import 'package:trust_hire/app/rating_controller.dart';
+import 'package:trust_hire/features/messaging/messaging_rules.dart';
+import 'package:trust_hire/services/message_repository.dart';
 import 'package:trust_hire/app/settings_controller.dart';
 import 'package:trust_hire/app/verification_controller.dart';
 import 'package:trust_hire/app/wallet_controller.dart';
@@ -331,6 +334,64 @@ void main() {
         isEmpty,
         reason: 'somebody with no part in any job heard about 183 of them',
       );
+    });
+  });
+
+  group('stop 5c — arranging it', () {
+    testWidgets('the demo has conversations, and one with a reply waiting',
+        (tester) async {
+      final store = await ready();
+      final jobs = JobController(
+        JobRepository(store, MediaStore(store)),
+      )..load();
+      final messages = MessageController(MessageRepository(store));
+      await messages.load();
+      await tester.pump();
+
+      const rules = MessagingRules();
+      final threads = {for (final m in messages.all) m.jobId};
+
+      expect(threads, isNotEmpty, reason: 'the stop opens on an empty screen');
+
+      // The script says every thread sits on a job that had a worker. A
+      // conversation the product could not have produced is not a demo of it.
+      for (final jobId in threads) {
+        final job = jobs.jobById(jobId);
+        expect(job, isNotNull);
+        expect(
+          rules.isOpen(job!),
+          isTrue,
+          reason: '$jobId has a thread but never had a worker',
+        );
+      }
+
+      // And somebody in the demo has something waiting, so the badge the
+      // script points at is reachable.
+      expect(messages.all.any((m) => !m.isRead), isTrue);
+    });
+
+    testWidgets('and a job still taking offers has no thread', (tester) async {
+      // The claim the script makes about *why* it opens at acceptance.
+      final store = await ready();
+      final jobs = JobController(
+        JobRepository(store, MediaStore(store)),
+      )..load();
+      await tester.pump();
+
+      const rules = MessagingRules();
+      final open = jobs.jobs.where((job) => !rules.isOpen(job));
+
+      expect(open, isNotEmpty, reason: 'no job is still taking offers');
+      final messages = MessageController(MessageRepository(store));
+      await messages.load();
+
+      for (final job in open) {
+        expect(
+          messages.threadFor(job.id),
+          isEmpty,
+          reason: '${job.id} is taking offers and already has a conversation',
+        );
+      }
     });
   });
 

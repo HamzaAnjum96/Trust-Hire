@@ -25,6 +25,9 @@ import '../create_job/create_job_screen.dart';
 import 'contact_panel.dart';
 import 'saved_jobs_controller.dart';
 import 'photo_gallery.dart';
+import '../../app/message_controller.dart';
+import '../messaging/messaging_rules.dart';
+import '../messaging/thread_screen.dart';
 import '../../l10n/app_localizations.dart';
 
 /// The job details bottom sheet.
@@ -244,6 +247,14 @@ class _Body extends StatelessWidget {
         const SizedBox(height: BrandSizing.spaceLg),
         Text(strings.contact, style: theme.textTheme.titleMedium),
         const SizedBox(height: BrandSizing.spaceSm),
+
+        // **Above the phone number, deliberately.** A thread stays with the
+        // job, so what was agreed can be looked up by either side later — a
+        // phone call leaves nothing behind, and Section 5's whole argument for
+        // revealing contact details at acceptance is that the two people now
+        // need to arrange something.
+        _MessagesRow(job: job),
+
         if (job.hasContact)
           ContactPanel(number: job.contactNumber!)
         else
@@ -603,6 +614,49 @@ class _DeletedJobNotice extends StatelessWidget {
             child: Text(strings.close),
           ),
         ],
+      ),
+    );
+  }
+}
+
+
+/// The way into a job's conversation, when there is one to have.
+///
+/// Shows nothing at all before the thread opens rather than a disabled row:
+/// a job still taking offers has no conversation to be had, and a greyed-out
+/// "Messages" would be a promise of one.
+class _MessagesRow extends StatelessWidget {
+  const _MessagesRow({required this.job});
+
+  final Job job;
+
+  @override
+  Widget build(BuildContext context) {
+    const rules = MessagingRules();
+    final me = context.watch<AccountController>().activeId;
+
+    if (!rules.isOpen(job) || !rules.belongsTo(job, me)) {
+      return const SizedBox.shrink();
+    }
+
+    final strings = AppStrings.of(context);
+    final unread = context.watch<MessageController>().unreadFor(job);
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: BrandSizing.spaceSm),
+      child: OutlinedButton.icon(
+        onPressed: () => ThreadScreen.open(context, jobId: job.id),
+        icon: unread == 0
+            ? const Icon(Icons.forum_outlined)
+            : Badge.count(count: unread, child: const Icon(Icons.forum)),
+        label: Text(
+          unread == 0
+              ? strings.openMessages
+              : strings.openMessagesWithCount(unread),
+        ),
+        style: OutlinedButton.styleFrom(
+          minimumSize: const Size.fromHeight(BrandSizing.touchTargetPreferred),
+        ),
       ),
     );
   }

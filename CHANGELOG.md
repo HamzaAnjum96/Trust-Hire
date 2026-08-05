@@ -12,6 +12,71 @@ that heading to the version and date, and open a fresh `[Unreleased]`.
 
 ## [Unreleased]
 
+### 0.18.0 — The two people can talk
+
+Once a job was accepted, the only way to arrange anything was a phone number.
+A call leaves nothing behind, so neither side could look up what was agreed —
+and the platform's whole argument for revealing contact details at acceptance
+is that the two people now need to arrange something.
+
+#### Added
+
+- **A thread per job**, opening the moment a worker is attached — the same
+  moment `JobLifecycle.revealsExactLocation` hands the two sides each other's
+  position, on the same argument. Reachable from the job sheet and from a
+  Messages tab in Activity, with unread counts on both.
+- **Message entries in the notification feed**, collapsed to one per thread.
+  Somebody who writes nine lines has asked one thing; nine rows would bury
+  everything else and send the reader to the same place nine times.
+- **104 seeded messages across 38 conversations**, 21 of them unread, written
+  as exchanges rather than assembled from random sentences — a thread of lines
+  that do not answer each other is worse for a demo than no thread.
+- **`test/support/harness.dart`** — see below.
+
+#### Decisions worth recording
+
+**A thread per job, not per pair of people.** Two people can hire each other
+more than once, and one rolling conversation would mix "are you coming at
+nine?" about last month's tap with this week's wiring.
+
+**It does not open during bidding.** A channel to every bidder turns a job with
+nine offers into nine conversations the hirer never asked for, and is the
+obvious way to take a deal off the platform before the platform has done
+anything. A worker with a question puts it in the offer's message, which the
+hirer reads next to the number it is about.
+
+**Read receipts, unlike the notification feed.** The feed is derived and could
+only ever carry "seen up to here"; messages are stored, so they carry their own
+read state — and a conversation is the one place where "did they read it?" is
+worth the extra field.
+
+**What was said cannot change.** The mock backend refuses any edit to a
+message's body or sender, the way it refuses an edit to a ledger entry. A read
+receipt is the only thing that may land on a message after it was written.
+
+#### Fixed
+
+- **The unread count leaked across accounts.** `unread` took a job *id*, so it
+  counted every unread message on the device — and the device holds everybody's.
+  The Activity tab read **"Messages · 20" beside three conversations.**
+  `belongsTo` existed and was tested; nothing in the counting consulted it. Both
+  counters now require the job.
+- **A cancelled job's thread disappeared.** `isOpen` keyed off
+  `JobStatus.hasWorker`, which is false once a job is called off — so the
+  conversation vanished in exactly the case where somebody wants to read back
+  what was agreed. It asks about the worker now, and goes read-only rather than
+  away. Found by a test written against the intended behaviour.
+- **Four test files kept a hand-written copy of the provider tree**, and every
+  one broke whenever a screen gained a dependency — three rounds running. They
+  had already drifted: one registered the wallet twice, one was missing the
+  rating controller. There is one `appHarness` now.
+
+#### Changed
+
+- `Message` is a new `RemoteEntity`, and `MessageRepository` queues through the
+  outbox like every other write.
+- The sweep is at 49 promises.
+
 ### 0.17.0 — The app tells you what happened
 
 Until now nothing in Trust Hire ever told anybody anything. A worker whose

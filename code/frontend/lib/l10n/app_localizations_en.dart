@@ -290,7 +290,7 @@ class AppStringsEn extends AppStrings {
   String get fieldMessage => 'Message';
 
   @override
-  String get messageHint => 'Anything else worth knowing.';
+  String get messageHint => 'Write a message';
 
   @override
   String get fieldArea => 'Area';
@@ -1188,6 +1188,74 @@ class AppStringsEn extends AppStrings {
   @override
   String get notifVerificationRejected =>
       'Your account has been suspended — see CNIC and phone';
+
+  @override
+  String get refusalMessageEdited =>
+      'A message cannot be changed after it is sent.';
+
+  @override
+  String get you => 'You';
+
+  @override
+  String get messagesTitle => 'Messages';
+
+  @override
+  String get messagesTab => 'Messages';
+
+  @override
+  String get sendMessage => 'Send';
+
+  @override
+  String messageThreadWith(String name) {
+    return 'With $name';
+  }
+
+  @override
+  String get messagesEmpty => 'No messages yet';
+
+  @override
+  String get messagesEmptyMessage =>
+      'Anything you agree here stays with the job, so both of you can look it up later.';
+
+  @override
+  String get noThreads => 'No conversations yet';
+
+  @override
+  String get noThreadsMessage =>
+      'A thread opens once a job is accepted — the same moment you each get the other\'s location.';
+
+  @override
+  String get messagesNotYetOpen =>
+      'Messages open once somebody is chosen for this job.';
+
+  @override
+  String get messagesClosed => 'This job is over, so the thread is read-only.';
+
+  @override
+  String get messagesNotYours =>
+      'This conversation is between the hirer and the worker.';
+
+  @override
+  String get messageTooLong => 'That is too long to send. Try splitting it up.';
+
+  @override
+  String get openMessages => 'Messages';
+
+  @override
+  String openMessagesWithCount(int count) {
+    return 'Messages · $count new';
+  }
+
+  @override
+  String notifMessageReceived(String name) {
+    return '$name sent you a message';
+  }
+
+  @override
+  String get messageReadReceipt => 'Read';
+
+  @override
+  String get messageSentReceipt => 'Sent';
 
   @override
   String get navDirectory => 'Directory';

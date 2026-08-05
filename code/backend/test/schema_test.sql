@@ -334,6 +334,51 @@ begin
 end;
 $$;
 
+\echo '== Messages — the thread attached to a job'
+
+insert into messages (id, job_id, sender_id, body) values
+  ('cccccccc-0000-0000-0000-000000000001',
+   'aaaaaaaa-0000-0000-0000-000000000001',
+   '11111111-1111-1111-1111-111111111111',
+   'Are you free tomorrow morning?');
+
+call must_fail(
+  $$insert into messages (id, job_id, sender_id, body)
+    values ('cccccccc-0000-0000-0000-000000000002',
+            'aaaaaaaa-0000-0000-0000-000000000001',
+            '11111111-1111-1111-1111-111111111111', '   ')$$,
+  'a message that is nothing but whitespace');
+
+call must_fail(
+  $$insert into messages (id, job_id, sender_id, body)
+    values ('cccccccc-0000-0000-0000-000000000003',
+            'aaaaaaaa-0000-0000-0000-000000000001',
+            '11111111-1111-1111-1111-111111111111', repeat('x', 1001))$$,
+  'a message longer than the bubble it goes in');
+
+-- **What was said cannot change.** A conversation people can rewrite afterwards
+-- is not a record of one.
+call must_fail(
+  $$update messages set body = 'something else'
+    where id = 'cccccccc-0000-0000-0000-000000000001'$$,
+  'rewriting what a message said');
+
+call must_fail(
+  $$update messages set sender_id = '22222222-2222-2222-2222-222222222222'
+    where id = 'cccccccc-0000-0000-0000-000000000001'$$,
+  'changing who sent a message');
+
+call must_fail(
+  $$update messages set read_at = sent_at - interval '1 hour'
+    where id = 'cccccccc-0000-0000-0000-000000000001'$$,
+  'a read receipt from before the message was sent');
+
+-- The one update a message does take.
+call must_work(
+  $$update messages set read_at = now()
+    where id = 'cccccccc-0000-0000-0000-000000000001'$$,
+  'marking a message read');
+
 \echo '== Section 9 — Mode B'
 
 call must_fail(

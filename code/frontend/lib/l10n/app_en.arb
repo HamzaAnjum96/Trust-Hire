@@ -888,6 +888,47 @@
   "notifSubscriptionLapsed": "Your directory listing has ended — people can no longer find you",
   "notifVerificationApproved": "Your account has been approved",
   "notifVerificationRejected": "Your account has been suspended — see CNIC and phone",
+  "refusalMessageEdited": "A message cannot be changed after it is sent.",
+  "you": "You",
+  "messagesTitle": "Messages",
+  "messagesTab": "Messages",
+  "messageHint": "Write a message",
+  "sendMessage": "Send",
+  "messageThreadWith": "With {name}",
+  "@messageThreadWith": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "messagesEmpty": "No messages yet",
+  "messagesEmptyMessage": "Anything you agree here stays with the job, so both of you can look it up later.",
+  "noThreads": "No conversations yet",
+  "noThreadsMessage": "A thread opens once a job is accepted — the same moment you each get the other's location.",
+  "messagesNotYetOpen": "Messages open once somebody is chosen for this job.",
+  "messagesClosed": "This job is over, so the thread is read-only.",
+  "messagesNotYours": "This conversation is between the hirer and the worker.",
+  "messageTooLong": "That is too long to send. Try splitting it up.",
+  "openMessages": "Messages",
+  "openMessagesWithCount": "Messages · {count} new",
+  "@openMessagesWithCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "notifMessageReceived": "{name} sent you a message",
+  "@notifMessageReceived": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "messageReadReceipt": "Read",
+  "messageSentReceipt": "Sent",
   "navDirectory": "Directory",
   "directoryTitle": "Book a professional",
   "directoryIntro": "Set prices, no haggling. Book someone directly and they say yes or no.",

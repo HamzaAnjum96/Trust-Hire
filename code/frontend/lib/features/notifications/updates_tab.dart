@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../../app/bid_controller.dart';
 import '../../app/job_controller.dart';
+import '../../app/message_controller.dart';
 import '../../app/notification_controller.dart';
 import '../../app/premium_controller.dart';
 import '../../app/rating_controller.dart';
@@ -16,6 +17,7 @@ import '../../models/notification.dart';
 import '../../services/media_store.dart';
 import '../../widgets/state_views.dart';
 import '../jobs/job_details_sheet.dart';
+import '../messaging/thread_screen.dart';
 
 /// What happened, newest first.
 ///
@@ -95,11 +97,13 @@ List<AppNotification> buildFeed(BuildContext context) {
   final wallet = context.watch<WalletController>();
   final premium = context.watch<PremiumController>();
   final verification = context.watch<VerificationController>();
+  final messages = context.watch<MessageController>();
 
   return notifications.feed(
     jobs: jobs.jobs,
     bids: bids.bids,
     ratings: ratings.all,
+    messages: messages.all,
     wallet: wallet.wallet,
     listing: premium.mine,
     review: verification.review,
@@ -145,6 +149,8 @@ class _UpdateCard extends StatelessWidget {
         BrandColours.successTeal),
       NotificationKind.verificationRejected => (Icons.gpp_bad_outlined,
         scheme.error),
+      NotificationKind.messageReceived => (Icons.forum_outlined,
+        scheme.primary),
     };
   }
 
@@ -185,6 +191,10 @@ class _UpdateCard extends StatelessWidget {
         strings.notifVerificationApproved,
       NotificationKind.verificationRejected =>
         strings.notifVerificationRejected,
+      NotificationKind.messageReceived => strings.notifMessageReceived(
+        context.read<JobController>().userById(entry.otherPartyId ?? '')?.name ??
+            strings.someone,
+      ),
     };
   }
 
@@ -211,6 +221,11 @@ class _UpdateCard extends StatelessWidget {
         borderRadius: BrandRadius.mediumAll,
         onTap: target == null
             ? null
+            // A message entry goes to the conversation. Opening the job sheet
+            // instead would put the reader one more tap from the thing they
+            // were told about.
+            : entry.kind == NotificationKind.messageReceived
+            ? () => ThreadScreen.open(context, jobId: target.id)
             : () => JobDetailsSheet.open(
                 context,
                 jobId: target.id,

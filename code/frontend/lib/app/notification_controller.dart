@@ -7,6 +7,7 @@ import '../features/notifications/notification_rules.dart';
 import '../models/admin.dart';
 import '../models/bid.dart';
 import '../models/job.dart';
+import '../models/message.dart';
 import '../models/notification.dart';
 import '../models/premium.dart';
 import '../models/rating.dart';
@@ -87,6 +88,7 @@ class NotificationController extends ChangeNotifier {
     required Iterable<Job> jobs,
     required Iterable<Bid> bids,
     required Iterable<Rating> ratings,
+    Iterable<Message> messages = const [],
     Wallet? wallet,
     DirectoryListing? listing,
     AccountReview? review,
@@ -97,6 +99,7 @@ class NotificationController extends ChangeNotifier {
     jobs: jobs,
     bids: bids,
     ratings: ratings,
+    messages: messages,
     wallet: wallet,
     listing: listing,
     review: review,

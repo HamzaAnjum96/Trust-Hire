@@ -8,6 +8,8 @@ import '../../core/formatters.dart';
 import '../../core/layout.dart';
 import '../../core/tokens.dart';
 import '../../app/notification_controller.dart';
+import '../../app/message_controller.dart';
+import '../messaging/threads_tab.dart';
 import '../notifications/updates_tab.dart';
 import '../../l10n/app_localizations.dart';
 import '../../models/bid.dart';
@@ -37,7 +39,7 @@ class MyJobsScreen extends StatefulWidget {
 
 class _MyJobsScreenState extends State<MyJobsScreen>
     with SingleTickerProviderStateMixin {
-  late final TabController _tabs = TabController(length: 4, vsync: this);
+  late final TabController _tabs = TabController(length: 5, vsync: this);
 
   @override
   void dispose() {
@@ -70,6 +72,7 @@ class _MyJobsScreenState extends State<MyJobsScreen>
     final unseen = context.watch<NotificationController>().unseen(
       buildFeed(context),
     );
+    final waiting = context.watch<MessageController>().threadsWaiting(jobs.jobs);
 
     return Scaffold(
       appBar: AppBar(
@@ -86,6 +89,9 @@ class _MyJobsScreenState extends State<MyJobsScreen>
             Tab(text: unseen == 0
                 ? strings.updatesTab
                 : '${strings.updatesTab} · $unseen'),
+            Tab(text: waiting == 0
+                ? strings.messagesTab
+                : '${strings.messagesTab} · $waiting'),
             Tab(text: '${strings.savedTab} · ${savedJobs.length}'),
             Tab(text: '${strings.postedTab} · ${myPostings.length}'),
             Tab(text: '${strings.offersTab} · ${myOffers.length}'),
@@ -104,6 +110,7 @@ class _MyJobsScreenState extends State<MyJobsScreen>
             controller: _tabs,
             children: [
               const UpdatesTab(),
+              const ThreadsTab(),
               _JobsTab(
                 jobs: savedJobs,
                 emptyIcon: Icons.bookmark_border,

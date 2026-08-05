@@ -25,7 +25,21 @@ class DemoSeed {
     await _installRatings();
     await _installAccounts();
     await _installDirectory();
+    await _installMessages();
     await _installAdmin();
+  }
+
+  /// The threads on jobs that got as far as having one.
+  ///
+  /// Seeded only where the app itself would have opened a thread — a job with
+  /// a worker on it. Demo data the product cannot produce is a demo of
+  /// something else.
+  Future<void> _installMessages() async {
+    final messages = await _loader.loadMessages();
+    await _store.writeCollection(
+      StoreKeys.messages,
+      messages.map((message) => message.toJson()).toList(growable: false),
+    );
   }
 
   /// The admin panel's data — who is waiting, whose CNIC is on file, and what

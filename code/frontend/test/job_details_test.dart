@@ -4,10 +4,8 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_test/flutter_test.dart';
-import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trust_hire/app/job_controller.dart';
-import 'package:trust_hire/core/theme.dart';
 import 'package:trust_hire/l10n/app_localizations.dart';
 import 'package:trust_hire/features/jobs/job_details_sheet.dart';
 import 'package:trust_hire/features/jobs/photo_gallery.dart';
@@ -20,6 +18,8 @@ import 'package:trust_hire/app/profile_controller.dart';
 import 'package:trust_hire/app/wallet_controller.dart';
 import 'package:trust_hire/services/bid_repository.dart';
 import 'package:trust_hire/services/local_store.dart';
+
+import 'support/harness.dart';
 import 'package:trust_hire/services/media_store.dart';
 import 'package:trust_hire/widgets/voice_note_player.dart';
 
@@ -46,8 +46,12 @@ void main() {
   late ProfileController profile;
   late WalletController wallet;
 
+  /// Held so the harness can build the controllers no test inspects from the
+  /// same storage as the ones it does.
+  late LocalStore store;
+
   Future<(JobController, MediaStore)> buildControllers() async {
-    final store = await LocalStore.open();
+    store = await LocalStore.open();
     savedJobs = SavedJobsController(store)..load();
     accounts = AccountController(store)..load();
     bids = BidController(BidRepository(store))..load();
@@ -70,26 +74,20 @@ void main() {
     int pumps = 8,
   }) async {
     await tester.pumpWidget(
-      MultiProvider(
-        providers: [
-          ChangeNotifierProvider.value(value: controller),
-          ChangeNotifierProvider.value(value: savedJobs),
-          ChangeNotifierProvider.value(value: accounts),
-          ChangeNotifierProvider.value(value: bids),
-          ChangeNotifierProvider.value(value: profile),
-          ChangeNotifierProvider.value(value: wallet),
-          Provider<MediaStore>.value(value: media),
-        ],
-        child: MaterialApp(
-          localizationsDelegates: AppStrings.localizationsDelegates,
-          supportedLocales: AppStrings.supportedLocales,
-          theme: BrandTheme.light,
-          home: Scaffold(
-            body: JobDetailsSheet(
-              jobId: jobId,
-              mediaStore: media,
-              viewerLocation: viewerLocation,
-            ),
+      appHarness(
+        store: store,
+        media: media,
+        jobs: controller,
+        saved: savedJobs,
+        accounts: accounts,
+        bids: bids,
+        profile: profile,
+        wallet: wallet,
+        child: Scaffold(
+          body: JobDetailsSheet(
+            jobId: jobId,
+            mediaStore: media,
+            viewerLocation: viewerLocation,
           ),
         ),
       ),

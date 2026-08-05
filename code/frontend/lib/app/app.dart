@@ -8,6 +8,7 @@ import '../features/jobs/job_filter_controller.dart';
 import '../features/jobs/saved_jobs_controller.dart';
 import '../features/map/location_controller.dart';
 import '../services/bid_repository.dart';
+import '../services/message_repository.dart';
 import '../services/job_repository.dart';
 import '../services/seed_loader.dart';
 import '../services/local_store.dart';
@@ -15,6 +16,7 @@ import '../services/backend/mock_backend.dart';
 import '../services/media_store.dart';
 import '../features/onboarding/onboarding_screen.dart';
 import 'account_controller.dart';
+import 'message_controller.dart';
 import 'notification_controller.dart';
 import 'admin_controller.dart';
 import 'sync_controller.dart';
@@ -112,6 +114,15 @@ class TrustHireApp extends StatelessWidget {
           create: (_) => VerificationController(store)..load(),
           update: (_, account, verification) => verification!
             ..setAccount(account.activeId, name: account.active.name ?? ''),
+        ),
+        // After SyncController, like every other repository-backed controller:
+        // a write made before the outbox exists is a write nobody queues.
+        ChangeNotifierProxyProvider<AccountController, MessageController>(
+          create: (context) => MessageController(
+            MessageRepository(store, context.read<SyncController>().enqueue),
+          )..load(),
+          update: (_, account, messages) =>
+              messages!..setAccount(account.activeId),
         ),
         // Only the "seen up to here" mark lives here; the feed itself is
         // derived from the controllers above whenever a screen asks for it.

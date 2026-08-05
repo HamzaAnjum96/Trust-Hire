@@ -112,6 +112,9 @@ class StoreKeys {
   /// a reset that has to guess at key names misses the ones it did not guess.
   static const notificationsSeen = 'trust_hire.notifications_seen';
 
+  /// Every message on every job's thread, as a JSON list.
+  static const messages = 'trust_hire.messages';
+
   /// Every rating either side has given, as a JSON list.
   static const ratings = 'trust_hire.ratings';
 

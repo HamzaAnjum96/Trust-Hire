@@ -37,6 +37,11 @@ enum RemoteEntity {
   review,
   dispute,
 
+  /// **Not** append-only, and deliberately so: a read receipt lands on the row
+  /// after it was written. What cannot change is what was *said* — see
+  /// [RefusalCode.messageCannotBeEdited].
+  message,
+
   /// Append-only, and the one whose whole value is that it cannot be edited.
   auditEntry;
 
@@ -201,6 +206,10 @@ enum RefusalCode {
   commissionAlreadyCharged,
   jobIsNotFinished,
   alreadyRatedFromThatSide,
+
+  /// Somebody tried to change what a message said, or who sent it. A
+  /// conversation people can rewrite afterwards is not a record of it.
+  messageCannotBeEdited,
 
   /// Somebody else moved the row on while this device was away.
   changedElsewhere,

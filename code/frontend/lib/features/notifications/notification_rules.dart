@@ -1,6 +1,7 @@
 import '../../models/bid.dart';
 import '../../models/job.dart';
 import '../../models/job_status.dart';
+import '../../models/message.dart';
 import '../../models/notification.dart';
 import '../../models/premium.dart';
 import '../../models/rating.dart';
@@ -41,6 +42,7 @@ class NotificationRules {
     required Iterable<Bid> bids,
     required Iterable<Rating> ratings,
     required DateTime now,
+    Iterable<Message> messages = const [],
     Wallet? wallet,
     DirectoryListing? listing,
     AccountReview? review,
@@ -55,6 +57,7 @@ class NotificationRules {
 
     feed.addAll(_aboutBids(bids, userId: userId, jobs: byId));
     feed.addAll(_aboutRatings(ratings, userId: userId, jobs: byId));
+    feed.addAll(_aboutMessages(messages, userId: userId, jobs: byId));
     if (wallet != null) {
       feed.addAll(_aboutWallet(wallet, locked: walletLocked, now: now));
     }
@@ -202,6 +205,50 @@ class NotificationRules {
         case BidStatus.offered || BidStatus.withdrawn:
           break;
       }
+    }
+  }
+
+  /// Unread messages, one entry per thread rather than one per message.
+  ///
+  /// **Collapsed on purpose.** Somebody who writes nine lines in a row has
+  /// asked one thing; nine identical rows in the feed would bury everything
+  /// else and send the reader to the same place nine times.
+  ///
+  /// Read messages produce nothing at all. Unlike the rest of the feed, a
+  /// message carries its own read state, so there is a better answer available
+  /// than "since you last looked at Activity".
+  Iterable<AppNotification> _aboutMessages(
+    Iterable<Message> messages, {
+    required String userId,
+    required Map<String, Job> jobs,
+  }) sync* {
+    final newest = <String, Message>{};
+
+    for (final message in messages) {
+      if (message.senderId == userId || message.isRead) continue;
+
+      final job = jobs[message.jobId];
+      // The same boundary the rest of the feed uses: a thread belongs to the
+      // two people on the job and to nobody else.
+      if (job == null) continue;
+      if (!job.isPostedBy(userId) && job.acceptedWorkerId != userId) continue;
+
+      final held = newest[message.jobId];
+      if (held == null || message.sentAt.isAfter(held.sentAt)) {
+        newest[message.jobId] = message;
+      }
+    }
+
+    for (final message in newest.values) {
+      yield AppNotification(
+        // Keyed by the job, not the message: the entry is about the thread,
+        // and an id that moved with each new line would make "seen" useless.
+        id: 'thread-${message.jobId}',
+        kind: NotificationKind.messageReceived,
+        at: message.sentAt,
+        jobId: message.jobId,
+        otherPartyId: message.senderId,
+      );
     }
   }
 

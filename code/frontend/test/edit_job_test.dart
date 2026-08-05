@@ -3,10 +3,8 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_test/flutter_test.dart';
-import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trust_hire/app/job_controller.dart';
-import 'package:trust_hire/core/theme.dart';
 import 'package:trust_hire/features/jobs/job_details_sheet.dart';
 import 'package:trust_hire/features/jobs/saved_jobs_controller.dart';
 import 'package:trust_hire/models/job.dart';
@@ -16,8 +14,9 @@ import 'package:trust_hire/app/profile_controller.dart';
 import 'package:trust_hire/app/wallet_controller.dart';
 import 'package:trust_hire/services/bid_repository.dart';
 import 'package:trust_hire/services/local_store.dart';
+
+import 'support/harness.dart';
 import 'package:trust_hire/services/media_store.dart';
-import 'package:trust_hire/l10n/app_localizations.dart';
 import 'package:trust_hire/app/account_controller.dart';
 
 /// Sprint 4's definition of done is "CRUD completed". Create is covered in
@@ -35,8 +34,12 @@ void main() {
   late ProfileController profile;
   late WalletController wallet;
 
+  /// Held so the harness builds the controllers no test inspects from the same
+  /// storage as the ones it does.
+  late LocalStore store;
+
   Future<(JobController, MediaStore, LocalStore)> build() async {
-    final store = await LocalStore.open();
+    store = await LocalStore.open();
     savedJobs = SavedJobsController(store)..load();
     accounts = AccountController(store)..load();
     bids = BidController(BidRepository(store))..load();
@@ -174,24 +177,17 @@ void main() {
       String jobId,
     ) async {
       await tester.pumpWidget(
-        MultiProvider(
-          providers: [
-            ChangeNotifierProvider.value(value: controller),
-            ChangeNotifierProvider.value(value: savedJobs),
-            ChangeNotifierProvider.value(value: accounts),
-            ChangeNotifierProvider.value(value: bids),
-            ChangeNotifierProvider.value(value: profile),
-            ChangeNotifierProvider.value(value: wallet),
-            ChangeNotifierProvider.value(value: wallet),
-            Provider<MediaStore>.value(value: media),
-          ],
-          child: MaterialApp(
-            localizationsDelegates: AppStrings.localizationsDelegates,
-            supportedLocales: AppStrings.supportedLocales,
-            theme: BrandTheme.light,
-            home: Scaffold(
-              body: JobDetailsSheet(jobId: jobId, mediaStore: media),
-            ),
+        appHarness(
+          store: store,
+          media: media,
+          jobs: controller,
+          saved: savedJobs,
+          accounts: accounts,
+          bids: bids,
+          profile: profile,
+          wallet: wallet,
+          child: Scaffold(
+            body: JobDetailsSheet(jobId: jobId, mediaStore: media),
           ),
         ),
       );
