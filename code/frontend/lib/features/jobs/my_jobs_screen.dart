@@ -7,6 +7,8 @@ import '../../app/job_controller.dart';
 import '../../core/formatters.dart';
 import '../../core/layout.dart';
 import '../../core/tokens.dart';
+import '../../app/notification_controller.dart';
+import '../notifications/updates_tab.dart';
 import '../../l10n/app_localizations.dart';
 import '../../models/bid.dart';
 import '../../models/job.dart';
@@ -35,7 +37,7 @@ class MyJobsScreen extends StatefulWidget {
 
 class _MyJobsScreenState extends State<MyJobsScreen>
     with SingleTickerProviderStateMixin {
-  late final TabController _tabs = TabController(length: 3, vsync: this);
+  late final TabController _tabs = TabController(length: 4, vsync: this);
 
   @override
   void dispose() {
@@ -65,13 +67,25 @@ class _MyJobsScreenState extends State<MyJobsScreen>
               ..sort((a, b) => b.createdAt.compareTo(a.createdAt)))
             .toList(growable: false);
 
+    final unseen = context.watch<NotificationController>().unseen(
+      buildFeed(context),
+    );
+
     return Scaffold(
       appBar: AppBar(
         title: Text(strings.navActivity),
         actions: const [AccountButton()],
         bottom: TabBar(
           controller: _tabs,
+          isScrollable: true,
+          tabAlignment: TabAlignment.start,
           tabs: [
+            // Updates first: it is the reason to open this destination at all
+            // now, and the three lists behind it are things you go looking for
+            // rather than things that change while you are away.
+            Tab(text: unseen == 0
+                ? strings.updatesTab
+                : '${strings.updatesTab} · $unseen'),
             Tab(text: '${strings.savedTab} · ${savedJobs.length}'),
             Tab(text: '${strings.postedTab} · ${myPostings.length}'),
             Tab(text: '${strings.offersTab} · ${myOffers.length}'),
@@ -89,6 +103,7 @@ class _MyJobsScreenState extends State<MyJobsScreen>
           LoadState.ready => TabBarView(
             controller: _tabs,
             children: [
+              const UpdatesTab(),
               _JobsTab(
                 jobs: savedJobs,
                 emptyIcon: Icons.bookmark_border,

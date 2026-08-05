@@ -82,10 +82,7 @@
     "scheduledHour": 17,
     "scheduledMinute": 30,
     "postedBy": "user-004",
-    "createdHoursAgo": 94.5,
-    "status": "completed",
-    "acceptedWorkerId": "user-019",
-    "agreedFare": 10000
+    "createdHoursAgo": 94.5
   },
   {
     "id": "seed-005",
@@ -130,9 +127,10 @@
     "postedBy": "user-006",
     "createdHoursAgo": 68.0,
     "contact": "0311 4595274",
-    "status": "inProgress",
-    "acceptedWorkerId": "user-034",
-    "agreedFare": 20000
+    "status": "accepted",
+    "acceptedWorkerId": "user-031",
+    "agreedFare": 25000,
+    "statusChangedHoursAgo": 2.0
   },
   {
     "id": "seed-007",
@@ -156,7 +154,11 @@
     "voiceNote": "assets/audio/voice-01.wav",
     "voiceNoteSeconds": 8.2,
     "postedBy": "user-007",
-    "createdHoursAgo": 74.5
+    "createdHoursAgo": 74.5,
+    "status": "completed",
+    "acceptedWorkerId": "user-005",
+    "agreedFare": 10000,
+    "statusChangedHoursAgo": 30.5
   },
   {
     "id": "seed-008",
@@ -179,10 +181,7 @@
     "scheduledMinute": 0,
     "postedBy": "user-008",
     "createdHoursAgo": 42.7,
-    "contact": "0333 1235000",
-    "status": "completed",
-    "acceptedWorkerId": "user-014",
-    "agreedFare": 9000
+    "contact": "0333 1235000"
   },
   {
     "id": "seed-009",
@@ -231,10 +230,7 @@
     "scheduledMinute": 0,
     "postedBy": "user-010",
     "createdHoursAgo": 37.3,
-    "contact": "0345 8614897",
-    "status": "completed",
-    "acceptedWorkerId": "user-058",
-    "agreedFare": 40000
+    "contact": "0345 8614897"
   },
   {
     "id": "seed-011",
@@ -284,7 +280,11 @@
     ],
     "postedBy": "user-012",
     "createdHoursAgo": 15.4,
-    "contact": "0300 7943228"
+    "contact": "0300 7943228",
+    "status": "accepted",
+    "acceptedWorkerId": "user-030",
+    "agreedFare": 60000,
+    "statusChangedHoursAgo": 5.2
   },
   {
     "id": "seed-013",
@@ -305,7 +305,11 @@
     "scheduledMinute": 30,
     "postedBy": "user-013",
     "createdHoursAgo": 63.4,
-    "contact": "0321 2620783"
+    "contact": "0321 2620783",
+    "status": "completed",
+    "acceptedWorkerId": "user-004",
+    "agreedFare": 3500,
+    "statusChangedHoursAgo": 34.2
   },
   {
     "id": "seed-014",
@@ -334,7 +338,8 @@
     "contact": "0301 5405230",
     "status": "completed",
     "acceptedWorkerId": "user-005",
-    "agreedFare": 2500
+    "agreedFare": 2500,
+    "statusChangedHoursAgo": 17.8
   },
   {
     "id": "seed-015",
@@ -359,9 +364,10 @@
     "postedBy": "user-015",
     "createdHoursAgo": 8.2,
     "contact": "0333 1593821",
-    "status": "inProgress",
-    "acceptedWorkerId": "user-019",
-    "agreedFare": 1000
+    "status": "completed",
+    "acceptedWorkerId": "user-039",
+    "agreedFare": 3000,
+    "statusChangedHoursAgo": 2.1
   },
   {
     "id": "seed-016",
@@ -472,10 +478,7 @@
     "radiusMetres": 500,
     "postedBy": "user-020",
     "createdHoursAgo": 7.2,
-    "contact": "0321 9790182",
-    "status": "accepted",
-    "acceptedWorkerId": "user-030",
-    "agreedFare": 3500
+    "contact": "0321 9790182"
   },
   {
     "id": "seed-021",
@@ -497,7 +500,8 @@
     "voiceNoteSeconds": 4.2,
     "postedBy": "user-021",
     "createdHoursAgo": 66.9,
-    "contact": "0347 7641252"
+    "contact": "0347 7641252",
+    "status": "cancelled"
   },
   {
     "id": "seed-022",
@@ -540,9 +544,10 @@
     "scheduledMinute": 0,
     "postedBy": "user-023",
     "createdHoursAgo": 56.8,
-    "status": "accepted",
-    "acceptedWorkerId": "user-007",
-    "agreedFare": 2000
+    "status": "inProgress",
+    "acceptedWorkerId": "user-011",
+    "agreedFare": 2000,
+    "statusChangedHoursAgo": 6.0
   },
   {
     "id": "seed-024",
@@ -564,7 +569,8 @@
     "createdHoursAgo": 55.0,
     "status": "accepted",
     "acceptedWorkerId": "user-048",
-    "agreedFare": 17000
+    "agreedFare": 17000,
+    "statusChangedHoursAgo": 19.8
   },
   {
     "id": "seed-025",
@@ -627,8 +633,7 @@
     },
     "radiusMetres": 2500,
     "postedBy": "user-027",
-    "createdHoursAgo": 62.2,
-    "status": "cancelled"
+    "createdHoursAgo": 62.2
   },
   {
     "id": "seed-028",
@@ -653,10 +658,7 @@
     "voiceNoteSeconds": 4.7,
     "postedBy": "user-028",
     "createdHoursAgo": 23.5,
-    "contact": "0321 9901874",
-    "status": "completed",
-    "acceptedWorkerId": "user-029",
-    "agreedFare": 7000
+    "contact": "0321 9901874"
   },
   {
     "id": "seed-029",
@@ -678,10 +680,7 @@
     "voiceNote": "assets/audio/voice-06.wav",
     "voiceNoteSeconds": 4.4,
     "postedBy": "user-029",
-    "createdHoursAgo": 8.0,
-    "status": "completed",
-    "acceptedWorkerId": "user-008",
-    "agreedFare": 8000
+    "createdHoursAgo": 8.0
   },
   {
     "id": "seed-030",
@@ -706,8 +705,9 @@
     "postedBy": "user-030",
     "createdHoursAgo": 46.3,
     "status": "completed",
-    "acceptedWorkerId": "user-011",
-    "agreedFare": 3500
+    "acceptedWorkerId": "user-038",
+    "agreedFare": 4000,
+    "statusChangedHoursAgo": 15.8
   },
   {
     "id": "seed-031",
@@ -729,10 +729,7 @@
     "scheduledHour": 14,
     "scheduledMinute": 0,
     "postedBy": "user-031",
-    "createdHoursAgo": 78.1,
-    "status": "inProgress",
-    "acceptedWorkerId": "user-034",
-    "agreedFare": 10000
+    "createdHoursAgo": 78.1
   },
   {
     "id": "seed-032",
@@ -894,10 +891,7 @@
     "scheduledMinute": 0,
     "postedBy": "user-038",
     "createdHoursAgo": 55.4,
-    "contact": "0300 1352318",
-    "status": "completed",
-    "acceptedWorkerId": "user-050",
-    "agreedFare": 1500
+    "contact": "0300 1352318"
   },
   {
     "id": "seed-039",
@@ -945,7 +939,8 @@
     "contact": "0300 7321803",
     "status": "completed",
     "acceptedWorkerId": "user-009",
-    "agreedFare": 2500
+    "agreedFare": 2500,
+    "statusChangedHoursAgo": 5.5
   },
   {
     "id": "seed-041",
@@ -1033,7 +1028,11 @@
     "scheduledMinute": 30,
     "postedBy": "user-044",
     "createdHoursAgo": 14.0,
-    "contact": "0332 9207579"
+    "contact": "0332 9207579",
+    "status": "completed",
+    "acceptedWorkerId": "user-049",
+    "agreedFare": 2500,
+    "statusChangedHoursAgo": 3.3
   },
   {
     "id": "seed-045",
@@ -1059,7 +1058,8 @@
     "contact": "0332 6370020",
     "status": "completed",
     "acceptedWorkerId": "user-017",
-    "agreedFare": 8000
+    "agreedFare": 6000,
+    "statusChangedHoursAgo": 30.8
   },
   {
     "id": "seed-046",
@@ -1106,7 +1106,8 @@
     "contact": "0300 3086023",
     "status": "completed",
     "acceptedWorkerId": "user-001",
-    "agreedFare": 3000
+    "agreedFare": 3000,
+    "statusChangedHoursAgo": 10.1
   },
   {
     "id": "seed-048",
@@ -1126,10 +1127,7 @@
     "scheduledHour": 16,
     "scheduledMinute": 30,
     "postedBy": "user-048",
-    "createdHoursAgo": 9.2,
-    "status": "inProgress",
-    "acceptedWorkerId": "user-014",
-    "agreedFare": 2000
+    "createdHoursAgo": 9.2
   },
   {
     "id": "seed-049",
@@ -1175,10 +1173,7 @@
     "scheduledMinute": 30,
     "postedBy": "user-050",
     "createdHoursAgo": 40.9,
-    "contact": "0301 9634287",
-    "status": "completed",
-    "acceptedWorkerId": "user-042",
-    "agreedFare": 20000
+    "contact": "0301 9634287"
   },
   {
     "id": "seed-051",
@@ -1222,8 +1217,7 @@
     "voiceNoteSeconds": 5.0,
     "postedBy": "user-052",
     "createdHoursAgo": 87.5,
-    "contact": "0347 2794611",
-    "status": "cancelled"
+    "contact": "0347 2794611"
   },
   {
     "id": "seed-053",
@@ -1250,7 +1244,8 @@
     "contact": "0301 3401504",
     "status": "inProgress",
     "acceptedWorkerId": "user-049",
-    "agreedFare": 4500
+    "agreedFare": 4500,
+    "statusChangedHoursAgo": 16.7
   },
   {
     "id": "seed-054",
@@ -1275,9 +1270,10 @@
     "postedBy": "user-054",
     "createdHoursAgo": 67.9,
     "contact": "0300 3330372",
-    "status": "completed",
-    "acceptedWorkerId": "user-048",
-    "agreedFare": 3500
+    "status": "inProgress",
+    "acceptedWorkerId": "user-030",
+    "agreedFare": 3500,
+    "statusChangedHoursAgo": 12.3
   },
   {
     "id": "seed-055",
@@ -1299,8 +1295,9 @@
     "createdHoursAgo": 21.7,
     "contact": "0347 6319958",
     "status": "completed",
-    "acceptedWorkerId": "user-023",
-    "agreedFare": 6000
+    "acceptedWorkerId": "user-027",
+    "agreedFare": 4000,
+    "statusChangedHoursAgo": 12.8
   },
   {
     "id": "seed-056",
@@ -1327,7 +1324,8 @@
     "contact": "0301 1188997",
     "status": "completed",
     "acceptedWorkerId": "user-016",
-    "agreedFare": 50000
+    "agreedFare": 50000,
+    "statusChangedHoursAgo": 23.3
   },
   {
     "id": "seed-057",
@@ -1352,8 +1350,9 @@
     "createdHoursAgo": 89.9,
     "contact": "0300 7515486",
     "status": "completed",
-    "acceptedWorkerId": "user-025",
-    "agreedFare": 9000
+    "acceptedWorkerId": "user-041",
+    "agreedFare": 14000,
+    "statusChangedHoursAgo": 12.0
   },
   {
     "id": "seed-058",
@@ -1373,8 +1372,7 @@
     "radiusMetres": 1000,
     "postedBy": "user-058",
     "createdHoursAgo": 46.2,
-    "contact": "0300 7443868",
-    "status": "cancelled"
+    "contact": "0300 7443868"
   },
   {
     "id": "seed-059",
@@ -1419,10 +1417,7 @@
       "assets/images/jobs/plumbing-01.png"
     ],
     "postedBy": "user-060",
-    "createdHoursAgo": 79.2,
-    "status": "completed",
-    "acceptedWorkerId": "user-044",
-    "agreedFare": 2000
+    "createdHoursAgo": 79.2
   },
   {
     "id": "seed-061",
@@ -1445,7 +1440,8 @@
     "contact": "0345 6621864",
     "status": "completed",
     "acceptedWorkerId": "user-016",
-    "agreedFare": 2000
+    "agreedFare": 2000,
+    "statusChangedHoursAgo": 28.8
   },
   {
     "id": "seed-062",
@@ -1465,7 +1461,10 @@
     "postedBy": "user-002",
     "createdHoursAgo": 21.3,
     "contact": "0332 1655706",
-    "status": "cancelled"
+    "status": "accepted",
+    "acceptedWorkerId": "user-047",
+    "agreedFare": 3500,
+    "statusChangedHoursAgo": 5.0
   },
   {
     "id": "seed-063",
@@ -1493,7 +1492,8 @@
     "createdHoursAgo": 58.7,
     "status": "completed",
     "acceptedWorkerId": "user-016",
-    "agreedFare": 3500
+    "agreedFare": 3500,
+    "statusChangedHoursAgo": 23.5
   },
   {
     "id": "seed-064",
@@ -1518,10 +1518,7 @@
     "voiceNoteSeconds": 7.4,
     "postedBy": "user-004",
     "createdHoursAgo": 27.9,
-    "contact": "0333 6277972",
-    "status": "inProgress",
-    "acceptedWorkerId": "user-060",
-    "agreedFare": 2500
+    "contact": "0333 6277972"
   },
   {
     "id": "seed-065",
@@ -1547,7 +1544,8 @@
     "contact": "0321 1317212",
     "status": "completed",
     "acceptedWorkerId": "user-001",
-    "agreedFare": 8000
+    "agreedFare": 6000,
+    "statusChangedHoursAgo": 24.7
   },
   {
     "id": "seed-066",
@@ -1571,9 +1569,10 @@
     "postedBy": "user-006",
     "createdHoursAgo": 7.7,
     "contact": "0300 1742063",
-    "status": "inProgress",
-    "acceptedWorkerId": "user-028",
-    "agreedFare": 40000
+    "status": "completed",
+    "acceptedWorkerId": "user-039",
+    "agreedFare": 35000,
+    "statusChangedHoursAgo": 3.0
   },
   {
     "id": "seed-067",
@@ -1599,9 +1598,10 @@
     "postedBy": "user-007",
     "createdHoursAgo": 38.6,
     "contact": "0345 6479399",
-    "status": "inProgress",
-    "acceptedWorkerId": "user-057",
-    "agreedFare": 16000
+    "status": "completed",
+    "acceptedWorkerId": "user-051",
+    "agreedFare": 16000,
+    "statusChangedHoursAgo": 10.2
   },
   {
     "id": "seed-068",
@@ -1655,8 +1655,9 @@
     "createdHoursAgo": 70.9,
     "contact": "0347 3165463",
     "status": "completed",
-    "acceptedWorkerId": "user-013",
-    "agreedFare": 2500
+    "acceptedWorkerId": "user-012",
+    "agreedFare": 2000,
+    "statusChangedHoursAgo": 28.4
   },
   {
     "id": "seed-070",
@@ -1701,9 +1702,10 @@
     "postedBy": "user-011",
     "createdHoursAgo": 81.2,
     "contact": "0321 4018461",
-    "status": "accepted",
-    "acceptedWorkerId": "user-023",
-    "agreedFare": 14000
+    "status": "inProgress",
+    "acceptedWorkerId": "user-025",
+    "agreedFare": 14000,
+    "statusChangedHoursAgo": 21.0
   },
   {
     "id": "seed-072",
@@ -1727,7 +1729,11 @@
     "voiceNoteSeconds": 6.9,
     "postedBy": "user-012",
     "createdHoursAgo": 81.2,
-    "contact": "0321 9455735"
+    "contact": "0321 9455735",
+    "status": "completed",
+    "acceptedWorkerId": "user-055",
+    "agreedFare": 6000,
+    "statusChangedHoursAgo": 21.7
   },
   {
     "id": "seed-073",
@@ -1751,7 +1757,11 @@
     "voiceNoteSeconds": 10.9,
     "postedBy": "user-013",
     "createdHoursAgo": 36.0,
-    "contact": "0301 4864220"
+    "contact": "0301 4864220",
+    "status": "completed",
+    "acceptedWorkerId": "user-031",
+    "agreedFare": 3000,
+    "statusChangedHoursAgo": 6.8
   },
   {
     "id": "seed-074",
@@ -1821,7 +1831,8 @@
     "contact": "0301 2862164",
     "status": "completed",
     "acceptedWorkerId": "user-009",
-    "agreedFare": 3000
+    "agreedFare": 2500,
+    "statusChangedHoursAgo": 22.7
   },
   {
     "id": "seed-077",
@@ -1849,7 +1860,8 @@
     "contact": "0301 6294546",
     "status": "completed",
     "acceptedWorkerId": "user-016",
-    "agreedFare": 3500
+    "agreedFare": 3500,
+    "statusChangedHoursAgo": 20.2
   },
   {
     "id": "seed-078",
@@ -1872,10 +1884,7 @@
     "scheduledMinute": 0,
     "postedBy": "user-018",
     "createdHoursAgo": 30.2,
-    "contact": "0321 9905243",
-    "status": "completed",
-    "acceptedWorkerId": "user-050",
-    "agreedFare": 9000
+    "contact": "0321 9905243"
   },
   {
     "id": "seed-079",
@@ -1895,10 +1904,7 @@
     "radiusMetres": 500,
     "postedBy": "user-019",
     "createdHoursAgo": 83.6,
-    "contact": "0332 1287459",
-    "status": "completed",
-    "acceptedWorkerId": "user-027",
-    "agreedFare": 800
+    "contact": "0332 1287459"
   },
   {
     "id": "seed-080",
@@ -1923,7 +1929,8 @@
     "createdHoursAgo": 78.0,
     "status": "completed",
     "acceptedWorkerId": "user-009",
-    "agreedFare": 2000
+    "agreedFare": 2000,
+    "statusChangedHoursAgo": 38.0
   },
   {
     "id": "seed-081",
@@ -1952,7 +1959,8 @@
     "createdHoursAgo": 83.2,
     "status": "completed",
     "acceptedWorkerId": "user-016",
-    "agreedFare": 70000
+    "agreedFare": 60000,
+    "statusChangedHoursAgo": 39.1
   },
   {
     "id": "seed-082",
@@ -2043,10 +2051,7 @@
     "radiusMetres": 2500,
     "postedBy": "user-025",
     "createdHoursAgo": 44.9,
-    "contact": "0311 4113857",
-    "status": "completed",
-    "acceptedWorkerId": "user-046",
-    "agreedFare": 8000
+    "contact": "0311 4113857"
   },
   {
     "id": "seed-086",
@@ -2092,7 +2097,11 @@
     "scheduledMinute": 30,
     "postedBy": "user-027",
     "createdHoursAgo": 38.3,
-    "contact": "0300 5925556"
+    "contact": "0300 5925556",
+    "status": "completed",
+    "acceptedWorkerId": "user-051",
+    "agreedFare": 2500,
+    "statusChangedHoursAgo": 21.9
   },
   {
     "id": "seed-088",
@@ -2114,8 +2123,9 @@
     "createdHoursAgo": 16.6,
     "contact": "0333 7943979",
     "status": "completed",
-    "acceptedWorkerId": "user-010",
-    "agreedFare": 16000
+    "acceptedWorkerId": "user-014",
+    "agreedFare": 20000,
+    "statusChangedHoursAgo": 9.7
   },
   {
     "id": "seed-089",
@@ -2138,7 +2148,11 @@
     "scheduledMinute": 30,
     "postedBy": "user-029",
     "createdHoursAgo": 77.9,
-    "contact": "0347 7505323"
+    "contact": "0347 7505323",
+    "status": "completed",
+    "acceptedWorkerId": "user-008",
+    "agreedFare": 5000,
+    "statusChangedHoursAgo": 11.4
   },
   {
     "id": "seed-090",
@@ -2158,9 +2172,10 @@
     "postedBy": "user-030",
     "createdHoursAgo": 73.6,
     "contact": "0347 7728084",
-    "status": "completed",
-    "acceptedWorkerId": "user-013",
-    "agreedFare": 30000
+    "status": "accepted",
+    "acceptedWorkerId": "user-032",
+    "agreedFare": 25000,
+    "statusChangedHoursAgo": 35.3
   },
   {
     "id": "seed-091",
@@ -2231,10 +2246,7 @@
     "scheduledMinute": 0,
     "postedBy": "user-033",
     "createdHoursAgo": 7.3,
-    "contact": "0347 3889203",
-    "status": "completed",
-    "acceptedWorkerId": "user-026",
-    "agreedFare": 20000
+    "contact": "0347 3889203"
   },
   {
     "id": "seed-094",
@@ -2252,10 +2264,7 @@
     },
     "radiusMetres": 2500,
     "postedBy": "user-034",
-    "createdHoursAgo": 59.8,
-    "status": "completed",
-    "acceptedWorkerId": "user-060",
-    "agreedFare": 3000
+    "createdHoursAgo": 59.8
   },
   {
     "id": "seed-095",
@@ -2303,8 +2312,9 @@
     "postedBy": "user-036",
     "createdHoursAgo": 69.7,
     "status": "completed",
-    "acceptedWorkerId": "user-038",
-    "agreedFare": 25000
+    "acceptedWorkerId": "user-006",
+    "agreedFare": 25000,
+    "statusChangedHoursAgo": 33.2
   },
   {
     "id": "seed-097",
@@ -2325,7 +2335,11 @@
       "assets/images/jobs/delivery-01.png"
     ],
     "postedBy": "user-037",
-    "createdHoursAgo": 43.6
+    "createdHoursAgo": 43.6,
+    "status": "completed",
+    "acceptedWorkerId": "user-019",
+    "agreedFare": 15000,
+    "statusChangedHoursAgo": 21.6
   },
   {
     "id": "seed-098",
@@ -2372,7 +2386,11 @@
     "voiceNoteSeconds": 10.4,
     "postedBy": "user-039",
     "createdHoursAgo": 36.0,
-    "contact": "0321 6975988"
+    "contact": "0321 6975988",
+    "status": "accepted",
+    "acceptedWorkerId": "user-012",
+    "agreedFare": 7000,
+    "statusChangedHoursAgo": 5.2
   },
   {
     "id": "seed-100",
@@ -2398,7 +2416,8 @@
     "contact": "0345 5516942",
     "status": "completed",
     "acceptedWorkerId": "user-001",
-    "agreedFare": 6000
+    "agreedFare": 6000,
+    "statusChangedHoursAgo": 5.8
   },
   {
     "id": "seed-101",
@@ -2418,10 +2437,7 @@
     "radiusMetres": 500,
     "postedBy": "user-041",
     "createdHoursAgo": 38.5,
-    "contact": "0345 4352602",
-    "status": "completed",
-    "acceptedWorkerId": "user-060",
-    "agreedFare": 16000
+    "contact": "0345 4352602"
   },
   {
     "id": "seed-102",
@@ -2445,8 +2461,7 @@
     "voiceNoteSeconds": 10.7,
     "postedBy": "user-042",
     "createdHoursAgo": 62.6,
-    "contact": "0347 6221706",
-    "status": "cancelled"
+    "contact": "0347 6221706"
   },
   {
     "id": "seed-103",
@@ -2494,8 +2509,7 @@
     "voiceNote": "assets/audio/voice-05.wav",
     "voiceNoteSeconds": 7.6,
     "postedBy": "user-044",
-    "createdHoursAgo": 16.7,
-    "status": "cancelled"
+    "createdHoursAgo": 16.7
   },
   {
     "id": "seed-105",
@@ -2521,7 +2535,8 @@
     "contact": "0301 1498837",
     "status": "completed",
     "acceptedWorkerId": "user-016",
-    "agreedFare": 1500
+    "agreedFare": 2500,
+    "statusChangedHoursAgo": 7.7
   },
   {
     "id": "seed-106",
@@ -2586,8 +2601,9 @@
     "createdHoursAgo": 46.8,
     "contact": "0332 5467834",
     "status": "completed",
-    "acceptedWorkerId": "user-029",
-    "agreedFare": 4500
+    "acceptedWorkerId": "user-042",
+    "agreedFare": 3000,
+    "statusChangedHoursAgo": 1.1
   },
   {
     "id": "seed-109",
@@ -2654,8 +2670,9 @@
     "createdHoursAgo": 37.9,
     "contact": "0301 8466084",
     "status": "completed",
-    "acceptedWorkerId": "user-027",
-    "agreedFare": 9000
+    "acceptedWorkerId": "user-053",
+    "agreedFare": 7000,
+    "statusChangedHoursAgo": 11.8
   },
   {
     "id": "seed-112",
@@ -2678,7 +2695,11 @@
     "voiceNoteSeconds": 11.0,
     "postedBy": "user-052",
     "createdHoursAgo": 83.8,
-    "contact": "0300 2988680"
+    "contact": "0300 2988680",
+    "status": "completed",
+    "acceptedWorkerId": "user-015",
+    "agreedFare": 25000,
+    "statusChangedHoursAgo": 33.1
   },
   {
     "id": "seed-113",
@@ -2702,7 +2723,8 @@
     "createdHoursAgo": 61.2,
     "status": "completed",
     "acceptedWorkerId": "user-009",
-    "agreedFare": 6000
+    "agreedFare": 7000,
+    "statusChangedHoursAgo": 20.2
   },
   {
     "id": "seed-114",
@@ -2729,8 +2751,9 @@
     "createdHoursAgo": 28.2,
     "contact": "0321 6964061",
     "status": "completed",
-    "acceptedWorkerId": "user-051",
-    "agreedFare": 6000
+    "acceptedWorkerId": "user-010",
+    "agreedFare": 4500,
+    "statusChangedHoursAgo": 4.0
   },
   {
     "id": "seed-115",
@@ -2822,9 +2845,10 @@
     "scheduledMinute": 0,
     "postedBy": "user-058",
     "createdHoursAgo": 54.2,
-    "status": "completed",
-    "acceptedWorkerId": "user-036",
-    "agreedFare": 4000
+    "status": "accepted",
+    "acceptedWorkerId": "user-004",
+    "agreedFare": 2500,
+    "statusChangedHoursAgo": 25.3
   },
   {
     "id": "seed-119",
@@ -2872,7 +2896,11 @@
     "scheduledMinute": 0,
     "postedBy": "user-060",
     "createdHoursAgo": 15.8,
-    "contact": "0300 4681444"
+    "contact": "0300 4681444",
+    "status": "completed",
+    "acceptedWorkerId": "user-017",
+    "agreedFare": 2500,
+    "statusChangedHoursAgo": 4.5
   },
   {
     "id": "seed-121",
@@ -2893,7 +2921,8 @@
     "createdHoursAgo": 1.8,
     "status": "inProgress",
     "acceptedWorkerId": "user-017",
-    "agreedFare": 8000
+    "agreedFare": 8000,
+    "statusChangedHoursAgo": 0.9
   },
   {
     "id": "seed-122",
@@ -2916,7 +2945,11 @@
     "voiceNoteSeconds": 8.1,
     "postedBy": "user-002",
     "createdHoursAgo": 40.9,
-    "contact": "0347 7748907"
+    "contact": "0347 7748907",
+    "status": "completed",
+    "acceptedWorkerId": "user-033",
+    "agreedFare": 6000,
+    "statusChangedHoursAgo": 12.0
   },
   {
     "id": "seed-123",
@@ -2936,8 +2969,9 @@
     "postedBy": "user-003",
     "createdHoursAgo": 91.9,
     "status": "accepted",
-    "acceptedWorkerId": "user-015",
-    "agreedFare": 12000
+    "acceptedWorkerId": "user-043",
+    "agreedFare": 8000,
+    "statusChangedHoursAgo": 46.0
   },
   {
     "id": "seed-124",
@@ -2963,7 +2997,8 @@
     ],
     "postedBy": "user-004",
     "createdHoursAgo": 94.3,
-    "contact": "0311 1725037"
+    "contact": "0311 1725037",
+    "status": "cancelled"
   },
   {
     "id": "seed-125",
@@ -2985,10 +3020,7 @@
     ],
     "postedBy": "user-005",
     "createdHoursAgo": 37.6,
-    "contact": "0301 6712390",
-    "status": "completed",
-    "acceptedWorkerId": "user-044",
-    "agreedFare": 9000
+    "contact": "0301 6712390"
   },
   {
     "id": "seed-126",
@@ -3055,7 +3087,11 @@
       "assets/images/jobs/painting-02.png"
     ],
     "postedBy": "user-008",
-    "createdHoursAgo": 12.7
+    "createdHoursAgo": 12.7,
+    "status": "completed",
+    "acceptedWorkerId": "user-032",
+    "agreedFare": 8000,
+    "statusChangedHoursAgo": 3.9
   },
   {
     "id": "seed-129",
@@ -3077,7 +3113,8 @@
     "contact": "0345 9239617",
     "status": "accepted",
     "acceptedWorkerId": "user-016",
-    "agreedFare": 3000
+    "agreedFare": 3000,
+    "statusChangedHoursAgo": 40.5
   },
   {
     "id": "seed-130",
@@ -3140,7 +3177,11 @@
     "scheduledMinute": 0,
     "postedBy": "user-012",
     "createdHoursAgo": 8.3,
-    "contact": "0345 9977643"
+    "contact": "0345 9977643",
+    "status": "inProgress",
+    "acceptedWorkerId": "user-039",
+    "agreedFare": 1500,
+    "statusChangedHoursAgo": 3.8
   },
   {
     "id": "seed-133",
@@ -3165,7 +3206,11 @@
       "assets/images/jobs/painting-02.png"
     ],
     "postedBy": "user-013",
-    "createdHoursAgo": 81.6
+    "createdHoursAgo": 81.6,
+    "status": "completed",
+    "acceptedWorkerId": "user-054",
+    "agreedFare": 13000,
+    "statusChangedHoursAgo": 14.2
   },
   {
     "id": "seed-134",
@@ -3236,7 +3281,8 @@
     "contact": "0347 3471863",
     "status": "accepted",
     "acceptedWorkerId": "user-001",
-    "agreedFare": 2500
+    "agreedFare": 3500,
+    "statusChangedHoursAgo": 45.7
   },
   {
     "id": "seed-137",
@@ -3258,7 +3304,8 @@
     "contact": "0333 9926751",
     "status": "accepted",
     "acceptedWorkerId": "user-009",
-    "agreedFare": 6000
+    "agreedFare": 6000,
+    "statusChangedHoursAgo": 25.7
   },
   {
     "id": "seed-138",
@@ -3279,10 +3326,7 @@
       "assets/images/jobs/cleaning-01.png"
     ],
     "postedBy": "user-018",
-    "createdHoursAgo": 55.3,
-    "status": "completed",
-    "acceptedWorkerId": "user-056",
-    "agreedFare": 3000
+    "createdHoursAgo": 55.3
   },
   {
     "id": "seed-139",
@@ -3302,10 +3346,7 @@
     "radiusMetres": 600,
     "postedBy": "user-019",
     "createdHoursAgo": 24.9,
-    "contact": "0300 8821277",
-    "status": "completed",
-    "acceptedWorkerId": "user-048",
-    "agreedFare": 6000
+    "contact": "0300 8821277"
   },
   {
     "id": "seed-140",
@@ -3369,10 +3410,7 @@
     "voiceNoteSeconds": 12.2,
     "postedBy": "user-022",
     "createdHoursAgo": 10.6,
-    "contact": "0345 6320594",
-    "status": "completed",
-    "acceptedWorkerId": "user-006",
-    "agreedFare": 8000
+    "contact": "0345 6320594"
   },
   {
     "id": "seed-143",
@@ -3395,10 +3433,7 @@
     "scheduledMinute": 0,
     "postedBy": "user-023",
     "createdHoursAgo": 71.0,
-    "contact": "0332 3226216",
-    "status": "inProgress",
-    "acceptedWorkerId": "user-036",
-    "agreedFare": 3000
+    "contact": "0332 3226216"
   },
   {
     "id": "seed-144",
@@ -3443,7 +3478,11 @@
     "voiceNote": "assets/audio/voice-03.wav",
     "voiceNoteSeconds": 10.6,
     "postedBy": "user-025",
-    "createdHoursAgo": 3.9
+    "createdHoursAgo": 3.9,
+    "status": "accepted",
+    "acceptedWorkerId": "user-059",
+    "agreedFare": 2500,
+    "statusChangedHoursAgo": 1.4
   },
   {
     "id": "seed-146",
@@ -3511,8 +3550,9 @@
     "createdHoursAgo": 93.9,
     "contact": "0300 7106245",
     "status": "completed",
-    "acceptedWorkerId": "user-025",
-    "agreedFare": 6000
+    "acceptedWorkerId": "user-006",
+    "agreedFare": 6000,
+    "statusChangedHoursAgo": 42.2
   },
   {
     "id": "seed-149",
@@ -3535,7 +3575,11 @@
     ],
     "postedBy": "user-029",
     "createdHoursAgo": 2.6,
-    "contact": "0300 9503671"
+    "contact": "0300 9503671",
+    "status": "completed",
+    "acceptedWorkerId": "user-046",
+    "agreedFare": 10000,
+    "statusChangedHoursAgo": 1.9
   },
   {
     "id": "seed-150",
@@ -3582,10 +3626,7 @@
     "voiceNoteSeconds": 11.0,
     "postedBy": "user-031",
     "createdHoursAgo": 28.3,
-    "contact": "0321 4059261",
-    "status": "completed",
-    "acceptedWorkerId": "user-047",
-    "agreedFare": 19000
+    "contact": "0321 4059261"
   },
   {
     "id": "seed-152",
@@ -3610,9 +3651,10 @@
     "voiceNoteSeconds": 13.5,
     "postedBy": "user-032",
     "createdHoursAgo": 22.6,
-    "status": "completed",
-    "acceptedWorkerId": "user-026",
-    "agreedFare": 10000
+    "status": "inProgress",
+    "acceptedWorkerId": "user-020",
+    "agreedFare": 18000,
+    "statusChangedHoursAgo": 5.3
   },
   {
     "id": "seed-153",
@@ -3640,9 +3682,7 @@
     ],
     "postedBy": "user-033",
     "createdHoursAgo": 94.8,
-    "status": "accepted",
-    "acceptedWorkerId": "user-047",
-    "agreedFare": 55000
+    "status": "cancelled"
   },
   {
     "id": "seed-154",
@@ -3740,8 +3780,9 @@
     "createdHoursAgo": 82.4,
     "contact": "0301 3574489",
     "status": "completed",
-    "acceptedWorkerId": "user-018",
-    "agreedFare": 4000
+    "acceptedWorkerId": "user-023",
+    "agreedFare": 4000,
+    "statusChangedHoursAgo": 11.2
   },
   {
     "id": "seed-158",
@@ -3762,8 +3803,9 @@
     "postedBy": "user-038",
     "createdHoursAgo": 12.5,
     "status": "completed",
-    "acceptedWorkerId": "user-053",
-    "agreedFare": 4000
+    "acceptedWorkerId": "user-033",
+    "agreedFare": 4500,
+    "statusChangedHoursAgo": 1.4
   },
   {
     "id": "seed-159",
@@ -3792,8 +3834,9 @@
     "createdHoursAgo": 56.8,
     "contact": "0345 7685122",
     "status": "completed",
-    "acceptedWorkerId": "user-046",
-    "agreedFare": 75000
+    "acceptedWorkerId": "user-059",
+    "agreedFare": 95000,
+    "statusChangedHoursAgo": 17.6
   },
   {
     "id": "seed-160",
@@ -3815,7 +3858,11 @@
     "scheduledHour": 10,
     "scheduledMinute": 30,
     "postedBy": "user-040",
-    "createdHoursAgo": 64.0
+    "createdHoursAgo": 64.0,
+    "status": "completed",
+    "acceptedWorkerId": "user-038",
+    "agreedFare": 20000,
+    "statusChangedHoursAgo": 8.1
   },
   {
     "id": "seed-161",
@@ -3843,10 +3890,7 @@
     ],
     "postedBy": "user-041",
     "createdHoursAgo": 13.4,
-    "contact": "0311 7432450",
-    "status": "accepted",
-    "acceptedWorkerId": "user-032",
-    "agreedFare": 1000
+    "contact": "0311 7432450"
   },
   {
     "id": "seed-162",
@@ -3870,9 +3914,10 @@
     "postedBy": "user-042",
     "createdHoursAgo": 10.0,
     "contact": "0345 5088387",
-    "status": "inProgress",
-    "acceptedWorkerId": "user-060",
-    "agreedFare": 13000
+    "status": "accepted",
+    "acceptedWorkerId": "user-052",
+    "agreedFare": 9000,
+    "statusChangedHoursAgo": 3.5
   },
   {
     "id": "seed-163",
@@ -3895,7 +3940,11 @@
     "scheduledMinute": 0,
     "postedBy": "user-043",
     "createdHoursAgo": 52.4,
-    "contact": "0301 5770655"
+    "contact": "0301 5770655",
+    "status": "accepted",
+    "acceptedWorkerId": "user-030",
+    "agreedFare": 2500,
+    "statusChangedHoursAgo": 14.6
   },
   {
     "id": "seed-164",
@@ -3914,9 +3963,10 @@
     "radiusMetres": 800,
     "postedBy": "user-044",
     "createdHoursAgo": 64.3,
-    "status": "accepted",
-    "acceptedWorkerId": "user-038",
-    "agreedFare": 1000
+    "status": "completed",
+    "acceptedWorkerId": "user-027",
+    "agreedFare": 1000,
+    "statusChangedHoursAgo": 8.3
   },
   {
     "id": "seed-165",
@@ -3940,8 +3990,9 @@
     "createdHoursAgo": 3.8,
     "contact": "0311 5336901",
     "status": "inProgress",
-    "acceptedWorkerId": "user-007",
-    "agreedFare": 2000
+    "acceptedWorkerId": "user-013",
+    "agreedFare": 1500,
+    "statusChangedHoursAgo": 1.9
   },
   {
     "id": "seed-166",
@@ -3969,7 +4020,8 @@
     "contact": "0333 3098739",
     "status": "completed",
     "acceptedWorkerId": "user-001",
-    "agreedFare": 7000
+    "agreedFare": 8000,
+    "statusChangedHoursAgo": 7.7
   },
   {
     "id": "seed-167",
@@ -4014,7 +4066,11 @@
     "scheduledHour": 14,
     "scheduledMinute": 30,
     "postedBy": "user-048",
-    "createdHoursAgo": 69.0
+    "createdHoursAgo": 69.0,
+    "status": "completed",
+    "acceptedWorkerId": "user-007",
+    "agreedFare": 30000,
+    "statusChangedHoursAgo": 8.8
   },
   {
     "id": "seed-169",
@@ -4059,9 +4115,10 @@
     "postedBy": "user-050",
     "createdHoursAgo": 27.1,
     "contact": "0321 9484614",
-    "status": "accepted",
-    "acceptedWorkerId": "user-027",
-    "agreedFare": 4500
+    "status": "inProgress",
+    "acceptedWorkerId": "user-039",
+    "agreedFare": 6000,
+    "statusChangedHoursAgo": 10.8
   },
   {
     "id": "seed-171",
@@ -4103,9 +4160,10 @@
     "radiusMetres": 600,
     "postedBy": "user-052",
     "createdHoursAgo": 25.9,
-    "status": "inProgress",
-    "acceptedWorkerId": "user-057",
-    "agreedFare": 19000
+    "status": "completed",
+    "acceptedWorkerId": "user-032",
+    "agreedFare": 20000,
+    "statusChangedHoursAgo": 1.0
   },
   {
     "id": "seed-173",
@@ -4130,7 +4188,11 @@
     "voiceNoteSeconds": 8.7,
     "postedBy": "user-053",
     "createdHoursAgo": 21.8,
-    "contact": "0345 4573988"
+    "contact": "0345 4573988",
+    "status": "completed",
+    "acceptedWorkerId": "user-025",
+    "agreedFare": 13000,
+    "statusChangedHoursAgo": 12.6
   },
   {
     "id": "seed-174",
@@ -4183,7 +4245,8 @@
     "contact": "0300 5035277",
     "status": "completed",
     "acceptedWorkerId": "user-009",
-    "agreedFare": 3000
+    "agreedFare": 2500,
+    "statusChangedHoursAgo": 45.7
   },
   {
     "id": "seed-176",
@@ -4204,7 +4267,8 @@
     "contact": "0300 2502272",
     "status": "completed",
     "acceptedWorkerId": "user-009",
-    "agreedFare": 3000
+    "agreedFare": 1500,
+    "statusChangedHoursAgo": 15.7
   },
   {
     "id": "seed-177",
@@ -4249,10 +4313,7 @@
     "voiceNoteSeconds": 6.0,
     "postedBy": "user-058",
     "createdHoursAgo": 32.7,
-    "contact": "0333 6030618",
-    "status": "completed",
-    "acceptedWorkerId": "user-015",
-    "agreedFare": 6000
+    "contact": "0333 6030618"
   },
   {
     "id": "seed-179",
@@ -4276,10 +4337,7 @@
     "voiceNoteSeconds": 10.1,
     "postedBy": "user-059",
     "createdHoursAgo": 41.8,
-    "contact": "0300 8592062",
-    "status": "completed",
-    "acceptedWorkerId": "user-026",
-    "agreedFare": 3000
+    "contact": "0300 8592062"
   },
   {
     "id": "seed-180",
@@ -4299,10 +4357,7 @@
     "voiceNote": "assets/audio/voice-05.wav",
     "voiceNoteSeconds": 9.7,
     "postedBy": "user-060",
-    "createdHoursAgo": 83.4,
-    "status": "completed",
-    "acceptedWorkerId": "user-059",
-    "agreedFare": 5000
+    "createdHoursAgo": 83.4
   },
   {
     "id": "seed-181",
@@ -4327,7 +4382,8 @@
     "postedBy": "user-001",
     "createdHoursAgo": 15.0,
     "contact": "0333 9252035",
-    "status": "cancelled"
+    "status": "cancelled",
+    "statusChangedHoursAgo": 6.0
   },
   {
     "id": "seed-182",
@@ -4351,7 +4407,11 @@
     "scheduledMinute": 0,
     "postedBy": "user-002",
     "createdHoursAgo": 37.3,
-    "contact": "0311 7596789"
+    "contact": "0311 7596789",
+    "status": "completed",
+    "acceptedWorkerId": "user-026",
+    "agreedFare": 8000,
+    "statusChangedHoursAgo": 7.7
   },
   {
     "id": "seed-183",
@@ -4376,6 +4436,7 @@
     "postedBy": "user-003",
     "createdHoursAgo": 26.7,
     "contact": "0347 8268221",
-    "status": "cancelled"
+    "status": "cancelled",
+    "statusChangedHoursAgo": 10.7
   }
 ]

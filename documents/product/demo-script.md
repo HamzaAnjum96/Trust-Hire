@@ -150,6 +150,27 @@ different searches.
 
 ---
 
+## Stop 5b — What the app tells you
+
+**Be:** Usman Raza. **Go:** Activity.
+
+The first tab is a feed of everything that concerns him, and the destination
+carries a count.
+
+- **He is told when he wins *and* when he loses.** "Another offer was chosen
+  for this job" is the entry most products leave out, and leaving it out means
+  a worker refreshes a job for three days to find out by omission.
+- **Every entry is dated to when the thing happened**, not to when the job was
+  posted — an offer made on Monday and accepted on Friday says Friday.
+- **Nothing here is stored.** The feed is computed from the jobs, bids, ratings
+  and ledger already on the device. Accept an offer anywhere in the app and the
+  worker is told, because being told is the same fact as the offer being
+  accepted — there is no event to forget to write.
+- **Switch to Trust Hire staff and back.** The counts are per person; the demo
+  accounts are separate people, not one device.
+
+---
+
 ## Stop 6 — Oversight
 
 **Be:** Trust Hire staff. **Go:** Profile → the admin panel.

@@ -280,27 +280,27 @@
     "phoneDaysAgo": 123
   },
   {
-    "userId": "user-048",
+    "userId": "user-023",
     "status": "approved",
     "cnicOnFile": true,
     "cnicPlausible": true,
     "phoneVerified": true,
     "simNameMatches": true,
     "cnicMasked": "*****-*****39-8",
-    "cnicName": "Rabia Sheikh",
+    "cnicName": "Usman Siddiqui",
     "cnicDaysAgo": 310,
     "phone": "+923211598960",
     "phoneDaysAgo": 137
   },
   {
-    "userId": "user-056",
+    "userId": "user-028",
     "status": "approved",
     "cnicOnFile": true,
     "cnicPlausible": true,
     "phoneVerified": true,
     "simNameMatches": true,
     "cnicMasked": "*****-*****55-1",
-    "cnicName": "Usman Shah",
+    "cnicName": "Zubair Malik",
     "cnicDaysAgo": 53,
     "phone": "+923327854611",
     "phoneDaysAgo": 28

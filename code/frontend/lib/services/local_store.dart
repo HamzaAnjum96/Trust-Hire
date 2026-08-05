@@ -107,6 +107,11 @@ class StoreKeys {
   /// The worker's token wallet — the whole ledger, as a JSON object.
   static const wallet = 'trust_hire.wallet';
 
+  /// When each account last opened the notification feed, as a JSON object of
+  /// account id to ISO timestamp. One key rather than one per account, because
+  /// a reset that has to guess at key names misses the ones it did not guess.
+  static const notificationsSeen = 'trust_hire.notifications_seen';
+
   /// Every rating either side has given, as a JSON list.
   static const ratings = 'trust_hire.ratings';
 

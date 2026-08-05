@@ -497,6 +497,32 @@ MUTATIONS = [
         replace="        base: null,",
         tests=["test/premium_test.dart"],
     ),
+
+    # --- 0.17.0: the notification feed --------------------------------------
+    # The feed is assembled from every job, bid and rating on the device,
+    # because that is all a local-first app has. This one line is the whole
+    # privacy boundary: without it the app is a public activity log of the
+    # marketplace, and it would look completely normal to whoever built it.
+    Mutation(
+        name="the-feed-reaches-only-the-two-people-involved",
+        promise="a stranger hears nothing about somebody else's job",
+        path="lib/features/notifications/notification_rules.dart",
+        find="    if (!isHirer && !isWorker) return;",
+        replace="    if (false) return;",
+        tests=["test/notification_test.dart"],
+    ),
+    # The entry a product is tempted to leave out. Leaving it out means a
+    # worker refreshes a job for three days to find out by omission.
+    Mutation(
+        name="a-worker-is-told-they-lost",
+        promise="being passed over is said plainly rather than left to be inferred",
+        path="lib/features/notifications/notification_rules.dart",
+        find="""          yield AppNotification(
+            id: 'bid-${bid.id}-passed',""",
+        replace="""          if (false) yield AppNotification(
+            id: 'bid-${bid.id}-passed',""",
+        tests=["test/notification_test.dart"],
+    ),
 ]
 
 

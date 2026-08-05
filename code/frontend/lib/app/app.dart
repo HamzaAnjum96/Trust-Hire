@@ -15,6 +15,7 @@ import '../services/backend/mock_backend.dart';
 import '../services/media_store.dart';
 import '../features/onboarding/onboarding_screen.dart';
 import 'account_controller.dart';
+import 'notification_controller.dart';
 import 'admin_controller.dart';
 import 'sync_controller.dart';
 import 'verification_controller.dart';
@@ -111,6 +112,13 @@ class TrustHireApp extends StatelessWidget {
           create: (_) => VerificationController(store)..load(),
           update: (_, account, verification) => verification!
             ..setAccount(account.activeId, name: account.active.name ?? ''),
+        ),
+        // Only the "seen up to here" mark lives here; the feed itself is
+        // derived from the controllers above whenever a screen asks for it.
+        ChangeNotifierProxyProvider<AccountController, NotificationController>(
+          create: (_) => NotificationController(store)..load(),
+          update: (_, account, notifications) =>
+              notifications!..setAccount(account.activeId),
         ),
         ChangeNotifierProvider(
           // Deliberately not requested here. Asking for a permission before

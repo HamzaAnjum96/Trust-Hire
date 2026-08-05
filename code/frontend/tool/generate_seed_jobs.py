@@ -747,17 +747,34 @@ def add_history(jobs, people):
         posted = job["createdHoursAgo"]
         chosen = place_bid(job, worker, "accepted", rng.uniform(hours_ago, posted))
 
+        decided = []
         for _ in range(rng.randint(0, 3)):
-            place_bid(
+            decided.append(place_bid(
                 job,
                 other_than(job, job["postedBy"], worker),
                 "passedOver",
                 rng.uniform(hours_ago, posted),
-            )
+            ))
+
+        # **One moment for the whole decision.** The hirer picked one offer and
+        # passed over the rest in a single act, so they share a timestamp — and
+        # it must sit between the newest offer and the work starting, or the
+        # feed reports a job accepted before anybody offered on it.
+        newest_offer = min(
+            [chosen["hoursAgo"]] + [bid["hoursAgo"] for bid in decided]
+        )
+        decided_at = round(rng.uniform(hours_ago, newest_offer), 1)
+        for bid in [chosen, *decided]:
+            bid["decidedHoursAgo"] = decided_at
 
         job["status"] = status
         job["acceptedWorkerId"] = worker
         job["agreedFare"] = chosen["fare"]
+        # When it last moved, relative like every other date here. Without it
+        # the notification feed dates "job finished" to when the job was
+        # *posted*, so a fortnight-old posting finished a fortnight ago
+        # regardless of when the work actually happened.
+        job["statusChangedHoursAgo"] = round(hours_ago, 1)
 
         # Recorded here rather than at each call site, so a worker is charged
         # for **every** job they finished — including one they did for another
@@ -936,6 +953,9 @@ def add_history(jobs, people):
         if len(mine) > 3:
             # Called off. Rare, and the one state with nothing to do next.
             mine[3]["status"] = "cancelled"
+            mine[3]["statusChangedHoursAgo"] = round(
+                mine[3]["createdHoursAgo"] * 0.4, 1
+            )
 
     # --- Everybody else ----------------------------------------------------
     #

@@ -814,6 +814,80 @@
   "bookingRequest": "Booked directly with you",
   "bookingAwaitingWorker": "Waiting for the worker to accept",
   "bookedFrom": "Booked from the directory",
+  "navUpdates": "Updates",
+  "updatesTab": "Updates",
+  "updatesTitle": "What happened",
+  "updatesEmpty": "Nothing yet",
+  "updatesEmptyMessage": "Offers, decisions and payments show up here as they happen. Post a job or make an offer to get things moving.",
+  "updatesNew": "{count, plural, =1{1 new} other{{count} new}}",
+  "@updatesNew": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "notifOfferReceived": "{name} offered {amount}",
+  "@notifOfferReceived": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "notifOfferAccepted": "Your offer of {amount} was accepted",
+  "@notifOfferAccepted": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "notifOfferPassedOver": "Another offer was chosen for this job",
+  "notifJobStarted": "Work has started",
+  "notifJobCompleted": "Job finished",
+  "notifJobCompletedFare": "Job finished at {amount}",
+  "@notifJobCompletedFare": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "notifJobCancelled": "This job was called off",
+  "notifJobExpired": "Your job ran out of time with nobody on it",
+  "notifRatingReceived": "You were rated {stars} out of 5",
+  "@notifRatingReceived": {
+    "placeholders": {
+      "stars": {
+        "type": "int"
+      }
+    }
+  },
+  "notifCommissionCharged": "Commission of {amount} charged",
+  "@notifCommissionCharged": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "notifWalletCredited": "{amount} added to your wallet",
+  "@notifWalletCredited": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "notifWalletLocked": "Bidding is paused until you settle what you owe",
+  "notifSubscriptionExpiring": "Your directory listing is ending soon",
+  "notifSubscriptionLapsed": "Your directory listing has ended — people can no longer find you",
+  "notifVerificationApproved": "Your account has been approved",
+  "notifVerificationRejected": "Your account has been suspended — see CNIC and phone",
   "navDirectory": "Directory",
   "directoryTitle": "Book a professional",
   "directoryIntro": "Set prices, no haggling. Book someone directly and they say yes or no.",

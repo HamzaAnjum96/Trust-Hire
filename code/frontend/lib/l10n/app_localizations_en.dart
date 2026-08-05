@@ -1099,6 +1099,97 @@ class AppStringsEn extends AppStrings {
   String get bookedFrom => 'Booked from the directory';
 
   @override
+  String get navUpdates => 'Updates';
+
+  @override
+  String get updatesTab => 'Updates';
+
+  @override
+  String get updatesTitle => 'What happened';
+
+  @override
+  String get updatesEmpty => 'Nothing yet';
+
+  @override
+  String get updatesEmptyMessage =>
+      'Offers, decisions and payments show up here as they happen. Post a job or make an offer to get things moving.';
+
+  @override
+  String updatesNew(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count new',
+      one: '1 new',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String notifOfferReceived(String name, String amount) {
+    return '$name offered $amount';
+  }
+
+  @override
+  String notifOfferAccepted(String amount) {
+    return 'Your offer of $amount was accepted';
+  }
+
+  @override
+  String get notifOfferPassedOver => 'Another offer was chosen for this job';
+
+  @override
+  String get notifJobStarted => 'Work has started';
+
+  @override
+  String get notifJobCompleted => 'Job finished';
+
+  @override
+  String notifJobCompletedFare(String amount) {
+    return 'Job finished at $amount';
+  }
+
+  @override
+  String get notifJobCancelled => 'This job was called off';
+
+  @override
+  String get notifJobExpired => 'Your job ran out of time with nobody on it';
+
+  @override
+  String notifRatingReceived(int stars) {
+    return 'You were rated $stars out of 5';
+  }
+
+  @override
+  String notifCommissionCharged(String amount) {
+    return 'Commission of $amount charged';
+  }
+
+  @override
+  String notifWalletCredited(String amount) {
+    return '$amount added to your wallet';
+  }
+
+  @override
+  String get notifWalletLocked =>
+      'Bidding is paused until you settle what you owe';
+
+  @override
+  String get notifSubscriptionExpiring =>
+      'Your directory listing is ending soon';
+
+  @override
+  String get notifSubscriptionLapsed =>
+      'Your directory listing has ended — people can no longer find you';
+
+  @override
+  String get notifVerificationApproved => 'Your account has been approved';
+
+  @override
+  String get notifVerificationRejected =>
+      'Your account has been suspended — see CNIC and phone';
+
+  @override
   String get navDirectory => 'Directory';
 
   @override

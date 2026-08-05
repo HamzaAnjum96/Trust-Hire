@@ -13,6 +13,7 @@ class Bid {
     required this.createdAt,
     this.message,
     this.status = BidStatus.offered,
+    this.decidedAt,
   });
 
   final String id;
@@ -31,12 +32,25 @@ class Bid {
 
   final BidStatus status;
 
+  /// When the hirer chose — which is not when this was offered.
+  ///
+  /// **The two used to be conflated**, and the notification feed showed it: an
+  /// offer made on Monday and accepted on Friday was reported as accepted on
+  /// Monday, and the job's own `statusChangedAt` was no help because by the
+  /// time the work finished it had moved on to record *that*. A decision is
+  /// its own event and needs its own moment.
+  ///
+  /// Null while the offer is still standing, and on offers withdrawn before
+  /// anybody looked at them.
+  final DateTime? decidedAt;
+
   Bid copyWith({
     int? fare,
     String? message,
     bool clearMessage = false,
     BidStatus? status,
     DateTime? createdAt,
+    DateTime? decidedAt,
   }) {
     return Bid(
       id: id,
@@ -46,6 +60,7 @@ class Bid {
       createdAt: createdAt ?? this.createdAt,
       message: clearMessage ? null : (message ?? this.message),
       status: status ?? this.status,
+      decidedAt: decidedAt ?? this.decidedAt,
     );
   }
 
@@ -57,6 +72,9 @@ class Bid {
     createdAt: DateTime.parse(json['createdAt'] as String),
     message: json['message'] as String?,
     status: BidStatus.fromId(json['status'] as String?),
+    decidedAt: json['decidedAt'] == null
+        ? null
+        : DateTime.parse(json['decidedAt'] as String),
   );
 
   Map<String, dynamic> toJson() => <String, dynamic>{
@@ -67,6 +85,7 @@ class Bid {
     'createdAt': createdAt.toIso8601String(),
     'message': message,
     'status': status.id,
+    'decidedAt': decidedAt?.toIso8601String(),
   };
 }
 

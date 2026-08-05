@@ -1928,6 +1928,138 @@ abstract class AppStrings {
   /// **'Booked from the directory'**
   String get bookedFrom;
 
+  /// No description provided for @navUpdates.
+  ///
+  /// In en, this message translates to:
+  /// **'Updates'**
+  String get navUpdates;
+
+  /// No description provided for @updatesTab.
+  ///
+  /// In en, this message translates to:
+  /// **'Updates'**
+  String get updatesTab;
+
+  /// No description provided for @updatesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'What happened'**
+  String get updatesTitle;
+
+  /// No description provided for @updatesEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing yet'**
+  String get updatesEmpty;
+
+  /// No description provided for @updatesEmptyMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Offers, decisions and payments show up here as they happen. Post a job or make an offer to get things moving.'**
+  String get updatesEmptyMessage;
+
+  /// No description provided for @updatesNew.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 new} other{{count} new}}'**
+  String updatesNew(int count);
+
+  /// No description provided for @notifOfferReceived.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} offered {amount}'**
+  String notifOfferReceived(String name, String amount);
+
+  /// No description provided for @notifOfferAccepted.
+  ///
+  /// In en, this message translates to:
+  /// **'Your offer of {amount} was accepted'**
+  String notifOfferAccepted(String amount);
+
+  /// No description provided for @notifOfferPassedOver.
+  ///
+  /// In en, this message translates to:
+  /// **'Another offer was chosen for this job'**
+  String get notifOfferPassedOver;
+
+  /// No description provided for @notifJobStarted.
+  ///
+  /// In en, this message translates to:
+  /// **'Work has started'**
+  String get notifJobStarted;
+
+  /// No description provided for @notifJobCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Job finished'**
+  String get notifJobCompleted;
+
+  /// No description provided for @notifJobCompletedFare.
+  ///
+  /// In en, this message translates to:
+  /// **'Job finished at {amount}'**
+  String notifJobCompletedFare(String amount);
+
+  /// No description provided for @notifJobCancelled.
+  ///
+  /// In en, this message translates to:
+  /// **'This job was called off'**
+  String get notifJobCancelled;
+
+  /// No description provided for @notifJobExpired.
+  ///
+  /// In en, this message translates to:
+  /// **'Your job ran out of time with nobody on it'**
+  String get notifJobExpired;
+
+  /// No description provided for @notifRatingReceived.
+  ///
+  /// In en, this message translates to:
+  /// **'You were rated {stars} out of 5'**
+  String notifRatingReceived(int stars);
+
+  /// No description provided for @notifCommissionCharged.
+  ///
+  /// In en, this message translates to:
+  /// **'Commission of {amount} charged'**
+  String notifCommissionCharged(String amount);
+
+  /// No description provided for @notifWalletCredited.
+  ///
+  /// In en, this message translates to:
+  /// **'{amount} added to your wallet'**
+  String notifWalletCredited(String amount);
+
+  /// No description provided for @notifWalletLocked.
+  ///
+  /// In en, this message translates to:
+  /// **'Bidding is paused until you settle what you owe'**
+  String get notifWalletLocked;
+
+  /// No description provided for @notifSubscriptionExpiring.
+  ///
+  /// In en, this message translates to:
+  /// **'Your directory listing is ending soon'**
+  String get notifSubscriptionExpiring;
+
+  /// No description provided for @notifSubscriptionLapsed.
+  ///
+  /// In en, this message translates to:
+  /// **'Your directory listing has ended — people can no longer find you'**
+  String get notifSubscriptionLapsed;
+
+  /// No description provided for @notifVerificationApproved.
+  ///
+  /// In en, this message translates to:
+  /// **'Your account has been approved'**
+  String get notifVerificationApproved;
+
+  /// No description provided for @notifVerificationRejected.
+  ///
+  /// In en, this message translates to:
+  /// **'Your account has been suspended — see CNIC and phone'**
+  String get notifVerificationRejected;
+
   /// No description provided for @navDirectory.
   ///
   /// In en, this message translates to:

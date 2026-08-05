@@ -14,6 +14,10 @@ import 'package:trust_hire/services/job_repository.dart';
 import 'package:trust_hire/app/bid_controller.dart';
 import 'package:trust_hire/app/profile_controller.dart';
 import 'package:trust_hire/app/wallet_controller.dart';
+import 'package:trust_hire/app/rating_controller.dart';
+import 'package:trust_hire/app/premium_controller.dart';
+import 'package:trust_hire/app/verification_controller.dart';
+import 'package:trust_hire/app/notification_controller.dart';
 import 'package:trust_hire/services/bid_repository.dart';
 import 'package:trust_hire/services/local_store.dart';
 import 'package:trust_hire/services/media_store.dart';
@@ -175,6 +179,20 @@ void main() {
             ChangeNotifierProvider(
               create: (_) => WalletController(store)..load(),
             ),
+            // The Activity screen leads with the Updates tab from 0.17.0, and
+            // the feed is derived from these four.
+            ChangeNotifierProvider(
+              create: (_) => RatingController(store)..load(),
+            ),
+            ChangeNotifierProvider(
+              create: (_) => PremiumController(store)..load(),
+            ),
+            ChangeNotifierProvider(
+              create: (_) => VerificationController(store)..load(),
+            ),
+            ChangeNotifierProvider(
+              create: (_) => NotificationController(store)..load(),
+            ),
             Provider<MediaStore>.value(value: media),
           ],
           child: MaterialApp(
@@ -190,9 +208,21 @@ void main() {
       }
     }
 
+    /// Moves to the tab named by [label].
+    ///
+    /// Every test below was written when Saved was the first tab and the
+    /// screen opened on it. 0.17.0 put Updates in front — the destination now
+    /// carries a badge, and tapping a badge must land on the thing it counted
+    /// — so a test about saved jobs has to say so.
+    Future<void> openTab(WidgetTester tester, String label) async {
+      await tester.tap(find.textContaining(label));
+      await tester.pumpAndSettle();
+    }
+
     testWidgets('says what to do when nothing is saved', (tester) async {
       final (jobs, media, saved) = await build();
       await pump(tester, jobs, media, saved, const MyJobsScreen());
+      await openTab(tester, strings.savedTab);
 
       expect(find.text(strings.noSavedJobs), findsOneWidget);
       expect(find.text(strings.noSavedJobsMessage), findsOneWidget);
@@ -206,6 +236,7 @@ void main() {
       await saved.toggle(job.id);
 
       await pump(tester, jobs, media, saved, const MyJobsScreen());
+      await openTab(tester, strings.savedTab);
 
       expect(find.text(job.displayTitle(strings)), findsOneWidget);
     });
@@ -215,12 +246,13 @@ void main() {
       await jobs.saveJob(job('mine', isLocal: true));
 
       await pump(tester, jobs, media, saved, const MyJobsScreen());
+      await openTab(tester, strings.savedTab);
 
       // Nothing saved, so the saved tab is empty …
       expect(find.text(strings.noSavedJobs), findsOneWidget);
 
       // … while the posted tab has the job.
-      await tester.tap(find.textContaining(strings.postedTab));
+      await openTab(tester, strings.postedTab);
       await tester.pumpAndSettle();
       expect(find.text('Job mine'), findsOneWidget);
     });
@@ -233,6 +265,7 @@ void main() {
       await saved.toggle('gone-for-good');
 
       await pump(tester, jobs, media, saved, const MyJobsScreen());
+      await openTab(tester, strings.savedTab);
 
       expect(find.text(strings.savedJobGone), findsOneWidget);
     });

@@ -68,6 +68,15 @@ class SeedLoader {
         createdAt: _ago(json, now),
         message: json['message'] as String?,
         status: BidStatus.fromId(json['status'] as String?),
+        // Null while the offer is still standing. The generator writes it only
+        // for bids the hirer actually decided on.
+        decidedAt: json['decidedHoursAgo'] == null
+            ? null
+            : now.subtract(
+                Duration(
+                  minutes: ((json['decidedHoursAgo'] as num) * 60).round(),
+                ),
+              ),
       );
     }).toList(growable: false);
   }
@@ -262,6 +271,7 @@ class SeedLoader {
   Job _jobFromSeed(Map<String, dynamic> json, DateTime now) {
     final scheduled = _resolveScheduled(json, now);
     final createdHoursAgo = (json['createdHoursAgo'] as num?)?.toDouble() ?? 24;
+    final movedHoursAgo = (json['statusChangedHoursAgo'] as num?)?.toDouble();
 
     final durationSeconds = (json['voiceNoteSeconds'] as num?)?.toDouble();
 
@@ -271,6 +281,11 @@ class SeedLoader {
       createdAt: now.subtract(
         Duration(minutes: (createdHoursAgo * 60).round()),
       ),
+      // Null on a job that has never moved. `lastActivityAt` falls back to
+      // `createdAt` there, so a still-open job is not dated twice.
+      statusChangedAt: movedHoursAgo == null
+          ? null
+          : now.subtract(Duration(minutes: (movedHoursAgo * 60).round())),
       title: json['title'] as String?,
       // Seed files may give a single `type` or a `tags` list; both are read
       // so the demo data did not have to be rewritten wholesale.

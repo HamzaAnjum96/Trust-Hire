@@ -4,6 +4,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:trust_hire/app/account_controller.dart';
 import 'package:trust_hire/app/admin_controller.dart';
+import 'package:trust_hire/features/notifications/notification_rules.dart';
+import 'package:trust_hire/models/notification.dart';
 import 'package:trust_hire/app/app.dart';
 import 'package:trust_hire/app/bid_controller.dart';
 import 'package:trust_hire/app/bootstrap.dart';
@@ -266,6 +268,68 @@ void main() {
         found.length,
         lessThan(premium.directory().length),
         reason: 'a search that returns everything is not a search',
+      );
+    });
+  });
+
+  group('stop 5b — what the app tells you', () {
+    testWidgets('a worker with history has a feed, including a loss',
+        (tester) async {
+      // The script puts the presenter on Usman and says he is told when he
+      // wins *and* when he loses. Both have to actually be reachable from the
+      // seed, or the stop is a claim about an empty screen.
+      final store = await ready();
+      final jobs = JobController(
+        JobRepository(store, MediaStore(store)),
+      )..load();
+      final bids = BidController(BidRepository(store))..load();
+      final ratings = RatingController(store)..load();
+      await tester.pump();
+
+      const rules = NotificationRules();
+      final feed = rules.forUser(
+        'user-009',
+        jobs: jobs.jobs,
+        bids: bids.bids,
+        ratings: ratings.all,
+        now: DateTime.now(),
+      );
+
+      expect(feed, isNotEmpty, reason: 'the stop opens on an empty screen');
+      expect(
+        feed.map((e) => e.kind),
+        contains(NotificationKind.offerPassedOver),
+        reason: 'the script promises he is told when he loses',
+      );
+      expect(
+        feed.map((e) => e.kind),
+        contains(NotificationKind.offerAccepted),
+      );
+    });
+
+    testWidgets('and it reaches nobody it should not', (tester) async {
+      // The one line in the feed that is a privacy boundary rather than a
+      // feature. Checked here as well as in the unit tests because the seed is
+      // the only place it runs against real data.
+      final store = await ready();
+      final jobs = JobController(
+        JobRepository(store, MediaStore(store)),
+      )..load();
+      final bids = BidController(BidRepository(store))..load();
+      await tester.pump();
+
+      final stranger = const NotificationRules().forUser(
+        'nobody-at-all',
+        jobs: jobs.jobs,
+        bids: bids.bids,
+        ratings: const [],
+        now: DateTime.now(),
+      );
+
+      expect(
+        stranger,
+        isEmpty,
+        reason: 'somebody with no part in any job heard about 183 of them',
       );
     });
   });

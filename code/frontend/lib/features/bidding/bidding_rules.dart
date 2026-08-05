@@ -123,15 +123,20 @@ class BiddingRules {
   /// Returns every bid on the job with its new status, so the caller writes
   /// one consistent set rather than mutating them one at a time — a job with
   /// two accepted bids is a state the app must not be able to reach.
-  List<Bid> accept(Bid accepted, {required List<Bid> allBidsOnJob}) {
+  List<Bid> accept(Bid accepted, {required List<Bid> allBidsOnJob, DateTime? at}) {
+    // One timestamp for the whole decision: the winner and everybody passed
+    // over were decided in the same act, and dating them separately would be
+    // a lie about how the hirer works.
+    final decidedAt = at ?? DateTime.now();
+
     return List.unmodifiable([
       for (final bid in allBidsOnJob)
         if (bid.id == accepted.id)
-          bid.copyWith(status: BidStatus.accepted)
+          bid.copyWith(status: BidStatus.accepted, decidedAt: decidedAt)
         else if (bid.status == BidStatus.withdrawn)
           bid
         else
-          bid.copyWith(status: BidStatus.passedOver),
+          bid.copyWith(status: BidStatus.passedOver, decidedAt: decidedAt),
     ]);
   }
 }

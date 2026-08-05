@@ -12,6 +12,63 @@ that heading to the version and date, and open a fresh `[Unreleased]`.
 
 ## [Unreleased]
 
+### 0.17.0 — The app tells you what happened
+
+Until now nothing in Trust Hire ever told anybody anything. A worker whose
+offer was accepted found out by opening the app and going to look; a worker who
+lost found out by the job quietly going away. That is the largest single gap
+between this and a live product, and it needs no backend to close.
+
+#### Added
+
+- **A notification feed**, as the first tab of Activity, with a count on the
+  navigation destination. Offers received and decided, work started and
+  finished, ratings, commission, top-ups, the debt lockout, a directory
+  subscription about to lapse, a verification decision.
+- **A worker is told when they lose.** `Another offer was chosen for this job`,
+  said plainly. It is the entry a product is tempted to leave out, and leaving
+  it out means somebody refreshes a job for three days to find out by omission.
+- **`Job.statusChangedAt`** — when a job last moved along its lifecycle. The
+  feed needs to date "finished" and had nothing to date it with.
+- **`Bid.decidedAt`** — when the hirer chose, which is not when the offer was
+  made. The winner and everybody passed over share one timestamp, because they
+  were decided in one act.
+
+#### How it works, and why
+
+**The feed is derived, never recorded.** The obvious design is an event table
+each controller appends to. It was rejected because this codebase has been
+bitten three times by exactly that shape — a write nobody makes is invisible,
+and the test passes because it seeds the table by hand. The sync layer shipped
+with a full test file and no caller; `reaches` was tested for two sprints while
+nothing could reach it.
+
+`NotificationRules` is a pure function over the jobs, bids, ratings and ledger
+already on the device. Accept a bid anywhere — from the sheet, from a test,
+from a screen nobody has written yet — and the worker is told, because being
+told is the same fact as the bid being accepted.
+
+The cost is real: there is no per-entry read state, only "seen up to here",
+which is the single timestamp per account that `NotificationController` stores.
+Plenty of shipped apps work exactly this way.
+
+**One line is the whole privacy boundary.** The feed is assembled from every
+job and bid on the device, because that is all a local-first app has, so the
+filter deciding who hears what is the only thing standing between this and a
+public activity log of the marketplace. It has a mutation in the sweep.
+
+**A demo account does not open on a badge reading 47.** Switching to an account
+for the first time starts its clock at that moment; the two years of seeded
+history behind it did not happen while anybody was watching.
+
+#### Changed
+
+- Activity leads with Updates rather than Saved. The destination now carries a
+  badge, and tapping a badge has to land on the thing it counted.
+- The seed records when each job moved and when each offer was decided, so a
+  demo account's feed reads as a history rather than as everything at once.
+- The sweep is at 47 promises.
+
 ### 0.16.0 — Mode B becomes location-first
 
 The directory was the one screen in a location-first product that ignored

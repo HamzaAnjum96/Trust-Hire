@@ -12,7 +12,9 @@ import '../features/jobs/my_jobs_screen.dart';
 import '../features/directory/directory_screen.dart';
 import '../features/map/map_screen.dart';
 import '../features/profile/profile_screen.dart';
+import '../features/notifications/updates_tab.dart';
 import '../l10n/app_localizations.dart';
+import 'notification_controller.dart';
 
 /// The navigation scaffold.
 ///
@@ -37,7 +39,7 @@ class _AppShellState extends State<AppShell> {
   ///
   /// Built per call rather than held as a constant, because the labels change
   /// with the interface language.
-  List<_Destination> _destinations(AppStrings strings) => [
+  List<_Destination> _destinations(AppStrings strings, int unseen) => [
     _Destination(Icons.map_outlined, Icons.map, strings.navMap),
     _Destination(Icons.work_outline, Icons.work, strings.navJobs),
     // Mode B, and a destination rather than a filter on the map. Section 9
@@ -48,7 +50,16 @@ class _AppShellState extends State<AppShell> {
     // "Activity", not "Saved": the screen behind it has always held saved,
     // posted and offered jobs, and naming it after one of its three tabs sent
     // anyone looking for the others to the wrong place.
-    _Destination(Icons.bookmark_border, Icons.bookmark, strings.navActivity),
+    _Destination(
+      Icons.bookmark_border,
+      Icons.bookmark,
+      strings.navActivity,
+      // **The reason to look.** Everything else in this bar is somewhere you
+      // decide to go; this is the one that can have news in it, and without a
+      // count a worker has no way to know their offer was accepted short of
+      // opening the app and hunting.
+      badge: unseen,
+    ),
     // "Profile", not "Settings": role and trades decide what the rest of the
     // app shows, which is not a setting — and a marketplace with no profile
     // destination has nowhere to put trust signals later.
@@ -80,6 +91,12 @@ class _AppShellState extends State<AppShell> {
     final strings = AppStrings.of(context);
     final layout = LayoutSize.of(context);
 
+    // Derived from the same rules the Updates tab uses, so the number on the
+    // badge and the number of highlighted rows behind it cannot disagree.
+    final unseen = context.watch<NotificationController>().unseen(
+      buildFeed(context),
+    );
+
     final body = IndexedStack(
       index: _index,
       children: const [
@@ -101,7 +118,7 @@ class _AppShellState extends State<AppShell> {
           children: [
             _NavigationRail(
               index: _index,
-              destinations: _destinations(strings),
+              destinations: _destinations(strings, unseen),
               onSelected: (value) => setState(() => _index = value),
               // Extended labels need the room; a tablet does not have it.
               extended: layout == LayoutSize.expanded,
@@ -130,7 +147,8 @@ class _AppShellState extends State<AppShell> {
         selectedIndex: _index,
         onDestinationSelected: (value) => setState(() => _index = value),
         destinations: [
-          for (final destination in _destinations(strings)) destination.forBar,
+          for (final destination in _destinations(strings, unseen))
+            destination.forBar,
         ],
       ),
     );
@@ -268,21 +286,37 @@ class _NavigationRail extends StatelessWidget {
 
 /// One place the app can be, in whichever navigation control is on screen.
 class _Destination {
-  const _Destination(this.icon, this.selectedIcon, this.label);
+  const _Destination(
+    this.icon,
+    this.selectedIcon,
+    this.label, {
+    this.badge = 0,
+  });
 
   final IconData icon;
   final IconData selectedIcon;
   final String label;
 
+  /// How many unseen things are waiting behind this destination. Zero draws
+  /// nothing — an empty badge is a decoration that teaches people to ignore
+  /// badges.
+  final int badge;
+
+  /// Both navigation controls take a plain icon widget, so the badge is
+  /// applied once here rather than at each of the two call sites.
+  Widget _wrap(IconData glyph) => badge == 0
+      ? Icon(glyph)
+      : Badge.count(count: badge, child: Icon(glyph));
+
   NavigationDestination get forBar => NavigationDestination(
-    icon: Icon(icon),
-    selectedIcon: Icon(selectedIcon),
+    icon: _wrap(icon),
+    selectedIcon: _wrap(selectedIcon),
     label: label,
   );
 
   NavigationRailDestination get forRail => NavigationRailDestination(
-    icon: Icon(icon),
-    selectedIcon: Icon(selectedIcon),
+    icon: _wrap(icon),
+    selectedIcon: _wrap(selectedIcon),
     label: Text(label),
   );
 }

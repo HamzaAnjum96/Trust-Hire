@@ -231,6 +231,19 @@ nobody. A hirer can still ask to see everyone, and a hirer who has declined
 location sees everyone by default: **declining a permission should cost you
 sorting, not access.**
 
+**The app tells you what happened.** Activity leads with a feed of everything
+that concerns you — offers in and decided, work started and finished, ratings,
+commission, the debt lockout, a listing about to lapse — and the navigation
+destination carries a count. **It is derived, never recorded**: a pure function
+over the jobs, bids, ratings and ledger already stored, rather than an event
+table each controller has to remember to append to. A write nobody makes is
+invisible, and this repository has been caught by that three times. The trade
+is that there is no per-entry read state, only "seen up to here".
+
+The filter deciding who hears about a job is the whole privacy boundary — the
+feed is built from *every* job and bid on the device, because that is all a
+local-first app has — so it carries a mutation in the sweep.
+
 **Demo accounts.** There is no sign-in — Section 13a excludes authentication
 from the POC — but the device can be any of seven people, switched from the map
 header, the app bar or the profile screen. Switching changes who owns which
@@ -292,6 +305,7 @@ code/frontend/
 │   │   ├── premium/      ← subscriptions and the hirer discount, as rules
 │   │   ├── admin/        ← approvals, disputes, overrides and the audit log
 │   │   ├── verification/ ← Section 2: the CNIC, the phone, the name check
+│   │   ├── notifications/← the derived feed: what happened, to whom
 │   │   ├── sync/         ← the outbox, and who wins when copies disagree
 │   │   ├── wallet/       ← tokens, commission, top-up
 │   │   ├── account/      ← the demo account switcher

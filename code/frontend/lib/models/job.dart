@@ -81,6 +81,7 @@ class Job {
     this.isLocal = false,
     this.bookedWorkerId,
     this.listedFare,
+    this.statusChangedAt,
   });
 
   final String id;
@@ -157,7 +158,8 @@ class Job {
   /// Separate from [copyWith] on purpose: editing a job and moving it forward
   /// are different acts, and the edit form must not be able to do the second
   /// by accident.
-  Job withStatus(JobStatus next) => _rebuild(status: next);
+  Job withStatus(JobStatus next, {DateTime? at}) =>
+      _rebuild(status: next, at: at);
 
   /// Where this is, in words — "Gulshan-e-Iqbal, Karachi".
   ///
@@ -173,6 +175,19 @@ class Job {
 
   /// When the work needs to happen. Null means "no particular time".
   final DateTime? scheduledTime;
+
+  /// When this job last moved along its lifecycle.
+  ///
+  /// Null on a job that has never moved — [createdAt] is the answer then, and
+  /// storing a copy of it would be a second source of truth for the same fact.
+  ///
+  /// Added for the notification feed, which has to say *when* an offer was
+  /// accepted or a job finished, and had nothing to date those with. It also
+  /// gives the lifecycle panel "completed yesterday" instead of nothing.
+  final DateTime? statusChangedAt;
+
+  /// When this job last changed in any way a person would notice.
+  DateTime get lastActivityAt => statusChangedAt ?? createdAt;
 
   /// Asset path (seeded jobs) or on-device file path (locally created ones).
   final String? voiceNotePath;
@@ -364,7 +379,12 @@ class Job {
   /// Every field carried across, with a few replaced. Private, so the only
   /// ways to change a job from outside are [copyWith] for an edit and the
   /// named transitions for everything else.
-  Job _rebuild({int? agreedFare, String? acceptedWorkerId, JobStatus? status}) {
+  Job _rebuild({
+    int? agreedFare,
+    String? acceptedWorkerId,
+    JobStatus? status,
+    DateTime? at,
+  }) {
     return Job(
       id: id,
       location: location,
@@ -389,6 +409,11 @@ class Job {
       isLocal: isLocal,
       bookedWorkerId: bookedWorkerId,
       listedFare: listedFare,
+      // Only a real move sets this. An edit goes through `copyWith`, which
+      // leaves it alone: changing the title is not progress.
+      statusChangedAt: status == null || status == this.status
+          ? statusChangedAt
+          : (at ?? DateTime.now()),
     );
   }
 
@@ -449,6 +474,7 @@ class Job {
       isLocal: isLocal,
       bookedWorkerId: bookedWorkerId,
       listedFare: listedFare,
+      statusChangedAt: statusChangedAt,
     );
   }
 
@@ -458,6 +484,9 @@ class Job {
       id: json['id'] as String,
       location: JobLocation.fromJson(json['location'] as Map<String, dynamic>),
       createdAt: DateTime.parse(json['createdAt'] as String),
+      statusChangedAt: json['statusChangedAt'] == null
+          ? null
+          : DateTime.parse(json['statusChangedAt'] as String),
       title: json['title'] as String?,
       // Jobs written before tags existed carry a single `type`; read it so a
       // user's existing work is not lost on upgrade.
@@ -502,6 +531,7 @@ class Job {
     'id': id,
     'location': location.toJson(),
     'createdAt': createdAt.toIso8601String(),
+    'statusChangedAt': statusChangedAt?.toIso8601String(),
     'title': title,
     'tags': tags.map((t) => t.id).toList(),
     'geofenceMetres': geofenceMetres,

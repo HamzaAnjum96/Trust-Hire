@@ -59,6 +59,11 @@ class VerificationController extends ChangeNotifier {
 
   Verification get mine => _reviews[_userId]?.verification ?? const Verification();
 
+  /// The whole record for this account, decision included, or null if the
+  /// platform has never looked at them. The notification feed needs the
+  /// decision *and* when it was made; [status] alone gives neither.
+  AccountReview? get review => _reviews[_userId];
+
   ReviewStatus get status =>
       _reviews[_userId]?.status ?? ReviewStatus.pending;
 

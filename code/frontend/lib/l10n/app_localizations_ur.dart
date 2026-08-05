@@ -1105,6 +1105,96 @@ class AppStringsUr extends AppStrings {
   String get bookedFrom => 'ڈائریکٹری سے بک کیا گیا';
 
   @override
+  String get navUpdates => 'اطلاعات';
+
+  @override
+  String get updatesTab => 'اطلاعات';
+
+  @override
+  String get updatesTitle => 'کیا ہوا';
+
+  @override
+  String get updatesEmpty => 'ابھی کچھ نہیں';
+
+  @override
+  String get updatesEmptyMessage =>
+      'پیشکشیں، فیصلے اور ادائیگیاں یہاں آتی رہیں گی۔ کام لگائیں یا پیشکش کریں تو سلسلہ شروع ہو گا۔';
+
+  @override
+  String updatesNew(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count نئی',
+      one: '1 نئی',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String notifOfferReceived(String name, String amount) {
+    return '$name نے $amount کی پیشکش کی';
+  }
+
+  @override
+  String notifOfferAccepted(String amount) {
+    return 'آپ کی $amount کی پیشکش قبول ہو گئی';
+  }
+
+  @override
+  String get notifOfferPassedOver => 'اس کام کے لیے کسی اور کی پیشکش چنی گئی';
+
+  @override
+  String get notifJobStarted => 'کام شروع ہو گیا';
+
+  @override
+  String get notifJobCompleted => 'کام مکمل ہوا';
+
+  @override
+  String notifJobCompletedFare(String amount) {
+    return 'کام $amount پر مکمل ہوا';
+  }
+
+  @override
+  String get notifJobCancelled => 'یہ کام منسوخ کر دیا گیا';
+
+  @override
+  String get notifJobExpired => 'آپ کے کام کا وقت گزر گیا اور کوئی نہیں ملا';
+
+  @override
+  String notifRatingReceived(int stars) {
+    return 'آپ کو 5 میں سے $stars ملے';
+  }
+
+  @override
+  String notifCommissionCharged(String amount) {
+    return '$amount کمیشن وصول کیا گیا';
+  }
+
+  @override
+  String notifWalletCredited(String amount) {
+    return 'آپ کے بٹوے میں $amount شامل ہوئے';
+  }
+
+  @override
+  String get notifWalletLocked => 'جب تک بقایا ادا نہیں ہوتا، پیشکش بند ہے';
+
+  @override
+  String get notifSubscriptionExpiring =>
+      'آپ کی ڈائریکٹری فہرست جلد ختم ہو رہی ہے';
+
+  @override
+  String get notifSubscriptionLapsed =>
+      'آپ کی ڈائریکٹری فہرست ختم ہو گئی — اب لوگ آپ کو نہیں ڈھونڈ سکتے';
+
+  @override
+  String get notifVerificationApproved => 'آپ کا اکاؤنٹ منظور ہو گیا';
+
+  @override
+  String get notifVerificationRejected =>
+      'آپ کا اکاؤنٹ معطل کر دیا گیا — شناختی کارڈ اور فون دیکھیں';
+
+  @override
   String get navDirectory => 'ڈائریکٹری';
 
   @override
