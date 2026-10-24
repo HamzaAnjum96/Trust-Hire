@@ -54,6 +54,9 @@ And the map had been showing a grey "API KEY REQUIRED" placard on every tile.
   While a payment is open the sheet cannot be dismissed — its poll is what
   turns Stripe's confirmation into tokens — and "Stop waiting" looks once more
   before letting go, so paying and giving up a second too soon still credits.
+  Verified against a real Stripe test account: a PKR session, paid with the
+  test card on Stripe's page, credited in the app — Rs. 0 to Rs. 1,000, one
+  ledger line.
 - **Profile → Dev services** — the dev server's address, and what it has
   switched on. Empty by default, and empty means no new network calls.
 - **`0005_payments.sql`** — `wallet_entries.payment_id`, unique across every

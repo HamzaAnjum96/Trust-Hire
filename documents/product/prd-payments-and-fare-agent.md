@@ -1,6 +1,7 @@
 # PRD — Stripe payments and the AI fare agent
 
-**Status:** built in 0.19.0, test mode and local model only.
+**Status:** built in 0.19.0, test mode and local model only. Verified end to
+end against a real Stripe test account and a local Qwen2.5 1.5B.
 **Asked for by:** the project evaluators — "Stripe integration, and an AI agent
 for fare recommendation."
 
@@ -57,8 +58,10 @@ has the set-up steps and the rules in detail.
 ## Demonstrating it (about five minutes)
 
 Before: `ollama pull qwen2.5:3b`, a Stripe test key in
-`code/backend/dev_server/.env`, `python3 code/backend/dev_server/server.py`,
-and `flutter run -d chrome --dart-define=DEV_SERVER=http://localhost:8787`.
+`code/backend/dev_server/.env` (copied from `.env.example`; it is git-ignored,
+and must stay that way — never commit a key, even a test one),
+`python3 code/backend/dev_server/server.py`, and
+`flutter run -d chrome --dart-define=DEV_SERVER=http://localhost:8787`.
 
 1. **Profile → Dev services.** Show "Connected", "Payments: Stripe test mode"
    and "Fare agent: qwen2.5:3b". This is the whole configuration.
@@ -72,6 +75,8 @@ and `flutter run -d chrome --dart-define=DEV_SERVER=http://localhost:8787`.
    degrades; it does not break.
 4. **Switch to Usman Raza → Wallet → Add tokens.** The sheet says Stripe test
    mode and names the test card. Pay Rs. 1,000 with `4242 4242 4242 4242`.
+   On Stripe's page, **untick "Save my information with Link"** first —
+   otherwise Stripe asks for a phone number before it will take the payment.
    Back in the app the balance moves within a few seconds.
 5. **Show the guard** if asked how the AI is kept honest: the test
    `a misplaced zero cannot get through` in `test/fare_advice_test.dart`, and

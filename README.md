@@ -262,7 +262,11 @@ English even when asked in Urdu; 3B and 7B do better.
 **Stripe.** Test mode only, enforced rather than advised: the server refuses
 to start payments with a live key. The top-up sheet opens Stripe Checkout in
 the browser and polls the dev server until Stripe says the session is paid
-(card `4242 4242 4242 4242`, any future date, any CVC). Three rules hold it up:
+(card `4242 4242 4242 4242`, any future date, any CVC — and untick "Save my
+information with Link" on Stripe's page, or it asks for a phone number first).
+Verified end to end against a real Stripe test account: Stripe takes the
+session in PKR, the test card pays it on Stripe's own page, and the app's poll
+credits the wallet. Three rules hold it up:
 
 - **The tokens credited are what Stripe charged**, read back from the session
   and cross-checked against `amount_total` — never the number the app asked
