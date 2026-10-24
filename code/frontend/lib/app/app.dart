@@ -33,9 +33,12 @@ import 'settings_controller.dart';
 
 /// Application root — wires up the controllers and the themes.
 class TrustHireApp extends StatelessWidget {
-  const TrustHireApp({super.key, required this.store});
+  const TrustHireApp({super.key, required this.store, this.location});
 
   final LocalStore store;
+
+  /// The address the app was opened at, for tests. Null means the real one.
+  final Uri? location;
 
   @override
   Widget build(BuildContext context) {
@@ -160,7 +163,7 @@ class TrustHireApp extends StatelessWidget {
             theme: BrandTheme.light,
             darkTheme: BrandTheme.dark,
             themeMode: settings.themeMode,
-            home: const _Entry(),
+            home: _Entry(location: location),
           );
         },
       ),
@@ -170,13 +173,15 @@ class TrustHireApp extends StatelessWidget {
 
 /// Chooses between the intro and the app itself.
 class _Entry extends StatelessWidget {
-  const _Entry();
+  const _Entry({this.location});
+
+  final Uri? location;
 
   @override
   Widget build(BuildContext context) {
     final settings = context.watch<SettingsController>();
 
-    if (settings.introSeen) return const AppShell();
+    if (settings.introSeen) return AppShell(location: location);
 
     return OnboardingScreen(
       location: context.read<LocationController>(),

@@ -595,5 +595,7 @@
   "devServicesAgentOn": "کرایہ ایجنٹ: {model}",
   "devServicesAgentNoModel": "کرایہ ایجنٹ: {model} ابھی ڈاؤن لوڈ نہیں ہوا",
   "devServicesAgentOff": "کرایہ ایجنٹ: بند — کرایہ اسی ڈیوائس پر نکالا جاتا ہے",
-  "refusalPaymentCredited": "یہ ادائیگی پہلے ہی ٹوکن میں بدلی جا چکی تھی۔"
+  "refusalPaymentCredited": "یہ ادائیگی پہلے ہی ٹوکن میں بدلی جا چکی تھی۔",
+  "topUpStripeLinkNotice": "Stripe ٹیسٹ موڈ۔ کوئی اصلی رقم منتقل نہیں ہوتی — کارڈ 4242 4242 4242 4242، کوئی بھی آنے والی تاریخ اور کوئی بھی CVC استعمال کریں، اور “Save my information with Link” کا نشان ہٹا دیں۔ ادائیگی ہوتے ہی Stripe آپ کو یہیں واپس لے آئے گا۔",
+  "topUpStripeLinkCaveat": "اس سائٹ پر ادائیگی کی تصدیق Stripe کے آپ کو واپس بھیجنے سے ہوتی ہے، کسی سرور کی جانچ سے نہیں۔ بٹوہ ویسے بھی صرف اسی براؤزر میں رہتا ہے۔"
 }

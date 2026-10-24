@@ -204,6 +204,7 @@ exactly as before.
 code/backend/dev_server/
 ├── server.py           ← standard library only: python3 server.py, nothing to install
 ├── payments.py         ← Stripe Checkout over the REST API; webhook signatures
+├── payment_links.py    ← makes the Payment Links the GitHub Pages site sells with
 ├── fare_agent.py       ← the agent loop, its tools, and the guard on its answer
 ├── .env.example        ← copy to .env (git-ignored) and fill in
 └── test_dev_server.py  ← python3 -m unittest discover code/backend/dev_server
@@ -278,6 +279,40 @@ credits the wallet. Three rules hold it up:
 - **Webhooks are verified before they are believed.** `/payments/webhook`
   checks Stripe's signature and timestamp; `stripe listen --forward-to
   localhost:8787/payments/webhook` prints the secret to put in `.env`.
+
+**Stripe on GitHub Pages, with no server.** The deployed site cannot hold a
+secret key — everything in it is public — and creating a Checkout Session needs
+one. So the site sells tokens through **Stripe Payment Links**: five public
+test-mode checkout pages, one per package, made once by `payment_links.py`
+on a developer's machine with the key and listed in
+`lib/features/wallet/stripe_links.dart`. They are not secrets; Stripe made
+them to be shared. "Pay Rs. 1,000 with Stripe" notes the top-up and leaves for
+the link in the same tab; Stripe sends the buyer back to the site with
+`?topup=1000&session=cs_test_…`, and `AppShell` credits it and tidies the
+address bar.
+
+What that cannot do is ask Stripe whether the session was paid — that also
+takes the secret key. So a return is believed only as far as the browser it
+lands in can vouch for it (`StripeReturn`): this browser started a top-up of
+exactly that amount, for that account, within a day; the session id is a test
+one; and it has not been credited before. The sheet says so in a line of its
+own. For a demo whose wallet lives in the browser anyway, that is no weaker
+than the simulation it replaces — anyone who wants free tokens can already tap
+for them — but it is not what a real deployment does, which is check the
+session on a server, as the dev server path above already does. The dev
+server, when one is set, wins over the links.
+
+```bash
+# After moving the site or switching Stripe account — reuses what exists:
+python3 code/backend/dev_server/payment_links.py --site https://<you>.github.io/Trust-Hire/
+#   → paste the printed block into lib/features/wallet/stripe_links.dart
+```
+
+The links are offered only on the web, and only on the origin they send
+people back to: a payment started on a phone or on `localhost` would return to
+a browser that never started it. Those builds keep the simulation, or use the
+dev server. Verified end to end on the deployed site: the link opens, the test
+card pays, Stripe sends the browser back, and the wallet shows the tokens.
 
 ### The app (`code/frontend/`)
 
@@ -407,7 +442,8 @@ code/frontend/
 │   │   ├── messaging/    ← the thread attached to a job, once it has a worker
 │   │   ├── notifications/← the derived feed: what happened, to whom
 │   │   ├── sync/         ← the outbox, and who wins when copies disagree
-│   │   ├── wallet/       ← tokens, commission, top-up (simulated or Stripe)
+│   │   ├── wallet/       ← tokens, commission, top-up (simulated, or Stripe by
+│   │   │                    dev server or by Payment Link)
 │   │   ├── fare_advice/  ← "Suggest a fare": the evidence, the guard, the agent
 │   │   ├── account/      ← the demo account switcher
 │   │   ├── profile/      ← role, trades, and the app's settings
@@ -417,7 +453,8 @@ code/frontend/
 │   │                    listings, Verification
 │   ├── services/     ← local storage, seed loading, repositories
 │   │   ├── backend/  ← the RemoteApi seam, and the mock behind it
-│   │   └── dev_services.dart ← the optional dev server, from the app's side
+│   │   ├── dev_services.dart ← the optional dev server, from the app's side
+│   │   └── browser_location.dart ← the address bar, on the web build only
 │   └── widgets/      ← shared UI (status pills, skeletons, empty states,
 │                        meta chips, fading scroll rows)
 ├── test/
@@ -520,7 +557,7 @@ The first two gate the deploy.
 proves the app behaves as the suite describes; it cannot prove the suite
 describes anything, because a check aimed at a case that also violates a
 neighbouring rule passes whether or not the rule it names still exists. The
-sweep breaks each of the 55 load-bearing promises in turn — the fare lock, the
+sweep breaks each of the 62 load-bearing promises in turn — the fare lock, the
 5% commission, the debt lockout, the ratings asymmetry, the visibility rule,
 the location reveal, the CNIC mask, the audit log's write-first ordering, a
 Stripe payment credited once, the fare agent held to the evidence — and

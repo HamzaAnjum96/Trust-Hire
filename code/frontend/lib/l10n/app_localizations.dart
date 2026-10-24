@@ -3673,6 +3673,18 @@ abstract class AppStrings {
   /// In en, this message translates to:
   /// **'That payment had already been turned into tokens.'**
   String get refusalPaymentCredited;
+
+  /// Explains a Stripe Payment Link top-up on the GitHub Pages site
+  ///
+  /// In en, this message translates to:
+  /// **'Stripe test mode. No real money moves — pay with card 4242 4242 4242 4242, any future date and any CVC, and untick “Save my information with Link”. Stripe brings you back here once it is paid.'**
+  String get topUpStripeLinkNotice;
+
+  /// What a Payment Link top-up does not establish
+  ///
+  /// In en, this message translates to:
+  /// **'On this site the payment is confirmed by Stripe sending you back, not checked by a server. The wallet only lives in this browser either way.'**
+  String get topUpStripeLinkCaveat;
 }
 
 class _AppStringsDelegate extends LocalizationsDelegate<AppStrings> {

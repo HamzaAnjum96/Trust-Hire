@@ -601,6 +601,69 @@ MUTATIONS = [
         replace="    final basis = [...agreed, ...asked];",
         tests=["test/fare_advice_test.dart"],
     ),
+
+    # --- 0.19.1: Stripe on GitHub Pages, with no server ----------------------
+    # Nothing on a static site can ask Stripe whether a session was paid, so a
+    # return is believed only as far as the browser it lands in can vouch for
+    # it. Each of these is one of the things it vouches for.
+    Mutation(
+        name="stripe-return-needs-a-top-up-started-here",
+        promise="a return address nobody in this browser used credits nothing",
+        path="lib/features/wallet/stripe_return.dart",
+        find="""    if (pending == null ||
+        now.difference(pending.startedAt) > PendingTopUp.maxAge) {""",
+        replace="""    if (pending == null && false) {""",
+        tests=["test/payments_test.dart"],
+    ),
+    Mutation(
+        name="stripe-return-expires",
+        promise="a top-up started more than a day ago no longer counts",
+        path="lib/features/wallet/stripe_return.dart",
+        find="""    if (pending == null ||
+        now.difference(pending.startedAt) > PendingTopUp.maxAge) {""",
+        replace="""    if (pending == null) {""",
+        tests=["test/payments_test.dart"],
+    ),
+    Mutation(
+        name="stripe-return-matches-the-amount",
+        promise="a return for one package does not credit another",
+        path="lib/features/wallet/stripe_return.dart",
+        find="    if (pending.tokens != tokens || pending.account != account) {",
+        replace="    if (pending.account != account) {",
+        tests=["test/payments_test.dart"],
+    ),
+    Mutation(
+        name="stripe-return-matches-the-account",
+        promise="a top-up started by one account is not credited to another",
+        path="lib/features/wallet/stripe_return.dart",
+        find="    if (pending.tokens != tokens || pending.account != account) {",
+        replace="    if (pending.tokens != tokens) {",
+        tests=["test/payments_test.dart"],
+    ),
+    Mutation(
+        name="stripe-return-is-test-money-only",
+        promise="a live session id is never read as a payment",
+        path="lib/features/wallet/stripe_return.dart",
+        find="""  static final _testSession = RegExp(r'^cs_test_[A-Za-z0-9]{1,250}$');""",
+        replace="""  static final _testSession = RegExp(r'^cs_[A-Za-z0-9_]{1,250}$');""",
+        tests=["test/payments_test.dart"],
+    ),
+    Mutation(
+        name="stripe-return-is-used-up",
+        promise="a pending top-up is spent by its return, so a reload finds nothing",
+        path="lib/app/wallet_controller.dart",
+        find="    await _store.remove(StoreKeys.pendingTopUp);",
+        replace="",
+        tests=["test/payments_test.dart"],
+    ),
+    Mutation(
+        name="stripe-links-only-where-they-come-back",
+        promise="a Payment Link is offered only on the site it returns to",
+        path="lib/features/wallet/stripe_links.dart",
+        find="      location.origin == Uri.parse(site).origin;",
+        replace="      true;",
+        tests=["test/payments_test.dart"],
+    ),
 ]
 
 

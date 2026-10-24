@@ -81,15 +81,17 @@ def _urlopen(request: urllib.request.Request, timeout: float) -> Tuple[int, byte
         return error.code, error.read()
 
 
-class StripeCheckout:
-    """Creates and reads Checkout Sessions for token top-ups."""
+class StripeApi:
+    """Stripe's REST API, with a test key and nothing else.
+
+    Shared by Checkout (`StripeCheckout`) and the Payment Links script
+    (`payment_links.py`), so the test-keys-only rule is checked in one place.
+    """
 
     def __init__(
         self,
         secret_key: str,
         *,
-        currency: str = "pkr",
-        public_url: str = "http://localhost:8787",
         api_base: str = "https://api.stripe.com",
         transport: Transport = _urlopen,
         timeout: float = 20.0,
@@ -98,18 +100,11 @@ class StripeCheckout:
         if problem:
             raise ValueError(problem)
         self._auth = "Basic " + base64.b64encode(f"{secret_key}:".encode()).decode()
-        self.currency = currency.lower()
-        self.public_url = public_url.rstrip("/")
         self.api_base = api_base.rstrip("/")
         self._transport = transport
         self._timeout = timeout
 
-    # Stripe takes PKR in paisa — it is a two-decimal currency there, even
-    # though nobody prices labour in paisa. 1 token is Rs. 1 (Section 11).
-    def _minor_units(self, tokens: int) -> int:
-        return tokens * 100
-
-    def _call(self, method: str, path: str, body: Optional[bytes] = None) -> dict:
+    def call(self, method: str, path: str, body: Optional[bytes] = None) -> dict:
         request = urllib.request.Request(
             f"{self.api_base}{path}",
             data=body,
@@ -135,6 +130,29 @@ class StripeCheckout:
             raise PaymentError(502, "stripe_refused", message)
         return payload
 
+
+class StripeCheckout(StripeApi):
+    """Creates and reads Checkout Sessions for token top-ups."""
+
+    def __init__(
+        self,
+        secret_key: str,
+        *,
+        currency: str = "pkr",
+        public_url: str = "http://localhost:8787",
+        api_base: str = "https://api.stripe.com",
+        transport: Transport = _urlopen,
+        timeout: float = 20.0,
+    ):
+        super().__init__(secret_key, api_base=api_base, transport=transport, timeout=timeout)
+        self.currency = currency.lower()
+        self.public_url = public_url.rstrip("/")
+
+    # Stripe takes PKR in paisa — it is a two-decimal currency there, even
+    # though nobody prices labour in paisa. 1 token is Rs. 1 (Section 11).
+    def _minor_units(self, tokens: int) -> int:
+        return tokens * 100
+
     def create(self, tokens: object, account: object) -> dict:
         """Opens a Checkout Session for [tokens] rupees of tokens."""
         if not isinstance(tokens, int) or isinstance(tokens, bool):
@@ -144,7 +162,7 @@ class StripeCheckout:
         if not isinstance(account, str) or not ACCOUNT_ID.match(account):
             raise PaymentError(400, "account_missing")
 
-        session = self._call(
+        session = self.call(
             "POST",
             "/v1/checkout/sessions",
             _form(
@@ -174,7 +192,7 @@ class StripeCheckout:
         if not SESSION_ID.match(session_id or ""):
             raise PaymentError(400, "not_a_test_session")
 
-        session = self._call(
+        session = self.call(
             "GET", f"/v1/checkout/sessions/{urllib.parse.quote(session_id)}"
         )
         return describe_session(session, currency=self.currency)

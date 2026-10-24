@@ -2221,4 +2221,12 @@ class AppStringsUr extends AppStrings {
   @override
   String get refusalPaymentCredited =>
       'یہ ادائیگی پہلے ہی ٹوکن میں بدلی جا چکی تھی۔';
+
+  @override
+  String get topUpStripeLinkNotice =>
+      'Stripe ٹیسٹ موڈ۔ کوئی اصلی رقم منتقل نہیں ہوتی — کارڈ 4242 4242 4242 4242، کوئی بھی آنے والی تاریخ اور کوئی بھی CVC استعمال کریں، اور “Save my information with Link” کا نشان ہٹا دیں۔ ادائیگی ہوتے ہی Stripe آپ کو یہیں واپس لے آئے گا۔';
+
+  @override
+  String get topUpStripeLinkCaveat =>
+      'اس سائٹ پر ادائیگی کی تصدیق Stripe کے آپ کو واپس بھیجنے سے ہوتی ہے، کسی سرور کی جانچ سے نہیں۔ بٹوہ ویسے بھی صرف اسی براؤزر میں رہتا ہے۔';
 }

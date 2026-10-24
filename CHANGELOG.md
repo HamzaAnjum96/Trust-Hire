@@ -12,6 +12,54 @@ that heading to the version and date, and open a fresh `[Unreleased]`.
 
 ## [Unreleased]
 
+### 0.19.1 — Stripe on GitHub Pages
+
+0.19.0 could take a Stripe test payment only through the dev server, so the
+deployed site — the link evaluators actually open — still simulated every
+top-up. It now takes a real Stripe test payment, with no server and no key in
+the site.
+
+#### Added
+
+- **Stripe Payment Links** for the five packages, made once in the Stripe
+  sandbox by `code/backend/dev_server/payment_links.py` (which reuses links it
+  already made, so it is safe to re-run) and listed in
+  `lib/features/wallet/stripe_links.dart`. On the deployed site, "Pay Rs. 1,000
+  with Stripe" leaves for the link in the same tab and Stripe sends the buyer
+  back with `?topup=1000&session=cs_test_…`.
+- **`StripeReturn`** — reads that return, credits it through
+  `WalletController.completeStripeReturn`, and tidies the address bar so a
+  reload or a bookmark does not carry it.
+- Seven mutations in the sweep, which is at 62; five dev server tests, at 36.
+
+#### Decisions worth recording
+
+**No key in the site, not even a test one.** Everything GitHub Pages serves is
+public. A Payment Link is made with the key, once, on a developer's machine —
+and is then just a URL Stripe built to be shared.
+
+**A return is believed only as far as this browser can vouch for it.** Nothing
+on a static site can ask Stripe whether a session was paid. So a return credits
+only a top-up this browser started — same amount, same account, within a day —
+with a test session id, once. A hand-typed return address does nothing. The
+sheet says, in a line of its own, that the payment is confirmed by Stripe
+sending the buyer back rather than checked by a server. That is no weaker than
+the simulation it replaces, since the wallet lives in the browser either way,
+but it is not what production does; the dev server path, which checks with
+Stripe, still wins whenever one is set.
+
+**The same tab, not a new one.** A second copy of the app open beside the
+first would hold two wallets in memory over one storage, and the older would
+write last.
+
+**Only where the links come back to.** The links are offered on the web, and
+only on the origin they return to. A phone or `localhost` would send the buyer
+back to a browser that never started the payment.
+
+**The pending top-up is cleared after the credit, not before.** A page closed
+between the two leaves it in place, and the ledger's idempotency on the session
+id makes the retry harmless; the other order could lose a payment.
+
 ### 0.19.0 — Stripe, a fare agent, and a map that shows the map
 
 The evaluators asked for a Stripe integration and an AI agent that recommends

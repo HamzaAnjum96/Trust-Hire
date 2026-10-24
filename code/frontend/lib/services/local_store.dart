@@ -183,6 +183,12 @@ class StoreKeys {
   /// agent. Empty means none, which is the default and the deployed app's.
   static const devServer = 'trust_hire.dev_server';
 
+  /// A top-up this browser has sent somebody to a Stripe Payment Link for —
+  /// who, how much and when — which the return from Stripe is checked
+  /// against. Device-wide, with the account inside it, because the page that
+  /// comes back is a fresh start and has to find it. See [StripeReturn].
+  static const pendingTopUp = 'trust_hire.pending_top_up';
+
   /// Comma-separated ids of blobs held by [MediaStore]. The blobs themselves
   /// live under `trust_hire.media.<id>` and are enumerated through this index.
   static const mediaIndex = 'trust_hire.media_index';
@@ -211,6 +217,7 @@ class StoreKeys {
     outbox,
     lastPulledAt,
     devServer,
+    pendingTopUp,
     mediaIndex,
   ];
 }

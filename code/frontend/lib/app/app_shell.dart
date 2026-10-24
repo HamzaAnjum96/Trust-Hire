@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
 
+import '../core/formatters.dart';
 import '../core/layout.dart';
 import '../core/tokens.dart';
 import '../features/create_job/create_job_screen.dart';
@@ -13,15 +14,22 @@ import '../features/directory/directory_screen.dart';
 import '../features/map/map_screen.dart';
 import '../features/profile/profile_screen.dart';
 import '../features/notifications/updates_tab.dart';
+import '../features/wallet/stripe_return.dart';
 import '../l10n/app_localizations.dart';
+import '../services/browser_location.dart';
 import 'notification_controller.dart';
+import 'wallet_controller.dart';
 
 /// The navigation scaffold.
 ///
 /// Map first, per design principle 1 — the map is the product, so it is the
 /// landing destination and posting a job is always one tap away.
 class AppShell extends StatefulWidget {
-  const AppShell({super.key});
+  const AppShell({super.key, this.location});
+
+  /// The address the app was opened at. Null means the real one; tests pass
+  /// a return from Stripe here.
+  final Uri? location;
 
   @override
   State<AppShell> createState() => _AppShellState();
@@ -29,6 +37,54 @@ class AppShell extends StatefulWidget {
 
 class _AppShellState extends State<AppShell> {
   int _index = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    // After the first frame, so there is a messenger to say what happened.
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) => _completeStripeReturn(),
+    );
+  }
+
+  /// The app has just been opened by Stripe sending a buyer back from a
+  /// Payment Link. Credit it if this browser started it — see [StripeReturn]
+  /// for what that does and does not establish — and say so.
+  ///
+  /// Here rather than in `bootstrap()`: crediting goes through
+  /// [WalletController], so the ledger in memory and the one in storage are
+  /// the same ledger. Written behind the controller's back, the next thing the
+  /// wallet saved would put the old balance back.
+  Future<void> _completeStripeReturn() async {
+    final location = widget.location ?? Uri.base;
+    final returned = StripeReturn.from(location);
+    if (returned == null || !mounted) return;
+
+    // First, so that whatever happens next, a reload does not bring it back.
+    replaceBrowserLocation(StripeReturn.cleaned(location));
+
+    final strings = AppStrings.of(context);
+    final messenger = ScaffoldMessenger.of(context);
+    final outcome = await context.read<WalletController>().completeStripeReturn(
+      returned,
+    );
+    if (!mounted) return;
+
+    final message = switch (outcome) {
+      StripeReturnOutcome.credited => strings.topUpDone(
+        Format.fare(strings, returned.tokens),
+      ),
+      StripeReturnOutcome.notMatched => strings.topUpNotMatched,
+      // Nothing to say about a return nobody here started, or one already
+      // counted — the first is not this person's business, the second is not
+      // news.
+      StripeReturnOutcome.notStartedHere ||
+      StripeReturnOutcome.alreadyCredited => null,
+    };
+    if (message != null) {
+      messenger.showSnackBar(SnackBar(content: Text(message)));
+    }
+  }
 
   /// The destinations, once.
   ///

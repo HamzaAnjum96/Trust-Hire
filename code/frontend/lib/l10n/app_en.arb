@@ -1558,5 +1558,13 @@
   "refusalPaymentCredited": "That payment had already been turned into tokens.",
   "@refusalPaymentCredited": {
     "description": "The server refused crediting a Stripe payment twice"
+  },
+  "topUpStripeLinkNotice": "Stripe test mode. No real money moves — pay with card 4242 4242 4242 4242, any future date and any CVC, and untick “Save my information with Link”. Stripe brings you back here once it is paid.",
+  "@topUpStripeLinkNotice": {
+    "description": "Explains a Stripe Payment Link top-up on the GitHub Pages site"
+  },
+  "topUpStripeLinkCaveat": "On this site the payment is confirmed by Stripe sending you back, not checked by a server. The wallet only lives in this browser either way.",
+  "@topUpStripeLinkCaveat": {
+    "description": "What a Payment Link top-up does not establish"
   }
 }

@@ -12,19 +12,23 @@ import '../../core/tokens.dart';
 import '../../l10n/app_localizations.dart';
 import '../../services/dev_services.dart';
 import '../../widgets/state_views.dart';
+import 'stripe_links.dart';
 
 /// Buying tokens.
 ///
 /// Section 11 asks for a real-feeling flow; Section 13a excludes real payment
-/// handling. Two ways to satisfy both:
+/// handling. Three ways to satisfy both, best first:
 ///
-/// - **Simulated**, the default: packages, a confirm, a balance that moves.
-/// - **Stripe in test mode**, when a dev server with a Stripe test key is
-///   running (`code/backend/dev_server/`): a real Checkout page opens, a test
-///   card pays, and the tokens land once Stripe confirms it. Real integration,
-///   no real money — the server refuses a live key outright.
+/// - **Stripe through the dev server**, when one with a test key is running
+///   (`code/backend/dev_server/`): a real Checkout page opens, a test card
+///   pays, and the tokens land once the server has asked Stripe and Stripe
+///   says paid. No real money — the server refuses a live key outright.
+/// - **Stripe through a Payment Link**, on the GitHub Pages site, where there
+///   is no server: the page goes to Stripe and Stripe sends it back. Believed
+///   only as far as this browser can vouch for it — see [StripeReturn].
+/// - **Simulated**, everywhere else: packages, a confirm, a balance that moves.
 ///
-/// Either way the sheet says plainly which one it is. A screen that looks like
+/// Whichever it is, the sheet says plainly which one. A screen that looks like
 /// a payment page without saying what it is, is the shape of a scam, and a
 /// product about trust cannot afford to teach people that Trust Hire asks for
 /// card numbers. The card is only ever typed into Stripe's own page.
@@ -33,6 +37,8 @@ class TopUpSheet extends StatefulWidget {
     super.key,
     this.openUrl = _openInBrowser,
     this.pollEvery = const Duration(seconds: 3),
+    this.paymentLinks,
+    this.openPaymentLink = _openHere,
   });
 
   /// Packages a person would actually pick, in rupees. The largest is a step
@@ -47,6 +53,13 @@ class TopUpSheet extends StatefulWidget {
   /// within a second or two of the card being accepted; three seconds is
   /// quick enough that nobody waits, slow enough to be no load at all.
   final Duration pollEvery;
+
+  /// Payment Links by package. Null means whatever this build has — which is
+  /// none at all off the GitHub Pages site. See [StripePaymentLinks].
+  final Map<int, String>? paymentLinks;
+
+  /// Leaves for a Payment Link, in this tab. Replaced in tests.
+  final Future<bool> Function(Uri) openPaymentLink;
 
   static Future<void> open(BuildContext context) {
     return showModalBottomSheet<void>(
@@ -64,6 +77,18 @@ class TopUpSheet extends StatefulWidget {
         mode: LaunchMode.externalApplication,
         webOnlyWindowName: '_blank',
       );
+    } catch (error) {
+      if (kDebugMode) debugPrint('Could not open the payment page: $error');
+      return false;
+    }
+  }
+
+  /// The same tab, not a new one: Stripe sends the buyer back to the site,
+  /// and a second copy of the app open beside the first would leave two
+  /// wallets in memory over one storage, the older of which writes last.
+  static Future<bool> _openHere(Uri url) async {
+    try {
+      return await launchUrl(url, webOnlyWindowName: '_self');
     } catch (error) {
       if (kDebugMode) debugPrint('Could not open the payment page: $error');
       return false;
@@ -145,6 +170,29 @@ class _TopUpSheetState extends State<TopUpSheet> {
   /// Returns once it knows; the periodic tick and "stop waiting" both use it,
   /// so somebody who paid and then gave up a second too soon still gets their
   /// tokens.
+  /// Off to Stripe, having written down what for. The page leaves, so there
+  /// is nothing to wait for here — the return is handled when Stripe sends the
+  /// buyer back (see `AppShell`).
+  Future<void> _payWithLink(String link, int tokens) async {
+    final strings = AppStrings.of(context);
+    final wallet = context.read<WalletController>();
+
+    setState(() {
+      _starting = true;
+      _problem = null;
+    });
+
+    await wallet.notePendingTopUp(tokens);
+    final opened = await widget.openPaymentLink(
+      StripePaymentLinks.withAccount(link, wallet.workerId),
+    );
+    if (!mounted) return;
+    setState(() {
+      _starting = false;
+      if (!opened) _problem = strings.topUpCouldNotOpen;
+    });
+  }
+
   Future<void> _check(DevServicesClient client) async {
     final session = _session;
     if (_checking || session == null) return;
@@ -216,6 +264,10 @@ class _TopUpSheetState extends State<TopUpSheet> {
     final theme = Theme.of(context);
     final devServices = context.watch<DevServicesController>();
     final stripe = devServices.paymentsReady ? devServices.client : null;
+    // A dev server that can check with Stripe beats a link that cannot.
+    final links = stripe == null
+        ? widget.paymentLinks ?? StripePaymentLinks.forThisBuild()
+        : null;
     final session = _session;
 
     // While a payment is open the sheet cannot be swiped or tapped away: its
@@ -251,14 +303,27 @@ class _TopUpSheetState extends State<TopUpSheet> {
                 const SizedBox(width: BrandSizing.spaceSm),
                 Expanded(
                   child: Text(
-                    stripe == null
-                        ? strings.topUpNotReal
-                        : strings.topUpStripeNotice,
+                    stripe != null
+                        ? strings.topUpStripeNotice
+                        : links != null
+                        ? strings.topUpStripeLinkNotice
+                        : strings.topUpNotReal,
                     style: theme.textTheme.labelSmall,
                   ),
                 ),
               ],
             ),
+
+            // What a link cannot establish, said where the choice is made.
+            if (links != null) ...[
+              const SizedBox(height: BrandSizing.spaceSm),
+              Text(
+                strings.topUpStripeLinkCaveat,
+                style: theme.textTheme.labelSmall?.copyWith(
+                  color: theme.colorScheme.onSurfaceVariant,
+                ),
+              ),
+            ],
 
             if (_problem != null) ...[
               const SizedBox(height: BrandSizing.spaceMd),
@@ -301,23 +366,26 @@ class _TopUpSheetState extends State<TopUpSheet> {
                 child: Text(strings.topUpStopWaiting),
               ),
             ] else
-              for (final tokens in TopUpSheet.packages) ...[
-                OutlinedButton(
-                  onPressed: _starting
-                      ? null
-                      : stripe == null
-                      ? () => _buySimulated(tokens)
-                      : () => _payWithStripe(stripe, tokens),
-                  child: Text(
-                    stripe == null
-                        ? strings.topUpConfirm(Format.fare(strings, tokens))
-                        : strings.topUpPayWithStripe(
-                            Format.fare(strings, tokens),
-                          ),
+              for (final tokens in TopUpSheet.packages)
+                if (links == null || links.containsKey(tokens)) ...[
+                  OutlinedButton(
+                    onPressed: _starting
+                        ? null
+                        : stripe != null
+                        ? () => _payWithStripe(stripe, tokens)
+                        : links != null
+                        ? () => _payWithLink(links[tokens]!, tokens)
+                        : () => _buySimulated(tokens),
+                    child: Text(
+                      stripe == null && links == null
+                          ? strings.topUpConfirm(Format.fare(strings, tokens))
+                          : strings.topUpPayWithStripe(
+                              Format.fare(strings, tokens),
+                            ),
+                    ),
                   ),
-                ),
-                const SizedBox(height: BrandSizing.spaceSm),
-              ],
+                  const SizedBox(height: BrandSizing.spaceSm),
+                ],
           ],
         ),
       ),

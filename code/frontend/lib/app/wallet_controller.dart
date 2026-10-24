@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 
+import '../features/wallet/stripe_return.dart';
 import '../features/wallet/wallet_rules.dart';
 import '../models/account.dart';
 import '../models/job.dart';
@@ -149,6 +150,58 @@ class WalletController extends ChangeNotifier {
       ),
     );
     return true;
+  }
+
+  /// About to leave for a Stripe Payment Link: remember who is buying how
+  /// much, so the page Stripe sends back can tell a return it started from
+  /// one that was typed in. Replaces any earlier one — only the latest top-up
+  /// is the one somebody is in the middle of.
+  Future<void> notePendingTopUp(int tokens, {DateTime? at}) =>
+      _store.writeString(
+        StoreKeys.pendingTopUp,
+        jsonEncode(
+          PendingTopUp(
+            account: _workerId,
+            tokens: tokens,
+            startedAt: at ?? DateTime.now(),
+          ).toJson(),
+        ),
+      );
+
+  PendingTopUp? get pendingTopUp {
+    final raw = _store.readString(StoreKeys.pendingTopUp);
+    if (raw == null || raw.isEmpty) return null;
+    try {
+      return PendingTopUp.fromJson(jsonDecode(raw) as Map<String, dynamic>);
+    } on Object {
+      // Unreadable is the same as absent: nothing gets credited on its say.
+      return null;
+    }
+  }
+
+  /// Credits a return from a Stripe Payment Link, if this browser started it.
+  ///
+  /// The pending top-up is cleared only *after* the credit is written. A page
+  /// closed between the two leaves it in place, and a reload then finds the
+  /// session already in the ledger — [creditPayment] is idempotent on it — so
+  /// the order costs nothing and the other order could lose a payment.
+  Future<StripeReturnOutcome> completeStripeReturn(
+    StripeReturn returned, {
+    DateTime? at,
+  }) async {
+    final now = at ?? DateTime.now();
+    final verdict = returned.check(pendingTopUp, account: _workerId, now: now);
+    if (verdict != StripeReturnOutcome.credited) return verdict;
+
+    final fresh = await creditPayment(
+      paymentId: returned.sessionId,
+      tokens: returned.tokens,
+      at: now,
+    );
+    await _store.remove(StoreKeys.pendingTopUp);
+    return fresh
+        ? StripeReturnOutcome.credited
+        : StripeReturnOutcome.alreadyCredited;
   }
 
   bool _hasEntryFor(String jobId, WalletEntryKind kind) =>

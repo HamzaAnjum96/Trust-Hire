@@ -32,6 +32,8 @@ work actually went for; the agent turns that into a range, and says why.
 | R8 | Nothing about people leaves the device; the model runs locally | `FareComparable.toJson`, `.env.example` |
 | R9 | With no dev server, everything works as before | `DevServicesController` — empty by default |
 | R10 | Every fallback says why it happened | the panel's notices, the sheet's notices |
+| R11 | The deployed GitHub Pages site takes a Stripe test payment, with no server and no key in the site | `StripePaymentLinks`, `StripeReturn`, `payment_links.py` |
+| R12 | A return from Stripe credits only a top-up this browser started, once | `StripeReturn.check`, `completeStripeReturn` |
 
 ## Non-goals
 
@@ -73,7 +75,9 @@ and must stay that way — never commit a key, even a test one),
 3. **Stop the model** (quit Ollama) and ask again. The on-device estimate
    appears with "The fare agent could not reach its model…". The feature
    degrades; it does not break.
-4. **Switch to Usman Raza → Wallet → Add tokens.** The sheet says Stripe test
+4. **Switch to Usman Raza → Wallet → Add tokens.** This step also works on
+   the GitHub Pages link with nothing running locally — it uses a Payment Link
+   there (see *What it does not establish*). The sheet says Stripe test
    mode and names the test card. Pay Rs. 1,000 with `4242 4242 4242 4242`.
    On Stripe's page, **untick "Save my information with Link"** first —
    otherwise Stripe asks for a phone number before it will take the payment.
@@ -91,3 +95,7 @@ and must stay that way — never commit a key, even a test one),
   in English when asked in Urdu. The number is guarded; the prose is not.
 - Test-mode Stripe proves the integration, not the business: PKR payouts,
   refunds and disputes are all untouched.
+- On the GitHub Pages site the payment is confirmed by Stripe sending the
+  browser back, not checked by a server — a static site cannot hold the key
+  that check needs. A return is credited only for a top-up that browser
+  started; the dev server path is the one that asks Stripe.

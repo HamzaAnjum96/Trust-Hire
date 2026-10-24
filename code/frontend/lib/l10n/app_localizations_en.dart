@@ -2212,4 +2212,12 @@ class AppStringsEn extends AppStrings {
   @override
   String get refusalPaymentCredited =>
       'That payment had already been turned into tokens.';
+
+  @override
+  String get topUpStripeLinkNotice =>
+      'Stripe test mode. No real money moves — pay with card 4242 4242 4242 4242, any future date and any CVC, and untick “Save my information with Link”. Stripe brings you back here once it is paid.';
+
+  @override
+  String get topUpStripeLinkCaveat =>
+      'On this site the payment is confirmed by Stripe sending you back, not checked by a server. The wallet only lives in this browser either way.';
 }
