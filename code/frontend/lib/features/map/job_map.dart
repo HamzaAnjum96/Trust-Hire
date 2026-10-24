@@ -198,6 +198,9 @@ class _JobMapState extends State<JobMap> {
                 ),
               ),
 
+              // Place names above the tint, so it never dims them.
+              mapTheme.labelLayer(context, provider: widget.tileProvider),
+
               // The approximate work area of the selected job. Only the
               // selected one is drawn — every radius at once turns the map into
               // noise, which section 15 warns against.
@@ -294,7 +297,7 @@ class _JobMapState extends State<JobMap> {
           ),
         ),
 
-        // OpenStreetMap requires visible attribution.
+        // The basemap's licence requires visible attribution.
         //
         // **Bottom left, not bottom right.** The right is where the posting
         // button and the map's own controls live, and a licence notice sitting

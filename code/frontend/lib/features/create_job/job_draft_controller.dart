@@ -99,6 +99,10 @@ class JobDraftController extends ChangeNotifier {
   bool _microphoneUnavailable = false;
 
   bool get isEditing => _editing != null;
+
+  /// The job being edited, so a fare suggestion does not compare it with
+  /// itself.
+  String? get editingId => _editing?.id;
   JobLocation get location => _location;
   double get radiusMetres => _radiusMetres;
   String get title => _title;

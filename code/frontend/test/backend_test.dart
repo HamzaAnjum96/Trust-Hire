@@ -236,6 +236,31 @@ void main() {
       expect(again.refused.single.code, RefusalCode.commissionAlreadyCharged);
     });
 
+    test('a payment buys tokens once, in any wallet', () async {
+      final backend = MockBackend();
+      await backend.push([
+        write(RemoteEntity.walletEntry, 'w-1', {
+          'kind': 'topUp',
+          'tokens': 1000,
+          'paymentId': 'cs_test_1',
+        }),
+      ]);
+
+      final again = await backend.push([
+        write(RemoteEntity.walletEntry, 'w-2', {
+          'kind': 'topUp',
+          'tokens': 1000,
+          'paymentId': 'cs_test_1',
+        }),
+        // A simulated top-up has no payment, and is never refused for it.
+        write(RemoteEntity.walletEntry, 'w-3', {'kind': 'topUp', 'tokens': 500}),
+        write(RemoteEntity.walletEntry, 'w-4', {'kind': 'topUp', 'tokens': 500}),
+      ]);
+
+      expect(again.refused.single.code, RefusalCode.paymentAlreadyCredited);
+      expect(again.accepted.map((r) => r.id), ['w-3', 'w-4']);
+    });
+
     test('an audit entry is never edited', () async {
       final backend = MockBackend();
       await backend.push([

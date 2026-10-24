@@ -179,6 +179,10 @@ class StoreKeys {
   static String forAccount(String key, String accountId) =>
       accountId == DemoAccounts.deviceId ? key : '$key#$accountId';
 
+  /// Where the optional dev server is — Stripe test payments and the fare
+  /// agent. Empty means none, which is the default and the deployed app's.
+  static const devServer = 'trust_hire.dev_server';
+
   /// Comma-separated ids of blobs held by [MediaStore]. The blobs themselves
   /// live under `trust_hire.media.<id>` and are enumerated through this index.
   static const mediaIndex = 'trust_hire.media_index';
@@ -206,6 +210,7 @@ class StoreKeys {
     phoneChallenge,
     outbox,
     lastPulledAt,
+    devServer,
     mediaIndex,
   ];
 }

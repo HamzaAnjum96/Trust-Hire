@@ -31,6 +31,7 @@ import '../account/account_switcher.dart';
 import '../directory/my_listing_screen.dart';
 import '../ratings/worker_standing_view.dart';
 import '../../app/account_controller.dart';
+import '../../app/dev_services_controller.dart';
 
 /// Who you are here, and how the app behaves for you.
 ///
@@ -179,6 +180,9 @@ class ProfileScreen extends StatelessWidget {
 
             const SizedBox(height: BrandSizing.spaceXl),
             const _BackendSection(),
+
+            const SizedBox(height: BrandSizing.spaceXl),
+            const _DevServicesSection(),
 
             const _VersionLine(),
           ],
@@ -408,12 +412,131 @@ class _BackendSection extends StatelessWidget {
         RefusalCode.recordIsAppendOnly => strings.refusalAppendOnly,
         RefusalCode.commissionAlreadyCharged =>
           strings.refusalCommissionCharged,
+        RefusalCode.paymentAlreadyCredited => strings.refusalPaymentCredited,
         RefusalCode.jobIsNotFinished => strings.refusalJobNotFinished,
         RefusalCode.alreadyRatedFromThatSide => strings.refusalAlreadyRated,
         RefusalCode.messageCannotBeEdited => strings.refusalMessageEdited,
         RefusalCode.changedElsewhere => strings.refusalChangedElsewhere,
         RefusalCode.unreachable => strings.refusalUnreachable,
       };
+}
+
+/// Where Stripe test payments and the fare agent come from.
+///
+/// A URL field rather than a build flag only, so the deployed app can be
+/// pointed at a dev server running on the evaluator's own laptop. Empty is the
+/// default, and empty means the app makes no call it did not make before.
+class _DevServicesSection extends StatefulWidget {
+  const _DevServicesSection();
+
+  @override
+  State<_DevServicesSection> createState() => _DevServicesSectionState();
+}
+
+class _DevServicesSectionState extends State<_DevServicesSection> {
+  late final TextEditingController _url = TextEditingController(
+    text: context.read<DevServicesController>().url,
+  );
+  bool _invalid = false;
+
+  @override
+  void dispose() {
+    _url.dispose();
+    super.dispose();
+  }
+
+  Future<void> _save() async {
+    final text = _url.text.trim();
+    final valid = text.isEmpty || DevServicesController.parse(text) != null;
+    setState(() => _invalid = !valid);
+    if (!valid) return;
+
+    final devServices = context.read<DevServicesController>();
+    await devServices.setUrl(text);
+    if (mounted) _url.text = devServices.url;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final strings = AppStrings.of(context);
+    final theme = Theme.of(context);
+    final devServices = context.watch<DevServicesController>();
+    final status = devServices.status;
+    final model = status?.model ?? '';
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Text(strings.devServicesSection, style: theme.textTheme.titleLarge),
+        const SizedBox(height: BrandSizing.spaceXs),
+        Text(strings.devServicesExplain, style: theme.textTheme.labelSmall),
+        const SizedBox(height: BrandSizing.spaceMd),
+
+        TextField(
+          controller: _url,
+          keyboardType: TextInputType.url,
+          autocorrect: false,
+          onSubmitted: (_) => _save(),
+          decoration: InputDecoration(
+            labelText: strings.devServicesUrlLabel,
+            hintText: strings.devServicesUrlHint,
+            errorText: _invalid ? strings.devServicesInvalid : null,
+          ),
+        ),
+        const SizedBox(height: BrandSizing.spaceSm),
+        Wrap(
+          spacing: BrandSizing.spaceSm,
+          runSpacing: BrandSizing.spaceSm,
+          children: [
+            OutlinedButton.icon(
+              onPressed: _save,
+              icon: const Icon(Icons.save_outlined),
+              label: Text(strings.devServicesSave),
+            ),
+            OutlinedButton.icon(
+              onPressed: devServices.isSet && !devServices.checking
+                  ? devServices.refresh
+                  : null,
+              icon: const Icon(Icons.wifi_tethering),
+              label: Text(strings.devServicesCheck),
+            ),
+          ],
+        ),
+
+        const SizedBox(height: BrandSizing.spaceMd),
+        Align(
+          alignment: AlignmentDirectional.centerStart,
+          child: !devServices.isSet
+              ? StatusPill.muted(context, strings.devServicesNotSet)
+              : devServices.checking
+              ? StatusPill.muted(context, strings.devServicesChecking)
+              : devServices.unreachable
+              ? StatusPill.bad(strings.devServicesUnreachable)
+              : status != null
+              ? StatusPill.good(strings.devServicesConnected)
+              : StatusPill.muted(context, strings.devServicesNotSet),
+        ),
+        if (status != null) ...[
+          const SizedBox(height: BrandSizing.spaceSm),
+          Text(
+            status.paymentsEnabled
+                ? strings.devServicesPaymentsOn
+                : strings.devServicesPaymentsOff,
+            style: theme.textTheme.bodyMedium,
+          ),
+          const SizedBox(height: BrandSizing.spaceXs),
+          Text(
+            status.agentEnabled
+                ? strings.devServicesAgentOn(model)
+                : status.modelReachable
+                ? strings.devServicesAgentNoModel(model)
+                : strings.devServicesAgentOff,
+            style: theme.textTheme.bodyMedium,
+          ),
+        ],
+      ],
+    );
+  }
 }
 
 /// The wallet, from the profile.

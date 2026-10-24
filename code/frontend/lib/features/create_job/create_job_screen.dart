@@ -11,6 +11,7 @@ import '../../models/job.dart';
 import '../../services/capture_service.dart';
 import '../../services/media_store.dart';
 import '../../widgets/state_views.dart';
+import '../fare_advice/fare_advice_panel.dart';
 import 'job_draft_controller.dart';
 import 'job_tag_field.dart';
 import 'location_picker.dart';
@@ -105,6 +106,13 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
         time?.minute ?? 0,
       ),
     );
+  }
+
+  /// A suggested fare, put in the field as though it had been typed — so it
+  /// is the hirer's to change, like anything else they typed.
+  void _useFare(int fare) {
+    _fareController.text = '$fare';
+    _draft.setStartingFare('$fare');
   }
 
   Future<void> _save() async {
@@ -249,6 +257,8 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
                   prefixText: '${strings.rupees('').trim()} ',
                 ),
               ),
+              const SizedBox(height: BrandSizing.spaceSm),
+              FareAdvicePanel(draft: _draft, onUse: _useFare),
 
               const SizedBox(height: BrandSizing.spaceLg),
               _FieldLabel(strings.fieldContact),

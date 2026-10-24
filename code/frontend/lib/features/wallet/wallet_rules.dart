@@ -115,10 +115,13 @@ class WalletRules {
   }
 
   /// What to record when a worker buys tokens, including any bonus it earns.
+  ///
+  /// [paymentId] is the Stripe session that paid for it, when one did.
   List<WalletEntry> onTopUp({
     required Wallet wallet,
     required int tokens,
     required DateTime now,
+    String? paymentId,
   }) {
     if (tokens <= 0) return const [];
 
@@ -128,6 +131,7 @@ class WalletRules {
         kind: WalletEntryKind.topUp,
         tokens: tokens,
         createdAt: now,
+        paymentId: paymentId,
       ),
     ];
 

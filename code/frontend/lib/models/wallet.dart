@@ -2,7 +2,8 @@ import '../l10n/app_localizations.dart';
 
 /// Why tokens moved.
 enum WalletEntryKind {
-  /// Bought tokens. Simulated — Section 13a excludes real money.
+  /// Bought tokens — simulated, or through Stripe in test mode when a dev
+  /// server is running. Section 13a excludes real money either way.
   topUp,
 
   /// The platform's 5% of an agreed fare, on completion.
@@ -51,6 +52,7 @@ class WalletEntry {
     required this.tokens,
     required this.createdAt,
     this.jobId,
+    this.paymentId,
   });
 
   final String id;
@@ -65,12 +67,19 @@ class WalletEntry {
   /// The job this was for, where there was one.
   final String? jobId;
 
+  /// The Stripe Checkout Session that paid for this, on a top-up that was
+  /// really paid for. **At most one entry per payment** — it is what stops a
+  /// payment that is checked twice from being credited twice. See
+  /// [WalletController.creditPayment].
+  final String? paymentId;
+
   factory WalletEntry.fromJson(Map<String, dynamic> json) => WalletEntry(
     id: json['id'] as String,
     kind: WalletEntryKind.fromId(json['kind'] as String?),
     tokens: (json['tokens'] as num).round(),
     createdAt: DateTime.parse(json['createdAt'] as String),
     jobId: json['jobId'] as String?,
+    paymentId: json['paymentId'] as String?,
   );
 
   Map<String, dynamic> toJson() => <String, dynamic>{
@@ -79,6 +88,7 @@ class WalletEntry {
     'tokens': tokens,
     'createdAt': createdAt.toIso8601String(),
     'jobId': jobId,
+    if (paymentId != null) 'paymentId': paymentId,
   };
 }
 

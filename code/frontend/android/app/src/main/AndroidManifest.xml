@@ -1,4 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Map tiles come from the network. Flutter's template only grants this
+         in debug and profile builds, so a release APK drew every map as a
+         blank background. -->
+    <uses-permission android:name="android.permission.INTERNET"/>
     <application
         android:label="trust_hire"
         android:name="${applicationName}"

@@ -547,6 +547,60 @@ MUTATIONS = [
         replace="  bool isOpen(Job job) => true;",
         tests=["test/messaging_test.dart"],
     ),
+
+    # --- 0.19.0: Stripe top-ups and the fare agent ----------------------------
+    # The sheet polls, so it is told about the same payment several times.
+    Mutation(
+        name="a-payment-buys-tokens-once",
+        promise="a Stripe payment reported twice is credited once",
+        path="lib/app/wallet_controller.dart",
+        find="    if (paymentId.isEmpty || hasCredited(paymentId)) return false;",
+        replace="    if (paymentId.isEmpty) return false;",
+        tests=["test/payments_test.dart"],
+    ),
+    Mutation(
+        name="credit-what-stripe-charged",
+        promise="the tokens credited are what Stripe charged, not what was asked",
+        path="lib/features/wallet/top_up_sheet.dart",
+        find="""      await wallet.creditPayment(paymentId: session.id, tokens: status.tokens);""",
+        replace="""      await wallet.creditPayment(paymentId: session.id, tokens: 1000);""",
+        tests=["test/payments_test.dart"],
+    ),
+    Mutation(
+        name="a-payment-is-for-one-wallet",
+        promise="a payment opened for one wallet is never credited to another",
+        path="lib/features/wallet/top_up_sheet.dart",
+        find="      if (status.account != wallet.workerId) {",
+        replace="      if (false) {",
+        tests=["test/payments_test.dart"],
+    ),
+    Mutation(
+        name="the-server-refuses-a-second-credit",
+        promise="the mock refuses a payment credited twice, as the index does",
+        path="lib/services/backend/mock_backend.dart",
+        find="""          return _commissionAlreadyCharged(write) ??
+              _paymentAlreadyCredited(write);""",
+        replace="""          return _commissionAlreadyCharged(write);""",
+        tests=["test/backend_test.dart"],
+    ),
+    # A language model writes the explanation; it does not get the last word
+    # on the number somebody is about to post.
+    Mutation(
+        name="the-agent-is-held-to-the-evidence",
+        promise="a fare the model invents is pulled back inside what similar work went for",
+        path="lib/features/fare_advice/fare_guard.dart",
+        find="    int band(int value) => value.clamp(floor, ceiling);",
+        replace="    int band(int value) => value;",
+        tests=["test/fare_advice_test.dart"],
+    ),
+    Mutation(
+        name="agreed-fares-outrank-asked-ones",
+        promise="a range rests on what work went for, not on what hirers hoped to pay",
+        path="lib/features/fare_advice/fare_evidence.dart",
+        find="    final basis = agreed.isNotEmpty ? agreed : asked;",
+        replace="    final basis = [...agreed, ...asked];",
+        tests=["test/fare_advice_test.dart"],
+    ),
 ]
 
 

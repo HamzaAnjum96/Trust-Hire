@@ -204,6 +204,11 @@ enum RefusalCode {
   offerDoesNotMatchTheJob,
   recordIsAppendOnly,
   commissionAlreadyCharged,
+
+  /// A Stripe payment was already turned into tokens — here or in another
+  /// wallet. A payment buys tokens once.
+  paymentAlreadyCredited,
+
   jobIsNotFinished,
   alreadyRatedFromThatSide,
 

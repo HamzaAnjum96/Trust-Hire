@@ -110,7 +110,10 @@ void main() {
     await tester.pumpWidget(harness());
     await tester.pumpAndSettle();
 
-    expect(find.text('© OpenStreetMap contributors © CARTO'), findsOneWidget);
+    expect(
+      find.text('Esri, HERE, Garmin, © OpenStreetMap contributors'),
+      findsOneWidget,
+    );
   });
 
   testWidgets('uses a purpose-built basemap per brightness', (tester) async {
@@ -118,8 +121,8 @@ void main() {
     // Darkening a single raster satisfies neither, so each brightness has its
     // own tile style rather than a filter over a shared one.
     expect(MapTheme.light.tileUrl, isNot(MapTheme.dark.tileUrl));
-    expect(MapTheme.light.tileUrl, contains('light_all'));
-    expect(MapTheme.dark.tileUrl, contains('dark_all'));
+    expect(MapTheme.light.tileUrl, contains('World_Light_Gray_Base'));
+    expect(MapTheme.dark.tileUrl, contains('World_Dark_Gray_Base'));
 
     // The brand tint must stay subtle enough to leave labels readable.
     expect(MapTheme.light.tintOpacity, lessThan(0.35));
@@ -145,8 +148,47 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    final layer = tester.widget<TileLayer>(find.byType(TileLayer));
-    expect(layer.urlTemplate, MapTheme.dark.tileUrl);
+    final layers = tester
+        .widgetList<TileLayer>(find.byType(TileLayer))
+        .map((layer) => layer.urlTemplate)
+        .toList();
+    expect(layers, [MapTheme.dark.tileUrl, MapTheme.dark.labelUrl]);
+  });
+
+  // CARTO began answering keyless requests with a tile reading "API KEY
+  // REQUIRED" — a 200 with a valid image, so nothing errored and every map in
+  // the app showed the placard. Nothing in a test can see a provider change
+  // its terms, but it can see the shape of what replaced it.
+  test('the default basemap needs no key and stops at its real zoom', () {
+    for (final theme in [MapTheme.light, MapTheme.dark]) {
+      expect(theme.tileUrl, isNot(contains('cartocdn')));
+      expect(theme.tileUrl, isNot(contains('key')));
+      expect(theme.labelUrl, isNotNull);
+      // Esri's canvas has nothing past z16 but a grey "not yet available".
+      expect(theme.maxNativeZoom, 16);
+    }
+  });
+
+  testWidgets('place names sit above the brand tint', (tester) async {
+    await tester.pumpWidget(harness());
+    await tester.pumpAndSettle();
+
+    final layers = tester
+        .widgetList<TileLayer>(find.byType(TileLayer))
+        .map((layer) => layer.urlTemplate)
+        .toList();
+    expect(layers, [MapTheme.light.tileUrl, MapTheme.light.labelUrl]);
+
+    // A FlutterMap paints its children in order, so the later one is on top.
+    final children = tester.widget<FlutterMap>(find.byType(FlutterMap)).children;
+    final tintAt = children.indexWhere(
+      (child) => child is IgnorePointer && child.child is ColoredBox,
+    );
+    final labelsAt = children.indexWhere(
+      (child) => child is IgnorePointer && child.child is TileLayer,
+    );
+    expect(tintAt, isNonNegative);
+    expect(labelsAt, greaterThan(tintAt));
   });
 
   group('regrouping waits for the map to settle', () {

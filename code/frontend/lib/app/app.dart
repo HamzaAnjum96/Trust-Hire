@@ -16,6 +16,7 @@ import '../services/backend/mock_backend.dart';
 import '../services/media_store.dart';
 import '../features/onboarding/onboarding_screen.dart';
 import 'account_controller.dart';
+import 'dev_services_controller.dart';
 import 'message_controller.dart';
 import 'notification_controller.dart';
 import 'admin_controller.dart';
@@ -53,6 +54,11 @@ class TrustHireApp extends StatelessWidget {
 
         ChangeNotifierProvider(
           create: (_) => SettingsController(store)..load(),
+        ),
+        // Optional, and off unless somebody points it at a dev server. Asks
+        // the server what it has switched on as soon as one is set.
+        ChangeNotifierProvider(
+          create: (_) => DevServicesController(store)..load(),
         ),
         ChangeNotifierProvider(
           create: (context) => JobController(

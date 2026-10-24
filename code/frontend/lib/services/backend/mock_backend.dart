@@ -72,6 +72,8 @@ class MockBackend implements RemoteApi {
         'ledgers_are_append_only (0003_marketplace.sql)',
     RefusalCode.commissionAlreadyCharged:
         'wallet_one_commission_per_job (0003_marketplace.sql)',
+    RefusalCode.paymentAlreadyCredited:
+        'wallet_one_top_up_per_payment (0005_payments.sql)',
     RefusalCode.messageCannotBeEdited:
         'messages_body_is_immutable (0003_marketplace.sql)',
     RefusalCode.changedElsewhere: 'row version: no SQL equivalent',
@@ -160,7 +162,8 @@ class MockBackend implements RemoteApi {
         // can be rewritten afterwards is a record nobody can rely on.
         if (existing != null) return RefusalCode.recordIsAppendOnly;
         if (write.entity == RemoteEntity.walletEntry) {
-          return _commissionAlreadyCharged(write);
+          return _commissionAlreadyCharged(write) ??
+              _paymentAlreadyCredited(write);
         }
         return null;
 
@@ -291,6 +294,19 @@ class MockBackend implements RemoteApi {
     );
 
     return charged ? RefusalCode.commissionAlreadyCharged : null;
+  }
+
+  /// Across every wallet, as the unique index is: one payment credited to two
+  /// people is the same mistake as crediting it twice to one.
+  RefusalCode? _paymentAlreadyCredited(PendingWrite write) {
+    final paymentId = write.data['paymentId'];
+    if (paymentId == null) return null;
+
+    final credited = _rows[RemoteEntity.walletEntry]!.values.any(
+      (row) => row.data['paymentId'] == paymentId && row.id != write.id,
+    );
+
+    return credited ? RefusalCode.paymentAlreadyCredited : null;
   }
 
   // --- Pretending to be far away -------------------------------------------

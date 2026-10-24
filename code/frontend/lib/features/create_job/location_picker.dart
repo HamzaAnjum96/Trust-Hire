@@ -83,6 +83,7 @@ class _LocationPickerState extends State<LocationPicker> {
               children: [
                 mapTheme.tileLayer(context, provider: widget.tileProvider),
                 mapTheme.tintLayer(),
+                mapTheme.labelLayer(context, provider: widget.tileProvider),
                 CircleLayer(
                   circles: [
                     CircleMarker(

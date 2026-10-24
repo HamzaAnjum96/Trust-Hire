@@ -12,6 +12,91 @@ that heading to the version and date, and open a fresh `[Unreleased]`.
 
 ## [Unreleased]
 
+### 0.19.0 — Stripe, a fare agent, and a map that shows the map
+
+The evaluators asked for a Stripe integration and an AI agent that recommends
+fares. Both need something a client cannot hold — a secret key, a language
+model — so both run in a small **dev server** on the developer's own machine,
+and the app treats it as optional: with none set, everything works as before.
+And the map had been showing a grey "API KEY REQUIRED" placard on every tile.
+
+#### Fixed
+
+- **Every map showed "API KEY REQUIRED".** CARTO began answering keyless
+  requests with a placard tile — a 200 with a valid PNG, so nothing errored and
+  the "tiles unavailable" notice never fired. The basemaps are now Esri's Light
+  Gray and Dark Gray Canvas, which need no key and send CORS headers; place
+  names come from a separate layer drawn above the brand tint, so it no longer
+  dims them. Native zoom stops at 16, where Esri's data does, instead of
+  fetching a grey "Map data not yet available" past it. A keyed provider can be
+  passed at build time with `--dart-define=MAP_TILES_LIGHT/DARK/ATTRIBUTION`.
+- **Release Android builds drew every map blank.** The main manifest never
+  declared the INTERNET permission — Flutter's template grants it only to
+  debug and profile builds.
+- **The posting form's message field said "Write a message".** 0.18.0 gave
+  the chat composer's hint the same key, `messageHint`, as the posting form's
+  "Anything else worth knowing." — the ARB file held both, and the later one
+  won. The composer has its own key now.
+
+#### Added
+
+- **`code/backend/dev_server/`** — standard library Python, nothing to
+  install. Stripe Checkout in test mode, a verified webhook, and the fare
+  agent. 31 unit tests, with a fake Stripe and a scripted model.
+- **"Suggest a fare" on the posting form.** Gathers every job on the device
+  that shares a tag and carries a fare (`FareEvidence`), and either works out
+  the quartiles there or asks the agent — a tool-calling loop over any
+  OpenAI-compatible local model (Ollama, LM Studio, llama.cpp). The answer says
+  who gave it: the model by name, or the device and how many agreed fares.
+  "Use Rs. 2,500" puts it in the field; nothing fills the field by itself.
+- **Stripe top-ups.** With the dev server running a test key, the top-up sheet
+  opens Stripe Checkout and credits the wallet when Stripe says it was paid.
+  While a payment is open the sheet cannot be dismissed — its poll is what
+  turns Stripe's confirmation into tokens — and "Stop waiting" looks once more
+  before letting go, so paying and giving up a second too soon still credits.
+- **Profile → Dev services** — the dev server's address, and what it has
+  switched on. Empty by default, and empty means no new network calls.
+- **`0005_payments.sql`** — `wallet_entries.payment_id`, unique across every
+  wallet, and only on a top-up. Swept: 57 rules, all covered.
+- **Six mutations in the sweep** for the new rules, which is at 55.
+
+#### Decisions worth recording
+
+**The model does not get the last word on the number.** It chooses which
+evidence to read and writes the explanation; the figure is put in order,
+rounded the way work is priced, and held inside `[low × 0.5, high × 1.5]` of
+what similar work went for. The rule is written twice — `FareGuard` in the
+app, `guard` in the server — and both are tested with the same cases, because
+the app should not trust a server it might not be talking to and the server
+should not hand out a number it would not stand behind.
+
+**A collapsed range takes the evidence's spread.** Tried against a real
+Qwen2.5 1.5B, the first answer was Rs. 2,250 – Rs. 2,250. A range of one
+number is false precision; it now widens to the quartiles around the figure.
+
+**The tokens credited are what Stripe charged.** The sheet credits the amount
+read back from the session, cross-checked against `amount_total` on the
+server — never the package the app asked for. And only to the wallet the
+session was opened for.
+
+**Test keys only, refused at start-up.** Section 13a excludes real money. A
+demo that can charge a real card is one pasted key away from doing it, so the
+server will not start payments with `sk_live_`.
+
+**The evidence is fares, never people.** What reaches the dev server is the
+job as the hirer wrote it and the fares to compare with — no phone number, no
+poster, no worker. The job text does leave the app, which is why the model is
+local.
+
+#### Changed
+
+- `WalletEntry` carries an optional `paymentId`; `WalletController` gained
+  `creditPayment`, idempotent on it.
+- `RefusalCode.paymentAlreadyCredited`, mirrored from the new unique index.
+- `http` is a direct dependency (it was already in the tree via flutter_map).
+- Android debug builds allow cleartext HTTP, so an emulator can reach the dev
+  server at `http://10.0.2.2:8787`. Release builds do not.
+
 ### 0.18.0 — The two people can talk
 
 Once a job was accepted, the only way to arrange anything was a phone number.

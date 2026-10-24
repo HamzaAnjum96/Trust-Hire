@@ -211,7 +211,7 @@ class _ThreadScreenState extends State<ThreadScreen> {
                           textInputAction: TextInputAction.newline,
                           keyboardType: TextInputType.multiline,
                           decoration: InputDecoration(
-                            hintText: strings.messageHint,
+                            hintText: strings.threadMessageHint,
                             counterText: '',
                             border: const OutlineInputBorder(
                               borderRadius: BrandRadius.mediumAll,

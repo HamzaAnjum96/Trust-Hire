@@ -119,6 +119,38 @@ class WalletController extends ChangeNotifier {
     );
   }
 
+  /// Whether [paymentId] has already been turned into tokens here.
+  bool hasCredited(String paymentId) =>
+      _wallet.entries.any((e) => e.paymentId == paymentId);
+
+  /// Credits a Stripe payment the dev server has confirmed.
+  ///
+  /// **Idempotent by payment**, exactly as a commission is by job: the sheet
+  /// polls, a person taps "stop waiting" just as it lands, a slow answer
+  /// arrives after a quick one — and each of those is the same payment, which
+  /// buys tokens once. Returns false when it had already been credited.
+  ///
+  /// [tokens] must be what Stripe recorded and charged for, as the dev server
+  /// reports it — never the number the app asked for at the start, which a
+  /// person could have changed on the way.
+  Future<bool> creditPayment({
+    required String paymentId,
+    required int tokens,
+    DateTime? at,
+  }) async {
+    if (paymentId.isEmpty || hasCredited(paymentId)) return false;
+
+    await _append(
+      rules.onTopUp(
+        wallet: _wallet,
+        tokens: tokens,
+        now: at ?? DateTime.now(),
+        paymentId: paymentId,
+      ),
+    );
+    return true;
+  }
+
   bool _hasEntryFor(String jobId, WalletEntryKind kind) =>
       _wallet.entries.any((e) => e.jobId == jobId && e.kind == kind);
 

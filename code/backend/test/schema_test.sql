@@ -625,6 +625,39 @@ call must_fail(
             '33333333-3333-3333-3333-333333333333', 'one more look')$$,
   'opening a CNIC after the dispute is settled');
 
+\echo '== Stripe top-ups — a payment buys tokens once'
+
+insert into wallet_entries (profile_id, kind, tokens, payment_id) values
+  ('33333333-3333-3333-3333-333333333333', 'topUp', 1000, 'cs_test_paid_once');
+
+call must_fail(
+  $$insert into wallet_entries (profile_id, kind, tokens, payment_id)
+    values ('33333333-3333-3333-3333-333333333333', 'topUp', 1000,
+            'cs_test_paid_once')$$,
+  'crediting the same Stripe payment twice');
+
+call must_fail(
+  $$insert into wallet_entries (profile_id, kind, tokens, payment_id)
+    values ('22222222-2222-2222-2222-222222222222', 'topUp', 1000,
+            'cs_test_paid_once')$$,
+  'crediting one payment to two wallets');
+
+call must_fail(
+  $$insert into wallet_entries (profile_id, kind, tokens, payment_id)
+    values ('33333333-3333-3333-3333-333333333333', 'loyaltyBonus', 1000,
+            'cs_test_a_bonus')$$,
+  'a payment reference on something that is not a top-up');
+
+call must_work(
+  $$insert into wallet_entries (profile_id, kind, tokens)
+    values ('33333333-3333-3333-3333-333333333333', 'topUp', 500)$$,
+  'a simulated top-up, with no payment behind it');
+
+call must_work(
+  $$insert into wallet_entries (profile_id, kind, tokens)
+    values ('33333333-3333-3333-3333-333333333333', 'topUp', 500)$$,
+  'and another — only real payments are unique');
+
 \echo '== The one rule that cannot be provoked'
 --
 -- `bids_one_accepted_per_job` has no behavioural test, and it is worth being

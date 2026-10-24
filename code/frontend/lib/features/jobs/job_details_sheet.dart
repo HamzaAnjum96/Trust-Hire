@@ -483,6 +483,7 @@ class _MapPreview extends StatelessWidget {
             children: [
               mapTheme.tileLayer(context),
               mapTheme.tintLayer(),
+              mapTheme.labelLayer(context),
 
               // Before the reveal: a circle, and no point inside it. After it:
               // the point, and no circle. Drawing both would leave the old

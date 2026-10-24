@@ -291,7 +291,7 @@ class AppStringsUr extends AppStrings {
   String get fieldMessage => 'پیغام';
 
   @override
-  String get messageHint => 'پیغام لکھیں';
+  String get messageHint => 'اور کوئی بات جو بتانی ہو۔';
 
   @override
   String get fieldArea => 'علاقہ';
@@ -1207,6 +1207,9 @@ class AppStringsUr extends AppStrings {
   String get messagesTab => 'پیغامات';
 
   @override
+  String get threadMessageHint => 'پیغام لکھیں';
+
+  @override
   String get sendMessage => 'بھیجیں';
 
   @override
@@ -2026,4 +2029,196 @@ class AppStringsUr extends AppStrings {
   @override
   String get refusalUnreachable =>
       'یہ ابھی بھیجا نہیں گیا۔ آپ کی ڈیوائس پر محفوظ ہے۔';
+
+  @override
+  String get fareAdviceAsk => 'کرایہ تجویز کریں';
+
+  @override
+  String fareAdviceByAgent(String model) {
+    return 'کرایہ ایجنٹ سے پوچھتا ہے — $model، آپ کے ڈیولپمنٹ سرور پر۔';
+  }
+
+  @override
+  String get fareAdviceOnDevice =>
+      'اسی ڈیوائس پر ملتے جلتے کاموں سے نکالا جاتا ہے۔';
+
+  @override
+  String get fareAdviceNeedsTags =>
+      'پہلے ایک ٹیگ چنیں، تاکہ موازنے کے لیے کام موجود ہو۔';
+
+  @override
+  String get fareAdviceAsking =>
+      'کرایہ ایجنٹ سے پوچھا جا رہا ہے۔ لیپ ٹاپ پر ماڈل کو ایک منٹ لگ سکتا ہے۔';
+
+  @override
+  String fareAdviceRange(String low, String high) {
+    return '$low سے $high تک';
+  }
+
+  @override
+  String fareAdviceSuggested(String amount) {
+    return 'تجویز کردہ ابتدائی کرایہ: $amount';
+  }
+
+  @override
+  String fareAdviceFromAgreed(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'ملتے جلتے کام کے $count طے شدہ کرایوں سے۔',
+      one: 'ملتے جلتے کام کے 1 طے شدہ کرائے سے۔',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String fareAdviceFromAsked(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other:
+          'ابھی کوئی کرایہ طے نہیں ہوا — یہ $count ملازمت دینے والوں کی ابتدائی پیشکش سے ہے۔',
+      one:
+          'ابھی کوئی کرایہ طے نہیں ہوا — یہ 1 ملازمت دینے والے کی ابتدائی پیشکش سے ہے۔',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get fareAdviceNoEvidence =>
+      'اس ڈیوائس پر کوئی ملتا جلتا کام نہیں، اس لیے یہ ماڈل کا اپنا اندازہ ہے۔';
+
+  @override
+  String get fareAdviceNothing =>
+      'ابھی موازنے کے لیے کوئی ملتا جلتا کام نہیں۔ جو مناسب لگے وہ رکھیں — کاریگر بتا دیں گے اگر نہیں۔';
+
+  @override
+  String fareAdviceReasoningBy(String model) {
+    return '$model کے مطابق وجہ:';
+  }
+
+  @override
+  String get fareAdviceClamped =>
+      'ایجنٹ کا اندازہ ملتے جلتے کاموں سے بہت مختلف تھا، اس لیے اسے حد کے اندر لایا گیا ہے۔';
+
+  @override
+  String get fareAgentFellBackUnreachable =>
+      'کرایہ ایجنٹ نے جواب نہیں دیا، اس لیے یہ اسی ڈیوائس پر نکالا گیا ہے۔';
+
+  @override
+  String get fareAgentFellBackNoModel =>
+      'کرایہ ایجنٹ اپنے ماڈل تک نہیں پہنچ سکا، اس لیے یہ اسی ڈیوائس پر نکالا گیا ہے۔';
+
+  @override
+  String get fareAgentFellBackNoAnswer =>
+      'کرایہ ایجنٹ کسی رقم پر نہیں پہنچا، اس لیے یہ اسی ڈیوائس پر نکالا گیا ہے۔';
+
+  @override
+  String get fareAgentFellBackRefused =>
+      'کرایہ ایجنٹ جواب نہیں دے سکا، اس لیے یہ اسی ڈیوائس پر نکالا گیا ہے۔';
+
+  @override
+  String fareAdviceUse(String amount) {
+    return '$amount رکھیں';
+  }
+
+  @override
+  String get fareAdviceCaveat =>
+      'یہ پچھلے کاموں سے تجویز ہے، قیمت نہیں۔ کاریگر پھر بھی اپنی پیشکش کر سکتے ہیں۔';
+
+  @override
+  String get topUpStripeNotice =>
+      'Stripe ٹیسٹ موڈ۔ کوئی اصلی رقم منتقل نہیں ہوتی — کارڈ 4242 4242 4242 4242، کوئی بھی آنے والی تاریخ اور کوئی بھی CVC استعمال کریں۔';
+
+  @override
+  String topUpPayWithStripe(String amount) {
+    return '$amount Stripe سے ادا کریں';
+  }
+
+  @override
+  String get topUpWaiting => 'Stripe کا انتظار';
+
+  @override
+  String get topUpWaitingExplain =>
+      'کھلنے والے Stripe صفحے پر ادائیگی مکمل کریں۔ Stripe کی تصدیق ہوتے ہی ٹوکن یہاں شامل ہو جائیں گے۔';
+
+  @override
+  String get topUpOpenAgain => 'ادائیگی کا صفحہ دوبارہ کھولیں';
+
+  @override
+  String get topUpStopWaiting => 'انتظار ختم کریں';
+
+  @override
+  String get topUpStripeFailed =>
+      'Stripe سے رابطہ نہیں ہو سکا۔ کوئی رقم نہیں لی گئی۔';
+
+  @override
+  String get topUpCouldNotOpen => 'ادائیگی کا صفحہ نہیں کھل سکا۔';
+
+  @override
+  String get topUpExpired =>
+      'ادائیگی کا وہ صفحہ ختم ہو گیا۔ کوئی رقم نہیں لی گئی۔';
+
+  @override
+  String get topUpNotMatched =>
+      'Stripe کے پاس یہ ادائیگی ہے، مگر یہ اس بٹوے سے میل نہیں کھاتی، اس لیے کچھ شامل نہیں کیا گیا۔';
+
+  @override
+  String get devServicesSection => 'ڈیولپمنٹ سروسز';
+
+  @override
+  String get devServicesExplain =>
+      'Stripe ٹیسٹ ادائیگیاں اور AI کرایہ ایجنٹ آپ کے اپنے کمپیوٹر پر ایک چھوٹے سرور پر چلتے ہیں — code/backend/dev_server۔ اس کے بغیر ٹوکن کی خریداری نمونہ ہے اور کرایہ اسی ڈیوائس پر نکالا جاتا ہے۔';
+
+  @override
+  String get devServicesUrlLabel => 'ڈیولپمنٹ سرور کا پتہ';
+
+  @override
+  String get devServicesUrlHint => 'مثلاً http://localhost:8787';
+
+  @override
+  String get devServicesSave => 'پتہ محفوظ کریں';
+
+  @override
+  String get devServicesCheck => 'رابطہ جانچیں';
+
+  @override
+  String get devServicesInvalid => 'یہ ایسا پتہ نہیں جو ایپ استعمال کر سکے۔';
+
+  @override
+  String get devServicesNotSet => 'مقرر نہیں';
+
+  @override
+  String get devServicesChecking => 'جانچ جاری ہے';
+
+  @override
+  String get devServicesConnected => 'منسلک';
+
+  @override
+  String get devServicesUnreachable => 'رابطہ نہیں ہو سکا';
+
+  @override
+  String get devServicesPaymentsOn => 'ادائیگیاں: Stripe ٹیسٹ موڈ';
+
+  @override
+  String get devServicesPaymentsOff =>
+      'ادائیگیاں: بند — ٹوکن کی خریداری نمونہ رہے گی';
+
+  @override
+  String devServicesAgentOn(String model) {
+    return 'کرایہ ایجنٹ: $model';
+  }
+
+  @override
+  String devServicesAgentNoModel(String model) {
+    return 'کرایہ ایجنٹ: $model ابھی ڈاؤن لوڈ نہیں ہوا';
+  }
+
+  @override
+  String get devServicesAgentOff =>
+      'کرایہ ایجنٹ: بند — کرایہ اسی ڈیوائس پر نکالا جاتا ہے';
+
+  @override
+  String get refusalPaymentCredited =>
+      'یہ ادائیگی پہلے ہی ٹوکن میں بدلی جا چکی تھی۔';
 }
