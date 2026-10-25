@@ -341,7 +341,7 @@ void main() {
       expect(find.textContaining('Suggested starting fare'), findsOneWidget);
       // Never written into the field until asked.
       final fareField = find.byWidgetPredicate(
-        (w) => w is TextField && w.decoration?.hintText == 'Rs. 2,000',
+        (w) => w is TextField && w.decoration?.hintText == '2,000',
       );
       expect(
         tester.widget<TextField>(fareField).controller!.text,

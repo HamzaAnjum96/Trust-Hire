@@ -6,11 +6,13 @@ import '../../app/account_controller.dart';
 import '../../app/job_controller.dart';
 import '../../core/formatters.dart';
 import '../../core/app_version.dart';
+import '../../core/theme.dart';
 import '../../core/tokens.dart';
 import '../../models/job.dart';
 import '../../services/capture_service.dart';
 import '../../services/media_store.dart';
 import '../../widgets/state_views.dart';
+import '../../widgets/fare_field.dart';
 import '../fare_advice/fare_advice_panel.dart';
 import 'job_draft_controller.dart';
 import 'job_tag_field.dart';
@@ -250,12 +252,12 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
               TextField(
                 controller: _fareController,
                 onChanged: _draft.setStartingFare,
+                // Typed in the style every fare in the app is shown in, so the
+                // number being set looks like the number workers will see.
+                style: theme.fareStyle,
                 keyboardType: TextInputType.number,
                 inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                decoration: InputDecoration(
-                  hintText: strings.fareHint,
-                  prefixText: '${strings.rupees('').trim()} ',
-                ),
+                decoration: fareDecoration(context, style: theme.fareStyle),
               ),
               const SizedBox(height: BrandSizing.spaceSm),
               FareAdvicePanel(draft: _draft, onUse: _useFare),
@@ -339,7 +341,17 @@ class _FieldLabel extends StatelessWidget {
   Widget build(BuildContext context) {
     // Section 23 — labels stay visible above fields rather than living in the
     // placeholder, and nothing carries a required marker.
-    return Text(text, style: Theme.of(context).textTheme.titleMedium);
+    //
+    // Body size at semibold, not the 18px section heading it used to be:
+    // nine labels at heading size made every field read as a new section,
+    // and the form as nine forms.
+    return Text(
+      text,
+      style: BrandType.body.copyWith(
+        fontWeight: FontWeight.w600,
+        color: Theme.of(context).colorScheme.onSurface,
+      ),
+    );
   }
 }
 

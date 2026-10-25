@@ -1425,5 +1425,9 @@
   "profileThisDemo": "This demo",
   "@profileThisDemo": {
     "description": "Profile group: where the data lives, the intro, restoring the seed"
+  },
+  "fareHintAmount": "2,000",
+  "@fareHintAmount": {
+    "description": "Example amount in an empty fare field; the currency is shown beside it"
   }
 }

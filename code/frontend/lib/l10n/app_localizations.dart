@@ -3505,6 +3505,12 @@ abstract class AppStrings {
   /// In en, this message translates to:
   /// **'This demo'**
   String get profileThisDemo;
+
+  /// Example amount in an empty fare field; the currency is shown beside it
+  ///
+  /// In en, this message translates to:
+  /// **'2,000'**
+  String get fareHintAmount;
 }
 
 class _AppStringsDelegate extends LocalizationsDelegate<AppStrings> {

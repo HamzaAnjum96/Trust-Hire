@@ -2108,4 +2108,7 @@ class AppStringsEn extends AppStrings {
 
   @override
   String get profileThisDemo => 'This demo';
+
+  @override
+  String get fareHintAmount => '2,000';
 }

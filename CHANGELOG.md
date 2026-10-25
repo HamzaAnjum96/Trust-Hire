@@ -12,6 +12,32 @@ that heading to the version and date, and open a fresh `[Unreleased]`.
 
 ## [Unreleased]
 
+### 0.20.2 — UI overhaul, round three: posting a job
+
+#### Changed
+
+- **Every kind of work is on screen at once.** The posting form showed three
+  and a half of its nineteen tags in a sideways scroller, with nothing to say
+  there were fifteen more past the edge — on the one field the form requires,
+  and the one that decides who sees the job. `TagGrid` divides the width into
+  as many even columns as fit (four on a phone) and sizes the tiles to fill
+  them. The trades screen uses it too, which also ends the ragged gap its
+  fixed-width tiles left at the end of each row.
+- **Field labels are body size at semibold**, not the 18px section heading:
+  nine labels at heading size made every field read as a section of its own.
+- **The fare is typed in the fare's own style** — bold, tabular — so the
+  number being set looks like the number workers will see.
+- **"Suggest a fare" has a chart icon.** The one it had carried sparkles, which
+  the brand guidelines rule out.
+
+#### Fixed
+
+- **An empty fare field showed its hint indented by an invisible "Rs.".**
+  `prefixText` is drawn only once a field has focus or text, but keeps its
+  space either way. The currency is now always shown beside the field
+  (`fareDecoration`, used by the posting form and the offer sheet), and the
+  hint is just an example amount.
+
 ### 0.20.1 — UI overhaul, round two: the map and the job sheet
 
 #### Changed

@@ -403,7 +403,8 @@ code/frontend/
 │   │   └── browser_location.dart ← the address bar, on the web build only
 │   └── widgets/      ← shared UI (status pills, skeletons, empty states,
 │                        meta chips, fading scroll rows, settings groups,
-│                        the "Your posting" badge, the fare tag)
+│                        the "Your posting" badge, the fare tag and field,
+│                        the tag grid)
 ├── test/
 │   └── support/      ← harness.dart: every provider, around one screen
 ├── assets/

@@ -6,7 +6,7 @@ import '../../core/layout.dart';
 import '../../core/tokens.dart';
 import '../../l10n/app_localizations.dart';
 import '../../models/job_tag.dart';
-import '../../widgets/tag_tile.dart';
+import '../../widgets/tag_grid.dart';
 
 /// Where a worker says what they do.
 ///
@@ -45,21 +45,14 @@ class MyTradesScreen extends StatelessWidget {
               style: theme.textTheme.labelSmall,
             ),
             const SizedBox(height: BrandSizing.spaceLg),
-            Wrap(
-              spacing: BrandSizing.spaceSm,
-              runSpacing: BrandSizing.spaceSm,
-              children: [
-                for (final tag in JobTag.workerOrder)
-                  TagTile(
-                    tag: tag,
-                    selected: profile.tags.contains(tag),
-                    // The default is shown selected and inert rather than
-                    // hidden: a worker should be able to see that general work
-                    // is on, not just be told it.
-                    enabled: !JobTag.defaultWorkerTags.contains(tag),
-                    onTap: () => profile.toggleTag(tag),
-                  ),
-              ],
+            TagGrid(
+              tags: JobTag.workerOrder,
+              isSelected: profile.tags.contains,
+              // The default is shown selected and inert rather than hidden: a
+              // worker should be able to see that general work is on, not
+              // just be told it.
+              isEnabled: (tag) => !JobTag.defaultWorkerTags.contains(tag),
+              onTap: profile.toggleTag,
             ),
             const SizedBox(height: BrandSizing.spaceLg),
             Text(

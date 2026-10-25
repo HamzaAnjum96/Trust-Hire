@@ -2115,4 +2115,7 @@ class AppStringsUr extends AppStrings {
 
   @override
   String get profileThisDemo => 'یہ ڈیمو';
+
+  @override
+  String get fareHintAmount => '2,000';
 }

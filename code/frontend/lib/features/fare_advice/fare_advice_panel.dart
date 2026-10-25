@@ -78,7 +78,7 @@ class _FareAdvicePanelState extends State<FareAdvicePanel> {
           alignment: AlignmentDirectional.centerStart,
           child: OutlinedButton.icon(
             onPressed: hasTags ? _ask : null,
-            icon: const Icon(Icons.insights_outlined),
+            icon: const Icon(Icons.query_stats),
             label: Text(strings.fareAdviceAsk),
           ),
         ),

@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import '../../app/bid_controller.dart';
 import '../../core/formatters.dart';
 import '../../core/tokens.dart';
+import '../../widgets/fare_field.dart';
 import '../../l10n/app_localizations.dart';
 import '../../models/job.dart';
 import 'bidding_rules.dart';
@@ -131,9 +132,9 @@ class _OfferSheetState extends State<OfferSheet> {
             keyboardType: TextInputType.number,
             inputFormatters: [FilteringTextInputFormatter.digitsOnly],
             style: theme.textTheme.headlineMedium,
-            decoration: InputDecoration(
-              hintText: strings.fareHint,
-              prefixText: '${strings.rupees('').trim()} ',
+            decoration: fareDecoration(
+              context,
+              style: theme.textTheme.headlineMedium,
               errorText: switch (_problem) {
                 BidRefusal.fareNotPositive => strings.fareMustBePositive,
                 BidRefusal.fareImplausible => strings.fareLooksTooHigh,
