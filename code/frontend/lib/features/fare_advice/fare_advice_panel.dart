@@ -2,13 +2,14 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../app/dev_services_controller.dart';
+import '../../app/ai_controller.dart';
 import '../../app/job_controller.dart';
 import '../../core/formatters.dart';
 import '../../core/tokens.dart';
 import '../../l10n/app_localizations.dart';
 import '../../models/job_tag.dart';
 import '../../widgets/state_views.dart';
+import '../ai/ai_consent.dart';
 import '../create_job/job_draft_controller.dart';
 import 'fare_advisor.dart';
 import 'fare_evidence.dart';
@@ -17,8 +18,8 @@ import 'fare_evidence.dart';
 ///
 /// Asked for, never automatic: the fare stays the hirer's to choose, and a
 /// suggestion that filled the field by itself would quietly become the price.
-/// The answer always says where it came from — the fare agent and which
-/// model, or this device and how many jobs — because a number without its
+/// The answer always says where it came from — the AI and which model, or
+/// the arithmetic on similar jobs and how many — because a number without its
 /// source is exactly the kind of claim this product is trying not to make.
 class FareAdvicePanel extends StatefulWidget {
   const FareAdvicePanel({
@@ -51,7 +52,7 @@ class _FareAdvicePanelState extends State<FareAdvicePanel> {
   Future<void> _ask() async {
     final draft = widget.draft;
     final jobs = context.read<JobController>().jobs;
-    final devServices = context.read<DevServicesController>();
+    final ai = context.read<AiController>();
     final language = AppStrings.of(context).localeName;
     final when = draft.scheduledTime;
 
@@ -68,6 +69,11 @@ class _FareAdvicePanelState extends State<FareAdvicePanel> {
       _askedAbout = draft.tags;
     });
 
+    // Starts the model if it is switched on and not yet running; null when it
+    // is off, cannot run here, or will not start — the estimate answers then.
+    final model = await ai.ensureReady();
+    if (!mounted) return;
+
     final advice = await widget.advisor.advise(
       FareQuestion(
         tags: draft.tags,
@@ -77,7 +83,7 @@ class _FareAdvicePanelState extends State<FareAdvicePanel> {
         when: when?.toIso8601String(),
         language: language,
       ),
-      agent: devServices.agentReady ? devServices.client : null,
+      model: model,
     );
     if (!mounted) return;
 
@@ -92,10 +98,10 @@ class _FareAdvicePanelState extends State<FareAdvicePanel> {
   Widget build(BuildContext context) {
     final strings = AppStrings.of(context);
     final theme = Theme.of(context);
-    final devServices = context.watch<DevServicesController>();
+    final ai = context.watch<AiController>();
     final hasTags = widget.draft.tags.isNotEmpty;
     final current = _asked && setEquals(_askedAbout, widget.draft.tags);
-    final model = devServices.status?.model;
+    final aiOn = ai.enabled && ai.available && ai.state != AiState.failed;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -112,11 +118,24 @@ class _FareAdvicePanelState extends State<FareAdvicePanel> {
         Text(
           !hasTags
               ? strings.fareAdviceNeedsTags
-              : devServices.agentReady && model != null
-              ? strings.fareAdviceByAgent(model)
+              : aiOn
+              ? (ai.onDevice
+                    ? strings.fareAdviceByAi(ai.modelName)
+                    : strings.fareAdviceByRemoteAi(ai.modelName))
               : strings.fareAdviceOnDevice,
           style: theme.textTheme.labelSmall,
         ),
+        // The way to an explanation, offered where the explanation would go
+        // — not buried in settings — and only where the AI can run.
+        if (hasTags && ai.available && !ai.enabled)
+          Align(
+            alignment: AlignmentDirectional.centerStart,
+            child: TextButton.icon(
+              onPressed: () => askToTurnOnAi(context),
+              icon: const Icon(Icons.auto_awesome_outlined, size: 18),
+              label: Text(strings.fareAdviceTurnOnAi),
+            ),
+          ),
 
         if (_asking) ...[
           const SizedBox(height: BrandSizing.spaceSm),
@@ -130,7 +149,9 @@ class _FareAdvicePanelState extends State<FareAdvicePanel> {
               const SizedBox(width: BrandSizing.spaceSm),
               Expanded(
                 child: Text(
-                  devServices.agentReady
+                  ai.state == AiState.loading
+                      ? strings.aiStatusLoading((ai.progress * 100).round())
+                      : aiOn
                       ? strings.fareAdviceAsking
                       : strings.fareAdviceOnDevice,
                   style: theme.textTheme.bodyMedium,
