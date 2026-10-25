@@ -2111,4 +2111,7 @@ class AppStringsEn extends AppStrings {
 
   @override
   String get fareHintAmount => '2,000';
+
+  @override
+  String get directoryPriceFrom => 'Starting price';
 }

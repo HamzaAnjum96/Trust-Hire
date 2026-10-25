@@ -3511,6 +3511,12 @@ abstract class AppStrings {
   /// In en, this message translates to:
   /// **'2,000'**
   String get fareHintAmount;
+
+  /// Under the lowest service price on a directory card
+  ///
+  /// In en, this message translates to:
+  /// **'Starting price'**
+  String get directoryPriceFrom;
 }
 
 class _AppStringsDelegate extends LocalizationsDelegate<AppStrings> {

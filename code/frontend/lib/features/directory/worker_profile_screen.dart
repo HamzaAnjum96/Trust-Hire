@@ -5,9 +5,12 @@ import '../../app/job_controller.dart';
 import '../../app/premium_controller.dart';
 import '../../core/formatters.dart';
 import '../../core/layout.dart';
+import '../../core/theme.dart';
 import '../../core/tokens.dart';
 import '../../l10n/app_localizations.dart';
 import '../../models/premium.dart';
+import '../../widgets/initials_avatar.dart';
+import '../../widgets/settings_group.dart';
 import '../../widgets/state_views.dart';
 import '../ratings/worker_standing_view.dart';
 import 'booking_sheet.dart';
@@ -72,28 +75,63 @@ class WorkerProfileScreen extends StatelessWidget {
             BrandSizing.spaceXl * 2,
           ),
           children: [
-            if (listing.headline != null) ...[
-              Text(listing.headline!, style: theme.textTheme.titleMedium),
-              const SizedBox(height: BrandSizing.spaceMd),
-            ],
-
-            WorkerStandingView(workerId: workerId),
-
-            const SizedBox(height: BrandSizing.spaceLg),
-            Text(strings.serviceAreaHeading, style: theme.textTheme.titleMedium),
-            const SizedBox(height: BrandSizing.spaceXs),
-            Text(
-              listing.remoteOnly
-                  ? strings.serviceAreaRemote
-                  : strings.serviceAreaRadius(
-                      Format.distance(strings, listing.serviceRadiusMetres),
-                    ),
-              style: theme.textTheme.bodyMedium,
+            // Who, before anything they say about themselves.
+            Row(
+              children: [
+                InitialsAvatar(name: name, radius: 28),
+                const SizedBox(width: BrandSizing.spaceMd),
+                Expanded(
+                  child: listing.headline == null
+                      ? const SizedBox.shrink()
+                      : Text(
+                          listing.headline!,
+                          style: theme.textTheme.titleMedium,
+                        ),
+                ),
+              ],
             ),
 
             const SizedBox(height: BrandSizing.spaceLg),
-            Text(strings.serviceMenu, style: theme.textTheme.titleLarge),
-            const SizedBox(height: BrandSizing.spaceSm),
+            SettingsGroup(
+              children: [
+                GroupPadding(child: WorkerStandingView(workerId: workerId)),
+                GroupPadding(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        strings.serviceAreaHeading,
+                        style: theme.textTheme.titleMedium,
+                      ),
+                      const SizedBox(height: BrandSizing.spaceXs),
+                      Text(
+                        listing.remoteOnly
+                            ? strings.serviceAreaRemote
+                            : strings.serviceAreaRadius(
+                                Format.distance(
+                                  strings,
+                                  listing.serviceRadiusMetres,
+                                ),
+                              ),
+                        style: theme.textTheme.bodyMedium,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+
+            const SizedBox(height: BrandSizing.spaceLg),
+            Padding(
+              padding: const EdgeInsetsDirectional.only(
+                start: BrandSizing.spaceXs,
+                bottom: BrandSizing.spaceSm,
+              ),
+              child: Text(
+                strings.serviceMenu,
+                style: theme.textTheme.titleMedium,
+              ),
+            ),
 
             if (!isListed)
               NoticePanel(message: strings.bookingUnavailable)
@@ -105,24 +143,18 @@ class WorkerProfileScreen extends StatelessWidget {
 
             if (listing.credentials.isNotEmpty) ...[
               const SizedBox(height: BrandSizing.spaceLg),
-              Text(
-                strings.credentialsHeading,
-                style: theme.textTheme.titleLarge,
+              SettingsGroup(
+                title: strings.credentialsHeading,
+                // Said once, under the list rather than on each row. Section
+                // 2 verifies a CNIC and a phone number; it does not verify a
+                // degree, and showing an unchecked claim without this line
+                // would be the app vouching for something nobody checked.
+                caption: strings.credentialsUnverified,
+                children: [
+                  for (final credential in listing.credentials)
+                    _CredentialRow(credential: credential),
+                ],
               ),
-              const SizedBox(height: BrandSizing.spaceXs),
-              // Said once, above the list rather than on each row. Section 2
-              // verifies a CNIC and a phone number; it does not verify a
-              // degree, and showing an unchecked claim without this line
-              // would be the app vouching for something nobody checked.
-              Text(
-                strings.credentialsUnverified,
-                style: theme.textTheme.labelSmall?.copyWith(
-                  color: theme.colorScheme.onSurfaceVariant,
-                ),
-              ),
-              const SizedBox(height: BrandSizing.spaceSm),
-              for (final credential in listing.credentials)
-                _CredentialRow(credential: credential),
             ],
           ],
         ),
@@ -153,10 +185,6 @@ class _ServiceCard extends StatelessWidget {
 
     return Card(
       margin: EdgeInsets.zero,
-      shape: RoundedRectangleBorder(
-        borderRadius: BrandRadius.mediumAll,
-        side: BorderSide(color: theme.colorScheme.outlineVariant),
-      ),
       child: Padding(
         padding: const EdgeInsets.all(BrandSizing.spaceMd),
         child: Column(
@@ -165,7 +193,11 @@ class _ServiceCard extends StatelessWidget {
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Icon(service.tag.icon, size: 20),
+                Icon(
+                  service.tag.icon,
+                  size: 20,
+                  color: theme.colorScheme.onSurfaceVariant,
+                ),
                 const SizedBox(width: BrandSizing.spaceSm),
                 Expanded(
                   child: Text(
@@ -190,7 +222,7 @@ class _ServiceCard extends StatelessWidget {
                     children: [
                       Text(
                         Format.fare(strings, youPay),
-                        style: theme.textTheme.titleLarge,
+                        style: theme.fareStyle,
                       ),
                       // The saving is shown, not just the smaller number. A
                       // discount nobody can see does not stop anybody taking
@@ -199,10 +231,7 @@ class _ServiceCard extends StatelessWidget {
                       if (youPay != service.priceRupees)
                         Text(
                           strings.bookingSaving(
-                            Format.fare(
-                              strings,
-                              service.priceRupees - youPay,
-                            ),
+                            Format.fare(strings, service.priceRupees - youPay),
                           ),
                           style: theme.textTheme.labelSmall?.copyWith(
                             color: BrandColours.successTeal,
@@ -211,6 +240,7 @@ class _ServiceCard extends StatelessWidget {
                     ],
                   ),
                 ),
+                const SizedBox(width: BrandSizing.spaceSm + 4),
                 FilledButton(
                   onPressed: () => BookingSheet.open(
                     context,
@@ -250,8 +280,6 @@ class _CredentialRow extends StatelessWidget {
     ].join(' · ');
 
     return ListTile(
-      contentPadding: EdgeInsets.zero,
-      dense: true,
       leading: const Icon(Icons.workspace_premium_outlined),
       title: Text(credential.title),
       subtitle: Text(detail),

@@ -5,11 +5,13 @@ import '../../app/job_controller.dart';
 import '../../app/premium_controller.dart';
 import '../../core/formatters.dart';
 import '../../core/layout.dart';
+import '../../core/theme.dart';
 import '../../core/tokens.dart';
 import '../../l10n/app_localizations.dart';
 import '../../models/job_tag.dart';
 import '../../models/premium.dart';
 import '../../widgets/fading_row.dart';
+import '../../widgets/initials_avatar.dart';
 import '../../widgets/meta_chip.dart';
 import '../../widgets/state_views.dart';
 import '../account/account_switcher.dart';
@@ -270,8 +272,7 @@ class _DirectoryControls extends StatelessWidget {
                     // appears once location is granted is one nobody knows to
                     // look for.
                     enabled:
-                        value != DirectoryOrder.byDistance ||
-                        canSortByDistance,
+                        value != DirectoryOrder.byDistance || canSortByDistance,
                     child: Text(_label(strings, value)),
                   ),
               ],
@@ -342,13 +343,10 @@ class _DirectoryControls extends StatelessWidget {
 ///
 /// Name, one line, what they start at, and their record. Deliberately not a
 /// photograph and not a badge: Section 9 sells *visibility*, and anything that
-/// made a paid listing look endorsed would be selling something else.
+/// made a paid listing look endorsed would be selling something else. The
+/// initials are in neutral sand for the same reason.
 class _ListingCard extends StatelessWidget {
-  const _ListingCard({
-    required this.listing,
-    this.name,
-    this.distanceMetres,
-  });
+  const _ListingCard({required this.listing, this.name, this.distanceMetres});
 
   final DirectoryListing listing;
   final String? name;
@@ -364,48 +362,78 @@ class _ListingCard extends StatelessWidget {
     final theme = Theme.of(context);
     final from = listing.fromPrice;
 
+    final shownName = name ?? strings.someone;
+
     return Card(
       margin: EdgeInsets.zero,
-      shape: RoundedRectangleBorder(
-        borderRadius: BrandRadius.mediumAll,
-        side: BorderSide(color: theme.colorScheme.outlineVariant),
-      ),
+      clipBehavior: Clip.antiAlias,
       child: InkWell(
-        borderRadius: BrandRadius.mediumAll,
         onTap: () => WorkerProfileScreen.open(context, listing: listing),
         child: Padding(
           padding: const EdgeInsets.all(BrandSizing.spaceMd),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                    child: Text(
-                      name ?? strings.someone,
-                      style: theme.textTheme.titleLarge,
-                    ),
-                  ),
-                  if (from != null)
-                    Text(
-                      strings.fromPrice(Format.fare(strings, from)),
-                      style: theme.textTheme.titleMedium?.copyWith(
-                        color: theme.colorScheme.primary,
+              LayoutBuilder(
+                builder: (context, constraints) => Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    InitialsAvatar(name: shownName),
+                    const SizedBox(width: BrandSizing.spaceSm + 4),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(shownName, style: theme.textTheme.titleLarge),
+                          if (listing.headline != null) ...[
+                            const SizedBox(height: 2),
+                            Text(
+                              listing.headline!,
+                              style: theme.textTheme.bodyMedium,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ],
+                        ],
                       ),
                     ),
-                ],
+                    if (from != null) ...[
+                      const SizedBox(width: BrandSizing.spaceSm),
+                      // The same shape as a fare on a job row: the number,
+                      // and what kind of number it is.
+                      ConstrainedBox(
+                        constraints: BoxConstraints(
+                          maxWidth: constraints.maxWidth * 0.36,
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            FittedBox(
+                              fit: BoxFit.scaleDown,
+                              alignment: AlignmentDirectional.centerEnd,
+                              child: Text(
+                                Format.fare(strings, from),
+                                style: theme.fareStyle,
+                              ),
+                            ),
+                            Text(
+                              strings.directoryPriceFrom,
+                              style: theme.textTheme.labelSmall,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ],
+                ),
               ),
 
-              if (listing.headline != null) ...[
-                const SizedBox(height: BrandSizing.spaceXs),
-                Text(listing.headline!, style: theme.textTheme.bodyMedium),
-              ],
-
-              // How far, and how far they will come. The second is the number
-              // the worker chose, and it is the reason they are on this
-              // screen at all rather than a different one.
-              const SizedBox(height: BrandSizing.spaceSm),
+              // How far, how far they will come, and what they do. The second
+              // is the number the worker chose, and it is the reason they are
+              // on this screen at all rather than a different one.
+              const SizedBox(height: BrandSizing.spaceSm + 4),
               Wrap(
                 spacing: BrandSizing.spaceMd,
                 runSpacing: BrandSizing.spaceXs,
@@ -425,24 +453,14 @@ class _ListingCard extends StatelessWidget {
                             Format.span(strings, listing.serviceRadiusMetres),
                           ),
                   ),
+                  // Facts, like the rest of the row — not chips, which read
+                  // as buttons and are not.
+                  for (final tag in listing.tags)
+                    MetaChip(icon: tag.icon, label: tag.label(strings)),
                 ],
               ),
 
               const SizedBox(height: BrandSizing.spaceSm),
-              Wrap(
-                spacing: BrandSizing.spaceXs,
-                runSpacing: BrandSizing.spaceXs,
-                children: [
-                  for (final tag in listing.tags)
-                    Chip(
-                      avatar: Icon(tag.icon, size: 16),
-                      label: Text(tag.label(strings)),
-                      visualDensity: VisualDensity.compact,
-                    ),
-                ],
-              ),
-
-              const SizedBox(height: BrandSizing.spaceXs),
               WorkerStandingView(workerId: listing.workerId, compact: true),
             ],
           ),

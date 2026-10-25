@@ -146,6 +146,21 @@ class BrandTheme {
         ),
       ),
 
+      // The same button as the elevated one, for the screens that ask for a
+      // filled one: Material's default is a 40px pill, and fourteen of them —
+      // "Book this", "Offer a fare", "Send" — sat beside 48px rounded
+      // rectangles that were meant to be the same control.
+      filledButtonTheme: FilledButtonThemeData(
+        style: FilledButton.styleFrom(
+          minimumSize: const Size(0, BrandSizing.touchTargetPreferred),
+          padding: const EdgeInsets.symmetric(horizontal: BrandSizing.spaceLg),
+          textStyle: BrandType.button,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BrandRadius.mediumAll,
+          ),
+        ),
+      ),
+
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
           foregroundColor: scheme.primary,

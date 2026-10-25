@@ -1429,5 +1429,9 @@
   "fareHintAmount": "2,000",
   "@fareHintAmount": {
     "description": "Example amount in an empty fare field; the currency is shown beside it"
+  },
+  "directoryPriceFrom": "Starting price",
+  "@directoryPriceFrom": {
+    "description": "Under the lowest service price on a directory card"
   }
 }

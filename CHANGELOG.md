@@ -12,6 +12,30 @@ that heading to the version and date, and open a fresh `[Unreleased]`.
 
 ## [Unreleased]
 
+### 0.20.3 — UI overhaul, round four: the directory
+
+#### Changed
+
+- **Directory cards read like job rows.** Initials, then name and headline,
+  with the starting price opposite in the fare's style and labelled as one.
+  Trades are facts in the row now rather than chips, which read as buttons
+  and were not. The initials are neutral sand and ink: Section 9 sells
+  visibility, and a listing marked out in the brand's colours would look
+  endorsed.
+- **A worker's page starts with who they are** — initials and headline —
+  then their record and where they work on one surface, the menu with
+  prices in the fare's style, and their credentials as a group whose caption
+  says Trust Hire has not checked them.
+- **Filled buttons match the rest.** Fourteen of them — "Book this", "Offer a
+  fare", "Send" — used Material's default 40px pill beside 48px rounded
+  rectangles meant to be the same control. The theme now gives them the
+  brand's height, radius and type.
+
+#### Added
+
+- `InitialsAvatar`, for people in the directory, who have no demo account to
+  draw an avatar from.
+
 ### 0.20.2 — UI overhaul, round three: posting a job
 
 #### Changed

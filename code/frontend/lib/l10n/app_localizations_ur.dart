@@ -2118,4 +2118,7 @@ class AppStringsUr extends AppStrings {
 
   @override
   String get fareHintAmount => '2,000';
+
+  @override
+  String get directoryPriceFrom => 'ابتدائی قیمت';
 }
