@@ -12,6 +12,45 @@ that heading to the version and date, and open a fresh `[Unreleased]`.
 
 ## [Unreleased]
 
+### 0.20.1 — UI overhaul, round two: the map and the job sheet
+
+#### Changed
+
+- **The job sheet leads with the fare and keeps its button in reach.** The
+  fare is the sheet's headline now — 28px, under the title — instead of one
+  detail row among five. The details sit on one grouped surface. And
+  **"Offer a fare" is pinned under the sheet**: it used to come after the
+  photos, the voice note, the details and the job's status, so on a phone it
+  was below the fold of a sheet that opens at three quarters — the one thing
+  a worker opened it to do, reached by scrolling past everything else. When
+  no offer can be made, the reason is in the sheet as before and nothing is
+  pinned.
+- **The pin's preview card is shaped like a row in the list** — title on one
+  side, fare on the other — and names the neighbourhood, which it never did.
+  Its button said "View Job" in English whatever the language; it says "Open
+  details" in the reader's language now.
+- **The map's top bar is 56px, and placed from its real height.** It was 72px
+  with the filter chips positioned 64px down, so the chips sat over its
+  bottom edge. The chips and the notices are now placed from the bar's height
+  rather than from numbers kept in step by hand, and the chips carry a shadow
+  so they read as floating over the map. The job count is a small pill.
+- **Map notices are slimmer.** The action is a link under the words instead of
+  a full-width button under them — the trades notice, button and all, covered
+  the top third of a phone's map.
+
+#### Fixed
+
+- **"Near me" hid behind the pin's preview card.** The map's two buttons moved
+  to a fixed 236px above the bottom when a pin was chosen, and a card with a
+  two-line title and a description is taller than that. They now ride on top
+  of the card, whatever its height, and move up with it as it slides in. On a
+  window too short for both, the card wins until it is closed.
+
+#### Added
+
+- `FareTag` — the fare and what kind of number it is, shared by the job row,
+  the preview card and the sheet.
+
 ### 0.20.0 — No dev server, and the first round of the UI overhaul
 
 Nobody is going to run a server: the app is GitHub Pages and that is all.

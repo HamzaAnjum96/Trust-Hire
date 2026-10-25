@@ -217,7 +217,6 @@
   "fareHint": "روپے 2,000",
   "rupees": "روپے {amount}",
   "startsAt": "شروع {amount} سے",
-  "agreedAt": "طے شدہ {amount}",
   "offerAFare": "اپنی قیمت بتائیں",
   "changeMyOffer": "اپنی پیشکش بدلیں",
   "yourOffer": "آپ نے {fare} کی پیشکش کی",

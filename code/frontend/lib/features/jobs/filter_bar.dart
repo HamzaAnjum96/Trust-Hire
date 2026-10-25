@@ -15,10 +15,15 @@ class QuickFilterBar extends StatelessWidget {
     super.key,
     required this.controller,
     this.scrollable = true,
+    this.floating = false,
   });
 
   final JobFilterController controller;
   final bool scrollable;
+
+  /// Over the map, where each chip needs a shadow to read as something that
+  /// sits on top of it rather than something printed on it.
+  final bool floating;
 
   @override
   Widget build(BuildContext context) {
@@ -27,30 +32,35 @@ class QuickFilterBar extends StatelessWidget {
 
     final chips = <Widget>[
       _FilterChip(
+        floating: floating,
         label: TimeFilter.today.label(strings),
         icon: Icons.today_outlined,
         selected: filter.time == TimeFilter.today,
         onTap: controller.toggleToday,
       ),
       _FilterChip(
+        floating: floating,
         label: DistanceFilter.nearMe.label(strings),
         icon: Icons.near_me_outlined,
         selected: filter.distance == DistanceFilter.nearMe,
         onTap: controller.toggleNearMe,
       ),
       _FilterChip(
+        floating: floating,
         label: strings.voiceNote,
         icon: Icons.mic_none,
         selected: filter.withVoiceNote,
         onTap: () => controller.setWithVoiceNote(!filter.withVoiceNote),
       ),
       _FilterChip(
+        floating: floating,
         label: strings.photos,
         icon: Icons.photo_library_outlined,
         selected: filter.withPhotos,
         onTap: () => controller.setWithPhotos(!filter.withPhotos),
       ),
       _FilterChip(
+        floating: floating,
         label: strings.more,
         icon: Icons.tune,
         selected:
@@ -63,6 +73,7 @@ class QuickFilterBar extends StatelessWidget {
       ),
       if (controller.isActive)
         _FilterChip(
+          floating: floating,
           label: strings.clear,
           icon: Icons.close,
           selected: false,
@@ -90,12 +101,14 @@ class _FilterChip extends StatelessWidget {
     required this.icon,
     required this.selected,
     required this.onTap,
+    this.floating = false,
   });
 
   final String label;
   final IconData icon;
   final bool selected;
   final VoidCallback onTap;
+  final bool floating;
 
   @override
   Widget build(BuildContext context) {
@@ -112,6 +125,8 @@ class _FilterChip extends StatelessWidget {
       child: Material(
         color: selected ? theme.colorScheme.primary : theme.colorScheme.surface,
         borderRadius: BrandRadius.mediumAll,
+        elevation: floating ? 2 : 0,
+        shadowColor: BrandColours.ink.withValues(alpha: 0.2),
         child: InkWell(
           onTap: onTap,
           borderRadius: BrandRadius.mediumAll,

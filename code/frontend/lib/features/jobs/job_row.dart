@@ -3,10 +3,10 @@ import 'package:provider/provider.dart';
 
 import '../../app/account_controller.dart';
 import '../../core/formatters.dart';
-import '../../core/theme.dart';
 import '../../core/tokens.dart';
 import '../../l10n/app_localizations.dart';
 import '../../models/job.dart';
+import '../../widgets/fare_tag.dart';
 import '../../widgets/meta_chip.dart';
 import '../../widgets/mine_badge.dart';
 
@@ -107,7 +107,7 @@ class JobRow extends StatelessWidget {
                       constraints: BoxConstraints(
                         maxWidth: constraints.maxWidth * 0.42,
                       ),
-                      child: _Fare(job: job),
+                      child: FareTag(job: job),
                     ),
                   ],
                 ),
@@ -178,71 +178,6 @@ class JobRow extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
-}
-
-/// The fare, and what kind of number it is.
-///
-/// An agreed fare is the one that was locked at acceptance, so it says so and
-/// carries the lock; a starting fare is the hirer's opening, and says that. A
-/// job with neither says it is open to offers, so a row without a number does
-/// not read as a row with a missing one.
-class _Fare extends StatelessWidget {
-  const _Fare({required this.job});
-
-  final Job job;
-
-  @override
-  Widget build(BuildContext context) {
-    final strings = AppStrings.of(context);
-    final theme = Theme.of(context);
-    final agreed = job.agreedFare;
-    final fare = agreed ?? job.startingFare;
-
-    if (fare == null) {
-      return Text(
-        strings.fareOpenToOffers,
-        style: theme.textTheme.labelMedium,
-        textAlign: TextAlign.end,
-        maxLines: 2,
-      );
-    }
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.end,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        // Shrunk rather than cut: "Rs. 10,0…" would be a different fare.
-        FittedBox(
-          fit: BoxFit.scaleDown,
-          alignment: AlignmentDirectional.centerEnd,
-          child: Text(Format.fare(strings, fare), style: theme.fareStyle),
-        ),
-        Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            if (agreed != null) ...[
-              Icon(
-                Icons.lock_outline,
-                size: 12,
-                color: theme.colorScheme.onSurfaceVariant,
-              ),
-              const SizedBox(width: 2),
-            ],
-            Flexible(
-              child: Text(
-                agreed != null
-                    ? strings.fareAgreedLabel
-                    : strings.fieldStartingFare,
-                style: theme.textTheme.labelSmall,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ),
-          ],
-        ),
-      ],
     );
   }
 }

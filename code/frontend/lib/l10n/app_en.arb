@@ -448,14 +448,6 @@
       }
     }
   },
-  "agreedAt": "Agreed at {amount}",
-  "@agreedAt": {
-    "placeholders": {
-      "amount": {
-        "type": "String"
-      }
-    }
-  },
   "offerAFare": "Offer a fare",
   "@offerAFare": {
     "description": "Button that opens the bidding sheet"

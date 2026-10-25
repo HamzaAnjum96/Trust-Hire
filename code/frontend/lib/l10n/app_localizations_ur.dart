@@ -780,11 +780,6 @@ class AppStringsUr extends AppStrings {
   }
 
   @override
-  String agreedAt(String amount) {
-    return 'طے شدہ $amount';
-  }
-
-  @override
   String get offerAFare => 'اپنی قیمت بتائیں';
 
   @override

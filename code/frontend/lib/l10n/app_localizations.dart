@@ -1400,12 +1400,6 @@ abstract class AppStrings {
   /// **'Starts at {amount}'**
   String startsAt(String amount);
 
-  /// No description provided for @agreedAt.
-  ///
-  /// In en, this message translates to:
-  /// **'Agreed at {amount}'**
-  String agreedAt(String amount);
-
   /// Button that opens the bidding sheet
   ///
   /// In en, this message translates to:

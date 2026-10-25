@@ -16,7 +16,10 @@ import '../../models/job.dart';
 import '../../services/media_store.dart';
 import '../../widgets/state_views.dart';
 import '../../widgets/voice_note_player.dart';
+import '../../widgets/fare_tag.dart';
 import '../../widgets/mine_badge.dart';
+import '../../widgets/settings_group.dart';
+import '../bidding/bidding_rules.dart';
 import '../bidding/offer_list.dart';
 import '../lifecycle/job_lifecycle.dart';
 import '../map/job_marker.dart';
@@ -118,173 +121,186 @@ class _Body extends StatelessWidget {
     final theme = Theme.of(context);
     final now = DateTime.now();
     final distance = Format.distanceToJob(strings, viewerLocation, job);
+    final mine = job.isPostedBy(context.watch<AccountController>().activeId);
 
-    return ListView(
-      controller: scrollController,
-      padding: const EdgeInsets.fromLTRB(
-        BrandSizing.spaceMd,
-        BrandSizing.spaceSm,
-        BrandSizing.spaceMd,
-        BrandSizing.spaceXl,
-      ),
+    return Column(
       children: [
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              child: Text(
-                job.displayTitle(strings),
-                style: theme.textTheme.headlineMedium,
-              ),
+        Expanded(
+          child: ListView(
+            controller: scrollController,
+            padding: const EdgeInsets.fromLTRB(
+              BrandSizing.spaceMd,
+              BrandSizing.spaceSm,
+              BrandSizing.spaceMd,
+              BrandSizing.spaceXl,
             ),
-            if (job.isPostedBy(context.watch<AccountController>().activeId))
-              ...[
-                const SizedBox(width: BrandSizing.spaceSm),
-                const MineBadge(),
+            children: [
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: Text(
+                      job.displayTitle(strings),
+                      style: theme.textTheme.headlineMedium,
+                    ),
+                  ),
+                  const SizedBox(width: BrandSizing.spaceSm),
+                  _SaveButton(jobId: job.id),
+                ],
+              ),
+              const SizedBox(height: BrandSizing.spaceXs),
+              Text(
+                strings.postedAgo(Format.posted(strings, job.createdAt, now)),
+                style: theme.textTheme.labelSmall,
+              ),
+              if (mine) ...[
+                const SizedBox(height: BrandSizing.spaceSm),
+                const Align(
+                  alignment: AlignmentDirectional.centerStart,
+                  child: MineBadge(),
+                ),
               ],
-            const SizedBox(width: BrandSizing.spaceSm),
-            _SaveButton(jobId: job.id),
-          ],
-        ),
-        const SizedBox(height: BrandSizing.spaceXs),
-        Text(
-          strings.postedAgo(Format.posted(strings, job.createdAt, now)),
-          style: theme.textTheme.labelSmall,
-        ),
 
-        if (job.hasPhotos) ...[
-          const SizedBox(height: BrandSizing.spaceMd),
-          PhotoGallery(photos: job.photoPaths, mediaStore: mediaStore),
-        ],
+              // The fare is the headline, not one detail among five: it is what a
+              // worker decides on, and what a hirer most wants to see they set.
+              const SizedBox(height: BrandSizing.spaceMd),
+              FareTag(job: job, large: true),
 
-        if (job.hasVoiceNote) ...[
-          const SizedBox(height: BrandSizing.spaceMd),
-          VoiceNotePlayer(
-            reference: job.voiceNotePath!,
-            mediaStore: mediaStore,
-            duration: job.voiceNoteDuration,
+              if (job.hasPhotos) ...[
+                const SizedBox(height: BrandSizing.spaceMd),
+                PhotoGallery(photos: job.photoPaths, mediaStore: mediaStore),
+              ],
+
+              if (job.hasVoiceNote) ...[
+                const SizedBox(height: BrandSizing.spaceMd),
+                VoiceNotePlayer(
+                  reference: job.voiceNotePath!,
+                  mediaStore: mediaStore,
+                  duration: job.voiceNoteDuration,
+                ),
+              ],
+
+              // Said plainly, rather than leaving someone who cannot hear the
+              // recording to discover for themselves that there is nothing to read.
+              if (job.isAudioOnly) ...[
+                const SizedBox(height: BrandSizing.spaceSm),
+                NoticePanel(
+                  message: job.hasContact
+                      ? strings.audioOnlyJobHelp
+                      : strings.audioOnlyJob,
+                  icon: Icons.hearing_disabled_outlined,
+                ),
+              ],
+
+              if (job.supportingDescription != null) ...[
+                const SizedBox(height: BrandSizing.spaceMd),
+                Text(
+                  job.supportingDescription!,
+                  style: theme.textTheme.bodyLarge,
+                ),
+              ],
+
+              const SizedBox(height: BrandSizing.spaceLg),
+              SettingsGroup(
+                children: [
+                  // Every tag the heading has not already said. A job can carry up
+                  // to three, and a worker deciding whether to bid wants all of
+                  // them.
+                  if (job.supportingTags.isNotEmpty)
+                    _DetailRow(
+                      icon: job.supportingTags.first.icon,
+                      label: strings.detailKindOfWork,
+                      value: job.supportingTags
+                          .map((tag) => tag.label(strings))
+                          .join(' · '),
+                    ),
+                  _DetailRow(
+                    icon: Icons.schedule,
+                    label: strings.detailWhen,
+                    value: Format.scheduled(strings, job.scheduledTime, now),
+                  ),
+                  _DetailRow(
+                    icon: Icons.place_outlined,
+                    label: strings.fieldArea,
+                    value: [
+                      // The neighbourhood first: it is the part a person
+                      // recognises, and the only part that means anything without
+                      // a position.
+                      ?job.area,
+                      ?distance,
+                      Format.radius(strings, job.radiusMetres),
+                    ].join(' · '),
+                  ),
+                  if (poster != null)
+                    _DetailRow(
+                      icon: Icons.person_outline,
+                      label: strings.detailPostedBy,
+                      value: poster!.area == null
+                          ? poster!.name
+                          : '${poster!.name} · ${poster!.area}',
+                    ),
+                ],
+              ),
+
+              const SizedBox(height: BrandSizing.spaceLg),
+
+              // Where the job stands comes first: it decides whether an offer is
+              // even possible, and a bid button above a "called off" notice would
+              // be a trap.
+              JobStatusPanel(job: job),
+
+              // Money, before the phone number: from P1-2 the way to take a job is
+              // to offer a fare, not to ring the poster.
+              const SizedBox(height: BrandSizing.spaceMd),
+              _Bidding(job: job, viewerLocation: viewerLocation),
+
+              const SizedBox(height: BrandSizing.spaceLg),
+              Text(strings.contact, style: theme.textTheme.titleMedium),
+              const SizedBox(height: BrandSizing.spaceSm),
+
+              // **Above the phone number, deliberately.** A thread stays with the
+              // job, so what was agreed can be looked up by either side later — a
+              // phone call leaves nothing behind, and Section 5's whole argument for
+              // revealing contact details at acceptance is that the two people now
+              // need to arrange something.
+              _MessagesRow(job: job),
+
+              if (job.hasContact)
+                ContactPanel(number: job.contactNumber!)
+              else
+                Text(strings.noContactGiven, style: theme.textTheme.bodyMedium),
+
+              const SizedBox(height: BrandSizing.spaceLg),
+              _MapPreview(job: job),
+              const SizedBox(height: BrandSizing.spaceSm),
+              Text(
+                // Section 5 of the Phase 1 spec replaced the POC's promise that an
+                // exact location is never shown. It is shown — to the two people who
+                // agreed to work together, and to nobody else — so the line says
+                // which of those two things is happening rather than the old
+                // reassurance that is no longer true.
+                _revealsExactLocation(
+                      job,
+                      context.watch<AccountController>().activeId,
+                    )
+                    ? strings.exactLocationShown
+                    : strings.generalAreaNotice,
+                style: theme.textTheme.labelSmall,
+              ),
+
+              // Only your own postings can be changed. Other people's stand in for
+              // work you have no business editing — and which of the two a job is
+              // depends on who you are currently being.
+              if (mine) ...[
+                const SizedBox(height: BrandSizing.spaceLg),
+                const Divider(),
+                const SizedBox(height: BrandSizing.spaceMd),
+                _JobActions(job: job),
+              ],
+            ],
           ),
-        ],
-
-        // Said plainly, rather than leaving someone who cannot hear the
-        // recording to discover for themselves that there is nothing to read.
-        if (job.isAudioOnly) ...[
-          const SizedBox(height: BrandSizing.spaceSm),
-          NoticePanel(
-            message: job.hasContact
-                ? strings.audioOnlyJobHelp
-                : strings.audioOnlyJob,
-            icon: Icons.hearing_disabled_outlined,
-          ),
-        ],
-
-        if (job.supportingDescription != null) ...[
-          const SizedBox(height: BrandSizing.spaceMd),
-          Text(job.supportingDescription!, style: theme.textTheme.bodyLarge),
-        ],
-
-        const SizedBox(height: BrandSizing.spaceLg),
-        // Every tag the heading has not already said. A job can carry up to
-        // three, and a worker deciding whether to bid wants all of them.
-        if (job.supportingTags.isNotEmpty)
-          _DetailRow(
-            icon: job.supportingTags.first.icon,
-            label: strings.detailKindOfWork,
-            value: job.supportingTags
-                .map((tag) => tag.label(strings))
-                .join(' · '),
-          ),
-        if (job.agreedFare != null)
-          _DetailRow(
-            icon: Icons.lock_outline,
-            label: strings.fieldStartingFare,
-            value: strings.agreedAt(Format.fare(strings, job.agreedFare!)),
-          )
-        else if (job.startingFare != null)
-          _DetailRow(
-            icon: Icons.payments_outlined,
-            label: strings.fieldStartingFare,
-            value: strings.startsAt(Format.fare(strings, job.startingFare!)),
-          ),
-        _DetailRow(
-          icon: Icons.schedule,
-          label: strings.detailWhen,
-          value: Format.scheduled(strings, job.scheduledTime, now),
         ),
-        _DetailRow(
-          icon: Icons.place_outlined,
-          label: strings.fieldArea,
-          value: [
-            // The neighbourhood first: it is the part a person recognises,
-            // and the only part that means anything without a position.
-            ?job.area,
-            ?distance,
-            Format.radius(strings, job.radiusMetres),
-          ].join(' · '),
-        ),
-        if (poster != null)
-          _DetailRow(
-            icon: Icons.person_outline,
-            label: strings.detailPostedBy,
-            value: poster!.area == null
-                ? poster!.name
-                : '${poster!.name} · ${poster!.area}',
-          ),
-
-        const SizedBox(height: BrandSizing.spaceMd),
-        const Divider(),
-        const SizedBox(height: BrandSizing.spaceMd),
-
-        // Where the job stands comes first: it decides whether an offer is
-        // even possible, and a bid button above a "called off" notice would
-        // be a trap.
-        JobStatusPanel(job: job),
-
-        // Money, before the phone number: from P1-2 the way to take a job is
-        // to offer a fare, not to ring the poster.
-        const SizedBox(height: BrandSizing.spaceMd),
-        _Bidding(job: job, viewerLocation: viewerLocation),
-
-        const SizedBox(height: BrandSizing.spaceLg),
-        Text(strings.contact, style: theme.textTheme.titleMedium),
-        const SizedBox(height: BrandSizing.spaceSm),
-
-        // **Above the phone number, deliberately.** A thread stays with the
-        // job, so what was agreed can be looked up by either side later — a
-        // phone call leaves nothing behind, and Section 5's whole argument for
-        // revealing contact details at acceptance is that the two people now
-        // need to arrange something.
-        _MessagesRow(job: job),
-
-        if (job.hasContact)
-          ContactPanel(number: job.contactNumber!)
-        else
-          Text(strings.noContactGiven, style: theme.textTheme.bodyMedium),
-
-        const SizedBox(height: BrandSizing.spaceLg),
-        _MapPreview(job: job),
-        const SizedBox(height: BrandSizing.spaceSm),
-        Text(
-          // Section 5 of the Phase 1 spec replaced the POC's promise that an
-          // exact location is never shown. It is shown — to the two people who
-          // agreed to work together, and to nobody else — so the line says
-          // which of those two things is happening rather than the old
-          // reassurance that is no longer true.
-          _revealsExactLocation(job, context.watch<AccountController>().activeId)
-              ? strings.exactLocationShown
-              : strings.generalAreaNotice,
-          style: theme.textTheme.labelSmall,
-        ),
-
-        // Only your own postings can be changed. Other people's stand in for
-        // work you have no business editing — and which of the two a job is
-        // depends on who you are currently being.
-        if (job.isPostedBy(context.watch<AccountController>().activeId)) ...[
-          const SizedBox(height: BrandSizing.spaceLg),
-          const Divider(),
-          const SizedBox(height: BrandSizing.spaceMd),
-          _JobActions(job: job),
-        ],
+        if (!mine) _OfferBar(job: job, viewerLocation: viewerLocation),
       ],
     );
   }
@@ -313,18 +329,71 @@ class _Bidding extends StatelessWidget {
       return OfferList(job: job);
     }
 
-    final profile = context.watch<ProfileController>();
-    final bids = context.watch<BidController>();
-    final wallet = context.watch<WalletController>();
+    // When an offer can be made, its button is pinned under the sheet
+    // ([_OfferBar]); here is only the reason when one cannot.
+    final refusal = _refusalFor(context, job, viewerLocation);
+    if (refusal == null) return const SizedBox.shrink();
+    return OfferAction(job: job, refusal: refusal);
+  }
+}
 
-    return OfferAction(
-      job: job,
-      refusal: bids.rules.refusalFor(
-        job,
-        worker: profile.profile,
-        from: viewerLocation,
-        existingBids: bids.forJob(job.id),
-        walletLocked: wallet.isLockedOut,
+/// Why this viewer cannot offer on [job], or null when they can.
+BidRefusal? _refusalFor(
+  BuildContext context,
+  Job job,
+  JobLocation? viewerLocation,
+) {
+  final profile = context.watch<ProfileController>();
+  final bids = context.watch<BidController>();
+  final wallet = context.watch<WalletController>();
+
+  return bids.rules.refusalFor(
+    job,
+    worker: profile.profile,
+    from: viewerLocation,
+    existingBids: bids.forJob(job.id),
+    walletLocked: wallet.isLockedOut,
+  );
+}
+
+/// The way to make an offer, pinned under the sheet.
+///
+/// **Pinned, because it is the one thing a worker opened the sheet to do.**
+/// It used to sit under the photos, the voice note, the details and the
+/// job's status, so on a phone it was below the fold of a sheet that opens at
+/// three quarters — the main action of the screen, reached by scrolling past
+/// everything else on it.
+class _OfferBar extends StatelessWidget {
+  const _OfferBar({required this.job, required this.viewerLocation});
+
+  final Job job;
+  final JobLocation? viewerLocation;
+
+  @override
+  Widget build(BuildContext context) {
+    if (_refusalFor(context, job, viewerLocation) != null) {
+      return const SizedBox.shrink();
+    }
+    final theme = Theme.of(context);
+
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: theme.colorScheme.surface,
+        border: Border(
+          top: BorderSide(color: theme.colorScheme.outlineVariant),
+        ),
+      ),
+      child: SafeArea(
+        top: false,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(
+            BrandSizing.spaceMd,
+            BrandSizing.spaceSm + 4,
+            BrandSizing.spaceMd,
+            BrandSizing.spaceSm + 4,
+          ),
+          child: OfferAction(job: job, refusal: null),
+        ),
       ),
     );
   }
@@ -544,7 +613,10 @@ class _DetailRow extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Padding(
-      padding: const EdgeInsets.only(bottom: BrandSizing.spaceMd),
+      padding: const EdgeInsets.symmetric(
+        horizontal: BrandSizing.spaceMd,
+        vertical: BrandSizing.spaceSm + 4,
+      ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -592,7 +664,6 @@ class _DeletedJobNotice extends StatelessWidget {
     );
   }
 }
-
 
 /// The way into a job's conversation, when there is one to have.
 ///

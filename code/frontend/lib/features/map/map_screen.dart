@@ -20,6 +20,7 @@ import '../jobs/job_row.dart';
 import '../profile/my_trades_screen.dart';
 import '../../widgets/meta_chip.dart';
 import '../../widgets/state_views.dart';
+import '../../widgets/fare_tag.dart';
 import '../../widgets/mine_badge.dart';
 import 'job_map.dart';
 import 'map_overlays.dart';
@@ -475,6 +476,7 @@ class _MapBody extends StatelessWidget {
     final strings = AppStrings.of(context);
     final padding = MediaQuery.paddingOf(context);
     final selected = _selected;
+    final cardShown = selected != null && showsPreviewCard;
     final locationExplanation = location.explanation(strings);
     final profile = context.watch<ProfileController>();
 
@@ -524,10 +526,12 @@ class _MapBody extends StatelessWidget {
         Positioned(
           left: 0,
           right: 0,
-          top: padding.top + 64,
+          top: padding.top + MapOverlayWidth.chipsTop,
           // Already a horizontal scroller, so it only needs the same ceiling
           // as the header above it to stay in the same column.
-          child: MapOverlayWidth(child: QuickFilterBar(controller: filters)),
+          child: MapOverlayWidth(
+            child: QuickFilterBar(controller: filters, floating: true),
+          ),
         ),
 
         // Every notice stacks downward from below the header. One column, not
@@ -541,7 +545,7 @@ class _MapBody extends StatelessWidget {
         Positioned(
           left: BrandSizing.spaceMd,
           right: BrandSizing.spaceMd,
-          top: padding.top + 116,
+          top: padding.top + MapOverlayWidth.noticesTop,
           child: MapOverlayWidth(
             clearsMapControls: true,
             child: ConstrainedBox(
@@ -595,66 +599,88 @@ class _MapBody extends StatelessWidget {
           ),
         ),
 
-        // "Near Me" sits above the preview card so it never ends up behind it.
-        AnimatedPositioned(
-          duration: Motion.standard(context),
-          curve: BrandMotion.curve,
+        // The map's own controls ride on top of the preview card instead of
+        // sitting at a fixed height above the bottom. The card's height
+        // depends on the job — a title on one line or two, a description or
+        // none — and at a fixed 236px, "Near me" sat behind a tall one.
+        Positioned(
+          left: BrandSizing.spaceMd,
           right: BrandSizing.spaceMd,
-          bottom: selected != null ? 236 : 96,
+          // Clear the navigation bar and the post button.
+          bottom: 96,
           child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              MapButton(
-                icon: Icons.zoom_out_map,
-                label: strings.showAllJobs,
-                onPressed: jobs.isEmpty ? null : () => onFitToJobs(jobs),
-              ),
-              const SizedBox(height: BrandSizing.spaceSm),
-              MapButton(
-                icon: Icons.my_location,
-                label: strings.nearMeLabel,
-                isBusy: location.isRequesting,
-                onPressed: onMyLocationPressed,
+              // On a short window there is no room for both: the controls
+              // would be pushed up into the header. The card is what was
+              // just asked for, so it wins until it is closed.
+              if (!cardShown || MediaQuery.sizeOf(context).height >= 600)
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      MapButton(
+                        icon: Icons.zoom_out_map,
+                        label: strings.showAllJobs,
+                        onPressed: jobs.isEmpty
+                            ? null
+                            : () => onFitToJobs(jobs),
+                      ),
+                      const SizedBox(height: BrandSizing.spaceSm),
+                      MapButton(
+                        icon: Icons.my_location,
+                        label: strings.nearMeLabel,
+                        isBusy: location.isRequesting,
+                        onPressed: onMyLocationPressed,
+                      ),
+                    ],
+                  ),
+                ),
+
+              // Section 28 — the preview slides up rather than appearing
+              // abruptly, and the controls above it move up with it.
+              AnimatedSize(
+                duration: Motion.standard(context),
+                curve: BrandMotion.curve,
+                alignment: Alignment.bottomCenter,
+                // The card's shadow reaches past its edges.
+                clipBehavior: Clip.none,
+                child: AnimatedSwitcher(
+                  duration: Motion.standard(context),
+                  switchInCurve: BrandMotion.curve,
+                  transitionBuilder: (child, animation) => SlideTransition(
+                    position: Tween<Offset>(
+                      begin: const Offset(0, 1),
+                      end: Offset.zero,
+                    ).animate(animation),
+                    child: FadeTransition(opacity: animation, child: child),
+                  ),
+                  child: !cardShown
+                      ? const SizedBox(width: double.infinity)
+                      : Padding(
+                          key: ValueKey(selected.id),
+                          padding: const EdgeInsets.only(
+                            top: BrandSizing.spaceSm,
+                          ),
+                          child: Center(
+                            child: ConstrainedBox(
+                              constraints: const BoxConstraints(
+                                maxWidth: BrandSizing.readableWidth,
+                              ),
+                              child: JobPreviewCard(
+                                job: selected,
+                                viewerLocation: location.position,
+                                onOpen: () => onOpenJob(selected),
+                              ),
+                            ),
+                          ),
+                        ),
+                ),
               ),
             ],
           ),
-        ),
-
-        // Section 28 — the preview slides up rather than appearing abruptly.
-        AnimatedSwitcher(
-          duration: Motion.standard(context),
-          switchInCurve: BrandMotion.curve,
-          transitionBuilder: (child, animation) => SlideTransition(
-            position: Tween<Offset>(
-              begin: const Offset(0, 1),
-              end: Offset.zero,
-            ).animate(animation),
-            child: FadeTransition(opacity: animation, child: child),
-          ),
-          child: (selected == null || !showsPreviewCard)
-              ? const SizedBox.shrink()
-              : Align(
-                  key: ValueKey(selected.id),
-                  alignment: Alignment.bottomCenter,
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(
-                      BrandSizing.spaceMd,
-                      0,
-                      BrandSizing.spaceMd,
-                      // Clear the navigation bar and the post button.
-                      96,
-                    ),
-                    child: ConstrainedBox(
-                      constraints: const BoxConstraints(
-                        maxWidth: BrandSizing.readableWidth,
-                      ),
-                      child: JobPreviewCard(
-                        job: selected,
-                        viewerLocation: location.position,
-                        onOpen: () => onOpenJob(selected),
-                      ),
-                    ),
-                  ),
-                ),
         ),
       ],
     );
@@ -696,24 +722,40 @@ class JobPreviewCard extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                child: Text(
-                  job.displayTitle(strings),
-                  style: theme.textTheme.titleLarge,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
+          // The same shape as a row in the list — title and badge on one
+          // side, the fare on the other — so a pin and a row read alike.
+          LayoutBuilder(
+            builder: (context, constraints) => Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        job.displayTitle(strings),
+                        style: theme.textTheme.titleLarge,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      if (job.isPostedBy(
+                        context.watch<AccountController>().activeId,
+                      )) ...[
+                        const SizedBox(height: BrandSizing.spaceXs),
+                        const MineBadge(),
+                      ],
+                    ],
+                  ),
                 ),
-              ),
-              if (job.isPostedBy(
-                context.watch<AccountController>().activeId,
-              )) ...[
-                const SizedBox(width: BrandSizing.spaceSm),
-                const MineBadge(),
+                const SizedBox(width: BrandSizing.spaceMd),
+                ConstrainedBox(
+                  constraints: BoxConstraints(
+                    maxWidth: constraints.maxWidth * 0.42,
+                  ),
+                  child: FareTag(job: job),
+                ),
               ],
-            ],
+            ),
           ),
           if (job.supportingDescription != null) ...[
             const SizedBox(height: BrandSizing.spaceXs),
@@ -729,18 +771,20 @@ class JobPreviewCard extends StatelessWidget {
             spacing: BrandSizing.spaceMd,
             runSpacing: BrandSizing.spaceXs,
             children: [
+              if (job.area != null)
+                MetaChip(icon: Icons.place_outlined, label: job.area!),
+              if (distance != null)
+                MetaChip(icon: Icons.near_me_outlined, label: distance),
               MetaChip(
                 icon: Icons.schedule,
                 label: Format.scheduled(strings, job.scheduledTime, now),
               ),
-              if (distance != null)
-                MetaChip(icon: Icons.near_me_outlined, label: distance),
-              MetaChip(
-                icon: Icons.radio_button_unchecked,
-                label: Format.radius(strings, job.radiusMetres),
-              ),
               if (job.hasVoiceNote)
-                MetaChip(icon: Icons.mic, label: strings.voiceNote),
+                MetaChip(
+                  icon: Icons.mic,
+                  iconColor: theme.colorScheme.secondary,
+                  label: strings.voiceNote,
+                ),
               if (job.hasPhotos)
                 MetaChip(
                   icon: Icons.photo_library_outlined,
@@ -754,7 +798,7 @@ class JobPreviewCard extends StatelessWidget {
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: onOpen,
-                child: const Text('View Job'),
+                child: Text(strings.openDetails),
               ),
             ),
           ],
@@ -763,4 +807,3 @@ class JobPreviewCard extends StatelessWidget {
     );
   }
 }
-

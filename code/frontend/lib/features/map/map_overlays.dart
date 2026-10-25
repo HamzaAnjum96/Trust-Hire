@@ -29,19 +29,25 @@ class MapHeader extends StatelessWidget {
   final int jobCount;
   final int totalJobCount;
 
+  /// Fixed, so the rows under it can be placed from it rather than from a
+  /// number somebody has to keep in step by hand — which is how the filter
+  /// chips came to sit 16px over the header's bottom edge.
+  static const height = 56.0;
+
   @override
   Widget build(BuildContext context) {
     final strings = AppStrings.of(context);
     final theme = Theme.of(context);
 
     return Container(
-      padding: const EdgeInsets.symmetric(
-        horizontal: BrandSizing.spaceMd,
-        vertical: BrandSizing.spaceSm + 4,
+      height: MapHeader.height,
+      padding: const EdgeInsetsDirectional.only(
+        start: BrandSizing.spaceXs,
+        end: BrandSizing.spaceSm + 4,
       ),
       decoration: BoxDecoration(
         color: theme.colorScheme.surface,
-        borderRadius: BrandRadius.mediumAll,
+        borderRadius: BrandRadius.largeAll,
         boxShadow: BrandShadows.card,
       ),
       child: Row(
@@ -71,16 +77,38 @@ class MapHeader extends StatelessWidget {
               ),
             ),
           ),
+          const SizedBox(width: BrandSizing.spaceXs),
           Expanded(
-            child: Text(strings.nearbyWork, style: theme.textTheme.titleLarge),
+            child: Text(
+              strings.nearbyWork,
+              style: theme.textTheme.titleLarge,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
           ),
-          Text(
-            // Say what is being hidden, so a short list never looks like a
-            // bug.
-            jobCount == totalJobCount
-                ? strings.jobCount(jobCount)
-                : strings.jobCountFiltered(jobCount, totalJobCount),
-            style: theme.textTheme.labelSmall,
+          const SizedBox(width: BrandSizing.spaceSm),
+          Container(
+            padding: const EdgeInsets.symmetric(
+              horizontal: BrandSizing.spaceSm + 2,
+              vertical: BrandSizing.spaceXs,
+            ),
+            decoration: BoxDecoration(
+              color: theme.brightness == Brightness.light
+                  ? BrandColours.warmSand
+                  : BrandColours.darkElevated,
+              borderRadius: BrandRadius.mediumAll,
+            ),
+            child: Text(
+              // Say what is being hidden, so a short list never looks like a
+              // bug.
+              jobCount == totalJobCount
+                  ? strings.jobCount(jobCount)
+                  : strings.jobCountFiltered(jobCount, totalJobCount),
+              style: BrandType.caption.copyWith(
+                fontWeight: FontWeight.w600,
+                color: theme.colorScheme.onSurface,
+              ),
+            ),
           ),
         ],
       ),
@@ -124,13 +152,24 @@ class MapOverlayWidth extends StatelessWidget {
   /// Below this, the notice column can reach the controls; above it, it
   /// cannot.
   ///
-  /// The notices start about 116px down and are capped at a third of the
-  /// height; the controls sit about 200px up from the bottom. Those two meet
-  /// when `116 + h/3 > h - 200`, which is a little under 480. Rounded up, and
-  /// applied only there — on a tall phone the gutter would cost a quarter of
-  /// the width of a narrow screen to avoid a collision that cannot happen,
-  /// which is how the notice ended up one word per line at 320px.
-  static const controlsAreInTheWayBelow = 480.0;
+  /// The notices start about 128px down ([noticesTop]) and are capped at a
+  /// third of the height; the controls sit about 200px up from the bottom.
+  /// Those two meet when `128 + h/3 > h - 200`, which is a little under 492.
+  /// Rounded up, and applied only there — on a tall phone the gutter would
+  /// cost a quarter of the width of a narrow screen to avoid a collision that
+  /// cannot happen, which is how the notice ended up one word per line at
+  /// 320px.
+  static const controlsAreInTheWayBelow = 500.0;
+
+  /// Where the filter chips start, below the safe area: under the header,
+  /// with a gap.
+  static const chipsTop =
+      BrandSizing.spaceSm + MapHeader.height + BrandSizing.spaceSm;
+
+  /// Where the notices start, below the safe area: under the chips, with a
+  /// gap.
+  static const noticesTop =
+      chipsTop + BrandSizing.touchTargetMinimum + BrandSizing.spaceSm + 4;
 
   @override
   Widget build(BuildContext context) {
@@ -184,50 +223,71 @@ class MapNotice extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Container(
-      padding: const EdgeInsets.fromLTRB(
+      padding: const EdgeInsetsDirectional.fromSTEB(
         BrandSizing.spaceMd,
         BrandSizing.spaceSm + 4,
+        BrandSizing.spaceXs,
         BrandSizing.spaceSm,
-        BrandSizing.spaceSm + 4,
       ),
       decoration: BoxDecoration(
         color: theme.colorScheme.surface,
-        borderRadius: BrandRadius.mediumAll,
+        borderRadius: BrandRadius.largeAll,
         border: Border.all(
           color: BrandColours.informationBlue.withValues(alpha: 0.35),
         ),
         boxShadow: BrandShadows.card,
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        mainAxisSize: MainAxisSize.min,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Icon(icon, size: 20, color: BrandColours.informationBlue),
-              const SizedBox(width: BrandSizing.spaceSm + 4),
-              Expanded(child: Text(message, style: theme.textTheme.bodyMedium)),
-              if (onDismiss != null)
-                IconButton(
-                  onPressed: onDismiss,
-                  icon: const Icon(Icons.close, size: 18),
-                  tooltip: strings.dismiss,
-                  // Not `VisualDensity.compact`, which takes the target to
-                  // 40px. Section 29 asks for 48, and this is the control
-                  // somebody reaches for when a notice is in the way of the
-                  // map — the worst one to make hard to hit.
-                  constraints: const BoxConstraints(
-                    minWidth: BrandSizing.touchTargetPreferred,
-                    minHeight: BrandSizing.touchTargetPreferred,
+          Padding(
+            padding: const EdgeInsets.only(top: 2),
+            child: Icon(icon, size: 20, color: BrandColours.informationBlue),
+          ),
+          const SizedBox(width: BrandSizing.spaceSm + 4),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(bottom: BrandSizing.spaceXs),
+                  child: Text(
+                    message,
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      color: theme.colorScheme.onSurface,
+                    ),
                   ),
                 ),
-            ],
+                // A link under the words rather than a full-width button
+                // under them: on a phone the trades notice, button and all,
+                // covered the top third of the map it was explaining.
+                if (actionLabel != null && onAction != null)
+                  TextButton(
+                    onPressed: onAction,
+                    style: TextButton.styleFrom(
+                      padding: EdgeInsets.zero,
+                      alignment: AlignmentDirectional.centerStart,
+                    ),
+                    child: Text(actionLabel!),
+                  ),
+              ],
+            ),
           ),
-          if (actionLabel != null && onAction != null) ...[
-            const SizedBox(height: BrandSizing.spaceSm),
-            OutlinedButton(onPressed: onAction, child: Text(actionLabel!)),
-          ],
+          if (onDismiss != null)
+            IconButton(
+              onPressed: onDismiss,
+              icon: const Icon(Icons.close, size: 18),
+              tooltip: strings.dismiss,
+              // Not `VisualDensity.compact`, which takes the target to 40px.
+              // Section 29 asks for 48, and this is the control somebody
+              // reaches for when a notice is in the way of the map — the
+              // worst one to make hard to hit.
+              constraints: const BoxConstraints(
+                minWidth: BrandSizing.touchTargetPreferred,
+                minHeight: BrandSizing.touchTargetPreferred,
+              ),
+            ),
         ],
       ),
     );

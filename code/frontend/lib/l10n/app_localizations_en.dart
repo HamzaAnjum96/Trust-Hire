@@ -774,11 +774,6 @@ class AppStringsEn extends AppStrings {
   }
 
   @override
-  String agreedAt(String amount) {
-    return 'Agreed at $amount';
-  }
-
-  @override
   String get offerAFare => 'Offer a fare';
 
   @override
