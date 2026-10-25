@@ -10,10 +10,20 @@ import '../core/tokens.dart';
 /// the job row's copy capped its width, so only the job row's copy survived a
 /// long Pakistani area name.
 class MetaChip extends StatelessWidget {
-  const MetaChip({super.key, required this.icon, required this.label});
+  const MetaChip({
+    super.key,
+    required this.icon,
+    required this.label,
+    this.iconColor,
+  });
 
   final IconData icon;
   final String label;
+
+  /// Only for a fact the brand gives a colour of its own — copper for a
+  /// voice note. Everything else stays muted, so the one that is not stands
+  /// out.
+  final Color? iconColor;
 
   /// Wide enough for "Ghulam Muhammad Abad, Faisalabad" to be worth reading,
   /// narrow enough that two of them still fit on a 320px line.
@@ -32,7 +42,11 @@ class MetaChip extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, size: 16, color: theme.colorScheme.onSurfaceVariant),
+          Icon(
+            icon,
+            size: 16,
+            color: iconColor ?? theme.colorScheme.onSurfaceVariant,
+          ),
           const SizedBox(width: BrandSizing.spaceXs + 2),
           Flexible(
             child: Text(

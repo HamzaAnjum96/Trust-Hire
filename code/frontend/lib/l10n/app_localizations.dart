@@ -740,12 +740,6 @@ abstract class AppStrings {
   /// **'Language'**
   String get language;
 
-  /// No description provided for @localData.
-  ///
-  /// In en, this message translates to:
-  /// **'Local data'**
-  String get localData;
-
   /// No description provided for @restoreSeedExplanation.
   ///
   /// In en, this message translates to:
@@ -3404,13 +3398,7 @@ abstract class AppStrings {
   /// **'Suggest a fare'**
   String get fareAdviceAsk;
 
-  /// Who will answer, when the AI fare agent is available
-  ///
-  /// In en, this message translates to:
-  /// **'Asks the fare agent — {model}, running on your dev server.'**
-  String fareAdviceByAgent(String model);
-
-  /// Who will answer, when there is no fare agent
+  /// Where the fare suggestion comes from
   ///
   /// In en, this message translates to:
   /// **'Worked out on this device from similar jobs.'**
@@ -3421,12 +3409,6 @@ abstract class AppStrings {
   /// In en, this message translates to:
   /// **'Choose a tag first, so there is work to compare with.'**
   String get fareAdviceNeedsTags;
-
-  /// While the AI agent is thinking
-  ///
-  /// In en, this message translates to:
-  /// **'Asking the fare agent. A model on a laptop can take a minute.'**
-  String get fareAdviceAsking;
 
   /// The suggested fare range
   ///
@@ -3452,53 +3434,11 @@ abstract class AppStrings {
   /// **'{count, plural, =1{No agreed fares yet — this is from what 1 hirer opened at.} other{No agreed fares yet — this is from what {count} hirers opened at.}}'**
   String fareAdviceFromAsked(int count);
 
-  /// When the agent answered without any evidence
-  ///
-  /// In en, this message translates to:
-  /// **'There are no similar jobs on this device, so this is the model\'s own estimate.'**
-  String get fareAdviceNoEvidence;
-
   /// When there is nothing to base a suggestion on
   ///
   /// In en, this message translates to:
   /// **'No similar jobs to compare with yet. Choose what you think is fair — workers will tell you if it is not.'**
   String get fareAdviceNothing;
-
-  /// Introduces the AI agent's explanation
-  ///
-  /// In en, this message translates to:
-  /// **'Why, according to {model}:'**
-  String fareAdviceReasoningBy(String model);
-
-  /// When the guard moved the AI's number
-  ///
-  /// In en, this message translates to:
-  /// **'The agent\'s figure was far from what similar work went for, so it has been brought back within range.'**
-  String get fareAdviceClamped;
-
-  /// Fallback: dev server unreachable
-  ///
-  /// In en, this message translates to:
-  /// **'The fare agent did not respond, so this was worked out on the device instead.'**
-  String get fareAgentFellBackUnreachable;
-
-  /// Fallback: the language model is not running
-  ///
-  /// In en, this message translates to:
-  /// **'The fare agent could not reach its model, so this was worked out on the device instead.'**
-  String get fareAgentFellBackNoModel;
-
-  /// Fallback: the model never answered
-  ///
-  /// In en, this message translates to:
-  /// **'The fare agent did not settle on a figure, so this was worked out on the device instead.'**
-  String get fareAgentFellBackNoAnswer;
-
-  /// Fallback: any other failure
-  ///
-  /// In en, this message translates to:
-  /// **'The fare agent could not answer, so this was worked out on the device instead.'**
-  String get fareAgentFellBackRefused;
 
   /// Puts the suggested fare into the field
   ///
@@ -3512,47 +3452,11 @@ abstract class AppStrings {
   /// **'A suggestion from past jobs, not a price. Workers can still offer their own.'**
   String get fareAdviceCaveat;
 
-  /// Says the Stripe top-up is test mode and how to pay
-  ///
-  /// In en, this message translates to:
-  /// **'Stripe test mode. No real money moves — pay with card 4242 4242 4242 4242, any future date and any CVC.'**
-  String get topUpStripeNotice;
-
   /// Starts a Stripe Checkout payment
   ///
   /// In en, this message translates to:
   /// **'Pay {amount} with Stripe'**
   String topUpPayWithStripe(String amount);
-
-  /// Title while a payment is open
-  ///
-  /// In en, this message translates to:
-  /// **'Waiting for Stripe'**
-  String get topUpWaiting;
-
-  /// While waiting for Stripe
-  ///
-  /// In en, this message translates to:
-  /// **'Finish paying on the Stripe page that opened. Your tokens are added here as soon as Stripe confirms it.'**
-  String get topUpWaitingExplain;
-
-  /// Reopens Stripe Checkout
-  ///
-  /// In en, this message translates to:
-  /// **'Open the payment page again'**
-  String get topUpOpenAgain;
-
-  /// Gives up on a payment in progress
-  ///
-  /// In en, this message translates to:
-  /// **'Stop waiting'**
-  String get topUpStopWaiting;
-
-  /// Starting a payment failed
-  ///
-  /// In en, this message translates to:
-  /// **'Stripe could not be reached. Nothing was charged.'**
-  String get topUpStripeFailed;
 
   /// The browser could not open Stripe
   ///
@@ -3560,113 +3464,11 @@ abstract class AppStrings {
   /// **'The payment page could not be opened.'**
   String get topUpCouldNotOpen;
 
-  /// The Checkout Session expired
-  ///
-  /// In en, this message translates to:
-  /// **'That payment page expired. Nothing was charged.'**
-  String get topUpExpired;
-
   /// A paid session that cannot be credited here
   ///
   /// In en, this message translates to:
   /// **'Stripe has that payment, but it does not match this wallet, so nothing was added.'**
   String get topUpNotMatched;
-
-  /// Profile section for the optional dev server
-  ///
-  /// In en, this message translates to:
-  /// **'Dev services'**
-  String get devServicesSection;
-
-  /// What the dev services section is for
-  ///
-  /// In en, this message translates to:
-  /// **'Stripe test payments and the AI fare agent run on a small dev server on your own computer — code/backend/dev_server. Without one, top-ups are simulated and fares are estimated on this device.'**
-  String get devServicesExplain;
-
-  /// Label on the dev server URL field
-  ///
-  /// In en, this message translates to:
-  /// **'Dev server address'**
-  String get devServicesUrlLabel;
-
-  /// Placeholder in the dev server URL field
-  ///
-  /// In en, this message translates to:
-  /// **'http://localhost:8787'**
-  String get devServicesUrlHint;
-
-  /// Saves the dev server URL
-  ///
-  /// In en, this message translates to:
-  /// **'Save address'**
-  String get devServicesSave;
-
-  /// Asks the dev server what is on
-  ///
-  /// In en, this message translates to:
-  /// **'Check connection'**
-  String get devServicesCheck;
-
-  /// The URL could not be parsed
-  ///
-  /// In en, this message translates to:
-  /// **'That is not an address the app can use.'**
-  String get devServicesInvalid;
-
-  /// No dev server configured
-  ///
-  /// In en, this message translates to:
-  /// **'Not set'**
-  String get devServicesNotSet;
-
-  /// A health check is running
-  ///
-  /// In en, this message translates to:
-  /// **'Checking'**
-  String get devServicesChecking;
-
-  /// The dev server answered
-  ///
-  /// In en, this message translates to:
-  /// **'Connected'**
-  String get devServicesConnected;
-
-  /// The dev server did not answer
-  ///
-  /// In en, this message translates to:
-  /// **'Not reachable'**
-  String get devServicesUnreachable;
-
-  /// Stripe is configured on the dev server
-  ///
-  /// In en, this message translates to:
-  /// **'Payments: Stripe test mode'**
-  String get devServicesPaymentsOn;
-
-  /// Stripe is not configured
-  ///
-  /// In en, this message translates to:
-  /// **'Payments: off — top-ups stay simulated'**
-  String get devServicesPaymentsOff;
-
-  /// The AI model is ready
-  ///
-  /// In en, this message translates to:
-  /// **'Fare agent: {model}'**
-  String devServicesAgentOn(String model);
-
-  /// The model server is up but lacks the model
-  ///
-  /// In en, this message translates to:
-  /// **'Fare agent: {model} is not downloaded yet'**
-  String devServicesAgentNoModel(String model);
-
-  /// No model server
-  ///
-  /// In en, this message translates to:
-  /// **'Fare agent: off — fares are estimated on this device'**
-  String get devServicesAgentOff;
 
   /// The server refused crediting a Stripe payment twice
   ///
@@ -3685,6 +3487,30 @@ abstract class AppStrings {
   /// In en, this message translates to:
   /// **'On this site the payment is confirmed by Stripe sending you back, not checked by a server. The wallet only lives in this browser either way.'**
   String get topUpStripeLinkCaveat;
+
+  /// Under the fare on a job row, once a worker has been chosen
+  ///
+  /// In en, this message translates to:
+  /// **'Agreed fare'**
+  String get fareAgreedLabel;
+
+  /// Where the fare would be on a job row, when the hirer gave none
+  ///
+  /// In en, this message translates to:
+  /// **'Open to offers'**
+  String get fareOpenToOffers;
+
+  /// Profile group: standing, verification, trades, wallet, listing
+  ///
+  /// In en, this message translates to:
+  /// **'Your work'**
+  String get profileYourWork;
+
+  /// Profile group: where the data lives, the intro, restoring the seed
+  ///
+  /// In en, this message translates to:
+  /// **'This demo'**
+  String get profileThisDemo;
 }
 
 class _AppStringsDelegate extends LocalizationsDelegate<AppStrings> {

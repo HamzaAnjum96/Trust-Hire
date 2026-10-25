@@ -91,6 +91,7 @@ class BrandRadius {
   static const smallAll = BorderRadius.all(Radius.circular(small));
   static const mediumAll = BorderRadius.all(Radius.circular(medium));
   static const largeAll = BorderRadius.all(Radius.circular(large));
+  static const sheetAll = BorderRadius.all(Radius.circular(sheet));
   static const sheetTop = BorderRadius.vertical(top: Radius.circular(sheet));
 }
 
@@ -205,6 +206,18 @@ class BrandType {
     fontSize: 16,
     height: 24 / 16,
     fontWeight: FontWeight.w600,
+  );
+
+  /// A fare. Bold, because it is the first thing a worker scans a list for,
+  /// and tabular, so amounts line up down the list instead of jittering with
+  /// each digit's width.
+  static const fare = TextStyle(
+    fontFamily: family,
+    fontFamilyFallback: fallback,
+    fontSize: 18,
+    height: 24 / 18,
+    fontWeight: FontWeight.w700,
+    fontFeatures: [FontFeature.tabularFigures()],
   );
 }
 

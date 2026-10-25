@@ -124,16 +124,15 @@ class WalletController extends ChangeNotifier {
   bool hasCredited(String paymentId) =>
       _wallet.entries.any((e) => e.paymentId == paymentId);
 
-  /// Credits a Stripe payment the dev server has confirmed.
+  /// Credits a Stripe payment.
   ///
-  /// **Idempotent by payment**, exactly as a commission is by job: the sheet
-  /// polls, a person taps "stop waiting" just as it lands, a slow answer
-  /// arrives after a quick one — and each of those is the same payment, which
-  /// buys tokens once. Returns false when it had already been credited.
+  /// **Idempotent by payment**, exactly as a commission is by job: a return
+  /// page reloaded before its address was tidied, two tabs handling the same
+  /// return — each of those is the same payment, which buys tokens once.
+  /// Returns false when it had already been credited.
   ///
-  /// [tokens] must be what Stripe recorded and charged for, as the dev server
-  /// reports it — never the number the app asked for at the start, which a
-  /// person could have changed on the way.
+  /// [tokens] must be what the payment was for — never a number somebody
+  /// could have changed on the way.
   Future<bool> creditPayment({
     required String paymentId,
     required int tokens,

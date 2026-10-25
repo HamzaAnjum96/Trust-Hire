@@ -12,6 +12,57 @@ that heading to the version and date, and open a fresh `[Unreleased]`.
 
 ## [Unreleased]
 
+### 0.20.0 — No dev server, and the first round of the UI overhaul
+
+Nobody is going to run a server: the app is GitHub Pages and that is all.
+So the dev server goes, the AI fare agent is paused until it can run in the
+browser, and the UI overhaul starts — mobile first, one working round at a
+time. This round is the foundation (theme), the jobs list and the profile.
+
+#### Removed
+
+- **The dev server** (`code/backend/dev_server/`) and everything in the app
+  that talked to it: `DevServicesClient`, `DevServicesController`, the
+  **Profile → Dev services** section, the top-up sheet's Checkout-and-poll
+  mode, the fare agent's client, the `http` dependency, the Android debug
+  build's cleartext exception, 34 strings, two sweep mutations (now 60) and
+  the tests that only covered it. Top-ups on the deployed site still go
+  through Stripe — by Payment Link, as 0.19.1 made them — and everywhere else
+  they stay simulated.
+- **The AI fare agent, for now.** "Suggest a fare" works out its range on the
+  device, as it always could without the agent. `FareGuard` stays, tested, so
+  the rule a model will be held to is settled before one returns. The paused
+  client-side work is in the history: "Paused: client-side AI and the
+  assistant — unfinished", reverted by the commit after it.
+
+#### Changed
+
+- **`payment_links.py` moved to `code/backend/stripe/`**, with the slice of
+  the Stripe client it needs (`stripe_api.py`) and its own tests. Run it once,
+  with a test key in a git-ignored `.env`, to make the five Payment Links.
+- **The fare leads every job row.** Opposite the title, bold, in tabular
+  figures so a list of them lines up, with what kind of number it is
+  underneath — *Starting fare*, or *Agreed fare* with a lock. A job with no
+  fare says *Open to offers* rather than leaving a gap. Until now a row did
+  not show the fare at all; it was two taps away, in the sheet. Rows also say
+  how far away the job is when the device knows where it is, and a voice note
+  is marked in copper, as the brand reserves it.
+- **The profile is five groups instead of twenty loose controls.** Who you are
+  (the account), what brings you here (two cards instead of a segmented
+  control that wrapped a word a line in Urdu), your work (record,
+  verification, trades, wallet, listing), settings, and this demo. The
+  proof-of-concept notice moved from the top of the screen — above the
+  person's own name — to the demo group at the foot.
+- **Theme.** Segmented controls are 48px with the 12px control radius instead
+  of Material's 40px pill; dialogues take the sheet's 20px corners; list
+  tiles, the floating action button and the fare have styles of their own.
+
+#### Fixed
+
+- **"Your posting" was 3.8:1** — 12px white on solid copper, below what small
+  text needs — in three hand-written copies. One `MineBadge` now, with the
+  copper as a tint and a border and the words in ink.
+
 ### 0.19.1 — Stripe on GitHub Pages
 
 0.19.0 could take a Stripe test payment only through the dev server, so the

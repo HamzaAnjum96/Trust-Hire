@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """The Stripe Payment Links the GitHub Pages build sells tokens with.
 
-    python3 code/backend/dev_server/payment_links.py \\
+    python3 code/backend/stripe/payment_links.py \\
         --site https://hamzaanjum96.github.io/Trust-Hire/
 
 Run once per Stripe account. It reads STRIPE_SECRET_KEY from the environment
@@ -20,8 +20,8 @@ session id: `<site>?topup=1000&session=cs_test_…`.
 was sent back with was really paid — that also needs the secret key. The app
 credits a return only for a top-up that browser itself started, once per
 session; see `StripeReturn` in the app. For a demo whose wallet lives in the
-browser anyway, that is no weaker than the simulated top-up it replaces. A real
-deployment checks the session on a server, as the dev server already does.
+browser anyway, that is no weaker than the simulated top-up it replaces; a
+real deployment would check the session on a server it runs.
 
 Running it again reuses links it already made for the same site, so it is safe
 to re-run; it only creates what is missing.
@@ -38,7 +38,7 @@ from typing import Dict, List, Optional
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from payments import StripeApi, _form  # noqa: E402
+from stripe_api import StripeApi, _form  # noqa: E402
 
 # Mirrors TopUpSheet.packages in the app.
 PACKAGES = (500, 1000, 2500, 5000, 10000)
@@ -157,12 +157,22 @@ def dart_map(links: Dict[int, str], site: str) -> str:
     return "\n".join(lines)
 
 
+def load_env(path: Path) -> None:
+    """KEY=value lines into the environment, without overriding what is set."""
+    if not path.exists():
+        return
+    for line in path.read_text().splitlines():
+        line = line.strip()
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+        key, _, value = line.partition("=")
+        os.environ.setdefault(key.strip(), value.strip().strip('"').strip("'"))
+
+
 def main(argv: Optional[List[str]] = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     parser.add_argument("--site", required=True, help="the deployed app, e.g. https://you.github.io/Trust-Hire/")
     args = parser.parse_args(argv)
-
-    from server import load_env  # noqa: E402 — only needed when run by hand
 
     load_env(Path(__file__).resolve().parent / ".env")
     site = args.site if args.site.endswith("/") else args.site + "/"

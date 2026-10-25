@@ -20,6 +20,7 @@ import '../jobs/job_row.dart';
 import '../profile/my_trades_screen.dart';
 import '../../widgets/meta_chip.dart';
 import '../../widgets/state_views.dart';
+import '../../widgets/mine_badge.dart';
 import 'job_map.dart';
 import 'map_overlays.dart';
 import 'location_controller.dart';
@@ -328,6 +329,7 @@ class _Discovery extends StatelessWidget {
           width: 380,
           child: _ResultsRail(
             jobs: jobs,
+            viewerLocation: location.position,
             selectedJobId: selectedJobId,
             onSelect: onJobTapped,
             onOpen: onOpenJob,
@@ -342,12 +344,14 @@ class _Discovery extends StatelessWidget {
 class _ResultsRail extends StatelessWidget {
   const _ResultsRail({
     required this.jobs,
+    required this.viewerLocation,
     required this.selectedJobId,
     required this.onSelect,
     required this.onOpen,
   });
 
   final List<Job> jobs;
+  final JobLocation? viewerLocation;
   final String? selectedJobId;
   final ValueChanged<Job> onSelect;
   final ValueChanged<Job> onOpen;
@@ -393,6 +397,7 @@ class _ResultsRail extends StatelessWidget {
                       return JobRow(
                         job: job,
                         now: now,
+                        viewerLocation: viewerLocation,
                         isSelected: job.id == selectedJobId,
                         // One tap moves the map to it; the details are a
                         // second, deliberate tap. Opening a sheet on every
@@ -706,7 +711,7 @@ class JobPreviewCard extends StatelessWidget {
                 context.watch<AccountController>().activeId,
               )) ...[
                 const SizedBox(width: BrandSizing.spaceSm),
-                const _LocalBadge(),
+                const MineBadge(),
               ],
             ],
           ),
@@ -754,34 +759,6 @@ class JobPreviewCard extends StatelessWidget {
             ),
           ],
         ],
-      ),
-    );
-  }
-}
-
-class _LocalBadge extends StatelessWidget {
-  const _LocalBadge();
-
-  @override
-  Widget build(BuildContext context) {
-    final strings = AppStrings.of(context);
-    return Container(
-      padding: const EdgeInsets.symmetric(
-        horizontal: BrandSizing.spaceSm,
-        vertical: 2,
-      ),
-      decoration: const BoxDecoration(
-        color: BrandColours.copper,
-        borderRadius: BrandRadius.smallAll,
-      ),
-      child: Text(
-        strings.onThisDevice,
-        style: TextStyle(
-          fontSize: 12,
-          height: 16 / 12,
-          fontWeight: FontWeight.w600,
-          color: BrandColours.white,
-        ),
       ),
     );
   }

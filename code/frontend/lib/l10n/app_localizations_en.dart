@@ -368,9 +368,6 @@ class AppStringsEn extends AppStrings {
   String get language => 'Language';
 
   @override
-  String get localData => 'Local data';
-
-  @override
   String get restoreSeedExplanation =>
       'Restoring the seed data removes every job you created on this device and brings back the original examples.';
 
@@ -2029,21 +2026,12 @@ class AppStringsEn extends AppStrings {
   String get fareAdviceAsk => 'Suggest a fare';
 
   @override
-  String fareAdviceByAgent(String model) {
-    return 'Asks the fare agent — $model, running on your dev server.';
-  }
-
-  @override
   String get fareAdviceOnDevice =>
       'Worked out on this device from similar jobs.';
 
   @override
   String get fareAdviceNeedsTags =>
       'Choose a tag first, so there is work to compare with.';
-
-  @override
-  String get fareAdviceAsking =>
-      'Asking the fare agent. A model on a laptop can take a minute.';
 
   @override
   String fareAdviceRange(String low, String high) {
@@ -2078,37 +2066,8 @@ class AppStringsEn extends AppStrings {
   }
 
   @override
-  String get fareAdviceNoEvidence =>
-      'There are no similar jobs on this device, so this is the model\'s own estimate.';
-
-  @override
   String get fareAdviceNothing =>
       'No similar jobs to compare with yet. Choose what you think is fair — workers will tell you if it is not.';
-
-  @override
-  String fareAdviceReasoningBy(String model) {
-    return 'Why, according to $model:';
-  }
-
-  @override
-  String get fareAdviceClamped =>
-      'The agent\'s figure was far from what similar work went for, so it has been brought back within range.';
-
-  @override
-  String get fareAgentFellBackUnreachable =>
-      'The fare agent did not respond, so this was worked out on the device instead.';
-
-  @override
-  String get fareAgentFellBackNoModel =>
-      'The fare agent could not reach its model, so this was worked out on the device instead.';
-
-  @override
-  String get fareAgentFellBackNoAnswer =>
-      'The fare agent did not settle on a figure, so this was worked out on the device instead.';
-
-  @override
-  String get fareAgentFellBackRefused =>
-      'The fare agent could not answer, so this was worked out on the device instead.';
 
   @override
   String fareAdviceUse(String amount) {
@@ -2120,94 +2079,16 @@ class AppStringsEn extends AppStrings {
       'A suggestion from past jobs, not a price. Workers can still offer their own.';
 
   @override
-  String get topUpStripeNotice =>
-      'Stripe test mode. No real money moves — pay with card 4242 4242 4242 4242, any future date and any CVC.';
-
-  @override
   String topUpPayWithStripe(String amount) {
     return 'Pay $amount with Stripe';
   }
 
   @override
-  String get topUpWaiting => 'Waiting for Stripe';
-
-  @override
-  String get topUpWaitingExplain =>
-      'Finish paying on the Stripe page that opened. Your tokens are added here as soon as Stripe confirms it.';
-
-  @override
-  String get topUpOpenAgain => 'Open the payment page again';
-
-  @override
-  String get topUpStopWaiting => 'Stop waiting';
-
-  @override
-  String get topUpStripeFailed =>
-      'Stripe could not be reached. Nothing was charged.';
-
-  @override
   String get topUpCouldNotOpen => 'The payment page could not be opened.';
-
-  @override
-  String get topUpExpired => 'That payment page expired. Nothing was charged.';
 
   @override
   String get topUpNotMatched =>
       'Stripe has that payment, but it does not match this wallet, so nothing was added.';
-
-  @override
-  String get devServicesSection => 'Dev services';
-
-  @override
-  String get devServicesExplain =>
-      'Stripe test payments and the AI fare agent run on a small dev server on your own computer — code/backend/dev_server. Without one, top-ups are simulated and fares are estimated on this device.';
-
-  @override
-  String get devServicesUrlLabel => 'Dev server address';
-
-  @override
-  String get devServicesUrlHint => 'http://localhost:8787';
-
-  @override
-  String get devServicesSave => 'Save address';
-
-  @override
-  String get devServicesCheck => 'Check connection';
-
-  @override
-  String get devServicesInvalid => 'That is not an address the app can use.';
-
-  @override
-  String get devServicesNotSet => 'Not set';
-
-  @override
-  String get devServicesChecking => 'Checking';
-
-  @override
-  String get devServicesConnected => 'Connected';
-
-  @override
-  String get devServicesUnreachable => 'Not reachable';
-
-  @override
-  String get devServicesPaymentsOn => 'Payments: Stripe test mode';
-
-  @override
-  String get devServicesPaymentsOff => 'Payments: off — top-ups stay simulated';
-
-  @override
-  String devServicesAgentOn(String model) {
-    return 'Fare agent: $model';
-  }
-
-  @override
-  String devServicesAgentNoModel(String model) {
-    return 'Fare agent: $model is not downloaded yet';
-  }
-
-  @override
-  String get devServicesAgentOff =>
-      'Fare agent: off — fares are estimated on this device';
 
   @override
   String get refusalPaymentCredited =>
@@ -2220,4 +2101,16 @@ class AppStringsEn extends AppStrings {
   @override
   String get topUpStripeLinkCaveat =>
       'On this site the payment is confirmed by Stripe sending you back, not checked by a server. The wallet only lives in this browser either way.';
+
+  @override
+  String get fareAgreedLabel => 'Agreed fare';
+
+  @override
+  String get fareOpenToOffers => 'Open to offers';
+
+  @override
+  String get profileYourWork => 'Your work';
+
+  @override
+  String get profileThisDemo => 'This demo';
 }

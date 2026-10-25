@@ -1,11 +1,11 @@
 -- Trust Hire — top-ups that were really paid for.
 --
--- Stripe Checkout, in test mode, through the dev server
--- (`code/backend/dev_server/`). A paid top-up carries the Checkout Session it
--- came from, and the one claim this migration makes is that **a payment buys
--- tokens once.** The app makes `creditPayment` idempotent; this makes a
--- second credit impossible however many clients are told the payment landed —
--- the sheet that polled for it, a retried webhook, a second device.
+-- Stripe, in test mode: a Payment Link on the deployed site today. A paid
+-- top-up carries the Checkout Session it came from, and the one claim this
+-- migration makes is that **a payment buys tokens once.** The app makes
+-- `creditPayment` idempotent; this makes a second credit impossible however
+-- many clients are told the payment landed — a reloaded return page, a
+-- retried webhook, a second device.
 
 alter table wallet_entries add column payment_id text;
 

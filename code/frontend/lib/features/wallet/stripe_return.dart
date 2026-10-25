@@ -59,9 +59,8 @@ class PendingTopUp {
 /// as far as the browser it lands in can vouch for it: this browser started a
 /// top-up of exactly this amount, for this account, in the last day, and this
 /// session has not been credited before. That is no weaker than the simulated
-/// top-up it replaces — the wallet lives in this browser either way — and the
-/// dev server path, which does check with Stripe, is what a real deployment
-/// would do.
+/// top-up it replaces — the wallet lives in this browser either way. A real
+/// deployment checks the session with Stripe, on its own server, first.
 class StripeReturn {
   const StripeReturn({required this.sessionId, required this.tokens});
 

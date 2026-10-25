@@ -15,6 +15,7 @@ import '../../core/tokens.dart';
 import '../../models/worker_profile.dart';
 import '../../services/backend/mock_backend.dart';
 import '../../services/backend/remote_api.dart';
+import '../../widgets/settings_group.dart';
 import '../../widgets/state_views.dart';
 import '../../widgets/status_pill.dart';
 import '../../l10n/app_localizations.dart';
@@ -31,7 +32,6 @@ import '../account/account_switcher.dart';
 import '../directory/my_listing_screen.dart';
 import '../ratings/worker_standing_view.dart';
 import '../../app/account_controller.dart';
-import '../../app/dev_services_controller.dart';
 
 /// Who you are here, and how the app behaves for you.
 ///
@@ -48,35 +48,51 @@ class ProfileScreen extends StatelessWidget {
     final strings = AppStrings.of(context);
     final settings = context.watch<SettingsController>();
     final theme = Theme.of(context);
+    final isAdmin = context.watch<AccountController>().active.isAdmin;
 
     return Scaffold(
       appBar: AppBar(title: Text(strings.navProfile)),
       body: ReadableWidth(
         child: ListView(
-          padding: const EdgeInsets.all(BrandSizing.spaceMd),
+          padding: const EdgeInsets.fromLTRB(
+            BrandSizing.spaceMd,
+            BrandSizing.spaceSm,
+            BrandSizing.spaceMd,
+            BrandSizing.spaceXl,
+          ),
           children: [
-            NoticePanel(message: strings.settingsStorageNotice),
-            SizedBox(height: BrandSizing.spaceLg),
-
-            // Above the role picker, because switching account can change the
-            // role underneath it — and a control that silently reorders the
-            // one below should sit above it.
-            Text(strings.demoAccounts, style: theme.textTheme.titleLarge),
-            const SizedBox(height: BrandSizing.spaceXs),
-            Text(
-              strings.demoAccountsExplain,
-              style: theme.textTheme.bodyMedium,
+            // Who you are, first. Above the role picker, because switching
+            // account can change the role underneath it — and a control that
+            // silently reorders the one below should sit above it.
+            Padding(
+              padding: const EdgeInsetsDirectional.only(
+                start: BrandSizing.spaceXs,
+                bottom: BrandSizing.spaceSm,
+              ),
+              child: Text(
+                strings.demoAccounts,
+                style: theme.textTheme.titleMedium,
+              ),
             ),
-            const SizedBox(height: BrandSizing.spaceSm),
             const AccountCard(),
+            Padding(
+              padding: const EdgeInsetsDirectional.fromSTEB(
+                BrandSizing.spaceXs,
+                BrandSizing.spaceSm,
+                BrandSizing.spaceXs,
+                0,
+              ),
+              child: Text(
+                strings.demoAccountsExplain,
+                style: theme.textTheme.bodyMedium,
+              ),
+            ),
 
             // Straight after the account, because for the one account that
             // has it this is the whole reason to be here — and burying it
             // under the appearance controls would put the platform's own
             // tools three screens below a light/dark switch.
             const _AdminSection(),
-
-            const SizedBox(height: BrandSizing.spaceXl),
 
             // Then, because it changes what the rest of the app shows: a
             // worker gets a feed filtered to their trades, a hirer gets the
@@ -86,103 +102,114 @@ class ProfileScreen extends StatelessWidget {
             // and is not hiring, and offering it a wallet and a trade list
             // would be four controls that mean nothing on the one account
             // that has a different job entirely.
-            if (!context.watch<AccountController>().active.isAdmin) ...[
-              Text(
-                strings.whatBringsYouHere,
-                style: theme.textTheme.titleLarge,
-              ),
-              const SizedBox(height: BrandSizing.spaceSm),
+            if (!isAdmin) ...[
+              const SizedBox(height: BrandSizing.spaceLg),
               const _RolePicker(),
             ],
 
-            const SizedBox(height: BrandSizing.spaceXl),
-            Text(strings.navSettings, style: theme.textTheme.titleLarge),
-            const SizedBox(height: BrandSizing.spaceSm),
-            Text(strings.appearance, style: theme.textTheme.titleMedium),
-            SizedBox(height: BrandSizing.spaceSm),
-            SegmentedButton<ThemeMode>(
-              segments: [
-                ButtonSegment(
-                  value: ThemeMode.system,
-                  label: Text(strings.themeSystem),
-                  icon: Icon(Icons.brightness_auto_outlined),
-                ),
-                ButtonSegment(
-                  value: ThemeMode.light,
-                  label: Text(strings.themeLight),
-                  icon: Icon(Icons.light_mode_outlined),
-                ),
-                ButtonSegment(
-                  value: ThemeMode.dark,
-                  label: Text(strings.themeDark),
-                  icon: Icon(Icons.dark_mode_outlined),
-                ),
-              ],
-              selected: {settings.themeMode},
-              onSelectionChanged: (selection) =>
-                  settings.setThemeMode(selection.first),
-            ),
-
             const SizedBox(height: BrandSizing.spaceLg),
-            Text(strings.language, style: theme.textTheme.titleMedium),
-            const SizedBox(height: BrandSizing.spaceSm),
-            SegmentedButton<String>(
-              segments: [
-                ButtonSegment(
-                  value: '',
-                  label: Text(strings.themeSystem),
-                  icon: const Icon(Icons.translate),
-                ),
-                for (final locale in SettingsController.supportedLocales)
-                  ButtonSegment(
-                    value: locale.languageCode,
-                    // Each language names itself, so someone who cannot read
-                    // the current one can still find their own.
-                    label: Text(
-                      AppStrings.of(context).localeName == locale.languageCode
-                          ? strings.languageName
-                          : _languageName(locale.languageCode),
+            SettingsGroup(
+              title: strings.navSettings,
+              children: [
+                GroupPadding(
+                  child: _Labelled(
+                    label: strings.appearance,
+                    child: SegmentedButton<ThemeMode>(
+                      segments: [
+                        ButtonSegment(
+                          value: ThemeMode.system,
+                          label: Text(strings.themeSystem),
+                          icon: const Icon(Icons.brightness_auto_outlined),
+                        ),
+                        ButtonSegment(
+                          value: ThemeMode.light,
+                          label: Text(strings.themeLight),
+                          icon: const Icon(Icons.light_mode_outlined),
+                        ),
+                        ButtonSegment(
+                          value: ThemeMode.dark,
+                          label: Text(strings.themeDark),
+                          icon: const Icon(Icons.dark_mode_outlined),
+                        ),
+                      ],
+                      selected: {settings.themeMode},
+                      onSelectionChanged: (selection) =>
+                          settings.setThemeMode(selection.first),
                     ),
                   ),
+                ),
+                GroupPadding(
+                  child: _Labelled(
+                    label: strings.language,
+                    child: SegmentedButton<String>(
+                      segments: [
+                        ButtonSegment(
+                          value: '',
+                          label: Text(strings.themeSystem),
+                          icon: const Icon(Icons.translate),
+                        ),
+                        for (final locale in SettingsController.supportedLocales)
+                          ButtonSegment(
+                            value: locale.languageCode,
+                            // Each language names itself, so someone who
+                            // cannot read the current one can still find
+                            // their own.
+                            label: Text(
+                              strings.localeName == locale.languageCode
+                                  ? strings.languageName
+                                  : _languageName(locale.languageCode),
+                            ),
+                          ),
+                      ],
+                      selected: {settings.locale?.languageCode ?? ''},
+                      onSelectionChanged: (selection) => settings.setLocale(
+                        selection.first.isEmpty
+                            ? null
+                            : Locale(selection.first),
+                      ),
+                    ),
+                  ),
+                ),
               ],
-              selected: {settings.locale?.languageCode ?? ''},
-              onSelectionChanged: (selection) => settings.setLocale(
-                selection.first.isEmpty ? null : Locale(selection.first),
-              ),
+            ),
+
+            // The proof-of-concept small print, at the foot rather than the
+            // head. It used to be the first thing on this screen, which put
+            // a disclaimer above the person's own name.
+            const SizedBox(height: BrandSizing.spaceLg),
+            SettingsGroup(
+              title: strings.profileThisDemo,
+              caption: strings.settingsStorageNotice,
+              children: [
+                ListTile(
+                  leading: const Icon(Icons.slideshow_outlined),
+                  title: Text(strings.showIntroAgain),
+                  onTap: () async {
+                    final messenger = ScaffoldMessenger.of(context);
+                    await settings.resetIntro();
+                    messenger.showSnackBar(
+                      SnackBar(content: Text(strings.introReset)),
+                    );
+                  },
+                ),
+                ListTile(
+                  // The colour is on the icon only: Error Red is too dark to
+                  // read as text on the dark theme's surfaces. The words say
+                  // what it does, and a confirmation says it again.
+                  leading: const Icon(
+                    Icons.restart_alt,
+                    color: BrandColours.errorRed,
+                  ),
+                  // Section 21 — explicit label, never "Confirm".
+                  title: Text(strings.restoreSeedData),
+                  subtitle: Text(strings.restoreSeedExplanation),
+                  onTap: () => _confirmReset(context),
+                ),
+              ],
             ),
 
             const SizedBox(height: BrandSizing.spaceLg),
-            Text(strings.localData, style: theme.textTheme.titleMedium),
-            const SizedBox(height: BrandSizing.spaceSm),
-            Text(
-              strings.restoreSeedExplanation,
-              style: theme.textTheme.bodyMedium,
-            ),
-            const SizedBox(height: BrandSizing.spaceMd),
-            OutlinedButton.icon(
-              onPressed: () async {
-                final messenger = ScaffoldMessenger.of(context);
-                await settings.resetIntro();
-                messenger.showSnackBar(
-                  SnackBar(content: Text(strings.introReset)),
-                );
-              },
-              icon: const Icon(Icons.slideshow_outlined),
-              label: Text(strings.showIntroAgain),
-            ),
-            const SizedBox(height: BrandSizing.spaceSm),
-            OutlinedButton.icon(
-              onPressed: () => _confirmReset(context),
-              icon: const Icon(Icons.restart_alt),
-              // Section 21 — explicit label, never "Confirm".
-              label: Text(strings.restoreSeedData),
-            ),
-
-            const SizedBox(height: BrandSizing.spaceXl),
             const _BackendSection(),
-
-            const SizedBox(height: BrandSizing.spaceXl),
-            const _DevServicesSection(),
 
             const _VersionLine(),
           ],
@@ -279,7 +306,6 @@ class _VerificationTile extends StatelessWidget {
     final mine = verification.mine;
 
     return ListTile(
-      contentPadding: EdgeInsets.zero,
       leading: Icon(
         mine.isComplete ? Icons.verified_user : Icons.badge_outlined,
         color: mine.isFlagged
@@ -319,44 +345,43 @@ class _BackendSection extends StatelessWidget {
       SyncState.needsAttention => strings.syncNeedsAttention,
     };
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
+    return SettingsGroup(
+      title: strings.backendSection,
+      caption: strings.backendExplain,
       children: [
-        Text(strings.backendSection, style: theme.textTheme.titleLarge),
-        const SizedBox(height: BrandSizing.spaceXs),
-        Text(strings.backendExplain, style: theme.textTheme.labelSmall),
-        const SizedBox(height: BrandSizing.spaceMd),
-
-        Row(
-          children: [
-            switch (state) {
-              SyncState.settled => StatusPill.good(label),
-              SyncState.needsAttention => StatusPill.bad(label),
-              _ => StatusPill.muted(context, label),
-            },
-            const SizedBox(width: BrandSizing.spaceSm),
-            Expanded(
-              child: Text(
-                strings.syncWaiting(sync.outbox.length),
-                style: theme.textTheme.labelMedium,
+        GroupPadding(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Row(
+                children: [
+                  switch (state) {
+                    SyncState.settled => StatusPill.good(label),
+                    SyncState.needsAttention => StatusPill.bad(label),
+                    _ => StatusPill.muted(context, label),
+                  },
+                  const SizedBox(width: BrandSizing.spaceSm),
+                  Expanded(
+                    child: Text(
+                      strings.syncWaiting(sync.outbox.length),
+                      style: theme.textTheme.labelMedium,
+                    ),
+                  ),
+                ],
               ),
-            ),
-          ],
+              const SizedBox(height: BrandSizing.spaceXs),
+              Text(
+                sync.lastPulledAt == null
+                    ? strings.syncNeverPulled
+                    : strings.syncLastPulled(
+                        Format.day(strings, sync.lastPulledAt!),
+                      ),
+                style: theme.textTheme.labelSmall,
+              ),
+            ],
+          ),
         ),
-
-        const SizedBox(height: BrandSizing.spaceXs),
-        Text(
-          sync.lastPulledAt == null
-              ? strings.syncNeverPulled
-              : strings.syncLastPulled(
-                  Format.day(strings, sync.lastPulledAt!),
-                ),
-          style: theme.textTheme.labelSmall,
-        ),
-
-        const SizedBox(height: BrandSizing.spaceSm),
         SwitchListTile(
-          contentPadding: EdgeInsets.zero,
           title: Text(strings.syncPretendOffline),
           value: backend.offline,
           onChanged: (value) {
@@ -367,33 +392,40 @@ class _BackendSection extends StatelessWidget {
             sync.load();
           },
         ),
-        OutlinedButton.icon(
-          onPressed: () async {
+        ListTile(
+          leading: const Icon(Icons.sync),
+          title: Text(strings.syncNow),
+          onTap: () async {
             await sync.push();
             await sync.pull();
           },
-          icon: const Icon(Icons.sync),
-          label: Text(strings.syncNow),
         ),
-
-        if (sync.needAttention.isNotEmpty) ...[
-          const SizedBox(height: BrandSizing.spaceMd),
-          Text(strings.syncRefusals, style: theme.textTheme.titleMedium),
-          const SizedBox(height: BrandSizing.spaceSm),
-          for (final refusal in sync.needAttention)
-            Padding(
-              padding: const EdgeInsets.only(bottom: BrandSizing.spaceSm),
-              child: NoticePanel(
-                message: _wordFor(strings, refusal.code),
-                icon: Icons.error_outline,
-                tone: NoticeTone.warning,
-              ),
+        if (sync.needAttention.isNotEmpty)
+          GroupPadding(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Text(strings.syncRefusals, style: theme.textTheme.titleMedium),
+                const SizedBox(height: BrandSizing.spaceSm),
+                for (final refusal in sync.needAttention)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: BrandSizing.spaceSm),
+                    child: NoticePanel(
+                      message: _wordFor(strings, refusal.code),
+                      icon: Icons.error_outline,
+                      tone: NoticeTone.warning,
+                    ),
+                  ),
+                Align(
+                  alignment: AlignmentDirectional.centerStart,
+                  child: TextButton(
+                    onPressed: sync.acknowledge,
+                    child: Text(strings.syncAcknowledge),
+                  ),
+                ),
+              ],
             ),
-          TextButton(
-            onPressed: sync.acknowledge,
-            child: Text(strings.syncAcknowledge),
           ),
-        ],
       ],
     );
   }
@@ -421,124 +453,6 @@ class _BackendSection extends StatelessWidget {
       };
 }
 
-/// Where Stripe test payments and the fare agent come from.
-///
-/// A URL field rather than a build flag only, so the deployed app can be
-/// pointed at a dev server running on the evaluator's own laptop. Empty is the
-/// default, and empty means the app makes no call it did not make before.
-class _DevServicesSection extends StatefulWidget {
-  const _DevServicesSection();
-
-  @override
-  State<_DevServicesSection> createState() => _DevServicesSectionState();
-}
-
-class _DevServicesSectionState extends State<_DevServicesSection> {
-  late final TextEditingController _url = TextEditingController(
-    text: context.read<DevServicesController>().url,
-  );
-  bool _invalid = false;
-
-  @override
-  void dispose() {
-    _url.dispose();
-    super.dispose();
-  }
-
-  Future<void> _save() async {
-    final text = _url.text.trim();
-    final valid = text.isEmpty || DevServicesController.parse(text) != null;
-    setState(() => _invalid = !valid);
-    if (!valid) return;
-
-    final devServices = context.read<DevServicesController>();
-    await devServices.setUrl(text);
-    if (mounted) _url.text = devServices.url;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final strings = AppStrings.of(context);
-    final theme = Theme.of(context);
-    final devServices = context.watch<DevServicesController>();
-    final status = devServices.status;
-    final model = status?.model ?? '';
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Text(strings.devServicesSection, style: theme.textTheme.titleLarge),
-        const SizedBox(height: BrandSizing.spaceXs),
-        Text(strings.devServicesExplain, style: theme.textTheme.labelSmall),
-        const SizedBox(height: BrandSizing.spaceMd),
-
-        TextField(
-          controller: _url,
-          keyboardType: TextInputType.url,
-          autocorrect: false,
-          onSubmitted: (_) => _save(),
-          decoration: InputDecoration(
-            labelText: strings.devServicesUrlLabel,
-            hintText: strings.devServicesUrlHint,
-            errorText: _invalid ? strings.devServicesInvalid : null,
-          ),
-        ),
-        const SizedBox(height: BrandSizing.spaceSm),
-        Wrap(
-          spacing: BrandSizing.spaceSm,
-          runSpacing: BrandSizing.spaceSm,
-          children: [
-            OutlinedButton.icon(
-              onPressed: _save,
-              icon: const Icon(Icons.save_outlined),
-              label: Text(strings.devServicesSave),
-            ),
-            OutlinedButton.icon(
-              onPressed: devServices.isSet && !devServices.checking
-                  ? devServices.refresh
-                  : null,
-              icon: const Icon(Icons.wifi_tethering),
-              label: Text(strings.devServicesCheck),
-            ),
-          ],
-        ),
-
-        const SizedBox(height: BrandSizing.spaceMd),
-        Align(
-          alignment: AlignmentDirectional.centerStart,
-          child: !devServices.isSet
-              ? StatusPill.muted(context, strings.devServicesNotSet)
-              : devServices.checking
-              ? StatusPill.muted(context, strings.devServicesChecking)
-              : devServices.unreachable
-              ? StatusPill.bad(strings.devServicesUnreachable)
-              : status != null
-              ? StatusPill.good(strings.devServicesConnected)
-              : StatusPill.muted(context, strings.devServicesNotSet),
-        ),
-        if (status != null) ...[
-          const SizedBox(height: BrandSizing.spaceSm),
-          Text(
-            status.paymentsEnabled
-                ? strings.devServicesPaymentsOn
-                : strings.devServicesPaymentsOff,
-            style: theme.textTheme.bodyMedium,
-          ),
-          const SizedBox(height: BrandSizing.spaceXs),
-          Text(
-            status.agentEnabled
-                ? strings.devServicesAgentOn(model)
-                : status.modelReachable
-                ? strings.devServicesAgentNoModel(model)
-                : strings.devServicesAgentOff,
-            style: theme.textTheme.bodyMedium,
-          ),
-        ],
-      ],
-    );
-  }
-}
-
 /// The wallet, from the profile.
 ///
 /// Only for a worker: the commission is charged to the person doing the work,
@@ -552,7 +466,6 @@ class _WalletTile extends StatelessWidget {
     final wallet = context.watch<WalletController>();
 
     return ListTile(
-      contentPadding: EdgeInsets.zero,
       leading: Icon(
         wallet.isLockedOut
             ? Icons.lock_outline
@@ -579,7 +492,6 @@ class _AdminSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final strings = AppStrings.of(context);
-    final theme = Theme.of(context);
     final account = context.watch<AccountController>().active;
 
     if (!account.isAdmin) return const SizedBox.shrink();
@@ -587,20 +499,20 @@ class _AdminSection extends StatelessWidget {
     final admin = context.watch<AdminController>();
     final waiting = admin.queue.length + admin.openDisputes.length;
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        const SizedBox(height: BrandSizing.spaceLg),
-        Text(strings.adminPanel, style: theme.textTheme.titleLarge),
-        ListTile(
-          contentPadding: EdgeInsets.zero,
-          leading: const Icon(Icons.shield_outlined),
-          title: Text(strings.adminPanelTile),
-          subtitle: Text(strings.adminSubtitle(waiting)),
-          trailing: const Icon(Icons.chevron_right),
-          onTap: () => AdminScreen.open(context),
-        ),
-      ],
+    return Padding(
+      padding: const EdgeInsets.only(top: BrandSizing.spaceLg),
+      child: SettingsGroup(
+        title: strings.adminPanel,
+        children: [
+          ListTile(
+            leading: const Icon(Icons.shield_outlined),
+            title: Text(strings.adminPanelTile),
+            subtitle: Text(strings.adminSubtitle(waiting)),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () => AdminScreen.open(context),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -619,7 +531,6 @@ class _ListingTile extends StatelessWidget {
     final premium = context.watch<PremiumController>();
 
     return ListTile(
-      contentPadding: EdgeInsets.zero,
       leading: Icon(
         premium.isPremium ? Icons.badge : Icons.badge_outlined,
         color: premium.isPremium ? BrandColours.copper : null,
@@ -674,50 +585,187 @@ class _RolePicker extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        SegmentedButton<UserRole>(
-          segments: [
-            ButtonSegment(
-              value: UserRole.worker,
-              label: Text(strings.roleWorker),
-              icon: const Icon(Icons.handyman_outlined),
-            ),
-            ButtonSegment(
-              value: UserRole.hirer,
-              label: Text(strings.roleHirer),
-              icon: const Icon(Icons.post_add_outlined),
-            ),
-          ],
-          selected: {profile.role},
-          onSelectionChanged: (selection) => profile.setRole(selection.first),
+        Padding(
+          padding: const EdgeInsetsDirectional.only(
+            start: BrandSizing.spaceXs,
+            bottom: BrandSizing.spaceSm,
+          ),
+          child: Text(
+            strings.whatBringsYouHere,
+            style: theme.textTheme.titleMedium,
+          ),
         ),
-        const SizedBox(height: BrandSizing.spaceSm),
-        Text(
-          profile.isWorker ? strings.roleWorkerHelp : strings.roleHirerHelp,
-          style: theme.textTheme.labelSmall,
+        // Two cards rather than a segmented control: the two labels are
+        // whole phrases, and in Urdu at a large text size a segmented control
+        // wrapped them a word a line.
+        IntrinsicHeight(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Expanded(
+                child: _RoleCard(
+                  icon: Icons.handyman_outlined,
+                  label: strings.roleWorker,
+                  selected: profile.isWorker,
+                  onTap: () => profile.setRole(UserRole.worker),
+                ),
+              ),
+              const SizedBox(width: BrandSizing.spaceSm + 4),
+              Expanded(
+                child: _RoleCard(
+                  icon: Icons.post_add_outlined,
+                  label: strings.roleHirer,
+                  selected: !profile.isWorker,
+                  onTap: () => profile.setRole(UserRole.hirer),
+                ),
+              ),
+            ],
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsetsDirectional.fromSTEB(
+            BrandSizing.spaceXs,
+            BrandSizing.spaceSm,
+            BrandSizing.spaceXs,
+            0,
+          ),
+          child: Text(
+            profile.isWorker ? strings.roleWorkerHelp : strings.roleHirerHelp,
+            style: theme.textTheme.bodyMedium,
+          ),
         ),
         if (profile.isWorker) ...[
-          const SizedBox(height: BrandSizing.spaceMd),
-          // Your own record, the way a hirer reviewing your offer sees it.
-          // Shown to you unprompted because Section 10 makes it the thing
-          // that decides what you are offered next — a number that governs
-          // your income should not be something you have to go looking for.
-          WorkerStandingView(
-            workerId: context.watch<AccountController>().activeId,
-            heading: strings.yourStanding,
+          const SizedBox(height: BrandSizing.spaceLg),
+          SettingsGroup(
+            title: strings.profileYourWork,
+            children: [
+              // Your own record, the way a hirer reviewing your offer sees
+              // it. Shown to you unprompted because Section 10 makes it the
+              // thing that decides what you are offered next — a number that
+              // governs your income should not be something you have to go
+              // looking for.
+              GroupPadding(
+                child: WorkerStandingView(
+                  workerId: context.watch<AccountController>().activeId,
+                  heading: strings.yourStanding,
+                ),
+              ),
+              const _VerificationTile(),
+              ListTile(
+                leading: const Icon(Icons.construction_outlined),
+                title: Text(strings.myTrades),
+                subtitle: Text(strings.tradeCount(profile.specialities.length)),
+                trailing: const Icon(Icons.chevron_right),
+                onTap: () => MyTradesScreen.open(context),
+              ),
+              const _WalletTile(),
+              const _ListingTile(),
+            ],
           ),
-          const SizedBox(height: BrandSizing.spaceSm),
-          const _VerificationTile(),
-          ListTile(
-            contentPadding: EdgeInsets.zero,
-            leading: const Icon(Icons.construction_outlined),
-            title: Text(strings.myTrades),
-            subtitle: Text(strings.tradeCount(profile.specialities.length)),
-            trailing: const Icon(Icons.chevron_right),
-            onTap: () => MyTradesScreen.open(context),
-          ),
-          const _WalletTile(),
-          const _ListingTile(),
         ],
+      ],
+    );
+  }
+}
+
+/// One side of the marketplace, as something to choose.
+///
+/// Selection is said three ways — the border, the tint and a tick — and to a
+/// screen reader as a selected button in a group of two, so colour is never
+/// the only sign of which one is on.
+class _RoleCard extends StatelessWidget {
+  const _RoleCard({
+    required this.icon,
+    required this.label,
+    required this.selected,
+    required this.onTap,
+  });
+
+  final IconData icon;
+  final String label;
+  final bool selected;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final scheme = theme.colorScheme;
+    final isLight = theme.brightness == Brightness.light;
+
+    return Semantics(
+      button: true,
+      selected: selected,
+      inMutuallyExclusiveGroup: true,
+      child: Material(
+        color: selected
+            ? (isLight ? BrandColours.warmSand : BrandColours.darkElevated)
+            : scheme.surface,
+        shape: RoundedRectangleBorder(
+          borderRadius: BrandRadius.largeAll,
+          side: BorderSide(
+            color: selected ? scheme.primary : scheme.outlineVariant,
+            width: selected ? 2 : 1,
+          ),
+        ),
+        clipBehavior: Clip.antiAlias,
+        child: InkWell(
+          onTap: onTap,
+          child: Padding(
+            padding: const EdgeInsets.all(BrandSizing.spaceMd),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Icon(
+                      icon,
+                      color: selected ? scheme.primary : scheme.onSurfaceVariant,
+                    ),
+                    const Spacer(),
+                    if (selected)
+                      Icon(Icons.check_circle, size: 20, color: scheme.primary),
+                  ],
+                ),
+                const SizedBox(height: BrandSizing.spaceSm + 4),
+                Text(
+                  label,
+                  style: BrandType.body.copyWith(
+                    fontWeight: FontWeight.w600,
+                    color: scheme.onSurface,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// A control with its name above it, inside a group.
+class _Labelled extends StatelessWidget {
+  const _Labelled({required this.label, required this.child});
+
+  final String label;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Text(
+          label,
+          style: BrandType.supporting.copyWith(
+            fontWeight: FontWeight.w600,
+            color: theme.colorScheme.onSurface,
+          ),
+        ),
+        const SizedBox(height: BrandSizing.spaceSm),
+        child,
       ],
     );
   }

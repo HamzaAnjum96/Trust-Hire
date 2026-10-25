@@ -548,30 +548,14 @@ MUTATIONS = [
         tests=["test/messaging_test.dart"],
     ),
 
-    # --- 0.19.0: Stripe top-ups and the fare agent ----------------------------
-    # The sheet polls, so it is told about the same payment several times.
+    # --- 0.19: Stripe top-ups and the fare evidence ----------------------------
+    # A reload of Stripe's return address tells it about the same payment again.
     Mutation(
         name="a-payment-buys-tokens-once",
         promise="a Stripe payment reported twice is credited once",
         path="lib/app/wallet_controller.dart",
         find="    if (paymentId.isEmpty || hasCredited(paymentId)) return false;",
         replace="    if (paymentId.isEmpty) return false;",
-        tests=["test/payments_test.dart"],
-    ),
-    Mutation(
-        name="credit-what-stripe-charged",
-        promise="the tokens credited are what Stripe charged, not what was asked",
-        path="lib/features/wallet/top_up_sheet.dart",
-        find="""      await wallet.creditPayment(paymentId: session.id, tokens: status.tokens);""",
-        replace="""      await wallet.creditPayment(paymentId: session.id, tokens: 1000);""",
-        tests=["test/payments_test.dart"],
-    ),
-    Mutation(
-        name="a-payment-is-for-one-wallet",
-        promise="a payment opened for one wallet is never credited to another",
-        path="lib/features/wallet/top_up_sheet.dart",
-        find="      if (status.account != wallet.workerId) {",
-        replace="      if (false) {",
         tests=["test/payments_test.dart"],
     ),
     Mutation(

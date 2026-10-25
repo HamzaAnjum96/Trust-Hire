@@ -3,10 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_test/flutter_test.dart';
-import 'package:http/http.dart' as http;
-import 'package:http/testing.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:trust_hire/app/dev_services_controller.dart';
 import 'package:trust_hire/app/job_controller.dart';
 import 'package:trust_hire/features/create_job/create_job_screen.dart';
 import 'package:trust_hire/features/fare_advice/fare_advisor.dart';
@@ -16,7 +13,6 @@ import 'package:trust_hire/l10n/app_localizations.dart';
 import 'package:trust_hire/models/job.dart';
 import 'package:trust_hire/models/job_status.dart';
 import 'package:trust_hire/models/job_tag.dart';
-import 'package:trust_hire/services/dev_services.dart';
 import 'package:trust_hire/services/job_repository.dart';
 import 'package:trust_hire/services/local_store.dart';
 import 'package:trust_hire/services/media_store.dart';
@@ -25,9 +21,9 @@ import 'support/harness.dart';
 
 /// The fare suggestion: what it rests on, and what it is not trusted with.
 ///
-/// The guard cases are the same ones `code/backend/dev_server/` tests in
-/// Python, with the same answers. The two are meant to be one rule written
-/// twice; if these and those ever disagree, one of them has drifted.
+/// The guard is for the AI, which is paused: whatever a model proposes will
+/// be held to it. It is tested now so the rule is settled before anything
+/// depends on it.
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
@@ -263,83 +259,26 @@ void main() {
       tags: {JobTag.plumbing},
       now: now,
     );
-    final question = FareQuestion(
-      tags: {JobTag.plumbing},
-      evidence: evidence,
-      title: 'Tap leaking',
-    );
 
-    DevServicesClient agent(http.Response Function(http.Request) answer) =>
-        DevServicesClient(
-          Uri.parse('http://dev'),
-          client: MockClient((request) async => answer(request)),
-        );
+    test('suggests the typical fare, inside what similar work went for', () {
+      final advice = const FareAdvisor().advise(
+        FareQuestion(tags: {JobTag.plumbing}, evidence: evidence),
+      )!;
+      final range = FareRange.of(evidence)!;
 
-    test('with no agent it works it out on the device', () async {
-      final advice = (await const FareAdvisor().advise(question))!;
-      expect(advice.source, FareAdviceSource.onDevice);
-      expect(advice.suggested, question.range!.typical);
-      expect(advice.agentFailure, isNull);
+      expect(advice.suggested, range.typical);
+      expect(advice.low, range.low);
+      expect(advice.high, range.high);
+      expect(advice.evidence.agreedCount, 6);
     });
 
-    test("the agent's answer is held to the evidence", () async {
-      http.Request? sent;
-      final advice = (await const FareAdvisor().advise(
-        question,
-        agent: agent((request) {
-          sent = request;
-          return http.Response(
-            jsonEncode({
-              'low': 20000,
-              'suggested': 25000,
-              'high': 90000,
-              'reasoning': 'Big job.',
-              'model': 'qwen2.5:3b',
-            }),
-            200,
-          );
-        }),
-      ))!;
-
-      expect(advice.source, FareAdviceSource.agent);
-      expect(advice.clamped, isTrue);
+    test('with nothing to compare with it says so rather than guess', () {
       expect(
-        advice.high,
-        lessThanOrEqualTo((question.range!.high * FareGuard.bandAbove).ceil()),
+        const FareAdvisor().advise(
+          const FareQuestion(tags: {JobTag.plumbing}, evidence: []),
+        ),
+        isNull,
       );
-      expect(advice.model, 'qwen2.5:3b');
-      expect(sent!.url.path, '/fares/advice');
-      final body = jsonDecode(sent!.body) as Map<String, dynamic>;
-      expect(body['baseline'], question.range!.toJson());
-      expect((body['evidence'] as List).length, evidence.length);
-    });
-
-    test('an agent that cannot answer falls back, and says why', () async {
-      final cases = <String, http.Response Function(http.Request)>{
-        'model_unreachable': (_) =>
-            http.Response(jsonEncode({'error': 'model_unreachable'}), 502),
-        'bad_response': (_) => http.Response('not json', 200),
-        'agent_gave_no_answer': (_) =>
-            http.Response(jsonEncode({'error': 'agent_gave_no_answer'}), 502),
-      };
-      for (final MapEntry(key: code, value: answer) in cases.entries) {
-        final advice = (await const FareAdvisor().advise(
-          question,
-          agent: agent(answer),
-        ))!;
-        expect(advice.source, FareAdviceSource.onDevice, reason: code);
-        expect(advice.agentFailure, code);
-      }
-
-      final unreachable = DevServicesClient(
-        Uri.parse('http://dev'),
-        client: MockClient((_) async => throw http.ClientException('refused')),
-      );
-      final advice = (await const FareAdvisor().advise(
-        question,
-        agent: unreachable,
-      ))!;
-      expect(advice.agentFailure, 'unreachable');
     });
   });
 
@@ -357,9 +296,8 @@ void main() {
     Future<void> openForm(
       WidgetTester tester,
       JobController jobs,
-      Job editing, {
-      DevServicesController? dev,
-    }) async {
+      Job editing,
+    ) async {
       final store = await LocalStore.open();
       tester.view.physicalSize = const Size(800, 4000);
       tester.view.devicePixelRatio = 1;
@@ -368,7 +306,6 @@ void main() {
         appHarness(
           store: store,
           jobs: jobs,
-          devServices: dev,
           child: CreateJobScreen(
             initialLocation: editing.location,
             editing: editing,
@@ -417,57 +354,6 @@ void main() {
         tester.widget<TextField>(fareField).controller!.text,
         '${expected.typical}',
       );
-    });
-
-    testWidgets("names the agent's model, and shows its reasoning", (
-      tester,
-    ) async {
-      final (jobs, editing) =
-          await tester.runAsync(setUpJobs) ?? (throw StateError('no jobs'));
-      final store = await tester.runAsync(LocalStore.open);
-      final dev = DevServicesController(
-        store!,
-        client: MockClient((request) async {
-          if (request.url.path == '/health') {
-            return http.Response(
-              jsonEncode({
-                'payments': {'enabled': false},
-                'fareAgent': {
-                  'enabled': true,
-                  'reachable': true,
-                  'model': 'qwen2.5:3b',
-                },
-              }),
-              200,
-            );
-          }
-          return http.Response(
-            jsonEncode({
-              'low': 2000,
-              'suggested': 2500,
-              'high': 3000,
-              'reasoning': 'Six agreed jobs nearby.',
-              'model': 'qwen2.5:3b',
-            }),
-            200,
-          );
-        }),
-      );
-      await tester.runAsync(() => dev.setUrl('localhost:8787'));
-      expect(dev.agentReady, isTrue);
-
-      await openForm(tester, jobs, editing, dev: dev);
-      expect(
-        find.text(
-          'Asks the fare agent — qwen2.5:3b, running on your dev server.',
-        ),
-        findsOneWidget,
-      );
-
-      await tester.tap(find.text('Suggest a fare'));
-      await tester.pumpAndSettle();
-      expect(find.text('Why, according to qwen2.5:3b:'), findsOneWidget);
-      expect(find.text('Six agreed jobs nearby.'), findsOneWidget);
     });
 
     testWidgets('changing the tags takes an answer to another question away', (

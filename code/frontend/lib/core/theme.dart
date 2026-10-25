@@ -240,6 +240,55 @@ class BrandTheme {
         }),
       ),
 
+      // A row in a settings group: the title carries a little more weight than
+      // body copy, so a list of them reads as a list of places to go.
+      listTileTheme: ListTileThemeData(
+        iconColor: mutedColour,
+        titleTextStyle: BrandType.body.copyWith(
+          color: textColour,
+          fontWeight: FontWeight.w500,
+        ),
+        subtitleTextStyle: BrandType.supporting.copyWith(color: mutedColour),
+      ),
+
+      // Section 22 — a control is 48px tall with a 12px radius, segmented ones
+      // included; Material's default is a 40px pill.
+      segmentedButtonTheme: SegmentedButtonThemeData(
+        style: ButtonStyle(
+          minimumSize: const WidgetStatePropertyAll(
+            Size(0, BrandSizing.touchTargetPreferred),
+          ),
+          textStyle: WidgetStatePropertyAll(
+            BrandType.supporting.copyWith(fontWeight: FontWeight.w600),
+          ),
+          side: WidgetStatePropertyAll(BorderSide(color: scheme.outline)),
+          shape: const WidgetStatePropertyAll(
+            RoundedRectangleBorder(borderRadius: BrandRadius.mediumAll),
+          ),
+        ),
+      ),
+
+      floatingActionButtonTheme: FloatingActionButtonThemeData(
+        backgroundColor: scheme.primary,
+        foregroundColor: scheme.onPrimary,
+        elevation: 2,
+        focusElevation: 2,
+        hoverElevation: 3,
+        highlightElevation: 1,
+        extendedTextStyle: BrandType.button,
+        shape: const RoundedRectangleBorder(borderRadius: BrandRadius.largeAll),
+      ),
+
+      // Section 25 — a dialogue is a sheet that sits in the middle, so it has
+      // the sheet's corners.
+      dialogTheme: DialogThemeData(
+        backgroundColor: scheme.surface,
+        surfaceTintColor: Colors.transparent,
+        shape: const RoundedRectangleBorder(borderRadius: BrandRadius.sheetAll),
+        titleTextStyle: BrandType.sectionHeading.copyWith(color: textColour),
+        contentTextStyle: BrandType.body.copyWith(color: mutedColour),
+      ),
+
       chipTheme: ChipThemeData(
         backgroundColor: isLight
             ? BrandColours.white
@@ -291,4 +340,15 @@ class BrandTheme {
       ),
     );
   }
+}
+
+/// Brand styles that Material's text theme has no slot for.
+extension BrandTextStyles on ThemeData {
+  /// A fare, in the one colour fares are given: Deep Burgundy on a light
+  /// surface, near-white on a dark one, where Deep Burgundy would disappear.
+  TextStyle get fareStyle => BrandType.fare.copyWith(
+    color: brightness == Brightness.light
+        ? BrandColours.deepBurgundy
+        : BrandColours.darkTextPrimary,
+  );
 }

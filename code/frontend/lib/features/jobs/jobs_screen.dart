@@ -89,6 +89,7 @@ class JobsScreen extends StatelessWidget {
             reachable: reachable,
             visible: visible,
             filters: filters,
+            viewerLocation: location.position,
           ),
         },
       ),
@@ -104,6 +105,7 @@ class _Results extends StatelessWidget {
     required this.reachable,
     required this.visible,
     required this.filters,
+    required this.viewerLocation,
   });
 
   final List<Job> all;
@@ -113,6 +115,7 @@ class _Results extends StatelessWidget {
 
   final List<Job> visible;
   final JobFilterController filters;
+  final JobLocation? viewerLocation;
 
   @override
   Widget build(BuildContext context) {
@@ -152,14 +155,15 @@ class _Results extends StatelessWidget {
       );
     }
 
-    return _JobList(jobs: visible);
+    return _JobList(jobs: visible, viewerLocation: viewerLocation);
   }
 }
 
 class _JobList extends StatelessWidget {
-  const _JobList({required this.jobs});
+  const _JobList({required this.jobs, required this.viewerLocation});
 
   final List<Job> jobs;
+  final JobLocation? viewerLocation;
 
   @override
   Widget build(BuildContext context) {
@@ -182,6 +186,7 @@ class _JobList extends StatelessWidget {
         child: JobRow(
           job: jobs[index],
           now: now,
+          viewerLocation: viewerLocation,
           onTap: () => JobDetailsSheet.open(
             context,
             jobId: jobs[index].id,

@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 
 import 'package:trust_hire/app/account_controller.dart';
 import 'package:trust_hire/app/bid_controller.dart';
-import 'package:trust_hire/app/dev_services_controller.dart';
 import 'package:trust_hire/app/job_controller.dart';
 import 'package:trust_hire/app/message_controller.dart';
 import 'package:trust_hire/app/notification_controller.dart';
@@ -49,7 +48,6 @@ Widget appHarness({
   PremiumController? premium,
   MessageController? messages,
   NotificationController? notifications,
-  DevServicesController? devServices,
   Locale locale = const Locale('en'),
   ThemeData? theme,
 }) {
@@ -88,12 +86,6 @@ Widget appHarness({
       provide<NotificationController>(
         notifications,
         () => NotificationController(store)..load(),
-      ),
-      // Built without `load()`: a test that wants a dev server hands one in,
-      // and nothing else should be reaching for the network.
-      provide<DevServicesController>(
-        devServices,
-        () => DevServicesController(store),
       ),
       ChangeNotifierProvider(create: (_) => VerificationController(store)..load()),
       ChangeNotifierProvider(create: (_) => LocationController()),

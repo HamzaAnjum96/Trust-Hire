@@ -6,7 +6,7 @@ import 'package:flutter/foundation.dart';
 /// GitHub Pages is a static host: everything in the site is readable by
 /// anybody, so it can never hold a Stripe secret key, and creating a Checkout
 /// Session needs one. A Payment Link is made once, ahead of time, by
-/// `code/backend/dev_server/payment_links.py` running on a developer's machine
+/// `code/backend/stripe/payment_links.py` running on a developer's machine
 /// with the key — and after that it is just a public URL. Stripe designed them
 /// to be shared, so **nothing below is a secret**: these are the addresses of
 /// five test-mode checkout pages, one per package.
@@ -34,7 +34,7 @@ class StripePaymentLinks {
   /// Only on the web, and only on [site]'s own origin: a link returns to one
   /// address, and a payment started anywhere else — a phone, `localhost` —
   /// would come back to a browser that never started it, and be credited
-  /// nowhere. Those builds keep the simulation, or use the dev server.
+  /// nowhere. Those builds keep the simulated top-up.
   static Map<int, String>? forThisBuild() =>
       kIsWeb && returnsTo(Uri.base) ? byTokens : null;
 

@@ -179,10 +179,6 @@ class StoreKeys {
   static String forAccount(String key, String accountId) =>
       accountId == DemoAccounts.deviceId ? key : '$key#$accountId';
 
-  /// Where the optional dev server is — Stripe test payments and the fare
-  /// agent. Empty means none, which is the default and the deployed app's.
-  static const devServer = 'trust_hire.dev_server';
-
   /// A top-up this browser has sent somebody to a Stripe Payment Link for —
   /// who, how much and when — which the return from Stripe is checked
   /// against. Device-wide, with the account inside it, because the page that
@@ -216,7 +212,6 @@ class StoreKeys {
     phoneChallenge,
     outbox,
     lastPulledAt,
-    devServer,
     pendingTopUp,
     mediaIndex,
   ];

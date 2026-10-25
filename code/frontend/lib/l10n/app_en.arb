@@ -155,7 +155,6 @@
   "themeLight": "Light",
   "themeDark": "Dark",
   "language": "Language",
-  "localData": "Local data",
   "restoreSeedExplanation": "Restoring the seed data removes every job you created on this device and brings back the original examples.",
   "restoreSeedData": "Restore Seed Data",
   "restoreSeedTitle": "Restore seed data?",
@@ -1326,26 +1325,13 @@
   "@fareAdviceAsk": {
     "description": "Button on the posting form that asks for a starting fare"
   },
-  "fareAdviceByAgent": "Asks the fare agent — {model}, running on your dev server.",
-  "@fareAdviceByAgent": {
-    "description": "Who will answer, when the AI fare agent is available",
-    "placeholders": {
-      "model": {
-        "type": "String"
-      }
-    }
-  },
   "fareAdviceOnDevice": "Worked out on this device from similar jobs.",
   "@fareAdviceOnDevice": {
-    "description": "Who will answer, when there is no fare agent"
+    "description": "Where the fare suggestion comes from"
   },
   "fareAdviceNeedsTags": "Choose a tag first, so there is work to compare with.",
   "@fareAdviceNeedsTags": {
     "description": "Why the fare suggestion cannot run yet"
-  },
-  "fareAdviceAsking": "Asking the fare agent. A model on a laptop can take a minute.",
-  "@fareAdviceAsking": {
-    "description": "While the AI agent is thinking"
   },
   "fareAdviceRange": "{low} – {high}",
   "@fareAdviceRange": {
@@ -1386,42 +1372,9 @@
       }
     }
   },
-  "fareAdviceNoEvidence": "There are no similar jobs on this device, so this is the model's own estimate.",
-  "@fareAdviceNoEvidence": {
-    "description": "When the agent answered without any evidence"
-  },
   "fareAdviceNothing": "No similar jobs to compare with yet. Choose what you think is fair — workers will tell you if it is not.",
   "@fareAdviceNothing": {
     "description": "When there is nothing to base a suggestion on"
-  },
-  "fareAdviceReasoningBy": "Why, according to {model}:",
-  "@fareAdviceReasoningBy": {
-    "description": "Introduces the AI agent's explanation",
-    "placeholders": {
-      "model": {
-        "type": "String"
-      }
-    }
-  },
-  "fareAdviceClamped": "The agent's figure was far from what similar work went for, so it has been brought back within range.",
-  "@fareAdviceClamped": {
-    "description": "When the guard moved the AI's number"
-  },
-  "fareAgentFellBackUnreachable": "The fare agent did not respond, so this was worked out on the device instead.",
-  "@fareAgentFellBackUnreachable": {
-    "description": "Fallback: dev server unreachable"
-  },
-  "fareAgentFellBackNoModel": "The fare agent could not reach its model, so this was worked out on the device instead.",
-  "@fareAgentFellBackNoModel": {
-    "description": "Fallback: the language model is not running"
-  },
-  "fareAgentFellBackNoAnswer": "The fare agent did not settle on a figure, so this was worked out on the device instead.",
-  "@fareAgentFellBackNoAnswer": {
-    "description": "Fallback: the model never answered"
-  },
-  "fareAgentFellBackRefused": "The fare agent could not answer, so this was worked out on the device instead.",
-  "@fareAgentFellBackRefused": {
-    "description": "Fallback: any other failure"
   },
   "fareAdviceUse": "Use {amount}",
   "@fareAdviceUse": {
@@ -1436,10 +1389,6 @@
   "@fareAdviceCaveat": {
     "description": "What a fare suggestion does not establish"
   },
-  "topUpStripeNotice": "Stripe test mode. No real money moves — pay with card 4242 4242 4242 4242, any future date and any CVC.",
-  "@topUpStripeNotice": {
-    "description": "Says the Stripe top-up is test mode and how to pay"
-  },
   "topUpPayWithStripe": "Pay {amount} with Stripe",
   "@topUpPayWithStripe": {
     "description": "Starts a Stripe Checkout payment",
@@ -1449,111 +1398,13 @@
       }
     }
   },
-  "topUpWaiting": "Waiting for Stripe",
-  "@topUpWaiting": {
-    "description": "Title while a payment is open"
-  },
-  "topUpWaitingExplain": "Finish paying on the Stripe page that opened. Your tokens are added here as soon as Stripe confirms it.",
-  "@topUpWaitingExplain": {
-    "description": "While waiting for Stripe"
-  },
-  "topUpOpenAgain": "Open the payment page again",
-  "@topUpOpenAgain": {
-    "description": "Reopens Stripe Checkout"
-  },
-  "topUpStopWaiting": "Stop waiting",
-  "@topUpStopWaiting": {
-    "description": "Gives up on a payment in progress"
-  },
-  "topUpStripeFailed": "Stripe could not be reached. Nothing was charged.",
-  "@topUpStripeFailed": {
-    "description": "Starting a payment failed"
-  },
   "topUpCouldNotOpen": "The payment page could not be opened.",
   "@topUpCouldNotOpen": {
     "description": "The browser could not open Stripe"
   },
-  "topUpExpired": "That payment page expired. Nothing was charged.",
-  "@topUpExpired": {
-    "description": "The Checkout Session expired"
-  },
   "topUpNotMatched": "Stripe has that payment, but it does not match this wallet, so nothing was added.",
   "@topUpNotMatched": {
     "description": "A paid session that cannot be credited here"
-  },
-  "devServicesSection": "Dev services",
-  "@devServicesSection": {
-    "description": "Profile section for the optional dev server"
-  },
-  "devServicesExplain": "Stripe test payments and the AI fare agent run on a small dev server on your own computer — code/backend/dev_server. Without one, top-ups are simulated and fares are estimated on this device.",
-  "@devServicesExplain": {
-    "description": "What the dev services section is for"
-  },
-  "devServicesUrlLabel": "Dev server address",
-  "@devServicesUrlLabel": {
-    "description": "Label on the dev server URL field"
-  },
-  "devServicesUrlHint": "http://localhost:8787",
-  "@devServicesUrlHint": {
-    "description": "Placeholder in the dev server URL field"
-  },
-  "devServicesSave": "Save address",
-  "@devServicesSave": {
-    "description": "Saves the dev server URL"
-  },
-  "devServicesCheck": "Check connection",
-  "@devServicesCheck": {
-    "description": "Asks the dev server what is on"
-  },
-  "devServicesInvalid": "That is not an address the app can use.",
-  "@devServicesInvalid": {
-    "description": "The URL could not be parsed"
-  },
-  "devServicesNotSet": "Not set",
-  "@devServicesNotSet": {
-    "description": "No dev server configured"
-  },
-  "devServicesChecking": "Checking",
-  "@devServicesChecking": {
-    "description": "A health check is running"
-  },
-  "devServicesConnected": "Connected",
-  "@devServicesConnected": {
-    "description": "The dev server answered"
-  },
-  "devServicesUnreachable": "Not reachable",
-  "@devServicesUnreachable": {
-    "description": "The dev server did not answer"
-  },
-  "devServicesPaymentsOn": "Payments: Stripe test mode",
-  "@devServicesPaymentsOn": {
-    "description": "Stripe is configured on the dev server"
-  },
-  "devServicesPaymentsOff": "Payments: off — top-ups stay simulated",
-  "@devServicesPaymentsOff": {
-    "description": "Stripe is not configured"
-  },
-  "devServicesAgentOn": "Fare agent: {model}",
-  "@devServicesAgentOn": {
-    "description": "The AI model is ready",
-    "placeholders": {
-      "model": {
-        "type": "String"
-      }
-    }
-  },
-  "devServicesAgentNoModel": "Fare agent: {model} is not downloaded yet",
-  "@devServicesAgentNoModel": {
-    "description": "The model server is up but lacks the model",
-    "placeholders": {
-      "model": {
-        "type": "String"
-      }
-    }
-  },
-  "devServicesAgentOff": "Fare agent: off — fares are estimated on this device",
-  "@devServicesAgentOff": {
-    "description": "No model server"
   },
   "refusalPaymentCredited": "That payment had already been turned into tokens.",
   "@refusalPaymentCredited": {
@@ -1566,5 +1417,21 @@
   "topUpStripeLinkCaveat": "On this site the payment is confirmed by Stripe sending you back, not checked by a server. The wallet only lives in this browser either way.",
   "@topUpStripeLinkCaveat": {
     "description": "What a Payment Link top-up does not establish"
+  },
+  "fareAgreedLabel": "Agreed fare",
+  "@fareAgreedLabel": {
+    "description": "Under the fare on a job row, once a worker has been chosen"
+  },
+  "fareOpenToOffers": "Open to offers",
+  "@fareOpenToOffers": {
+    "description": "Where the fare would be on a job row, when the hirer gave none"
+  },
+  "profileYourWork": "Your work",
+  "@profileYourWork": {
+    "description": "Profile group: standing, verification, trades, wallet, listing"
+  },
+  "profileThisDemo": "This demo",
+  "@profileThisDemo": {
+    "description": "Profile group: where the data lives, the intro, restoring the seed"
   }
 }

@@ -16,6 +16,7 @@ import '../../models/job.dart';
 import '../../services/media_store.dart';
 import '../../widgets/state_views.dart';
 import '../../widgets/voice_note_player.dart';
+import '../../widgets/mine_badge.dart';
 import '../bidding/offer_list.dart';
 import '../lifecycle/job_lifecycle.dart';
 import '../map/job_marker.dart';
@@ -139,7 +140,7 @@ class _Body extends StatelessWidget {
             if (job.isPostedBy(context.watch<AccountController>().activeId))
               ...[
                 const SizedBox(width: BrandSizing.spaceSm),
-                const _LocalBadge(),
+                const MineBadge(),
               ],
             const SizedBox(width: BrandSizing.spaceSm),
             _SaveButton(jobId: job.id),
@@ -560,34 +561,6 @@ class _DetailRow extends StatelessWidget {
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class _LocalBadge extends StatelessWidget {
-  const _LocalBadge();
-
-  @override
-  Widget build(BuildContext context) {
-    final strings = AppStrings.of(context);
-    return Container(
-      padding: const EdgeInsets.symmetric(
-        horizontal: BrandSizing.spaceSm,
-        vertical: 3,
-      ),
-      decoration: const BoxDecoration(
-        color: BrandColours.copper,
-        borderRadius: BrandRadius.smallAll,
-      ),
-      child: Text(
-        strings.onThisDevice,
-        style: TextStyle(
-          fontSize: 12,
-          height: 16 / 12,
-          fontWeight: FontWeight.w600,
-          color: BrandColours.white,
-        ),
       ),
     );
   }

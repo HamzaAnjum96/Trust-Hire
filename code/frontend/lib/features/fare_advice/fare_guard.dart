@@ -23,10 +23,10 @@ class HeldFare {
 /// writes Rs. 900,000 for a leaking tap is stopped here, not shown to somebody
 /// about to post a job.
 ///
-/// **Mirrored in `code/backend/dev_server/fare_agent.py`**, which applies the
-/// same rule before answering. Both check, because the app should not have to
-/// trust a server it may not be talking to, and the server should not hand
-/// out a number it would not stand behind. Change one, change both.
+/// **Ready for the AI, which is paused.** Nothing proposes a fare for this to
+/// hold yet — the suggestion is the arithmetic in `FareRange` — but when the
+/// on-device model returns, its figure comes through here before anybody
+/// sees it. Kept, and tested, so that rule is already in place when it does.
 class FareGuard {
   const FareGuard();
 
