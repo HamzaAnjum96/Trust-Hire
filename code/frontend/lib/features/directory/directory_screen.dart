@@ -194,7 +194,7 @@ class _DirectoryScreenState extends State<DirectoryScreen> {
               )
             else
               for (final listing in listings) ...[
-                DirectoryListingCard(
+                _ListingCard(
                   listing: listing,
                   name: names[listing.workerId],
                   distanceMetres: premium.distanceTo(listing, hirerAt: here),
@@ -343,8 +343,8 @@ class _DirectoryControls extends StatelessWidget {
 /// Name, one line, what they start at, and their record. Deliberately not a
 /// photograph and not a badge: Section 9 sells *visibility*, and anything that
 /// made a paid listing look endorsed would be selling something else.
-class DirectoryListingCard extends StatelessWidget {
-  const DirectoryListingCard({
+class _ListingCard extends StatelessWidget {
+  const _ListingCard({
     required this.listing,
     this.name,
     this.distanceMetres,
