@@ -60,7 +60,14 @@ class _UpdatesTabState extends State<UpdatesTab> {
     final seenAt = notifications.seenAt;
     final byId = {for (final job in jobs.jobs) job.id: job};
 
-    return ListView.separated(
+    final theme = Theme.of(context);
+    final last = feed.length - 1;
+
+    // **One surface, rows divided by hairlines** — an inbox rather than a
+    // stack of identical cards, which made twenty updates read as twenty
+    // separate things of equal weight. Built lazily all the same: a busy
+    // account's feed is long.
+    return ListView.builder(
       padding: const EdgeInsets.fromLTRB(
         BrandSizing.spaceMd,
         BrandSizing.spaceMd,
@@ -68,17 +75,39 @@ class _UpdatesTabState extends State<UpdatesTab> {
         BrandSizing.spaceXl * 3,
       ),
       itemCount: feed.length,
-      separatorBuilder: (_, _) => const SizedBox(height: BrandSizing.spaceSm),
       itemBuilder: (context, index) {
         final entry = feed[index];
+        const corner = Radius.circular(BrandRadius.large);
+        final side = BorderSide(color: theme.colorScheme.outlineVariant);
 
-        return _UpdateCard(
-          entry: entry,
-          job: entry.jobId == null ? null : byId[entry.jobId],
-          // Highlighted only on the pass where it was still unseen. The mark
-          // moves a frame after the tab opens, so the reader gets one look at
-          // what is new rather than a list that was already grey.
-          isNew: seenAt != null && entry.at.isAfter(seenAt),
+        return Container(
+          clipBehavior: Clip.antiAlias,
+          decoration: BoxDecoration(
+            color: theme.colorScheme.surface,
+            border: Border(
+              left: side,
+              right: side,
+              top: index == 0 ? side : BorderSide.none,
+              bottom: side,
+            ),
+            borderRadius: BorderRadius.vertical(
+              top: index == 0 ? corner : Radius.zero,
+              bottom: index == last ? corner : Radius.zero,
+            ),
+          ),
+          // So the row's ink is drawn over the white above it, not under it.
+          child: Material(
+            type: MaterialType.transparency,
+            child: _UpdateRow(
+              entry: entry,
+              job: entry.jobId == null ? null : byId[entry.jobId],
+              // Highlighted only on the pass where it was still unseen. The
+              // mark moves a frame after the tab opens, so the reader gets
+              // one look at what is new rather than a list that was already
+              // grey.
+              isNew: seenAt != null && entry.at.isAfter(seenAt),
+            ),
+          ),
         );
       },
     );
@@ -111,8 +140,8 @@ List<AppNotification> buildFeed(BuildContext context) {
   );
 }
 
-class _UpdateCard extends StatelessWidget {
-  const _UpdateCard({required this.entry, required this.isNew, this.job});
+class _UpdateRow extends StatelessWidget {
+  const _UpdateRow({required this.entry, required this.isNew, this.job});
 
   final AppNotification entry;
   final Job? job;
@@ -123,34 +152,58 @@ class _UpdateCard extends StatelessWidget {
     final scheme = Theme.of(context).colorScheme;
 
     return switch (entry.kind) {
-      NotificationKind.offerReceived => (Icons.local_offer_outlined,
-        scheme.primary),
-      NotificationKind.offerAccepted => (Icons.check_circle_outline,
-        BrandColours.successTeal),
-      NotificationKind.offerPassedOver => (Icons.do_not_disturb_on_outlined,
-        scheme.outline),
-      NotificationKind.jobStarted => (Icons.play_circle_outline,
-        scheme.primary),
-      NotificationKind.jobCompleted => (Icons.task_alt,
-        BrandColours.successTeal),
+      NotificationKind.offerReceived => (
+        Icons.local_offer_outlined,
+        scheme.primary,
+      ),
+      NotificationKind.offerAccepted => (
+        Icons.check_circle_outline,
+        BrandColours.successTeal,
+      ),
+      NotificationKind.offerPassedOver => (
+        Icons.do_not_disturb_on_outlined,
+        scheme.outline,
+      ),
+      NotificationKind.jobStarted => (
+        Icons.play_circle_outline,
+        scheme.primary,
+      ),
+      NotificationKind.jobCompleted => (
+        Icons.task_alt,
+        BrandColours.successTeal,
+      ),
       NotificationKind.jobCancelled => (Icons.cancel_outlined, scheme.outline),
       NotificationKind.jobExpired => (Icons.timer_off_outlined, scheme.outline),
       NotificationKind.ratingReceived => (Icons.star_outline, scheme.primary),
-      NotificationKind.commissionCharged => (Icons.receipt_long_outlined,
-        scheme.onSurfaceVariant),
-      NotificationKind.walletCredited => (Icons.account_balance_wallet_outlined,
-        BrandColours.successTeal),
+      NotificationKind.commissionCharged => (
+        Icons.receipt_long_outlined,
+        scheme.onSurfaceVariant,
+      ),
+      NotificationKind.walletCredited => (
+        Icons.account_balance_wallet_outlined,
+        BrandColours.successTeal,
+      ),
       NotificationKind.walletLocked => (Icons.lock_outline, scheme.error),
-      NotificationKind.subscriptionExpiring => (Icons.schedule,
-        BrandColours.informationBlue),
-      NotificationKind.subscriptionLapsed => (Icons.badge_outlined,
-        scheme.error),
-      NotificationKind.verificationApproved => (Icons.verified_outlined,
-        BrandColours.successTeal),
-      NotificationKind.verificationRejected => (Icons.gpp_bad_outlined,
-        scheme.error),
-      NotificationKind.messageReceived => (Icons.forum_outlined,
-        scheme.primary),
+      NotificationKind.subscriptionExpiring => (
+        Icons.schedule,
+        BrandColours.informationBlue,
+      ),
+      NotificationKind.subscriptionLapsed => (
+        Icons.badge_outlined,
+        scheme.error,
+      ),
+      NotificationKind.verificationApproved => (
+        Icons.verified_outlined,
+        BrandColours.successTeal,
+      ),
+      NotificationKind.verificationRejected => (
+        Icons.gpp_bad_outlined,
+        scheme.error,
+      ),
+      NotificationKind.messageReceived => (
+        Icons.forum_outlined,
+        scheme.primary,
+      ),
     };
   }
 
@@ -161,7 +214,10 @@ class _UpdateCard extends StatelessWidget {
 
     return switch (entry.kind) {
       NotificationKind.offerReceived => strings.notifOfferReceived(
-        context.read<JobController>().userById(entry.otherPartyId ?? '')?.name ??
+        context
+                .read<JobController>()
+                .userById(entry.otherPartyId ?? '')
+                ?.name ??
             strings.someone,
         money,
       ),
@@ -171,9 +227,10 @@ class _UpdateCard extends StatelessWidget {
       // The fare is worth repeating on completion — it is the moment somebody
       // checks what they are owed — but a job with no agreed fare has none to
       // repeat, and "finished at Rs. 0" would be a lie.
-      NotificationKind.jobCompleted => entry.amount == null
-          ? strings.notifJobCompleted
-          : strings.notifJobCompletedFare(money),
+      NotificationKind.jobCompleted =>
+        entry.amount == null
+            ? strings.notifJobCompleted
+            : strings.notifJobCompletedFare(money),
       NotificationKind.jobCancelled => strings.notifJobCancelled,
       NotificationKind.jobExpired => strings.notifJobExpired,
       NotificationKind.ratingReceived => strings.notifRatingReceived(
@@ -192,7 +249,10 @@ class _UpdateCard extends StatelessWidget {
       NotificationKind.verificationRejected =>
         strings.notifVerificationRejected,
       NotificationKind.messageReceived => strings.notifMessageReceived(
-        context.read<JobController>().userById(entry.otherPartyId ?? '')?.name ??
+        context
+                .read<JobController>()
+                .userById(entry.otherPartyId ?? '')
+                ?.name ??
             strings.someone,
       ),
     };
@@ -205,20 +265,21 @@ class _UpdateCard extends StatelessWidget {
     final (icon, colour) = _glyph(context);
     final target = job;
 
-    return Card(
-      margin: EdgeInsets.zero,
-      shape: RoundedRectangleBorder(
-        borderRadius: BrandRadius.mediumAll,
-        side: BorderSide(
-          // The only thing marking an entry as new. Not a dot and not a bold
-          // weight: this list is read at a glance, and a coloured edge survives
-          // being glanced at.
-          color: isNew ? theme.colorScheme.primary : theme.colorScheme.outlineVariant,
-          width: isNew ? 1.5 : 1,
+    // The only thing marking an entry as new is its edge: a burgundy bar
+    // down the leading side, over a faint tint. Not a dot and not a bold
+    // weight — this list is read at a glance, and a coloured edge survives
+    // being glanced at.
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: isNew ? theme.colorScheme.primary.withValues(alpha: 0.06) : null,
+        border: BorderDirectional(
+          start: BorderSide(
+            color: isNew ? theme.colorScheme.primary : Colors.transparent,
+            width: 3,
+          ),
         ),
       ),
       child: InkWell(
-        borderRadius: BrandRadius.mediumAll,
         onTap: target == null
             ? null
             // A message entry goes to the conversation. Opening the job sheet
@@ -236,8 +297,16 @@ class _UpdateCard extends StatelessWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Icon(icon, color: colour, size: 22),
-              const SizedBox(width: BrandSizing.spaceMd),
+              Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  color: colour.withValues(alpha: 0.12),
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(icon, color: colour, size: 22),
+              ),
+              const SizedBox(width: BrandSizing.spaceSm + 4),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,

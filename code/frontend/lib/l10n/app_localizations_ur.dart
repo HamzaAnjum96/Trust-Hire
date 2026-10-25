@@ -2121,4 +2121,7 @@ class AppStringsUr extends AppStrings {
 
   @override
   String get directoryPriceFrom => 'ابتدائی قیمت';
+
+  @override
+  String get walletHistory => 'لین دین';
 }

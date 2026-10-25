@@ -2114,4 +2114,7 @@ class AppStringsEn extends AppStrings {
 
   @override
   String get directoryPriceFrom => 'Starting price';
+
+  @override
+  String get walletHistory => 'History';
 }

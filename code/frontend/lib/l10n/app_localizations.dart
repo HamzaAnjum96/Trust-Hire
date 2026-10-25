@@ -3517,6 +3517,12 @@ abstract class AppStrings {
   /// In en, this message translates to:
   /// **'Starting price'**
   String get directoryPriceFrom;
+
+  /// Heading over the wallet's ledger
+  ///
+  /// In en, this message translates to:
+  /// **'History'**
+  String get walletHistory;
 }
 
 class _AppStringsDelegate extends LocalizationsDelegate<AppStrings> {

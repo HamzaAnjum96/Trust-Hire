@@ -1433,5 +1433,9 @@
   "directoryPriceFrom": "Starting price",
   "@directoryPriceFrom": {
     "description": "Under the lowest service price on a directory card"
+  },
+  "walletHistory": "History",
+  "@walletHistory": {
+    "description": "Heading over the wallet's ledger"
   }
 }

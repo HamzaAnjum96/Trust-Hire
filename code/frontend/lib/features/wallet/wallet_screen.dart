@@ -7,6 +7,7 @@ import '../../core/layout.dart';
 import '../../core/tokens.dart';
 import '../../l10n/app_localizations.dart';
 import '../../models/wallet.dart';
+import '../../widgets/settings_group.dart';
 import '../../widgets/state_views.dart';
 import 'top_up_sheet.dart';
 import 'wallet_rules.dart';
@@ -44,14 +45,67 @@ class WalletScreen extends StatelessWidget {
         child: ListView(
           padding: const EdgeInsets.all(BrandSizing.spaceMd),
           children: [
-            Text(strings.walletBalance, style: theme.textTheme.labelMedium),
-            const SizedBox(height: BrandSizing.spaceXs),
-            Text(
-              Format.fare(strings, wallet.balance),
-              style: theme.textTheme.displaySmall?.copyWith(
-                // Debt is named in the copy underneath as well — section 29
-                // rules out colour as the only carrier of meaning.
-                color: controller.isInDebt ? BrandColours.errorRed : null,
+            // **The one bold surface in the app.** Everything else is white
+            // on sand; the balance is the number a worker opens this screen
+            // for, and it is money, so it gets the brand's deepest colour.
+            Container(
+              padding: const EdgeInsets.all(BrandSizing.spaceLg),
+              decoration: const BoxDecoration(
+                color: BrandColours.deepBurgundy,
+                borderRadius: BrandRadius.sheetAll,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    strings.walletBalance,
+                    style: BrandType.supporting.copyWith(
+                      color: BrandColours.white.withValues(alpha: 0.8),
+                    ),
+                  ),
+                  const SizedBox(height: BrandSizing.spaceXs),
+                  FittedBox(
+                    fit: BoxFit.scaleDown,
+                    alignment: AlignmentDirectional.centerStart,
+                    child: Text(
+                      Format.fare(strings, wallet.balance),
+                      // Debt is said in the notice under the card as well:
+                      // section 29 rules out colour as the only carrier of
+                      // meaning, and red would not read on burgundy anyway.
+                      style: BrandType.fare.copyWith(
+                        fontSize: 36,
+                        height: 44 / 36,
+                        color: BrandColours.white,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: BrandSizing.spaceXs),
+                  Text(
+                    !wallet.hasFirstJobCredit
+                        ? strings.firstJobCreditWaiting(
+                            Format.fare(
+                              strings,
+                              WalletRules.firstJobCreditTokens,
+                            ),
+                          )
+                        : strings.loyaltyProgress(
+                            Format.fare(strings, toNextBonus),
+                          ),
+                    style: BrandType.caption.copyWith(
+                      color: BrandColours.white.withValues(alpha: 0.8),
+                    ),
+                  ),
+                  const SizedBox(height: BrandSizing.spaceMd),
+                  FilledButton.icon(
+                    onPressed: () => TopUpSheet.open(context),
+                    style: FilledButton.styleFrom(
+                      backgroundColor: BrandColours.white,
+                      foregroundColor: BrandColours.deepBurgundy,
+                    ),
+                    icon: const Icon(Icons.add),
+                    label: Text(strings.topUpTitle),
+                  ),
+                ],
               ),
             ),
 
@@ -73,36 +127,20 @@ class WalletScreen extends StatelessWidget {
             else
               NoticePanel(message: strings.walletExplanation),
 
-            const SizedBox(height: BrandSizing.spaceMd),
-            FilledButton.icon(
-              onPressed: () => TopUpSheet.open(context),
-              icon: const Icon(Icons.add),
-              label: Text(strings.topUpTitle),
-            ),
-
-            const SizedBox(height: BrandSizing.spaceSm),
-            if (!wallet.hasFirstJobCredit)
-              Text(
-                strings.firstJobCreditWaiting(
-                  Format.fare(strings, WalletRules.firstJobCreditTokens),
-                ),
-                style: theme.textTheme.labelSmall,
-              )
-            else
-              Text(
-                strings.loyaltyProgress(Format.fare(strings, toNextBonus)),
-                style: theme.textTheme.labelSmall,
-              ),
-
-            const SizedBox(height: BrandSizing.spaceXl),
+            const SizedBox(height: BrandSizing.spaceLg),
             if (wallet.entries.isEmpty)
               Text(strings.walletEmpty, style: theme.textTheme.bodyMedium)
             else
-              // Newest first to read, oldest first to compute. The ledger is
-              // stored in the order things happened because the debt count
-              // depends on it; only the display is reversed.
-              for (final entry in wallet.entries.reversed)
-                _EntryRow(entry: entry),
+              SettingsGroup(
+                title: strings.walletHistory,
+                children: [
+                  // Newest first to read, oldest first to compute. The ledger
+                  // is stored in the order things happened because the debt
+                  // count depends on it; only the display is reversed.
+                  for (final entry in wallet.entries.reversed)
+                    _EntryRow(entry: entry),
+                ],
+              ),
 
             if (rules.isLockedOut(wallet)) const SizedBox(height: 0),
           ],
@@ -124,7 +162,10 @@ class _EntryRow extends StatelessWidget {
     final isCredit = entry.tokens >= 0;
 
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: BrandSizing.spaceSm),
+      padding: const EdgeInsets.symmetric(
+        horizontal: BrandSizing.spaceMd,
+        vertical: BrandSizing.spaceSm + 4,
+      ),
       child: Row(
         children: [
           Icon(
@@ -159,8 +200,11 @@ class _EntryRow extends StatelessWidget {
           Text(
             // The sign is spelled out rather than left to colour alone.
             '${isCredit ? '+' : '−'} ${Format.fare(strings, entry.tokens.abs())}',
-            style: theme.textTheme.titleMedium?.copyWith(
-              color: isCredit ? BrandColours.successTeal : null,
+            style: BrandType.fare.copyWith(
+              fontSize: 16,
+              color: isCredit
+                  ? BrandColours.successTeal
+                  : theme.colorScheme.onSurface,
             ),
           ),
         ],

@@ -12,6 +12,32 @@ that heading to the version and date, and open a fresh `[Unreleased]`.
 
 ## [Unreleased]
 
+### 0.21.0 — UI overhaul, round five: wallet, activity and the first run
+
+The last round of the overhaul that started in 0.20.0.
+
+#### Changed
+
+- **The wallet's balance is the app's one bold surface.** A Deep Burgundy card
+  with the balance in the fare's style, the first-job credit or loyalty line,
+  and "Add tokens" inside it — instead of a thin 36px number on the page
+  background. The history is one grouped list, amounts in tabular figures, so
+  the column of charges lines up. Debt is still said in words under the card;
+  red would not read on burgundy, and colour was never meant to carry it.
+- **Activity is an inbox, not a stack of cards.** Twenty identical rounded
+  cards made twenty updates read as twenty separate things of equal weight.
+  They are rows on one surface now, each kind's icon in a tinted disc, and a
+  new one marked the way it always was — by its edge, now a burgundy bar
+  down the leading side over a faint tint.
+- **The first run has pictures.** On a window tall enough for them (700px and
+  up), each intro panel shows a small picture in place of its icon — a map
+  with three pins and a fare, a voice note, the circle a job covers with you
+  beside it. Drawn from the app's own pieces in section 17's terms (simple
+  geometric forms, rounded edges, burgundy, copper, sand and ink), so they
+  show what the next screen will rather than decorating. Shorter windows keep
+  the medallion, and the sentence that says what the app is still fits above
+  the fold at every shape `surfaces_test.dart` checks.
+
 ### 0.20.3 — UI overhaul, round four: the directory
 
 #### Changed
