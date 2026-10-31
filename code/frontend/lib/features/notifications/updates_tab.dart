@@ -15,6 +15,7 @@ import '../../l10n/app_localizations.dart';
 import '../../models/job.dart';
 import '../../models/notification.dart';
 import '../../services/media_store.dart';
+import '../../widgets/inbox_row.dart';
 import '../../widgets/state_views.dart';
 import '../jobs/job_details_sheet.dart';
 import '../messaging/thread_screen.dart';
@@ -60,13 +61,9 @@ class _UpdatesTabState extends State<UpdatesTab> {
     final seenAt = notifications.seenAt;
     final byId = {for (final job in jobs.jobs) job.id: job};
 
-    final theme = Theme.of(context);
-    final last = feed.length - 1;
-
     // **One surface, rows divided by hairlines** — an inbox rather than a
-    // stack of identical cards, which made twenty updates read as twenty
-    // separate things of equal weight. Built lazily all the same: a busy
-    // account's feed is long.
+    // stack of identical cards. Built lazily all the same: a busy account's
+    // feed is long. See [InboxRow].
     return ListView.builder(
       padding: const EdgeInsets.fromLTRB(
         BrandSizing.spaceMd,
@@ -77,36 +74,17 @@ class _UpdatesTabState extends State<UpdatesTab> {
       itemCount: feed.length,
       itemBuilder: (context, index) {
         final entry = feed[index];
-        const corner = Radius.circular(BrandRadius.large);
-        final side = BorderSide(color: theme.colorScheme.outlineVariant);
 
-        return Container(
-          clipBehavior: Clip.antiAlias,
-          decoration: BoxDecoration(
-            color: theme.colorScheme.surface,
-            border: Border(
-              left: side,
-              right: side,
-              top: index == 0 ? side : BorderSide.none,
-              bottom: side,
-            ),
-            borderRadius: BorderRadius.vertical(
-              top: index == 0 ? corner : Radius.zero,
-              bottom: index == last ? corner : Radius.zero,
-            ),
-          ),
-          // So the row's ink is drawn over the white above it, not under it.
-          child: Material(
-            type: MaterialType.transparency,
-            child: _UpdateRow(
-              entry: entry,
-              job: entry.jobId == null ? null : byId[entry.jobId],
-              // Highlighted only on the pass where it was still unseen. The
-              // mark moves a frame after the tab opens, so the reader gets
-              // one look at what is new rather than a list that was already
-              // grey.
-              isNew: seenAt != null && entry.at.isAfter(seenAt),
-            ),
+        return InboxRow(
+          index: index,
+          count: feed.length,
+          // Highlighted only on the pass where it was still unseen. The mark
+          // moves a frame after the tab opens, so the reader gets one look at
+          // what is new rather than a list that was already grey.
+          highlighted: seenAt != null && entry.at.isAfter(seenAt),
+          child: _UpdateRow(
+            entry: entry,
+            job: entry.jobId == null ? null : byId[entry.jobId],
           ),
         );
       },
@@ -141,11 +119,10 @@ List<AppNotification> buildFeed(BuildContext context) {
 }
 
 class _UpdateRow extends StatelessWidget {
-  const _UpdateRow({required this.entry, required this.isNew, this.job});
+  const _UpdateRow({required this.entry, this.job});
 
   final AppNotification entry;
   final Job? job;
-  final bool isNew;
 
   /// One icon per kind, chosen so the list can be scanned without reading it.
   (IconData, Color) _glyph(BuildContext context) {
@@ -265,87 +242,72 @@ class _UpdateRow extends StatelessWidget {
     final (icon, colour) = _glyph(context);
     final target = job;
 
-    // The only thing marking an entry as new is its edge: a burgundy bar
-    // down the leading side, over a faint tint. Not a dot and not a bold
-    // weight — this list is read at a glance, and a coloured edge survives
-    // being glanced at.
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: isNew ? theme.colorScheme.primary.withValues(alpha: 0.06) : null,
-        border: BorderDirectional(
-          start: BorderSide(
-            color: isNew ? theme.colorScheme.primary : Colors.transparent,
-            width: 3,
-          ),
-        ),
-      ),
-      child: InkWell(
-        onTap: target == null
-            ? null
-            // A message entry goes to the conversation. Opening the job sheet
-            // instead would put the reader one more tap from the thing they
-            // were told about.
-            : entry.kind == NotificationKind.messageReceived
-            ? () => ThreadScreen.open(context, jobId: target.id)
-            : () => JobDetailsSheet.open(
-                context,
-                jobId: target.id,
-                mediaStore: context.read<MediaStore>(),
+    return InkWell(
+      onTap: target == null
+          ? null
+          // A message entry goes to the conversation. Opening the job sheet
+          // instead would put the reader one more tap from the thing they
+          // were told about.
+          : entry.kind == NotificationKind.messageReceived
+          ? () => ThreadScreen.open(context, jobId: target.id)
+          : () => JobDetailsSheet.open(
+              context,
+              jobId: target.id,
+              mediaStore: context.read<MediaStore>(),
+            ),
+      child: Padding(
+        padding: const EdgeInsets.all(BrandSizing.spaceMd),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color: colour.withValues(alpha: 0.12),
+                shape: BoxShape.circle,
               ),
-        child: Padding(
-          padding: const EdgeInsets.all(BrandSizing.spaceMd),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                width: 40,
-                height: 40,
-                decoration: BoxDecoration(
-                  color: colour.withValues(alpha: 0.12),
-                  shape: BoxShape.circle,
-                ),
-                child: Icon(icon, color: colour, size: 22),
-              ),
-              const SizedBox(width: BrandSizing.spaceSm + 4),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      _line(context, strings),
-                      style: theme.textTheme.bodyLarge,
-                    ),
-                    if (target != null) ...[
-                      const SizedBox(height: BrandSizing.spaceXs),
-                      Text(
-                        // What the update is *about*. Without it the list is a
-                        // column of "Job finished" with no way to tell which.
-                        target.title ?? target.area ?? strings.untitledJob,
-                        style: theme.textTheme.bodyMedium?.copyWith(
-                          color: theme.colorScheme.onSurfaceVariant,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ],
+              child: Icon(icon, color: colour, size: 22),
+            ),
+            const SizedBox(width: BrandSizing.spaceSm + 4),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    _line(context, strings),
+                    style: theme.textTheme.bodyLarge,
+                  ),
+                  if (target != null) ...[
                     const SizedBox(height: BrandSizing.spaceXs),
                     Text(
-                      Format.posted(strings, entry.at, DateTime.now()),
-                      style: theme.textTheme.labelSmall?.copyWith(
+                      // What the update is *about*. Without it the list is a
+                      // column of "Job finished" with no way to tell which.
+                      target.title ?? target.area ?? strings.untitledJob,
+                      style: theme.textTheme.bodyMedium?.copyWith(
                         color: theme.colorScheme.onSurfaceVariant,
                       ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ],
-                ),
+                  const SizedBox(height: BrandSizing.spaceXs),
+                  Text(
+                    Format.posted(strings, entry.at, DateTime.now()),
+                    style: theme.textTheme.labelSmall?.copyWith(
+                      color: theme.colorScheme.onSurfaceVariant,
+                    ),
+                  ),
+                ],
               ),
-              if (target != null)
-                Icon(
-                  Icons.chevron_right,
-                  color: theme.colorScheme.outline,
-                  semanticLabel: strings.openDetails,
-                ),
-            ],
-          ),
+            ),
+            if (target != null)
+              Icon(
+                Icons.chevron_right,
+                color: theme.colorScheme.outline,
+                semanticLabel: strings.openDetails,
+              ),
+          ],
         ),
       ),
     );

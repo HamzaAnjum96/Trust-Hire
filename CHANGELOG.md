@@ -12,6 +12,27 @@ that heading to the version and date, and open a fresh `[Unreleased]`.
 
 ## [Unreleased]
 
+### 0.21.1 — UI overhaul, the screens round five left
+
+The screens that had only picked up the shared theme so far.
+
+#### Changed
+
+- **Messages is an inbox, like Updates.** One surface with hairlines between
+  conversations instead of a card each; initials at the start of every row;
+  an unread conversation marked by the same burgundy edge as a new update,
+  with its count in burgundy rather than Material's error red — an unread
+  message is news, not a fault. `InboxRow` now draws both lists.
+- **A conversation says who it is with**: initials beside the name at the top
+  of the thread.
+- **The Posted tab no longer badges every row "Your posting".** Every job in it
+  is the viewer's; the badge was the same word on every card.
+- **Admin review cards are lighter.** The decision — approve or suspend — stays
+  as two buttons; adjusting the balance, unlocking a wallet and opening a CNIC
+  are text buttons under a hairline. Four full-size buttons on every card
+  made a queue of six people a wall of twenty-four. "Open the CNIC" is still
+  shown disabled, with its reason, until a dispute opens the door.
+
 ### 0.21.0 — UI overhaul, round five: wallet, activity and the first run
 
 The last round of the overhaul that started in 0.20.0.

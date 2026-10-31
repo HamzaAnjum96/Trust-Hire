@@ -11,6 +11,7 @@ import '../../core/tokens.dart';
 import '../../l10n/app_localizations.dart';
 import '../../models/admin.dart';
 import '../../models/job.dart';
+import '../../widgets/initials_avatar.dart';
 import '../../widgets/state_views.dart';
 import '../../widgets/status_pill.dart';
 import 'admin_rules.dart';
@@ -26,9 +27,9 @@ import 'admin_rules.dart';
 class AdminScreen extends StatefulWidget {
   const AdminScreen({super.key});
 
-  static Future<void> open(BuildContext context) => Navigator.of(context).push(
-    MaterialPageRoute<void>(builder: (_) => const AdminScreen()),
-  );
+  static Future<void> open(BuildContext context) => Navigator.of(
+    context,
+  ).push(MaterialPageRoute<void>(builder: (_) => const AdminScreen()));
 
   @override
   State<AdminScreen> createState() => _AdminScreenState();
@@ -68,12 +69,7 @@ class _AdminScreenState extends State<AdminScreen>
       ),
       body: TabBarView(
         controller: _tabs,
-        children: const [
-          _UsersTab(),
-          _DisputesTab(),
-          _JobsTab(),
-          _LogTab(),
-        ],
+        children: const [_UsersTab(), _DisputesTab(), _JobsTab(), _LogTab()],
       ),
     );
   }
@@ -146,7 +142,7 @@ class _ReviewCard extends StatelessWidget {
     return Card(
       margin: EdgeInsets.zero,
       shape: RoundedRectangleBorder(
-        borderRadius: BrandRadius.mediumAll,
+        borderRadius: BrandRadius.largeAll,
         side: BorderSide(
           color: review.isFlagged
               ? BrandColours.errorRed.withValues(alpha: 0.5)
@@ -160,9 +156,9 @@ class _ReviewCard extends StatelessWidget {
           children: [
             Row(
               children: [
-                Expanded(
-                  child: Text(name, style: theme.textTheme.titleMedium),
-                ),
+                InitialsAvatar(name: name),
+                const SizedBox(width: BrandSizing.spaceSm + 4),
+                Expanded(child: Text(name, style: theme.textTheme.titleMedium)),
                 switch (review.status) {
                   ReviewStatus.pending => StatusPill.muted(
                     context,
@@ -229,7 +225,11 @@ class _ReviewCard extends StatelessWidget {
               ),
             ),
 
-            const SizedBox(height: BrandSizing.spaceSm),
+            // The decision, as the two buttons that look like one; then the
+            // things staff do less often, lighter, under a hairline. Four
+            // full-size buttons on every card made a queue of six people a
+            // wall of twenty-four.
+            const SizedBox(height: BrandSizing.spaceMd),
             Wrap(
               spacing: BrandSizing.spaceSm,
               runSpacing: BrandSizing.spaceXs,
@@ -256,17 +256,25 @@ class _ReviewCard extends StatelessWidget {
                     ),
                     child: Text(strings.adminSuspend),
                   ),
+              ],
+            ),
+            const SizedBox(height: BrandSizing.spaceSm),
+            const Divider(),
+            Wrap(
+              spacing: BrandSizing.spaceXs,
+              children: [
                 if (locked)
-                  OutlinedButton(
+                  TextButton.icon(
                     onPressed: () => _OverrideSheet.open(
                       context,
                       title: strings.adminUnlockWallet,
                       onConfirm: (note, _) =>
                           admin.unlockWallet(review.userId, note: note),
                     ),
-                    child: Text(strings.adminUnlockWallet),
+                    icon: const Icon(Icons.lock_open_outlined),
+                    label: Text(strings.adminUnlockWallet),
                   ),
-                OutlinedButton(
+                TextButton.icon(
                   onPressed: () => _OverrideSheet.open(
                     context,
                     title: strings.adminAdjustWallet,
@@ -277,7 +285,8 @@ class _ReviewCard extends StatelessWidget {
                       note: note,
                     ),
                   ),
-                  child: Text(strings.adminAdjustWallet),
+                  icon: const Icon(Icons.account_balance_wallet_outlined),
+                  label: Text(strings.adminAdjustWallet),
                 ),
                 _CnicButton(userId: review.userId),
               ],
@@ -309,10 +318,7 @@ class _CnicButton extends StatelessWidget {
     final admin = context.read<AdminController>();
     final messenger = ScaffoldMessenger.of(context);
 
-    final record = await admin.openCnic(
-      userId,
-      note: strings.actionViewCnic,
-    );
+    final record = await admin.openCnic(userId, note: strings.actionViewCnic);
     if (record == null || !context.mounted) return;
 
     messenger.showSnackBar(SnackBar(content: Text(strings.adminCnicOpened)));
@@ -353,7 +359,7 @@ class _CnicButton extends StatelessWidget {
 
     return Tooltip(
       message: allowed ? strings.adminOpenCnic : strings.adminCnicLocked,
-      child: OutlinedButton.icon(
+      child: TextButton.icon(
         onPressed: allowed ? () => _open(context) : null,
         icon: Icon(allowed ? Icons.badge_outlined : Icons.lock_outline),
         label: Text(strings.adminOpenCnic),

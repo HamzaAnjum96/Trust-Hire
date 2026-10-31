@@ -29,6 +29,7 @@ class JobRow extends StatelessWidget {
     this.viewerLocation,
     this.isSelected = false,
     this.onOpen,
+    this.marksOwnPosting = true,
   });
 
   final Job job;
@@ -50,12 +51,19 @@ class JobRow extends StatelessWidget {
   /// useless. A list with nowhere else to go leaves this null and opens on tap.
   final VoidCallback? onOpen;
 
+  /// Whether a job the viewer posted says so. Off in the Posted tab, where
+  /// every row is the viewer's and the badge would be the same word on every
+  /// card.
+  final bool marksOwnPosting;
+
   @override
   Widget build(BuildContext context) {
     final strings = AppStrings.of(context);
     final theme = Theme.of(context);
     final distance = Format.distanceToJob(strings, viewerLocation, job);
-    final mine = job.isPostedBy(context.watch<AccountController>().activeId);
+    final mine =
+        marksOwnPosting &&
+        job.isPostedBy(context.watch<AccountController>().activeId);
 
     return Card(
       clipBehavior: Clip.antiAlias,

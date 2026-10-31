@@ -72,7 +72,9 @@ class _MyJobsScreenState extends State<MyJobsScreen>
     final unseen = context.watch<NotificationController>().unseen(
       buildFeed(context),
     );
-    final waiting = context.watch<MessageController>().threadsWaiting(jobs.jobs);
+    final waiting = context.watch<MessageController>().threadsWaiting(
+      jobs.jobs,
+    );
 
     return Scaffold(
       appBar: AppBar(
@@ -86,12 +88,16 @@ class _MyJobsScreenState extends State<MyJobsScreen>
             // Updates first: it is the reason to open this destination at all
             // now, and the three lists behind it are things you go looking for
             // rather than things that change while you are away.
-            Tab(text: unseen == 0
-                ? strings.updatesTab
-                : '${strings.updatesTab} · $unseen'),
-            Tab(text: waiting == 0
-                ? strings.messagesTab
-                : '${strings.messagesTab} · $waiting'),
+            Tab(
+              text: unseen == 0
+                  ? strings.updatesTab
+                  : '${strings.updatesTab} · $unseen',
+            ),
+            Tab(
+              text: waiting == 0
+                  ? strings.messagesTab
+                  : '${strings.messagesTab} · $waiting',
+            ),
             Tab(text: '${strings.savedTab} · ${savedJobs.length}'),
             Tab(text: '${strings.postedTab} · ${myPostings.length}'),
             Tab(text: '${strings.offersTab} · ${myOffers.length}'),
@@ -126,6 +132,7 @@ class _MyJobsScreenState extends State<MyJobsScreen>
                 emptyIcon: Icons.work_outline,
                 emptyTitle: strings.noPostings,
                 emptyMessage: strings.noPostingsMessage,
+                marksOwnPostings: false,
               ),
               _OffersTab(offers: myOffers, jobs: byId),
             ],
@@ -250,6 +257,7 @@ class _JobsTab extends StatelessWidget {
     required this.emptyTitle,
     required this.emptyMessage,
     this.notice,
+    this.marksOwnPostings = true,
   });
 
   final List<Job> jobs;
@@ -257,6 +265,9 @@ class _JobsTab extends StatelessWidget {
   final String emptyTitle;
   final String emptyMessage;
   final String? notice;
+
+  /// See [JobRow.marksOwnPosting].
+  final bool marksOwnPostings;
 
   @override
   Widget build(BuildContext context) {
@@ -288,6 +299,7 @@ class _JobsTab extends StatelessWidget {
         final job = jobs[index - (notice == null ? 0 : 1)];
         return JobRow(
           job: job,
+          marksOwnPosting: marksOwnPostings,
           now: now,
           onTap: () => JobDetailsSheet.open(
             context,

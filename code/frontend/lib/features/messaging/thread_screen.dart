@@ -9,6 +9,7 @@ import '../../core/tokens.dart';
 import '../../l10n/app_localizations.dart';
 import '../../models/job.dart';
 import '../../models/message.dart';
+import '../../widgets/initials_avatar.dart';
 import '../../widgets/state_views.dart';
 import 'messaging_rules.dart';
 
@@ -63,9 +64,9 @@ class _ThreadScreenState extends State<ThreadScreen> {
 
     if (refusal != null) {
       final strings = AppStrings.of(context);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(_wordFor(strings, refusal))),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(_wordFor(strings, refusal))));
       return;
     }
 
@@ -121,27 +122,41 @@ class _ThreadScreenState extends State<ThreadScreen> {
     final me = messages.viewerId;
     final thread = messages.threadFor(job.id);
     final otherId = rules.otherParty(job, me);
-    final otherName = otherId == null
-        ? null
-        : jobs.userById(otherId)?.name;
+    final otherName = otherId == null ? null : jobs.userById(otherId)?.name;
     final canWrite = rules.acceptsMessages(job) && rules.belongsTo(job, me);
 
     return Scaffold(
       appBar: AppBar(
-        title: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        titleSpacing: 0,
+        title: Row(
           children: [
-            Text(otherName ?? strings.messagesTitle),
-            // What the conversation is about. Two people can hire each other
-            // twice, and a thread with only a name at the top is a thread you
-            // have to read to identify.
-            Text(
-              job.displayTitle(strings),
-              style: theme.textTheme.labelSmall?.copyWith(
-                color: theme.colorScheme.onSurfaceVariant,
+            if (otherName != null) ...[
+              InitialsAvatar(name: otherName, radius: 18),
+              const SizedBox(width: BrandSizing.spaceSm + 4),
+            ],
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    otherName ?? strings.messagesTitle,
+                    style: theme.textTheme.titleLarge,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  // What the conversation is about. Two people can hire each
+                  // other twice, and a thread with only a name at the top is
+                  // a thread you have to read to identify.
+                  Text(
+                    job.displayTitle(strings),
+                    style: theme.textTheme.labelSmall?.copyWith(
+                      color: theme.colorScheme.onSurfaceVariant,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ],
               ),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
             ),
           ],
         ),

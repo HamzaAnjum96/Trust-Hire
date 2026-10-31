@@ -8,6 +8,8 @@ import '../../core/tokens.dart';
 import '../../l10n/app_localizations.dart';
 import '../../models/job.dart';
 import '../../models/message.dart';
+import '../../widgets/inbox_row.dart';
+import '../../widgets/initials_avatar.dart';
 import '../../widgets/state_views.dart';
 import 'messaging_rules.dart';
 import 'thread_screen.dart';
@@ -52,7 +54,9 @@ class ThreadsTab extends StatelessWidget {
       );
     }
 
-    return ListView.separated(
+    // One surface with hairlines between conversations, like Updates. See
+    // [InboxRow].
+    return ListView.builder(
       padding: const EdgeInsets.fromLTRB(
         BrandSizing.spaceMd,
         BrandSizing.spaceMd,
@@ -60,17 +64,21 @@ class ThreadsTab extends StatelessWidget {
         BrandSizing.spaceXl * 3,
       ),
       itemCount: rows.length,
-      separatorBuilder: (_, _) => const SizedBox(height: BrandSizing.spaceSm),
       itemBuilder: (context, index) {
         final (job, latest, unread) = rows[index];
         final otherId = rules.otherParty(job, me);
 
-        return _ThreadRow(
-          job: job,
-          latest: latest!,
-          unread: unread,
-          otherName: otherId == null ? null : jobs.userById(otherId)?.name,
-          isMine: latest.senderId == me,
+        return InboxRow(
+          index: index,
+          count: rows.length,
+          highlighted: unread > 0,
+          child: _ThreadRow(
+            job: job,
+            latest: latest!,
+            unread: unread,
+            otherName: otherId == null ? null : jobs.userById(otherId)?.name,
+            isMine: latest.senderId == me,
+          ),
         );
       },
     );
@@ -97,73 +105,87 @@ class _ThreadRow extends StatelessWidget {
     final strings = AppStrings.of(context);
     final theme = Theme.of(context);
 
-    return Card(
-      margin: EdgeInsets.zero,
-      shape: RoundedRectangleBorder(
-        borderRadius: BrandRadius.mediumAll,
-        side: BorderSide(
-          color: unread > 0
-              ? theme.colorScheme.primary
-              : theme.colorScheme.outlineVariant,
-          width: unread > 0 ? 1.5 : 1,
-        ),
-      ),
-      child: InkWell(
-        borderRadius: BrandRadius.mediumAll,
-        onTap: () => ThreadScreen.open(context, jobId: job.id),
-        child: Padding(
-          padding: const EdgeInsets.all(BrandSizing.spaceMd),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      otherName ?? strings.someone,
-                      style: theme.textTheme.titleMedium,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    Text(
-                      job.displayTitle(strings),
-                      style: theme.textTheme.labelSmall?.copyWith(
-                        color: theme.colorScheme.onSurfaceVariant,
-                      ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    const SizedBox(height: BrandSizing.spaceXs),
-                    Text(
-                      // Prefixed when it is yours, so a row showing your own
-                      // last line does not read as something they said.
-                      isMine ? '${strings.you}: ${latest.body}' : latest.body,
-                      style: theme.textTheme.bodyMedium,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(width: BrandSizing.spaceSm),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
+    final name = otherName ?? strings.someone;
+
+    return InkWell(
+      onTap: () => ThreadScreen.open(context, jobId: job.id),
+      child: Padding(
+        padding: const EdgeInsets.all(BrandSizing.spaceMd),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            InitialsAvatar(name: name),
+            const SizedBox(width: BrandSizing.spaceSm + 4),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          name,
+                          style: theme.textTheme.titleMedium,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      const SizedBox(width: BrandSizing.spaceSm),
+                      Text(
+                        Format.posted(strings, latest.sentAt, DateTime.now()),
+                        style: theme.textTheme.labelSmall?.copyWith(
+                          color: theme.colorScheme.onSurfaceVariant,
+                        ),
+                      ),
+                    ],
+                  ),
                   Text(
-                    Format.posted(strings, latest.sentAt, DateTime.now()),
+                    job.displayTitle(strings),
                     style: theme.textTheme.labelSmall?.copyWith(
                       color: theme.colorScheme.onSurfaceVariant,
                     ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
-                  if (unread > 0) ...[
-                    const SizedBox(height: BrandSizing.spaceXs),
-                    Badge.count(count: unread),
-                  ],
+                  const SizedBox(height: BrandSizing.spaceXs),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: Text(
+                          // Prefixed when it is yours, so a row showing your
+                          // own last line does not read as something they
+                          // said.
+                          isMine
+                              ? '${strings.you}: ${latest.body}'
+                              : latest.body,
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            // Unread is said by the edge and the count; the
+                            // line itself reads stronger as well.
+                            color: unread > 0
+                                ? theme.colorScheme.onSurface
+                                : null,
+                          ),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      if (unread > 0) ...[
+                        const SizedBox(width: BrandSizing.spaceSm),
+                        // Burgundy, not Material's error red: an unread message
+                        // is news, not a fault.
+                        Badge.count(
+                          count: unread,
+                          backgroundColor: theme.colorScheme.primary,
+                          textColor: theme.colorScheme.onPrimary,
+                        ),
+                      ],
+                    ],
+                  ),
                 ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
