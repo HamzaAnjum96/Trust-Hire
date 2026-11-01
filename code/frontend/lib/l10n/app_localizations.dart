@@ -3523,6 +3523,372 @@ abstract class AppStrings {
   /// In en, this message translates to:
   /// **'History'**
   String get walletHistory;
+
+  /// Profile group for the in-browser language model
+  ///
+  /// In en, this message translates to:
+  /// **'On-device AI'**
+  String get aiSection;
+
+  /// What the on-device AI is, under its profile group
+  ///
+  /// In en, this message translates to:
+  /// **'A small language model that runs in this browser. It explains fare suggestions and answers questions about jobs and workers. Nothing you type leaves this device, and it can only show what the app already shows you.'**
+  String get aiExplain;
+
+  /// What the AI is, when a build points at a hosted model
+  ///
+  /// In en, this message translates to:
+  /// **'This build uses {model}, a hosted model, through Trust Hire\'s own server. Job text leaves this device; phone numbers never do.'**
+  String aiRemoteExplain(String model);
+
+  /// Why the AI cannot be switched on here
+  ///
+  /// In en, this message translates to:
+  /// **'This browser cannot run a model: it needs WebGPU, which most recent desktop browsers and some phones have. The assistant and fare suggestions still work, from the app\'s own data.'**
+  String get aiUnsupported;
+
+  /// AI status pill
+  ///
+  /// In en, this message translates to:
+  /// **'Checking'**
+  String get aiStatusChecking;
+
+  /// AI status pill
+  ///
+  /// In en, this message translates to:
+  /// **'Not on this device'**
+  String get aiStatusUnsupported;
+
+  /// AI status pill
+  ///
+  /// In en, this message translates to:
+  /// **'Off'**
+  String get aiStatusOff;
+
+  /// AI status pill: switched on, not loaded yet
+  ///
+  /// In en, this message translates to:
+  /// **'On, starts when used'**
+  String get aiStatusIdle;
+
+  /// AI status while the model downloads or loads
+  ///
+  /// In en, this message translates to:
+  /// **'Loading {percent}%'**
+  String aiStatusLoading(int percent);
+
+  /// AI status pill
+  ///
+  /// In en, this message translates to:
+  /// **'Ready'**
+  String get aiStatusReady;
+
+  /// AI status pill
+  ///
+  /// In en, this message translates to:
+  /// **'Could not start'**
+  String get aiStatusFailed;
+
+  /// The larger on-device model
+  ///
+  /// In en, this message translates to:
+  /// **'Standard'**
+  String get aiModelStandard;
+
+  /// The smaller on-device model
+  ///
+  /// In en, this message translates to:
+  /// **'Lighter'**
+  String get aiModelLight;
+
+  /// Download size of the chosen model
+  ///
+  /// In en, this message translates to:
+  /// **'{model}: about {size} MB, downloaded once.'**
+  String aiModelSize(String model, int size);
+
+  /// The chosen model is cached
+  ///
+  /// In en, this message translates to:
+  /// **'{model} is already on this device.'**
+  String aiModelDownloaded(String model);
+
+  /// Switch the AI on
+  ///
+  /// In en, this message translates to:
+  /// **'Turn on'**
+  String get aiTurnOn;
+
+  /// Switch the AI off
+  ///
+  /// In en, this message translates to:
+  /// **'Turn off'**
+  String get aiTurnOff;
+
+  /// Retry starting the AI
+  ///
+  /// In en, this message translates to:
+  /// **'Try again'**
+  String get aiTryAgain;
+
+  /// Delete the cached model
+  ///
+  /// In en, this message translates to:
+  /// **'Remove the download'**
+  String get aiRemoveDownload;
+
+  /// Consent dialog title
+  ///
+  /// In en, this message translates to:
+  /// **'Turn on the on-device AI?'**
+  String get aiConsentTitle;
+
+  /// Consent dialog: what switching on costs
+  ///
+  /// In en, this message translates to:
+  /// **'{model} runs in this browser. It is about {size} MB, downloaded once over your connection and kept for next time. Nothing you type leaves this device.'**
+  String aiConsentBody(String model, int size);
+
+  /// Consent dialog when the model is cached
+  ///
+  /// In en, this message translates to:
+  /// **'{model} is already on this device, so switching it on costs no data. Nothing you type leaves this device.'**
+  String aiConsentBodyDownloaded(String model);
+
+  /// Consent dialog for a hosted model
+  ///
+  /// In en, this message translates to:
+  /// **'Questions go to {model}, a hosted model, through Trust Hire\'s own server. Job text leaves this device; phone numbers never do.'**
+  String aiConsentRemoteBody(String model);
+
+  /// Decline the consent dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Not now'**
+  String get aiConsentCancel;
+
+  /// Accept the consent dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Download and turn on'**
+  String get aiConsentDownload;
+
+  /// Who answered: the on-device model
+  ///
+  /// In en, this message translates to:
+  /// **'Answered by {model}, running on this device.'**
+  String aiAnsweredBy(String model);
+
+  /// Who answered: a hosted model
+  ///
+  /// In en, this message translates to:
+  /// **'Answered by {model}, a hosted model.'**
+  String aiAnsweredByRemote(String model);
+
+  /// Who answered: the word list
+  ///
+  /// In en, this message translates to:
+  /// **'Matched from your words. No AI is involved.'**
+  String get aiAnsweredByWords;
+
+  /// The assistant's title and its button
+  ///
+  /// In en, this message translates to:
+  /// **'Ask Trust Hire'**
+  String get assistantTitle;
+
+  /// Assistant welcome heading
+  ///
+  /// In en, this message translates to:
+  /// **'What are you looking for?'**
+  String get assistantWelcome;
+
+  /// Assistant welcome text
+  ///
+  /// In en, this message translates to:
+  /// **'Ask for work, or for somebody to do it, in English, Urdu or Roman Urdu. Answers come from what the app already shows you.'**
+  String get assistantIntro;
+
+  /// Above the example questions
+  ///
+  /// In en, this message translates to:
+  /// **'Try'**
+  String get assistantTry;
+
+  /// Example question
+  ///
+  /// In en, this message translates to:
+  /// **'Painting jobs near me'**
+  String get assistantExampleJobs;
+
+  /// Example question
+  ///
+  /// In en, this message translates to:
+  /// **'Who can fix wiring?'**
+  String get assistantExampleWiring;
+
+  /// Example question
+  ///
+  /// In en, this message translates to:
+  /// **'Electrician in Lahore'**
+  String get assistantExampleCity;
+
+  /// Example question, in Roman Urdu in the English UI
+  ///
+  /// In en, this message translates to:
+  /// **'plumber chahiye'**
+  String get assistantExampleRoman;
+
+  /// Assistant input hint
+  ///
+  /// In en, this message translates to:
+  /// **'Ask about jobs or workers'**
+  String get assistantHint;
+
+  /// Send button tooltip
+  ///
+  /// In en, this message translates to:
+  /// **'Ask'**
+  String get assistantSend;
+
+  /// While the assistant works
+  ///
+  /// In en, this message translates to:
+  /// **'Looking'**
+  String get assistantThinking;
+
+  /// Assistant status when the AI is off
+  ///
+  /// In en, this message translates to:
+  /// **'Matching your words. Turn on the on-device AI for better answers.'**
+  String get assistantAiOffNote;
+
+  /// Assistant status after an AI failure
+  ///
+  /// In en, this message translates to:
+  /// **'The AI could not answer, so this was matched from your words.'**
+  String get assistantAiFailedNote;
+
+  /// Assistant status when the AI answered without searching, or searched for something the words do not say
+  ///
+  /// In en, this message translates to:
+  /// **'The AI\'s answer did not fit your words, so this was matched from them instead.'**
+  String get assistantAiSetAsideNote;
+
+  /// When a request is not about jobs or workers
+  ///
+  /// In en, this message translates to:
+  /// **'I can find open jobs, and people in the directory. Try “painting jobs near me” or “who can fix wiring?”'**
+  String get assistantHelp;
+
+  /// Assistant result count
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 open job for {what}.} other{{count} open jobs for {what}.}}'**
+  String assistantFoundJobs(int count, String what);
+
+  /// Assistant result count
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 open job.} other{{count} open jobs.}}'**
+  String assistantFoundJobsAny(int count);
+
+  /// No results
+  ///
+  /// In en, this message translates to:
+  /// **'No open jobs for {what} reach you right now.'**
+  String assistantNoJobs(String what);
+
+  /// No results
+  ///
+  /// In en, this message translates to:
+  /// **'No open jobs match that right now.'**
+  String get assistantNoJobsAny;
+
+  /// Assistant result count
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 person for {what}, best record first.} other{{count} people for {what}, best record first.}}'**
+  String assistantFoundWorkers(int count, String what);
+
+  /// Assistant result count
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 person in the directory, best record first.} other{{count} people in the directory, best record first.}}'**
+  String assistantFoundWorkersAny(int count);
+
+  /// No results
+  ///
+  /// In en, this message translates to:
+  /// **'Nobody in the directory does {what} near you yet.'**
+  String assistantNoWorkers(String what);
+
+  /// No results
+  ///
+  /// In en, this message translates to:
+  /// **'Nobody in the directory matches that yet.'**
+  String get assistantNoWorkersAny;
+
+  /// Why a worker found no jobs for a trade they do not have
+  ///
+  /// In en, this message translates to:
+  /// **'Jobs for {trades} only reach you if it is one of your trades. Add it in Profile, under My trades.'**
+  String assistantAddTrade(String trades);
+
+  /// Who answers the fare question
+  ///
+  /// In en, this message translates to:
+  /// **'Explained by {model}, running on this device.'**
+  String fareAdviceByAi(String model);
+
+  /// Who answers the fare question
+  ///
+  /// In en, this message translates to:
+  /// **'Explained by {model}, a hosted model.'**
+  String fareAdviceByRemoteAi(String model);
+
+  /// Link to switch the AI on, from the fare panel
+  ///
+  /// In en, this message translates to:
+  /// **'Explain it with the on-device AI'**
+  String get fareAdviceTurnOnAi;
+
+  /// While the AI works out a fare
+  ///
+  /// In en, this message translates to:
+  /// **'Asking {model}. On a phone this can take a minute.'**
+  String fareAdviceAsking(String model);
+
+  /// Above the AI's explanation
+  ///
+  /// In en, this message translates to:
+  /// **'Why, according to {model}:'**
+  String fareAdviceReasoningBy(String model);
+
+  /// The guard moved the AI's figure
+  ///
+  /// In en, this message translates to:
+  /// **'The AI\'s figure was far from what similar work went for, so it has been brought back within range.'**
+  String get fareAdviceClamped;
+
+  /// The AI failed; the arithmetic answered
+  ///
+  /// In en, this message translates to:
+  /// **'The AI could not answer, so this was worked out from similar jobs instead.'**
+  String get fareAiFellBack;
+
+  /// The AI timed out; the arithmetic answered
+  ///
+  /// In en, this message translates to:
+  /// **'The AI took too long, so this was worked out from similar jobs instead.'**
+  String get fareAiFellBackSlow;
+
+  /// The AI answered without looking at the evidence, or far outside it; the arithmetic answered
+  ///
+  /// In en, this message translates to:
+  /// **'The AI\'s figure was not based on similar jobs, so this one was worked out from them instead.'**
+  String get fareAiSetAside;
 }
 
 class _AppStringsDelegate extends LocalizationsDelegate<AppStrings> {

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:trust_hire/app/account_controller.dart';
+import 'package:trust_hire/app/ai_controller.dart';
 import 'package:trust_hire/app/bid_controller.dart';
 import 'package:trust_hire/app/job_controller.dart';
 import 'package:trust_hire/app/message_controller.dart';
@@ -48,6 +49,7 @@ Widget appHarness({
   PremiumController? premium,
   MessageController? messages,
   NotificationController? notifications,
+  AiController? ai,
   Locale locale = const Locale('en'),
   ThemeData? theme,
 }) {
@@ -89,6 +91,7 @@ Widget appHarness({
       ),
       ChangeNotifierProvider(create: (_) => VerificationController(store)..load()),
       ChangeNotifierProvider(create: (_) => LocationController()),
+      provide<AiController>(ai, () => AiController(store)..load()),
       Provider<MediaStore>.value(value: mediaStore),
     ],
     child: MaterialApp(

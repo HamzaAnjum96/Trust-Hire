@@ -15,6 +15,7 @@ import '../../widgets/initials_avatar.dart';
 import '../../widgets/meta_chip.dart';
 import '../../widgets/state_views.dart';
 import '../account/account_switcher.dart';
+import '../assistant/assistant_screen.dart';
 import '../map/location_controller.dart';
 import '../premium/premium_rules.dart';
 import '../ratings/worker_standing_view.dart';
@@ -101,7 +102,8 @@ class _DirectoryScreenState extends State<DirectoryScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(strings.directoryTitle),
-        actions: const [AccountButton()],
+        // Asking is another way to search, so it sits with the search.
+        actions: const [AskButton(), AccountButton()],
       ),
       body: ReadableWidth(
         child: ListView(
@@ -196,7 +198,7 @@ class _DirectoryScreenState extends State<DirectoryScreen> {
               )
             else
               for (final listing in listings) ...[
-                _ListingCard(
+                DirectoryListingCard(
                   listing: listing,
                   name: names[listing.workerId],
                   distanceMetres: premium.distanceTo(listing, hirerAt: here),
@@ -345,8 +347,13 @@ class _DirectoryControls extends StatelessWidget {
 /// photograph and not a badge: Section 9 sells *visibility*, and anything that
 /// made a paid listing look endorsed would be selling something else. The
 /// initials are in neutral sand for the same reason.
-class _ListingCard extends StatelessWidget {
-  const _ListingCard({required this.listing, this.name, this.distanceMetres});
+class DirectoryListingCard extends StatelessWidget {
+  const DirectoryListingCard({
+    super.key,
+    required this.listing,
+    this.name,
+    this.distanceMetres,
+  });
 
   final DirectoryListing listing;
   final String? name;

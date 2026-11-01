@@ -18,6 +18,7 @@ import 'job_row.dart';
 import '../profile/my_trades_screen.dart';
 import '../../l10n/app_localizations.dart';
 import '../account/account_switcher.dart';
+import '../assistant/assistant_screen.dart';
 
 /// A plain list of every job in local storage.
 ///
@@ -50,7 +51,8 @@ class JobsScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(strings.findWork),
-        actions: const [AccountButton()],
+        // Asking is another way to search, so it sits with the search.
+        actions: const [AskButton(), AccountButton()],
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(112),
           child: ReadableWidth(

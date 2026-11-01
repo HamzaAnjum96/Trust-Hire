@@ -1437,5 +1437,361 @@
   "walletHistory": "History",
   "@walletHistory": {
     "description": "Heading over the wallet's ledger"
+  },
+  "aiSection": "On-device AI",
+  "@aiSection": {
+    "description": "Profile group for the in-browser language model"
+  },
+  "aiExplain": "A small language model that runs in this browser. It explains fare suggestions and answers questions about jobs and workers. Nothing you type leaves this device, and it can only show what the app already shows you.",
+  "@aiExplain": {
+    "description": "What the on-device AI is, under its profile group"
+  },
+  "aiRemoteExplain": "This build uses {model}, a hosted model, through Trust Hire's own server. Job text leaves this device; phone numbers never do.",
+  "@aiRemoteExplain": {
+    "description": "What the AI is, when a build points at a hosted model",
+    "placeholders": {
+      "model": {
+        "type": "String"
+      }
+    }
+  },
+  "aiUnsupported": "This browser cannot run a model: it needs WebGPU, which most recent desktop browsers and some phones have. The assistant and fare suggestions still work, from the app's own data.",
+  "@aiUnsupported": {
+    "description": "Why the AI cannot be switched on here"
+  },
+  "aiStatusChecking": "Checking",
+  "@aiStatusChecking": {
+    "description": "AI status pill"
+  },
+  "aiStatusUnsupported": "Not on this device",
+  "@aiStatusUnsupported": {
+    "description": "AI status pill"
+  },
+  "aiStatusOff": "Off",
+  "@aiStatusOff": {
+    "description": "AI status pill"
+  },
+  "aiStatusIdle": "On, starts when used",
+  "@aiStatusIdle": {
+    "description": "AI status pill: switched on, not loaded yet"
+  },
+  "aiStatusLoading": "Loading {percent}%",
+  "@aiStatusLoading": {
+    "description": "AI status while the model downloads or loads",
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "aiStatusReady": "Ready",
+  "@aiStatusReady": {
+    "description": "AI status pill"
+  },
+  "aiStatusFailed": "Could not start",
+  "@aiStatusFailed": {
+    "description": "AI status pill"
+  },
+  "aiModelStandard": "Standard",
+  "@aiModelStandard": {
+    "description": "The larger on-device model"
+  },
+  "aiModelLight": "Lighter",
+  "@aiModelLight": {
+    "description": "The smaller on-device model"
+  },
+  "aiModelSize": "{model}: about {size} MB, downloaded once.",
+  "@aiModelSize": {
+    "description": "Download size of the chosen model",
+    "placeholders": {
+      "model": {
+        "type": "String"
+      },
+      "size": {
+        "type": "int"
+      }
+    }
+  },
+  "aiModelDownloaded": "{model} is already on this device.",
+  "@aiModelDownloaded": {
+    "description": "The chosen model is cached",
+    "placeholders": {
+      "model": {
+        "type": "String"
+      }
+    }
+  },
+  "aiTurnOn": "Turn on",
+  "@aiTurnOn": {
+    "description": "Switch the AI on"
+  },
+  "aiTurnOff": "Turn off",
+  "@aiTurnOff": {
+    "description": "Switch the AI off"
+  },
+  "aiTryAgain": "Try again",
+  "@aiTryAgain": {
+    "description": "Retry starting the AI"
+  },
+  "aiRemoveDownload": "Remove the download",
+  "@aiRemoveDownload": {
+    "description": "Delete the cached model"
+  },
+  "aiConsentTitle": "Turn on the on-device AI?",
+  "@aiConsentTitle": {
+    "description": "Consent dialog title"
+  },
+  "aiConsentBody": "{model} runs in this browser. It is about {size} MB, downloaded once over your connection and kept for next time. Nothing you type leaves this device.",
+  "@aiConsentBody": {
+    "description": "Consent dialog: what switching on costs",
+    "placeholders": {
+      "model": {
+        "type": "String"
+      },
+      "size": {
+        "type": "int"
+      }
+    }
+  },
+  "aiConsentBodyDownloaded": "{model} is already on this device, so switching it on costs no data. Nothing you type leaves this device.",
+  "@aiConsentBodyDownloaded": {
+    "description": "Consent dialog when the model is cached",
+    "placeholders": {
+      "model": {
+        "type": "String"
+      }
+    }
+  },
+  "aiConsentRemoteBody": "Questions go to {model}, a hosted model, through Trust Hire's own server. Job text leaves this device; phone numbers never do.",
+  "@aiConsentRemoteBody": {
+    "description": "Consent dialog for a hosted model",
+    "placeholders": {
+      "model": {
+        "type": "String"
+      }
+    }
+  },
+  "aiConsentCancel": "Not now",
+  "@aiConsentCancel": {
+    "description": "Decline the consent dialog"
+  },
+  "aiConsentDownload": "Download and turn on",
+  "@aiConsentDownload": {
+    "description": "Accept the consent dialog"
+  },
+  "aiAnsweredBy": "Answered by {model}, running on this device.",
+  "@aiAnsweredBy": {
+    "description": "Who answered: the on-device model",
+    "placeholders": {
+      "model": {
+        "type": "String"
+      }
+    }
+  },
+  "aiAnsweredByRemote": "Answered by {model}, a hosted model.",
+  "@aiAnsweredByRemote": {
+    "description": "Who answered: a hosted model",
+    "placeholders": {
+      "model": {
+        "type": "String"
+      }
+    }
+  },
+  "aiAnsweredByWords": "Matched from your words. No AI is involved.",
+  "@aiAnsweredByWords": {
+    "description": "Who answered: the word list"
+  },
+  "assistantTitle": "Ask Trust Hire",
+  "@assistantTitle": {
+    "description": "The assistant's title and its button"
+  },
+  "assistantWelcome": "What are you looking for?",
+  "@assistantWelcome": {
+    "description": "Assistant welcome heading"
+  },
+  "assistantIntro": "Ask for work, or for somebody to do it, in English, Urdu or Roman Urdu. Answers come from what the app already shows you.",
+  "@assistantIntro": {
+    "description": "Assistant welcome text"
+  },
+  "assistantTry": "Try",
+  "@assistantTry": {
+    "description": "Above the example questions"
+  },
+  "assistantExampleJobs": "Painting jobs near me",
+  "@assistantExampleJobs": {
+    "description": "Example question"
+  },
+  "assistantExampleWiring": "Who can fix wiring?",
+  "@assistantExampleWiring": {
+    "description": "Example question"
+  },
+  "assistantExampleCity": "Electrician in Lahore",
+  "@assistantExampleCity": {
+    "description": "Example question"
+  },
+  "assistantExampleRoman": "plumber chahiye",
+  "@assistantExampleRoman": {
+    "description": "Example question, in Roman Urdu in the English UI"
+  },
+  "assistantHint": "Ask about jobs or workers",
+  "@assistantHint": {
+    "description": "Assistant input hint"
+  },
+  "assistantSend": "Ask",
+  "@assistantSend": {
+    "description": "Send button tooltip"
+  },
+  "assistantThinking": "Looking",
+  "@assistantThinking": {
+    "description": "While the assistant works"
+  },
+  "assistantAiOffNote": "Matching your words. Turn on the on-device AI for better answers.",
+  "@assistantAiOffNote": {
+    "description": "Assistant status when the AI is off"
+  },
+  "assistantAiFailedNote": "The AI could not answer, so this was matched from your words.",
+  "@assistantAiFailedNote": {
+    "description": "Assistant status after an AI failure"
+  },
+  "assistantAiSetAsideNote": "The AI's answer did not fit your words, so this was matched from them instead.",
+  "@assistantAiSetAsideNote": {
+    "description": "Assistant status when the AI answered without searching, or searched for something the words do not say"
+  },
+  "assistantHelp": "I can find open jobs, and people in the directory. Try “painting jobs near me” or “who can fix wiring?”",
+  "@assistantHelp": {
+    "description": "When a request is not about jobs or workers"
+  },
+  "assistantFoundJobs": "{count, plural, =1{1 open job for {what}.} other{{count} open jobs for {what}.}}",
+  "@assistantFoundJobs": {
+    "description": "Assistant result count",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "what": {
+        "type": "String"
+      }
+    }
+  },
+  "assistantFoundJobsAny": "{count, plural, =1{1 open job.} other{{count} open jobs.}}",
+  "@assistantFoundJobsAny": {
+    "description": "Assistant result count",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "assistantNoJobs": "No open jobs for {what} reach you right now.",
+  "@assistantNoJobs": {
+    "description": "No results",
+    "placeholders": {
+      "what": {
+        "type": "String"
+      }
+    }
+  },
+  "assistantNoJobsAny": "No open jobs match that right now.",
+  "@assistantNoJobsAny": {
+    "description": "No results"
+  },
+  "assistantFoundWorkers": "{count, plural, =1{1 person for {what}, best record first.} other{{count} people for {what}, best record first.}}",
+  "@assistantFoundWorkers": {
+    "description": "Assistant result count",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "what": {
+        "type": "String"
+      }
+    }
+  },
+  "assistantFoundWorkersAny": "{count, plural, =1{1 person in the directory, best record first.} other{{count} people in the directory, best record first.}}",
+  "@assistantFoundWorkersAny": {
+    "description": "Assistant result count",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "assistantNoWorkers": "Nobody in the directory does {what} near you yet.",
+  "@assistantNoWorkers": {
+    "description": "No results",
+    "placeholders": {
+      "what": {
+        "type": "String"
+      }
+    }
+  },
+  "assistantNoWorkersAny": "Nobody in the directory matches that yet.",
+  "@assistantNoWorkersAny": {
+    "description": "No results"
+  },
+  "assistantAddTrade": "Jobs for {trades} only reach you if it is one of your trades. Add it in Profile, under My trades.",
+  "@assistantAddTrade": {
+    "description": "Why a worker found no jobs for a trade they do not have",
+    "placeholders": {
+      "trades": {
+        "type": "String"
+      }
+    }
+  },
+  "fareAdviceByAi": "Explained by {model}, running on this device.",
+  "@fareAdviceByAi": {
+    "description": "Who answers the fare question",
+    "placeholders": {
+      "model": {
+        "type": "String"
+      }
+    }
+  },
+  "fareAdviceByRemoteAi": "Explained by {model}, a hosted model.",
+  "@fareAdviceByRemoteAi": {
+    "description": "Who answers the fare question",
+    "placeholders": {
+      "model": {
+        "type": "String"
+      }
+    }
+  },
+  "fareAdviceTurnOnAi": "Explain it with the on-device AI",
+  "@fareAdviceTurnOnAi": {
+    "description": "Link to switch the AI on, from the fare panel"
+  },
+  "fareAdviceAsking": "Asking {model}. On a phone this can take a minute.",
+  "@fareAdviceAsking": {
+    "description": "While the AI works out a fare",
+    "placeholders": {
+      "model": {
+        "type": "String"
+      }
+    }
+  },
+  "fareAdviceReasoningBy": "Why, according to {model}:",
+  "@fareAdviceReasoningBy": {
+    "description": "Above the AI's explanation",
+    "placeholders": {
+      "model": {
+        "type": "String"
+      }
+    }
+  },
+  "fareAdviceClamped": "The AI's figure was far from what similar work went for, so it has been brought back within range.",
+  "@fareAdviceClamped": {
+    "description": "The guard moved the AI's figure"
+  },
+  "fareAiFellBack": "The AI could not answer, so this was worked out from similar jobs instead.",
+  "@fareAiFellBack": {
+    "description": "The AI failed; the arithmetic answered"
+  },
+  "fareAiFellBackSlow": "The AI took too long, so this was worked out from similar jobs instead.",
+  "@fareAiFellBackSlow": {
+    "description": "The AI timed out; the arithmetic answered"
+  },
+  "fareAiSetAside": "The AI's figure was not based on similar jobs, so this one was worked out from them instead.",
+  "@fareAiSetAside": {
+    "description": "The AI answered without looking at the evidence, or far outside it; the arithmetic answered"
   }
 }

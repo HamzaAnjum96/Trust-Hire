@@ -29,6 +29,7 @@ import '../../app/premium_controller.dart';
 import '../admin/admin_screen.dart';
 import '../verification/verification_screen.dart';
 import '../account/account_switcher.dart';
+import '../ai/ai_settings_section.dart';
 import '../directory/my_listing_screen.dart';
 import '../ratings/worker_standing_view.dart';
 import '../../app/account_controller.dart';
@@ -172,6 +173,9 @@ class ProfileScreen extends StatelessWidget {
                 ),
               ],
             ),
+
+            const SizedBox(height: BrandSizing.spaceLg),
+            const AiSettingsSection(),
 
             // The proof-of-concept small print, at the foot rather than the
             // head. It used to be the first thing on this screen, which put

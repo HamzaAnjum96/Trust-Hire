@@ -2124,4 +2124,264 @@ class AppStringsUr extends AppStrings {
 
   @override
   String get walletHistory => 'لین دین';
+
+  @override
+  String get aiSection => 'ڈیوائس پر AI';
+
+  @override
+  String get aiExplain =>
+      'ایک چھوٹا لینگویج ماڈل جو اسی براؤزر میں چلتا ہے۔ یہ کرایے کی تجویز سمجھاتا ہے اور کاموں اور کاریگروں کے بارے میں سوالوں کے جواب دیتا ہے۔ آپ جو لکھتے ہیں وہ اس ڈیوائس سے باہر نہیں جاتا، اور یہ صرف وہی دکھا سکتا ہے جو ایپ آپ کو پہلے سے دکھاتی ہے۔';
+
+  @override
+  String aiRemoteExplain(String model) {
+    return 'یہ ورژن Trust Hire کے اپنے سرور کے ذریعے $model استعمال کرتا ہے، جو ایک آن لائن ماڈل ہے۔ کام کی تفصیل اس ڈیوائس سے باہر جاتی ہے؛ فون نمبر کبھی نہیں۔';
+  }
+
+  @override
+  String get aiUnsupported =>
+      'یہ براؤزر ماڈل نہیں چلا سکتا: اس کے لیے WebGPU چاہیے، جو زیادہ تر نئے کمپیوٹر براؤزرز اور کچھ فونز میں ہوتا ہے۔ اسسٹنٹ اور کرایے کی تجویز پھر بھی ایپ کے اپنے ڈیٹا سے کام کرتے ہیں۔';
+
+  @override
+  String get aiStatusChecking => 'جانچ ہو رہی ہے';
+
+  @override
+  String get aiStatusUnsupported => 'اس ڈیوائس پر نہیں';
+
+  @override
+  String get aiStatusOff => 'بند';
+
+  @override
+  String get aiStatusIdle => 'چالو، استعمال پر شروع ہوگا';
+
+  @override
+  String aiStatusLoading(int percent) {
+    return 'لوڈ ہو رہا ہے $percent%';
+  }
+
+  @override
+  String get aiStatusReady => 'تیار';
+
+  @override
+  String get aiStatusFailed => 'شروع نہیں ہو سکا';
+
+  @override
+  String get aiModelStandard => 'معیاری';
+
+  @override
+  String get aiModelLight => 'ہلکا';
+
+  @override
+  String aiModelSize(String model, int size) {
+    return '$model: تقریباً $size MB، ایک بار ڈاؤن لوڈ۔';
+  }
+
+  @override
+  String aiModelDownloaded(String model) {
+    return '$model پہلے سے اس ڈیوائس پر موجود ہے۔';
+  }
+
+  @override
+  String get aiTurnOn => 'چالو کریں';
+
+  @override
+  String get aiTurnOff => 'بند کریں';
+
+  @override
+  String get aiTryAgain => 'دوبارہ کوشش کریں';
+
+  @override
+  String get aiRemoveDownload => 'ڈاؤن لوڈ حذف کریں';
+
+  @override
+  String get aiConsentTitle => 'اس ڈیوائس پر AI چالو کریں؟';
+
+  @override
+  String aiConsentBody(String model, int size) {
+    return '$model اسی براؤزر میں چلتا ہے۔ یہ تقریباً $size MB ہے، ایک بار آپ کے انٹرنیٹ سے ڈاؤن لوڈ ہوتا ہے اور اگلی بار کے لیے رکھا جاتا ہے۔ آپ جو لکھتے ہیں وہ اس ڈیوائس سے باہر نہیں جاتا۔';
+  }
+
+  @override
+  String aiConsentBodyDownloaded(String model) {
+    return '$model پہلے سے اس ڈیوائس پر موجود ہے، اس لیے اسے چالو کرنے میں کوئی ڈیٹا خرچ نہیں ہوگا۔ آپ جو لکھتے ہیں وہ اس ڈیوائس سے باہر نہیں جاتا۔';
+  }
+
+  @override
+  String aiConsentRemoteBody(String model) {
+    return 'سوالات Trust Hire کے اپنے سرور کے ذریعے $model کو جاتے ہیں، جو ایک آن لائن ماڈل ہے۔ کام کی تفصیل اس ڈیوائس سے باہر جاتی ہے؛ فون نمبر کبھی نہیں۔';
+  }
+
+  @override
+  String get aiConsentCancel => 'ابھی نہیں';
+
+  @override
+  String get aiConsentDownload => 'ڈاؤن لوڈ کر کے چالو کریں';
+
+  @override
+  String aiAnsweredBy(String model) {
+    return '$model نے جواب دیا، اسی ڈیوائس پر۔';
+  }
+
+  @override
+  String aiAnsweredByRemote(String model) {
+    return '$model نے جواب دیا، جو ایک آن لائن ماڈل ہے۔';
+  }
+
+  @override
+  String get aiAnsweredByWords =>
+      'آپ کے الفاظ سے ملایا گیا۔ اس میں کوئی AI شامل نہیں۔';
+
+  @override
+  String get assistantTitle => 'ٹرسٹ ہائر سے پوچھیں';
+
+  @override
+  String get assistantWelcome => 'آپ کیا تلاش کر رہے ہیں؟';
+
+  @override
+  String get assistantIntro =>
+      'کام کے بارے میں پوچھیں، یا کسی ایسے شخص کے بارے میں جو کام کر سکے، انگریزی، اردو یا رومن اردو میں۔ جواب وہی ہوتے ہیں جو ایپ آپ کو پہلے سے دکھاتی ہے۔';
+
+  @override
+  String get assistantTry => 'آزمائیں';
+
+  @override
+  String get assistantExampleJobs => 'میرے قریب رنگ کا کام';
+
+  @override
+  String get assistantExampleWiring => 'وائرنگ کون ٹھیک کر سکتا ہے؟';
+
+  @override
+  String get assistantExampleCity => 'لاہور میں الیکٹریشن';
+
+  @override
+  String get assistantExampleRoman => 'پلمبر چاہیے';
+
+  @override
+  String get assistantHint => 'کام یا کاریگروں کے بارے میں پوچھیں';
+
+  @override
+  String get assistantSend => 'پوچھیں';
+
+  @override
+  String get assistantThinking => 'تلاش ہو رہی ہے';
+
+  @override
+  String get assistantAiOffNote =>
+      'آپ کے الفاظ سے ملایا جا رہا ہے۔ بہتر جوابات کے لیے ڈیوائس پر AI چالو کریں۔';
+
+  @override
+  String get assistantAiFailedNote =>
+      'AI جواب نہیں دے سکا، اس لیے یہ آپ کے الفاظ سے ملایا گیا۔';
+
+  @override
+  String get assistantAiSetAsideNote =>
+      'AI کا جواب آپ کے الفاظ سے میل نہیں کھاتا تھا، اس لیے یہ انہی سے ملایا گیا۔';
+
+  @override
+  String get assistantHelp =>
+      'میں کھلے کام اور ڈائریکٹری میں لوگ تلاش کر سکتا ہوں۔ آزمائیں: “میرے قریب رنگ کا کام” یا “وائرنگ کون ٹھیک کر سکتا ہے؟”';
+
+  @override
+  String assistantFoundJobs(int count, String what) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$what کے $count کھلے کام۔',
+      one: '$what کا 1 کھلا کام۔',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String assistantFoundJobsAny(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count کھلے کام۔',
+      one: '1 کھلا کام۔',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String assistantNoJobs(String what) {
+    return 'ابھی آپ تک $what کا کوئی کھلا کام نہیں پہنچ رہا۔';
+  }
+
+  @override
+  String get assistantNoJobsAny => 'ابھی کوئی کھلا کام اس سے نہیں ملتا۔';
+
+  @override
+  String assistantFoundWorkers(int count, String what) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$what کے لیے $count افراد، بہترین ریکارڈ پہلے۔',
+      one: '$what کے لیے 1 فرد، بہترین ریکارڈ پہلے۔',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String assistantFoundWorkersAny(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'ڈائریکٹری میں $count افراد، بہترین ریکارڈ پہلے۔',
+      one: 'ڈائریکٹری میں 1 فرد، بہترین ریکارڈ پہلے۔',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String assistantNoWorkers(String what) {
+    return 'ابھی ڈائریکٹری میں آپ کے قریب کوئی $what کا کام نہیں کرتا۔';
+  }
+
+  @override
+  String get assistantNoWorkersAny =>
+      'ابھی ڈائریکٹری میں کوئی اس سے نہیں ملتا۔';
+
+  @override
+  String assistantAddTrade(String trades) {
+    return '$trades کے کام آپ تک تبھی پہنچتے ہیں جب یہ آپ کے ہنر میں شامل ہو۔ اسے پروفائل میں میرے کام کے تحت شامل کریں۔';
+  }
+
+  @override
+  String fareAdviceByAi(String model) {
+    return '$model وضاحت کرے گا، اسی ڈیوائس پر۔';
+  }
+
+  @override
+  String fareAdviceByRemoteAi(String model) {
+    return '$model وضاحت کرے گا، جو ایک آن لائن ماڈل ہے۔';
+  }
+
+  @override
+  String get fareAdviceTurnOnAi => 'ڈیوائس پر AI سے وضاحت کروائیں';
+
+  @override
+  String fareAdviceAsking(String model) {
+    return '$model سے پوچھا جا رہا ہے۔ فون پر اس میں ایک منٹ لگ سکتا ہے۔';
+  }
+
+  @override
+  String fareAdviceReasoningBy(String model) {
+    return '$model کے مطابق وجہ:';
+  }
+
+  @override
+  String get fareAdviceClamped =>
+      'AI کا اندازہ ملتے جلتے کام کے کرایوں سے بہت مختلف تھا، اس لیے اسے حد کے اندر لایا گیا ہے۔';
+
+  @override
+  String get fareAiFellBack =>
+      'AI جواب نہیں دے سکا، اس لیے یہ ملتے جلتے کاموں سے نکالا گیا ہے۔';
+
+  @override
+  String get fareAiFellBackSlow =>
+      'AI نے بہت دیر لگائی، اس لیے یہ ملتے جلتے کاموں سے نکالا گیا ہے۔';
+
+  @override
+  String get fareAiSetAside =>
+      'AI کا اندازہ ملتے جلتے کاموں پر مبنی نہیں تھا، اس لیے یہ انہی سے نکالا گیا ہے۔';
 }

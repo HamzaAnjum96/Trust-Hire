@@ -5,6 +5,7 @@ import '../../app/account_controller.dart';
 import '../../core/tokens.dart';
 import '../../l10n/app_localizations.dart';
 import '../account/account_switcher.dart';
+import '../assistant/assistant_screen.dart';
 
 /// The things that float on top of the map.
 ///
@@ -43,7 +44,7 @@ class MapHeader extends StatelessWidget {
       height: MapHeader.height,
       padding: const EdgeInsetsDirectional.only(
         start: BrandSizing.spaceXs,
-        end: BrandSizing.spaceSm + 4,
+        end: BrandSizing.spaceXs,
       ),
       decoration: BoxDecoration(
         color: theme.colorScheme.surface,
@@ -110,6 +111,9 @@ class MapHeader extends StatelessWidget {
               ),
             ),
           ),
+          // On the home screen too: "painting jobs near me" is a question
+          // somebody looking at a map of jobs is about to ask.
+          const AskButton(),
         ],
       ),
     );

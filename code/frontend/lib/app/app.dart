@@ -16,6 +16,7 @@ import '../services/backend/mock_backend.dart';
 import '../services/media_store.dart';
 import '../features/onboarding/onboarding_screen.dart';
 import 'account_controller.dart';
+import 'ai_controller.dart';
 import 'message_controller.dart';
 import 'notification_controller.dart';
 import 'admin_controller.dart';
@@ -140,6 +141,10 @@ class TrustHireApp extends StatelessWidget {
           // the intro asks — and afterwards, only "Near Me" does.
           create: (_) => LocationController(),
         ),
+        // Loads nothing but a flag and whether this browser could run a
+        // model. The model itself is fetched only after somebody switches the
+        // AI on, having been told the size — see `AiController`.
+        ChangeNotifierProvider(create: (_) => AiController(store)..load()),
       ],
       child: Consumer<SettingsController>(
         builder: (context, settings, _) {

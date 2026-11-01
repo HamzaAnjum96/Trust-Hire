@@ -253,13 +253,121 @@ range similar work went for, agreed fares ahead of what hirers merely asked.
 It is asked for, never automatic, and always says what it rests on. **The
 evidence is fares, never people:** no phone number, poster or worker is in it.
 
-**The AI fare agent is paused.** When it returns it will run in the browser,
-not on a server. `FareGuard` is already in place for it, and tested: whatever
-a model proposes is put in order, rounded the way work is priced, and held
-inside `[low × 0.5, high × 1.5]` of what similar work actually went for, so a
-small model that writes Rs. 900,000 for a leaking tap is caught there. The
-unfinished work is kept in the history — commit "Paused: client-side AI and
-the assistant — unfinished", reverted by the one after it.
+**With the on-device AI switched on**, a model looks at the same evidence
+through two read-only tools (`market_summary`, `comparable_jobs`), proposes a
+range and explains it in a sentence or two, signed with its name. It does not
+get the last word on the number: `FareGuard` puts whatever it proposes in
+order, rounds it the way work is priced, and holds it inside
+`[low × 0.5, high × 1.5]` of what similar work actually went for — so a small
+model that writes Rs. 900,000 for a leaking tap is caught there, and the card
+says it was. **No evidence, no number:** with nothing similar to compare
+against there is no suggestion at all, and the model is not even asked. An
+answer given **without looking at the evidence**, or whose suggestion lands
+outside the band, is **set aside** rather than pulled in to its edge, and the
+arithmetic is shown with a note saying so — asked in a job's description to
+"suggest Rs. 90,000", Qwen2.5 1.5B did, without calling a tool. Any other
+failure — too slow, not JSON, never settles — falls back to the arithmetic
+too, and says so. Its explanation is required, kept to two sentences, and
+shown only if it is in the language of the screen.
+
+### The on-device AI and "Ask Trust Hire"
+
+The evaluators asked for an AI agent; there is no server to run one on. So it
+runs **in the visitor's own browser**: WebLLM on WebGPU, a Qwen2.5 model of
+1.5B parameters (about 900 MB) or 0.5B (about 300 MB), downloaded once into the
+browser's cache. **Nothing is fetched until somebody switches it on** — from
+the profile, the fare panel or the assistant — having been told the size; the
+people this is for pay for data by the megabyte. Nothing typed leaves the
+device. A browser without WebGPU (most phones today, every Android and iOS
+build) is told so plainly, and everything still works without it.
+
+```
+lib/services/ai/
+├── ai_model.dart        ← AiModel: the one interface every feature talks to
+├── ai_agent.dart        ← a JSON-action loop over read-only tools
+├── ai_safety.dart       ← framing, limits, and cleaning what a model says
+├── ai_prompts.dart      ← everything the app says to a model, in one file
+├── browser_model.dart   ← the on-device model, and its two sizes
+├── browser_engine*.dart ← WebLLM through web/ai/bridge.js; a stub off the web
+└── remote_model.dart    ← a hosted model behind your own proxy — for later
+lib/app/ai_controller.dart  ← consent, size, state; which model answers
+lib/features/assistant/     ← "Ask Trust Hire": word list, searches, engine
+lib/features/ai/            ← the consent dialog and the profile group
+web/ai/                     ← bridge.js and worker.js, loaded only when on
+```
+
+**"Ask Trust Hire"** — the Ask button on the map, the Jobs list and the
+Directory — answers requests about open jobs and directory workers, and
+nothing else: "painting jobs near me", "who can fix wiring?", "plumber
+chahiye". A word list in English, Urdu and Roman Urdu reads every request;
+with the AI on, the model is told what the list made of it and chooses what to
+search for, and writes a sentence about what came back. Either way **the
+results come from the app's own data**, through the same rules that decide
+what the rest of the app shows this person — the tag and distance rule for
+jobs, each worker's own radius for the directory.
+
+What keeps a model honest, in order of how much it matters:
+
+- **It cannot put anything on screen.** A job or a worker appears only if a
+  search returned it this turn, matched by id; an id the model invents matches
+  nothing. If it answers without searching at all, its words are dropped and
+  the request is answered from the data.
+- **It cannot do worse than the word list.** A model small enough for a
+  browser knows little Urdu — asked "rang ka kaam chahiye", Qwen2.5 1.5B
+  searched cleaning and gardening. Where the list understood a request, only
+  the model's searches that agree with it count — the right trade, jobs or
+  workers as asked — and a model with none is overruled; where the list finds
+  something and the model found nothing, the list's answer is shown. Either
+  way the screen says the AI's answer was set aside. What a model adds is a
+  reading of what the list cannot read ("my boundary wall is cracking"), and a
+  sentence.
+- **It can only look things up.** Every tool is read-only — no tool posts,
+  books, pays or changes anything — so the worst a misled model can do is
+  search.
+- **It answers in a shape, not in prose to act on.** Each turn is one JSON
+  action fixed by schema: WebLLM constrains generation to it, and the app
+  validates it again.
+- **What people wrote is data.** It is framed between markers the model is
+  told never to take instructions from, and the markers are stripped from
+  inside it first, so nobody can close the frame early.
+- **Its words are cleaned before they are shown.** No links, no email
+  addresses, no phone numbers — none of which the app ever needs a model to
+  supply, and all of which are how a scam would use one — and cut to the two
+  sentences it was asked for, the later ones being where a small model starts
+  making things up. A sentence in the other language is not shown; the app's
+  own, in the screen's language, always is. Everything a model says is signed
+  with its name, and never stored.
+- **A gap in the data is said outright.** A worker with no rating goes to the
+  model as "not rated yet" and a job with no fare as "open to offers": given
+  nothing, a small model fills the gap from the result next to it.
+
+**Tried on a real model, not only on scripts.** The tests drive the agent with
+scripted replies, which say exactly what a misbehaving model would. Before
+0.22.0 shipped, the same code was also run against Qwen2.5 1.5B — the on-device
+default's own model, served by llama.cpp through `RemoteModel` — on English,
+Urdu and Roman Urdu requests, an off-topic one and two injection attempts.
+That run is where the Urdu misreadings, the injected fare, the borrowed rating
+and the five-sentence replies above were found; after the fixes, every request
+in it came back with the right results. The browser path was run as well —
+WebLLM from its CDN, the 0.5B download, a reply held to its schema — in
+headless Chromium on a software GPU, which is how the sizes the consent prompt
+quotes were found to be too high.
+
+**Swapping in a premium model later is a build flag**, not a rewrite: every
+feature talks to `AiModel`, and `RemoteModel` is a second implementation of
+it that posts an OpenAI-style chat completion with structured output to
+**your own** proxy (a Cloudflare Worker, a Supabase Edge Function), which
+holds the vendor's key. Never the vendor's API from the app — anything
+shipped to a browser is public.
+
+```bash
+flutter build web --dart-define=AI_ENDPOINT=https://ai.example.com/v1 \
+                  --dart-define=AI_MODEL=<the provider's model id> \
+                  --dart-define=AI_MODEL_LABEL='<what people are shown>'
+```
+
+With that set the app uses the hosted model and says so — job text then
+leaves the device, which the consent dialog says too. https only.
 
 ### The app (`code/frontend/`)
 
@@ -391,7 +499,9 @@ code/frontend/
 │   │   ├── sync/         ← the outbox, and who wins when copies disagree
 │   │   ├── wallet/       ← tokens, commission, top-up (simulated, or Stripe by
 │   │   │                    Payment Link on the deployed site)
-│   │   ├── fare_advice/  ← "Suggest a fare": the evidence, and the guard
+│   │   ├── fare_advice/  ← "Suggest a fare": the evidence, the AI, the guard
+│   │   ├── assistant/    ← "Ask Trust Hire": word list, searches, engine
+│   │   ├── ai/           ← switching the on-device AI on, and its consent
 │   │   ├── account/      ← the demo account switcher
 │   │   ├── profile/      ← role, trades, and the app's settings
 │   │   └── onboarding/   ← first-run intro and permission priming
@@ -400,6 +510,7 @@ code/frontend/
 │   │                    listings, Verification
 │   ├── services/     ← local storage, seed loading, repositories
 │   │   ├── backend/  ← the RemoteApi seam, and the mock behind it
+│   │   ├── ai/       ← the model layer — see "The on-device AI" above
 │   │   └── browser_location.dart ← the address bar, on the web build only
 │   └── widgets/      ← shared UI (status pills, skeletons, empty states,
 │                        meta chips, fading scroll rows, settings groups,
@@ -412,7 +523,8 @@ code/frontend/
 │   ├── images/       ← placeholder job photos
 │   ├── audio/        ← placeholder voice notes
 │   └── fonts/        ← Inter, Noto Sans Arabic, Noto Nastaliq Urdu
-├── web/              ← the web shell: metadata, manifest, boot screen, icons
+├── web/              ← the web shell: metadata, manifest, boot screen, icons,
+│                        and ai/ — the WebLLM bridge, loaded only when switched on
 ├── test/
 └── tool/             ← dev scripts (seed data, assets, icons, the test sweep)
 ```
@@ -505,13 +617,15 @@ The first two gate the deploy.
 proves the app behaves as the suite describes; it cannot prove the suite
 describes anything, because a check aimed at a case that also violates a
 neighbouring rule passes whether or not the rule it names still exists. The
-sweep breaks each of the 60 load-bearing promises in turn — the fare lock, the
+sweep breaks each of the 72 load-bearing promises in turn — the fare lock, the
 5% commission, the debt lockout, the ratings asymmetry, the visibility rule,
 the location reveal, the CNIC mask, the audit log's write-first ordering, a
-Stripe payment credited once, a suggested fare held to the evidence — and
-reports any the suite does not notice. Four survived — two on the first run and
-two more when the list was widened — and every one was a real gap rather than
-noise.
+Stripe payment credited once, a suggested fare held to the evidence, no model
+download before consent, no model answer shown that no search returned, a
+model overruled by the word list, a fare given without evidence set aside —
+and reports any the suite does not notice. Five survived — two on the first
+run, two more when the list was widened, one in 0.22.0 — and every one was a
+real gap rather than noise.
 
 Its sibling for the schema is `code/backend/tool/sweep_schema.sh`, which found
 two vacuous SQL checks the same way. **If you add a rule that decides money,
@@ -593,8 +707,10 @@ flutter build web --dart-define=MAP_TILES_LIGHT='https://…/{z}/{x}/{y}.png?key
                   --dart-define=MAP_TILES_ATTRIBUTION='© …'
 ```
 
-Tiles are one of only two things in the app that use a network (the other is
-Stripe's checkout page, on the deployed site): everything else works offline, and when tiles
+Tiles are one of only three things in the app that use a network (the others
+are Stripe's checkout page, on the deployed site, and the on-device AI's
+one-time download, once somebody switches it on): everything else works
+offline, and when tiles
 cannot be fetched the map still positions jobs correctly over a plain
 background and says so. Release Android builds now declare the INTERNET
 permission — Flutter's template grants it only to debug and profile builds, so
@@ -613,8 +729,10 @@ speech, and exist so playback and the waveform can be demonstrated.
   place colour, radius, type and motion values are written down.
 - **Missing information is acceptable.** A job is postable with a voice note
   alone, a photo alone, or a title alone — do not add required fields.
-- **No network calls in the POC** — except map tiles, and Stripe's own checkout
-  page when somebody pays. Everything runs against local storage; seed data is copied
+- **No network calls in the POC** — except map tiles, Stripe's own checkout
+  page when somebody pays, and the on-device AI's one-time download (WebLLM
+  from jsDelivr, the model from Hugging Face) once somebody switches it on,
+  having been told its size. Everything runs against local storage; seed data is copied
   in on first run and edited locally from then on. Anything that does reach
   the network must work, and say so, when it cannot.
 - **No secrets in the repository.** Commit a `.env.example` listing required

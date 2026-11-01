@@ -189,6 +189,13 @@ class StoreKeys {
   /// live under `trust_hire.media.<id>` and are enumerated through this index.
   static const mediaIndex = 'trust_hire.media_index';
 
+  /// Whether somebody switched the on-device AI on — the consent its download
+  /// needs. Off until they do; see `AiController`.
+  static const aiEnabled = 'trust_hire.ai_enabled';
+
+  /// Which size of on-device model they chose.
+  static const aiModel = 'trust_hire.ai_model';
+
   static const all = <String>[
     jobs,
     users,
@@ -214,5 +221,7 @@ class StoreKeys {
     lastPulledAt,
     pendingTopUp,
     mediaIndex,
+    aiEnabled,
+    aiModel,
   ];
 }

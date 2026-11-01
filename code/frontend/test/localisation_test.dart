@@ -139,6 +139,10 @@ void main() {
       for (final entity in Directory('lib').listSync(recursive: true)) {
         if (entity is! File || !entity.path.endsWith('.dart')) continue;
         if (entity.path.contains('/l10n/')) continue;
+        // What the app says to a language model: English on purpose, never
+        // on screen. One file, so prompts cannot hide anywhere else — see
+        // its header.
+        if (entity.path.endsWith('/services/ai/ai_prompts.dart')) continue;
         yield entity;
       }
     }

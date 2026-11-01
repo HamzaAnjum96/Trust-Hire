@@ -4,7 +4,13 @@ import 'fare_evidence.dart';
 
 /// A fare proposal after the guard has had it.
 class HeldFare {
-  const HeldFare(this.low, this.suggested, this.high, {this.clamped = false});
+  const HeldFare(
+    this.low,
+    this.suggested,
+    this.high, {
+    this.clamped = false,
+    this.outOfBand = false,
+  });
 
   final int low;
   final int suggested;
@@ -12,6 +18,10 @@ class HeldFare {
 
   /// The band had to move at least one of the three.
   final bool clamped;
+
+  /// The band had to move the suggestion itself — not an edge of the range,
+  /// which a model may argue for, but the figure it would have somebody post.
+  final bool outOfBand;
 }
 
 /// What a language model is not trusted with: the number itself.
@@ -23,10 +33,11 @@ class HeldFare {
 /// writes Rs. 900,000 for a leaking tap is stopped here, not shown to somebody
 /// about to post a job.
 ///
-/// **Ready for the AI, which is paused.** Nothing proposes a fare for this to
-/// hold yet — the suggestion is the arithmetic in `FareRange` — but when the
-/// on-device model returns, its figure comes through here before anybody
-/// sees it. Kept, and tested, so that rule is already in place when it does.
+/// The AI proposes; this disposes. An edge of the range outside the band is
+/// brought back inside it. A *suggestion* outside it is [HeldFare.outOfBand],
+/// and `FareAdvisor.advise` then sets the AI's answer aside altogether: a
+/// figure pulled back from Rs. 85,000 to the top of the band is still a
+/// figure from nowhere.
 class FareGuard {
   const FareGuard();
 
@@ -89,6 +100,7 @@ class FareGuard {
       held.suggested,
       held.high,
       clamped: held.low != lo || held.suggested != mid || held.high != hi,
+      outOfBand: held.suggested != mid,
     );
   }
 }

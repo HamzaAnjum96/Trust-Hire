@@ -2117,4 +2117,263 @@ class AppStringsEn extends AppStrings {
 
   @override
   String get walletHistory => 'History';
+
+  @override
+  String get aiSection => 'On-device AI';
+
+  @override
+  String get aiExplain =>
+      'A small language model that runs in this browser. It explains fare suggestions and answers questions about jobs and workers. Nothing you type leaves this device, and it can only show what the app already shows you.';
+
+  @override
+  String aiRemoteExplain(String model) {
+    return 'This build uses $model, a hosted model, through Trust Hire\'s own server. Job text leaves this device; phone numbers never do.';
+  }
+
+  @override
+  String get aiUnsupported =>
+      'This browser cannot run a model: it needs WebGPU, which most recent desktop browsers and some phones have. The assistant and fare suggestions still work, from the app\'s own data.';
+
+  @override
+  String get aiStatusChecking => 'Checking';
+
+  @override
+  String get aiStatusUnsupported => 'Not on this device';
+
+  @override
+  String get aiStatusOff => 'Off';
+
+  @override
+  String get aiStatusIdle => 'On, starts when used';
+
+  @override
+  String aiStatusLoading(int percent) {
+    return 'Loading $percent%';
+  }
+
+  @override
+  String get aiStatusReady => 'Ready';
+
+  @override
+  String get aiStatusFailed => 'Could not start';
+
+  @override
+  String get aiModelStandard => 'Standard';
+
+  @override
+  String get aiModelLight => 'Lighter';
+
+  @override
+  String aiModelSize(String model, int size) {
+    return '$model: about $size MB, downloaded once.';
+  }
+
+  @override
+  String aiModelDownloaded(String model) {
+    return '$model is already on this device.';
+  }
+
+  @override
+  String get aiTurnOn => 'Turn on';
+
+  @override
+  String get aiTurnOff => 'Turn off';
+
+  @override
+  String get aiTryAgain => 'Try again';
+
+  @override
+  String get aiRemoveDownload => 'Remove the download';
+
+  @override
+  String get aiConsentTitle => 'Turn on the on-device AI?';
+
+  @override
+  String aiConsentBody(String model, int size) {
+    return '$model runs in this browser. It is about $size MB, downloaded once over your connection and kept for next time. Nothing you type leaves this device.';
+  }
+
+  @override
+  String aiConsentBodyDownloaded(String model) {
+    return '$model is already on this device, so switching it on costs no data. Nothing you type leaves this device.';
+  }
+
+  @override
+  String aiConsentRemoteBody(String model) {
+    return 'Questions go to $model, a hosted model, through Trust Hire\'s own server. Job text leaves this device; phone numbers never do.';
+  }
+
+  @override
+  String get aiConsentCancel => 'Not now';
+
+  @override
+  String get aiConsentDownload => 'Download and turn on';
+
+  @override
+  String aiAnsweredBy(String model) {
+    return 'Answered by $model, running on this device.';
+  }
+
+  @override
+  String aiAnsweredByRemote(String model) {
+    return 'Answered by $model, a hosted model.';
+  }
+
+  @override
+  String get aiAnsweredByWords => 'Matched from your words. No AI is involved.';
+
+  @override
+  String get assistantTitle => 'Ask Trust Hire';
+
+  @override
+  String get assistantWelcome => 'What are you looking for?';
+
+  @override
+  String get assistantIntro =>
+      'Ask for work, or for somebody to do it, in English, Urdu or Roman Urdu. Answers come from what the app already shows you.';
+
+  @override
+  String get assistantTry => 'Try';
+
+  @override
+  String get assistantExampleJobs => 'Painting jobs near me';
+
+  @override
+  String get assistantExampleWiring => 'Who can fix wiring?';
+
+  @override
+  String get assistantExampleCity => 'Electrician in Lahore';
+
+  @override
+  String get assistantExampleRoman => 'plumber chahiye';
+
+  @override
+  String get assistantHint => 'Ask about jobs or workers';
+
+  @override
+  String get assistantSend => 'Ask';
+
+  @override
+  String get assistantThinking => 'Looking';
+
+  @override
+  String get assistantAiOffNote =>
+      'Matching your words. Turn on the on-device AI for better answers.';
+
+  @override
+  String get assistantAiFailedNote =>
+      'The AI could not answer, so this was matched from your words.';
+
+  @override
+  String get assistantAiSetAsideNote =>
+      'The AI\'s answer did not fit your words, so this was matched from them instead.';
+
+  @override
+  String get assistantHelp =>
+      'I can find open jobs, and people in the directory. Try “painting jobs near me” or “who can fix wiring?”';
+
+  @override
+  String assistantFoundJobs(int count, String what) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count open jobs for $what.',
+      one: '1 open job for $what.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String assistantFoundJobsAny(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count open jobs.',
+      one: '1 open job.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String assistantNoJobs(String what) {
+    return 'No open jobs for $what reach you right now.';
+  }
+
+  @override
+  String get assistantNoJobsAny => 'No open jobs match that right now.';
+
+  @override
+  String assistantFoundWorkers(int count, String what) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count people for $what, best record first.',
+      one: '1 person for $what, best record first.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String assistantFoundWorkersAny(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count people in the directory, best record first.',
+      one: '1 person in the directory, best record first.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String assistantNoWorkers(String what) {
+    return 'Nobody in the directory does $what near you yet.';
+  }
+
+  @override
+  String get assistantNoWorkersAny =>
+      'Nobody in the directory matches that yet.';
+
+  @override
+  String assistantAddTrade(String trades) {
+    return 'Jobs for $trades only reach you if it is one of your trades. Add it in Profile, under My trades.';
+  }
+
+  @override
+  String fareAdviceByAi(String model) {
+    return 'Explained by $model, running on this device.';
+  }
+
+  @override
+  String fareAdviceByRemoteAi(String model) {
+    return 'Explained by $model, a hosted model.';
+  }
+
+  @override
+  String get fareAdviceTurnOnAi => 'Explain it with the on-device AI';
+
+  @override
+  String fareAdviceAsking(String model) {
+    return 'Asking $model. On a phone this can take a minute.';
+  }
+
+  @override
+  String fareAdviceReasoningBy(String model) {
+    return 'Why, according to $model:';
+  }
+
+  @override
+  String get fareAdviceClamped =>
+      'The AI\'s figure was far from what similar work went for, so it has been brought back within range.';
+
+  @override
+  String get fareAiFellBack =>
+      'The AI could not answer, so this was worked out from similar jobs instead.';
+
+  @override
+  String get fareAiFellBackSlow =>
+      'The AI took too long, so this was worked out from similar jobs instead.';
+
+  @override
+  String get fareAiSetAside =>
+      'The AI\'s figure was not based on similar jobs, so this one was worked out from them instead.';
 }
