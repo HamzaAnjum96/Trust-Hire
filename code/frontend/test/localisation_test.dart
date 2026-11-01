@@ -73,6 +73,27 @@ void main() {
       expect(untranslated, isEmpty);
     });
 
+    test('an Urdu sentence never bends a trade\'s name', () async {
+      // A trade's Urdu name is often a phrase — بجلی کا کام, لکڑی کا کام —
+      // and a phrase before a postposition has to change its own ending:
+      // "بجلی کا کام کے لیے" is wrong, "بجلی کے کام کے لیے" is right. A
+      // template cannot do that, so it never puts the name there; it says
+      // the name first, and the rest after a colon.
+      final ur =
+          (await SeedFacts.readJsonAsset('lib/l10n/app_ur.arb'))
+              as Map<String, dynamic>;
+      final bent = RegExp(r'\{(what|trades)\} (کا|کے|کی|کو|سے|میں|پر|تک)');
+
+      final wrong = [
+        for (final entry in ur.entries)
+          if (!entry.key.startsWith('@') &&
+              bent.hasMatch(entry.value as String))
+            entry.key,
+      ];
+
+      expect(wrong, isEmpty);
+    });
+
     test('both languages are offered', () {
       expect(AppStrings.supportedLocales, hasLength(2));
       expect(

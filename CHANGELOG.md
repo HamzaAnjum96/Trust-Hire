@@ -12,6 +12,19 @@ that heading to the version and date, and open a fresh `[Unreleased]`.
 
 ## [Unreleased]
 
+### 0.22.1 — Urdu sentences in the assistant
+
+#### Fixed
+
+- **The assistant's own Urdu sentences bent trade names wrongly.** The
+  templates put the name before a postposition — "بجلی کا کام کے لیے 1 فرد",
+  and "کوئی بجلی کا کام کا کام نہیں کرتا" — but a phrase like بجلی کا کام has to
+  change its own ending there, which a template cannot do. The five
+  sentences now say the trade first and the rest after a colon:
+  "بجلی کا کام: 1 فرد، بہترین ریکارڈ پہلے۔" Seen on the live site in 0.22.0.
+- `localisation_test.dart` now fails on any Urdu template that puts a trade's
+  name before a postposition, and found exactly these five.
+
 ### 0.22.0 — The AI is back, on the device, in the new design
 
 The work paused in 0.20.0 (`fe02f82`) restored and fitted to the overhaul, then

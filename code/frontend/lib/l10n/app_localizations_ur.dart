@@ -2285,8 +2285,8 @@ class AppStringsUr extends AppStrings {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$what کے $count کھلے کام۔',
-      one: '$what کا 1 کھلا کام۔',
+      other: '$what: $count کھلے کام۔',
+      one: '$what: 1 کھلا کام۔',
     );
     return '$_temp0';
   }
@@ -2304,7 +2304,7 @@ class AppStringsUr extends AppStrings {
 
   @override
   String assistantNoJobs(String what) {
-    return 'ابھی آپ تک $what کا کوئی کھلا کام نہیں پہنچ رہا۔';
+    return '$what: ابھی آپ تک کوئی کھلا کام نہیں پہنچ رہا۔';
   }
 
   @override
@@ -2315,8 +2315,8 @@ class AppStringsUr extends AppStrings {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$what کے لیے $count افراد، بہترین ریکارڈ پہلے۔',
-      one: '$what کے لیے 1 فرد، بہترین ریکارڈ پہلے۔',
+      other: '$what: $count افراد، بہترین ریکارڈ پہلے۔',
+      one: '$what: 1 فرد، بہترین ریکارڈ پہلے۔',
     );
     return '$_temp0';
   }
@@ -2334,7 +2334,7 @@ class AppStringsUr extends AppStrings {
 
   @override
   String assistantNoWorkers(String what) {
-    return 'ابھی ڈائریکٹری میں آپ کے قریب کوئی $what کا کام نہیں کرتا۔';
+    return '$what: ابھی ڈائریکٹری میں آپ کے قریب کوئی نہیں۔';
   }
 
   @override
@@ -2343,7 +2343,7 @@ class AppStringsUr extends AppStrings {
 
   @override
   String assistantAddTrade(String trades) {
-    return '$trades کے کام آپ تک تبھی پہنچتے ہیں جب یہ آپ کے ہنر میں شامل ہو۔ اسے پروفائل میں میرے کام کے تحت شامل کریں۔';
+    return 'یہ کام آپ تک تبھی پہنچتے ہیں جب $trades آپ کے ہنر میں شامل ہو۔ اسے پروفائل میں، میرے کام کے تحت شامل کریں۔';
   }
 
   @override
