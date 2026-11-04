@@ -136,28 +136,26 @@ class FareAdvisor {
     if (model == null) return onDevice(range);
 
     try {
-      final outcome =
-          await AiAgent(
-            model: model,
-            instructions: _instructions(question.language),
-            tools: fareTools(question.evidence),
-            answer: const {
-              'low': {'type': 'integer'},
-              'suggested': {'type': 'integer'},
-              'high': {'type': 'integer'},
-              'reasoning': {'type': 'string'},
-            },
-            // The why is required: without it the AI's answer is only the
-            // arithmetic again, with a model's name on it.
-            requiredAnswer: const ['low', 'suggested', 'high', 'reasoning'],
-            maxSteps: maxSteps,
-            maxTokens: 220,
-          ).run(
-            question.jobText,
-            context: AiPrompts.fareContext([
-              for (final t in question.tags) t.id,
-            ]),
-          );
+      final context = AiPrompts.fareContext([
+        for (final t in question.tags) t.id,
+      ]);
+      final agent = AiAgent(
+        model: model,
+        instructions: _instructions(question.language),
+        tools: fareTools(question.evidence),
+        answer: const {
+          'low': {'type': 'integer'},
+          'suggested': {'type': 'integer'},
+          'high': {'type': 'integer'},
+          'reasoning': {'type': 'string'},
+        },
+        // The why is required: without it the AI's answer is only the
+        // arithmetic again, with a model's name on it.
+        requiredAnswer: const ['low', 'suggested', 'high', 'reasoning'],
+        maxSteps: maxSteps,
+        maxTokens: 220,
+      );
+      final outcome = await agent.run(question.jobText, context: context);
 
       // The evidence is only in the tools. An answer given without one came
       // from somewhere else — the job text, which anybody can write, or
@@ -185,7 +183,8 @@ class FareAdvisor {
       );
       final shown =
           reasoning.isNotEmpty &&
-          AiSafety.writtenIn(reasoning, question.language);
+          AiSafety.writtenIn(reasoning, question.language) &&
+          !AiSafety.echoes(reasoning, '${agent.systemPrompt}\n$context');
       return FareAdvice(
         low: held.low,
         suggested: held.suggested,

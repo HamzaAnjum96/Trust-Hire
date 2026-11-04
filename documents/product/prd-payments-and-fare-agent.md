@@ -112,8 +112,10 @@ Nothing to set up: open the GitHub Pages link.
   app's own sentence beneath, cannot. The 1.5B model was run against the real
   code before shipping, and the browser path — WebLLM from its CDN, the 0.5B
   download, a reply held to its schema — in headless Chromium on a software
-  GPU, where one short reply took eleven minutes. A real GPU, and a phone with
-  WebGPU, have not been tried.
+  GPU, where one short reply took eleven minutes. The app's own screens ran
+  the same way, end to end: the 0.5B model searched correctly, and its answer
+  — 55 minutes later — was its own instructions read back, which the app now
+  refuses to show. A real GPU, and a phone with WebGPU, have not been tried.
 - The payment is confirmed by Stripe sending the browser back, not checked by
   a server — a static site cannot hold the key that check needs. A return is
   credited only for a top-up that browser started. A real deployment checks

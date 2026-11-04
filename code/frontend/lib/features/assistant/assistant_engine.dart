@@ -157,77 +157,76 @@ class AssistantEngine {
       'words': {'type': 'string'},
     };
 
-    final outcome =
-        await AiAgent(
-          model: model,
-          instructions: _instructions(language),
-          tools: [
-            AiTool(
-              name: 'search_jobs',
-              description: AiPrompts.searchJobs,
-              parameters: parameters,
-              run: (arguments) {
-                final query = _queryFrom(arguments, AssistantIntent.jobs);
-                final hits = search.jobs(
-                  data,
-                  tags: query.tags,
-                  nearMe: query.nearMe,
-                  words: query.words,
-                );
-                searches.add((query: query, jobs: hits, workers: const []));
-                return {
-                  'count': hits.length,
-                  'jobs': [for (final hit in hits) hit.toJson()],
-                };
-              },
-            ),
-            AiTool(
-              name: 'search_workers',
-              description: AiPrompts.searchWorkers,
-              parameters: parameters,
-              run: (arguments) {
-                final query = _queryFrom(arguments, AssistantIntent.workers);
-                final hits = search.workers(
-                  data,
-                  tags: query.tags,
-                  nearMe: query.nearMe,
-                  words: query.words,
-                );
-                searches.add((query: query, jobs: const [], workers: hits));
-                return {
-                  'count': hits.length,
-                  'workers': [for (final hit in hits) hit.toJson()],
-                };
-              },
-            ),
-          ],
-          answer: const {
-            'reply': {'type': 'string'},
-            'job_ids': {
-              'type': 'array',
-              'items': {'type': 'string'},
-            },
-            'worker_ids': {
-              'type': 'array',
-              'items': {'type': 'string'},
-            },
-            'off_topic': {'type': 'boolean'},
+    final context = [
+      AiPrompts.assistantContext(isWorker: data.isWorker),
+      if (read.intent != AssistantIntent.unclear)
+        AiPrompts.assistantReading(
+          workers: read.intent == AssistantIntent.workers,
+          tags: [for (final tag in read.tags) tag.id],
+          nearMe: read.nearMe,
+        ),
+    ].join('\n');
+
+    final agent = AiAgent(
+      model: model,
+      instructions: _instructions(language),
+      tools: [
+        AiTool(
+          name: 'search_jobs',
+          description: AiPrompts.searchJobs,
+          parameters: parameters,
+          run: (arguments) {
+            final query = _queryFrom(arguments, AssistantIntent.jobs);
+            final hits = search.jobs(
+              data,
+              tags: query.tags,
+              nearMe: query.nearMe,
+              words: query.words,
+            );
+            searches.add((query: query, jobs: hits, workers: const []));
+            return {
+              'count': hits.length,
+              'jobs': [for (final hit in hits) hit.toJson()],
+            };
           },
-          requiredAnswer: const ['reply'],
-          maxSteps: maxSteps,
-          maxTokens: 200,
-        ).run(
-          request,
-          context: [
-            AiPrompts.assistantContext(isWorker: data.isWorker),
-            if (read.intent != AssistantIntent.unclear)
-              AiPrompts.assistantReading(
-                workers: read.intent == AssistantIntent.workers,
-                tags: [for (final tag in read.tags) tag.id],
-                nearMe: read.nearMe,
-              ),
-          ].join('\n'),
-        );
+        ),
+        AiTool(
+          name: 'search_workers',
+          description: AiPrompts.searchWorkers,
+          parameters: parameters,
+          run: (arguments) {
+            final query = _queryFrom(arguments, AssistantIntent.workers);
+            final hits = search.workers(
+              data,
+              tags: query.tags,
+              nearMe: query.nearMe,
+              words: query.words,
+            );
+            searches.add((query: query, jobs: const [], workers: hits));
+            return {
+              'count': hits.length,
+              'workers': [for (final hit in hits) hit.toJson()],
+            };
+          },
+        ),
+      ],
+      answer: const {
+        'reply': {'type': 'string'},
+        'job_ids': {
+          'type': 'array',
+          'items': {'type': 'string'},
+        },
+        'worker_ids': {
+          'type': 'array',
+          'items': {'type': 'string'},
+        },
+        'off_topic': {'type': 'boolean'},
+      },
+      requiredAnswer: const ['reply'],
+      maxSteps: maxSteps,
+      maxTokens: 200,
+    );
+    final outcome = await agent.run(request, context: context);
 
     final answer = outcome.answer;
 
@@ -287,9 +286,13 @@ class AssistantEngine {
       query: asked,
       jobs: jobs,
       workers: workers,
-      // A sentence in the other language is not shown: the app's own, in
-      // the language of the screen, always is.
-      prose: prose.isEmpty || !AiSafety.writtenIn(prose, language)
+      // A sentence in the other language is not shown, nor one that repeats
+      // the model's own instructions: the app's own sentence, in the
+      // language of the screen, always is.
+      prose:
+          prose.isEmpty ||
+              !AiSafety.writtenIn(prose, language) ||
+              AiSafety.echoes(prose, '${agent.systemPrompt}\n$context')
           ? null
           : prose,
       model: model.name,

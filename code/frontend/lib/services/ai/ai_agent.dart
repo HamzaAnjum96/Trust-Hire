@@ -161,6 +161,10 @@ class AiAgent {
     throw const AiFailure('no_answer');
   }
 
+  /// Everything this agent tells the model before the request — for
+  /// [AiSafety.echoes], which drops a reply that only repeats it.
+  String get systemPrompt => _system();
+
   String _system() {
     final toolList = [
       for (final tool in tools) '- ${tool.name}: ${tool.description}',

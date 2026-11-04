@@ -347,6 +347,46 @@ void main() {
       expect(reply.aiFailure, AssistantEngine.setAside);
     });
 
+    test(
+      '**a model that answers with its own instructions is not quoted**',
+      () async {
+        // What Qwen2.5 0.5B did in the app, on a software GPU: searched
+        // correctly, then "answered" with two sentences of its prompt.
+        final model = ScriptedModel([
+          {
+            'action': 'search_workers',
+            'arguments': {
+              'tags': ['electrical'],
+            },
+          },
+          {
+            'action': 'answer',
+            'answer': {
+              'reply':
+                  'one or two sentences in English about what the search '
+                  'found, and job_ids or worker_ids are the ids of the '
+                  'results you mention. In reply, name results by title or '
+                  'name, never by id.',
+            },
+          },
+        ]);
+
+        final reply = await engine.answer(
+          'Who can fix wiring?',
+          data: data(
+            isWorker: false,
+            listings: [listing('imran', JobTag.electrical)],
+          ),
+          model: model,
+        );
+
+        expect(reply.prose, isNull, reason: 'the app\'s own sentence instead');
+        expect([for (final w in reply.workers) w.id], ['imran']);
+        expect(reply.model, 'Test model', reason: 'its search still counts');
+        expect(reply.aiFailure, isNull);
+      },
+    );
+
     test('the model is told what the word list read', () async {
       final model = ScriptedModel([
         {

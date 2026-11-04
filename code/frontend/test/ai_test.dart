@@ -97,6 +97,29 @@ void main() {
       expect(AiSafety.firstSentences('No full stop', 2), 'No full stop');
     });
 
+    test('a reply that repeats what the model was told is caught', () {
+      const told =
+          'Then answer: reply is one or two short sentences in English about '
+          'what the search found, and job_ids or worker_ids are the ids of '
+          'the results you mention.';
+
+      expect(
+        AiSafety.echoes(
+          'one or two sentences in English about what the search found, '
+          'and job_ids or worker_ids are the ids of the results you mention.',
+          told,
+        ),
+        isTrue,
+        reason: 'what Qwen2.5 0.5B said in the app',
+      );
+      expect(
+        AiSafety.echoes('The search found one electrician, Imran Noor.', told),
+        isFalse,
+        reason: 'three words in common is a sentence, not an echo',
+      );
+      expect(AiSafety.echoes('Short.', told), isFalse);
+    });
+
     test('a reply is told apart by the script it is written in', () {
       expect(AiSafety.writtenIn('Two painting jobs found.', 'en'), isTrue);
       expect(AiSafety.writtenIn('Two painting jobs found.', 'ur'), isFalse);

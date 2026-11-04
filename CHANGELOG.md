@@ -12,6 +12,28 @@ that heading to the version and date, and open a fresh `[Unreleased]`.
 
 ## [Unreleased]
 
+### 0.22.4 — A model's instructions are not its answer
+
+The in-app run 0.22.3 began finished. The whole path — Flutter, the JavaScript
+bridge, WebLLM and back — works: Qwen2.5 0.5B loaded in under a minute,
+searched electricians correctly, and the app showed the right card. Its
+sentence, 55 minutes later on a software GPU, was two of its own instructions:
+"one or two sentences in English about what the search found, and job_ids or
+worker_ids are the ids of the results you mention."
+
+#### Security
+
+- **A reply that repeats what the model was told is not shown** — five words
+  in a row from its prompt, in the assistant or the fare panel. The app's own
+  sentence, and the results the search returned, stand. A rule in the test
+  sweep (73 now), and the exact sentence the model produced is in the tests.
+
+#### Changed
+
+- The demo script's AI stop says *Standard* writes better sentences than
+  *Lighter*, and that a sentence repeating the model's instructions is not
+  shown. The README and the payments PRD record the in-app run.
+
 ### 0.22.3 — The assistant, run in the app on a real model
 
 #### Fixed

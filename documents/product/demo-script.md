@@ -339,11 +339,14 @@ that behaves like one in the ways that matter.
 phones do not have it yet, and are told so. **Go:** Profile → On-device AI.
 
 1. **Choose Lighter, and Turn on.** It says the size first — about 300 MB,
-   once — and downloads nothing until you agree. The model runs in this
-   browser; nothing typed leaves the device.
+   once — and downloads nothing until you agree. *Standard*, about 900 MB,
+   writes better sentences. Either way the model runs in this browser and
+   nothing typed leaves the device.
 2. **Ask again** (Stop 5d). The answer is signed by the model, which writes a
    sentence of its own above the app's — or, where its reading did not fit the
-   words, says the AI's answer was set aside and shows the word list's.
+   words, says the AI's answer was set aside and shows the word list's. A
+   sentence that only repeats the model's instructions — the lighter model's
+   habit — is not shown at all.
 3. **Post a job and Suggest a fare** (Stop 3b). The model looks at the same
    similar jobs, through two read-only tools, and says why in two sentences —
    or is set aside, with a note, and the arithmetic stands.

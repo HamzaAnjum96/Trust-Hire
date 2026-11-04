@@ -676,6 +676,11 @@ void main() {
         300,
         reason: 'the script says about 300 MB',
       );
+      expect(
+        BrowserModelChoice.standard.downloadMb,
+        900,
+        reason: 'and Standard about 900 MB',
+      );
       expect(find.textContaining('about 300 MB'), findsWidgets);
       expect(engine.loads, isEmpty, reason: 'nothing until somebody agrees');
     });

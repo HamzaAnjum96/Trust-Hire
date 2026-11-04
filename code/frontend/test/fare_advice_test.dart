@@ -407,6 +407,34 @@ void main() {
       expect(advice.suggested, question.range!.typical);
     });
 
+    test('an explanation that repeats its instructions is not shown', () async {
+      final model = ScriptedModel([
+        {
+          'action': 'market_summary',
+          'arguments': {'tag': 'plumbing'},
+        },
+        {
+          'action': 'answer',
+          'answer': {
+            'low': 2000,
+            'suggested': 2500,
+            'high': 3000,
+            'reasoning':
+                'Then answer with low, suggested and high in whole rupees, '
+                'based only on what the tools returned.',
+          },
+        },
+      ]);
+
+      final advice = (await const FareAdvisor().advise(
+        question,
+        model: model,
+      ))!;
+
+      expect(advice.source, FareAdviceSource.agent, reason: 'the figure is');
+      expect(advice.reasoning, isNull, reason: 'the parroting is not');
+    });
+
     test('an explanation in the other language is not shown', () async {
       List<Object?> script(String reasoning) => [
         {

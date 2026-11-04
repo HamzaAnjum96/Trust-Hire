@@ -340,6 +340,9 @@ What keeps a model honest, in order of how much it matters:
 - **A gap in the data is said outright.** A worker with no rating goes to the
   model as "not rated yet" and a job with no fare as "open to offers": given
   nothing, a small model fills the gap from the result next to it.
+- **It cannot pass its instructions off as an answer.** A reply that repeats
+  five words in a row of what the model was told is not shown, here or in the
+  fare panel; the app's own sentence is.
 
 **Tried on a real model, not only on scripts.** The tests drive the agent with
 scripted replies, which say exactly what a misbehaving model would. Before
@@ -351,7 +354,12 @@ and the five-sentence replies above were found; after the fixes, every request
 in it came back with the right results. The browser path was run as well —
 WebLLM from its CDN, the 0.5B download, a reply held to its schema — in
 headless Chromium on a software GPU, which is how the sizes the consent prompt
-quotes were found to be too high.
+quotes were found to be too high. And then the app itself, the same way:
+Flutter, the JavaScript bridge, WebLLM and back. The 0.5B model loaded in
+under a minute and searched correctly; its answer took 55 minutes on a
+software GPU (seconds on a real one) and was two sentences of its own
+instructions — which is why a reply that repeats its prompt is no longer
+shown.
 
 **Swapping in a premium model later is a build flag**, not a rewrite: every
 feature talks to `AiModel`, and `RemoteModel` is a second implementation of
@@ -625,12 +633,13 @@ The first two gate the deploy.
 proves the app behaves as the suite describes; it cannot prove the suite
 describes anything, because a check aimed at a case that also violates a
 neighbouring rule passes whether or not the rule it names still exists. The
-sweep breaks each of the 72 load-bearing promises in turn — the fare lock, the
+sweep breaks each of the 73 load-bearing promises in turn — the fare lock, the
 5% commission, the debt lockout, the ratings asymmetry, the visibility rule,
 the location reveal, the CNIC mask, the audit log's write-first ordering, a
 Stripe payment credited once, a suggested fare held to the evidence, no model
 download before consent, no model answer shown that no search returned, a
-model overruled by the word list, a fare given without evidence set aside —
+model overruled by the word list, a fare given without evidence set aside, a
+reply that only repeats its prompt not shown —
 and reports any the suite does not notice. Five survived — two on the first
 run, two more when the list was widened, one in 0.22.0 — and every one was a
 real gap rather than noise.

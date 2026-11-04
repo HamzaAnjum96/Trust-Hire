@@ -103,6 +103,39 @@ class AiSafety {
     return text;
   }
 
+  static final _word = RegExp(r'[\p{L}\p{N}_]+', unicode: true);
+
+  /// How many words in a row, shared with what a model was told, make a reply
+  /// its instructions coming back rather than an answer. Five: "the search
+  /// found" is a fair thing to say; "about what the search found, and" is
+  /// the prompt.
+  static const echoRun = 5;
+
+  /// Whether [reply] repeats [told] — any [echoRun] words in a row that also
+  /// appear in a row there, ignoring case and punctuation.
+  ///
+  /// Qwen2.5 0.5B, asked in the app who could fix wiring, searched correctly
+  /// and then "answered" with two sentences of its own instructions: "one or
+  /// two sentences in English about what the search found, and job_ids or
+  /// worker_ids are the ids of the results you mention." A reply like that is
+  /// not shown; the app's own sentence is.
+  static bool echoes(String reply, String told) {
+    List<String> words(String text) => [
+      for (final m in _word.allMatches(text.toLowerCase())) m.group(0)!,
+    ];
+    final said = words(reply);
+    if (said.length < echoRun) return false;
+    final source = words(told);
+    final runs = <String>{
+      for (var i = 0; i + echoRun <= source.length; i++)
+        source.sublist(i, i + echoRun).join(' '),
+    };
+    for (var i = 0; i + echoRun <= said.length; i++) {
+      if (runs.contains(said.sublist(i, i + echoRun).join(' '))) return true;
+    }
+    return false;
+  }
+
   static final _urduLetter = RegExp(
     r'[\u0600-\u06FF\u0750-\u077F\uFB50-\uFDFF\uFE70-\uFEFF]',
   );

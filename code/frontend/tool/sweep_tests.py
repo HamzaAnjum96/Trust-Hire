@@ -715,6 +715,14 @@ MUTATIONS = [
         tests=["test/ai_test.dart", "test/assistant_test.dart", "test/fare_advice_test.dart"],
     ),
     Mutation(
+        name="a-model-that-repeats-its-instructions-is-not-quoted",
+        promise="a reply that only repeats the model's prompt is not shown as its answer",
+        path="lib/services/ai/ai_safety.dart",
+        find="  static const echoRun = 5;",
+        replace="  static const echoRun = 500;",
+        tests=["test/ai_test.dart", "test/assistant_test.dart", "test/fare_advice_test.dart"],
+    ),
+    Mutation(
         name="a-model-says-two-sentences",
         promise="a model's reply is cut to the sentences it was asked for",
         path="lib/services/ai/ai_safety.dart",
