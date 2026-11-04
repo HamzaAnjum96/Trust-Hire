@@ -70,4 +70,10 @@ class BrowserModel implements AiModel {
     _queue = reply.then((_) {}, onError: (_) {});
     return reply;
   }
+
+  /// Interrupts whatever is being written. Without this, a reply an agent
+  /// gave up on kept the GPU busy, the next question queued behind it — and
+  /// timed out too, which on a slow GPU meant every question after the first.
+  @override
+  Future<void> cancel() => _engine.interrupt();
 }

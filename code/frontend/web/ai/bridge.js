@@ -26,6 +26,14 @@ export async function support() {
   try {
     const adapter = await navigator.gpu.requestAdapter();
     if (!adapter) return JSON.stringify({ ok: false, reason: 'no-adapter' });
+    // A software stand-in for a GPU (SwiftShader, when the browser has no
+    // hardware it will use) runs a model hundreds of times too slowly: one
+    // answer took 55 minutes on one, and the app would time out on every
+    // question. Better to say so than to download a model for it.
+    const info = adapter.info || {};
+    if (info.isFallbackAdapter || adapter.isFallbackAdapter) {
+      return JSON.stringify({ ok: false, reason: 'software-gpu' });
+    }
     return JSON.stringify({ ok: true, f16: adapter.features.has('shader-f16') });
   } catch (error) {
     return JSON.stringify({ ok: false, reason: 'error' });
@@ -64,6 +72,15 @@ export async function complete(requestJson) {
     response_format: { type: 'json_object', schema: JSON.stringify(request.schema) },
   });
   return reply.choices?.[0]?.message?.content ?? '';
+}
+
+/**
+ * Stops the reply being written, if one is. A reply the app has given up on
+ * would otherwise go on using the GPU, and every question after it would
+ * wait behind it.
+ */
+export function interrupt() {
+  if (engine) engine.interruptGenerate();
 }
 
 /** Unloads [model] if it is loaded, and deletes its weights from the cache. */

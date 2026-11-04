@@ -1672,6 +1672,27 @@
     "description": "Assistant status after an AI failure"
   },
   "assistantAiSetAsideNote": "The AI's answer did not fit your words, so this was matched from them instead.",
+  "assistantAiSlowNote": "The AI took too long, so this was matched from your words.",
+  "@assistantAiSlowNote": {
+    "description": "Assistant status when the AI ran out of time"
+  },
+  "aiStartFailedNote": "The on-device AI could not start here, so your words are matched instead.",
+  "@aiStartFailedNote": {
+    "description": "Assistant status bar when the model failed to load"
+  },
+  "aiUnsupportedSoftware": "This browser has only a software stand-in for a graphics chip here, far too slow to run a model. The assistant and fare suggestions still work, from the app's own data.",
+  "@aiUnsupportedSoftware": {
+    "description": "Why the AI is unavailable: WebGPU is a software fallback adapter"
+  },
+  "aiLastProblem": "What went wrong last time: {problem}",
+  "@aiLastProblem": {
+    "description": "The last AI failure, technical, for reporting it",
+    "placeholders": {
+      "problem": {
+        "type": "String"
+      }
+    }
+  },
   "@assistantAiSetAsideNote": {
     "description": "Assistant status when the AI answered without searching, or searched for something the words do not say"
   },

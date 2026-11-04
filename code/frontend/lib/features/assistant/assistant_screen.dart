@@ -135,6 +135,19 @@ class _AssistantScreenState extends State<AssistantScreen> {
     );
     if (!mounted) return;
 
+    // Kept where it can be read back — Profile, On-device AI — so a failure
+    // can be reported rather than only seen.
+    if (model != null) {
+      switch (reply.aiFailure) {
+        case null:
+          ai.noteAnswered();
+        case AssistantEngine.setAside:
+          break;
+        case final failure:
+          ai.noteProblem(failure, reply.aiFailureDetail);
+      }
+    }
+
     setState(() {
       _turns.add(_Turn.answered(reply));
       _thinking = false;
@@ -232,7 +245,7 @@ class _AiStatusBar extends StatelessWidget {
       ),
       AiState.failed => (
         Icons.text_fields,
-        strings.assistantAiFailedNote,
+        strings.aiStartFailedNote,
         TextButton(onPressed: ai.ensureReady, child: Text(strings.aiTryAgain)),
       ),
       AiState.checking || AiState.unsupported => (
@@ -542,6 +555,7 @@ class _Answered extends StatelessWidget {
                   switch (reply.aiFailure) {
                     null => author,
                     AssistantEngine.setAside => strings.assistantAiSetAsideNote,
+                    'timeout' => strings.assistantAiSlowNote,
                     _ => strings.assistantAiFailedNote,
                   },
                   style: theme.textTheme.labelSmall?.copyWith(

@@ -2279,6 +2279,23 @@ class AppStringsEn extends AppStrings {
       'The AI\'s answer did not fit your words, so this was matched from them instead.';
 
   @override
+  String get assistantAiSlowNote =>
+      'The AI took too long, so this was matched from your words.';
+
+  @override
+  String get aiStartFailedNote =>
+      'The on-device AI could not start here, so your words are matched instead.';
+
+  @override
+  String get aiUnsupportedSoftware =>
+      'This browser has only a software stand-in for a graphics chip here, far too slow to run a model. The assistant and fare suggestions still work, from the app\'s own data.';
+
+  @override
+  String aiLastProblem(String problem) {
+    return 'What went wrong last time: $problem';
+  }
+
+  @override
   String get assistantHelp =>
       'I can find open jobs, and people in the directory. Try “painting jobs near me” or “who can fix wiring?”';
 

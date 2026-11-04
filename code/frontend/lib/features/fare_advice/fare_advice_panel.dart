@@ -87,6 +87,17 @@ class _FareAdvicePanelState extends State<FareAdvicePanel> {
     );
     if (!mounted) return;
 
+    if (model != null && advice != null) {
+      switch (advice.agentFailure) {
+        case null:
+          ai.noteAnswered();
+        case FareAdvisor.setAside:
+          break;
+        case final failure:
+          ai.noteProblem(failure, advice.agentFailureDetail);
+      }
+    }
+
     setState(() {
       _asking = false;
       _asked = true;

@@ -80,6 +80,31 @@ class AiController extends ChangeNotifier {
   String? _failure;
   String? get failure => _failure;
 
+  /// What went wrong last time the AI was asked or started — its code and,
+  /// where there is one, what the browser said. Shown in the profile so a
+  /// failure can be reported, not just seen. Cleared by a good answer.
+  String? _lastProblem;
+  String? get lastProblem => _lastProblem;
+
+  /// Why this browser cannot run a model, when it cannot.
+  String? get unsupportedReason =>
+      _support?.ok == false ? _support?.reason : null;
+
+  /// Records what went wrong, for [lastProblem] and the browser's console.
+  void noteProblem(String code, [String detail = '']) {
+    final text = detail.isEmpty ? code : '$code: $detail';
+    _lastProblem = text.length > 240 ? '${text.substring(0, 240)}…' : text;
+    debugPrint('Trust Hire AI — $_lastProblem');
+    notifyListeners();
+  }
+
+  /// A good answer: whatever went wrong before no longer describes now.
+  void noteAnswered() {
+    if (_lastProblem == null) return;
+    _lastProblem = null;
+    notifyListeners();
+  }
+
   AiModel? _model;
   Future<AiModel?>? _starting;
 
@@ -165,6 +190,7 @@ class AiController extends ChangeNotifier {
     } on AiFailure catch (error) {
       _failure = error.code;
       _state = AiState.failed;
+      noteProblem(error.code, error.detail);
       return null;
     } finally {
       notifyListeners();

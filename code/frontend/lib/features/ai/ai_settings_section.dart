@@ -41,7 +41,9 @@ class AiSettingsSection extends StatelessWidget {
       caption: ai.isRemote
           ? strings.aiRemoteExplain(ai.modelName)
           : ai.state == AiState.unsupported
-          ? strings.aiUnsupported
+          ? (ai.unsupportedReason == 'software-gpu'
+                ? strings.aiUnsupportedSoftware
+                : strings.aiUnsupported)
           : strings.aiExplain,
       children: [
         GroupPadding(
@@ -97,6 +99,18 @@ class AiSettingsSection extends StatelessWidget {
                           ai.choice.downloadMb,
                         ),
                   style: theme.textTheme.labelSmall,
+                ),
+              ],
+
+              // What went wrong last time, in the browser's own words — so a
+              // failure can be passed on, not only seen. Selectable, to copy.
+              if (ai.lastProblem case final problem?) ...[
+                const SizedBox(height: BrandSizing.spaceSm),
+                SelectableText(
+                  strings.aiLastProblem(problem),
+                  style: theme.textTheme.labelSmall?.copyWith(
+                    color: theme.colorScheme.onSurfaceVariant,
+                  ),
                 ),
               ],
             ],

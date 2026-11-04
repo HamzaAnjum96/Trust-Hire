@@ -715,6 +715,22 @@ MUTATIONS = [
         tests=["test/ai_test.dart", "test/assistant_test.dart", "test/fare_advice_test.dart"],
     ),
     Mutation(
+        name="a-reply-given-up-on-is-stopped",
+        promise="an answer past its time limit is interrupted, so the next question is not stuck behind it",
+        path="lib/services/ai/ai_agent.dart",
+        find="          unawaited(model.cancel());\n",
+        replace="",
+        tests=["test/ai_test.dart"],
+    ),
+    Mutation(
+        name="the-models-words-go-back-as-written",
+        promise="a model's reply is handed back word for word, so WebLLM can reuse what it has read",
+        path="lib/services/ai/ai_agent.dart",
+        find="      messages.add(AiMessage.assistant(reply));",
+        replace="      messages.add(AiMessage.assistant(jsonEncode(action)));",
+        tests=["test/ai_test.dart"],
+    ),
+    Mutation(
         name="a-model-that-repeats-its-instructions-is-not-quoted",
         promise="a reply that only repeats the model's prompt is not shown as its answer",
         path="lib/services/ai/ai_safety.dart",

@@ -3788,6 +3788,30 @@ abstract class AppStrings {
   /// **'The AI\'s answer did not fit your words, so this was matched from them instead.'**
   String get assistantAiSetAsideNote;
 
+  /// Assistant status when the AI ran out of time
+  ///
+  /// In en, this message translates to:
+  /// **'The AI took too long, so this was matched from your words.'**
+  String get assistantAiSlowNote;
+
+  /// Assistant status bar when the model failed to load
+  ///
+  /// In en, this message translates to:
+  /// **'The on-device AI could not start here, so your words are matched instead.'**
+  String get aiStartFailedNote;
+
+  /// Why the AI is unavailable: WebGPU is a software fallback adapter
+  ///
+  /// In en, this message translates to:
+  /// **'This browser has only a software stand-in for a graphics chip here, far too slow to run a model. The assistant and fare suggestions still work, from the app\'s own data.'**
+  String get aiUnsupportedSoftware;
+
+  /// The last AI failure, technical, for reporting it
+  ///
+  /// In en, this message translates to:
+  /// **'What went wrong last time: {problem}'**
+  String aiLastProblem(String problem);
+
   /// When a request is not about jobs or workers
   ///
   /// In en, this message translates to:

@@ -64,6 +64,10 @@ class RemoteModel implements AiModel {
     );
   }
 
+  /// A hosted request has its own time limit, and blocks no GPU here.
+  @override
+  Future<void> cancel() async {}
+
   @override
   Future<String> complete(AiRequest request) async {
     final http.Response response;

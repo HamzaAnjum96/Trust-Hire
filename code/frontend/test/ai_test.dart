@@ -1,8 +1,12 @@
+import 'dart:async';
 import 'dart:convert';
+
+import 'package:flutter/material.dart';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trust_hire/app/ai_controller.dart';
+import 'package:trust_hire/features/ai/ai_settings_section.dart';
 import 'package:trust_hire/services/ai/ai_agent.dart';
 import 'package:trust_hire/services/ai/ai_model.dart';
 import 'package:trust_hire/services/ai/ai_safety.dart';
@@ -11,6 +15,7 @@ import 'package:trust_hire/services/ai/browser_model.dart';
 import 'package:trust_hire/services/local_store.dart';
 
 import 'support/fake_ai.dart';
+import 'support/harness.dart';
 
 /// The AI layer: what a model is told, what it is believed, and when it is
 /// allowed to download at all.
@@ -274,6 +279,75 @@ void main() {
       );
     });
 
+    test('an agent that gives up stops the model writing', () async {
+      final model = ScriptedModel([Completer<String>().future]);
+      final impatient = AiAgent(
+        model: model,
+        instructions: 'Look things up.',
+        tools: const [],
+        answer: const {
+          'reply': {'type': 'string'},
+        },
+        timeout: const Duration(milliseconds: 50),
+      );
+
+      await expectLater(
+        impatient.run('hi'),
+        throwsA(isA<AiFailure>().having((f) => f.code, 'code', 'timeout')),
+      );
+      expect(model.cancels, 1);
+    });
+
+    test('**a reply given up on no longer blocks every question after '
+        'it**', () async {
+      // On a slow GPU the first answer ran past the time limit and went on
+      // being written; the next question queued behind it and timed out
+      // too, and so on — "the AI could not answer", every time.
+      final engine = FakeBrowserEngine(hangs: true);
+      final model = BrowserModel(engine, BrowserModelChoice.light);
+      final agent = AiAgent(
+        model: model,
+        instructions: 'Answer.',
+        tools: const [],
+        answer: const {
+          'reply': {'type': 'string'},
+        },
+        timeout: const Duration(milliseconds: 100),
+      );
+
+      await expectLater(agent.run('first'), throwsA(isA<AiFailure>()));
+      expect(engine.interrupts, 1, reason: 'the abandoned reply is stopped');
+
+      engine
+        ..hangs = false
+        ..reply = jsonEncode({
+          'action': 'answer',
+          'answer': {'reply': 'second'},
+        });
+      final outcome = await agent.run('second');
+      expect(outcome.answer['reply'], 'second');
+    });
+
+    test("the model's own words go back to it as it wrote them", () async {
+      // WebLLM reuses what it has already read only when the conversation
+      // comes back word for word; re-encoded, it read everything again.
+      const written = '{"action": "lookup",  "arguments": {"word": "tap"}}';
+      final model = ScriptedModel([
+        written,
+        {
+          'action': 'answer',
+          'answer': {'reply': 'Found it.'},
+        },
+      ]);
+
+      await agent(model).run('find tap');
+
+      final echoed = model.requests[1].messages.firstWhere(
+        (m) => m.role == AiRole.assistant,
+      );
+      expect(echoed.content, written);
+    });
+
     test('a model that never settles stops', () async {
       final model = ScriptedModel([
         for (var i = 0; i < 10; i++) {'action': 'lookup'},
@@ -363,6 +437,38 @@ void main() {
       },
     );
 
+    test('a failed start is kept, in the browser\'s words', () async {
+      final engine = FakeBrowserEngine(
+        loadFailure: const AiFailure('failed', 'GPUDevice was lost'),
+      );
+      final (ai, _, _) = await controller(engine: engine);
+
+      await ai.enable();
+
+      expect(ai.lastProblem, 'failed: GPUDevice was lost');
+    });
+
+    test('a software stand-in for a GPU is not offered the model', () async {
+      // An answer took 55 minutes on one. Every question would time out.
+      final engine = FakeBrowserEngine(
+        supported: const BrowserSupport.unsupported('software-gpu'),
+      );
+      final (ai, _, _) = await controller(engine: engine);
+
+      expect(ai.state, AiState.unsupported);
+      expect(ai.unsupportedReason, 'software-gpu');
+      await ai.enable();
+      expect(engine.loads, isEmpty);
+    });
+
+    test('a good answer clears the last problem', () async {
+      final (ai, _, _) = await controller();
+      ai.noteProblem('timeout');
+      expect(ai.lastProblem, 'timeout');
+      ai.noteAnswered();
+      expect(ai.lastProblem, isNull);
+    });
+
     test('a failed start is reported and can be tried again', () async {
       final engine = FakeBrowserEngine(loadFailure: const AiFailure('failed'));
       final (ai, _, _) = await controller(engine: engine);
@@ -418,6 +524,60 @@ void main() {
       );
       expect(await ai.ensureReady(), same(remote));
       expect(engine.loads, isEmpty);
+    });
+  });
+
+  group('the profile group', () {
+    Future<void> show(WidgetTester tester, AiController ai) async {
+      final store = (await tester.runAsync(LocalStore.open))!;
+      tester.view.physicalSize = const Size(800, 1600);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.reset);
+      await tester.runAsync(ai.load);
+      await tester.pumpWidget(
+        appHarness(
+          store: store,
+          ai: ai,
+          child: const SingleChildScrollView(child: AiSettingsSection()),
+        ),
+      );
+      await tester.pumpAndSettle();
+    }
+
+    testWidgets('says when the browser has only a software GPU', (
+      tester,
+    ) async {
+      final store = (await tester.runAsync(LocalStore.open))!;
+      final ai = AiController(
+        store,
+        engine: FakeBrowserEngine(
+          supported: const BrowserSupport.unsupported('software-gpu'),
+        ),
+        remoteFromBuild: false,
+      );
+      await show(tester, ai);
+
+      expect(find.textContaining('software stand-in'), findsOneWidget);
+    });
+
+    testWidgets('shows what went wrong last time, to be passed on', (
+      tester,
+    ) async {
+      final store = (await tester.runAsync(LocalStore.open))!;
+      final ai = AiController(
+        store,
+        engine: FakeBrowserEngine(),
+        remoteFromBuild: false,
+      );
+      await show(tester, ai);
+
+      ai.noteProblem('failed', 'GPUDevice was lost');
+      await tester.pumpAndSettle();
+
+      expect(
+        find.text('What went wrong last time: failed: GPUDevice was lost'),
+        findsOneWidget,
+      );
     });
   });
 

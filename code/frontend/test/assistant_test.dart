@@ -712,6 +712,42 @@ void main() {
     );
   });
 
+  testWidgets('an answer that took too long says so, and is kept to report', (
+    tester,
+  ) async {
+    final store = (await tester.runAsync(LocalStore.open))!;
+    tester.view.physicalSize = const Size(800, 1600);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
+
+    final ai = AiController(
+      store,
+      remote: ScriptedModel(
+        [const AiFailure('timeout')],
+        name: 'Hosted test model',
+        onDevice: false,
+      ),
+      remoteFromBuild: false,
+    );
+    await tester.runAsync(() async {
+      await ai.load();
+      await ai.enable();
+    });
+
+    await tester.pumpWidget(
+      appHarness(store: store, ai: ai, child: const AssistantScreen()),
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Who can fix wiring?'));
+    await tester.pumpAndSettle();
+
+    expect(
+      find.text('The AI took too long, so this was matched from your words.'),
+      findsOneWidget,
+    );
+    expect(ai.lastProblem, 'timeout');
+  });
+
   testWidgets('the screen answers from the word list where there is no AI', (
     tester,
   ) async {

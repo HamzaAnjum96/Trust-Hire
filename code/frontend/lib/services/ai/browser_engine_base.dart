@@ -14,6 +14,7 @@ class BrowserSupport {
   final bool f16;
 
   /// Why not, when [ok] is false: `not-web`, `no-webgpu`, `no-adapter`,
+  /// `software-gpu` (only a software stand-in for a GPU, far too slow),
   /// `error`.
   final String? reason;
 }
@@ -30,5 +31,9 @@ abstract interface class BrowserEngine {
   Future<bool> isDownloaded(String modelId);
   Future<void> load(String modelId, LoadProgress onProgress);
   Future<String> complete(AiRequest request);
+
+  /// Stops a reply mid-way. Safe to call when nothing is being written.
+  Future<void> interrupt();
+
   Future<void> forget(String modelId);
 }

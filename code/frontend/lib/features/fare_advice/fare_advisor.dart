@@ -29,6 +29,7 @@ class FareAdvice {
     this.modelOnDevice = true,
     this.clamped = false,
     this.agentFailure,
+    this.agentFailureDetail = '',
     this.toolsUsed = const [],
   });
 
@@ -55,6 +56,9 @@ class FareAdvice {
   /// Set when the AI was asked and could not answer, so this is the estimate
   /// from similar jobs instead. An [AiFailure] code.
   final String? agentFailure;
+
+  /// What the browser said, when [agentFailure] is an [AiFailure].
+  final String agentFailureDetail;
 
   /// The tools the AI used, in order — what it looked at before answering.
   final List<String> toolsUsed;
@@ -119,8 +123,11 @@ class FareAdvisor {
   static const setAside = 'set_aside';
 
   /// The quartiles of what similar work went for, worked out here.
-  FareAdvice? onDevice(FareRange? range, {String? agentFailure}) =>
-      range == null
+  FareAdvice? onDevice(
+    FareRange? range, {
+    String? agentFailure,
+    String agentFailureDetail = '',
+  }) => range == null
       ? null
       : FareAdvice(
           low: range.low,
@@ -128,6 +135,7 @@ class FareAdvisor {
           high: range.high,
           evidence: range,
           agentFailure: agentFailure,
+          agentFailureDetail: agentFailureDetail,
         );
 
   Future<FareAdvice?> advise(FareQuestion question, {AiModel? model}) async {
@@ -153,7 +161,9 @@ class FareAdvisor {
         // arithmetic again, with a model's name on it.
         requiredAnswer: const ['low', 'suggested', 'high', 'reasoning'],
         maxSteps: maxSteps,
-        maxTokens: 220,
+        // Room for the figures and two sentences of why; cut off at the
+        // limit, a reply is not JSON and is thrown away.
+        maxTokens: 400,
       );
       final outcome = await agent.run(question.jobText, context: context);
 
@@ -198,7 +208,11 @@ class FareAdvisor {
         toolsUsed: outcome.toolsUsed,
       );
     } on AiFailure catch (failure) {
-      return onDevice(range, agentFailure: failure.code);
+      return onDevice(
+        range,
+        agentFailure: failure.code,
+        agentFailureDetail: failure.detail,
+      );
     }
   }
 

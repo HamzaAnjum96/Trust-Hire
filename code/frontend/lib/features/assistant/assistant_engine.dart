@@ -16,6 +16,7 @@ class AssistantReply {
     this.model,
     this.modelOnDevice = true,
     this.aiFailure,
+    this.aiFailureDetail = '',
     this.missingTrades = const {},
   });
 
@@ -38,6 +39,9 @@ class AssistantReply {
   /// Set when the AI was asked and its answer is not what is shown, so the
   /// word list's is: an [AiFailure] code, or [AssistantEngine.setAside].
   final String? aiFailure;
+
+  /// What the browser said, when [aiFailure] is an [AiFailure].
+  final String aiFailureDetail;
 
   /// Trades a worker does not have that the search was for. Their jobs do not
   /// reach this worker — Section 8 — and the way to change that is to add the
@@ -96,7 +100,12 @@ class AssistantEngine {
       try {
         return await _withModel(request, data, model, language);
       } on AiFailure catch (failure) {
-        return _fromWords(request, data, aiFailure: failure.code);
+        return _fromWords(
+          request,
+          data,
+          aiFailure: failure.code,
+          aiFailureDetail: failure.detail,
+        );
       }
     }
     return _fromWords(request, data);
@@ -106,6 +115,7 @@ class AssistantEngine {
     String request,
     AssistantData data, {
     String? aiFailure,
+    String aiFailureDetail = '',
   }) {
     final query = reader.read(request, isWorker: data.isWorker);
     final jobs = query.intent == AssistantIntent.jobs
@@ -130,6 +140,7 @@ class AssistantEngine {
       jobs: jobs,
       workers: workers,
       aiFailure: aiFailure,
+      aiFailureDetail: aiFailureDetail,
       missingTrades: _missing(query, data, found: jobs.isNotEmpty),
     );
   }
@@ -224,7 +235,9 @@ class AssistantEngine {
       },
       requiredAnswer: const ['reply'],
       maxSteps: maxSteps,
-      maxTokens: 200,
+      // Room for two sentences and every id a search can return. A reply cut
+      // off at the limit is not JSON, and was thrown away.
+      maxTokens: 400,
     );
     final outcome = await agent.run(request, context: context);
 

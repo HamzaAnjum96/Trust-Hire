@@ -279,7 +279,14 @@ browser's cache. **Nothing is fetched until somebody switches it on** — from
 the profile, the fare panel or the assistant — having been told the size; the
 people this is for pay for data by the megabyte. Nothing typed leaves the
 device. A browser without WebGPU (most phones today, every Android and iOS
-build) is told so plainly, and everything still works without it.
+build) is told so plainly, and everything still works without it — as is one
+whose WebGPU is only a software stand-in for a graphics chip, where one answer
+took 55 minutes. **When the AI cannot answer, the screen says why** — it took
+too long, it could not start (with *Try again*), or it wrote something the app
+could not read — and *Profile → On-device AI* keeps what went wrong last time,
+in the browser's own words, to pass on. An answer that runs past its time
+limit is interrupted, not left writing: on a slow GPU, one abandoned reply
+used to make every question after it wait, and fail too.
 
 ```
 lib/services/ai/
@@ -633,7 +640,7 @@ The first two gate the deploy.
 proves the app behaves as the suite describes; it cannot prove the suite
 describes anything, because a check aimed at a case that also violates a
 neighbouring rule passes whether or not the rule it names still exists. The
-sweep breaks each of the 73 load-bearing promises in turn — the fare lock, the
+sweep breaks each of the 75 load-bearing promises in turn — the fare lock, the
 5% commission, the debt lockout, the ratings asymmetry, the visibility rule,
 the location reveal, the CNIC mask, the audit log's write-first ordering, a
 Stripe payment credited once, a suggested fare held to the evidence, no model

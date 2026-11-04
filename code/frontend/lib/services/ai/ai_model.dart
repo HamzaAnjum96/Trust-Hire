@@ -80,4 +80,8 @@ abstract interface class AiModel {
 
   /// One reply, as JSON text matching [AiRequest.schema].
   Future<String> complete(AiRequest request);
+
+  /// Stops a reply nobody is waiting for any more. Called when an agent gives
+  /// up on its time limit.
+  Future<void> cancel();
 }

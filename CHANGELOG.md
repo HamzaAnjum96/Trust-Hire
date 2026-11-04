@@ -12,6 +12,41 @@ that heading to the version and date, and open a fresh `[Unreleased]`.
 
 ## [Unreleased]
 
+### 0.22.5 — "Always AI could not answer"
+
+Reported from a real device. The app could not show why, so this release
+fixes every way it can get there that the code and a real browser show, and
+makes the next failure say what it was.
+
+#### Fixed
+
+- **One slow answer failed every question after it.** An answer past the
+  agent's time limit was abandoned but not stopped: the model went on writing
+  it, the next question queued behind it, ran out of time too, and so on. An
+  agent that gives up now interrupts the model (WebLLM's `interruptGenerate`,
+  through a new `interrupt()` in the bridge).
+- **A browser with only a software stand-in for a GPU was offered the model.**
+  Chrome can hand WebGPU a software adapter when it will not use the graphics
+  hardware; an answer there took 55 minutes, so every question timed out. It
+  is now told the AI cannot run here, like a browser without WebGPU.
+- **Every step made the model read the whole conversation again.** WebLLM
+  reuses what it has read only if the conversation comes back word for word,
+  and the app re-encoded the model's replies. They go back as written.
+- **A long reply was thrown away as unreadable.** Cut off at 200 tokens (220
+  for fares), the JSON did not close. The limit is 400.
+- **Last release's bridge could answer this release's app.** `bridge.js` is
+  fetched with the app's version on it, so a cached copy is not reused across
+  releases.
+
+#### Added
+
+- **The screen says which failure it was**: the AI took too long, could not
+  start here (with *Try again*), or could not answer — and *Profile →
+  On-device AI* shows what went wrong last time, in the browser's words,
+  selectable to copy. The browser's console logs it too.
+- Tests for each, and two rules in the sweep (75 now): an abandoned reply is
+  interrupted, and a reply goes back as it was written.
+
 ### 0.22.4 — A model's instructions are not its answer
 
 The in-app run 0.22.3 began finished. The whole path — Flutter, the JavaScript

@@ -25,5 +25,8 @@ class _NoBrowserEngine implements BrowserEngine {
       Future.error(const AiFailure('unsupported'));
 
   @override
+  Future<void> interrupt() async {}
+
+  @override
   Future<void> forget(String modelId) async {}
 }

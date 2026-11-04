@@ -3,6 +3,7 @@ import 'dart:js_interop';
 
 import 'package:web/web.dart' as web;
 
+import '../../core/app_version.dart';
 import 'ai_model.dart';
 import 'browser_engine_base.dart';
 
@@ -14,6 +15,7 @@ extension type _Bridge._(JSObject _) implements JSObject {
   external JSPromise<JSBoolean> cached(JSString model);
   external JSPromise<JSAny?> load(JSString model, JSFunction onProgress);
   external JSPromise<JSString> complete(JSString request);
+  external void interrupt();
   external JSPromise<JSAny?> forget(JSString model);
 }
 
@@ -21,9 +23,14 @@ class _WebBrowserEngine implements BrowserEngine {
   Future<_Bridge>? _bridge;
 
   /// The bridge, imported on first use. Resolved against the page's base so
-  /// it is found under `/Trust-Hire/` on GitHub Pages and at `/` locally.
+  /// it is found under `/Trust-Hire/` on GitHub Pages and at `/` locally —
+  /// and with this release's version on it, so a browser holding last
+  /// release's bridge fetches this one's. New app code talking to an old
+  /// bridge is how a fix seems never to have shipped.
   Future<_Bridge> _get() => _bridge ??= () async {
-    final url = Uri.parse(web.document.baseURI).resolve('ai/bridge.js');
+    final url = Uri.parse(
+      web.document.baseURI,
+    ).resolve('ai/bridge.js').replace(queryParameters: {'v': AppVersion.name});
     final module = await importModule(url.toString().toJS).toDart;
     return module as _Bridge;
   }();
@@ -81,6 +88,15 @@ class _WebBrowserEngine implements BrowserEngine {
     return (await bridge.complete(jsonEncode(request.toJson()).toJS).toDart)
         .toDart;
   });
+
+  @override
+  Future<void> interrupt() async {
+    try {
+      (await _get()).interrupt();
+    } catch (_) {
+      // Nothing was running, or the bridge never loaded: nothing to stop.
+    }
+  }
 
   @override
   Future<void> forget(String modelId) => _guard(() async {

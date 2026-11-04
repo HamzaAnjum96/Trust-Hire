@@ -92,10 +92,16 @@ class AiAgent {
 
   /// Runs the loop on [request] — the person's words, or the job they are
   /// asking about — which is framed as data before the model sees it.
-  Future<AgentOutcome> run(String request, {String context = ''}) => _run(
-    request,
-    context,
-  ).timeout(timeout, onTimeout: () => throw const AiFailure('timeout'));
+  Future<AgentOutcome> run(String request, {String context = ''}) =>
+      _run(request, context).timeout(
+        timeout,
+        onTimeout: () {
+          // The model may still be writing. Stop it, or the next question
+          // waits behind a reply nobody will read, and times out too.
+          unawaited(model.cancel());
+          throw const AiFailure('timeout');
+        },
+      );
 
   Future<AgentOutcome> _run(String request, String context) async {
     final byName = {for (final tool in tools) tool.name: tool};
@@ -121,8 +127,17 @@ class AiAgent {
       );
 
       final action = AiSafety.jsonObject(reply);
-      if (action == null) throw const AiFailure('bad_reply');
-      messages.add(AiMessage.assistant(jsonEncode(action)));
+      if (action == null) {
+        throw AiFailure(
+          'bad_reply',
+          'no JSON in a ${reply.length}-character reply',
+        );
+      }
+      // Exactly as it was written: WebLLM keeps the conversation it has
+      // already read, and reuses it only if what comes back matches word for
+      // word. Re-encoded, the spacing differs, and it reads the whole
+      // conversation again on every step.
+      messages.add(AiMessage.assistant(reply));
 
       final name = action['action'];
       if (name == _answerAction) {

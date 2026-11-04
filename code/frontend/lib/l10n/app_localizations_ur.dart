@@ -2287,6 +2287,23 @@ class AppStringsUr extends AppStrings {
       'AI کا جواب آپ کے الفاظ سے میل نہیں کھاتا تھا، اس لیے یہ انہی سے ملایا گیا۔';
 
   @override
+  String get assistantAiSlowNote =>
+      'AI نے بہت دیر لگائی، اس لیے یہ آپ کے الفاظ سے ملایا گیا۔';
+
+  @override
+  String get aiStartFailedNote =>
+      'ڈیوائس پر AI یہاں شروع نہیں ہو سکا، اس لیے آپ کے الفاظ سے ملایا جا رہا ہے۔';
+
+  @override
+  String get aiUnsupportedSoftware =>
+      'اس براؤزر کے پاس یہاں گرافکس چِپ کی جگہ صرف ایک سافٹ ویئر متبادل ہے، جو ماڈل چلانے کے لیے بہت سست ہے۔ اسسٹنٹ اور کرایے کی تجویز پھر بھی ایپ کے اپنے ڈیٹا سے کام کرتے ہیں۔';
+
+  @override
+  String aiLastProblem(String problem) {
+    return 'پچھلی بار کیا خرابی ہوئی: $problem';
+  }
+
+  @override
   String get assistantHelp =>
       'میں کھلے کام اور ڈائریکٹری میں لوگ تلاش کر سکتا ہوں۔ آزمائیں: “میرے قریب رنگ کا کام” یا “وائرنگ کون ٹھیک کر سکتا ہے؟”';
 
