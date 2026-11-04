@@ -194,8 +194,14 @@ class _AdviceCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
+          // One similar job is one figure, not a range from it to itself.
           Text(
-            strings.fareAdviceRange(rupees(advice.low), rupees(advice.high)),
+            advice.low == advice.high
+                ? rupees(advice.low)
+                : strings.fareAdviceRange(
+                    rupees(advice.low),
+                    rupees(advice.high),
+                  ),
             style: theme.fareStyle,
           ),
           const SizedBox(height: BrandSizing.spaceXs),

@@ -12,6 +12,32 @@ that heading to the version and date, and open a fresh `[Unreleased]`.
 
 ## [Unreleased]
 
+### 0.22.2 — The demo reaches what the evaluators asked for
+
+#### Added
+
+- **The demo script has the stops it was missing**: a starting fare (3b), a
+  Stripe test payment (4b), asking (5d), and the on-device AI (8b). It never
+  reached either of the evaluators' asks — the Stripe integration and the AI
+  fare agent — and like every stop, each new one is checked by
+  `demo_walkthrough_test.dart`: the six agreed plumbing fares it quotes, the
+  test-mode links, the electrician the assistant finds, the 300 MB the consent
+  prompt says.
+- "Before you start" now says to refuse the location prompt. The seeded people
+  are in five Pakistani cities, and the distance and travel rules hide them
+  from anywhere else — the directory stop was already empty for anyone
+  following the script from abroad.
+
+#### Fixed
+
+- **One similar job is one figure, not a range.** With a single agreed fare
+  behind it — Medical, in the seed — the card read "Rs. 6,000 – Rs. 6,000".
+- **The assistant no longer promises "better answers" from the AI.** Run
+  against a real model, the word list overrules it wherever the list
+  understood the request. The bar now says what the AI adds: it can read ways
+  of asking the word list does not know.
+- The README still said the fare agent was paused.
+
 ### 0.22.1 — Urdu sentences in the assistant
 
 #### Fixed

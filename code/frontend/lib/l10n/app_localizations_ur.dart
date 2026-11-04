@@ -2266,7 +2266,7 @@ class AppStringsUr extends AppStrings {
 
   @override
   String get assistantAiOffNote =>
-      'آپ کے الفاظ سے ملایا جا رہا ہے۔ بہتر جوابات کے لیے ڈیوائس پر AI چالو کریں۔';
+      'آپ کے الفاظ سے ملایا جا رہا ہے۔ ڈیوائس پر AI پوچھنے کے وہ انداز بھی سمجھ سکتا ہے جو الفاظ کی فہرست میں نہیں۔';
 
   @override
   String get assistantAiFailedNote =>

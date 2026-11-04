@@ -1,8 +1,17 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:trust_hire/app/account_controller.dart';
+import 'package:trust_hire/app/ai_controller.dart';
+import 'package:trust_hire/features/ai/ai_settings_section.dart';
+import 'package:trust_hire/features/assistant/assistant_screen.dart';
+import 'package:trust_hire/features/directory/directory_screen.dart';
+import 'package:trust_hire/features/fare_advice/fare_evidence.dart';
+import 'package:trust_hire/features/wallet/stripe_links.dart';
+import 'package:trust_hire/services/ai/browser_engine.dart';
+import 'package:trust_hire/services/ai/browser_model.dart';
 import 'package:trust_hire/app/admin_controller.dart';
 import 'package:trust_hire/features/notifications/notification_rules.dart';
 import 'package:trust_hire/models/notification.dart';
@@ -33,6 +42,8 @@ import 'package:trust_hire/services/job_repository.dart';
 import 'package:trust_hire/services/local_store.dart';
 import 'package:trust_hire/services/media_store.dart';
 
+import 'support/fake_ai.dart';
+import 'support/harness.dart';
 import 'support/surface.dart';
 
 /// The demo, stop by stop.
@@ -532,6 +543,141 @@ void main() {
         isTrue,
         reason: 'the script walks the empty state on the device account',
       );
+    });
+  });
+
+  group('stop 3b — a starting fare', () {
+    testWidgets('plumbing rests on six agreed fares, and medical on one', (
+      tester,
+    ) async {
+      final store = await ready();
+      final jobs = JobController(JobRepository(store, MediaStore(store)))
+        ..load();
+      await tester.pump();
+
+      FareRange? range(JobTag tag) => FareRange.of(
+        FareEvidence.gather(jobs.jobs, tags: {tag}, now: DateTime.now()),
+      );
+
+      expect(
+        range(JobTag.plumbing)?.agreedCount,
+        6,
+        reason: 'the script quotes "From 6 agreed fares for similar work"',
+      );
+      final medical = range(JobTag.medical);
+      expect(
+        medical?.agreedCount,
+        1,
+        reason: 'the script says Medical has one',
+      );
+      expect(
+        medical?.low,
+        medical?.high,
+        reason: 'one figure, which the card shows as one',
+      );
+    });
+  });
+
+  group('stop 4b — paying in Stripe\'s test mode', () {
+    test(
+      'Rs. 1,000 has a link, every link is test mode, and it comes home',
+      () {
+        expect(
+          StripePaymentLinks.byTokens.keys,
+          contains(1000),
+          reason: 'the script pays Rs. 1,000',
+        );
+        for (final link in StripePaymentLinks.byTokens.values) {
+          expect(
+            link,
+            startsWith('https://buy.stripe.com/test_'),
+            reason: 'the script promises no real money can move',
+          );
+        }
+        expect(
+          StripePaymentLinks.returnsTo(Uri.parse(StripePaymentLinks.site)),
+          isTrue,
+          reason: 'the deployed site is where a payment comes back to',
+        );
+      },
+    );
+  });
+
+  group('stop 5d — asking', () {
+    testWidgets('the device account finds the electrician, is told why '
+        'painting finds nothing, and is told what it can ask', (tester) async {
+      final store = await ready();
+      tester.view.physicalSize = const Size(800, 1600);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.reset);
+
+      await tester.pumpWidget(
+        appHarness(store: store, child: const AssistantScreen()),
+      );
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('Who can fix wiring?'));
+      await tester.pumpAndSettle();
+      expect(
+        find.byType(DirectoryListingCard),
+        findsOneWidget,
+        reason: 'the script says it finds the directory\'s electrician',
+      );
+
+      Future<void> ask(String text) async {
+        await tester.enterText(find.byType(TextField), text);
+        await tester.tap(find.byTooltip('Ask'));
+        await tester.pumpAndSettle();
+      }
+
+      await ask('rang ka kaam chahiye');
+      expect(
+        find.textContaining('Add it in Profile, under My trades'),
+        findsOneWidget,
+        reason: 'painting is not one of the device account\'s trades',
+      );
+
+      await ask('What is the weather?');
+      expect(find.textContaining('I can find open jobs'), findsOneWidget);
+    });
+  });
+
+  group('stop 8b — the on-device AI', () {
+    testWidgets('a browser that can run it offers Lighter, and says about '
+        '300 MB before anything downloads', (tester) async {
+      final store = await ready();
+      tester.view.physicalSize = const Size(800, 1600);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.reset);
+
+      final engine = FakeBrowserEngine(
+        supported: const BrowserSupport.supported(f16: true),
+      );
+      final ai = AiController(store, engine: engine, remoteFromBuild: false);
+      await tester.runAsync(ai.load);
+
+      await tester.pumpWidget(
+        appHarness(
+          store: store,
+          ai: ai,
+          child: const SingleChildScrollView(child: AiSettingsSection()),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      expect(find.text('On-device AI'), findsOneWidget);
+      await tester.tap(find.text('Lighter'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Turn on'));
+      await tester.pumpAndSettle();
+
+      expect(
+        BrowserModelChoice.light.downloadMb,
+        300,
+        reason: 'the script says about 300 MB',
+      );
+      expect(find.textContaining('about 300 MB'), findsWidgets);
+      expect(engine.loads, isEmpty, reason: 'nothing until somebody agrees');
     });
   });
 }

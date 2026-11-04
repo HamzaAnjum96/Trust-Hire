@@ -6,6 +6,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trust_hire/app/ai_controller.dart';
 import 'package:trust_hire/app/job_controller.dart';
+import 'package:trust_hire/core/formatters.dart';
 import 'package:trust_hire/features/create_job/create_job_screen.dart';
 import 'package:trust_hire/features/fare_advice/fare_advisor.dart';
 import 'package:trust_hire/features/fare_advice/fare_evidence.dart';
@@ -612,6 +613,54 @@ void main() {
       expect(find.textContaining('85,000'), findsNothing);
       expect(find.text('As the description says.'), findsNothing);
       expect(find.textContaining('Suggested starting fare'), findsOneWidget);
+    });
+
+    testWidgets('one similar job is shown as one figure, not a range', (
+      tester,
+    ) async {
+      final (jobs, editing) =
+          await tester.runAsync(() async {
+            final store = await LocalStore.open();
+            final jobs = JobController(JobRepository(store, MediaStore(store)));
+            await jobs.load();
+            // Medical, alone, with no fare of its own: what is left to
+            // compare with is the seed's one agreed medical fare.
+            final editing = jobs.jobs.firstWhere(
+              (j) =>
+                  j.tags.length == 1 &&
+                  j.tags.contains(JobTag.medical) &&
+                  j.startingFare == null &&
+                  j.agreedFare == null,
+            );
+            return (jobs, editing);
+          }) ??
+          (throw StateError('no jobs'));
+      await openForm(tester, jobs, editing);
+
+      final range = FareRange.of(
+        FareEvidence.gather(
+          jobs.jobs,
+          tags: editing.tags,
+          now: DateTime.now(),
+          excludingJobId: editing.id,
+        ),
+      )!;
+      expect(range.low, range.high, reason: 'the case under test');
+
+      await tester.tap(find.text('Suggest a fare'));
+      await tester.pumpAndSettle();
+
+      final strings = AppStrings.of(
+        tester.element(find.byType(CreateJobScreen)),
+      );
+      final figure = Format.fare(strings, range.low);
+      expect(find.text(figure), findsOneWidget);
+      expect(
+        find.text(strings.fareAdviceRange(figure, figure)),
+        findsNothing,
+        reason: 'a range from a figure to itself reads as a mistake',
+      );
+      expect(find.text('From 1 agreed fare for similar work.'), findsOneWidget);
     });
 
     testWidgets('changing the tags takes an answer to another question away', (

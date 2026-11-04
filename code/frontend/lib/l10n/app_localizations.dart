@@ -3761,7 +3761,7 @@ abstract class AppStrings {
   /// Assistant status when the AI is off
   ///
   /// In en, this message translates to:
-  /// **'Matching your words. Turn on the on-device AI for better answers.'**
+  /// **'Matching your words. The on-device AI can also read ways of asking the word list does not know.'**
   String get assistantAiOffNote;
 
   /// Assistant status after an AI failure

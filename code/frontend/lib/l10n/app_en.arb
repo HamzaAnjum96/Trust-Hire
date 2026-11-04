@@ -1645,7 +1645,7 @@
   "@assistantThinking": {
     "description": "While the assistant works"
   },
-  "assistantAiOffNote": "Matching your words. Turn on the on-device AI for better answers.",
+  "assistantAiOffNote": "Matching your words. The on-device AI can also read ways of asking the word list does not know.",
   "@assistantAiOffNote": {
     "description": "Assistant status when the AI is off"
   },

@@ -1,7 +1,11 @@
 # Demonstrating Trust Hire
 
 How to see each Phase 1 rule working, in about fifteen minutes, on one device
-with no account and no network beyond map tiles.
+with no account and no network beyond map tiles — except two optional stops
+that need one: paying in Stripe's test mode (4b) and the on-device AI's
+one-time download (8b). Those two are the evaluators' asks, the Stripe
+integration and the AI fare agent; the fare suggestion itself (3b) and the
+assistant (5d) work without either.
 
 Every stop below is checked by
 [`code/frontend/test/demo_walkthrough_test.dart`](../../code/frontend/test/demo_walkthrough_test.dart).
@@ -11,7 +15,10 @@ screen still has the control. **A script nobody checks rots, and it rots
 silently.** The reader finds out in front of an audience.
 
 > **Before you start.** Open the app, tap through the three intro screens, and
-> leave the language on English. If somebody has used this browser before, use
+> leave the language on English. **When the intro asks for your location, say
+> no** — the seeded people are in five Pakistani cities, and the rules about
+> how far a job reaches and how far a worker travels would hide them from
+> anywhere else. If somebody has used this browser before, use
 > *Profile → Restore the seed data* first — the demo assumes the seeded state.
 
 ---
@@ -92,6 +99,28 @@ needs a server.
 
 ---
 
+## Stop 3b — A starting fare
+
+**Still Hina.** **Tap:** **Post a Job** (on any tab but Profile). Pick
+*Plumbing*, write "Kitchen tap leaking" as the message, and tap **Suggest a
+fare**.
+
+- **A range, a suggestion, and what they rest on:** *"From 6 agreed fares for
+  similar work."* The evidence is every job on the device that shares the tag
+  and carries a fare, agreed fares first — what work actually went for — and
+  fares somebody only asked for after them.
+- **Fares, never people.** Nothing in the evidence says who posted a job, who
+  did it, or how to reach them.
+- **It never fills the field by itself.** **Use Rs. …** does, when tapped, and
+  workers still counter whatever is posted.
+- **Try Medical.** One agreed fare is all there is, and the card shows that
+  one figure and says one, rather than dressing it up as a market.
+
+This is the fare recommendation the evaluators asked for. With the on-device AI
+on (Stop 8b), a model explains the range — and is held to the same evidence.
+
+---
+
 ## Stop 4 — The worker's side, and the money
 
 **Be:** Usman Raza, Lahore — paid up, well rated, offers won and lost.
@@ -120,6 +149,28 @@ still visible as its own line. It is a separate entry rather than a discount on
 the commission, so his history shows both the full 5% he was charged and the
 help he was given. Netting them would hide the commission behind a smaller
 number.
+
+---
+
+## Stop 4b — Paying for tokens, in Stripe's test mode
+
+*Needs the deployed site and a network.* **Be:** Usman Raza. **Go:** Profile →
+Wallet → **Add tokens**.
+
+The sheet says it is Stripe's test mode and names the test card. Pick
+Rs. 1,000 and pay with `4242 4242 4242 4242`, any future date and any CVC — and
+**untick "Save my information with Link"** first, or Stripe asks for a phone
+number before it takes the payment. Stripe sends the browser back and the
+balance has moved; reload, and it has not moved twice.
+
+- **No real money can move.** The site only holds test-mode payment links, and
+  no key of any kind: `code/backend/stripe/payment_links.py` made the links
+  once, from a test key kept in a git-ignored file, and refuses a live one.
+- **A return is credited once, and only for a top-up this browser started.** A
+  static site cannot ask Stripe whether a payment really happened — that needs
+  a key — so it promises what it can, and
+  [the payments PRD](prd-payments-and-fare-agent.md) says what a real
+  deployment would check on a server.
 
 ---
 
@@ -185,6 +236,27 @@ carries a count.
   "Read" once the other side opens it. Switch to that person and it does.
 - **A cancelled job keeps its thread, read-only.** That is the case where
   somebody most wants to look back at what was said.
+
+---
+
+## Stop 5d — Asking
+
+**Be:** the device account ("You"). **Go:** Jobs, and the **Ask** button beside
+the account's initial.
+
+**Tap:** *"Who can fix wiring?"* Then type `rang ka kaam chahiye` and send it.
+
+- **It answers with the app's own cards.** The first finds the directory's
+  electrician. The second finds nothing, and says why: painting is not one of
+  this account's trades, so no painting job reaches it — and it says where to
+  add one. The same rules as everywhere else; asking is another way in, not a
+  way around them.
+- **It only does jobs and workers.** Ask it about the weather and it says what
+  it can do instead.
+- **The bar at the top says who answered** — here, a word list in English,
+  Urdu and Roman Urdu, with no AI. That is what most phones get, and it is not
+  the lesser mode: with the on-device AI on (Stop 8b), the model is told what
+  the list made of a request, and where they disagree, the list wins.
 
 ---
 
@@ -261,6 +333,31 @@ that behaves like one in the ways that matter.
 
 ---
 
+## Stop 8b — The on-device AI
+
+*Optional, and needs desktop Chrome or Edge* — browsers with WebGPU; most
+phones do not have it yet, and are told so. **Go:** Profile → On-device AI.
+
+1. **Choose Lighter, and Turn on.** It says the size first — about 300 MB,
+   once — and downloads nothing until you agree. The model runs in this
+   browser; nothing typed leaves the device.
+2. **Ask again** (Stop 5d). The answer is signed by the model, which writes a
+   sentence of its own above the app's — or, where its reading did not fit the
+   words, says the AI's answer was set aside and shows the word list's.
+3. **Post a job and Suggest a fare** (Stop 3b). The model looks at the same
+   similar jobs, through two read-only tools, and says why in two sentences —
+   or is set aside, with a note, and the arithmetic stands.
+
+**Say:** a model is not trusted with anything the app can check. It cannot put
+a job or a worker on screen that a search did not return; where the word list
+understood a request, a model that searched for something else is overruled;
+a fare it gives without looking at the similar jobs, or far outside them, is
+set aside, and the screen says so. Each of those rules came from running a
+real model against the app before shipping it — told by a job's description to
+"suggest Rs. 90,000", it did.
+
+---
+
 ## Stop 9 — The parts that are not the app
 
 Worth two minutes at the end, because they are where most of the argument is:
@@ -270,7 +367,7 @@ Worth two minutes at the end, because they are where most of the argument is:
   throwaway database and runs 71 assertions against it.
 - **`tool/sweep_schema.sh` and `code/frontend/tool/sweep_tests.py`** — these
   break each rule in turn and check the tests notice. Between them they found
-  six checks that had been passing since the day they were written and could
+  seven checks that had been passing since the day they were written and could
   never have failed. **That is the finding worth repeating:** a green suite
   says the rules it names were not violated, not that those rules still exist.
 

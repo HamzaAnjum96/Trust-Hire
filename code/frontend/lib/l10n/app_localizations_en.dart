@@ -2258,7 +2258,7 @@ class AppStringsEn extends AppStrings {
 
   @override
   String get assistantAiOffNote =>
-      'Matching your words. Turn on the on-device AI for better answers.';
+      'Matching your words. The on-device AI can also read ways of asking the word list does not know.';
 
   @override
   String get assistantAiFailedNote =>
