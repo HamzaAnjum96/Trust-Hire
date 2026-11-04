@@ -61,17 +61,29 @@ export async function load(model, onProgress) {
   loadedModel = model;
 }
 
-/** One reply, constrained to the request's JSON Schema. */
+/**
+ * One reply, constrained to the request's JSON Schema.
+ *
+ * Streamed, though nothing reads it as it comes: WebLLM clears an interrupt
+ * only when a streamed reply starts. A plain reply checks the flag before
+ * anything clears it, so after one interrupt every later plain reply came back
+ * empty, at once, until the page was reloaded.
+ */
 export async function complete(requestJson) {
   if (!engine) throw new Error('not_ready');
   const request = JSON.parse(requestJson);
-  const reply = await engine.chat.completions.create({
+  const chunks = await engine.chat.completions.create({
     messages: request.messages,
     temperature: request.temperature,
     max_tokens: request.max_tokens,
     response_format: { type: 'json_object', schema: JSON.stringify(request.schema) },
+    stream: true,
   });
-  return reply.choices?.[0]?.message?.content ?? '';
+  let text = '';
+  for await (const chunk of chunks) {
+    text += chunk.choices?.[0]?.delta?.content ?? '';
+  }
+  return text;
 }
 
 /**

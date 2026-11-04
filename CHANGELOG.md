@@ -12,6 +12,19 @@ that heading to the version and date, and open a fresh `[Unreleased]`.
 
 ## [Unreleased]
 
+### 0.22.6 — An interrupted reply no longer empties the next
+
+#### Fixed
+
+- **After one interrupt, every reply came back empty.** 0.22.5 interrupts a
+  reply its agent gave up on. Checked against WebLLM itself on a real browser,
+  that left WebLLM's interrupt flag set: a plain (not streamed) reply checks
+  the flag before anything clears it, so every reply after the first
+  interrupt came back empty, at once — "could not answer" until the page was
+  reloaded. The bridge now asks for streamed replies, which clear the flag as
+  they start, and collects them whole. Checked the same way: the reply after
+  an interrupt is written.
+
 ### 0.22.5 — "Always AI could not answer"
 
 Reported from a real device. The app could not show why, so this release
