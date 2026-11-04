@@ -12,6 +12,16 @@ that heading to the version and date, and open a fresh `[Unreleased]`.
 
 ## [Unreleased]
 
+### 0.23.0 — The redesign
+
+#### Added
+
+- **Four design skills are committed to the project** under `.claude/skills/`:
+  Anthropic's `frontend-design`, Impeccable, UI UX Pro Max and Vercel's
+  `web-design-guidelines`. `skills-lock.json` records their sources. A new
+  root `.gitignore` keeps out Impeccable's 22 MB native engine, which its
+  launcher downloads on first use, and the per-machine `settings.local.json`.
+
 ### 0.22.6 — An interrupted reply no longer empties the next
 
 #### Fixed

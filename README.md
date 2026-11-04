@@ -21,8 +21,13 @@ Trust-Hire/
 ├── AGENTS.md                     ← instructions for AI coding agents
 ├── CLAUDE.md                     ← Claude Code entry point → AGENTS.md
 │
+├── .gitignore                    ← repo-level ignores (the Impeccable engine, local settings)
+├── skills-lock.json              ← where the project's design skills came from
+│
 ├── .claude/
-│   └── settings.json             ← Claude Code marketplace + enabled plugins
+│   ├── settings.json             ← Claude Code marketplace + enabled plugins
+│   ├── skills/                   ← project design skills (see Claude Code setup)
+│   └── agents/                   ← Impeccable's review and documentation agents
 ├── .github/
 │   ├── copilot-instructions.md   ← Copilot entry point → AGENTS.md
 │   └── workflows/
@@ -852,6 +857,33 @@ on each prompt, and runs a git-diff-based review when a turn ends.
 are the ones most relevant to `documents/` — they let Claude read and produce
 Word, PDF, PowerPoint, and Excel files directly. `dataviz` covers charts and
 dashboards; `artifact-design` covers shareable HTML pages.
+
+**Project design skills** live in `.claude/skills/`, committed, so they load
+for anyone who opens the repository in Claude Code. `skills-lock.json` records
+where three of them came from; Impeccable has its own installer. The 0.23
+redesign was done with all four, held to `documents/brand-guidelines/`.
+
+| Skill | Source | What it is for |
+| --- | --- | --- |
+| `frontend-design` | `anthropics/skills` | Committing to a visual direction instead of templated defaults |
+| `impeccable` | `pbakaus/impeccable` | Critique, audit, polish and layout passes; its four review agents are in `.claude/agents/` |
+| `ui-ux-pro-max` | `nextlevelbuilder/ui-ux-pro-max-skill` | A searchable rule base: UX guidelines, type, colour, and a Flutter stack guide |
+| `web-design-guidelines` | `vercel-labs/agent-skills` | A review against Vercel's web interface guidelines |
+
+```bash
+# Reinstall or update them:
+npx -y skills add anthropics/skills --skill frontend-design -a claude-code
+npx -y skills add nextlevelbuilder/ui-ux-pro-max-skill --skill ui-ux-pro-max -a claude-code
+npx -y skills add vercel-labs/agent-skills --skill web-design-guidelines -a claude-code
+npx impeccable install --providers=claude --scope=project
+```
+
+Impeccable's native engine (about 22 MB) is git-ignored. Its launcher,
+`.claude/skills/impeccable/scripts/impeccable`, downloads it the first time it
+runs and checks it against `engine-checksums.txt`. The installer also writes
+design-detector hooks into `.claude/settings.local.json`. That file is
+per-machine and git-ignored too. The detector reads HTML and CSS, so it has
+nothing to say about Flutter code anyway.
 
 > Plugin commands and hooks register at session start. After changing
 > `.claude/settings.json`, restart the session before new commands appear.

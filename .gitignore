@@ -1,0 +1,8 @@
+# Impeccable's native engine (about 22 MB, one per platform). Its launcher,
+# .claude/skills/impeccable/scripts/impeccable, downloads it on first run and
+# verifies it against engine-checksums.txt, so it does not need to be in git.
+.claude/skills/impeccable/scripts/bin/
+
+# Per-machine Claude Code settings, and Impeccable's scratch captures.
+.claude/settings.local.json
+.impeccable/
