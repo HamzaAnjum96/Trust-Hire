@@ -2215,6 +2215,16 @@ class AppStringsEn extends AppStrings {
   }
 
   @override
+  String aiAnswersHere(String model) {
+    return '$model answers here, running on this device.';
+  }
+
+  @override
+  String aiAnswersHereRemote(String model) {
+    return '$model answers here, a hosted model.';
+  }
+
+  @override
   String aiAnsweredByRemote(String model) {
     return 'Answered by $model, a hosted model.';
   }

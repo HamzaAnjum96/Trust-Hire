@@ -3680,6 +3680,18 @@ abstract class AppStrings {
   /// **'Answered by {model}, running on this device.'**
   String aiAnsweredBy(String model);
 
+  /// The assistant's status bar, before and between answers: who will answer
+  ///
+  /// In en, this message translates to:
+  /// **'{model} answers here, running on this device.'**
+  String aiAnswersHere(String model);
+
+  /// The assistant's status bar when a hosted model will answer
+  ///
+  /// In en, this message translates to:
+  /// **'{model} answers here, a hosted model.'**
+  String aiAnswersHereRemote(String model);
+
   /// Who answered: a hosted model
   ///
   /// In en, this message translates to:

@@ -175,7 +175,11 @@ class AiController extends ChangeNotifier {
   Future<AiModel?> enable() async {
     _enabled = true;
     await _store.writeFlag(StoreKeys.aiEnabled, true);
-    if (_remote == null && _state != AiState.unsupported) {
+    if (_remote != null) {
+      // Nothing to download: a hosted model is ready the moment it is
+      // allowed, as [load] already says of one switched on before.
+      _state = AiState.ready;
+    } else if (_state != AiState.unsupported) {
       _state = AiState.idle;
     }
     notifyListeners();

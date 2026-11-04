@@ -646,6 +646,14 @@ void main() {
       appHarness(store: store, ai: ai, child: const AssistantScreen()),
     );
     await tester.pumpAndSettle();
+
+    // Who will answer, before anything is asked — not "Answered by", which
+    // claimed an answer that did not exist yet.
+    expect(
+      find.text('Hosted test model answers here, a hosted model.'),
+      findsOneWidget,
+    );
+
     await tester.tap(find.text('Who can fix wiring?'));
     await tester.pumpAndSettle();
 

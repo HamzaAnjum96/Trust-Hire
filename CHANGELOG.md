@@ -12,6 +12,20 @@ that heading to the version and date, and open a fresh `[Unreleased]`.
 
 ## [Unreleased]
 
+### 0.22.3 — The assistant, run in the app on a real model
+
+#### Fixed
+
+- **The assistant's bar claimed an answer before anything was asked.** It read
+  "Answered by Qwen2.5 0.5B, running on this device" on an empty screen —
+  which also fooled the script watching the in-app run below. It says who
+  answers now: "Qwen2.5 0.5B answers here, running on this device." The line
+  under each answer still says who answered it.
+- **A hosted model switched on still said the AI was off.** `enable()` left a
+  `RemoteModel` in the off state, so the bar offered to turn on the AI that was
+  already answering. Nobody saw it — no build has a hosted model yet — but it
+  was waiting for the day a premium model is swapped in.
+
 ### 0.22.2 — The demo reaches what the evaluators asked for
 
 #### Added

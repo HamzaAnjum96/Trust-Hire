@@ -1588,6 +1588,24 @@
       }
     }
   },
+  "aiAnswersHere": "{model} answers here, running on this device.",
+  "@aiAnswersHere": {
+    "description": "The assistant's status bar, before and between answers: who will answer",
+    "placeholders": {
+      "model": {
+        "type": "String"
+      }
+    }
+  },
+  "aiAnswersHereRemote": "{model} answers here, a hosted model.",
+  "@aiAnswersHereRemote": {
+    "description": "The assistant's status bar when a hosted model will answer",
+    "placeholders": {
+      "model": {
+        "type": "String"
+      }
+    }
+  },
   "aiAnsweredByRemote": "Answered by {model}, a hosted model.",
   "@aiAnsweredByRemote": {
     "description": "Who answered: a hosted model",

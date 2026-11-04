@@ -597,6 +597,8 @@
   "aiConsentCancel": "ابھی نہیں",
   "aiConsentDownload": "ڈاؤن لوڈ کر کے چالو کریں",
   "aiAnsweredBy": "{model} نے جواب دیا، اسی ڈیوائس پر۔",
+  "aiAnswersHere": "یہاں {model} جواب دیتا ہے، اسی ڈیوائس پر۔",
+  "aiAnswersHereRemote": "یہاں {model} جواب دیتا ہے، جو ایک آن لائن ماڈل ہے۔",
   "aiAnsweredByRemote": "{model} نے جواب دیا، جو ایک آن لائن ماڈل ہے۔",
   "aiAnsweredByWords": "آپ کے الفاظ سے ملایا گیا۔ اس میں کوئی AI شامل نہیں۔",
   "assistantTitle": "ٹرسٹ ہائر سے پوچھیں",

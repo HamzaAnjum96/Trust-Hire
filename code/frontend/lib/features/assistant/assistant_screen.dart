@@ -209,11 +209,12 @@ class _AiStatusBar extends StatelessWidget {
     final ai = context.watch<AiController>();
 
     final (IconData icon, String text, Widget? action) = switch (ai.state) {
+      // Who will answer, not who did: nothing has been asked yet.
       AiState.ready || AiState.idle => (
         ai.onDevice ? Icons.devices_outlined : Icons.cloud_outlined,
         ai.onDevice
-            ? strings.aiAnsweredBy(ai.modelName)
-            : strings.aiAnsweredByRemote(ai.modelName),
+            ? strings.aiAnswersHere(ai.modelName)
+            : strings.aiAnswersHereRemote(ai.modelName),
         null,
       ),
       AiState.loading => (

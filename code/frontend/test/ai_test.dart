@@ -388,6 +388,11 @@ void main() {
       expect(await ai.ensureReady(), isNull, reason: 'still needs a yes');
 
       await ai.enable();
+      expect(
+        ai.state,
+        AiState.ready,
+        reason: 'switched on, it says so — not "off" while it answers',
+      );
       expect(await ai.ensureReady(), same(remote));
       expect(engine.loads, isEmpty);
     });

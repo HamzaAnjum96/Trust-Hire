@@ -2222,6 +2222,16 @@ class AppStringsUr extends AppStrings {
   }
 
   @override
+  String aiAnswersHere(String model) {
+    return 'یہاں $model جواب دیتا ہے، اسی ڈیوائس پر۔';
+  }
+
+  @override
+  String aiAnswersHereRemote(String model) {
+    return 'یہاں $model جواب دیتا ہے، جو ایک آن لائن ماڈل ہے۔';
+  }
+
+  @override
   String aiAnsweredByRemote(String model) {
     return '$model نے جواب دیا، جو ایک آن لائن ماڈل ہے۔';
   }
