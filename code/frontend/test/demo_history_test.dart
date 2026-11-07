@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_test/flutter_test.dart';
+import 'package:trust_hire/widgets/counted_label.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:trust_hire/app/app.dart';
@@ -512,15 +512,14 @@ void main() {
 
       await tester.tap(find.text('Activity'));
       await tester.pumpAndSettle();
+      await tester.tap(find.text('Your jobs'));
+      await tester.pumpAndSettle();
 
       // The exact count comes from the generator and will move; that it is
       // not zero is the thing this is here to catch.
-      final label = tester
-          .widgetList<Text>(find.byType(Text))
-          .map((text) => text.data)
-          .whereType<String>()
-          .firstWhere((data) => data.startsWith('Offers · '));
-      final count = int.parse(label.split(' · ').last);
+      final count = tester
+          .widget<CountedLabel>(find.widgetWithText(CountedLabel, 'Offers'))
+          .count;
 
       expect(count, greaterThan(0), reason: 'the seed did not land in time');
     });

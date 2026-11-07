@@ -37,7 +37,12 @@ class LoadingView extends StatelessWidget {
   }
 }
 
-/// An empty state — Warm Sand illustration area, a heading, and a next step.
+/// An empty state: what is missing, and the next step.
+///
+/// Since 0.23 without the 88px sand medallion it used to lead with. Every
+/// empty tab in the app opened on the same large circle, which made "nothing
+/// yet" the loudest thing on the screen. The icon is now a quiet marker, and
+/// the words — and the button, when there is one — carry it.
 class EmptyView extends StatelessWidget {
   const EmptyView({
     super.key,
@@ -55,7 +60,6 @@ class EmptyView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final isLight = theme.brightness == Brightness.light;
 
     // **Scrollable, not just centred.** An empty state is the one thing on the
     // screen, so a fixed column that is four pixels too tall has nowhere to
@@ -69,44 +73,40 @@ class EmptyView extends StatelessWidget {
         ),
         child: Center(
           child: Padding(
-            padding: const EdgeInsets.all(BrandSizing.spaceLg),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  width: 88,
-                  height: 88,
-                  decoration: BoxDecoration(
-                    color: isLight
-                        ? BrandColours.warmSand
-                        : BrandColours.darkElevated,
-                    shape: BoxShape.circle,
-                  ),
-                  child: Icon(
+            padding: const EdgeInsets.symmetric(
+              horizontal: BrandSizing.spaceLg,
+              vertical: BrandSizing.spaceXl,
+            ),
+            child: ConstrainedBox(
+              // A message wider than this is read as a paragraph rather than
+              // as a line of advice.
+              constraints: const BoxConstraints(maxWidth: 400),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
                     icon,
-                    size: 36,
-                    color: isLight
-                        ? BrandColours.copper
-                        : BrandColours.darkCopper,
+                    size: 32,
+                    color: theme.colorScheme.onSurfaceVariant,
                   ),
-                ),
-                const SizedBox(height: BrandSizing.spaceLg),
-                Text(
-                  title,
-                  style: theme.textTheme.titleLarge,
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: BrandSizing.spaceSm),
-                Text(
-                  message,
-                  style: theme.textTheme.bodyMedium,
-                  textAlign: TextAlign.center,
-                ),
-                if (action != null) ...[
-                  const SizedBox(height: BrandSizing.spaceLg),
-                  action!,
+                  const SizedBox(height: BrandSizing.spaceMd),
+                  Text(
+                    title,
+                    style: theme.textTheme.titleLarge,
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: BrandSizing.spaceSm),
+                  Text(
+                    message,
+                    style: theme.textTheme.bodyMedium,
+                    textAlign: TextAlign.center,
+                  ),
+                  if (action != null) ...[
+                    const SizedBox(height: BrandSizing.spaceLg),
+                    action!,
+                  ],
                 ],
-              ],
+              ),
             ),
           ),
         ),

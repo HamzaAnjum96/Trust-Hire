@@ -1,5 +1,6 @@
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_test/flutter_test.dart';
+import 'package:trust_hire/widgets/counted_label.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:trust_hire/app/account_controller.dart';
@@ -132,7 +133,8 @@ void main() {
           expect(
             job['city'],
             city,
-            reason: '${account.name} lives in $city but posted in '
+            reason:
+                '${account.name} lives in $city but posted in '
                 '${job['city']}',
           );
         }
@@ -170,7 +172,10 @@ void main() {
     test('the poster does, and nobody else', () {
       expect(job(postedBy: 'user-003').isPostedBy('user-003'), isTrue);
       expect(job(postedBy: 'user-003').isPostedBy('user-009'), isFalse);
-      expect(job(postedBy: 'user-003').isPostedBy(DemoAccounts.deviceId), isFalse);
+      expect(
+        job(postedBy: 'user-003').isPostedBy(DemoAccounts.deviceId),
+        isFalse,
+      );
     });
 
     test('a job saved before demo accounts belongs to the device', () {
@@ -327,8 +332,13 @@ void main() {
 
       await tester.tap(find.text('Activity'));
       await tester.pumpAndSettle();
+      await tester.tap(find.text('Your jobs'));
+      await tester.pumpAndSettle();
 
-      expect(find.text('Posted · 4'), findsOneWidget);
+      final posted = tester.widget<CountedLabel>(
+        find.widgetWithText(CountedLabel, 'Posted'),
+      );
+      expect(posted.count, 4);
     });
 
     testWidgets('and the profile follows', (tester) async {

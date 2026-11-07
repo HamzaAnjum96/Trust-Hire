@@ -65,27 +65,17 @@ class ProfileScreen extends StatelessWidget {
             // Who you are, first. Above the role picker, because switching
             // account can change the role underneath it — and a control that
             // silently reorders the one below should sit above it.
-            Padding(
-              padding: const EdgeInsetsDirectional.only(
-                start: BrandSizing.spaceXs,
-                bottom: BrandSizing.spaceSm,
-              ),
-              child: Text(
-                strings.demoAccounts,
-                style: theme.textTheme.titleMedium,
-              ),
-            ),
             const AccountCard(),
             Padding(
               padding: const EdgeInsetsDirectional.fromSTEB(
                 BrandSizing.spaceXs,
-                BrandSizing.spaceSm,
+                BrandSizing.spaceXs,
                 BrandSizing.spaceXs,
                 0,
               ),
               child: Text(
                 strings.demoAccountsExplain,
-                style: theme.textTheme.bodyMedium,
+                style: theme.textTheme.labelSmall,
               ),
             ),
 

@@ -2,18 +2,17 @@ import 'package:flutter/material.dart';
 
 import '../core/tokens.dart';
 
-/// One row of a list drawn as a single surface — an inbox.
+/// One row of an inbox: Updates and Messages both use it.
 ///
-/// The borders and corners depend on where the row sits, so a list built
-/// lazily, a row at a time, still reads as one card with hairlines between
-/// its rows rather than as a stack of identical cards. Updates and messages
-/// both use it: twenty separate cards made twenty items read as twenty things
-/// of equal weight.
+/// **Flat on the page since 0.23**, like the job rows: a hairline under each
+/// row but the last, no box around the list. It used to draw the whole list
+/// as one bordered card a row at a time, which made the inbox the one list in
+/// the app with a frame round it.
 ///
-/// [highlighted] marks something new the way the app always has — by an
-/// edge, now a burgundy bar down the leading side over a faint tint. Not a dot
-/// and not a bold weight: an inbox is read at a glance, and a coloured edge
-/// survives being glanced at.
+/// [highlighted] marks something new with a sand fill *and* a burgundy dot at
+/// the leading edge. It used to be a 3px coloured bar, which was colour alone
+/// doing the work; a dot is what every inbox people already use draws, and it
+/// survives being glanced at in either theme.
 class InboxRow extends StatelessWidget {
   const InboxRow({
     super.key,
@@ -32,41 +31,41 @@ class InboxRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
-    final first = index == 0;
+    final theme = Theme.of(context);
+    final scheme = theme.colorScheme;
     final last = index == count - 1;
-    const corner = Radius.circular(BrandRadius.large);
-    final side = BorderSide(color: scheme.outlineVariant);
+    final fill = theme.brightness == Brightness.light
+        ? BrandColours.warmSand
+        : BrandColours.darkElevated;
 
-    return Container(
-      clipBehavior: Clip.antiAlias,
-      decoration: BoxDecoration(
-        color: scheme.surface,
-        border: Border(
-          left: side,
-          right: side,
-          top: first ? side : BorderSide.none,
-          bottom: side,
+    return Material(
+      color: highlighted ? fill : Colors.transparent,
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          border: last
+              ? null
+              : Border(bottom: BorderSide(color: scheme.outlineVariant)),
         ),
-        borderRadius: BorderRadius.vertical(
-          top: first ? corner : Radius.zero,
-          bottom: last ? corner : Radius.zero,
-        ),
-      ),
-      // So a row's ink is drawn over the white above it, not under it.
-      child: Material(
-        type: MaterialType.transparency,
-        child: DecoratedBox(
-          decoration: BoxDecoration(
-            color: highlighted ? scheme.primary.withValues(alpha: 0.06) : null,
-            border: BorderDirectional(
-              start: BorderSide(
-                color: highlighted ? scheme.primary : Colors.transparent,
-                width: 3,
+        child: Stack(
+          children: [
+            child,
+            if (highlighted)
+              PositionedDirectional(
+                start: 5,
+                top: 0,
+                bottom: 0,
+                child: Center(
+                  child: Container(
+                    width: 7,
+                    height: 7,
+                    decoration: BoxDecoration(
+                      color: scheme.primary,
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+                ),
               ),
-            ),
-          ),
-          child: child,
+          ],
         ),
       ),
     );

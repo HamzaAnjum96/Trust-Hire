@@ -17,11 +17,12 @@ class JobListSkeleton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ExcludeSemantics(
+      // The shape of the rows it stands in for: flat, with a hairline
+      // between them.
       child: ListView.separated(
-        padding: const EdgeInsets.all(BrandSizing.spaceMd),
+        padding: const EdgeInsets.symmetric(vertical: BrandSizing.spaceSm),
         itemCount: rows,
-        separatorBuilder: (_, _) =>
-            const SizedBox(height: BrandSizing.spaceSm + 4),
+        separatorBuilder: (_, _) => const Divider(indent: BrandSizing.spaceMd),
         itemBuilder: (_, _) => const _JobRowSkeleton(),
       ),
     );
@@ -33,16 +34,9 @@ class _JobRowSkeleton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
-    return Container(
-      padding: const EdgeInsets.all(BrandSizing.spaceMd),
-      decoration: BoxDecoration(
-        color: theme.colorScheme.surface,
-        borderRadius: BrandRadius.largeAll,
-        border: Border.all(color: theme.colorScheme.outlineVariant),
-      ),
-      child: const Column(
+    return const Padding(
+      padding: EdgeInsets.all(BrandSizing.spaceMd),
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           LoadingBlock(width: 180, height: 20),

@@ -10,6 +10,7 @@ import 'package:trust_hire/l10n/app_localizations.dart';
 import 'package:trust_hire/models/job.dart';
 import 'package:trust_hire/services/local_store.dart';
 import 'package:trust_hire/services/location_service.dart';
+import 'package:trust_hire/features/map/job_map.dart';
 
 import 'support/test_strings.dart';
 
@@ -204,7 +205,7 @@ void main() {
       await settle(tester);
 
       expect(find.byType(OnboardingScreen), findsOneWidget);
-      expect(find.text('Nearby work'), findsNothing);
+      expect(find.byType(JobMap), findsNothing);
     });
 
     testWidgets('later runs go straight to the map', (tester) async {
@@ -215,7 +216,7 @@ void main() {
       await settle(tester);
 
       expect(find.byType(OnboardingScreen), findsNothing);
-      expect(find.text('Nearby work'), findsOneWidget);
+      expect(find.byType(JobMap), findsOneWidget);
     });
 
     testWidgets('finishing the intro reveals the app', (tester) async {
@@ -228,7 +229,7 @@ void main() {
       await settle(tester);
 
       expect(find.byType(OnboardingScreen), findsNothing);
-      expect(find.text('Nearby work'), findsOneWidget);
+      expect(find.byType(JobMap), findsOneWidget);
     });
   });
 

@@ -636,14 +636,33 @@ class _Composer extends StatelessWidget {
   }
 }
 
-/// The way in, wherever it is offered: an "Ask" button.
+/// The way in, wherever it is offered: the word "Ask", inside a search bar.
+///
+/// A word rather than an icon since 0.23. It was a pair of speech bubbles,
+/// which is what Messages looks like, so two features shared one symbol. And
+/// it sits *in* the search bar because it is another way of searching: type
+/// to filter what is here, or ask in your own words.
 class AskButton extends StatelessWidget {
   const AskButton({super.key});
 
   @override
-  Widget build(BuildContext context) => IconButton(
-    tooltip: AppStrings.of(context).assistantTitle,
-    icon: const Icon(Icons.question_answer_outlined),
-    onPressed: () => AssistantScreen.open(context),
-  );
+  Widget build(BuildContext context) {
+    final strings = AppStrings.of(context);
+    return Tooltip(
+      message: strings.assistantTitle,
+      child: TextButton(
+        onPressed: () => AssistantScreen.open(context),
+        style: TextButton.styleFrom(
+          minimumSize: const Size(
+            BrandSizing.touchTargetPreferred,
+            BrandSizing.touchTargetPreferred,
+          ),
+          padding: const EdgeInsets.symmetric(
+            horizontal: BrandSizing.spaceSm + 4,
+          ),
+        ),
+        child: Text(strings.ask),
+      ),
+    );
+  }
 }

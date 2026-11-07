@@ -27,6 +27,21 @@ class AppStringsUr extends AppStrings {
   String get postAJob => 'کام لگائیں';
 
   @override
+  String get showAsList => 'فہرست میں دکھائیں';
+
+  @override
+  String get showOnMap => 'نقشے پر دکھائیں';
+
+  @override
+  String get ask => 'پوچھیں';
+
+  @override
+  String get yourJobsTab => 'آپ کے کام';
+
+  @override
+  String get moreActions => 'مزید اختیارات';
+
+  @override
   String get nearbyWork => 'قریبی کام';
 
   @override

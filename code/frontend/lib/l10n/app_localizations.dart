@@ -134,6 +134,36 @@ abstract class AppStrings {
   /// **'Post a Job'**
   String get postAJob;
 
+  /// Switches the Jobs destination from the map to a list of the same results
+  ///
+  /// In en, this message translates to:
+  /// **'Show as a list'**
+  String get showAsList;
+
+  /// Switches the Jobs destination from the list back to the map
+  ///
+  /// In en, this message translates to:
+  /// **'Show on the map'**
+  String get showOnMap;
+
+  /// Short label for the button that opens Ask Trust Hire, inside a search bar
+  ///
+  /// In en, this message translates to:
+  /// **'Ask'**
+  String get ask;
+
+  /// Activity tab holding the jobs you posted, offered on and saved
+  ///
+  /// In en, this message translates to:
+  /// **'Your jobs'**
+  String get yourJobsTab;
+
+  /// Tooltip on the overflow menu of a job
+  ///
+  /// In en, this message translates to:
+  /// **'More actions'**
+  String get moreActions;
+
   /// No description provided for @nearbyWork.
   ///
   /// In en, this message translates to:

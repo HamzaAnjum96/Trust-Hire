@@ -30,9 +30,13 @@ class BrandTheme {
       outlineVariant: BrandColours.cardBorder,
       error: BrandColours.errorRed,
       onError: BrandColours.white,
+      // The view switch and the snack bar: things that float over content
+      // and must read against both the map and the list.
+      inverseSurface: BrandColours.ink,
+      onInverseSurface: BrandColours.white,
     );
 
-    return _base(scheme).copyWith(scaffoldBackgroundColor: BrandColours.mist);
+    return _base(scheme, ground: BrandColours.mist);
   }
 
   static ThemeData get dark {
@@ -55,14 +59,15 @@ class BrandTheme {
       outlineVariant: BrandColours.darkElevated,
       error: BrandColours.errorRed,
       onError: BrandColours.white,
+      inverseSurface: BrandColours.darkTextPrimary,
+      onInverseSurface: BrandColours.ink,
     );
 
-    return _base(
-      scheme,
-    ).copyWith(scaffoldBackgroundColor: BrandColours.darkBackground);
+    return _base(scheme, ground: BrandColours.darkBackground);
   }
 
-  static ThemeData _base(ColorScheme scheme) {
+  /// [ground] is the page: the colour every screen and its app bar sit on.
+  static ThemeData _base(ColorScheme scheme, {required Color ground}) {
     final isLight = scheme.brightness == Brightness.light;
     final textColour = scheme.onSurface;
     final mutedColour = scheme.onSurfaceVariant;
@@ -84,17 +89,23 @@ class BrandTheme {
     return ThemeData(
       useMaterial3: true,
       colorScheme: scheme,
+      scaffoldBackgroundColor: ground,
       fontFamily: BrandType.family,
       fontFamilyFallback: BrandType.fallback,
       textTheme: textTheme,
       splashFactory: InkSparkle.splashFactory,
 
+      // **On the ground, not on white.** A white bar over a mist page over
+      // white cards was three surfaces where there is one thing. The bar is
+      // now part of the page, and a hairline shadow appears only once content
+      // scrolls under it.
       appBarTheme: AppBarTheme(
-        backgroundColor: scheme.surface,
+        backgroundColor: ground,
         foregroundColor: scheme.onSurface,
         surfaceTintColor: Colors.transparent,
+        shadowColor: BrandColours.ink.withValues(alpha: isLight ? 0.18 : 0.6),
         elevation: 0,
-        scrolledUnderElevation: 0.5,
+        scrolledUnderElevation: 1,
         centerTitle: false,
         titleTextStyle: BrandType.pageHeading.copyWith(color: scheme.onSurface),
       ),
@@ -320,6 +331,32 @@ class BrandTheme {
         shape: const RoundedRectangleBorder(
           borderRadius: BrandRadius.mediumAll,
         ),
+      ),
+
+      tabBarTheme: TabBarThemeData(
+        labelColor: scheme.primary,
+        unselectedLabelColor: mutedColour,
+        labelStyle: BrandType.supporting.copyWith(fontWeight: FontWeight.w600),
+        unselectedLabelStyle: BrandType.supporting.copyWith(
+          fontWeight: FontWeight.w500,
+        ),
+        indicatorColor: scheme.primary,
+        indicatorSize: TabBarIndicatorSize.label,
+        dividerColor: scheme.outlineVariant,
+        overlayColor: WidgetStatePropertyAll(
+          scheme.primary.withValues(alpha: 0.06),
+        ),
+      ),
+
+      popupMenuTheme: PopupMenuThemeData(
+        color: scheme.surface,
+        surfaceTintColor: Colors.transparent,
+        elevation: 3,
+        shadowColor: BrandColours.ink.withValues(alpha: 0.25),
+        shape: const RoundedRectangleBorder(
+          borderRadius: BrandRadius.mediumAll,
+        ),
+        textStyle: BrandType.body.copyWith(color: textColour),
       ),
 
       dividerTheme: DividerThemeData(

@@ -57,12 +57,7 @@ class ThreadsTab extends StatelessWidget {
     // One surface with hairlines between conversations, like Updates. See
     // [InboxRow].
     return ListView.builder(
-      padding: const EdgeInsets.fromLTRB(
-        BrandSizing.spaceMd,
-        BrandSizing.spaceMd,
-        BrandSizing.spaceMd,
-        BrandSizing.spaceXl * 3,
-      ),
+      padding: const EdgeInsets.only(bottom: BrandSizing.spaceXl),
       itemCount: rows.length,
       itemBuilder: (context, index) {
         final (job, latest, unread) = rows[index];

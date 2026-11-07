@@ -14,9 +14,50 @@ that heading to the version and date, and open a fresh `[Unreleased]`.
 
 ### 0.23.0 — The redesign
 
-#### Added
+The brand stays (burgundy, copper, sand, Inter, map first). What changed is
+what each control is: which things are places, which are actions, and which
+are two views of one thing. The reasoning is in
+`documents/design/2026-11-04-redesign.md`.
 
-- **Four design skills are committed to the project** under `.claude/skills/`:
+#### Changed
+
+- **Four destinations and one action.** *Map* and *Jobs* were two
+  destinations showing the same jobs under the same filters. They are now one,
+  **Jobs**, with a switch at the bottom of the screen between the map and the
+  list ("16 jobs" on the map, "Map" on the list). On a desktop both are on
+  screen and the switch is not drawn.
+- **Post a Job is a button in the bar, not a button over the content.** It is
+  the middle slot of the bottom bar on a phone, filled burgundy so it never
+  reads as a place, and the first thing on the rail. As a floating button it
+  covered the last rows of every list.
+- **One search bar for the map and the list**, with the account avatar and
+  **Ask** in it. Ask was a pair of speech bubbles, which is what Messages looks
+  like; it is now the word, beside the search it is an alternative to. The map's
+  title bar and the list's app bar are gone.
+- **Activity has three tabs, not five**: Updates, Messages and *Your jobs*.
+  Inside *Your jobs*, Posted, Offers and Saved are a segmented control, opening
+  on Posted for a hirer and Offers for a worker. On a phone, Offers used to sit
+  off the right edge of the screen.
+- **The Activity badge counts unanswered messages too.** A new message used to
+  raise no badge anywhere.
+- **Rows, not cards.** Job rows, offers, updates and messages are flat rows on
+  the page with a hairline between them. Unseen updates are a sand fill and a
+  dot, replacing a coloured bar down the edge. In the desktop list, *Open
+  details* appears on the selected row only, not on every row.
+- **App bars sit on the page ground**, with a hairline once content scrolls
+  under them, so a screen is one surface instead of three.
+- **Profile leads with the person**: avatar, name, area, and *Switch account*
+  in words. The "Demo accounts" heading and the card around the person are gone.
+- **Empty states are quieter.** The 88px sand medallion is now a small icon
+  above the words and the next step.
+- The rail carries the product's name.
+
+#### Fixed
+
+- Activity's third tab no longer starts past the right edge of a 390px phone.
+  On a phone the tabs share the width equally.
+
+#### Added
   Anthropic's `frontend-design`, Impeccable, UI UX Pro Max and Vercel's
   `web-design-guidelines`. `skills-lock.json` records their sources. A new
   root `.gitignore` keeps out Impeccable's 22 MB native engine, which its

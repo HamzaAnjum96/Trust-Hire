@@ -73,7 +73,7 @@ it is for.
 | `agile/retrospectives/` | `sprint-NN-retro.md`, matching the sprint number, or `phase-N-retro.md` for a whole phase — [`phase-1-retro.md`](documents/agile/retrospectives/phase-1-retro.md) covers P1-1 to P1-7 and [`p1-8a-p1-9-retro.md`](documents/agile/retrospectives/p1-8a-p1-9-retro.md) the two after it, and [`0-15-x-retro.md`](documents/agile/retrospectives/0-15-x-retro.md) the three UI and refactor rounds after *that* — which is where the carried actions' current status lives. What went well, what did not, and **actions with named owners**. Carry unfinished actions forward explicitly. Write it at the end of the sprint; a retro covering seven of them at once is archaeology. |
 | `brand-guidelines/` | [`brand-guidelines.md`](documents/brand-guidelines/brand-guidelines.md) is the source of truth: positioning, the burgundy/copper/sand palette, typography, logo direction, iconography, map styling, voice and tone, component specs, motion, accessibility, dark mode, and design tokens. Anything user-facing should be traceable back to it. Add new colours with their hex value *and* intended use; keep source assets next to exports. |
 | `product/` | [`roadmap.md`](documents/product/roadmap.md) sets out what comes after the POC. [`phase-1-system-logic.md`](documents/product/phase-1-system-logic.md) specifies a fuller two-sided marketplace, and [`poc-vs-phase-1.md`](documents/product/poc-vs-phase-1.md) reconciles the two — **read that before building against either**. [`demo-script.md`](documents/product/demo-script.md) walks somebody through the built app in about fifteen minutes, stop by stop — the fare suggestion, a Stripe test payment, the assistant and the on-device AI included — and every stop is checked by `test/demo_walkthrough_test.dart`, so the script cannot rot quietly. [`ux-audit-response.md`](documents/product/ux-audit-response.md) answers the UI/UX audit finding by finding: done, scheduled, or declined with a reason. [`prd-payments-and-fare-agent.md`](documents/product/prd-payments-and-fare-agent.md) covers the Stripe integration and the AI fare agent the evaluators asked for — requirements, non-goals, and a three-minute demo on the deployed site; the agent runs in the visitor's own browser. Alongside them: vision, PRDs (`prd-<slug>.md`), personas, success metrics. State non-goals as clearly as goals, and number requirements so backlog stories can reference them. |
-| `design/` | User flows, wireframes, mockups, design-system and accessibility decisions. Link the live design tool **and** commit a dated export — links rot. Record the reasoning, not just the picture. |
+| `design/` | User flows, wireframes, mockups, design-system and accessibility decisions. Link the live design tool **and** commit a dated export — links rot. Record the reasoning, not just the picture. [`2026-11-04-redesign.md`](documents/design/2026-11-04-redesign.md) records the 0.23 redesign: what was wrong with the structure, what each control is for now, and what was kept on purpose. |
 | `research/` | User interviews, competitor analysis, market sizing, surveys. Separate observation from interpretation. **No personal data** — refer to participants by reference (`P3`), and keep names, CVs, and recordings out of the repository. |
 | `meeting-notes/` | `YYYY-MM-DD-<topic>.md`. Decisions and owner-assigned actions are the part worth keeping; reflect anything structural into `product/` or `code/` too, because nobody will find it here later. |
 
@@ -308,8 +308,8 @@ lib/features/ai/            ← the consent dialog and the profile group
 web/ai/                     ← bridge.js and worker.js, loaded only when on
 ```
 
-**"Ask Trust Hire"** — the Ask button on the map, the Jobs list and the
-Directory — answers requests about open jobs and directory workers, and
+**"Ask Trust Hire"** — the **Ask** button inside the search bar on Jobs (map
+and list) and the Directory — answers requests about open jobs and directory workers, and
 nothing else: "painting jobs near me", "who can fix wiring?", "plumber
 chahiye". A word list in English, Urdu and Roman Urdu reads every request;
 with the AI on, the model is told what the list made of it and chooses what to
@@ -435,7 +435,8 @@ sorting, not access.**
 **The app tells you what happened.** Activity leads with a feed of everything
 that concerns you — offers in and decided, work started and finished, ratings,
 commission, the debt lockout, a listing about to lapse — and the navigation
-destination carries a count. **It is derived, never recorded**: a pure function
+destination carries a count of those plus the conversations waiting for a
+reply. **It is derived, never recorded**: a pure function
 over the jobs, bids, ratings and ledger already stored, rather than an event
 table each controller has to remember to append to. A write nobody makes is
 invisible, and this repository has been caught by that three times. The trade
@@ -454,8 +455,8 @@ when a job is called off rather than disappearing, because that is exactly when
 somebody wants to read back what was agreed.
 
 **Demo accounts.** There is no sign-in — Section 13a excludes authentication
-from the POC — but the device can be any of seven people, switched from the map
-header, the app bar or the profile screen. Switching changes who owns which
+from the POC — but the device can be any of seven people, switched from the search
+bar on Jobs, the app bar or the head of the profile screen. Switching changes who owns which
 job, whose offers are yours, whose wallet is charged and which trades filter
 the feed, which is the only way to see bidding, the job lifecycle and mutual
 ratings work end to end on one device.
@@ -503,8 +504,9 @@ code/frontend/
 │   ├── app/          ← app root, shell, controllers
 │   ├── core/         ← brand tokens, theme, breakpoints, formatters
 │   ├── features/
-│   │   ├── map/          ← the map — the primary surface, and its overlays
-│   │   ├── jobs/         ← job list, details, saved and posted
+│   │   ├── map/          ← Jobs: the map and its list view, the search bar and
+│   │   │                    the overlays over them
+│   │   ├── jobs/         ← job rows and results, details, saved and posted
 │   │   ├── create_job/   ← posting and editing
 │   │   ├── feed/         ← the visibility rule: which jobs reach whom
 │   │   ├── bidding/      ← offers, and the hirer's choice
@@ -535,7 +537,8 @@ code/frontend/
 │   └── widgets/      ← shared UI (status pills, skeletons, empty states,
 │                        meta chips, fading scroll rows, settings groups,
 │                        the "Your posting" badge, the fare tag and field,
-│                        the tag grid, initials avatars, inbox rows)
+│                        the tag grid, initials avatars, inbox rows, the
+│                        counted segment label)
 ├── test/
 │   └── support/      ← harness.dart: every provider, around one screen
 ├── assets/
@@ -625,10 +628,20 @@ visible version a stale cache and a failed deploy look identical.
 
 **Layout.** Navigation follows Material's window size classes, with one
 departure: **a rail needs height as well as width.** Below 520px the bottom bar
-is used however wide the window is, because five labelled destinations plus the
-posting action is about 450px of rail — and on a phone held sideways the last
-destination fell below the fold with nothing on screen to say the rail
-scrolled. `LayoutSize.fromSize` is where that lives.
+is used however wide the window is, because the product's name, the posting
+action and four labelled destinations are about 450px of rail — and on a phone
+held sideways the last destination fell below the fold with nothing on screen
+to say the rail scrolled. `LayoutSize.fromSize` is where that lives.
+
+**Navigation (since 0.23): four destinations and one action.** *Jobs* is the
+map and the list of the same results, switched by the pill at the bottom of
+the screen; on a desktop both are on screen at once. *Directory*, *Activity*
+and *Profile* follow. **Post a Job** is a button, never a destination: the
+middle slot of the bottom bar on a phone, the first thing under the product's
+name on the rail. Activity holds *Updates*, *Messages* and *Your jobs*, and
+the last is one list filtered three ways — Posted, Offers, Saved. The
+reasoning is in
+[`documents/design/2026-11-04-redesign.md`](documents/design/2026-11-04-redesign.md).
 
 **Checks**
 

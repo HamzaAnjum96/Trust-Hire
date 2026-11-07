@@ -6,6 +6,8 @@ import '../../core/tokens.dart';
 import '../../l10n/app_localizations.dart';
 import '../account/account_switcher.dart';
 import '../assistant/assistant_screen.dart';
+import '../jobs/filter_bar.dart';
+import '../jobs/job_filter_controller.dart';
 
 /// The things that float on top of the map.
 ///
@@ -18,22 +20,34 @@ import '../assistant/assistant_screen.dart';
 /// written down on [MapOverlayWidth]: two of the four bugs found at unusual
 /// window shapes were overlays landing on top of each other.
 
-/// The bar across the top of the map: who you are, where you are, how much
-/// work is here.
-class MapHeader extends StatelessWidget {
-  const MapHeader({
+/// The bar across the top of the Jobs destination: search, ask, and who you
+/// are.
+///
+/// **One bar for both views.** It floats over the map and sits pinned above
+/// the list, and it is the same widget in both, holding the same query — so
+/// switching between map and list never loses what was typed. It replaced
+/// the map's title bar ("Nearby work · 16 jobs") and the list's app bar
+/// ("Find work"), which said the same thing in two shapes.
+///
+/// The count moved to the view switch (see [JobsViewSwitch]), which is where
+/// the eye goes when deciding whether to look at the results another way.
+class JobsSearchBar extends StatelessWidget {
+  const JobsSearchBar({
     super.key,
-    required this.jobCount,
-    required this.totalJobCount,
+    required this.filters,
+    this.floating = false,
   });
 
-  final int jobCount;
-  final int totalJobCount;
+  final JobFilterController filters;
+
+  /// Over the map it needs a shadow to read as something on top of it; above
+  /// the list it is part of the page and takes a hairline instead.
+  final bool floating;
 
   /// Fixed, so the rows under it can be placed from it rather than from a
   /// number somebody has to keep in step by hand — which is how the filter
   /// chips came to sit 16px over the header's bottom edge.
-  static const height = 56.0;
+  static const height = 52.0;
 
   @override
   Widget build(BuildContext context) {
@@ -41,31 +55,39 @@ class MapHeader extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Container(
-      height: MapHeader.height,
-      padding: const EdgeInsetsDirectional.only(
-        start: BrandSizing.spaceXs,
-        end: BrandSizing.spaceXs,
-      ),
+      height: JobsSearchBar.height,
       decoration: BoxDecoration(
         color: theme.colorScheme.surface,
-        borderRadius: BrandRadius.largeAll,
-        boxShadow: BrandShadows.card,
+        borderRadius: BrandRadius.mediumAll,
+        border: floating
+            ? null
+            : Border.all(color: theme.colorScheme.outlineVariant),
+        boxShadow: floating ? BrandShadows.card : null,
       ),
       child: Row(
         children: [
-          // The map has no app bar to hang the account switcher off, and the
-          // landing screen is the one place a demonstration must not leave
-          // "who am I?" unanswered. It takes the header's leading slot: the
-          // heading beside it already says these are jobs near a place, so
-          // the pin icon was saying it twice.
+          Expanded(child: JobSearchField(controller: filters, embedded: true)),
+          // "Painting jobs near me" is a question somebody looking at jobs is
+          // about to ask, so the assistant is offered beside the search it
+          // is an alternative to.
+          SizedBox(
+            height: 24,
+            child: VerticalDivider(
+              width: 1,
+              color: theme.colorScheme.outlineVariant,
+            ),
+          ),
+          const AskButton(),
+          // The landing screen is the one place a demonstration must not
+          // leave "who am I?" unanswered, and the map has no app bar to hang
+          // the account switcher off.
           Tooltip(
             message: strings.switchAccount,
             child: InkWell(
               customBorder: const CircleBorder(),
               onTap: () => AccountSheet.open(context),
               // The avatar is drawn at 28px, but section 29 asks for a 48px
-              // target and a circle is harder to hit than a rectangle. The
-              // box is invisible; only the reach changes.
+              // target. The box is invisible; only the reach changes.
               child: SizedBox(
                 width: BrandSizing.touchTargetPreferred,
                 height: BrandSizing.touchTargetPreferred,
@@ -79,42 +101,89 @@ class MapHeader extends StatelessWidget {
             ),
           ),
           const SizedBox(width: BrandSizing.spaceXs),
-          Expanded(
-            child: Text(
-              strings.nearbyWork,
-              style: theme.textTheme.titleLarge,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
-          ),
-          const SizedBox(width: BrandSizing.spaceSm),
-          Container(
-            padding: const EdgeInsets.symmetric(
-              horizontal: BrandSizing.spaceSm + 2,
-              vertical: BrandSizing.spaceXs,
-            ),
-            decoration: BoxDecoration(
-              color: theme.brightness == Brightness.light
-                  ? BrandColours.warmSand
-                  : BrandColours.darkElevated,
-              borderRadius: BrandRadius.mediumAll,
-            ),
-            child: Text(
-              // Say what is being hidden, so a short list never looks like a
-              // bug.
-              jobCount == totalJobCount
-                  ? strings.jobCount(jobCount)
-                  : strings.jobCountFiltered(jobCount, totalJobCount),
-              style: BrandType.caption.copyWith(
-                fontWeight: FontWeight.w600,
-                color: theme.colorScheme.onSurface,
-              ),
-            ),
-          ),
-          // On the home screen too: "painting jobs near me" is a question
-          // somebody looking at a map of jobs is about to ask.
-          const AskButton(),
         ],
+      ),
+    );
+  }
+}
+
+/// Switches the Jobs destination between the map and the list.
+///
+/// **A view switch, not navigation.** Both views show the same results under
+/// the same filters, so changing between them changes how you look, not where
+/// you are — which is why it lives inside the destination rather than in the
+/// navigation bar, where the two used to be separate places.
+///
+/// Floats at the bottom centre, under the thumb, the way Airbnb and Google
+/// Maps place theirs. On the map it carries the result count, so it doubles
+/// as the answer to "how many?"; on the list it says where it goes back to.
+class JobsViewSwitch extends StatelessWidget {
+  const JobsViewSwitch({
+    super.key,
+    required this.showingMap,
+    required this.jobCount,
+    required this.totalJobCount,
+    required this.onPressed,
+  });
+
+  final bool showingMap;
+  final int jobCount;
+  final int totalJobCount;
+  final VoidCallback onPressed;
+
+  static const height = 44.0;
+
+  @override
+  Widget build(BuildContext context) {
+    final strings = AppStrings.of(context);
+    final theme = Theme.of(context);
+    final foreground = theme.colorScheme.onInverseSurface;
+
+    // Say what is being hidden, so a short list never looks like a bug.
+    final count = jobCount == totalJobCount
+        ? strings.jobCount(jobCount)
+        : strings.jobCountFiltered(jobCount, totalJobCount);
+
+    return Semantics(
+      button: true,
+      label: showingMap ? '${strings.showAsList}, $count' : strings.showOnMap,
+      excludeSemantics: true,
+      child: Material(
+        color: theme.colorScheme.inverseSurface,
+        shape: const StadiumBorder(),
+        elevation: 3,
+        shadowColor: BrandColours.ink.withValues(alpha: 0.3),
+        child: InkWell(
+          onTap: onPressed,
+          customBorder: const StadiumBorder(),
+          child: Container(
+            height: JobsViewSwitch.height,
+            constraints: const BoxConstraints(minWidth: 96),
+            padding: const EdgeInsets.symmetric(
+              horizontal: BrandSizing.spaceMd,
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  showingMap ? Icons.view_list_outlined : Icons.map_outlined,
+                  size: 20,
+                  color: foreground,
+                ),
+                const SizedBox(width: BrandSizing.spaceSm),
+                Text(
+                  showingMap ? count : strings.navMap,
+                  style: BrandType.supporting.copyWith(
+                    color: foreground,
+                    fontWeight: FontWeight.w600,
+                    fontFeatures: const [FontFeature.tabularFigures()],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -168,12 +237,12 @@ class MapOverlayWidth extends StatelessWidget {
   /// Where the filter chips start, below the safe area: under the header,
   /// with a gap.
   static const chipsTop =
-      BrandSizing.spaceSm + MapHeader.height + BrandSizing.spaceSm;
+      BrandSizing.spaceSm + JobsSearchBar.height + BrandSizing.spaceSm;
 
   /// Where the notices start, below the safe area: under the chips, with a
   /// gap.
   static const noticesTop =
-      chipsTop + BrandSizing.touchTargetMinimum + BrandSizing.spaceSm + 4;
+      chipsTop + BrandSizing.touchTargetMinimum + BrandSizing.spaceSm;
 
   @override
   Widget build(BuildContext context) {
@@ -236,9 +305,7 @@ class MapNotice extends StatelessWidget {
       decoration: BoxDecoration(
         color: theme.colorScheme.surface,
         borderRadius: BrandRadius.largeAll,
-        border: Border.all(
-          color: BrandColours.informationBlue.withValues(alpha: 0.35),
-        ),
+        border: Border.all(color: theme.colorScheme.outlineVariant),
         boxShadow: BrandShadows.card,
       ),
       child: Row(

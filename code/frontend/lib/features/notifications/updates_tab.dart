@@ -65,12 +65,7 @@ class _UpdatesTabState extends State<UpdatesTab> {
     // stack of identical cards. Built lazily all the same: a busy account's
     // feed is long. See [InboxRow].
     return ListView.builder(
-      padding: const EdgeInsets.fromLTRB(
-        BrandSizing.spaceMd,
-        BrandSizing.spaceMd,
-        BrandSizing.spaceMd,
-        BrandSizing.spaceXl * 3,
-      ),
+      padding: const EdgeInsets.only(bottom: BrandSizing.spaceXl),
       itemCount: feed.length,
       itemBuilder: (context, index) {
         final entry = feed[index];

@@ -52,20 +52,24 @@ void main() {
     'a desktop browser': Size(1440, 900),
   };
 
-  /// The five destinations, by the icons that never change with the language.
+  /// The four destinations, by the icons that never change with the language.
   ///
   /// Two each: the selected destination shows the filled icon and the outlined
-  /// one disappears, so looking for only one of them finds four destinations
-  /// and concludes the fifth is missing.
+  /// one disappears, so looking for only one of them finds three destinations
+  /// and concludes the fourth is missing.
+  ///
+  /// Since 0.23 the map and the list are one destination, Jobs; the list is
+  /// reached through the view switch, which the matrix below presses too.
   const destinations = <String, (IconData, IconData)>{
-    'map': (Icons.map_outlined, Icons.map),
     'jobs': (Icons.work_outline, Icons.work),
     'directory': (Icons.badge_outlined, Icons.badge),
     'activity': (Icons.bookmark_border, Icons.bookmark),
     'profile': (Icons.person_outline, Icons.person),
   };
 
-  Future<void> open(WidgetTester tester, Size size, {
+  Future<void> open(
+    WidgetTester tester,
+    Size size, {
     required Brightness brightness,
     required Locale locale,
   }) async {
@@ -89,7 +93,10 @@ void main() {
   }
 
   for (final shape in shapes.entries) {
-    for (final theme in const {'light': Brightness.light, 'dark': Brightness.dark}.entries) {
+    for (final theme in const {
+      'light': Brightness.light,
+      'dark': Brightness.dark,
+    }.entries) {
       for (final language in const {'English': 'en', 'Urdu': 'ur'}.entries) {
         testWidgets(
           'every screen renders on ${shape.key}, ${theme.key}, in ${language.key}',
@@ -100,6 +107,21 @@ void main() {
               brightness: theme.value,
               locale: Locale(language.value),
             );
+
+            // The list, where it replaces the map rather than sitting beside
+            // it. Same results, its own layout, so its own chance to overflow.
+            final toList = find.bySemanticsLabel(RegExp('^Show as a list'));
+            if (toList.evaluate().isNotEmpty) {
+              await tester.tap(toList.first, warnIfMissed: false);
+              await settle(tester);
+              expect(
+                tester.takeException(),
+                isNull,
+                reason:
+                    'the job list threw on ${shape.key} '
+                    '(${theme.key}, ${language.key}) — an overflow counts',
+              );
+            }
 
             for (final destination in destinations.entries) {
               final icon = find.byIcon(destination.value.$1);
@@ -115,7 +137,8 @@ void main() {
               expect(
                 tester.takeException(),
                 isNull,
-                reason: '${destination.key} threw on ${shape.key} '
+                reason:
+                    '${destination.key} threw on ${shape.key} '
                     '(${theme.key}, ${language.key}) — an overflow counts',
               );
             }
@@ -144,7 +167,8 @@ void main() {
             find.byIcon(destination.value.$1).evaluate().isNotEmpty ||
                 find.byIcon(destination.value.$2).evaluate().isNotEmpty,
             isTrue,
-            reason: '${destination.key} is not on screen at ${shape.key}; '
+            reason:
+                '${destination.key} is not on screen at ${shape.key}; '
                 'a destination behind a scroll nobody can see is one nobody '
                 'can reach',
           );
@@ -195,7 +219,8 @@ void main() {
         expect(
           tester.getRect(body).bottom,
           lessThanOrEqualTo(tester.getRect(panel).bottom),
-          reason: 'the sentence that says what the app is runs past the '
+          reason:
+              'the sentence that says what the app is runs past the '
               'bottom of the panel at ${shape.key}, and nothing says to '
               'scroll',
         );

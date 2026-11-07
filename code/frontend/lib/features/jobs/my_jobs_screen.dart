@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../../app/account_controller.dart';
 import '../../app/bid_controller.dart';
 import '../../app/job_controller.dart';
+import '../../app/profile_controller.dart';
 import '../../core/formatters.dart';
 import '../../core/layout.dart';
 import '../../core/tokens.dart';
@@ -15,6 +16,7 @@ import '../../l10n/app_localizations.dart';
 import '../../models/bid.dart';
 import '../../models/job.dart';
 import '../../services/media_store.dart';
+import '../../widgets/counted_label.dart';
 import '../../widgets/job_skeleton.dart';
 import '../../widgets/state_views.dart';
 import 'job_details_sheet.dart';
@@ -22,14 +24,16 @@ import 'job_row.dart';
 import 'saved_jobs_controller.dart';
 import '../account/account_switcher.dart';
 
-/// The three lists that are about *you* — work you kept, work you posted, and
-/// work you offered on.
+/// Activity: what arrived, and what you are keeping an eye on.
 ///
-/// All three are answers to the same gap: the app had nowhere to come back to.
-/// A worker who found a job had to find it again; a poster had no home for
-/// what they had posted; and an offer, once made, could only be found by
-/// remembering which job it was on — which meant a passed-over bid was
-/// invisible, and being passed over is what happens to most of them.
+/// **Three tabs since 0.23, not five.** Updates and Messages arrive while you
+/// are away; *Your jobs* is three lists you go and check — what you posted,
+/// what you offered on, what you saved. As five scrolling tabs, Offers sat off
+/// the right edge of a phone with nothing to say it was there, and Offers is
+/// where a worker learns whether they were chosen.
+///
+/// The three lists are subsets of one list of jobs, so inside *Your jobs* they
+/// are a segmented control rather than three more tabs.
 class MyJobsScreen extends StatefulWidget {
   const MyJobsScreen({super.key});
 
@@ -39,7 +43,7 @@ class MyJobsScreen extends StatefulWidget {
 
 class _MyJobsScreenState extends State<MyJobsScreen>
     with SingleTickerProviderStateMixin {
-  late final TabController _tabs = TabController(length: 5, vsync: this);
+  late final TabController _tabs = TabController(length: 3, vsync: this);
 
   @override
   void dispose() {
@@ -51,7 +55,84 @@ class _MyJobsScreenState extends State<MyJobsScreen>
   Widget build(BuildContext context) {
     final strings = AppStrings.of(context);
     final jobs = context.watch<JobController>();
+    final compact = LayoutSize.of(context) == LayoutSize.compact;
+
+    final unseen = context.watch<NotificationController>().unseen(
+      buildFeed(context),
+    );
+    final waiting = context.watch<MessageController>().threadsWaiting(
+      jobs.jobs,
+    );
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(strings.navActivity),
+        actions: const [AccountButton()],
+        bottom: TabBar(
+          controller: _tabs,
+          // **On a phone, three equal tabs across the whole width**, so none
+          // can sit past the edge — which is where Offers was when there were
+          // five. On a wider window, three tabs stretched across 1,200px read
+          // as three buttons, so there they sit together under the title.
+          isScrollable: !compact,
+          tabAlignment: compact ? TabAlignment.fill : TabAlignment.start,
+          tabs: [
+            // Updates first: it is the reason to open this destination at all,
+            // and the badge on the navigation bar lands here.
+            Tab(
+              text: unseen == 0
+                  ? strings.updatesTab
+                  : '${strings.updatesTab} · $unseen',
+            ),
+            Tab(
+              text: waiting == 0
+                  ? strings.messagesTab
+                  : '${strings.messagesTab} · $waiting',
+            ),
+            Tab(text: strings.yourJobsTab),
+          ],
+        ),
+      ),
+      // The same measure as the job list; these are the same rows.
+      body: ReadableWidth(
+        child: switch (jobs.state) {
+          LoadState.idle || LoadState.loading => const JobListSkeleton(),
+          LoadState.failed => ErrorView(
+            message: strings.couldNotLoadJobs,
+            onRetry: jobs.load,
+          ),
+          LoadState.ready => TabBarView(
+            controller: _tabs,
+            children: const [UpdatesTab(), ThreadsTab(), _YourJobs()],
+          ),
+        },
+      ),
+    );
+  }
+}
+
+/// Which of your lists is showing.
+enum _Mine { posted, offers, saved }
+
+/// The jobs that are yours one way or another, filtered three ways.
+class _YourJobs extends StatefulWidget {
+  const _YourJobs();
+
+  @override
+  State<_YourJobs> createState() => _YourJobsState();
+}
+
+class _YourJobsState extends State<_YourJobs> {
+  /// Null until somebody picks one; until then it follows the role, because a
+  /// hirer comes here for their postings and a worker for their offers.
+  _Mine? _picked;
+
+  @override
+  Widget build(BuildContext context) {
+    final strings = AppStrings.of(context);
+    final jobs = context.watch<JobController>();
     final saved = context.watch<SavedJobsController>();
+    final isWorker = context.watch<ProfileController>().isWorker;
 
     final savedJobs = saved.resolve(jobs.jobs);
     final me = context.watch<AccountController>().activeId;
@@ -69,76 +150,57 @@ class _MyJobsScreenState extends State<MyJobsScreen>
               ..sort((a, b) => b.createdAt.compareTo(a.createdAt)))
             .toList(growable: false);
 
-    final unseen = context.watch<NotificationController>().unseen(
-      buildFeed(context),
-    );
-    final waiting = context.watch<MessageController>().threadsWaiting(
-      jobs.jobs,
-    );
+    final showing = _picked ?? (isWorker ? _Mine.offers : _Mine.posted);
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(strings.navActivity),
-        actions: const [AccountButton()],
-        bottom: TabBar(
-          controller: _tabs,
-          isScrollable: true,
-          tabAlignment: TabAlignment.start,
-          tabs: [
-            // Updates first: it is the reason to open this destination at all
-            // now, and the three lists behind it are things you go looking for
-            // rather than things that change while you are away.
-            Tab(
-              text: unseen == 0
-                  ? strings.updatesTab
-                  : '${strings.updatesTab} · $unseen',
-            ),
-            Tab(
-              text: waiting == 0
-                  ? strings.messagesTab
-                  : '${strings.messagesTab} · $waiting',
-            ),
-            Tab(text: '${strings.savedTab} · ${savedJobs.length}'),
-            Tab(text: '${strings.postedTab} · ${myPostings.length}'),
-            Tab(text: '${strings.offersTab} · ${myOffers.length}'),
-          ],
-        ),
-      ),
-      // The same measure as the job list; these are the same rows.
-      body: ReadableWidth(
-        child: switch (jobs.state) {
-          LoadState.idle || LoadState.loading => const JobListSkeleton(),
-          LoadState.failed => ErrorView(
-            message: strings.couldNotLoadJobs,
-            onRetry: jobs.load,
+    ButtonSegment<_Mine> segment(_Mine value, String label, int count) =>
+        ButtonSegment(
+          value: value,
+          label: CountedLabel(label: label, count: count),
+        );
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(
+            BrandSizing.spaceMd,
+            BrandSizing.spaceMd,
+            BrandSizing.spaceMd,
+            BrandSizing.spaceSm,
           ),
-          LoadState.ready => TabBarView(
-            controller: _tabs,
-            children: [
-              const UpdatesTab(),
-              const ThreadsTab(),
-              _JobsTab(
-                jobs: savedJobs,
-                emptyIcon: Icons.bookmark_border,
-                emptyTitle: strings.noSavedJobs,
-                emptyMessage: strings.noSavedJobsMessage,
-                // Said once, rather than letting the list quietly shrink.
-                notice: saved.hasMissing(jobs.jobs)
-                    ? strings.savedJobGone
-                    : null,
-              ),
-              _JobsTab(
-                jobs: myPostings,
-                emptyIcon: Icons.work_outline,
-                emptyTitle: strings.noPostings,
-                emptyMessage: strings.noPostingsMessage,
-                marksOwnPostings: false,
-              ),
-              _OffersTab(offers: myOffers, jobs: byId),
+          child: SegmentedButton<_Mine>(
+            showSelectedIcon: false,
+            segments: [
+              segment(_Mine.posted, strings.postedTab, myPostings.length),
+              segment(_Mine.offers, strings.offersTab, myOffers.length),
+              segment(_Mine.saved, strings.savedTab, savedJobs.length),
             ],
+            selected: {showing},
+            onSelectionChanged: (value) =>
+                setState(() => _picked = value.single),
           ),
-        },
-      ),
+        ),
+        Expanded(
+          child: switch (showing) {
+            _Mine.posted => _JobsTab(
+              jobs: myPostings,
+              emptyIcon: Icons.work_outline,
+              emptyTitle: strings.noPostings,
+              emptyMessage: strings.noPostingsMessage,
+              marksOwnPostings: false,
+            ),
+            _Mine.offers => _OffersTab(offers: myOffers, jobs: byId),
+            _Mine.saved => _JobsTab(
+              jobs: savedJobs,
+              emptyIcon: Icons.bookmark_border,
+              emptyTitle: strings.noSavedJobs,
+              emptyMessage: strings.noSavedJobsMessage,
+              // Said once, rather than letting the list quietly shrink.
+              notice: saved.hasMissing(jobs.jobs) ? strings.savedJobGone : null,
+            ),
+          },
+        ),
+      ],
     );
   }
 }
@@ -170,15 +232,9 @@ class _OffersTab extends StatelessWidget {
     final now = DateTime.now();
 
     return ListView.separated(
-      padding: const EdgeInsets.fromLTRB(
-        BrandSizing.spaceMd,
-        BrandSizing.spaceMd,
-        BrandSizing.spaceMd,
-        BrandSizing.spaceXl * 3,
-      ),
+      padding: const EdgeInsets.only(bottom: BrandSizing.spaceXl),
       itemCount: offers.length,
-      separatorBuilder: (_, _) =>
-          const SizedBox(height: BrandSizing.spaceSm + 4),
+      separatorBuilder: (_, _) => const Divider(indent: BrandSizing.spaceMd),
       itemBuilder: (context, index) {
         final offer = offers[index];
         final job = jobs[offer.jobId]!;
@@ -195,8 +251,8 @@ class _OffersTab extends StatelessWidget {
                 mediaStore: context.read<MediaStore>(),
               ),
             ),
-            const SizedBox(height: BrandSizing.spaceXs),
             _OfferOutcome(offer: offer, strings: strings),
+            const SizedBox(height: BrandSizing.spaceSm + 4),
           ],
         );
       },
@@ -228,7 +284,7 @@ class _OfferOutcome extends StatelessWidget {
     };
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: BrandSizing.spaceSm),
+      padding: const EdgeInsets.symmetric(horizontal: BrandSizing.spaceMd),
       child: Row(
         children: [
           Expanded(
@@ -282,18 +338,19 @@ class _JobsTab extends StatelessWidget {
     final now = DateTime.now();
 
     return ListView.separated(
-      padding: const EdgeInsets.fromLTRB(
-        BrandSizing.spaceMd,
-        BrandSizing.spaceMd,
-        BrandSizing.spaceMd,
-        BrandSizing.spaceXl * 3,
-      ),
+      padding: const EdgeInsets.only(bottom: BrandSizing.spaceXl),
       itemCount: jobs.length + (notice == null ? 0 : 1),
-      separatorBuilder: (_, _) =>
-          const SizedBox(height: BrandSizing.spaceSm + 4),
+      separatorBuilder: (_, index) => notice != null && index == 0
+          ? const SizedBox(height: BrandSizing.spaceSm)
+          : const Divider(indent: BrandSizing.spaceMd),
       itemBuilder: (context, index) {
         if (notice != null && index == 0) {
-          return NoticePanel(message: notice!);
+          return Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: BrandSizing.spaceMd,
+            ),
+            child: NoticePanel(message: notice!),
+          );
         }
 
         final job = jobs[index - (notice == null ? 0 : 1)];

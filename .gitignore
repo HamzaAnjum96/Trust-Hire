@@ -6,3 +6,4 @@
 # Per-machine Claude Code settings, and Impeccable's scratch captures.
 .claude/settings.local.json
 .impeccable/
+__pycache__/

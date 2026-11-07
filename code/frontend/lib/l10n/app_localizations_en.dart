@@ -27,6 +27,21 @@ class AppStringsEn extends AppStrings {
   String get postAJob => 'Post a Job';
 
   @override
+  String get showAsList => 'Show as a list';
+
+  @override
+  String get showOnMap => 'Show on the map';
+
+  @override
+  String get ask => 'Ask';
+
+  @override
+  String get yourJobsTab => 'Your jobs';
+
+  @override
+  String get moreActions => 'More actions';
+
+  @override
   String get nearbyWork => 'Nearby work';
 
   @override

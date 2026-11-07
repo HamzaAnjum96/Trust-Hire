@@ -3,6 +3,7 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trust_hire/app/app.dart';
+import 'package:trust_hire/app/app_shell.dart';
 import 'package:trust_hire/app/settings_controller.dart';
 import 'package:trust_hire/core/layout.dart';
 import 'package:trust_hire/core/tokens.dart';
@@ -137,9 +138,13 @@ void main() {
       await tester.pumpWidget(TrustHireApp(store: await readyStore()));
       await settle(tester);
 
+      await tester.tap(find.text('Directory'));
+      await settle(tester);
+      expect(find.text('Book a professional'), findsOneWidget);
+
       await tester.tap(find.text('Jobs'));
       await settle(tester);
-      expect(find.text('Find work'), findsOneWidget);
+      expect(find.byType(JobMap), findsOneWidget);
 
       await tester.tap(find.text('Profile'));
       await settle(tester);
@@ -157,7 +162,7 @@ void main() {
         await settle(tester);
 
         expect(
-          find.byType(FloatingActionButton),
+          find.byType(PostJobButton),
           findsOneWidget,
           reason: 'the primary action vanished at one size',
         );
@@ -234,7 +239,12 @@ void main() {
       await tester.pumpWidget(TrustHireApp(store: await readyStore()));
       await settle(tester);
 
-      await tester.tap(find.text('Open details').first);
+      // Selecting comes first; the way through to the details is on the
+      // selected row, not repeated on every one.
+      expect(find.text('Open details'), findsNothing);
+      await tester.tap(find.byType(JobRow).first);
+      await settle(tester);
+      await tester.tap(find.text('Open details'));
       await settle(tester);
 
       expect(find.byType(JobDetailsSheet), findsOneWidget);
@@ -309,7 +319,7 @@ void main() {
       await tester.pumpWidget(TrustHireApp(store: await readyStore()));
       await settle(tester);
 
-      await tester.tap(find.text('Jobs'));
+      await tester.tap(find.bySemanticsLabel(RegExp('^Show as a list')));
       await settle(tester);
 
       final row = tester.getSize(find.byType(JobRow).first).width;

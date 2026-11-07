@@ -4,7 +4,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trust_hire/app/app.dart';
 import 'package:trust_hire/app/settings_controller.dart';
+import 'package:trust_hire/features/account/account_switcher.dart';
 import 'package:trust_hire/features/map/job_map.dart';
+import 'package:trust_hire/features/map/map_overlays.dart';
 import 'package:trust_hire/services/local_store.dart';
 
 import 'support/seed_facts.dart';
@@ -74,19 +76,21 @@ void main() {
     await tester.pumpWidget(TrustHireApp(store: store));
     await settle(tester);
 
-    // Navigation scaffold is present with all four destinations.
+    // Navigation scaffold is present with all four destinations. Since 0.23
+    // the map and the list are one destination, Jobs.
     expect(find.byType(NavigationBar), findsOneWidget);
     expect(find.byType(NavigationRail), findsNothing);
-    expect(find.text('Map'), findsOneWidget);
     expect(find.text('Jobs'), findsOneWidget);
+    expect(find.text('Directory'), findsOneWidget);
     expect(find.text('Activity'), findsOneWidget);
     expect(find.text('Profile'), findsOneWidget);
 
     // Primary action is reachable from the landing screen.
     expect(find.text('Post a Job'), findsOneWidget);
 
-    // The map is the landing surface.
-    expect(find.text('Nearby work'), findsOneWidget);
+    // The map is the landing surface, under the search bar.
+    expect(find.byType(JobMap), findsOneWidget);
+    expect(find.byType(JobsSearchBar), findsOneWidget);
 
     // The seed data made it into local storage.
     final stored = store.readCollection(StoreKeys.jobs);
@@ -105,22 +109,31 @@ void main() {
     await tester.pumpWidget(TrustHireApp(store: store));
     await settle(tester);
 
-    await tester.tap(find.text('Jobs'));
+    // The list is the Jobs destination's other view, not a place of its own.
+    await tester.tap(find.bySemanticsLabel(RegExp('^Show as a list')));
     await settle(tester);
-    expect(find.text('Find work'), findsOneWidget);
+    expect(find.byType(JobMap), findsNothing);
+    expect(find.byType(JobsSearchBar), findsOneWidget);
 
-    // "Activity", not "Saved" — the screen has always held both tabs, and
-    // naming it after one of them hid the other.
+    await tester.tap(find.text('Directory'));
+    await settle(tester);
+    expect(find.text('Book a professional'), findsOneWidget);
+
+    // "Activity", not "Saved" — the screen holds what arrives and what you
+    // keep an eye on, and naming it after one list hid the others.
     await tester.tap(find.text('Activity'));
     await settle(tester);
-    expect(find.text('Saved · 0'), findsOneWidget);
-    expect(find.text('Posted · 0'), findsOneWidget);
+    await tester.tap(find.text('Your jobs'));
+    await settle(tester);
+    expect(find.text('Saved'), findsOneWidget);
+    expect(find.text('Posted'), findsOneWidget);
+    expect(find.text('Offers'), findsOneWidget);
 
     await tester.tap(find.text('Profile'));
     await settle(tester);
     // Who you are leads, then role and trades; the preferences sit
     // underneath them, off the first screenful on a handset.
-    expect(find.text('Demo accounts'), findsOneWidget);
+    expect(find.byType(AccountCard), findsOneWidget);
     expect(find.text('What brings you here'), findsOneWidget);
 
     // Scrolled far enough to be about *order* rather than about how tall the
@@ -161,7 +174,7 @@ void main() {
     await settle(tester);
 
     // The map rendered anyway, centred on the fallback.
-    expect(find.text('Nearby work'), findsOneWidget);
+    expect(find.byType(JobMap), findsOneWidget);
     // A count of the jobs this worker can see, not of every job in the file:
     // since P1-1 a worker on the default tag only ever sees general work.
     expect(

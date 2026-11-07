@@ -41,11 +41,12 @@ and they explain most of the decisions below:
 
 **Be:** the device account ("You"), which is where the app opens.
 
-**Map.** Jobs near you, clustered. The count in the header is how many are
-visible *to you* — not how many exist. Pins are approximate on purpose: the
-circle is the area, not the address.
+**Jobs**, on the map. Jobs near you, clustered. The count on the switch at the
+bottom of the map ("16 jobs") is how many are visible *to you* — not how many
+exist. Pins are approximate on purpose: the circle is the area, not the
+address. Tap the switch for the same jobs as a list; tap it again for the map.
 
-**The notice under the header.** *"Jobs only reach you when they match a trade
+**The notice under the search bar.** *"Jobs only reach you when they match a trade
 you do."* This is Section 8 working, and it is why the count is lower than the
 183 jobs in the seed. Tap the ✕ to dismiss it; it stays dismissed for this
 account.
@@ -57,7 +58,8 @@ looks like, and it is the reason the other six accounts exist.
 
 ## Stop 2 — Being somebody else
 
-**Tap:** the avatar in the map header (or *Profile → Demo accounts*).
+**Tap:** the avatar at the end of the search bar (or *Profile → Switch
+account*).
 
 Seven accounts, five of them people from the seed, one per city, plus Trust
 Hire's own staff account. Each row says where they are and how much they have
@@ -71,7 +73,8 @@ not accounts: no password, no privacy between them, one browser's storage.
 
 ## Stop 3 — The hirer's side (Mode A)
 
-**Be:** Hina Butt, Islamabad. **Go:** Activity → Posted.
+**Be:** Hina Butt, Islamabad. **Go:** Activity → Your jobs. It opens on
+*Posted* for a hirer.
 
 Four postings, in different states. Open the one marked with offers.
 
@@ -101,7 +104,8 @@ needs a server.
 
 ## Stop 3b — A starting fare
 
-**Still Hina.** **Tap:** **Post a Job** (on any tab but Profile). Pick
+**Still Hina.** **Tap:** **Post a Job**, in the middle of the bottom bar (at the
+top of the rail on a wide window). Pick
 *Plumbing*, write "Kitchen tap leaking" as the message, and tap **Suggest a
 fare**.
 

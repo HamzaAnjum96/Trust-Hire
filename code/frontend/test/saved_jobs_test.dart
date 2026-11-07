@@ -171,8 +171,15 @@ void main() {
     /// screen opened on it. 0.17.0 put Updates in front — the destination now
     /// carries a badge, and tapping a badge must land on the thing it counted
     /// — so a test about saved jobs has to say so.
+    ///
+    /// Since 0.23 Saved and Posted are segments inside *Your jobs*, not tabs
+    /// of their own, so it goes there first.
     Future<void> openTab(WidgetTester tester, String label) async {
-      await tester.tap(find.textContaining(label));
+      if (find.text(label).evaluate().isEmpty) {
+        await tester.tap(find.text(strings.yourJobsTab));
+        await tester.pumpAndSettle();
+      }
+      await tester.tap(find.text(label));
       await tester.pumpAndSettle();
     }
 

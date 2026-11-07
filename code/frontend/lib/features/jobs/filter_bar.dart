@@ -321,9 +321,17 @@ class FilterSheet extends StatelessWidget {
 /// The search field. Typing is the last resort in this product, so it sits
 /// alongside the chips rather than above them.
 class JobSearchField extends StatefulWidget {
-  const JobSearchField({super.key, required this.controller});
+  const JobSearchField({
+    super.key,
+    required this.controller,
+    this.embedded = false,
+  });
 
   final JobFilterController controller;
+
+  /// Drawn without a box of its own, because it sits inside one: the search
+  /// bar at the top of the Jobs destination.
+  final bool embedded;
 
   @override
   State<JobSearchField> createState() => _JobSearchFieldState();
@@ -343,24 +351,39 @@ class _JobSearchFieldState extends State<JobSearchField> {
   @override
   Widget build(BuildContext context) {
     final strings = AppStrings.of(context);
+    final clear = widget.controller.filter.query.isEmpty
+        ? null
+        : IconButton(
+            icon: const Icon(Icons.close),
+            tooltip: strings.clearSearch,
+            onPressed: () {
+              _text.clear();
+              widget.controller.setQuery('');
+            },
+          );
+
     return TextField(
       controller: _text,
       onChanged: widget.controller.setQuery,
       textInputAction: TextInputAction.search,
-      decoration: InputDecoration(
-        hintText: strings.searchJobs,
-        prefixIcon: const Icon(Icons.search),
-        suffixIcon: widget.controller.filter.query.isEmpty
-            ? null
-            : IconButton(
-                icon: const Icon(Icons.close),
-                tooltip: strings.clearSearch,
-                onPressed: () {
-                  _text.clear();
-                  widget.controller.setQuery('');
-                },
+      decoration: widget.embedded
+          ? InputDecoration(
+              hintText: strings.searchJobs,
+              prefixIcon: const Icon(Icons.search),
+              suffixIcon: clear,
+              filled: false,
+              border: InputBorder.none,
+              enabledBorder: InputBorder.none,
+              focusedBorder: InputBorder.none,
+              contentPadding: const EdgeInsets.symmetric(
+                vertical: BrandSizing.spaceSm + 6,
               ),
-      ),
+            )
+          : InputDecoration(
+              hintText: strings.searchJobs,
+              prefixIcon: const Icon(Icons.search),
+              suffixIcon: clear,
+            ),
     );
   }
 }

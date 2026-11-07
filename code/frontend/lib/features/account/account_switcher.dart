@@ -184,11 +184,13 @@ class _AccountTile extends StatelessWidget {
   }
 }
 
-/// The switcher as it appears on the profile screen.
+/// Who you are, at the head of the profile — and the way to be someone else.
 ///
-/// Above the role picker, because "who am I" comes before "which side am I
-/// on": switching account can change the role underneath you, and a control
-/// that silently reorders the one below it should sit above it.
+/// **A header, not a card** since 0.23: a large avatar, the name at page
+/// size, where they are, and "Switch account" said in words under it, the
+/// way a profile with more than one account usually says it. The whole row
+/// opens the switcher. It used to be a bordered list tile under a "Demo
+/// accounts" heading, which put the demo's mechanics above the person.
 class AccountCard extends StatelessWidget {
   const AccountCard({super.key});
 
@@ -198,27 +200,68 @@ class AccountCard extends StatelessWidget {
     final theme = Theme.of(context);
     final account = context.watch<AccountController>().active;
 
-    return Card(
-      margin: EdgeInsets.zero,
-      shape: const RoundedRectangleBorder(borderRadius: BrandRadius.largeAll),
-      child: ListTile(
-        contentPadding: const EdgeInsets.symmetric(
-          horizontal: BrandSizing.spaceMd,
-          vertical: BrandSizing.spaceSm,
-        ),
-        leading: AccountAvatar(account: account, radius: 24),
-        title: Text(
-          accountName(account, strings),
-          style: theme.textTheme.titleMedium,
-        ),
-        subtitle: Text(
-          account.area ??
-              (account.isAdmin
-                  ? strings.accountStaffHelp
-                  : strings.accountYouHelp),
-        ),
-        trailing: const Icon(Icons.swap_horiz),
+    return Material(
+      type: MaterialType.transparency,
+      child: InkWell(
         onTap: () => AccountSheet.open(context),
+        borderRadius: BrandRadius.largeAll,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: BrandSizing.spaceXs,
+            vertical: BrandSizing.spaceSm,
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              AccountAvatar(account: account, radius: 30),
+              const SizedBox(width: BrandSizing.spaceMd),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Section size, bold: under the page's own "Profile" a
+                    // second 24px heading would compete with it.
+                    Text(
+                      accountName(account, strings),
+                      style: theme.textTheme.titleLarge?.copyWith(
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      account.area ??
+                          (account.isAdmin
+                              ? strings.accountStaffHelp
+                              : strings.accountYouHelp),
+                      style: theme.textTheme.bodyMedium,
+                    ),
+                    const SizedBox(height: BrandSizing.spaceSm),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.swap_horiz,
+                          size: 18,
+                          color: theme.colorScheme.primary,
+                        ),
+                        const SizedBox(width: BrandSizing.spaceXs + 2),
+                        Flexible(
+                          child: Text(
+                            strings.switchAccount,
+                            style: BrandType.supporting.copyWith(
+                              color: theme.colorScheme.primary,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

@@ -6,6 +6,26 @@
   "navJobs": "Jobs",
   "navSettings": "Settings",
   "postAJob": "Post a Job",
+  "showAsList": "Show as a list",
+  "@showAsList": {
+    "description": "Switches the Jobs destination from the map to a list of the same results"
+  },
+  "showOnMap": "Show on the map",
+  "@showOnMap": {
+    "description": "Switches the Jobs destination from the list back to the map"
+  },
+  "ask": "Ask",
+  "@ask": {
+    "description": "Short label for the button that opens Ask Trust Hire, inside a search bar"
+  },
+  "yourJobsTab": "Your jobs",
+  "@yourJobsTab": {
+    "description": "Activity tab holding the jobs you posted, offered on and saved"
+  },
+  "moreActions": "More actions",
+  "@moreActions": {
+    "description": "Tooltip on the overflow menu of a job"
+  },
   "nearbyWork": "Nearby work",
   "findWork": "Find work",
   "jobCount": "{count, plural, =1{1 job} other{{count} jobs}}",

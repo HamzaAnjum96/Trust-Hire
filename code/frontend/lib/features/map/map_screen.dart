@@ -16,6 +16,7 @@ import '../../services/media_store.dart';
 import '../jobs/filter_bar.dart';
 import '../jobs/job_details_sheet.dart';
 import '../jobs/job_filter_controller.dart';
+import '../jobs/job_results.dart';
 import '../jobs/job_row.dart';
 import '../profile/my_trades_screen.dart';
 import '../../widgets/meta_chip.dart';
@@ -28,10 +29,16 @@ import 'location_controller.dart';
 import 'marker_cluster.dart';
 import '../../l10n/app_localizations.dart';
 
-/// The map — the primary surface of the product.
+/// The Jobs destination: the map, and the same results as a list.
 ///
 /// Design principle 1: jobs exist on a map, not inside long lists. Tapping a
 /// pin selects it, draws its approximate work area, and raises a preview.
+///
+/// **Since 0.23 the list lives here too.** It was a destination of its own,
+/// and the two were the same jobs under one shared filter state, a tab apart.
+/// Now a view switch at the bottom of the screen turns the map into the list
+/// and back, under one search bar; on a desktop both are on screen at once
+/// and the switch is not drawn.
 class MapScreen extends StatefulWidget {
   const MapScreen({super.key});
 
@@ -43,6 +50,16 @@ class _MapScreenState extends State<MapScreen> {
   final MapController _mapController = MapController();
   String? _selectedJobId;
   bool _tilesUnavailable = false;
+
+  /// Whether the list is showing instead of the map, where only one fits.
+  /// The map is the default: it is the product.
+  bool _showingList = false;
+
+  void _toggleView() => setState(() {
+    _showingList = !_showingList;
+    // A pin selected on the map means nothing in the list.
+    _selectedJobId = null;
+  });
 
   /// The opening camera, worked out once the jobs are known.
   ///
@@ -209,6 +226,10 @@ class _MapScreenState extends State<MapScreen> {
           onRetry: jobs.load,
         ),
         LoadState.ready => _Discovery(
+          allJobs: jobs.jobs,
+          reachable: reachable,
+          showingList: _showingList,
+          onToggleView: _toggleView,
           jobs: filters.apply(
             reachable,
             strings: strings,
@@ -253,6 +274,10 @@ class _MapScreenState extends State<MapScreen> {
 /// pins come from, and selecting in either place selects in both.
 class _Discovery extends StatelessWidget {
   const _Discovery({
+    required this.allJobs,
+    required this.reachable,
+    required this.showingList,
+    required this.onToggleView,
     required this.jobs,
     required this.totalJobCount,
     required this.hiddenByTags,
@@ -270,6 +295,14 @@ class _Discovery extends StatelessWidget {
     required this.onClusterTapped,
     required this.onFitToJobs,
   });
+
+  /// Every job on the device, and those the visibility rule lets through —
+  /// the list's empty states need both to say the right thing.
+  final List<Job> allJobs;
+  final List<Job> reachable;
+
+  final bool showingList;
+  final VoidCallback onToggleView;
 
   final List<Job> jobs;
   final int totalJobCount;
@@ -294,7 +327,28 @@ class _Discovery extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final split = LayoutSize.of(context).isSplit;
+
+    final viewSwitch = JobsViewSwitch(
+      showingMap: !showingList,
+      jobCount: jobs.length,
+      totalJobCount: totalJobCount,
+      onPressed: onToggleView,
+    );
+
+    if (!split && showingList) {
+      return _ListBody(
+        allJobs: allJobs,
+        reachable: reachable,
+        visible: jobs,
+        filters: filters,
+        viewerLocation: location.position,
+        viewSwitch: viewSwitch,
+      );
+    }
+
     final map = _MapBody(
+      viewSwitch: split ? null : viewSwitch,
       jobs: jobs,
       totalJobCount: totalJobCount,
       hiddenByTags: hiddenByTags,
@@ -307,7 +361,7 @@ class _Discovery extends StatelessWidget {
       // The preview card is the handset's answer to "what is this pin?". With
       // a rail beside the map that question is already answered, and a card
       // over the map would only cover it.
-      showsPreviewCard: !LayoutSize.of(context).isSplit,
+      showsPreviewCard: !split,
       onJobTapped: onJobTapped,
       onMapTapped: onMapTapped,
       onMyLocationPressed: onMyLocationPressed,
@@ -317,7 +371,7 @@ class _Discovery extends StatelessWidget {
       onFitToJobs: onFitToJobs,
     );
 
-    if (!LayoutSize.of(context).isSplit) return map;
+    if (!split) return map;
 
     return Row(
       children: [
@@ -330,6 +384,7 @@ class _Discovery extends StatelessWidget {
           width: 380,
           child: _ResultsRail(
             jobs: jobs,
+            totalJobCount: totalJobCount,
             viewerLocation: location.position,
             selectedJobId: selectedJobId,
             onSelect: onJobTapped,
@@ -345,6 +400,7 @@ class _Discovery extends StatelessWidget {
 class _ResultsRail extends StatelessWidget {
   const _ResultsRail({
     required this.jobs,
+    required this.totalJobCount,
     required this.viewerLocation,
     required this.selectedJobId,
     required this.onSelect,
@@ -352,6 +408,7 @@ class _ResultsRail extends StatelessWidget {
   });
 
   final List<Job> jobs;
+  final int totalJobCount;
   final JobLocation? viewerLocation;
   final String? selectedJobId;
   final ValueChanged<Job> onSelect;
@@ -371,14 +428,32 @@ class _ResultsRail extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.fromLTRB(
               BrandSizing.spaceMd,
+              BrandSizing.spaceMd + 2,
               BrandSizing.spaceMd,
-              BrandSizing.spaceMd,
-              BrandSizing.spaceSm,
+              BrandSizing.spaceSm + 4,
             ),
-            // No count here: the map's own header carries it a hundred
-            // pixels away, and the two can never disagree — the rail renders
-            // exactly the jobs the pins come from.
-            child: Text(strings.jobsNearby, style: theme.textTheme.titleMedium),
+            // The count lives here on a desktop: the view switch that carries
+            // it on a handset is not drawn when both views are on screen.
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.baseline,
+              textBaseline: TextBaseline.alphabetic,
+              children: [
+                Expanded(
+                  child: Text(
+                    strings.jobsNearby,
+                    style: theme.textTheme.titleMedium,
+                  ),
+                ),
+                Text(
+                  jobs.length == totalJobCount
+                      ? strings.jobCount(jobs.length)
+                      : strings.jobCountFiltered(jobs.length, totalJobCount),
+                  style: theme.textTheme.labelMedium?.copyWith(
+                    fontFeatures: const [FontFeature.tabularFigures()],
+                  ),
+                ),
+              ],
+            ),
           ),
           const Divider(height: 1),
           Expanded(
@@ -389,10 +464,9 @@ class _ResultsRail extends StatelessWidget {
                     message: strings.tryWiderArea,
                   )
                 : ListView.separated(
-                    padding: const EdgeInsets.all(BrandSizing.spaceMd),
                     itemCount: jobs.length,
                     separatorBuilder: (_, _) =>
-                        const SizedBox(height: BrandSizing.spaceSm),
+                        const Divider(indent: BrandSizing.spaceMd),
                     itemBuilder: (context, index) {
                       final job = jobs[index];
                       return JobRow(
@@ -415,8 +489,82 @@ class _ResultsRail extends StatelessWidget {
   }
 }
 
+/// The list in place of the map, where only one of them fits.
+///
+/// Same search bar, same chips, same results: the only thing that changed is
+/// how they are drawn. Held to the reading measure, so on a tablet the rows
+/// and the bar above them line up rather than stretching.
+class _ListBody extends StatelessWidget {
+  const _ListBody({
+    required this.allJobs,
+    required this.reachable,
+    required this.visible,
+    required this.filters,
+    required this.viewerLocation,
+    required this.viewSwitch,
+  });
+
+  final List<Job> allJobs;
+  final List<Job> reachable;
+  final List<Job> visible;
+  final JobFilterController filters;
+  final JobLocation? viewerLocation;
+  final Widget viewSwitch;
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        Positioned.fill(
+          child: SafeArea(
+            bottom: false,
+            child: ReadableWidth(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(
+                      BrandSizing.spaceMd,
+                      BrandSizing.spaceSm,
+                      BrandSizing.spaceMd,
+                      BrandSizing.spaceSm,
+                    ),
+                    child: JobsSearchBar(filters: filters),
+                  ),
+                  QuickFilterBar(controller: filters),
+                  const SizedBox(height: BrandSizing.spaceSm),
+                  const Divider(height: 1),
+                  Expanded(
+                    child: JobResults(
+                      all: allJobs,
+                      reachable: reachable,
+                      visible: visible,
+                      filters: filters,
+                      viewerLocation: viewerLocation,
+                      // Clear of the view switch floating over the bottom.
+                      bottomPadding:
+                          JobsViewSwitch.height + BrandSizing.spaceXl * 2,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+        Positioned(
+          left: 0,
+          right: 0,
+          bottom: BrandSizing.spaceMd,
+          child: Center(child: viewSwitch),
+        ),
+      ],
+    );
+  }
+}
+
 class _MapBody extends StatelessWidget {
   const _MapBody({
+    required this.viewSwitch,
     required this.jobs,
     required this.totalJobCount,
     required this.hiddenByTags,
@@ -435,6 +583,9 @@ class _MapBody extends StatelessWidget {
     required this.onFitToJobs,
     this.showsPreviewCard = true,
   });
+
+  /// Turns the map into the list. Null where both are on screen.
+  final Widget? viewSwitch;
 
   final List<Job> jobs;
   final int totalJobCount;
@@ -503,8 +654,8 @@ class _MapBody extends StatelessWidget {
           ),
         ),
 
-        // A floating title rather than an app bar — the map should reach the
-        // top of the screen.
+        // A floating search bar rather than an app bar — the map should reach
+        // the top of the screen.
         Positioned(
           left: BrandSizing.spaceMd,
           right: BrandSizing.spaceMd,
@@ -514,10 +665,7 @@ class _MapBody extends StatelessWidget {
           // together in one column instead of drifting apart as the window
           // widens.
           child: MapOverlayWidth(
-            child: MapHeader(
-              jobCount: jobs.length,
-              totalJobCount: totalJobCount,
-            ),
+            child: JobsSearchBar(filters: filters, floating: true),
           ),
         ),
 
@@ -606,8 +754,10 @@ class _MapBody extends StatelessWidget {
         Positioned(
           left: BrandSizing.spaceMd,
           right: BrandSizing.spaceMd,
-          // Clear the navigation bar and the post button.
-          bottom: 96,
+          // Nothing floats over the bottom of the map any more: posting moved
+          // into the navigation bar, and the view switch sits in the middle
+          // while these sit at the edge.
+          bottom: BrandSizing.spaceMd,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -682,6 +832,16 @@ class _MapBody extends StatelessWidget {
             ],
           ),
         ),
+
+        // The view switch, while there is no preview card: the card is what
+        // was just asked for, and the switch would sit on top of it.
+        if (viewSwitch != null && !cardShown)
+          Positioned(
+            left: 0,
+            right: 0,
+            bottom: BrandSizing.spaceMd,
+            child: Center(child: viewSwitch),
+          ),
       ],
     );
   }

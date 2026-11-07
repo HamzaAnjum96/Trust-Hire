@@ -11,6 +11,7 @@ import 'package:trust_hire/l10n/app_localizations.dart';
 import 'package:trust_hire/models/job.dart';
 import 'package:trust_hire/models/job_tag.dart';
 import 'package:trust_hire/services/local_store.dart';
+import 'package:trust_hire/features/map/job_map.dart';
 
 import 'support/seed_facts.dart';
 import 'support/test_strings.dart';
@@ -181,8 +182,7 @@ void main() {
       final prose = RegExp(r'^[A-Za-z][^,;:]*( [a-z]+){2,}');
       // `throw` joins these for the same reason `Error(` is here: an
       // exception message is read in a stack trace, never on a screen.
-      final developerFacing =
-          RegExp(r'debugPrint\(|Error\(|assert\(|throw ');
+      final developerFacing = RegExp(r'debugPrint\(|Error\(|assert\(|throw ');
       // Comments are prose by nature and are not shipped to anyone.
       final comment = RegExp(r'^\s*(///?|\*)');
 
@@ -240,7 +240,7 @@ void main() {
       await tester.pumpWidget(TrustHireApp(store: store));
       await settle(tester);
 
-      expect(find.text('Nearby work'), findsOneWidget);
+      expect(find.byType(JobMap), findsOneWidget);
       // Read off the navigation, whichever shape this surface gets — the
       // point is the text direction, not the control.
       expect(

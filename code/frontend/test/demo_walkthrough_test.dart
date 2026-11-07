@@ -85,17 +85,20 @@ void main() {
   }
 
   group('stop 1 — the app opens on work, with no account and no network', () {
-    testWidgets('and the five destinations are all there', (tester) async {
+    testWidgets('and the four destinations and posting are all there', (
+      tester,
+    ) async {
       final store = await ready();
       await tester.useCompactSurface();
       await tester.pumpWidget(TrustHireApp(store: store));
       await settle(tester);
 
       // The bottom bar is the whole of the demo's navigation. If one of these
-      // is missing, half the script cannot be followed.
+      // is missing, half the script cannot be followed. Since 0.23 the map and
+      // the list are one destination, Jobs, and posting sits in the bar.
       for (final destination in [
-        'Map',
         'Jobs',
+        'Post a Job',
         'Directory',
         'Activity',
         'Profile',
