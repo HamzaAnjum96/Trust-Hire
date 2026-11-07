@@ -7,6 +7,7 @@ import '../../app/job_controller.dart';
 import '../../core/formatters.dart';
 import '../../core/app_version.dart';
 import '../../core/theme.dart';
+import '../../core/layout.dart';
 import '../../core/tokens.dart';
 import '../../models/job.dart';
 import '../../services/capture_service.dart';
@@ -164,162 +165,169 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
               onPressed: () => Navigator.of(context).pop(),
             ),
           ),
-          body: ListView(
-            padding: const EdgeInsets.fromLTRB(
-              BrandSizing.spaceMd,
-              BrandSizing.spaceMd,
-              BrandSizing.spaceMd,
-              BrandSizing.spaceXl * 3,
-            ),
-            children: [
-              Text(
-                strings.whatWorkDoYouNeed,
-                style: theme.textTheme.headlineMedium,
+          // Held to the reading measure: on a desktop the fields ran the full
+          // width of the window, a 1,400px box for a short title.
+          body: ReadableWidth(
+            child: ListView(
+              padding: const EdgeInsets.fromLTRB(
+                BrandSizing.spaceMd,
+                BrandSizing.spaceMd,
+                BrandSizing.spaceMd,
+                BrandSizing.spaceXl * 3,
               ),
-              const SizedBox(height: BrandSizing.spaceXs),
-              Text(
-                // Section 33 copy — the whole premise, said plainly.
-                strings.anyOneIsEnough,
-                style: theme.textTheme.bodyMedium,
-              ),
-
-              const SizedBox(height: BrandSizing.spaceLg),
-              VoiceRecorderField(draft: _draft),
-
-              const SizedBox(height: BrandSizing.spaceLg),
-              _FieldLabel(strings.fieldTags),
-              const SizedBox(height: BrandSizing.spaceXs),
-              Text(strings.tagsHelp, style: theme.textTheme.labelSmall),
-              const SizedBox(height: BrandSizing.spaceSm),
-              JobTagField(draft: _draft),
-
-              const SizedBox(height: BrandSizing.spaceLg),
-              _FieldLabel(strings.photos),
-              const SizedBox(height: BrandSizing.spaceSm),
-              PhotoField(draft: _draft, mediaStore: mediaStore),
-
-              const SizedBox(height: BrandSizing.spaceLg),
-              _FieldLabel(strings.fieldTitle),
-              const SizedBox(height: BrandSizing.spaceSm),
-              TextField(
-                controller: _titleController,
-                onChanged: _draft.setTitle,
-                textCapitalization: TextCapitalization.sentences,
-                decoration: InputDecoration(hintText: strings.titleHint),
-              ),
-
-              const SizedBox(height: BrandSizing.spaceLg),
-              _FieldLabel(strings.fieldMessage),
-              const SizedBox(height: BrandSizing.spaceSm),
-              TextField(
-                controller: _descriptionController,
-                onChanged: _draft.setDescription,
-                textCapitalization: TextCapitalization.sentences,
-                maxLines: 3,
-                decoration: InputDecoration(hintText: strings.messageHint),
-              ),
-
-              // Asked for, never required. Someone who recorded a voice note
-              // because writing is hard must still be able to post — that is
-              // the product — so this says who the words would help and then
-              // gets out of the way.
-              if (_draft.wouldBeAudioOnly) ...[
-                const SizedBox(height: BrandSizing.spaceSm),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Icon(
-                      Icons.hearing_disabled_outlined,
-                      size: 18,
-                      color: theme.colorScheme.onSurfaceVariant,
-                    ),
-                    const SizedBox(width: BrandSizing.spaceSm),
-                    Expanded(
-                      child: Text(
-                        strings.addWordsForVoiceNote,
-                        style: theme.textTheme.labelSmall,
-                      ),
-                    ),
-                  ],
+              children: [
+                Text(
+                  strings.whatWorkDoYouNeed,
+                  style: theme.textTheme.headlineMedium,
                 ),
-              ],
+                const SizedBox(height: BrandSizing.spaceXs),
+                Text(
+                  // Section 33 copy — the whole premise, said plainly.
+                  strings.anyOneIsEnough,
+                  style: theme.textTheme.bodyMedium,
+                ),
 
-              const SizedBox(height: BrandSizing.spaceLg),
-              _FieldLabel(strings.fieldStartingFare),
-              const SizedBox(height: BrandSizing.spaceXs),
-              Text(strings.startingFareHelp, style: theme.textTheme.labelSmall),
-              const SizedBox(height: BrandSizing.spaceSm),
-              TextField(
-                controller: _fareController,
-                onChanged: _draft.setStartingFare,
-                // Typed in the style every fare in the app is shown in, so the
-                // number being set looks like the number workers will see.
-                style: theme.fareStyle,
-                keyboardType: TextInputType.number,
-                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                decoration: fareDecoration(context, style: theme.fareStyle),
-              ),
-              const SizedBox(height: BrandSizing.spaceSm),
-              FareAdvicePanel(draft: _draft, onUse: _useFare),
-
-              const SizedBox(height: BrandSizing.spaceLg),
-              _FieldLabel(strings.fieldContact),
-              const SizedBox(height: BrandSizing.spaceXs),
-              Text(strings.contactHelp, style: theme.textTheme.labelSmall),
-              const SizedBox(height: BrandSizing.spaceSm),
-              TextField(
-                controller: _contactController,
-                onChanged: _draft.setContactNumber,
-                keyboardType: TextInputType.phone,
-                decoration: InputDecoration(hintText: strings.contactHint),
-              ),
-
-              const SizedBox(height: BrandSizing.spaceLg),
-              _FieldLabel(strings.fieldArea),
-              const SizedBox(height: BrandSizing.spaceXs),
-              Text(strings.areaHelp, style: theme.textTheme.labelSmall),
-              const SizedBox(height: BrandSizing.spaceSm),
-              LocationPicker(
-                location: _draft.location,
-                radiusMetres: _draft.radiusMetres,
-                onLocationChanged: _draft.setLocation,
-              ),
-              const SizedBox(height: BrandSizing.spaceSm),
-              _RadiusSlider(
-                metres: _draft.radiusMetres,
-                onChanged: _draft.setRadius,
-              ),
-
-              const SizedBox(height: BrandSizing.spaceLg),
-              _FieldLabel(strings.detailWhen),
-              const SizedBox(height: BrandSizing.spaceSm),
-              _WhenField(
-                scheduledTime: _draft.scheduledTime,
-                onPick: _pickDateTime,
-                onClear: () => _draft.setScheduledTime(null),
-              ),
-
-              if (_draft.saveFailed) ...[
                 const SizedBox(height: BrandSizing.spaceLg),
-                NoticePanel(
-                  message: strings.couldNotSave,
-                  icon: Icons.error_outline,
-                  tone: NoticeTone.warning,
+                VoiceRecorderField(draft: _draft),
+
+                const SizedBox(height: BrandSizing.spaceLg),
+                _FieldLabel(strings.fieldTags),
+                const SizedBox(height: BrandSizing.spaceXs),
+                Text(strings.tagsHelp, style: theme.textTheme.labelSmall),
+                const SizedBox(height: BrandSizing.spaceSm),
+                JobTagField(draft: _draft),
+
+                const SizedBox(height: BrandSizing.spaceLg),
+                _FieldLabel(strings.photos),
+                const SizedBox(height: BrandSizing.spaceSm),
+                PhotoField(draft: _draft, mediaStore: mediaStore),
+
+                const SizedBox(height: BrandSizing.spaceLg),
+                _FieldLabel(strings.fieldTitle),
+                const SizedBox(height: BrandSizing.spaceSm),
+                TextField(
+                  controller: _titleController,
+                  onChanged: _draft.setTitle,
+                  textCapitalization: TextCapitalization.sentences,
+                  decoration: InputDecoration(hintText: strings.titleHint),
+                ),
+
+                const SizedBox(height: BrandSizing.spaceLg),
+                _FieldLabel(strings.fieldMessage),
+                const SizedBox(height: BrandSizing.spaceSm),
+                TextField(
+                  controller: _descriptionController,
+                  onChanged: _draft.setDescription,
+                  textCapitalization: TextCapitalization.sentences,
+                  maxLines: 3,
+                  decoration: InputDecoration(hintText: strings.messageHint),
+                ),
+
+                // Asked for, never required. Someone who recorded a voice note
+                // because writing is hard must still be able to post — that is
+                // the product — so this says who the words would help and then
+                // gets out of the way.
+                if (_draft.wouldBeAudioOnly) ...[
+                  const SizedBox(height: BrandSizing.spaceSm),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Icon(
+                        Icons.hearing_disabled_outlined,
+                        size: 18,
+                        color: theme.colorScheme.onSurfaceVariant,
+                      ),
+                      const SizedBox(width: BrandSizing.spaceSm),
+                      Expanded(
+                        child: Text(
+                          strings.addWordsForVoiceNote,
+                          style: theme.textTheme.labelSmall,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+
+                const SizedBox(height: BrandSizing.spaceLg),
+                _FieldLabel(strings.fieldStartingFare),
+                const SizedBox(height: BrandSizing.spaceXs),
+                Text(
+                  strings.startingFareHelp,
+                  style: theme.textTheme.labelSmall,
+                ),
+                const SizedBox(height: BrandSizing.spaceSm),
+                TextField(
+                  controller: _fareController,
+                  onChanged: _draft.setStartingFare,
+                  // Typed in the style every fare in the app is shown in, so the
+                  // number being set looks like the number workers will see.
+                  style: theme.fareStyle,
+                  keyboardType: TextInputType.number,
+                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                  decoration: fareDecoration(context, style: theme.fareStyle),
+                ),
+                const SizedBox(height: BrandSizing.spaceSm),
+                FareAdvicePanel(draft: _draft, onUse: _useFare),
+
+                const SizedBox(height: BrandSizing.spaceLg),
+                _FieldLabel(strings.fieldContact),
+                const SizedBox(height: BrandSizing.spaceXs),
+                Text(strings.contactHelp, style: theme.textTheme.labelSmall),
+                const SizedBox(height: BrandSizing.spaceSm),
+                TextField(
+                  controller: _contactController,
+                  onChanged: _draft.setContactNumber,
+                  keyboardType: TextInputType.phone,
+                  decoration: InputDecoration(hintText: strings.contactHint),
+                ),
+
+                const SizedBox(height: BrandSizing.spaceLg),
+                _FieldLabel(strings.fieldArea),
+                const SizedBox(height: BrandSizing.spaceXs),
+                Text(strings.areaHelp, style: theme.textTheme.labelSmall),
+                const SizedBox(height: BrandSizing.spaceSm),
+                LocationPicker(
+                  location: _draft.location,
+                  radiusMetres: _draft.radiusMetres,
+                  onLocationChanged: _draft.setLocation,
+                ),
+                const SizedBox(height: BrandSizing.spaceSm),
+                _RadiusSlider(
+                  metres: _draft.radiusMetres,
+                  onChanged: _draft.setRadius,
+                ),
+
+                const SizedBox(height: BrandSizing.spaceLg),
+                _FieldLabel(strings.detailWhen),
+                const SizedBox(height: BrandSizing.spaceSm),
+                _WhenField(
+                  scheduledTime: _draft.scheduledTime,
+                  onPick: _pickDateTime,
+                  onClear: () => _draft.setScheduledTime(null),
+                ),
+
+                if (_draft.saveFailed) ...[
+                  const SizedBox(height: BrandSizing.spaceLg),
+                  NoticePanel(
+                    message: strings.couldNotSave,
+                    icon: Icons.error_outline,
+                    tone: NoticeTone.warning,
+                  ),
+                ],
+
+                // Which build this is. Deliberately quiet and at the very
+                // bottom: it is for whoever is checking that a change actually
+                // deployed, and means nothing to someone posting a job.
+                const SizedBox(height: BrandSizing.spaceXl),
+                Text(
+                  AppVersion.label,
+                  style: theme.textTheme.labelSmall?.copyWith(
+                    color: theme.colorScheme.onSurfaceVariant,
+                  ),
+                  textAlign: TextAlign.center,
                 ),
               ],
-
-              // Which build this is. Deliberately quiet and at the very
-              // bottom: it is for whoever is checking that a change actually
-              // deployed, and means nothing to someone posting a job.
-              const SizedBox(height: BrandSizing.spaceXl),
-              Text(
-                AppVersion.label,
-                style: theme.textTheme.labelSmall?.copyWith(
-                  color: theme.colorScheme.onSurfaceVariant,
-                ),
-                textAlign: TextAlign.center,
-              ),
-            ],
+            ),
           ),
           bottomNavigationBar: _SaveBar(
             draft: _draft,
@@ -451,41 +459,73 @@ class _SaveBar extends StatelessWidget {
     final strings = AppStrings.of(context);
     final theme = Theme.of(context);
 
-    return SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.all(BrandSizing.spaceMd),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            if (draft.problem != null)
-              Padding(
-                padding: const EdgeInsets.only(bottom: BrandSizing.spaceSm),
-                child: Text(
-                  draft.problem == DraftProblem.noTags
-                      ? strings.tagsRequired
-                      : strings.addAtLeastOne,
-                  style: theme.textTheme.labelSmall,
-                  textAlign: TextAlign.center,
-                ),
+    // A footer, not more of the page: a white bar with a hairline over it,
+    // so the one action on the screen sits apart from the fields scrolling
+    // past behind it.
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: theme.colorScheme.surface,
+        border: Border(
+          top: BorderSide(color: theme.colorScheme.outlineVariant),
+        ),
+      ),
+      child: SafeArea(
+        // Not ReadableWidth: that is an Align with no height factor, and in a
+        // bottom bar it takes the whole height of the screen, leaving the
+        // form none.
+        child: Align(
+          alignment: Alignment.topCenter,
+          heightFactor: 1,
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(
+              maxWidth: BrandSizing.readableWidth,
+            ),
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(
+                BrandSizing.spaceMd,
+                BrandSizing.spaceSm + 4,
+                BrandSizing.spaceMd,
+                BrandSizing.spaceSm + 4,
               ),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: draft.canSave ? onSave : null,
-                child: draft.isSaving
-                    ? const SizedBox(
-                        width: 20,
-                        height: 20,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2.5,
-                          color: BrandColours.white,
-                        ),
-                      )
-                    // Section 21 — never "Submit".
-                    : Text(isEditing ? strings.saveChanges : strings.saveJob),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (draft.problem != null)
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        bottom: BrandSizing.spaceSm,
+                      ),
+                      child: Text(
+                        draft.problem == DraftProblem.noTags
+                            ? strings.tagsRequired
+                            : strings.addAtLeastOne,
+                        style: theme.textTheme.labelSmall,
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: draft.canSave ? onSave : null,
+                      child: draft.isSaving
+                          ? const SizedBox(
+                              width: 20,
+                              height: 20,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2.5,
+                                color: BrandColours.white,
+                              ),
+                            )
+                          // Section 21 — never "Submit".
+                          : Text(
+                              isEditing ? strings.saveChanges : strings.saveJob,
+                            ),
+                    ),
+                  ),
+                ],
               ),
             ),
-          ],
+          ),
         ),
       ),
     );

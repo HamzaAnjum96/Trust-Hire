@@ -6,6 +6,7 @@ import 'job_filter.dart';
 import 'job_filter_controller.dart';
 import '../../l10n/app_localizations.dart';
 import '../../widgets/fading_row.dart';
+import '../../widgets/search_bar_frame.dart';
 
 /// Quick filters: the two the sprint plan names, plus a way into the rest.
 ///
@@ -367,18 +368,7 @@ class _JobSearchFieldState extends State<JobSearchField> {
       onChanged: widget.controller.setQuery,
       textInputAction: TextInputAction.search,
       decoration: widget.embedded
-          ? InputDecoration(
-              hintText: strings.searchJobs,
-              prefixIcon: const Icon(Icons.search),
-              suffixIcon: clear,
-              filled: false,
-              border: InputBorder.none,
-              enabledBorder: InputBorder.none,
-              focusedBorder: InputBorder.none,
-              contentPadding: const EdgeInsets.symmetric(
-                vertical: BrandSizing.spaceSm + 6,
-              ),
-            )
+          ? searchBarDecoration(hint: strings.searchJobs, suffixIcon: clear)
           : InputDecoration(
               hintText: strings.searchJobs,
               prefixIcon: const Icon(Icons.search),

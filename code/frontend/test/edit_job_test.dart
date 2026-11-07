@@ -196,12 +196,12 @@ void main() {
       }
     }
 
-    Future<void> scrollToBottom(WidgetTester tester) async {
-      for (var attempt = 0; attempt < 4; attempt++) {
-        await tester.drag(find.byType(ListView), const Offset(0, -400));
-        for (var i = 0; i < 4; i++) {
-          await tester.pump(const Duration(milliseconds: 100));
-        }
+    /// Since 0.23 edit and delete are in the More menu beside the title,
+    /// not buttons at the foot of the sheet.
+    Future<void> openMenu(WidgetTester tester) async {
+      await tester.tap(find.byTooltip('More actions'));
+      for (var i = 0; i < 4; i++) {
+        await tester.pump(const Duration(milliseconds: 100));
       }
     }
 
@@ -212,7 +212,7 @@ void main() {
       await controller.saveJob(localJob());
 
       await openSheet(tester, controller, media, 'local-1');
-      await scrollToBottom(tester);
+      await openMenu(tester);
 
       expect(find.text('Edit Job'), findsOneWidget);
       expect(find.text('Delete Job'), findsOneWidget);
@@ -222,8 +222,10 @@ void main() {
       final (controller, media, _) = await build();
 
       await openSheet(tester, controller, media, 'seed-001');
-      await scrollToBottom(tester);
 
+      // Not even the menu: a seeded job open to offers is not this account's,
+      // and there is nothing on it this account could call off.
+      expect(find.byTooltip('More actions'), findsNothing);
       expect(find.text('Edit Job'), findsNothing);
       expect(find.text('Delete Job'), findsNothing);
     });
@@ -233,7 +235,7 @@ void main() {
       await controller.saveJob(localJob());
 
       await openSheet(tester, controller, media, 'local-1');
-      await scrollToBottom(tester);
+      await openMenu(tester);
 
       await tester.tap(find.text('Delete Job'));
       await tester.pumpAndSettle();

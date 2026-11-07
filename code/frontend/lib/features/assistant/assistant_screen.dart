@@ -516,15 +516,20 @@ class _Answered extends StatelessWidget {
             if (jobs.jobById(hit.id) case final job?)
               Padding(
                 padding: const EdgeInsets.only(bottom: BrandSizing.spaceSm),
-                child: JobRow(
-                  job: job,
-                  now: now,
-                  viewerLocation: here,
-                  onTap: () => JobDetailsSheet.open(
-                    context,
-                    jobId: job.id,
-                    mediaStore: context.read<MediaStore>(),
+                // Rows are flat on a page since 0.23; inside an answer each
+                // result keeps a frame, so it reads as one thing found.
+                child: Card(
+                  clipBehavior: Clip.antiAlias,
+                  child: JobRow(
+                    job: job,
+                    now: now,
                     viewerLocation: here,
+                    onTap: () => JobDetailsSheet.open(
+                      context,
+                      jobId: job.id,
+                      mediaStore: context.read<MediaStore>(),
+                      viewerLocation: here,
+                    ),
                   ),
                 ),
               ),
@@ -532,10 +537,13 @@ class _Answered extends StatelessWidget {
             if (premium.listingFor(hit.id) case final listing?)
               Padding(
                 padding: const EdgeInsets.only(bottom: BrandSizing.spaceSm),
-                child: DirectoryListingCard(
-                  listing: listing,
-                  name: hit.name.isEmpty ? null : hit.name,
-                  distanceMetres: hit.km == null ? null : hit.km! * 1000,
+                child: Card(
+                  clipBehavior: Clip.antiAlias,
+                  child: DirectoryListingCard(
+                    listing: listing,
+                    name: hit.name.isEmpty ? null : hit.name,
+                    distanceMetres: hit.km == null ? null : hit.km! * 1000,
+                  ),
                 ),
               ),
           Row(

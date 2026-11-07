@@ -27,6 +27,10 @@ class AppStringsUr extends AppStrings {
   String get postAJob => 'کام لگائیں';
 
   @override
+  String get contactYours =>
+      'یہ آپ کا نمبر ہے۔ باقی سب اسے \"رابطہ دکھائیں\" کے پیچھے دیکھتے ہیں۔';
+
+  @override
   String get showAsList => 'فہرست میں دکھائیں';
 
   @override

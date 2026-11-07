@@ -62,8 +62,14 @@ class TagTile extends StatelessWidget {
           child: AnimatedContainer(
             duration: Motion.fast(context),
             width: width,
+            // Room for a two-line label on every tile, so a row whose labels
+            // wrap and a row whose labels do not are the same height.
+            constraints: const BoxConstraints(minHeight: 84),
+            // Narrow at the sides: the label needs the width more than the
+            // tile needs the margin. At 8px a side "Appliance repair" and
+            // "Legal advice" were shrunk to about 10px to fit one line.
             padding: const EdgeInsets.symmetric(
-              horizontal: BrandSizing.spaceSm,
+              horizontal: 2,
               vertical: BrandSizing.spaceSm,
             ),
             decoration: BoxDecoration(
@@ -79,22 +85,18 @@ class TagTile extends StatelessWidget {
               children: [
                 Icon(tag.icon, size: 28, color: foreground),
                 const SizedBox(height: BrandSizing.spaceXs + 2),
-                // Shrunk to fit rather than broken mid-word. "Construction"
-                // is one character too long for a 92px tile and was wrapping
-                // as "Constructio / n", which reads as a rendering fault —
-                // and these labels exist precisely so somebody who reads
-                // slowly can check the icon against a word.
-                FittedBox(
-                  fit: BoxFit.scaleDown,
-                  child: Text(
-                    tag.label(strings),
-                    style: theme.textTheme.labelSmall?.copyWith(
-                      color: foreground,
-                      fontWeight: selected ? FontWeight.w600 : FontWeight.w500,
-                    ),
-                    textAlign: TextAlign.center,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
+                // Two-word labels wrap at the space; a single word too long
+                // for the tile is shrunk rather than broken mid-word, which
+                // read as a rendering fault ("Constructio / n"). Since 0.23
+                // the shrink is the exception — at large text sizes — not
+                // what happens to every long label: these labels exist so
+                // somebody who reads slowly can check the icon against a
+                // word, and 10px defeats that.
+                _TileLabel(
+                  text: tag.label(strings),
+                  style: theme.textTheme.labelSmall!.copyWith(
+                    color: foreground,
+                    fontWeight: selected ? FontWeight.w600 : FontWeight.w500,
                   ),
                 ),
               ],
@@ -102,6 +104,61 @@ class TagTile extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+/// A tile's label: wrapped at its spaces, and shrunk only if one word alone
+/// is wider than the tile.
+///
+/// A bare `FittedBox` around the text — what this used to be — lays the text
+/// out with no width limit, so it never wraps: every two-word label was
+/// shrunk onto one line instead. Here the text is laid out at the tile's own
+/// width, or at the widest single word if that is wider, and only then scaled.
+class _TileLabel extends StatelessWidget {
+  const _TileLabel({required this.text, required this.style});
+
+  final String text;
+  final TextStyle style;
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final direction = Directionality.of(context);
+        final scaler = MediaQuery.textScalerOf(context);
+        var widest = 0.0;
+        for (final word in text.split(RegExp(r'\s+'))) {
+          final painter = TextPainter(
+            text: TextSpan(text: word, style: style),
+            textDirection: direction,
+            textScaler: scaler,
+            maxLines: 1,
+          )..layout();
+          if (painter.width > widest) widest = painter.width;
+          painter.dispose();
+        }
+
+        final width = constraints.maxWidth.isFinite
+            ? (widest.ceilToDouble() > constraints.maxWidth
+                  ? widest.ceilToDouble()
+                  : constraints.maxWidth)
+            : widest.ceilToDouble();
+
+        return FittedBox(
+          fit: BoxFit.scaleDown,
+          child: SizedBox(
+            width: width,
+            child: Text(
+              text,
+              style: style,
+              textAlign: TextAlign.center,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+        );
+      },
     );
   }
 }

@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../../app/account_controller.dart';
 import '../../core/formatters.dart';
+import '../../core/theme.dart';
 import '../../core/tokens.dart';
 import '../../l10n/app_localizations.dart';
 import '../../models/job.dart';
@@ -105,9 +106,7 @@ class JobRow extends StatelessWidget {
                             Text(
                               job.displayTitle(strings),
                               style: theme.textTheme.titleMedium?.copyWith(
-                                color: isSelected
-                                    ? theme.colorScheme.primary
-                                    : null,
+                                color: isSelected ? theme.accentText : null,
                               ),
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,

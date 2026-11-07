@@ -146,6 +146,7 @@ class _Body extends StatelessWidget {
                   ),
                   const SizedBox(width: BrandSizing.spaceSm),
                   _SaveButton(jobId: job.id),
+                  _MoreMenu(job: job, mine: mine),
                 ],
               ),
               const SizedBox(height: BrandSizing.spaceXs),
@@ -247,7 +248,10 @@ class _Body extends StatelessWidget {
               // Where the job stands comes first: it decides whether an offer is
               // even possible, and a bid button above a "called off" notice would
               // be a trap.
-              JobStatusPanel(job: job),
+              // Calling it off lives in the More menu beside the title: as a
+              // full-width red button here it was the first thing a hirer saw
+              // on their own posting, above the offers they came to choose.
+              JobStatusPanel(job: job, showsCancel: false),
 
               // Money, before the phone number: from P1-2 the way to take a job is
               // to offer a fare, not to ring the poster.
@@ -265,7 +269,11 @@ class _Body extends StatelessWidget {
               // need to arrange something.
               _MessagesRow(job: job),
 
-              if (job.hasContact)
+              // Your own number is not offered back to you behind a button;
+              // the line says how everybody else gets it instead.
+              if (job.hasContact && mine)
+                Text(strings.contactYours, style: theme.textTheme.bodyMedium)
+              else if (job.hasContact)
                 ContactPanel(number: job.contactNumber!)
               else
                 Text(strings.noContactGiven, style: theme.textTheme.bodyMedium),
@@ -287,16 +295,6 @@ class _Body extends StatelessWidget {
                     : strings.generalAreaNotice,
                 style: theme.textTheme.labelSmall,
               ),
-
-              // Only your own postings can be changed. Other people's stand in for
-              // work you have no business editing — and which of the two a job is
-              // depends on who you are currently being.
-              if (mine) ...[
-                const SizedBox(height: BrandSizing.spaceLg),
-                const Divider(),
-                const SizedBox(height: BrandSizing.spaceMd),
-                _JobActions(job: job),
-              ],
             ],
           ),
         ),
@@ -429,11 +427,24 @@ class _SaveButton extends StatelessWidget {
   }
 }
 
-/// Edit and delete, for jobs that live on this device.
-class _JobActions extends StatelessWidget {
-  const _JobActions({required this.job});
+/// Edit, call off and delete, behind a More button beside the title.
+///
+/// **Out of the way of the task, not out of reach.** These used to be three
+/// full-width buttons: "Call this off" above the offers, "Edit Job" and
+/// "Delete Job" at the foot of a long sheet. Changing or ending a posting is
+/// something you do occasionally and deliberately; choosing an offer is what
+/// you came for. The two destructive items are red, sit below a divider, and
+/// still ask before they act.
+///
+/// Only your own postings can be edited or deleted — other people's stand in
+/// for work you have no business changing, and which a job is depends on who
+/// you are currently being. Calling off is offered to whichever side the
+/// lifecycle allows, including a worker after they were chosen.
+class _MoreMenu extends StatelessWidget {
+  const _MoreMenu({required this.job, required this.mine});
 
   final Job job;
+  final bool mine;
 
   Future<void> _edit(BuildContext context) async {
     await Navigator.of(context).push(
@@ -485,33 +496,69 @@ class _JobActions extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final strings = AppStrings.of(context);
-    return Column(
-      children: [
-        SizedBox(
-          width: double.infinity,
-          child: OutlinedButton.icon(
-            onPressed: () => _edit(context),
-            icon: const Icon(Icons.edit_outlined),
-            label: Text(strings.editJob),
-          ),
+    const lifecycle = JobLifecycle();
+    final me = context.watch<AccountController>().activeId;
+    final canCallOff = lifecycle
+        .actionsFor(job, role: lifecycle.roleFor(job, viewerId: me))
+        .contains(JobAction.cancel);
+
+    if (!mine && !canCallOff) return const SizedBox.shrink();
+
+    PopupMenuItem<_More> item(
+      _More value,
+      IconData icon,
+      String label, {
+      bool danger = false,
+    }) {
+      final colour = danger ? BrandColours.errorRed : null;
+      return PopupMenuItem(
+        value: value,
+        child: Row(
+          children: [
+            Icon(icon, size: 20, color: colour),
+            const SizedBox(width: BrandSizing.spaceSm + 4),
+            Text(label, style: TextStyle(color: colour)),
+          ],
         ),
-        const SizedBox(height: BrandSizing.spaceSm),
-        SizedBox(
-          width: double.infinity,
-          child: TextButton.icon(
-            onPressed: () => _delete(context),
-            style: TextButton.styleFrom(
-              foregroundColor: BrandColours.errorRed,
-              minimumSize: const Size(0, BrandSizing.touchTargetPreferred),
-            ),
-            icon: const Icon(Icons.delete_outline),
-            label: Text(strings.deleteJob),
+      );
+    }
+
+    return PopupMenuButton<_More>(
+      tooltip: strings.moreActions,
+      icon: const Icon(Icons.more_horiz),
+      position: PopupMenuPosition.under,
+      onSelected: (choice) => switch (choice) {
+        _More.edit => _edit(context),
+        _More.callOff => runJobAction(context, job, JobAction.cancel),
+        _More.delete => _delete(context),
+      },
+      itemBuilder: (_) => [
+        // Edit, then a line, then the two that cannot be taken back. A
+        // worker's menu has only the one, so no line.
+        if (mine) ...[
+          item(_More.edit, Icons.edit_outlined, strings.editJob),
+          const PopupMenuDivider(),
+        ],
+        if (canCallOff)
+          item(
+            _More.callOff,
+            Icons.do_not_disturb_on_outlined,
+            strings.cancelJob,
+            danger: true,
           ),
-        ),
+        if (mine)
+          item(
+            _More.delete,
+            Icons.delete_outline,
+            strings.deleteJob,
+            danger: true,
+          ),
       ],
     );
   }
 }
+
+enum _More { edit, callOff, delete }
 
 /// A static map showing where the work is, with its approximate area.
 /// True when this viewer is one of the two people who agreed to work

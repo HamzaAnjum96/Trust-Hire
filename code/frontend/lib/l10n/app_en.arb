@@ -6,6 +6,10 @@
   "navJobs": "Jobs",
   "navSettings": "Settings",
   "postAJob": "Post a Job",
+  "contactYours": "This is your number. Everyone else sees it behind Show Contact.",
+  "@contactYours": {
+    "description": "On the poster's own job, in place of the Show Contact button"
+  },
   "showAsList": "Show as a list",
   "@showAsList": {
     "description": "Switches the Jobs destination from the map to a list of the same results"

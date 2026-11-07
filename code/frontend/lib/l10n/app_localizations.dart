@@ -134,6 +134,12 @@ abstract class AppStrings {
   /// **'Post a Job'**
   String get postAJob;
 
+  /// On the poster's own job, in place of the Show Contact button
+  ///
+  /// In en, this message translates to:
+  /// **'This is your number. Everyone else sees it behind Show Contact.'**
+  String get contactYours;
+
   /// Switches the Jobs destination from the map to a list of the same results
   ///
   /// In en, this message translates to:

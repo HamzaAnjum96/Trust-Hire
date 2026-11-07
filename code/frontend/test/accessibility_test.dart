@@ -154,6 +154,13 @@ void main() {
           BrandColours.darkTextSecondary,
           BrandColours.darkSurface,
         ),
+        // The text tint added in 0.23, against the darkest-contrast surface
+        // it is drawn on. The fill colour it replaces for text was 2.95:1
+        // here.
+        'Dark burgundy text on the elevated dark surface': (
+          BrandColours.darkBurgundyText,
+          BrandColours.darkElevated,
+        ),
       };
 
       pairs.forEach((name, pair) {

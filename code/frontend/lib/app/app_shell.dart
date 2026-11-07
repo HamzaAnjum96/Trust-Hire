@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 
 import '../core/formatters.dart';
 import '../core/layout.dart';
+import '../core/theme.dart';
 import '../core/tokens.dart';
 import '../features/create_job/create_job_screen.dart';
 import '../features/map/location_controller.dart';
@@ -386,7 +387,7 @@ class _BarSlot extends StatelessWidget {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: BrandType.caption.copyWith(
-                    color: theme.colorScheme.primary,
+                    color: theme.accentText,
                     fontWeight: FontWeight.w600,
                   ),
                 ),

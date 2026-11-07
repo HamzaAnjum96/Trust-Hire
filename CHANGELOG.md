@@ -12,6 +12,43 @@ that heading to the version and date, and open a fresh `[Unreleased]`.
 
 ## [Unreleased]
 
+### 0.23.1 — The redesign, round two: the job, the directory, the form
+
+#### Changed
+
+- **A job's sheet puts the task first.** Edit, *Call this off* and Delete are
+  in a **More** menu (⋯) beside the title, the last two in red below a line
+  and still confirmed before they act. On a hirer's own posting the offers now
+  come straight after the details. Before, a full-width red *Call this off*
+  sat above them. Progress steps (Confirm arrival, Mark finished, Rate) stay
+  as buttons.
+- **Your own number is not offered back to you.** On your own posting,
+  Contact says the number is behind *Show Contact* for everyone else, instead
+  of showing you the button.
+- **The Directory uses the same search bar as Jobs**, with Ask inside it.
+  Listings are rows with a hairline between them, like jobs. In Ask Trust
+  Hire's answers each result keeps a light frame so it reads as one thing
+  found.
+- **The posting form and its Save button keep to the reading measure** on a
+  wide window. Before, the fields ran the full width of a desktop browser. The
+  Save bar is now a white footer with a hairline over it.
+- **The first-run screens are a 560px column** on a tall, wide window. The
+  1,400px "Next" button is gone. A short window keeps the full width, so the
+  sentence saying what Trust Hire is stays above the fold.
+
+#### Fixed
+
+- **Trade tiles no longer shrink their labels to fit one line.** "Appliance
+  repair", "Legal advice" and "General work" were drawn at about 10px. A
+  `FittedBox` laid the label out with no width limit, so it never wrapped.
+  Labels now wrap at the space, and shrink only if a single word is wider than
+  the tile.
+- **Burgundy text in dark mode meets AA.** Text buttons, links, the selected
+  tab and *Switch account* used the dark-mode fill burgundy, which is
+  3.3:1 on the dark surface. They now use a lighter tint, `#D9798F`, at 5.0:1
+  or better. It is recorded in the brand guidelines' dark-mode section and
+  checked by `accessibility_test.dart`.
+
 ### 0.23.0 — The redesign
 
 The brand stays (burgundy, copper, sand, Inter, map first). What changed is

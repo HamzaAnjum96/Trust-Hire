@@ -11,6 +11,7 @@ import '../../l10n/app_localizations.dart';
 import '../../models/job_tag.dart';
 import '../../models/premium.dart';
 import '../../widgets/fading_row.dart';
+import '../../widgets/search_bar_frame.dart';
 import '../../widgets/initials_avatar.dart';
 import '../../widgets/meta_chip.dart';
 import '../../widgets/state_views.dart';
@@ -99,25 +100,32 @@ class _DirectoryScreenState extends State<DirectoryScreen> {
     // problems with different ways out.
     final isFiltered = query.trim().isNotEmpty || tag != null;
 
+    // Everything above the people is padded; the people themselves are rows
+    // that run edge to edge with a hairline between them, like every other
+    // list in the app.
+    Widget padded(Widget child) => Padding(
+      padding: const EdgeInsets.symmetric(horizontal: BrandSizing.spaceMd),
+      child: child,
+    );
+
     return Scaffold(
       appBar: AppBar(
         title: Text(strings.directoryTitle),
-        // Asking is another way to search, so it sits with the search.
-        actions: const [AskButton(), AccountButton()],
+        actions: const [AccountButton()],
       ),
       body: ReadableWidth(
         child: ListView(
-          padding: const EdgeInsets.fromLTRB(
-            BrandSizing.spaceMd,
-            BrandSizing.spaceMd,
-            BrandSizing.spaceMd,
-            BrandSizing.spaceXl * 3,
+          padding: const EdgeInsets.only(
+            top: BrandSizing.spaceXs,
+            bottom: BrandSizing.spaceXl,
           ),
           children: [
-            Text(
-              strings.directoryIntro,
-              style: theme.textTheme.bodyMedium?.copyWith(
-                color: theme.colorScheme.onSurfaceVariant,
+            padded(
+              Text(
+                strings.directoryIntro,
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  color: theme.colorScheme.onSurfaceVariant,
+                ),
               ),
             ),
             const SizedBox(height: BrandSizing.spaceMd),
@@ -125,35 +133,36 @@ class _DirectoryScreenState extends State<DirectoryScreen> {
             // Typing is the last resort in this product — the chips above and
             // the map are meant to carry most of the work — but the directory
             // is the one surface where somebody arrives knowing the name of
-            // the person or the thing they want.
-            TextField(
-              controller: _search,
-              textInputAction: TextInputAction.search,
-              onChanged: (_) => setState(() {}),
-              decoration: InputDecoration(
-                hintText: strings.searchDirectory,
-                prefixIcon: const Icon(Icons.search),
-                suffixIcon: query.isEmpty
-                    ? null
-                    : IconButton(
-                        icon: const Icon(Icons.clear),
-                        tooltip: strings.clear,
-                        onPressed: () => setState(_search.clear),
-                      ),
-                border: const OutlineInputBorder(
-                  borderRadius: BrandRadius.mediumAll,
+            // the person or the thing they want. Ask sits inside the same bar
+            // it does on Jobs: it is another way of searching.
+            padded(
+              SearchBarFrame(
+                field: TextField(
+                  controller: _search,
+                  textInputAction: TextInputAction.search,
+                  onChanged: (_) => setState(() {}),
+                  decoration: searchBarDecoration(
+                    hint: strings.searchDirectory,
+                    suffixIcon: query.isEmpty
+                        ? null
+                        : IconButton(
+                            icon: const Icon(Icons.close),
+                            tooltip: strings.clear,
+                            onPressed: () => setState(_search.clear),
+                          ),
+                  ),
                 ),
+                trailing: const [AskButton()],
               ),
             ),
 
-            const SizedBox(height: BrandSizing.spaceMd),
+            const SizedBox(height: BrandSizing.spaceSm + 4),
 
             // Same treatment as the job filters: eight categories do not fit
             // a phone, and a chip clipped mid-word by the screen edge reads as
             // a rendering bug rather than as a row that scrolls.
             if (available.isNotEmpty)
               FadingRow(
-                padding: EdgeInsets.zero,
                 children: [
                   ChoiceChip(
                     label: Text(strings.directoryAllWork),
@@ -173,18 +182,21 @@ class _DirectoryScreenState extends State<DirectoryScreen> {
 
             const SizedBox(height: BrandSizing.spaceSm),
 
-            _DirectoryControls(
-              count: listings.length,
-              order: _order,
-              // Sorting by distance from a position nobody knows would be a
-              // list in a made-up order with a confident label on it.
-              canSortByDistance: here != null,
-              onOrder: (value) => setState(() => _order = value),
-              withinReach: _withinReach,
-              onWithinReach: (value) => setState(() => _withinReach = value),
+            padded(
+              _DirectoryControls(
+                count: listings.length,
+                order: _order,
+                // Sorting by distance from a position nobody knows would be a
+                // list in a made-up order with a confident label on it.
+                canSortByDistance: here != null,
+                onOrder: (value) => setState(() => _order = value),
+                withinReach: _withinReach,
+                onWithinReach: (value) => setState(() => _withinReach = value),
+              ),
             ),
 
-            const SizedBox(height: BrandSizing.spaceMd),
+            const SizedBox(height: BrandSizing.spaceSm),
+            const Divider(height: 1),
 
             if (listings.isEmpty)
               EmptyView(
@@ -197,13 +209,13 @@ class _DirectoryScreenState extends State<DirectoryScreen> {
                     : strings.directoryEmptyMessage,
               )
             else
-              for (final listing in listings) ...[
+              for (final (i, listing) in listings.indexed) ...[
+                if (i > 0) const Divider(indent: BrandSizing.spaceMd),
                 DirectoryListingCard(
                   listing: listing,
                   name: names[listing.workerId],
                   distanceMetres: premium.distanceTo(listing, hirerAt: here),
                 ),
-                const SizedBox(height: BrandSizing.spaceSm + 4),
               ],
           ],
         ),
@@ -341,7 +353,10 @@ class _DirectoryControls extends StatelessWidget {
   }
 }
 
-/// One worker, as a row in the directory.
+/// One worker, as a row in the directory (and in Ask Trust Hire's answers).
+///
+/// Named "card" for history; since 0.23 it draws no box of its own, like
+/// every other row. Where it needs one — inside an answer — the caller adds it.
 ///
 /// Name, one line, what they start at, and their record. Deliberately not a
 /// photograph and not a badge: Section 9 sells *visibility*, and anything that
@@ -371,9 +386,9 @@ class DirectoryListingCard extends StatelessWidget {
 
     final shownName = name ?? strings.someone;
 
-    return Card(
-      margin: EdgeInsets.zero,
-      clipBehavior: Clip.antiAlias,
+    // A row, like a job: flat on the page, the list draws the hairline.
+    return Material(
+      type: MaterialType.transparency,
       child: InkWell(
         onTap: () => WorkerProfileScreen.open(context, listing: listing),
         child: Padding(

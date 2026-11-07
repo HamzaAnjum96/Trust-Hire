@@ -1213,6 +1213,19 @@ Use a slightly lighter burgundy for visibility.
 
 Hex: #B44C65
 
+Use it for fills (buttons, the selected navigation pill, markers) and large
+text only. It is 3.3:1 on the dark surface, which fails AA for normal text.
+
+Dark Mode Burgundy Text
+
+Added in 0.23. A lighter tint of the same hue, for burgundy *words* on dark
+surfaces: links, text buttons, the selected tab, "Switch account".
+
+Hex: #D9798F
+
+At least 5.0:1 on the background, the surface and the elevated surface. Never
+put white text on it.
+
 Dark Mode Copper
 
 Hex: #DB8453

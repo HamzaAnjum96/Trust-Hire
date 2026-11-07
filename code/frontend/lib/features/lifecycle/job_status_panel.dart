@@ -25,87 +25,21 @@ class JobStatusPanel extends StatelessWidget {
     super.key,
     required this.job,
     this.lifecycle = const JobLifecycle(),
+    this.showsCancel = true,
   });
 
   final Job job;
   final JobLifecycle lifecycle;
 
-  Future<void> _run(BuildContext context, JobAction action) async {
-    final strings = AppStrings.of(context);
-    final jobs = context.read<JobController>();
-    final wallet = context.read<WalletController>();
-    final me = context.read<AccountController>().activeId;
-    final role = lifecycle.roleFor(job, viewerId: me);
+  /// Whether "Call this off" is drawn here with the other next steps.
+  ///
+  /// False in the job sheet since 0.23, which puts it in the sheet's More
+  /// menu: as a full-width red button it was the first thing a hirer saw on
+  /// their own posting, above the offers they had come to choose between.
+  final bool showsCancel;
 
-    if (action == JobAction.cancel || action == JobAction.declineBooking) {
-      final isDecline = action == JobAction.declineBooking;
-
-      final confirmed = await showDialog<bool>(
-        context: context,
-        builder: (dialogContext) => AlertDialog(
-          shape: const RoundedRectangleBorder(
-            borderRadius: BrandRadius.largeAll,
-          ),
-          title: Text(
-            isDecline ? strings.declineBookingTitle : strings.cancelJob,
-          ),
-          content: Text(
-            isDecline
-                ? strings.declineBookingExplanation
-                : strings.cancelJobExplanation,
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(dialogContext).pop(false),
-              child: Text(strings.keepJob),
-            ),
-            TextButton(
-              style: TextButton.styleFrom(
-                foregroundColor: isDecline ? null : BrandColours.errorRed,
-              ),
-              onPressed: () => Navigator.of(dialogContext).pop(true),
-              child: Text(
-                isDecline ? strings.declineBooking : strings.cancelJob,
-              ),
-            ),
-          ],
-        ),
-      );
-
-      if (confirmed != true) return;
-    }
-
-    // Null when the job moved on while the sheet was open — a race, not an
-    // error, so nothing is said and nothing is written.
-    final next = lifecycle.resultOf(action, job: job, role: role);
-    if (next == null) return;
-
-    // Accepting a booking also records *who* accepted it. Nothing else here
-    // changes more than the status, which is why this is the one branch.
-    final updated = action == JobAction.acceptBooking
-        ? job.withBookingAccepted()
-        : job.withStatus(next);
-
-    await jobs.saveJob(updated);
-
-    // The money follows the status, and only after it is saved. If the write
-    // above fails, nobody has been charged for a job that did not finish.
-    // Both wallet calls are idempotent by job id, so a retry cannot charge
-    // twice — see WalletController.
-    if (next == JobStatus.completed && job.agreedFare != null) {
-      await wallet.recordCompletionOf(updated);
-    } else if (next == JobStatus.cancelled &&
-        role == JobRole.worker &&
-        // Declining a booking is not walking away from work: nothing was ever
-        // agreed, nobody has been left waiting on the day, and Section 9 makes
-        // it the worker's call. Charging for it would make availability
-        // something a worker has to pay to have.
-        action != JobAction.declineBooking) {
-      // Only the worker is penalised. Section 11 charges the person who
-      // accepted a job and then walked away from it.
-      await wallet.recordWorkerCancellation(jobId: job.id);
-    }
-  }
+  Future<void> _run(BuildContext context, JobAction action) =>
+      runJobAction(context, job, action, lifecycle: lifecycle);
 
   @override
   Widget build(BuildContext context) {
@@ -113,7 +47,10 @@ class JobStatusPanel extends StatelessWidget {
     final theme = Theme.of(context);
     final me = context.watch<AccountController>().activeId;
     final role = lifecycle.roleFor(job, viewerId: me);
-    final actions = lifecycle.actionsFor(job, role: role);
+    final actions = [
+      for (final action in lifecycle.actionsFor(job, role: role))
+        if (showsCancel || action != JobAction.cancel) action,
+    ];
 
     final ending = switch (job.status) {
       JobStatus.completed => strings.jobFinished,
@@ -152,8 +89,7 @@ class JobStatusPanel extends StatelessWidget {
             icon: Icons.badge_outlined,
             message: switch ((role, job.status)) {
               (JobRole.worker, JobStatus.open) => strings.bookingRequest,
-              (JobRole.hirer, JobStatus.open) =>
-                strings.bookingAwaitingWorker,
+              (JobRole.hirer, JobStatus.open) => strings.bookingAwaitingWorker,
               _ => strings.bookedFrom,
             },
           ),
@@ -265,5 +201,88 @@ class _StatusChip extends StatelessWidget {
       JobStatus.cancelled ||
       JobStatus.expired => StatusPill.muted(context, label),
     };
+  }
+}
+
+/// Takes [action] on [job] as whoever is signed in: asks first where the
+/// action cannot be undone, then moves the job and settles any money.
+///
+/// Public so the job sheet's More menu can call off a job through exactly the
+/// same path as the buttons here — one confirmation, one set of wallet rules.
+Future<void> runJobAction(
+  BuildContext context,
+  Job job,
+  JobAction action, {
+  JobLifecycle lifecycle = const JobLifecycle(),
+}) async {
+  final strings = AppStrings.of(context);
+  final jobs = context.read<JobController>();
+  final wallet = context.read<WalletController>();
+  final me = context.read<AccountController>().activeId;
+  final role = lifecycle.roleFor(job, viewerId: me);
+
+  if (action == JobAction.cancel || action == JobAction.declineBooking) {
+    final isDecline = action == JobAction.declineBooking;
+
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        shape: const RoundedRectangleBorder(borderRadius: BrandRadius.largeAll),
+        title: Text(
+          isDecline ? strings.declineBookingTitle : strings.cancelJob,
+        ),
+        content: Text(
+          isDecline
+              ? strings.declineBookingExplanation
+              : strings.cancelJobExplanation,
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(false),
+            child: Text(strings.keepJob),
+          ),
+          TextButton(
+            style: TextButton.styleFrom(
+              foregroundColor: isDecline ? null : BrandColours.errorRed,
+            ),
+            onPressed: () => Navigator.of(dialogContext).pop(true),
+            child: Text(isDecline ? strings.declineBooking : strings.cancelJob),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmed != true) return;
+  }
+
+  // Null when the job moved on while the sheet was open — a race, not an
+  // error, so nothing is said and nothing is written.
+  final next = lifecycle.resultOf(action, job: job, role: role);
+  if (next == null) return;
+
+  // Accepting a booking also records *who* accepted it. Nothing else here
+  // changes more than the status, which is why this is the one branch.
+  final updated = action == JobAction.acceptBooking
+      ? job.withBookingAccepted()
+      : job.withStatus(next);
+
+  await jobs.saveJob(updated);
+
+  // The money follows the status, and only after it is saved. If the write
+  // above fails, nobody has been charged for a job that did not finish.
+  // Both wallet calls are idempotent by job id, so a retry cannot charge
+  // twice — see WalletController.
+  if (next == JobStatus.completed && job.agreedFare != null) {
+    await wallet.recordCompletionOf(updated);
+  } else if (next == JobStatus.cancelled &&
+      role == JobRole.worker &&
+      // Declining a booking is not walking away from work: nothing was ever
+      // agreed, nobody has been left waiting on the day, and Section 9 makes
+      // it the worker's call. Charging for it would make availability
+      // something a worker has to pay to have.
+      action != JobAction.declineBooking) {
+    // Only the worker is penalised. Section 11 charges the person who
+    // accepted a job and then walked away from it.
+    await wallet.recordWorkerCancellation(jobId: job.id);
   }
 }

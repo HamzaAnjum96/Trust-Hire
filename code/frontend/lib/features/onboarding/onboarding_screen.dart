@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../core/formatters.dart';
 import '../../core/motion.dart';
 import '../../core/theme.dart';
+import '../../core/layout.dart';
 import '../../core/tokens.dart';
 import '../../l10n/app_localizations.dart';
 import '../map/location_controller.dart';
@@ -85,98 +86,118 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       backgroundColor: isLight
           ? BrandColours.warmSand
           : BrandColours.darkBackground,
+      // **One column, about the width of a phone held sideways.** On a
+      // desktop browser the intro stretched edge to edge: a 1,400px "Next"
+      // under a sentence that ended a third of the way across.
+      //
+      // Only where there is height to spare. Narrowing a short window makes
+      // the text wrap onto more lines, and at 740×380 that pushed the
+      // sentence saying what Trust Hire is below the fold — the defect
+      // surfaces_test.dart was written for.
       body: SafeArea(
-        child: Column(
-          children: [
-            Align(
-              alignment: AlignmentDirectional.centerEnd,
-              child: Padding(
-                padding: const EdgeInsets.all(BrandSizing.spaceSm),
-                child: TextButton(
-                  onPressed: widget.onFinished,
-                  child: Text(strings.onboardSkip),
+        child: Center(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              maxWidth:
+                  MediaQuery.sizeOf(context).height < LayoutSize.railNeedsHeight
+                  ? double.infinity
+                  : 560,
+            ),
+            child: Column(
+              children: [
+                Align(
+                  alignment: AlignmentDirectional.centerEnd,
+                  child: Padding(
+                    padding: const EdgeInsets.all(BrandSizing.spaceSm),
+                    child: TextButton(
+                      onPressed: widget.onFinished,
+                      child: Text(strings.onboardSkip),
+                    ),
+                  ),
                 ),
-              ),
-            ),
 
-            Expanded(
-              child: PageView(
-                controller: _pages,
-                onPageChanged: (page) => setState(() => _page = page),
-                children: [
-                  _Panel(
-                    icon: Icons.place_outlined,
-                    picture: const _MapPicture(),
-                    title: strings.onboardWelcomeTitle,
-                    body: strings.onboardWelcomeBody,
+                Expanded(
+                  child: PageView(
+                    controller: _pages,
+                    onPageChanged: (page) => setState(() => _page = page),
+                    children: [
+                      _Panel(
+                        icon: Icons.place_outlined,
+                        picture: const _MapPicture(),
+                        title: strings.onboardWelcomeTitle,
+                        body: strings.onboardWelcomeBody,
+                      ),
+                      _Panel(
+                        icon: Icons.mic_none,
+                        picture: const _VoicePicture(),
+                        title: strings.onboardVoiceTitle,
+                        body: strings.onboardVoiceBody,
+                      ),
+                      _Panel(
+                        icon: Icons.near_me_outlined,
+                        picture: const _LocationPicture(),
+                        title: strings.onboardLocationTitle,
+                        body: strings.onboardLocationBody,
+                        footnote: strings.onboardPrivacyNote,
+                      ),
+                    ],
                   ),
-                  _Panel(
-                    icon: Icons.mic_none,
-                    picture: const _VoicePicture(),
-                    title: strings.onboardVoiceTitle,
-                    body: strings.onboardVoiceBody,
-                  ),
-                  _Panel(
-                    icon: Icons.near_me_outlined,
-                    picture: const _LocationPicture(),
-                    title: strings.onboardLocationTitle,
-                    body: strings.onboardLocationBody,
-                    footnote: strings.onboardPrivacyNote,
-                  ),
-                ],
-              ),
-            ),
+                ),
 
-            _Dots(count: _pageCount, current: _page),
-            const SizedBox(height: BrandSizing.spaceLg),
+                _Dots(count: _pageCount, current: _page),
+                const SizedBox(height: BrandSizing.spaceLg),
 
-            Padding(
-              padding: const EdgeInsets.fromLTRB(
-                BrandSizing.spaceLg,
-                0,
-                BrandSizing.spaceLg,
-                BrandSizing.spaceLg,
-              ),
-              child: _page == _pageCount - 1
-                  // The last panel is the only place location is asked for,
-                  // and only after saying what it is for.
-                  ? Column(
-                      children: [
-                        SizedBox(
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(
+                    BrandSizing.spaceLg,
+                    0,
+                    BrandSizing.spaceLg,
+                    BrandSizing.spaceLg,
+                  ),
+                  child: _page == _pageCount - 1
+                      // The last panel is the only place location is asked for,
+                      // and only after saying what it is for.
+                      ? Column(
+                          children: [
+                            SizedBox(
+                              width: double.infinity,
+                              child: ElevatedButton(
+                                onPressed: _requesting ? null : _askForLocation,
+                                child: _requesting
+                                    ? const SizedBox(
+                                        width: 20,
+                                        height: 20,
+                                        child: CircularProgressIndicator(
+                                          strokeWidth: 2.5,
+                                          color: BrandColours.white,
+                                        ),
+                                      )
+                                    : Text(strings.onboardAllowLocation),
+                              ),
+                            ),
+                            const SizedBox(height: BrandSizing.spaceSm),
+                            SizedBox(
+                              width: double.infinity,
+                              child: OutlinedButton(
+                                onPressed: _requesting
+                                    ? null
+                                    : widget.onFinished,
+                                child: Text(strings.onboardNotNow),
+                              ),
+                            ),
+                          ],
+                        )
+                      : SizedBox(
                           width: double.infinity,
                           child: ElevatedButton(
-                            onPressed: _requesting ? null : _askForLocation,
-                            child: _requesting
-                                ? const SizedBox(
-                                    width: 20,
-                                    height: 20,
-                                    child: CircularProgressIndicator(
-                                      strokeWidth: 2.5,
-                                      color: BrandColours.white,
-                                    ),
-                                  )
-                                : Text(strings.onboardAllowLocation),
+                            onPressed: _next,
+                            child: Text(strings.onboardNext),
                           ),
                         ),
-                        const SizedBox(height: BrandSizing.spaceSm),
-                        SizedBox(
-                          width: double.infinity,
-                          child: OutlinedButton(
-                            onPressed: _requesting ? null : widget.onFinished,
-                            child: Text(strings.onboardNotNow),
-                          ),
-                        ),
-                      ],
-                    )
-                  : SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        onPressed: _next,
-                        child: Text(strings.onboardNext),
-                      ),
-                    ),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );

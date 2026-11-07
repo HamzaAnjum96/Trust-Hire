@@ -8,6 +8,7 @@ import '../account/account_switcher.dart';
 import '../assistant/assistant_screen.dart';
 import '../jobs/filter_bar.dart';
 import '../jobs/job_filter_controller.dart';
+import '../../widgets/search_bar_frame.dart';
 
 /// The things that float on top of the map.
 ///
@@ -47,62 +48,43 @@ class JobsSearchBar extends StatelessWidget {
   /// Fixed, so the rows under it can be placed from it rather than from a
   /// number somebody has to keep in step by hand — which is how the filter
   /// chips came to sit 16px over the header's bottom edge.
-  static const height = 52.0;
+  static const height = SearchBarFrame.height;
 
   @override
   Widget build(BuildContext context) {
     final strings = AppStrings.of(context);
-    final theme = Theme.of(context);
 
-    return Container(
-      height: JobsSearchBar.height,
-      decoration: BoxDecoration(
-        color: theme.colorScheme.surface,
-        borderRadius: BrandRadius.mediumAll,
-        border: floating
-            ? null
-            : Border.all(color: theme.colorScheme.outlineVariant),
-        boxShadow: floating ? BrandShadows.card : null,
-      ),
-      child: Row(
-        children: [
-          Expanded(child: JobSearchField(controller: filters, embedded: true)),
-          // "Painting jobs near me" is a question somebody looking at jobs is
-          // about to ask, so the assistant is offered beside the search it
-          // is an alternative to.
-          SizedBox(
-            height: 24,
-            child: VerticalDivider(
-              width: 1,
-              color: theme.colorScheme.outlineVariant,
-            ),
-          ),
-          const AskButton(),
-          // The landing screen is the one place a demonstration must not
-          // leave "who am I?" unanswered, and the map has no app bar to hang
-          // the account switcher off.
-          Tooltip(
-            message: strings.switchAccount,
-            child: InkWell(
-              customBorder: const CircleBorder(),
-              onTap: () => AccountSheet.open(context),
-              // The avatar is drawn at 28px, but section 29 asks for a 48px
-              // target. The box is invisible; only the reach changes.
-              child: SizedBox(
-                width: BrandSizing.touchTargetPreferred,
-                height: BrandSizing.touchTargetPreferred,
-                child: Center(
-                  child: AccountAvatar(
-                    account: context.watch<AccountController>().active,
-                    radius: 14,
-                  ),
+    return SearchBarFrame(
+      floating: floating,
+      field: JobSearchField(controller: filters, embedded: true),
+      trailing: [
+        // "Painting jobs near me" is a question somebody looking at jobs is
+        // about to ask, so the assistant is offered beside the search it is
+        // an alternative to.
+        const AskButton(),
+        // The landing screen is the one place a demonstration must not leave
+        // "who am I?" unanswered, and the map has no app bar to hang the
+        // account switcher off.
+        Tooltip(
+          message: strings.switchAccount,
+          child: InkWell(
+            customBorder: const CircleBorder(),
+            onTap: () => AccountSheet.open(context),
+            // The avatar is drawn at 28px, but section 29 asks for a 48px
+            // target. The box is invisible; only the reach changes.
+            child: SizedBox(
+              width: BrandSizing.touchTargetPreferred,
+              height: BrandSizing.touchTargetPreferred,
+              child: Center(
+                child: AccountAvatar(
+                  account: context.watch<AccountController>().active,
+                  radius: 14,
                 ),
               ),
             ),
           ),
-          const SizedBox(width: BrandSizing.spaceXs),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

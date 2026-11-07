@@ -59,6 +59,14 @@ class BrandColours {
   /// Lighter burgundy for visibility on dark surfaces. 3.64:1 on the dark
   /// background — large text and UI elements, not body copy.
   static const darkBurgundy = Color(0xFFB44C65);
+
+  /// Burgundy for *text* on dark surfaces: links, text buttons, the selected
+  /// tab, "Switch account". Added in 0.23. [darkBurgundy] is 3.3:1 on the
+  /// dark surface and 2.95:1 on the elevated one, which fails AA for anything
+  /// smaller than large text — and every text button in dark mode was using
+  /// it. This tint of the same hue is 5.0:1 or better on all three dark
+  /// surfaces. Fills keep [darkBurgundy]; white text on this would fail.
+  static const darkBurgundyText = Color(0xFFD9798F);
   static const darkCopper = Color(0xFFDB8453);
 
   // --- Map surface (section 15) ---

@@ -71,6 +71,9 @@ class BrandTheme {
     final isLight = scheme.brightness == Brightness.light;
     final textColour = scheme.onSurface;
     final mutedColour = scheme.onSurfaceVariant;
+    // Burgundy as text: the brand colour on light surfaces, a lighter tint of
+    // it on dark ones, where the fill colour fails AA as text.
+    final accentText = isLight ? scheme.primary : BrandColours.darkBurgundyText;
 
     final textTheme = TextTheme(
       displayLarge: BrandType.display.copyWith(color: textColour),
@@ -146,7 +149,7 @@ class BrandTheme {
       // Section 22 — secondary button: transparent with a burgundy border.
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
-          foregroundColor: scheme.primary,
+          foregroundColor: accentText,
           minimumSize: const Size(0, BrandSizing.touchTargetPreferred),
           padding: const EdgeInsets.symmetric(horizontal: BrandSizing.spaceLg),
           side: BorderSide(color: scheme.primary),
@@ -174,7 +177,7 @@ class BrandTheme {
 
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
-          foregroundColor: scheme.primary,
+          foregroundColor: accentText,
           minimumSize: const Size(0, BrandSizing.touchTargetMinimum),
           textStyle: BrandType.button,
           shape: const RoundedRectangleBorder(
@@ -334,13 +337,13 @@ class BrandTheme {
       ),
 
       tabBarTheme: TabBarThemeData(
-        labelColor: scheme.primary,
+        labelColor: accentText,
         unselectedLabelColor: mutedColour,
         labelStyle: BrandType.supporting.copyWith(fontWeight: FontWeight.w600),
         unselectedLabelStyle: BrandType.supporting.copyWith(
           fontWeight: FontWeight.w500,
         ),
-        indicatorColor: scheme.primary,
+        indicatorColor: accentText,
         indicatorSize: TabBarIndicatorSize.label,
         dividerColor: scheme.outlineVariant,
         overlayColor: WidgetStatePropertyAll(
@@ -396,6 +399,13 @@ class BrandTheme {
 
 /// Brand styles that Material's text theme has no slot for.
 extension BrandTextStyles on ThemeData {
+  /// Burgundy for text and small glyphs: Trust Burgundy on a light surface,
+  /// [BrandColours.darkBurgundyText] on a dark one. Use this, not
+  /// `colorScheme.primary`, whenever burgundy is the colour of words.
+  Color get accentText => brightness == Brightness.light
+      ? colorScheme.primary
+      : BrandColours.darkBurgundyText;
+
   /// A fare, in the one colour fares are given: Deep Burgundy on a light
   /// surface, near-white on a dark one, where Deep Burgundy would disappear.
   TextStyle get fareStyle => BrandType.fare.copyWith(

@@ -27,6 +27,10 @@ class AppStringsEn extends AppStrings {
   String get postAJob => 'Post a Job';
 
   @override
+  String get contactYours =>
+      'This is your number. Everyone else sees it behind Show Contact.';
+
+  @override
   String get showAsList => 'Show as a list';
 
   @override
