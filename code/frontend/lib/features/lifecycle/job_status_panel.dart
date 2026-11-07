@@ -26,6 +26,7 @@ class JobStatusPanel extends StatelessWidget {
     required this.job,
     this.lifecycle = const JobLifecycle(),
     this.showsCancel = true,
+    this.showsStatus = true,
   });
 
   final Job job;
@@ -37,6 +38,11 @@ class JobStatusPanel extends StatelessWidget {
   /// menu: as a full-width red button it was the first thing a hirer saw on
   /// their own posting, above the offers they had come to choose between.
   final bool showsCancel;
+
+  /// Whether the status pill heads the panel. False in the job sheet, which
+  /// shows it beside "Posted 3 hours ago" at the top, where it was a lone
+  /// small label below the details.
+  final bool showsStatus;
 
   Future<void> _run(BuildContext context, JobAction action) =>
       runJobAction(context, job, action, lifecycle: lifecycle);
@@ -62,20 +68,23 @@ class JobStatusPanel extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Row(
-          children: [
-            JobStatusChip(status: job.status),
-            const SizedBox(width: BrandSizing.spaceSm),
-            if (job.status == JobStatus.inProgress)
-              Expanded(
-                child: Text(
-                  strings.statusInProgress,
-                  style: theme.textTheme.labelSmall,
-                  overflow: TextOverflow.ellipsis,
+        if (showsStatus)
+          Row(
+            children: [
+              JobStatusChip(status: job.status),
+              const SizedBox(width: BrandSizing.spaceSm),
+              if (job.status == JobStatus.inProgress)
+                Expanded(
+                  child: Text(
+                    strings.statusInProgress,
+                    style: theme.textTheme.labelSmall,
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
-              ),
-          ],
-        ),
+            ],
+          )
+        else if (job.status == JobStatus.inProgress)
+          Text(strings.statusInProgress, style: theme.textTheme.bodyMedium),
 
         // A Mode B job says which mode it came from, because the two behave
         // differently and the difference is not otherwise visible: there are
@@ -180,9 +189,14 @@ class _RatingPrompt extends StatelessWidget {
 ///
 /// Section 29 of the brand guidelines: colour is never the only carrier of
 /// meaning, so the chip is labelled and the tint only reinforces it.
-/// A job's status as a pill: quiet while it is open, burgundy while work is
-/// under way, teal once it finished well. Public since 0.23 so a hirer's list
-/// of postings can say where each one stands without opening it.
+/// A job's status as a pill. Public since 0.23 so a hirer's list of postings
+/// can say where each one stands without opening it.
+///
+/// **One loud style, for the one kind of state that needs somebody**: work
+/// agreed or under way is burgundy. Everything else — taking offers,
+/// finished, called off, expired — is the quiet pill, and the word says
+/// which. Finished used to be a filled teal pill, so in a list of postings
+/// the job that needed nothing was the heaviest thing on the screen.
 class JobStatusChip extends StatelessWidget {
   const JobStatusChip({super.key, required this.status});
 
@@ -197,10 +211,11 @@ class JobStatusChip extends StatelessWidget {
       JobStatus.open => StatusPill.muted(context, label),
       JobStatus.accepted ||
       JobStatus.inProgress => StatusPill.emphasised(context, label),
-      JobStatus.completed => StatusPill.good(label),
-      // Not the error treatment: a job that was called off or ran out of time
-      // is over, not wrong, and colouring it like a failure would tell the
-      // person who cancelled it that they did something bad.
+      // Not the error treatment for the last two: a job that was called off
+      // or ran out of time is over, not wrong, and colouring it like a
+      // failure would tell the person who cancelled it that they did
+      // something bad.
+      JobStatus.completed ||
       JobStatus.cancelled ||
       JobStatus.expired => StatusPill.muted(context, label),
     };

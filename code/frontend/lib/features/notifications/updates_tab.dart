@@ -12,6 +12,10 @@ import '../../app/wallet_controller.dart';
 import '../../core/formatters.dart';
 import '../../core/tokens.dart';
 import '../../l10n/app_localizations.dart';
+import '../../services/location_service.dart';
+import '../map/location_controller.dart';
+import '../create_job/create_job_screen.dart';
+import '../../app/profile_controller.dart';
 import '../../models/job.dart';
 import '../../models/notification.dart';
 import '../../services/media_store.dart';
@@ -51,10 +55,30 @@ class _UpdatesTabState extends State<UpdatesTab> {
 
     final feed = buildFeed(context);
     if (feed.isEmpty) {
+      // An empty inbox is an invitation, not a dead end: a hirer gets the
+      // way to start one. A worker's way in is the Jobs destination, one tap
+      // away in the bar, so a button here would only repeat it.
+      final hiring = !context.watch<ProfileController>().isWorker;
       return EmptyView(
         icon: Icons.notifications_none,
         title: strings.updatesEmpty,
         message: strings.updatesEmptyMessage,
+        action: hiring
+            ? FilledButton.icon(
+                onPressed: () => Navigator.of(context).push(
+                  MaterialPageRoute<String>(
+                    fullscreenDialog: true,
+                    builder: (_) => CreateJobScreen(
+                      initialLocation:
+                          context.read<LocationController>().position ??
+                          LocationService.fallback,
+                    ),
+                  ),
+                ),
+                icon: const Icon(Icons.add),
+                label: Text(strings.postAJob),
+              )
+            : null,
       );
     }
 

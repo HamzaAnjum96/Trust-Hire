@@ -151,10 +151,22 @@ class _Body extends StatelessWidget {
                   _MoreMenu(job: job, mine: mine),
                 ],
               ),
-              const SizedBox(height: BrandSizing.spaceXs),
-              Text(
-                strings.postedAgo(Format.posted(strings, job.createdAt, now)),
-                style: theme.textTheme.labelSmall,
+              const SizedBox(height: BrandSizing.spaceSm),
+              // Where the job stands, beside when it was posted: the two
+              // facts that decide whether it is worth reading further.
+              Wrap(
+                spacing: BrandSizing.spaceSm,
+                runSpacing: BrandSizing.spaceXs,
+                crossAxisAlignment: WrapCrossAlignment.center,
+                children: [
+                  JobStatusChip(status: job.status),
+                  Text(
+                    strings.postedAgo(
+                      Format.posted(strings, job.createdAt, now),
+                    ),
+                    style: theme.textTheme.labelMedium,
+                  ),
+                ],
               ),
               if (mine) ...[
                 const SizedBox(height: BrandSizing.spaceSm),
@@ -253,7 +265,7 @@ class _Body extends StatelessWidget {
               // Calling it off lives in the More menu beside the title: as a
               // full-width red button here it was the first thing a hirer saw
               // on their own posting, above the offers they came to choose.
-              JobStatusPanel(job: job, showsCancel: false),
+              JobStatusPanel(job: job, showsCancel: false, showsStatus: false),
 
               // Money, before the phone number: from P1-2 the way to take a job is
               // to offer a fare, not to ring the poster.

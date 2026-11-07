@@ -100,6 +100,22 @@ class _DirectoryScreenState extends State<DirectoryScreen> {
     // problems with different ways out.
     final isFiltered = query.trim().isNotEmpty || tag != null;
 
+    final categories = [
+      ChoiceChip(
+        label: Text(strings.directoryAllWork),
+        selected: tag == null,
+        onSelected: (_) => setState(() => _tag = null),
+      ),
+      for (final option in JobTag.workerOrder)
+        if (available.contains(option))
+          ChoiceChip(
+            avatar: Icon(option.icon, size: 18),
+            label: Text(option.label(strings)),
+            selected: tag == option,
+            onSelected: (_) => setState(() => _tag = option),
+          ),
+    ];
+
     // Everything above the people is padded; the people themselves are rows
     // that run edge to edge with a hairline between them, like every other
     // list in the app.
@@ -170,24 +186,21 @@ class _DirectoryScreenState extends State<DirectoryScreen> {
                 // Same treatment as the job filters: eight categories do not fit
                 // a phone, and a chip clipped mid-word by the screen edge reads as
                 // a rendering bug rather than as a row that scrolls.
+                // On a phone, one row that scrolls and fades at its edge. On
+                // anything wider, every category on show: a desktop reader
+                // cannot swipe, and a fade at the 720px column's edge was
+                // the only sign that "Tutoring" had more after it.
                 if (available.isNotEmpty)
-                  FadingRow(
-                    children: [
-                      ChoiceChip(
-                        label: Text(strings.directoryAllWork),
-                        selected: tag == null,
-                        onSelected: (_) => setState(() => _tag = null),
+                  if (LayoutSize.of(context) == LayoutSize.compact)
+                    FadingRow(children: categories)
+                  else
+                    padded(
+                      Wrap(
+                        spacing: BrandSizing.spaceSm,
+                        runSpacing: BrandSizing.spaceSm,
+                        children: categories,
                       ),
-                      for (final option in JobTag.workerOrder)
-                        if (available.contains(option))
-                          ChoiceChip(
-                            avatar: Icon(option.icon, size: 18),
-                            label: Text(option.label(strings)),
-                            selected: tag == option,
-                            onSelected: (_) => setState(() => _tag = option),
-                          ),
-                    ],
-                  ),
+                    ),
 
                 const SizedBox(height: BrandSizing.spaceSm),
 

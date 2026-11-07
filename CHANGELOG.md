@@ -12,6 +12,25 @@ that heading to the version and date, and open a fresh `[Unreleased]`.
 
 ## [Unreleased]
 
+### 0.23.3 — The redesign, verdict pass
+
+#### Changed
+
+- **A job's status heads its sheet**, beside "Posted 3 hours ago". It used to
+  be a lone small label below the details.
+- **One loud status style.** Burgundy is kept for work agreed or under way.
+  Finished, called off, expired and taking offers share the quiet pill, and
+  the word says which. Finished was a filled teal pill, so in a list of
+  postings the job that needed nothing was the heaviest thing on the screen.
+- On a wide window, the Directory's categories wrap instead of fading off the
+  edge of the column.
+- A hirer's empty Updates tab offers *Post a Job*.
+
+#### Checked
+
+- `tool/sweep_tests.py` passes: all 75 promises are still held up by at least
+  one test after the redesign.
+
 ### 0.23.2 — The redesign, reviewed
 
 An independent design review (Impeccable's finish reviewer, given the brief,
