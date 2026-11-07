@@ -145,7 +145,9 @@ class _Body extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(width: BrandSizing.spaceSm),
-                  _SaveButton(jobId: job.id),
+                  // Saving is for finding somebody else's job again; your own
+                  // are already under Activity → Your jobs → Posted.
+                  if (!mine) _SaveButton(jobId: job.id),
                   _MoreMenu(job: job, mine: mine),
                 ],
               ),

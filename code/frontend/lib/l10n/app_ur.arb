@@ -6,6 +6,7 @@
   "navJobs": "کام",
   "navSettings": "ترتیبات",
   "postAJob": "کام لگائیں",
+  "jobCountOf": "{total} میں سے {shown} کام",
   "contactYours": "یہ آپ کا نمبر ہے۔ باقی سب اسے \"رابطہ دکھائیں\" کے پیچھے دیکھتے ہیں۔",
   "showAsList": "فہرست میں دکھائیں",
   "showOnMap": "نقشے پر دکھائیں",

@@ -117,7 +117,7 @@ void main() {
 
     await tester.tap(find.text('Directory'));
     await settle(tester);
-    expect(find.text('Book a professional'), findsOneWidget);
+    expect(find.textContaining('Set prices, no haggling'), findsOneWidget);
 
     // "Activity", not "Saved" — the screen holds what arrives and what you
     // keep an eye on, and naming it after one list hid the others.

@@ -151,6 +151,12 @@ class BrandShadows {
 }
 
 /// Type scale (section 11). Nothing smaller than 12px.
+///
+/// **Every style sets its tracking to 0**, Inter's own. Section 11 gives
+/// sizes and weights and no tracking, so until 0.23 Material's defaults
+/// filled the gap when these were merged into the theme: half a pixel on
+/// 16px body copy and on 12px captions, which spread the small text out and
+/// made "Construction" too wide for its tile.
 class BrandType {
   const BrandType._();
 
@@ -162,6 +168,7 @@ class BrandType {
   static const display = TextStyle(
     fontFamily: family,
     fontFamilyFallback: fallback,
+    letterSpacing: 0,
     fontSize: 32,
     height: 38 / 32,
     fontWeight: FontWeight.w700,
@@ -170,6 +177,7 @@ class BrandType {
   static const pageHeading = TextStyle(
     fontFamily: family,
     fontFamilyFallback: fallback,
+    letterSpacing: 0,
     fontSize: 24,
     height: 30 / 24,
     fontWeight: FontWeight.w700,
@@ -178,6 +186,7 @@ class BrandType {
   static const sectionHeading = TextStyle(
     fontFamily: family,
     fontFamilyFallback: fallback,
+    letterSpacing: 0,
     fontSize: 18,
     height: 24 / 18,
     fontWeight: FontWeight.w600,
@@ -186,6 +195,7 @@ class BrandType {
   static const body = TextStyle(
     fontFamily: family,
     fontFamilyFallback: fallback,
+    letterSpacing: 0,
     fontSize: 16,
     height: 24 / 16,
     fontWeight: FontWeight.w400,
@@ -194,6 +204,7 @@ class BrandType {
   static const supporting = TextStyle(
     fontFamily: family,
     fontFamilyFallback: fallback,
+    letterSpacing: 0,
     fontSize: 14,
     height: 20 / 14,
     fontWeight: FontWeight.w400,
@@ -202,6 +213,7 @@ class BrandType {
   static const caption = TextStyle(
     fontFamily: family,
     fontFamilyFallback: fallback,
+    letterSpacing: 0,
     fontSize: 12,
     height: 16 / 12,
     fontWeight: FontWeight.w500,
@@ -211,6 +223,7 @@ class BrandType {
   static const button = TextStyle(
     fontFamily: family,
     fontFamilyFallback: fallback,
+    letterSpacing: 0,
     fontSize: 16,
     height: 24 / 16,
     fontWeight: FontWeight.w600,
@@ -222,6 +235,7 @@ class BrandType {
   static const fare = TextStyle(
     fontFamily: family,
     fontFamilyFallback: fallback,
+    letterSpacing: 0,
     fontSize: 18,
     height: 24 / 18,
     fontWeight: FontWeight.w700,

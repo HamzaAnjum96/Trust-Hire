@@ -51,164 +51,174 @@ class ProfileScreen extends StatelessWidget {
     final theme = Theme.of(context);
     final isAdmin = context.watch<AccountController>().active.isAdmin;
 
-    return Scaffold(
-      appBar: AppBar(title: Text(strings.navProfile)),
-      body: ReadableWidth(
-        child: ListView(
-          padding: const EdgeInsets.fromLTRB(
-            BrandSizing.spaceMd,
-            BrandSizing.spaceSm,
-            BrandSizing.spaceMd,
-            BrandSizing.spaceXl,
+    // The bar lines up with the column under it; see [readableInset].
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final inset = readableInset(constraints.maxWidth);
+        return Scaffold(
+          appBar: AppBar(
+            title: Text(strings.navProfile),
+            titleSpacing: NavigationToolbar.kMiddleSpacing + inset,
           ),
-          children: [
-            // Who you are, first. Above the role picker, because switching
-            // account can change the role underneath it — and a control that
-            // silently reorders the one below should sit above it.
-            const AccountCard(),
-            Padding(
-              padding: const EdgeInsetsDirectional.fromSTEB(
-                BrandSizing.spaceXs,
-                BrandSizing.spaceXs,
-                BrandSizing.spaceXs,
-                0,
+          body: ReadableWidth(
+            child: ListView(
+              padding: const EdgeInsets.fromLTRB(
+                BrandSizing.spaceMd,
+                BrandSizing.spaceSm,
+                BrandSizing.spaceMd,
+                BrandSizing.spaceXl,
               ),
-              child: Text(
-                strings.demoAccountsExplain,
-                style: theme.textTheme.labelSmall,
-              ),
-            ),
-
-            // Straight after the account, because for the one account that
-            // has it this is the whole reason to be here — and burying it
-            // under the appearance controls would put the platform's own
-            // tools three screens below a light/dark switch.
-            const _AdminSection(),
-
-            // Then, because it changes what the rest of the app shows: a
-            // worker gets a feed filtered to their trades, a hirer gets the
-            // jobs they posted.
-            //
-            // Not for staff. Trust Hire's own account is not looking for work
-            // and is not hiring, and offering it a wallet and a trade list
-            // would be four controls that mean nothing on the one account
-            // that has a different job entirely.
-            if (!isAdmin) ...[
-              const SizedBox(height: BrandSizing.spaceLg),
-              const _RolePicker(),
-            ],
-
-            const SizedBox(height: BrandSizing.spaceLg),
-            SettingsGroup(
-              title: strings.navSettings,
               children: [
-                GroupPadding(
-                  child: _Labelled(
-                    label: strings.appearance,
-                    child: SegmentedButton<ThemeMode>(
-                      segments: [
-                        ButtonSegment(
-                          value: ThemeMode.system,
-                          label: Text(strings.themeSystem),
-                          icon: const Icon(Icons.brightness_auto_outlined),
-                        ),
-                        ButtonSegment(
-                          value: ThemeMode.light,
-                          label: Text(strings.themeLight),
-                          icon: const Icon(Icons.light_mode_outlined),
-                        ),
-                        ButtonSegment(
-                          value: ThemeMode.dark,
-                          label: Text(strings.themeDark),
-                          icon: const Icon(Icons.dark_mode_outlined),
-                        ),
-                      ],
-                      selected: {settings.themeMode},
-                      onSelectionChanged: (selection) =>
-                          settings.setThemeMode(selection.first),
-                    ),
+                // Who you are, first. Above the role picker, because switching
+                // account can change the role underneath it — and a control that
+                // silently reorders the one below should sit above it.
+                const AccountCard(),
+                Padding(
+                  padding: const EdgeInsetsDirectional.fromSTEB(
+                    BrandSizing.spaceXs,
+                    BrandSizing.spaceXs,
+                    BrandSizing.spaceXs,
+                    0,
+                  ),
+                  child: Text(
+                    strings.demoAccountsExplain,
+                    style: theme.textTheme.bodyMedium,
                   ),
                 ),
-                GroupPadding(
-                  child: _Labelled(
-                    label: strings.language,
-                    child: SegmentedButton<String>(
-                      segments: [
-                        ButtonSegment(
-                          value: '',
-                          label: Text(strings.themeSystem),
-                          icon: const Icon(Icons.translate),
-                        ),
-                        for (final locale in SettingsController.supportedLocales)
-                          ButtonSegment(
-                            value: locale.languageCode,
-                            // Each language names itself, so someone who
-                            // cannot read the current one can still find
-                            // their own.
-                            label: Text(
-                              strings.localeName == locale.languageCode
-                                  ? strings.languageName
-                                  : _languageName(locale.languageCode),
+
+                // Straight after the account, because for the one account that
+                // has it this is the whole reason to be here — and burying it
+                // under the appearance controls would put the platform's own
+                // tools three screens below a light/dark switch.
+                const _AdminSection(),
+
+                // Then, because it changes what the rest of the app shows: a
+                // worker gets a feed filtered to their trades, a hirer gets the
+                // jobs they posted.
+                //
+                // Not for staff. Trust Hire's own account is not looking for work
+                // and is not hiring, and offering it a wallet and a trade list
+                // would be four controls that mean nothing on the one account
+                // that has a different job entirely.
+                if (!isAdmin) ...[
+                  const SizedBox(height: BrandSizing.spaceLg),
+                  const _RolePicker(),
+                ],
+
+                const SizedBox(height: BrandSizing.spaceLg),
+                SettingsGroup(
+                  title: strings.navSettings,
+                  children: [
+                    GroupPadding(
+                      child: _Labelled(
+                        label: strings.appearance,
+                        child: SegmentedButton<ThemeMode>(
+                          segments: [
+                            ButtonSegment(
+                              value: ThemeMode.system,
+                              label: Text(strings.themeSystem),
+                              icon: const Icon(Icons.brightness_auto_outlined),
                             ),
-                          ),
-                      ],
-                      selected: {settings.locale?.languageCode ?? ''},
-                      onSelectionChanged: (selection) => settings.setLocale(
-                        selection.first.isEmpty
-                            ? null
-                            : Locale(selection.first),
+                            ButtonSegment(
+                              value: ThemeMode.light,
+                              label: Text(strings.themeLight),
+                              icon: const Icon(Icons.light_mode_outlined),
+                            ),
+                            ButtonSegment(
+                              value: ThemeMode.dark,
+                              label: Text(strings.themeDark),
+                              icon: const Icon(Icons.dark_mode_outlined),
+                            ),
+                          ],
+                          selected: {settings.themeMode},
+                          onSelectionChanged: (selection) =>
+                              settings.setThemeMode(selection.first),
+                        ),
                       ),
                     ),
-                  ),
+                    GroupPadding(
+                      child: _Labelled(
+                        label: strings.language,
+                        child: SegmentedButton<String>(
+                          segments: [
+                            ButtonSegment(
+                              value: '',
+                              label: Text(strings.themeSystem),
+                              icon: const Icon(Icons.translate),
+                            ),
+                            for (final locale
+                                in SettingsController.supportedLocales)
+                              ButtonSegment(
+                                value: locale.languageCode,
+                                // Each language names itself, so someone who
+                                // cannot read the current one can still find
+                                // their own.
+                                label: Text(
+                                  strings.localeName == locale.languageCode
+                                      ? strings.languageName
+                                      : _languageName(locale.languageCode),
+                                ),
+                              ),
+                          ],
+                          selected: {settings.locale?.languageCode ?? ''},
+                          onSelectionChanged: (selection) => settings.setLocale(
+                            selection.first.isEmpty
+                                ? null
+                                : Locale(selection.first),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
+
+                const SizedBox(height: BrandSizing.spaceLg),
+                const AiSettingsSection(),
+
+                // The proof-of-concept small print, at the foot rather than the
+                // head. It used to be the first thing on this screen, which put
+                // a disclaimer above the person's own name.
+                const SizedBox(height: BrandSizing.spaceLg),
+                SettingsGroup(
+                  title: strings.profileThisDemo,
+                  caption: strings.settingsStorageNotice,
+                  children: [
+                    ListTile(
+                      leading: const Icon(Icons.slideshow_outlined),
+                      title: Text(strings.showIntroAgain),
+                      onTap: () async {
+                        final messenger = ScaffoldMessenger.of(context);
+                        await settings.resetIntro();
+                        messenger.showSnackBar(
+                          SnackBar(content: Text(strings.introReset)),
+                        );
+                      },
+                    ),
+                    ListTile(
+                      // The colour is on the icon only: Error Red is too dark to
+                      // read as text on the dark theme's surfaces. The words say
+                      // what it does, and a confirmation says it again.
+                      leading: const Icon(
+                        Icons.restart_alt,
+                        color: BrandColours.errorRed,
+                      ),
+                      // Section 21 — explicit label, never "Confirm".
+                      title: Text(strings.restoreSeedData),
+                      subtitle: Text(strings.restoreSeedExplanation),
+                      onTap: () => _confirmReset(context),
+                    ),
+                  ],
+                ),
+
+                const SizedBox(height: BrandSizing.spaceLg),
+                const _BackendSection(),
+
+                const _VersionLine(),
               ],
             ),
-
-            const SizedBox(height: BrandSizing.spaceLg),
-            const AiSettingsSection(),
-
-            // The proof-of-concept small print, at the foot rather than the
-            // head. It used to be the first thing on this screen, which put
-            // a disclaimer above the person's own name.
-            const SizedBox(height: BrandSizing.spaceLg),
-            SettingsGroup(
-              title: strings.profileThisDemo,
-              caption: strings.settingsStorageNotice,
-              children: [
-                ListTile(
-                  leading: const Icon(Icons.slideshow_outlined),
-                  title: Text(strings.showIntroAgain),
-                  onTap: () async {
-                    final messenger = ScaffoldMessenger.of(context);
-                    await settings.resetIntro();
-                    messenger.showSnackBar(
-                      SnackBar(content: Text(strings.introReset)),
-                    );
-                  },
-                ),
-                ListTile(
-                  // The colour is on the icon only: Error Red is too dark to
-                  // read as text on the dark theme's surfaces. The words say
-                  // what it does, and a confirmation says it again.
-                  leading: const Icon(
-                    Icons.restart_alt,
-                    color: BrandColours.errorRed,
-                  ),
-                  // Section 21 — explicit label, never "Confirm".
-                  title: Text(strings.restoreSeedData),
-                  subtitle: Text(strings.restoreSeedExplanation),
-                  onTap: () => _confirmReset(context),
-                ),
-              ],
-            ),
-
-            const SizedBox(height: BrandSizing.spaceLg),
-            const _BackendSection(),
-
-            const _VersionLine(),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 
@@ -713,7 +723,9 @@ class _RoleCard extends StatelessWidget {
                   children: [
                     Icon(
                       icon,
-                      color: selected ? scheme.primary : scheme.onSurfaceVariant,
+                      color: selected
+                          ? scheme.primary
+                          : scheme.onSurfaceVariant,
                     ),
                     const Spacer(),
                     if (selected)

@@ -2,6 +2,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
+import '../../core/formatters.dart';
 import '../../core/motion.dart';
 import '../../core/tokens.dart';
 import '../../models/job.dart';
@@ -84,6 +85,62 @@ class JobMarker extends StatelessWidget {
                 ),
               ),
             ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// The fare over the selected pin: "Rs. 2,500".
+///
+/// The first-run screen has always drawn the map this way — a pin with its
+/// price above it — and until 0.23 the real map did not. Only on the selected
+/// pin: on every pin, a city's worth of labels would cover the map they are
+/// labelling. Decorative for a screen reader, which hears the fare in the
+/// preview card and the job's row.
+class PinFareLabel extends StatelessWidget {
+  const PinFareLabel({super.key, required this.job});
+
+  final Job job;
+
+  /// Room above the pin for the label and the gap under it.
+  static const height = 28.0;
+  static const gap = 4.0;
+
+  /// Wide enough for "Rs. 100,000" at the label's size.
+  static const width = 120.0;
+
+  @override
+  Widget build(BuildContext context) {
+    final fare = job.agreedFare ?? job.startingFare;
+    if (fare == null) return const SizedBox(height: height);
+
+    final strings = AppStrings.of(context);
+    final light = Theme.of(context).brightness == Brightness.light;
+
+    return ExcludeSemantics(
+      child: Container(
+        height: height,
+        padding: const EdgeInsets.symmetric(horizontal: BrandSizing.spaceSm),
+        decoration: BoxDecoration(
+          color: light ? BrandColours.white : BrandColours.darkElevated,
+          borderRadius: BrandRadius.smallAll,
+          border: Border.all(
+            color: light ? BrandColours.cardBorder : BrandColours.slate,
+          ),
+          boxShadow: BrandShadows.card,
+        ),
+        alignment: Alignment.center,
+        child: Text(
+          Format.fare(strings, fare),
+          maxLines: 1,
+          style: BrandType.caption.copyWith(
+            fontWeight: FontWeight.w700,
+            fontFeatures: const [FontFeature.tabularFigures()],
+            color: light
+                ? BrandColours.deepBurgundy
+                : BrandColours.darkTextPrimary,
           ),
         ),
       ),

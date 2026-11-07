@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 import '../core/tokens.dart';
@@ -45,12 +46,26 @@ class FadingRow extends StatelessWidget {
           colors: const [Colors.black, Colors.black, Colors.transparent],
         ).createShader(bounds),
         blendMode: BlendMode.dstIn,
-        child: ListView.separated(
-          scrollDirection: Axis.horizontal,
-          padding: padding,
-          itemCount: children.length,
-          separatorBuilder: (_, _) => SizedBox(width: spacing),
-          itemBuilder: (_, index) => Center(child: children[index]),
+        // Draggable with a mouse as well as a finger. A desktop browser has
+        // no horizontal wheel on most mice, and Flutter leaves mouse drags
+        // out by default — so on a wide window the Directory's categories
+        // past "Tutoring" could not be reached at all.
+        child: ScrollConfiguration(
+          behavior: ScrollConfiguration.of(context).copyWith(
+            dragDevices: {
+              PointerDeviceKind.touch,
+              PointerDeviceKind.mouse,
+              PointerDeviceKind.trackpad,
+              PointerDeviceKind.stylus,
+            },
+          ),
+          child: ListView.separated(
+            scrollDirection: Axis.horizontal,
+            padding: padding,
+            itemCount: children.length,
+            separatorBuilder: (_, _) => SizedBox(width: spacing),
+            itemBuilder: (_, index) => Center(child: children[index]),
+          ),
         ),
       ),
     );

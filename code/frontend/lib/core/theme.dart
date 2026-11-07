@@ -25,6 +25,10 @@ class BrandTheme {
       surfaceContainerLowest: BrandColours.white,
       surfaceContainerLow: BrandColours.mist,
       surfaceContainer: BrandColours.warmSand,
+      // Material's default here is a lavender grey, which is not a colour in
+      // this brand; the quiet status pill ("Taking offers", "Called off")
+      // sits on it.
+      surfaceContainerHighest: BrandColours.cardBorder,
       onSurfaceVariant: BrandColours.slate,
       outline: BrandColours.stone,
       outlineVariant: BrandColours.cardBorder,
@@ -54,6 +58,7 @@ class BrandTheme {
       surfaceContainerLowest: BrandColours.darkBackground,
       surfaceContainerLow: BrandColours.darkSurface,
       surfaceContainer: BrandColours.darkElevated,
+      surfaceContainerHighest: BrandColours.darkElevated,
       onSurfaceVariant: BrandColours.darkTextSecondary,
       outline: BrandColours.slate,
       outlineVariant: BrandColours.darkElevated,

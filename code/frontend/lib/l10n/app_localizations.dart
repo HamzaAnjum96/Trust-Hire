@@ -134,6 +134,12 @@ abstract class AppStrings {
   /// **'Post a Job'**
   String get postAJob;
 
+  /// How many jobs the filters leave, out of how many there are; a heading over the results
+  ///
+  /// In en, this message translates to:
+  /// **'{shown} of {total} jobs'**
+  String jobCountOf(int shown, int total);
+
   /// On the poster's own job, in place of the Show Contact button
   ///
   /// In en, this message translates to:

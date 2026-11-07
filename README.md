@@ -538,7 +538,7 @@ code/frontend/
 │                        meta chips, fading scroll rows, settings groups,
 │                        the "Your posting" badge, the fare tag and field,
 │                        the tag grid, initials avatars, inbox rows, the
-│                        counted segment label)
+│                        counted segment label, the search bar frame)
 ├── test/
 │   └── support/      ← harness.dart: every provider, around one screen
 ├── assets/

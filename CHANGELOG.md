@@ -12,6 +12,44 @@ that heading to the version and date, and open a fresh `[Unreleased]`.
 
 ## [Unreleased]
 
+### 0.23.2 — The redesign, reviewed
+
+An independent design review (Impeccable's finish reviewer, given the brief,
+the design note and nineteen screenshots) returned *fix*. This release acts on
+what it found; what was declined, and why, is in
+`documents/design/2026-11-04-redesign.md`.
+
+#### Added
+
+- **The selected pin carries its fare** ("Rs. 7,000"), the way the first-run
+  screen has always drawn the map.
+- **Your postings say where they stand.** Under Activity → Your jobs →
+  Posted, each row shows its status and, while open, how many offers are
+  waiting.
+- The list view is headed by its count, like the map's switch: "16 jobs", or
+  "3 of 16 jobs" while filters hide some.
+
+#### Changed
+
+- **Location, time and distance on a row are 14px**, the size section 11 of
+  the brand guidelines gives those facts. They were 12px captions.
+- **Every text style uses Inter's own tracking.** The brand scale gives no
+  letter spacing, so Material's defaults were filling it in: half a pixel on
+  body copy and captions.
+- The desktop list is headed by its count, not "Work on this map". It lists
+  every result, not only those in view.
+- While a pin's preview is open, the map's notices step aside, so on a phone
+  the preview no longer squeezes the map into a strip.
+- The Directory is headed "Directory", like its tab.
+- Ratings use a drawn star instead of the "★" character.
+- No bookmark on your own posting.
+- Chip rows drag with a mouse or trackpad. On a desktop, the Directory's
+  later categories could not be reached before.
+- The quiet status pill uses the brand's warm neutral instead of Material's
+  lavender default.
+- `web/index.html` declares `color-scheme: light dark`, so the browser's own
+  scrollbars and controls follow the theme on the boot screen.
+
 ### 0.23.1 — The redesign, round two: the job, the directory, the form
 
 #### Changed

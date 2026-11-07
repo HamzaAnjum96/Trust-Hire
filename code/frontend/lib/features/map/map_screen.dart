@@ -432,27 +432,13 @@ class _ResultsRail extends StatelessWidget {
               BrandSizing.spaceMd,
               BrandSizing.spaceSm + 4,
             ),
-            // The count lives here on a desktop: the view switch that carries
-            // it on a handset is not drawn when both views are on screen.
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.baseline,
-              textBaseline: TextBaseline.alphabetic,
-              children: [
-                Expanded(
-                  child: Text(
-                    strings.jobsNearby,
-                    style: theme.textTheme.titleMedium,
-                  ),
-                ),
-                Text(
-                  jobs.length == totalJobCount
-                      ? strings.jobCount(jobs.length)
-                      : strings.jobCountFiltered(jobs.length, totalJobCount),
-                  style: theme.textTheme.labelMedium?.copyWith(
-                    fontFeatures: const [FontFeature.tabularFigures()],
-                  ),
-                ),
-              ],
+            // The count *is* the heading. This list is every result under
+            // the filters, wherever it is; it used to be headed "Work on
+            // this map" over a map showing one city of them.
+            child: _ResultCount(
+              shown: jobs.length,
+              total: totalJobCount,
+              style: theme.textTheme.titleMedium,
             ),
           ),
           const Divider(height: 1),
@@ -484,6 +470,33 @@ class _ResultsRail extends StatelessWidget {
                   ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+/// "16 jobs", or "3 of 16 jobs" while filters hide some — said, so a short
+/// list never looks like a bug.
+class _ResultCount extends StatelessWidget {
+  const _ResultCount({
+    required this.shown,
+    required this.total,
+    required this.style,
+  });
+
+  final int shown;
+  final int total;
+  final TextStyle? style;
+
+  @override
+  Widget build(BuildContext context) {
+    final strings = AppStrings.of(context);
+    return Text(
+      shown == total
+          ? strings.jobCount(shown)
+          : strings.jobCountOf(shown, total),
+      style: style?.copyWith(
+        fontFeatures: const [FontFeature.tabularFigures()],
       ),
     );
   }
@@ -532,7 +545,24 @@ class _ListBody extends StatelessWidget {
                     child: JobsSearchBar(filters: filters),
                   ),
                   QuickFilterBar(controller: filters),
-                  const SizedBox(height: BrandSizing.spaceSm),
+                  // The same count the map's switch carries, so it does not
+                  // disappear when the list is what is showing.
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(
+                      BrandSizing.spaceMd,
+                      BrandSizing.spaceSm + 4,
+                      BrandSizing.spaceMd,
+                      BrandSizing.spaceSm,
+                    ),
+                    child: _ResultCount(
+                      shown: visible.length,
+                      total: reachable.length,
+                      style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                        color: Theme.of(context).colorScheme.onSurface,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
                   const Divider(height: 1),
                   Expanded(
                     child: JobResults(
@@ -690,62 +720,67 @@ class _MapBody extends StatelessWidget {
         // **Capped at a third of the height.** Two notices can be true at once,
         // and on a short window they covered most of the map — the one thing
         // the app is for. Past the cap the column scrolls rather than growing.
-        Positioned(
-          left: BrandSizing.spaceMd,
-          right: BrandSizing.spaceMd,
-          top: padding.top + MapOverlayWidth.noticesTop,
-          child: MapOverlayWidth(
-            clearsMapControls: true,
-            child: ConstrainedBox(
-              constraints: BoxConstraints(
-                maxHeight: MediaQuery.sizeOf(context).height / 3,
-              ),
-              child: SingleChildScrollView(
-                child: Column(
-                  spacing: BrandSizing.spaceSm,
-                  children: [
-                    if (locationExplanation != null)
-                      MapNotice(
-                        icon: Icons.location_off_outlined,
-                        message: locationExplanation,
-                        onDismiss: location.dismissExplanation,
-                      ),
-                    if (tilesUnavailable)
-                      MapNotice(
-                        icon: Icons.cloud_off,
-                        message: strings.mapImagesNotLoading,
-                      ),
-                    if (jobs.isEmpty && totalJobCount > 0)
-                      MapNotice(
-                        icon: Icons.search_off,
-                        message: strings.noJobsMatchHere,
-                        onDismiss: filters.clear,
-                      ),
+        //
+        // **Not while a pin's preview is up.** That is what was just asked
+        // for, and with both on a phone the map between them was a strip
+        // about 200px tall. The notices come back when the preview closes.
+        if (!cardShown)
+          Positioned(
+            left: BrandSizing.spaceMd,
+            right: BrandSizing.spaceMd,
+            top: padding.top + MapOverlayWidth.noticesTop,
+            child: MapOverlayWidth(
+              clearsMapControls: true,
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxHeight: MediaQuery.sizeOf(context).height / 3,
+                ),
+                child: SingleChildScrollView(
+                  child: Column(
+                    spacing: BrandSizing.spaceSm,
+                    children: [
+                      if (locationExplanation != null)
+                        MapNotice(
+                          icon: Icons.location_off_outlined,
+                          message: locationExplanation,
+                          onDismiss: location.dismissExplanation,
+                        ),
+                      if (tilesUnavailable)
+                        MapNotice(
+                          icon: Icons.cloud_off,
+                          message: strings.mapImagesNotLoading,
+                        ),
+                      if (jobs.isEmpty && totalJobCount > 0)
+                        MapNotice(
+                          icon: Icons.search_off,
+                          message: strings.noJobsMatchHere,
+                          onDismiss: filters.clear,
+                        ),
 
-                    // Not a filter and not an error: the tag rule is holding jobs
-                    // back, and the only thing that changes it is adding a trade.
-                    // Shown just for a worker who has never added one, so it stops
-                    // appearing as soon as it stops being news.
-                    //
-                    // Dismissible, though closing it changes nothing about the
-                    // rule. It sits over the map — the thing the app is for — and
-                    // somebody who has read it and is happy on general work should
-                    // not have to read it again on every launch. The way back is
-                    // the trades screen, which the profile always links to.
-                    if (hiddenByTags > 0 && !profile.tradesNoticeDismissed)
-                      MapNotice(
-                        icon: Icons.construction_outlined,
-                        message: strings.noJobsForTradesHelp,
-                        actionLabel: strings.addATrade,
-                        onAction: () => MyTradesScreen.open(context),
-                        onDismiss: profile.dismissTradesNotice,
-                      ),
-                  ],
+                      // Not a filter and not an error: the tag rule is holding jobs
+                      // back, and the only thing that changes it is adding a trade.
+                      // Shown just for a worker who has never added one, so it stops
+                      // appearing as soon as it stops being news.
+                      //
+                      // Dismissible, though closing it changes nothing about the
+                      // rule. It sits over the map — the thing the app is for — and
+                      // somebody who has read it and is happy on general work should
+                      // not have to read it again on every launch. The way back is
+                      // the trades screen, which the profile always links to.
+                      if (hiddenByTags > 0 && !profile.tradesNoticeDismissed)
+                        MapNotice(
+                          icon: Icons.construction_outlined,
+                          message: strings.noJobsForTradesHelp,
+                          actionLabel: strings.addATrade,
+                          onAction: () => MyTradesScreen.open(context),
+                          onDismiss: profile.dismissTradesNotice,
+                        ),
+                    ],
+                  ),
                 ),
               ),
             ),
           ),
-        ),
 
         // The map's own controls ride on top of the preview card instead of
         // sitting at a fixed height above the bottom. The card's height

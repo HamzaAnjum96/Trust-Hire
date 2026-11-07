@@ -108,118 +108,133 @@ class _DirectoryScreenState extends State<DirectoryScreen> {
       child: child,
     );
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(strings.directoryTitle),
-        actions: const [AccountButton()],
-      ),
-      body: ReadableWidth(
-        child: ListView(
-          padding: const EdgeInsets.only(
-            top: BrandSizing.spaceXs,
-            bottom: BrandSizing.spaceXl,
+    // The bar lines up with the column under it; see [readableInset].
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final inset = readableInset(constraints.maxWidth);
+        return Scaffold(
+          appBar: AppBar(
+            // Named as the navigation names it, like every destination: a tap on
+            // "Directory" landing on a page headed something else reads as a
+            // wrong turn. The sentence under it says what the mode is.
+            title: Text(strings.navDirectory),
+            titleSpacing: NavigationToolbar.kMiddleSpacing + inset,
+            actionsPadding: EdgeInsetsDirectional.only(end: inset),
+            actions: const [AccountButton()],
           ),
-          children: [
-            padded(
-              Text(
-                strings.directoryIntro,
-                style: theme.textTheme.bodyMedium?.copyWith(
-                  color: theme.colorScheme.onSurfaceVariant,
-                ),
+          body: ReadableWidth(
+            child: ListView(
+              padding: const EdgeInsets.only(
+                top: BrandSizing.spaceXs,
+                bottom: BrandSizing.spaceXl,
               ),
-            ),
-            const SizedBox(height: BrandSizing.spaceMd),
-
-            // Typing is the last resort in this product — the chips above and
-            // the map are meant to carry most of the work — but the directory
-            // is the one surface where somebody arrives knowing the name of
-            // the person or the thing they want. Ask sits inside the same bar
-            // it does on Jobs: it is another way of searching.
-            padded(
-              SearchBarFrame(
-                field: TextField(
-                  controller: _search,
-                  textInputAction: TextInputAction.search,
-                  onChanged: (_) => setState(() {}),
-                  decoration: searchBarDecoration(
-                    hint: strings.searchDirectory,
-                    suffixIcon: query.isEmpty
-                        ? null
-                        : IconButton(
-                            icon: const Icon(Icons.close),
-                            tooltip: strings.clear,
-                            onPressed: () => setState(_search.clear),
-                          ),
+              children: [
+                padded(
+                  Text(
+                    strings.directoryIntro,
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      color: theme.colorScheme.onSurfaceVariant,
+                    ),
                   ),
                 ),
-                trailing: const [AskButton()],
-              ),
-            ),
+                const SizedBox(height: BrandSizing.spaceMd),
 
-            const SizedBox(height: BrandSizing.spaceSm + 4),
-
-            // Same treatment as the job filters: eight categories do not fit
-            // a phone, and a chip clipped mid-word by the screen edge reads as
-            // a rendering bug rather than as a row that scrolls.
-            if (available.isNotEmpty)
-              FadingRow(
-                children: [
-                  ChoiceChip(
-                    label: Text(strings.directoryAllWork),
-                    selected: tag == null,
-                    onSelected: (_) => setState(() => _tag = null),
-                  ),
-                  for (final option in JobTag.workerOrder)
-                    if (available.contains(option))
-                      ChoiceChip(
-                        avatar: Icon(option.icon, size: 18),
-                        label: Text(option.label(strings)),
-                        selected: tag == option,
-                        onSelected: (_) => setState(() => _tag = option),
+                // Typing is the last resort in this product — the chips above and
+                // the map are meant to carry most of the work — but the directory
+                // is the one surface where somebody arrives knowing the name of
+                // the person or the thing they want. Ask sits inside the same bar
+                // it does on Jobs: it is another way of searching.
+                padded(
+                  SearchBarFrame(
+                    field: TextField(
+                      controller: _search,
+                      textInputAction: TextInputAction.search,
+                      onChanged: (_) => setState(() {}),
+                      decoration: searchBarDecoration(
+                        hint: strings.searchDirectory,
+                        suffixIcon: query.isEmpty
+                            ? null
+                            : IconButton(
+                                icon: const Icon(Icons.close),
+                                tooltip: strings.clear,
+                                onPressed: () => setState(_search.clear),
+                              ),
                       ),
-                ],
-              ),
-
-            const SizedBox(height: BrandSizing.spaceSm),
-
-            padded(
-              _DirectoryControls(
-                count: listings.length,
-                order: _order,
-                // Sorting by distance from a position nobody knows would be a
-                // list in a made-up order with a confident label on it.
-                canSortByDistance: here != null,
-                onOrder: (value) => setState(() => _order = value),
-                withinReach: _withinReach,
-                onWithinReach: (value) => setState(() => _withinReach = value),
-              ),
-            ),
-
-            const SizedBox(height: BrandSizing.spaceSm),
-            const Divider(height: 1),
-
-            if (listings.isEmpty)
-              EmptyView(
-                icon: isFiltered ? Icons.search_off : Icons.badge_outlined,
-                title: isFiltered
-                    ? strings.directoryNoMatch
-                    : strings.directoryEmpty,
-                message: isFiltered
-                    ? strings.directoryNoMatchMessage
-                    : strings.directoryEmptyMessage,
-              )
-            else
-              for (final (i, listing) in listings.indexed) ...[
-                if (i > 0) const Divider(indent: BrandSizing.spaceMd),
-                DirectoryListingCard(
-                  listing: listing,
-                  name: names[listing.workerId],
-                  distanceMetres: premium.distanceTo(listing, hirerAt: here),
+                    ),
+                    trailing: const [AskButton()],
+                  ),
                 ),
+
+                const SizedBox(height: BrandSizing.spaceSm + 4),
+
+                // Same treatment as the job filters: eight categories do not fit
+                // a phone, and a chip clipped mid-word by the screen edge reads as
+                // a rendering bug rather than as a row that scrolls.
+                if (available.isNotEmpty)
+                  FadingRow(
+                    children: [
+                      ChoiceChip(
+                        label: Text(strings.directoryAllWork),
+                        selected: tag == null,
+                        onSelected: (_) => setState(() => _tag = null),
+                      ),
+                      for (final option in JobTag.workerOrder)
+                        if (available.contains(option))
+                          ChoiceChip(
+                            avatar: Icon(option.icon, size: 18),
+                            label: Text(option.label(strings)),
+                            selected: tag == option,
+                            onSelected: (_) => setState(() => _tag = option),
+                          ),
+                    ],
+                  ),
+
+                const SizedBox(height: BrandSizing.spaceSm),
+
+                padded(
+                  _DirectoryControls(
+                    count: listings.length,
+                    order: _order,
+                    // Sorting by distance from a position nobody knows would be a
+                    // list in a made-up order with a confident label on it.
+                    canSortByDistance: here != null,
+                    onOrder: (value) => setState(() => _order = value),
+                    withinReach: _withinReach,
+                    onWithinReach: (value) =>
+                        setState(() => _withinReach = value),
+                  ),
+                ),
+
+                const SizedBox(height: BrandSizing.spaceSm),
+                const Divider(height: 1),
+
+                if (listings.isEmpty)
+                  EmptyView(
+                    icon: isFiltered ? Icons.search_off : Icons.badge_outlined,
+                    title: isFiltered
+                        ? strings.directoryNoMatch
+                        : strings.directoryEmpty,
+                    message: isFiltered
+                        ? strings.directoryNoMatchMessage
+                        : strings.directoryEmptyMessage,
+                  )
+                else
+                  for (final (i, listing) in listings.indexed) ...[
+                    if (i > 0) const Divider(indent: BrandSizing.spaceMd),
+                    DirectoryListingCard(
+                      listing: listing,
+                      name: names[listing.workerId],
+                      distanceMetres: premium.distanceTo(
+                        listing,
+                        hirerAt: here,
+                      ),
+                    ),
+                  ],
               ],
-          ],
-        ),
-      ),
+            ),
+          ),
+        );
+      },
     );
   }
 }

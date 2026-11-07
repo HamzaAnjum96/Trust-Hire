@@ -13,6 +13,9 @@ import '../../app/message_controller.dart';
 import '../messaging/threads_tab.dart';
 import '../notifications/updates_tab.dart';
 import '../../l10n/app_localizations.dart';
+import '../../core/theme.dart';
+import '../../models/job_status.dart';
+import '../lifecycle/job_status_panel.dart';
 import '../../models/bid.dart';
 import '../../models/job.dart';
 import '../../services/media_store.dart';
@@ -64,49 +67,58 @@ class _MyJobsScreenState extends State<MyJobsScreen>
       jobs.jobs,
     );
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(strings.navActivity),
-        actions: const [AccountButton()],
-        bottom: TabBar(
-          controller: _tabs,
-          // **On a phone, three equal tabs across the whole width**, so none
-          // can sit past the edge — which is where Offers was when there were
-          // five. On a wider window, three tabs stretched across 1,200px read
-          // as three buttons, so there they sit together under the title.
-          isScrollable: !compact,
-          tabAlignment: compact ? TabAlignment.fill : TabAlignment.start,
-          tabs: [
-            // Updates first: it is the reason to open this destination at all,
-            // and the badge on the navigation bar lands here.
-            Tab(
-              text: unseen == 0
-                  ? strings.updatesTab
-                  : '${strings.updatesTab} · $unseen',
+    // The bar lines up with the column under it; see [readableInset].
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final inset = readableInset(constraints.maxWidth);
+        return Scaffold(
+          appBar: AppBar(
+            title: Text(strings.navActivity),
+            titleSpacing: NavigationToolbar.kMiddleSpacing + inset,
+            actionsPadding: EdgeInsetsDirectional.only(end: inset),
+            actions: const [AccountButton()],
+            bottom: TabBar(
+              padding: EdgeInsetsDirectional.only(start: inset, end: inset),
+              controller: _tabs,
+              // **On a phone, three equal tabs across the whole width**, so none
+              // can sit past the edge — which is where Offers was when there were
+              // five. On a wider window, three tabs stretched across 1,200px read
+              // as three buttons, so there they sit together under the title.
+              isScrollable: !compact,
+              tabAlignment: compact ? TabAlignment.fill : TabAlignment.start,
+              tabs: [
+                // Updates first: it is the reason to open this destination at all,
+                // and the badge on the navigation bar lands here.
+                Tab(
+                  text: unseen == 0
+                      ? strings.updatesTab
+                      : '${strings.updatesTab} · $unseen',
+                ),
+                Tab(
+                  text: waiting == 0
+                      ? strings.messagesTab
+                      : '${strings.messagesTab} · $waiting',
+                ),
+                Tab(text: strings.yourJobsTab),
+              ],
             ),
-            Tab(
-              text: waiting == 0
-                  ? strings.messagesTab
-                  : '${strings.messagesTab} · $waiting',
-            ),
-            Tab(text: strings.yourJobsTab),
-          ],
-        ),
-      ),
-      // The same measure as the job list; these are the same rows.
-      body: ReadableWidth(
-        child: switch (jobs.state) {
-          LoadState.idle || LoadState.loading => const JobListSkeleton(),
-          LoadState.failed => ErrorView(
-            message: strings.couldNotLoadJobs,
-            onRetry: jobs.load,
           ),
-          LoadState.ready => TabBarView(
-            controller: _tabs,
-            children: const [UpdatesTab(), ThreadsTab(), _YourJobs()],
+          // The same measure as the job list; these are the same rows.
+          body: ReadableWidth(
+            child: switch (jobs.state) {
+              LoadState.idle || LoadState.loading => const JobListSkeleton(),
+              LoadState.failed => ErrorView(
+                message: strings.couldNotLoadJobs,
+                onRetry: jobs.load,
+              ),
+              LoadState.ready => TabBarView(
+                controller: _tabs,
+                children: const [UpdatesTab(), ThreadsTab(), _YourJobs()],
+              ),
+            },
           ),
-        },
-      ),
+        );
+      },
     );
   }
 }
@@ -306,6 +318,52 @@ class _OfferOutcome extends StatelessWidget {
   }
 }
 
+/// Where one of your postings stands: its status, and the offers waiting on
+/// it while it is open.
+class _PostingStatus extends StatelessWidget {
+  const _PostingStatus({required this.job});
+
+  final Job job;
+
+  @override
+  Widget build(BuildContext context) {
+    final strings = AppStrings.of(context);
+    final theme = Theme.of(context);
+    final waiting = job.status == JobStatus.open
+        ? context
+              .watch<BidController>()
+              .bids
+              .where(
+                (bid) => bid.jobId == job.id && bid.status == BidStatus.offered,
+              )
+              .length
+        : null;
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: BrandSizing.spaceMd),
+      child: Row(
+        children: [
+          JobStatusChip(status: job.status),
+          if (waiting != null) ...[
+            const SizedBox(width: BrandSizing.spaceSm + 4),
+            Expanded(
+              child: Text(
+                strings.offerCount(waiting),
+                style: theme.textTheme.labelMedium?.copyWith(
+                  // An offer waiting is the reason to open it: said in the
+                  // brand's text colour, and in words, never colour alone.
+                  color: waiting > 0 ? theme.accentText : null,
+                  fontWeight: waiting > 0 ? FontWeight.w600 : null,
+                ),
+              ),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+}
+
 class _JobsTab extends StatelessWidget {
   const _JobsTab({
     required this.jobs,
@@ -354,7 +412,7 @@ class _JobsTab extends StatelessWidget {
         }
 
         final job = jobs[index - (notice == null ? 0 : 1)];
-        return JobRow(
+        final row = JobRow(
           job: job,
           marksOwnPosting: marksOwnPostings,
           now: now,
@@ -363,6 +421,21 @@ class _JobsTab extends StatelessWidget {
             jobId: job.id,
             mediaStore: context.read<MediaStore>(),
           ),
+        );
+        if (marksOwnPostings) return row;
+
+        // Your own postings, where the question is "which of these needs
+        // me?": every row says where the job stands and, while it is open,
+        // how many offers are waiting. Before, four postings in four
+        // different states looked identical, and finding the one with offers
+        // meant opening each.
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            row,
+            _PostingStatus(job: job),
+            const SizedBox(height: BrandSizing.spaceSm + 4),
+          ],
         );
       },
     );

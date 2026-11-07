@@ -89,3 +89,16 @@ class ReadableWidth extends StatelessWidget {
     );
   }
 }
+
+/// How far in from each side a [ReadableWidth] column starts, in a space
+/// [width] wide. Zero until the space is wider than the column.
+///
+/// For the app bar over such a column. Left at its default, a title and
+/// tabs sit against the left edge of a 1,200px pane while the content is a
+/// centred 720px column under them, and the page reads as two layouts. Use it
+/// for the title's spacing, the actions' padding and the tab bar's padding,
+/// so the bar lines up with what it heads.
+double readableInset(double width) {
+  final inset = (width - BrandSizing.readableWidth) / 2;
+  return inset > 0 ? inset : 0;
+}

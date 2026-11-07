@@ -124,7 +124,7 @@ class JobsViewSwitch extends StatelessWidget {
     // Say what is being hidden, so a short list never looks like a bug.
     final count = jobCount == totalJobCount
         ? strings.jobCount(jobCount)
-        : strings.jobCountFiltered(jobCount, totalJobCount);
+        : strings.jobCountOf(jobCount, totalJobCount);
 
     return Semantics(
       button: true,

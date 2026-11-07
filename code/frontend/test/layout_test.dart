@@ -140,7 +140,7 @@ void main() {
 
       await tester.tap(find.text('Directory'));
       await settle(tester);
-      expect(find.text('Book a professional'), findsOneWidget);
+      expect(find.textContaining('Set prices, no haggling'), findsOneWidget);
 
       await tester.tap(find.text('Jobs'));
       await settle(tester);
@@ -179,7 +179,9 @@ void main() {
       // The map is still the surface; the rail answers "what is this pin?"
       // without covering it.
       expect(find.byType(JobMap), findsOneWidget);
-      expect(find.text('Work on this map'), findsWidgets);
+      // Headed by its count since 0.23 — the list is every result under the
+      // filters, not only the ones in view.
+      expect(find.textContaining(RegExp(r'^\d+ jobs$')), findsWidgets);
       expect(find.byType(JobRow), findsWidgets);
     });
 
@@ -189,7 +191,6 @@ void main() {
       await settle(tester);
 
       expect(find.byType(JobMap), findsOneWidget);
-      expect(find.text('Work on this map'), findsNothing);
       expect(find.byType(JobRow), findsNothing);
     });
 

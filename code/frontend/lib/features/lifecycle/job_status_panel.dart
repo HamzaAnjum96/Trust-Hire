@@ -64,7 +64,7 @@ class JobStatusPanel extends StatelessWidget {
       children: [
         Row(
           children: [
-            _StatusChip(status: job.status),
+            JobStatusChip(status: job.status),
             const SizedBox(width: BrandSizing.spaceSm),
             if (job.status == JobStatus.inProgress)
               Expanded(
@@ -180,8 +180,11 @@ class _RatingPrompt extends StatelessWidget {
 ///
 /// Section 29 of the brand guidelines: colour is never the only carrier of
 /// meaning, so the chip is labelled and the tint only reinforces it.
-class _StatusChip extends StatelessWidget {
-  const _StatusChip({required this.status});
+/// A job's status as a pill: quiet while it is open, burgundy while work is
+/// under way, teal once it finished well. Public since 0.23 so a hirer's list
+/// of postings can say where each one stands without opening it.
+class JobStatusChip extends StatelessWidget {
+  const JobStatusChip({super.key, required this.status});
 
   final JobStatus status;
 

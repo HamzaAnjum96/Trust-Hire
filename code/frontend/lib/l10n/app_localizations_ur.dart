@@ -27,6 +27,11 @@ class AppStringsUr extends AppStrings {
   String get postAJob => 'کام لگائیں';
 
   @override
+  String jobCountOf(int shown, int total) {
+    return '$total میں سے $shown کام';
+  }
+
+  @override
   String get contactYours =>
       'یہ آپ کا نمبر ہے۔ باقی سب اسے \"رابطہ دکھائیں\" کے پیچھے دیکھتے ہیں۔';
 

@@ -421,6 +421,10 @@ class _NavigationRail extends StatelessWidget {
   final bool extended;
   final Widget? action;
 
+  /// An extended rail is 256px wide and its destinations' indicator starts
+  /// 12px in, so a 232px leading column centred in it starts there too.
+  static const _extendedLeadingWidth = 232.0;
+
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
@@ -438,17 +442,24 @@ class _NavigationRail extends StatelessWidget {
                   top: BrandSizing.spaceMd,
                   bottom: BrandSizing.spaceLg,
                 ),
-                child: Column(
-                  crossAxisAlignment: extended
-                      ? CrossAxisAlignment.start
-                      : CrossAxisAlignment.center,
-                  children: [
-                    _RailMark(extended: extended),
-                    if (action != null) ...[
-                      const SizedBox(height: BrandSizing.spaceLg),
-                      action!,
+                // The rail centres whatever leads it. Extended, that left the
+                // name and the button floating mid-rail over destinations that
+                // start at the left edge; held to the rail's width, they start
+                // where the destinations' indicator does.
+                child: SizedBox(
+                  width: extended ? _extendedLeadingWidth : null,
+                  child: Column(
+                    crossAxisAlignment: extended
+                        ? CrossAxisAlignment.start
+                        : CrossAxisAlignment.center,
+                    children: [
+                      _RailMark(extended: extended),
+                      if (action != null) ...[
+                        const SizedBox(height: BrandSizing.spaceLg),
+                        action!,
+                      ],
                     ],
-                  ],
+                  ),
                 ),
               ),
               destinations: [

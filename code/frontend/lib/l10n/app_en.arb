@@ -6,6 +6,18 @@
   "navJobs": "Jobs",
   "navSettings": "Settings",
   "postAJob": "Post a Job",
+  "jobCountOf": "{shown} of {total} jobs",
+  "@jobCountOf": {
+    "description": "How many jobs the filters leave, out of how many there are; a heading over the results",
+    "placeholders": {
+      "shown": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
   "contactYours": "This is your number. Everyone else sees it behind Show Contact.",
   "@contactYours": {
     "description": "On the poster's own job, in place of the Show Contact button"

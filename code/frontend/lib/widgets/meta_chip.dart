@@ -48,10 +48,14 @@ class MetaChip extends StatelessWidget {
             color: iconColor ?? theme.colorScheme.onSurfaceVariant,
           ),
           const SizedBox(width: BrandSizing.spaceXs + 2),
+          // Supporting text, 14px — section 11 names location, dates and
+          // distance as exactly what that size is for. These were captions
+          // (12px), which section 11 keeps for secondary metadata, used
+          // sparingly; on a job row they are the facts a worker decides on.
           Flexible(
             child: Text(
               label,
-              style: theme.textTheme.labelSmall,
+              style: theme.textTheme.labelMedium,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),

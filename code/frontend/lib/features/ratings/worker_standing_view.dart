@@ -48,11 +48,28 @@ class WorkerStandingView extends StatelessWidget {
     );
 
     if (compact) {
-      return Text(
-        _summary(standing, strings),
-        style: theme.textTheme.labelSmall?.copyWith(
-          color: theme.colorScheme.onSurfaceVariant,
-        ),
+      // A drawn star, not the ★ character: a glyph from whatever font has
+      // one is a different shape and weight on every device, beside icons
+      // that are all one family. At the meta row's size, so it reads as one
+      // more fact on the row.
+      return Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (standing.hasHistory && standing.hasRating) ...[
+            Icon(
+              Icons.star_rounded,
+              size: 16,
+              color: theme.colorScheme.onSurfaceVariant,
+            ),
+            const SizedBox(width: BrandSizing.spaceXs),
+          ],
+          Flexible(
+            child: Text(
+              _summary(standing, strings),
+              style: theme.textTheme.labelMedium,
+            ),
+          ),
+        ],
       );
     }
 
@@ -107,7 +124,7 @@ class WorkerStandingView extends StatelessWidget {
 
     return [
       if (standing.hasRating)
-        '★ ${standing.averageStars!.toStringAsFixed(1)}'
+        standing.averageStars!.toStringAsFixed(1)
       else
         strings.notRatedYet,
       strings.jobsCompleted(standing.completedJobs),

@@ -80,12 +80,15 @@ Four postings, in different states. Open the one marked with offers.
 
 What to point at, in this order:
 
-1. **The offers, cheapest first — and nothing marks one as the one to take.**
-   Section 4 requires the hirer to choose. The order exists because a list
-   needs an order; there is no "recommended" badge and the top row gets no
-   extra emphasis.
-2. **"Show Contact".** The poster's number is behind a button rather than
-   printed on the card. Asking is the moment it is revealed.
+1. **The offers come first — cheapest first — and nothing marks one as the
+   one to take.** Section 4 requires the hirer to choose. The order exists
+   because a list needs an order; there is no "recommended" badge and the top
+   row gets no extra emphasis. Edit, *Call this off* and Delete are in the ⋯
+   menu beside the title, out of the way of the choice.
+2. **Contact.** Her own number is not offered back to her. The line says
+   everyone else sees it behind *Show Contact*, a button rather than a number
+   printed on the card. Asking is the moment it is revealed: as Usman, open
+   the same job to see it.
 3. **The circle, and the line under it:** *"This is the general area. The exact
    spot is shared once a worker is chosen."* Phase 1 reveals exact locations
    after acceptance, and the copy was changed in the same sprint as the

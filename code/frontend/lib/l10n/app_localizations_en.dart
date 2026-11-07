@@ -27,6 +27,11 @@ class AppStringsEn extends AppStrings {
   String get postAJob => 'Post a Job';
 
   @override
+  String jobCountOf(int shown, int total) {
+    return '$shown of $total jobs';
+  }
+
+  @override
   String get contactYours =>
       'This is your number. Everyone else sees it behind Show Contact.';
 

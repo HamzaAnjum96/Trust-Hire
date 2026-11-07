@@ -251,7 +251,44 @@ class _JobMapState extends State<JobMap> {
                   return MarkerLayer(
                     markers: [
                       for (final cluster in clusters)
-                        if (cluster.isSingle)
+                        if (cluster.isSingle &&
+                            cluster.only.id == widget.selectedJobId)
+                          // The selected pin carries its fare above it, so
+                          // its box grows upwards; the bottom-centre anchor
+                          // keeps the point on the coordinate.
+                          Marker(
+                            point: LatLng(
+                              cluster.only.location.latitude,
+                              cluster.only.location.longitude,
+                            ),
+                            width: PinFareLabel.width,
+                            height:
+                                JobMarker.selectedSize +
+                                PinFareLabel.height +
+                                PinFareLabel.gap,
+                            alignment: Alignment.topCenter,
+                            child: Column(
+                              children: [
+                                PinFareLabel(job: cluster.only),
+                                const SizedBox(height: PinFareLabel.gap),
+                                SizedBox.square(
+                                  dimension: JobMarker.selectedSize,
+                                  child: JobMarker(
+                                    job: cluster.only,
+                                    isMine:
+                                        widget.myAccountId != null &&
+                                        cluster.only.isPostedBy(
+                                          widget.myAccountId!,
+                                        ),
+                                    isSelected: true,
+                                    onTap: () =>
+                                        widget.onJobTapped(cluster.only),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                        else if (cluster.isSingle)
                           Marker(
                             point: LatLng(
                               cluster.only.location.latitude,
@@ -267,8 +304,7 @@ class _JobMapState extends State<JobMap> {
                               isMine:
                                   widget.myAccountId != null &&
                                   cluster.only.isPostedBy(widget.myAccountId!),
-                              isSelected:
-                                  cluster.only.id == widget.selectedJobId,
+                              isSelected: false,
                               onTap: () => widget.onJobTapped(cluster.only),
                             ),
                           )
