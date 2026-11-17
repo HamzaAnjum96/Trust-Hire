@@ -121,7 +121,7 @@ class _FareAdvicePanelState extends State<FareAdvicePanel> {
           alignment: AlignmentDirectional.centerStart,
           child: OutlinedButton.icon(
             onPressed: hasTags && !_asking ? _ask : null,
-            icon: const Icon(Icons.query_stats),
+            icon: const Icon(Icons.query_stats_rounded),
             label: Text(strings.fareAdviceAsk),
           ),
         ),
@@ -144,7 +144,7 @@ class _FareAdvicePanelState extends State<FareAdvicePanel> {
             child: TextButton.icon(
               onPressed: () => askToTurnOnAi(context),
               style: TextButton.styleFrom(padding: EdgeInsets.zero),
-              icon: const Icon(Icons.download_for_offline_outlined, size: 18),
+              icon: const Icon(Icons.download_for_offline_rounded, size: 18),
               label: Text(strings.fareAdviceTurnOnAi),
             ),
           ),
@@ -256,7 +256,7 @@ class _AdviceCard extends StatelessWidget {
                 FareAdvisor.setAside => strings.fareAiSetAside,
                 _ => strings.fareAiFellBack,
               },
-              icon: Icons.info_outline,
+              icon: Icons.info_outline_rounded,
             ),
           ],
 

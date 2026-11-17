@@ -87,7 +87,7 @@ class _ContactPanelState extends State<ContactPanel> {
               width: double.infinity,
               child: ElevatedButton.icon(
                 onPressed: () => setState(() => _revealed = true),
-                icon: const Icon(Icons.visibility_outlined),
+                icon: const Icon(Icons.visibility_rounded),
                 label: Text(strings.contactShow),
               ),
             ),
@@ -108,7 +108,7 @@ class _ContactPanelState extends State<ContactPanel> {
           Row(
             children: [
               Icon(
-                Icons.phone_outlined,
+                Icons.phone_rounded,
                 size: 20,
                 color: theme.colorScheme.onSurfaceVariant,
               ),
@@ -126,7 +126,7 @@ class _ContactPanelState extends State<ContactPanel> {
               ),
               IconButton(
                 onPressed: () => _copy(strings),
-                icon: const Icon(Icons.copy_outlined),
+                icon: const Icon(Icons.copy_rounded),
                 tooltip: strings.copyNumber,
               ),
             ],
@@ -137,7 +137,7 @@ class _ContactPanelState extends State<ContactPanel> {
               Expanded(
                 child: ElevatedButton.icon(
                   onPressed: () => _call(strings),
-                  icon: const Icon(Icons.call),
+                  icon: const Icon(Icons.call_rounded),
                   label: Text(strings.callNumber),
                 ),
               ),
@@ -145,7 +145,7 @@ class _ContactPanelState extends State<ContactPanel> {
               Expanded(
                 child: OutlinedButton.icon(
                   onPressed: () => _whatsApp(strings),
-                  icon: const Icon(Icons.chat_outlined),
+                  icon: const Icon(Icons.chat_rounded),
                   label: Text(strings.whatsAppNumber),
                 ),
               ),

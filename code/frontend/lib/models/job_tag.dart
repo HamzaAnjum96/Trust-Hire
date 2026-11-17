@@ -22,27 +22,27 @@ import '../l10n/app_localizations.dart';
 /// being asked are hirers, and the picker is icon-led so choosing does not
 /// require reading.
 enum JobTag {
-  plumbing(Icons.plumbing),
-  electrical(Icons.electrical_services),
-  painting(Icons.format_paint),
-  carpentry(Icons.carpenter),
-  masonry(Icons.foundation),
-  construction(Icons.construction),
-  applianceRepair(Icons.ac_unit),
-  cleaning(Icons.cleaning_services),
-  moving(Icons.local_shipping),
-  driving(Icons.directions_car),
-  gardening(Icons.yard),
-  tailoring(Icons.checkroom),
-  cooking(Icons.restaurant),
-  tutoring(Icons.school),
-  security(Icons.shield_outlined),
-  legal(Icons.gavel),
-  medical(Icons.medical_services_outlined),
-  beauty(Icons.content_cut),
+  plumbing(Icons.plumbing_rounded),
+  electrical(Icons.electrical_services_rounded),
+  painting(Icons.format_paint_rounded),
+  carpentry(Icons.carpenter_rounded),
+  masonry(Icons.foundation_rounded),
+  construction(Icons.construction_rounded),
+  applianceRepair(Icons.ac_unit_rounded),
+  cleaning(Icons.cleaning_services_rounded),
+  moving(Icons.local_shipping_rounded),
+  driving(Icons.directions_car_rounded),
+  gardening(Icons.yard_rounded),
+  tailoring(Icons.checkroom_rounded),
+  cooking(Icons.restaurant_rounded),
+  tutoring(Icons.school_rounded),
+  security(Icons.shield_rounded),
+  legal(Icons.gavel_rounded),
+  medical(Icons.medical_services_rounded),
+  beauty(Icons.content_cut_rounded),
   // Every worker holds this by default, and it is a valid job tag too —
   // a hirer who does not know what trade they need can still be seen.
-  misc(Icons.handyman);
+  misc(Icons.handyman_rounded);
 
   const JobTag(this.icon);
 

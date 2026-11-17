@@ -69,7 +69,7 @@ class _VoiceRecorderFieldState extends State<VoiceRecorderField> {
         isLight: isLight,
         child: Row(
           children: [
-            Icon(Icons.mic_off_outlined, color: context.colours.info, size: 22),
+            Icon(Icons.mic_off_rounded, color: context.colours.info, size: 22),
             const SizedBox(width: BrandSizing.spaceSm + 4),
             Expanded(
               child: Text(
@@ -90,7 +90,7 @@ class _VoiceRecorderFieldState extends State<VoiceRecorderField> {
             // Section 26 — recording turns the control Error Red.
             _RoundButton(
               colour: context.colours.bad,
-              icon: Icons.stop,
+              icon: Icons.stop_rounded,
               label: strings.stopRecording,
               onTap: draft.stopRecording,
             ),
@@ -127,7 +127,7 @@ class _VoiceRecorderFieldState extends State<VoiceRecorderField> {
         isLight: isLight,
         child: Row(
           children: [
-            Icon(Icons.graphic_eq, color: context.colours.voice, size: 26),
+            Icon(Icons.graphic_eq_rounded, color: context.colours.voice, size: 26),
             const SizedBox(width: BrandSizing.spaceMd),
             Expanded(
               child: Column(
@@ -153,7 +153,7 @@ class _VoiceRecorderFieldState extends State<VoiceRecorderField> {
             ),
             IconButton(
               onPressed: draft.removeVoiceNote,
-              icon: const Icon(Icons.close),
+              icon: const Icon(Icons.close_rounded),
               tooltip: strings.removeVoiceNote,
             ),
           ],
@@ -167,7 +167,7 @@ class _VoiceRecorderFieldState extends State<VoiceRecorderField> {
         children: [
           _RoundButton(
             colour: context.colours.voice,
-            icon: Icons.mic,
+            icon: Icons.mic_rounded,
             label: strings.recordAVoiceNote,
             onTap: draft.startRecording,
           ),
@@ -218,14 +218,14 @@ class PhotoField extends StatelessWidget {
         scrollDirection: Axis.horizontal,
         children: [
           _AddTile(
-            icon: Icons.photo_camera_outlined,
+            icon: Icons.photo_camera_rounded,
             label: strings.takePhoto,
             isLight: isLight,
             onTap: draft.takePhoto,
           ),
           const SizedBox(width: BrandSizing.spaceSm),
           _AddTile(
-            icon: Icons.photo_library_outlined,
+            icon: Icons.photo_library_rounded,
             label: strings.choosePhoto,
             isLight: isLight,
             onTap: draft.choosePhoto,
@@ -334,7 +334,7 @@ class _PhotoTile extends StatelessWidget {
                 child: Padding(
                   padding: EdgeInsets.all(4),
                   child: Icon(
-                    Icons.close,
+                    Icons.close_rounded,
                     size: 16,
                     color: context.colours.onInverse,
                     semanticLabel: strings.removePhoto,

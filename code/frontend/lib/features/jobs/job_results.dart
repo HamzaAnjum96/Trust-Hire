@@ -49,7 +49,7 @@ class JobResults extends StatelessWidget {
     final strings = AppStrings.of(context);
     if (all.isEmpty) {
       return EmptyView(
-        icon: Icons.work_outline,
+        icon: Icons.work_outline_rounded,
         title: strings.noJobsYet,
         message: strings.postTheFirstJob,
       );
@@ -60,7 +60,7 @@ class JobResults extends StatelessWidget {
     // offering that button here would be a dead end.
     if (reachable.isEmpty) {
       return EmptyView(
-        icon: Icons.construction_outlined,
+        icon: Icons.construction_rounded,
         title: strings.noJobsForTrades,
         message: strings.noJobsForTradesHelp,
         action: OutlinedButton(
@@ -72,7 +72,7 @@ class JobResults extends StatelessWidget {
 
     if (visible.isEmpty) {
       return EmptyView(
-        icon: Icons.search_off,
+        icon: Icons.search_off_rounded,
         title: strings.noJobsMatch,
         message: strings.tryWiderArea,
         action: OutlinedButton(

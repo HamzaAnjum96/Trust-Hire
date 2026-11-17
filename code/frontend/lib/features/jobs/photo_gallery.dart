@@ -125,7 +125,7 @@ class _PhotoViewer extends StatelessWidget {
         backgroundColor: Colors.transparent,
         foregroundColor: context.colours.onInverse,
         leading: IconButton(
-          icon: const Icon(Icons.close),
+          icon: const Icon(Icons.close_rounded),
           tooltip: strings.close,
           onPressed: () => Navigator.of(context).pop(),
         ),

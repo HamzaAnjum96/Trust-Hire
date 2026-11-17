@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 
 import '../core/formatters.dart';
 import '../core/layout.dart';
-import '../core/theme.dart';
 import '../core/tokens.dart';
 import '../features/create_job/create_job_screen.dart';
 import '../features/map/location_controller.dart';
@@ -111,15 +110,15 @@ class _AppShellState extends State<AppShell> {
   List<_Destination> _destinations(AppStrings strings, int waiting) => [
     // The map and the list of the same jobs. Named for what is in it rather
     // than for one of its two views.
-    _Destination(Icons.work_outline, Icons.work, strings.navJobs),
+    _Destination(Icons.work_outline_rounded, Icons.work_rounded, strings.navJobs),
     // Mode B, and a destination rather than a filter on the map. Section 9
     // calls it "a second, parallel discovery mode": the map answers where
     // there is work, the directory answers who can do a thing and what they
     // charge. Folding one into the other would make both worse.
-    _Destination(Icons.badge_outlined, Icons.badge, strings.navDirectory),
+    _Destination(Icons.badge_rounded, Icons.badge_rounded, strings.navDirectory),
     _Destination(
-      Icons.bookmark_border,
-      Icons.bookmark,
+      Icons.bookmark_border_rounded,
+      Icons.bookmark_rounded,
       strings.navActivity,
       // **The reason to look.** Everything else in this bar is somewhere you
       // decide to go; this is the one that can have news in it. It counts
@@ -130,7 +129,7 @@ class _AppShellState extends State<AppShell> {
     // "Profile", not "Settings": role and trades decide what the rest of the
     // app shows, which is not a setting — and a marketplace with no profile
     // destination has nowhere to put trust signals later.
-    _Destination(Icons.person_outline, Icons.person, strings.navProfile),
+    _Destination(Icons.person_outline_rounded, Icons.person_rounded, strings.navProfile),
   ];
 
   void _openCreateJob() {
@@ -206,16 +205,13 @@ class _AppShellState extends State<AppShell> {
       );
     }
 
-    final theme = Theme.of(context);
     return Scaffold(
       body: body,
       bottomNavigationBar: DecoratedBox(
         // A hairline rather than a shadow: the bar is the floor of the
         // screen, not something floating over it.
         decoration: BoxDecoration(
-          border: Border(
-            top: BorderSide(color: theme.colorScheme.outlineVariant),
-          ),
+          border: Border(top: BorderSide(color: context.colours.shell)),
         ),
         child: NavigationBar(
           selectedIndex: _barIndexOf(_index),
@@ -284,8 +280,8 @@ class PostJobButton extends StatelessWidget {
         ? FloatingActionButton(
             heroTag: null,
             onPressed: onPressed,
-            backgroundColor: context.colours.action,
-            foregroundColor: context.colours.onAction,
+            backgroundColor: context.colours.onShell,
+            foregroundColor: context.colours.shell,
             elevation: 0,
             focusElevation: 0,
             hoverElevation: 1,
@@ -298,8 +294,8 @@ class PostJobButton extends StatelessWidget {
         : FloatingActionButton.extended(
             heroTag: null,
             onPressed: onPressed,
-            backgroundColor: context.colours.action,
-            foregroundColor: context.colours.onAction,
+            backgroundColor: context.colours.onShell,
+            foregroundColor: context.colours.shell,
             elevation: 0,
             focusElevation: 0,
             hoverElevation: 1,
@@ -313,17 +309,20 @@ class PostJobButton extends StatelessWidget {
     return switch (shape) {
       // Section 21 — say what the action does, never "Submit".
       PostJobShape.wide => fab(
-        icon: const Icon(Icons.add),
+        icon: const Icon(Icons.add_rounded),
         label: Text(strings.postAJob, style: BrandType.button),
       ),
       PostJobShape.stacked => Column(
         children: [
-          fab(child: const Icon(Icons.add)),
+          fab(child: const Icon(Icons.add_rounded)),
           const SizedBox(height: BrandSizing.spaceXs),
           Text(
             strings.postAJob,
             textAlign: TextAlign.center,
-            style: theme.textTheme.labelSmall,
+            // On the ink rail: the shell's own text colour, not the page's.
+            style: theme.textTheme.labelSmall?.copyWith(
+              color: context.colours.onShell,
+            ),
           ),
         ],
       ),
@@ -334,10 +333,10 @@ class PostJobButton extends StatelessWidget {
 
 /// The posting button as one slot of the bottom bar.
 ///
-/// The same footprint as a destination — a 64×32 pill over a label — so the
-/// bar keeps one rhythm, but the pill is always filled burgundy with a white
-/// glyph. A selected destination is a sand pill with a burgundy glyph, so the
-/// two can never be mistaken for each other.
+/// The same footprint as a destination — a pill over a label — so the bar
+/// keeps one rhythm, but the pill is always white with an ink glyph. The
+/// selected destination is a turmeric pill, so the action and "you are here"
+/// can never be mistaken for each other on the ink shell.
 class _BarSlot extends StatelessWidget {
   const _BarSlot({required this.onPressed});
 
@@ -346,7 +345,6 @@ class _BarSlot extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final strings = AppStrings.of(context);
-    final theme = Theme.of(context);
 
     // Already inside an Expanded: NavigationBar gives every slot one.
     return Semantics(
@@ -371,13 +369,13 @@ class _BarSlot extends StatelessWidget {
                 width: 56,
                 height: 32,
                 decoration: BoxDecoration(
-                  color: context.colours.action,
+                  color: context.colours.onShell,
                   borderRadius: BrandRadius.mediumAll,
                 ),
                 child: Icon(
-                  Icons.add,
+                  Icons.add_rounded,
                   size: 24,
-                  color: context.colours.onAction,
+                  color: context.colours.shell,
                 ),
               ),
               const SizedBox(height: BrandSizing.spaceXs),
@@ -388,7 +386,7 @@ class _BarSlot extends StatelessWidget {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: BrandType.caption.copyWith(
-                    color: theme.accentText,
+                    color: context.colours.onShell,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
@@ -487,16 +485,19 @@ class _RailMark extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final strings = AppStrings.of(context);
-    final theme = Theme.of(context);
 
     final pin = Container(
       width: 32,
       height: 32,
       decoration: BoxDecoration(
-        color: context.colours.action,
+        color: context.colours.highlight,
         borderRadius: BrandRadius.smallAll,
       ),
-      child: Icon(Icons.location_on, size: 22, color: context.colours.onAction),
+      child: Icon(
+        Icons.location_on_rounded,
+        size: 22,
+        color: context.colours.onHighlight,
+      ),
     );
 
     if (!extended) {
@@ -513,7 +514,7 @@ class _RailMark extends StatelessWidget {
           Text(
             strings.appTitle,
             style: BrandType.sectionHeading.copyWith(
-              color: theme.colorScheme.onSurface,
+              color: context.colours.onShell,
               fontWeight: FontWeight.w700,
             ),
           ),

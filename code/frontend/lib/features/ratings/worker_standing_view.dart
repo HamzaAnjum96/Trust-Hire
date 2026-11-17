@@ -85,7 +85,7 @@ class WorkerStandingView extends StatelessWidget {
         Row(
           children: [
             Icon(
-              standing.hasRating ? Icons.star : Icons.star_border,
+              standing.hasRating ? Icons.star_rounded : Icons.star_border_rounded,
               size: 20,
               color: standing.hasRating
                   ? context.colours.rating

@@ -130,7 +130,7 @@ class PinFareLabel extends StatelessWidget {
           color: context.colours.raised,
           borderRadius: BrandRadius.smallAll,
           border: Border.all(color: context.colours.lineStrong),
-          boxShadow: BrandShadows.card,
+          boxShadow: context.colours.card,
         ),
         alignment: Alignment.center,
         child: Text(

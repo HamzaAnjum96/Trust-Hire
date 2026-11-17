@@ -139,7 +139,7 @@ class ErrorView extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.error_outline, size: 40, color: context.colours.bad),
+            Icon(Icons.error_outline_rounded, size: 40, color: context.colours.bad),
             const SizedBox(height: BrandSizing.spaceMd),
             Text(
               message,
@@ -163,7 +163,7 @@ class NoticePanel extends StatelessWidget {
   const NoticePanel({
     super.key,
     required this.message,
-    this.icon = Icons.info_outline,
+    this.icon = Icons.info_outline_rounded,
     this.tone = NoticeTone.information,
   });
 

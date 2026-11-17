@@ -150,7 +150,7 @@ class JobsViewSwitch extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Icon(
-                  showingMap ? Icons.view_list_outlined : Icons.map_outlined,
+                  showingMap ? Icons.view_list_rounded : Icons.map_rounded,
                   size: 20,
                   color: foreground,
                 ),
@@ -289,7 +289,7 @@ class MapNotice extends StatelessWidget {
         color: theme.colorScheme.surface,
         borderRadius: BrandRadius.largeAll,
         border: Border.all(color: theme.colorScheme.outlineVariant),
-        boxShadow: BrandShadows.card,
+        boxShadow: context.colours.card,
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -331,7 +331,7 @@ class MapNotice extends StatelessWidget {
           if (onDismiss != null)
             IconButton(
               onPressed: onDismiss,
-              icon: const Icon(Icons.close, size: 18),
+              icon: const Icon(Icons.close_rounded, size: 18),
               tooltip: strings.dismiss,
               // Not `VisualDensity.compact`, which takes the target to 40px.
               // Section 29 asks for 48, and this is the control somebody

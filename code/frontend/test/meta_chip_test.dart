@@ -82,7 +82,7 @@ void main() {
         const Wrap(
           children: [
             MetaChip(
-              icon: Icons.place_outlined,
+              icon: Icons.place_rounded,
               label: 'Ghulam Muhammad Abad, Faisalabad, Punjab, Pakistan',
             ),
           ],

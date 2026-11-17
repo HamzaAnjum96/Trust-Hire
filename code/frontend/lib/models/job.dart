@@ -349,9 +349,9 @@ class Job {
   IconData get icon {
     final chosen = primaryTag;
     if (chosen != null) return chosen.icon;
-    if (hasVoiceNote) return Icons.mic;
-    if (hasPhotos) return Icons.photo_camera;
-    return Icons.work;
+    if (hasVoiceNote) return Icons.mic_rounded;
+    if (hasPhotos) return Icons.photo_camera_rounded;
+    return Icons.work_rounded;
   }
 
   /// True when the job is scheduled for today.

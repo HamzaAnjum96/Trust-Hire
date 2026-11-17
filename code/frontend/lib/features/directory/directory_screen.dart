@@ -172,7 +172,7 @@ class _DirectoryScreenState extends State<DirectoryScreen> {
                         suffixIcon: query.isEmpty
                             ? null
                             : IconButton(
-                                icon: const Icon(Icons.close),
+                                icon: const Icon(Icons.close_rounded),
                                 tooltip: strings.clear,
                                 onPressed: () => setState(_search.clear),
                               ),
@@ -224,7 +224,7 @@ class _DirectoryScreenState extends State<DirectoryScreen> {
 
                 if (listings.isEmpty)
                   EmptyView(
-                    icon: isFiltered ? Icons.search_off : Icons.badge_outlined,
+                    icon: isFiltered ? Icons.search_off_rounded : Icons.badge_rounded,
                     title: isFiltered
                         ? strings.directoryNoMatch
                         : strings.directoryEmpty,
@@ -329,7 +329,7 @@ class _DirectoryControls extends StatelessWidget {
                     ),
                   ),
                   Icon(
-                    Icons.arrow_drop_down,
+                    Icons.arrow_drop_down_rounded,
                     color: context.colours.accentText,
                     semanticLabel: strings.directoryOrderLabel,
                   ),
@@ -491,13 +491,13 @@ class DirectoryListingCard extends StatelessWidget {
                 children: [
                   if (distanceMetres != null)
                     MetaChip(
-                      icon: Icons.near_me_outlined,
+                      icon: Icons.near_me_rounded,
                       label: Format.distance(strings, distanceMetres!),
                     ),
                   MetaChip(
                     icon: listing.remoteOnly
-                        ? Icons.language
-                        : Icons.directions_car_outlined,
+                        ? Icons.language_rounded
+                        : Icons.directions_car_rounded,
                     label: listing.remoteOnly
                         ? strings.worksRemotely
                         : strings.travelsUpTo(

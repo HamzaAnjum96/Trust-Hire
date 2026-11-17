@@ -58,7 +58,7 @@ class MyListingScreen extends StatelessWidget {
                 ),
                 TextButton.icon(
                   onPressed: () => _ServiceSheet.open(context),
-                  icon: const Icon(Icons.add),
+                  icon: const Icon(Icons.add_rounded),
                   label: Text(strings.addService),
                 ),
               ],
@@ -66,7 +66,7 @@ class MyListingScreen extends StatelessWidget {
 
             if (listing.services.isEmpty)
               EmptyView(
-                icon: Icons.sell_outlined,
+                icon: Icons.sell_rounded,
                 title: strings.noServicesYet,
                 message: strings.noServicesYetMessage,
               )
@@ -100,7 +100,7 @@ class MyListingScreen extends StatelessWidget {
                 ),
                 TextButton.icon(
                   onPressed: () => _CredentialSheet.open(context),
-                  icon: const Icon(Icons.add),
+                  icon: const Icon(Icons.add_rounded),
                   label: Text(strings.addCredential),
                 ),
               ],
@@ -116,14 +116,14 @@ class MyListingScreen extends StatelessWidget {
               ListTile(
                 contentPadding: EdgeInsets.zero,
                 dense: true,
-                leading: const Icon(Icons.workspace_premium_outlined),
+                leading: const Icon(Icons.workspace_premium_rounded),
                 title: Text(credential.title),
                 subtitle: credential.issuer == null
                     ? null
                     : Text(credential.issuer!),
                 trailing: IconButton(
                   tooltip: strings.removeService,
-                  icon: const Icon(Icons.close),
+                  icon: const Icon(Icons.close_rounded),
                   onPressed: () =>
                       premium.removeCredential(credential.id),
                 ),
@@ -169,7 +169,7 @@ class _SubscriptionPanel extends StatelessWidget {
             message:
                 '${strings.premiumActive(Format.day(strings, subscription.expiresAt))} · '
                 '${strings.premiumDaysLeft(subscription.daysLeftAt(DateTime.now()))}',
-            icon: Icons.verified_outlined,
+            icon: Icons.verified_rounded,
           ),
         ] else if (premium.hasLapsed) ...[
           const SizedBox(height: BrandSizing.spaceMd),
@@ -238,7 +238,7 @@ class _ServiceRow extends StatelessWidget {
       subtitle: Text(Format.fare(strings, service.priceRupees)),
       trailing: IconButton(
         tooltip: strings.removeService,
-        icon: const Icon(Icons.close),
+        icon: const Icon(Icons.close_rounded),
         onPressed: () => premium.removeService(service.id),
       ),
     );
@@ -298,8 +298,8 @@ class _ServiceArea extends StatelessWidget {
             children: [
               Icon(
                 listing.base == null
-                    ? Icons.location_off_outlined
-                    : Icons.place_outlined,
+                    ? Icons.location_off_rounded
+                    : Icons.place_rounded,
                 size: 18,
                 color: theme.colorScheme.onSurfaceVariant,
               ),
@@ -326,7 +326,7 @@ class _ServiceArea extends StatelessWidget {
                       if (position == null || !context.mounted) return;
                       await premium.setServiceArea(base: position);
                     },
-              icon: const Icon(Icons.my_location, size: 18),
+              icon: const Icon(Icons.my_location_rounded, size: 18),
               label: Text(strings.useMyLocation),
             ),
           ),

@@ -128,7 +128,7 @@ class _VoiceNotePlayerState extends State<VoiceNotePlayer> {
         isLight: isLight,
         child: Row(
           children: [
-            Icon(Icons.mic_off_outlined, color: context.colours.bad, size: 22),
+            Icon(Icons.mic_off_rounded, color: context.colours.bad, size: 22),
             const SizedBox(width: BrandSizing.spaceSm + 4),
             Expanded(
               child: Text(
@@ -158,7 +158,7 @@ class _VoiceNotePlayerState extends State<VoiceNotePlayer> {
                   width: BrandSizing.touchTargetPreferred,
                   height: BrandSizing.touchTargetPreferred,
                   child: Icon(
-                    _isPlaying ? Icons.pause : Icons.play_arrow,
+                    _isPlaying ? Icons.pause_rounded : Icons.play_arrow_rounded,
                     color: context.colours.onVoice,
                     size: 26,
                   ),

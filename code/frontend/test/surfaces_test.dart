@@ -61,10 +61,10 @@ void main() {
   /// Since 0.23 the map and the list are one destination, Jobs; the list is
   /// reached through the view switch, which the matrix below presses too.
   const destinations = <String, (IconData, IconData)>{
-    'jobs': (Icons.work_outline, Icons.work),
-    'directory': (Icons.badge_outlined, Icons.badge),
-    'activity': (Icons.bookmark_border, Icons.bookmark),
-    'profile': (Icons.person_outline, Icons.person),
+    'jobs': (Icons.work_outline_rounded, Icons.work_rounded),
+    'directory': (Icons.badge_rounded, Icons.badge_rounded),
+    'activity': (Icons.bookmark_border_rounded, Icons.bookmark_rounded),
+    'profile': (Icons.person_outline_rounded, Icons.person_rounded),
   };
 
   Future<void> open(

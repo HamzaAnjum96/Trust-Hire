@@ -96,7 +96,7 @@ class JobStatusPanel extends StatelessWidget {
         if (job.isDirectBooking) ...[
           const SizedBox(height: BrandSizing.spaceSm),
           NoticePanel(
-            icon: Icons.badge_outlined,
+            icon: Icons.badge_rounded,
             message: switch ((role, job.status)) {
               (JobRole.worker, JobStatus.open) => strings.bookingRequest,
               (JobRole.hirer, JobStatus.open) => strings.bookingAwaitingWorker,
@@ -107,7 +107,7 @@ class JobStatusPanel extends StatelessWidget {
 
         if (ending != null) ...[
           const SizedBox(height: BrandSizing.spaceSm),
-          NoticePanel(message: ending, icon: Icons.info_outline),
+          NoticePanel(message: ending, icon: Icons.info_outline_rounded),
         ],
 
         // Only on a finished job, and only for the two people who were in it.
@@ -179,7 +179,7 @@ class _RatingPrompt extends StatelessWidget {
       padding: const EdgeInsets.only(top: BrandSizing.spaceSm),
       child: FilledButton.tonalIcon(
         onPressed: () => RatingSheet.open(context, job: job, role: role),
-        icon: const Icon(Icons.star_border),
+        icon: const Icon(Icons.star_border_rounded),
         label: Text(strings.rateThisJob),
       ),
     );

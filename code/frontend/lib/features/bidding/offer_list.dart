@@ -53,7 +53,7 @@ class OfferList extends StatelessWidget {
           Text(strings.noOffersYet, style: theme.textTheme.bodyMedium)
         else ...[
           if (!job.isAccepted) ...[
-            NoticePanel(message: strings.fareLocked, icon: Icons.lock_outline),
+            NoticePanel(message: strings.fareLocked, icon: Icons.lock_outline_rounded),
             const SizedBox(height: BrandSizing.spaceSm),
           ],
           for (final bid in bids) ...[

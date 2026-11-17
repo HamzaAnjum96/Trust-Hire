@@ -148,11 +148,11 @@ class JobRow extends StatelessWidget {
                     // that says only what and when is a row a worker cannot
                     // use.
                     if (job.area != null)
-                      MetaChip(icon: Icons.place_outlined, label: job.area!),
+                      MetaChip(icon: Icons.place_rounded, label: job.area!),
                     if (distance != null)
-                      MetaChip(icon: Icons.near_me_outlined, label: distance),
+                      MetaChip(icon: Icons.near_me_rounded, label: distance),
                     MetaChip(
-                      icon: Icons.schedule,
+                      icon: Icons.schedule_rounded,
                       label: Format.scheduled(strings, job.scheduledTime, now),
                     ),
                     // One tag only, and never the one the heading already
@@ -165,7 +165,7 @@ class JobRow extends StatelessWidget {
                       ),
                     if (job.hasVoiceNote)
                       MetaChip(
-                        icon: Icons.mic,
+                        icon: Icons.mic_rounded,
                         iconColor: context.colours.voice,
                         // Distinguishes "has a voice note as well" from "the
                         // voice note is all there is", which decides whether
@@ -176,7 +176,7 @@ class JobRow extends StatelessWidget {
                       ),
                     if (job.hasPhotos)
                       MetaChip(
-                        icon: Icons.photo_library_outlined,
+                        icon: Icons.photo_library_rounded,
                         label: strings.photoCount(job.photoPaths.length),
                       ),
                   ],
@@ -188,7 +188,7 @@ class JobRow extends StatelessWidget {
                   const SizedBox(height: BrandSizing.spaceSm),
                   FilledButton.icon(
                     onPressed: onOpen,
-                    icon: const Icon(Icons.open_in_full, size: 18),
+                    icon: const Icon(Icons.open_in_full_rounded, size: 18),
                     label: Text(strings.openDetails),
                   ),
                 ],

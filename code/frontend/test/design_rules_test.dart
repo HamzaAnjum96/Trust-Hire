@@ -116,6 +116,22 @@ void main() {
     );
   });
 
+  test('one icon family: Material rounded', () {
+    // Since 0.24 every glyph is from the rounded set: filled shapes read
+    // better than thin outlines at small sizes in bright light. An outline
+    // that carries state (an unsaved bookmark, an empty star) is the rounded
+    // set's own _border variant.
+    expect(
+      offences(
+        RegExp(r'Icons\.\w+'),
+        unless: (line) => RegExp(
+          r'Icons\.\w+',
+        ).allMatches(line).every((m) => m.group(0)!.endsWith('_rounded')),
+      ),
+      isEmpty,
+    );
+  });
+
   test('rows are rows: no card inside a job or inbox row', () {
     // Cards are for things that sit above the page. A list draws hairlines.
     for (final path in [

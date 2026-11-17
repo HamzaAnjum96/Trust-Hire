@@ -61,7 +61,7 @@ class _UpdatesTabState extends State<UpdatesTab> {
       // away in the bar, so a button here would only repeat it.
       final hiring = !context.watch<ProfileController>().isWorker;
       return EmptyView(
-        icon: Icons.notifications_none,
+        icon: Icons.notifications_none_rounded,
         title: strings.updatesEmpty,
         message: strings.updatesEmptyMessage,
         action: hiring
@@ -76,7 +76,7 @@ class _UpdatesTabState extends State<UpdatesTab> {
                     ),
                   ),
                 ),
-                icon: const Icon(Icons.add),
+                icon: const Icon(Icons.add_rounded),
                 label: Text(strings.postAJob),
               )
             : null,
@@ -150,52 +150,52 @@ class _UpdateRow extends StatelessWidget {
 
     return switch (entry.kind) {
       NotificationKind.offerReceived => (
-        Icons.local_offer_outlined,
+        Icons.local_offer_rounded,
         scheme.primary,
       ),
       NotificationKind.offerAccepted => (
-        Icons.check_circle_outline,
+        Icons.check_circle_outline_rounded,
         context.colours.good,
       ),
       NotificationKind.offerPassedOver => (
-        Icons.do_not_disturb_on_outlined,
+        Icons.do_not_disturb_on_rounded,
         scheme.outline,
       ),
       NotificationKind.jobStarted => (
-        Icons.play_circle_outline,
+        Icons.play_circle_outline_rounded,
         scheme.primary,
       ),
-      NotificationKind.jobCompleted => (Icons.task_alt, context.colours.good),
-      NotificationKind.jobCancelled => (Icons.cancel_outlined, scheme.outline),
-      NotificationKind.jobExpired => (Icons.timer_off_outlined, scheme.outline),
-      NotificationKind.ratingReceived => (Icons.star_outline, scheme.primary),
+      NotificationKind.jobCompleted => (Icons.task_alt_rounded, context.colours.good),
+      NotificationKind.jobCancelled => (Icons.cancel_rounded, scheme.outline),
+      NotificationKind.jobExpired => (Icons.timer_off_rounded, scheme.outline),
+      NotificationKind.ratingReceived => (Icons.star_outline_rounded, scheme.primary),
       NotificationKind.commissionCharged => (
-        Icons.receipt_long_outlined,
+        Icons.receipt_long_rounded,
         scheme.onSurfaceVariant,
       ),
       NotificationKind.walletCredited => (
-        Icons.account_balance_wallet_outlined,
+        Icons.account_balance_wallet_rounded,
         context.colours.good,
       ),
-      NotificationKind.walletLocked => (Icons.lock_outline, scheme.error),
+      NotificationKind.walletLocked => (Icons.lock_outline_rounded, scheme.error),
       NotificationKind.subscriptionExpiring => (
-        Icons.schedule,
+        Icons.schedule_rounded,
         context.colours.info,
       ),
       NotificationKind.subscriptionLapsed => (
-        Icons.badge_outlined,
+        Icons.badge_rounded,
         scheme.error,
       ),
       NotificationKind.verificationApproved => (
-        Icons.verified_outlined,
+        Icons.verified_rounded,
         context.colours.good,
       ),
       NotificationKind.verificationRejected => (
-        Icons.gpp_bad_outlined,
+        Icons.gpp_bad_rounded,
         scheme.error,
       ),
       NotificationKind.messageReceived => (
-        Icons.forum_outlined,
+        Icons.forum_rounded,
         scheme.primary,
       ),
     };
@@ -320,7 +320,7 @@ class _UpdateRow extends StatelessWidget {
             ),
             if (target != null)
               Icon(
-                Icons.chevron_right,
+                Icons.chevron_right_rounded,
                 color: theme.colorScheme.outline,
                 semanticLabel: strings.openDetails,
               ),

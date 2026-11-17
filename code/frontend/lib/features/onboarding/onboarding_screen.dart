@@ -108,6 +108,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     padding: const EdgeInsets.all(BrandSizing.spaceSm),
                     child: TextButton(
                       onPressed: widget.onFinished,
+                      // Ink, not the accent: the intro's ground is turmeric
+                      // in light mode, and the accent text on it is faint.
+                      style: TextButton.styleFrom(
+                        foregroundColor: context.colours.text,
+                      ),
                       child: Text(strings.onboardSkip),
                     ),
                   ),
@@ -119,19 +124,19 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     onPageChanged: (page) => setState(() => _page = page),
                     children: [
                       _Panel(
-                        icon: Icons.place_outlined,
+                        icon: Icons.place_rounded,
                         picture: const _MapPicture(),
                         title: strings.onboardWelcomeTitle,
                         body: strings.onboardWelcomeBody,
                       ),
                       _Panel(
-                        icon: Icons.mic_none,
+                        icon: Icons.mic_none_rounded,
                         picture: const _VoicePicture(),
                         title: strings.onboardVoiceTitle,
                         body: strings.onboardVoiceBody,
                       ),
                       _Panel(
-                        icon: Icons.near_me_outlined,
+                        icon: Icons.near_me_rounded,
                         picture: const _LocationPicture(),
                         title: strings.onboardLocationTitle,
                         body: strings.onboardLocationBody,
@@ -283,7 +288,7 @@ class _Panel extends StatelessWidget {
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Icon(Icons.lock_outline, size: 18, color: context.colours.info),
+                Icon(Icons.lock_outline_rounded, size: 18, color: context.colours.info),
                 const SizedBox(width: BrandSizing.spaceSm),
                 Expanded(
                   child: Text(footnote!, style: theme.textTheme.bodyMedium),
@@ -305,7 +310,6 @@ class _Dots extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     final strings = AppStrings.of(context);
 
     return Semantics(
@@ -320,9 +324,11 @@ class _Dots extends StatelessWidget {
               width: i == current ? 24 : 8,
               height: 8,
               decoration: BoxDecoration(
+                // On the intro's turmeric ground a turmeric dot vanishes:
+                // the current page is ink, the others ink at a third.
                 color: i == current
-                    ? context.colours.highlight
-                    : theme.colorScheme.outline,
+                    ? context.colours.text
+                    : context.colours.text.withValues(alpha: 0.3),
                 borderRadius: BorderRadius.circular(4),
               ),
             ),
@@ -425,7 +431,7 @@ class _Pin extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) =>
-      Icon(Icons.place, size: size, color: colour);
+      Icon(Icons.place_rounded, size: size, color: colour);
 }
 
 /// Three roads, drawn wide and soft so they read as a map and not as a chart.
@@ -509,7 +515,7 @@ class _VoicePicture extends StatelessWidget {
                   shape: BoxShape.circle,
                 ),
                 child: Icon(
-                  Icons.mic,
+                  Icons.mic_rounded,
                   color: context.colours.onVoice,
                   size: 28,
                 ),

@@ -29,7 +29,7 @@ Future<bool> askToTurnOnAi(BuildContext context) async {
     builder: (dialogContext) => AlertDialog(
       // A download, said with a download — not a sparkle: the brand
       // guidelines rule those out, and what this asks for is data.
-      icon: const Icon(Icons.download_for_offline_outlined),
+      icon: const Icon(Icons.download_for_offline_rounded),
       title: Text(strings.aiConsentTitle),
       content: Text(body),
       actions: [

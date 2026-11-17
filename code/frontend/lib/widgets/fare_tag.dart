@@ -64,7 +64,7 @@ class FareTag extends StatelessWidget {
           children: [
             if (agreed != null) ...[
               Icon(
-                Icons.lock_outline,
+                Icons.lock_outline_rounded,
                 size: large ? 14 : 12,
                 color: theme.colorScheme.onSurfaceVariant,
               ),

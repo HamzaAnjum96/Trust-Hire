@@ -446,7 +446,7 @@ class _ResultsRail extends StatelessWidget {
           Expanded(
             child: jobs.isEmpty
                 ? EmptyView(
-                    icon: Icons.search_off,
+                    icon: Icons.search_off_rounded,
                     title: strings.noJobsMatch,
                     message: strings.tryWiderArea,
                   )
@@ -742,18 +742,18 @@ class _MapBody extends StatelessWidget {
                     children: [
                       if (locationExplanation != null)
                         MapNotice(
-                          icon: Icons.location_off_outlined,
+                          icon: Icons.location_off_rounded,
                           message: locationExplanation,
                           onDismiss: location.dismissExplanation,
                         ),
                       if (tilesUnavailable)
                         MapNotice(
-                          icon: Icons.cloud_off,
+                          icon: Icons.cloud_off_rounded,
                           message: strings.mapImagesNotLoading,
                         ),
                       if (jobs.isEmpty && totalJobCount > 0)
                         MapNotice(
-                          icon: Icons.search_off,
+                          icon: Icons.search_off_rounded,
                           message: strings.noJobsMatchHere,
                           onDismiss: filters.clear,
                         ),
@@ -770,7 +770,7 @@ class _MapBody extends StatelessWidget {
                       // the trades screen, which the profile always links to.
                       if (hiddenByTags > 0 && !profile.tradesNoticeDismissed)
                         MapNotice(
-                          icon: Icons.construction_outlined,
+                          icon: Icons.construction_rounded,
                           message: strings.noJobsForTradesHelp,
                           actionLabel: strings.addATrade,
                           onAction: () => MyTradesScreen.open(context),
@@ -808,7 +808,7 @@ class _MapBody extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       MapButton(
-                        icon: Icons.zoom_out_map,
+                        icon: Icons.zoom_out_map_rounded,
                         label: strings.showAllJobs,
                         onPressed: jobs.isEmpty
                             ? null
@@ -816,7 +816,7 @@ class _MapBody extends StatelessWidget {
                       ),
                       const SizedBox(height: BrandSizing.spaceSm),
                       MapButton(
-                        icon: Icons.my_location,
+                        icon: Icons.my_location_rounded,
                         label: strings.nearMeLabel,
                         isBusy: location.isRequesting,
                         onPressed: onMyLocationPressed,
@@ -911,7 +911,7 @@ class JobPreviewCard extends StatelessWidget {
         color: theme.colorScheme.surface,
         borderRadius: BrandRadius.largeAll,
         border: Border.all(color: theme.colorScheme.outlineVariant),
-        boxShadow: BrandShadows.card,
+        boxShadow: context.colours.lift,
       ),
       padding: const EdgeInsets.all(BrandSizing.spaceMd),
       child: Column(
@@ -968,22 +968,22 @@ class JobPreviewCard extends StatelessWidget {
             runSpacing: BrandSizing.spaceXs,
             children: [
               if (job.area != null)
-                MetaChip(icon: Icons.place_outlined, label: job.area!),
+                MetaChip(icon: Icons.place_rounded, label: job.area!),
               if (distance != null)
-                MetaChip(icon: Icons.near_me_outlined, label: distance),
+                MetaChip(icon: Icons.near_me_rounded, label: distance),
               MetaChip(
-                icon: Icons.schedule,
+                icon: Icons.schedule_rounded,
                 label: Format.scheduled(strings, job.scheduledTime, now),
               ),
               if (job.hasVoiceNote)
                 MetaChip(
-                  icon: Icons.mic,
+                  icon: Icons.mic_rounded,
                   iconColor: context.colours.voice,
                   label: strings.voiceNote,
                 ),
               if (job.hasPhotos)
                 MetaChip(
-                  icon: Icons.photo_library_outlined,
+                  icon: Icons.photo_library_rounded,
                   label: strings.photoCount(job.photoPaths.length),
                 ),
             ],

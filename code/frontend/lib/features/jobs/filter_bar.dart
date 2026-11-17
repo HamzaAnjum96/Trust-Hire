@@ -36,35 +36,35 @@ class QuickFilterBar extends StatelessWidget {
       _FilterChip(
         floating: floating,
         label: TimeFilter.today.label(strings),
-        icon: Icons.today_outlined,
+        icon: Icons.today_rounded,
         selected: filter.time == TimeFilter.today,
         onTap: controller.toggleToday,
       ),
       _FilterChip(
         floating: floating,
         label: DistanceFilter.nearMe.label(strings),
-        icon: Icons.near_me_outlined,
+        icon: Icons.near_me_rounded,
         selected: filter.distance == DistanceFilter.nearMe,
         onTap: controller.toggleNearMe,
       ),
       _FilterChip(
         floating: floating,
         label: strings.voiceNote,
-        icon: Icons.mic_none,
+        icon: Icons.mic_none_rounded,
         selected: filter.withVoiceNote,
         onTap: () => controller.setWithVoiceNote(!filter.withVoiceNote),
       ),
       _FilterChip(
         floating: floating,
         label: strings.photos,
-        icon: Icons.photo_library_outlined,
+        icon: Icons.photo_library_rounded,
         selected: filter.withPhotos,
         onTap: () => controller.setWithPhotos(!filter.withPhotos),
       ),
       _FilterChip(
         floating: floating,
         label: strings.more,
-        icon: Icons.tune,
+        icon: Icons.tune_rounded,
         selected:
             (filter.time != TimeFilter.any &&
                 filter.time != TimeFilter.today) ||
@@ -77,7 +77,7 @@ class QuickFilterBar extends StatelessWidget {
         _FilterChip(
           floating: floating,
           label: strings.clear,
-          icon: Icons.close,
+          icon: Icons.close_rounded,
           selected: false,
           onTap: controller.clear,
         ),
@@ -149,7 +149,7 @@ class _FilterChip extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Icon(
-                  selected ? Icons.check : icon,
+                  selected ? Icons.check_rounded : icon,
                   size: 16,
                   color: foreground,
                 ),
@@ -221,7 +221,7 @@ class FilterSheet extends StatelessWidget {
                   for (final option in TimeFilter.values)
                     _FilterChip(
                       label: option.label(strings),
-                      icon: Icons.schedule,
+                      icon: Icons.schedule_rounded,
                       selected: filter.time == option,
                       onTap: () => controller.setTime(option),
                     ),
@@ -238,7 +238,7 @@ class FilterSheet extends StatelessWidget {
                   for (final option in DistanceFilter.values)
                     _FilterChip(
                       label: option.label(strings),
-                      icon: Icons.near_me_outlined,
+                      icon: Icons.near_me_rounded,
                       selected: filter.distance == option,
                       onTap: () => controller.setDistance(option),
                     ),
@@ -254,14 +254,14 @@ class FilterSheet extends StatelessWidget {
                 children: [
                   _FilterChip(
                     label: strings.voiceNote,
-                    icon: Icons.mic_none,
+                    icon: Icons.mic_none_rounded,
                     selected: filter.withVoiceNote,
                     onTap: () =>
                         controller.setWithVoiceNote(!filter.withVoiceNote),
                   ),
                   _FilterChip(
                     label: strings.photos,
-                    icon: Icons.photo_library_outlined,
+                    icon: Icons.photo_library_rounded,
                     selected: filter.withPhotos,
                     onTap: () => controller.setWithPhotos(!filter.withPhotos),
                   ),
@@ -356,7 +356,7 @@ class _JobSearchFieldState extends State<JobSearchField> {
     final clear = widget.controller.filter.query.isEmpty
         ? null
         : IconButton(
-            icon: const Icon(Icons.close),
+            icon: const Icon(Icons.close_rounded),
             tooltip: strings.clearSearch,
             onPressed: () {
               _text.clear();
@@ -372,7 +372,7 @@ class _JobSearchFieldState extends State<JobSearchField> {
           ? searchBarDecoration(hint: strings.searchJobs, suffixIcon: clear)
           : InputDecoration(
               hintText: strings.searchJobs,
-              prefixIcon: const Icon(Icons.search),
+              prefixIcon: const Icon(Icons.search_rounded),
               suffixIcon: clear,
             ),
     );

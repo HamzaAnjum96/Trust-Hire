@@ -50,7 +50,7 @@ class _MissingPhoto extends StatelessWidget {
       color: context.colours.tint,
       child: Center(
         child: Icon(
-          Icons.image_not_supported_outlined,
+          Icons.image_not_supported_rounded,
           size: 28,
           color: context.colours.voice,
         ),

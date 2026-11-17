@@ -224,19 +224,19 @@ class _AiStatusBar extends StatelessWidget {
     final (IconData icon, String text, Widget? action) = switch (ai.state) {
       // Who will answer, not who did: nothing has been asked yet.
       AiState.ready || AiState.idle => (
-        ai.onDevice ? Icons.devices_outlined : Icons.cloud_outlined,
+        ai.onDevice ? Icons.devices_rounded : Icons.cloud_rounded,
         ai.onDevice
             ? strings.aiAnswersHere(ai.modelName)
             : strings.aiAnswersHereRemote(ai.modelName),
         null,
       ),
       AiState.loading => (
-        Icons.downloading,
+        Icons.downloading_rounded,
         strings.aiStatusLoading((ai.progress * 100).round()),
         null,
       ),
       AiState.off => (
-        Icons.text_fields,
+        Icons.text_fields_rounded,
         strings.assistantAiOffNote,
         TextButton(
           onPressed: () => askToTurnOnAi(context),
@@ -244,12 +244,12 @@ class _AiStatusBar extends StatelessWidget {
         ),
       ),
       AiState.failed => (
-        Icons.text_fields,
+        Icons.text_fields_rounded,
         strings.aiStartFailedNote,
         TextButton(onPressed: ai.ensureReady, child: Text(strings.aiTryAgain)),
       ),
       AiState.checking || AiState.unsupported => (
-        Icons.text_fields,
+        Icons.text_fields_rounded,
         strings.aiAnsweredByWords,
         null,
       ),
@@ -331,7 +331,7 @@ class _Welcome extends StatelessWidget {
               shape: BoxShape.circle,
             ),
             child: Icon(
-              Icons.question_answer_outlined,
+              Icons.question_answer_rounded,
               size: 30,
               color: context.colours.accentText,
             ),
@@ -355,7 +355,7 @@ class _Welcome extends StatelessWidget {
           children: [
             for (final example in examples)
               ActionChip(
-                avatar: const Icon(Icons.search, size: 18),
+                avatar: const Icon(Icons.search_rounded, size: 18),
                 label: Text(example),
                 onPressed: () => onAsk(example),
               ),
@@ -547,10 +547,10 @@ class _Answered extends StatelessWidget {
             children: [
               Icon(
                 reply.model == null
-                    ? Icons.text_fields
+                    ? Icons.text_fields_rounded
                     : (reply.modelOnDevice
-                          ? Icons.devices_outlined
-                          : Icons.cloud_outlined),
+                          ? Icons.devices_rounded
+                          : Icons.cloud_rounded),
                 size: 14,
                 color: theme.colorScheme.onSurfaceVariant,
               ),
@@ -631,7 +631,7 @@ class _Composer extends StatelessWidget {
                   minWidth: BrandSizing.touchTargetPreferred,
                   minHeight: BrandSizing.touchTargetPreferred,
                 ),
-                icon: const Icon(Icons.arrow_upward),
+                icon: const Icon(Icons.arrow_upward_rounded),
               ),
             ],
           ),

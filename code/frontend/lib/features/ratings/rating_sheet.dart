@@ -187,7 +187,7 @@ class _StarPicker extends StatelessWidget {
                 iconSize: 36,
                 tooltip: strings.starsChosen(value),
                 icon: Icon(
-                  value <= stars ? Icons.star : Icons.star_border,
+                  value <= stars ? Icons.star_rounded : Icons.star_border_rounded,
                   color: value <= stars
                       ? context.colours.rating
                       : theme.colorScheme.outline,

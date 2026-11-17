@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trust_hire/app/app.dart';
 import 'package:trust_hire/app/settings_controller.dart';
 import 'package:trust_hire/core/theme.dart';
+import 'package:trust_hire/core/roles.dart';
 import 'package:trust_hire/core/tokens.dart';
 import 'package:trust_hire/services/local_store.dart';
 
@@ -125,65 +126,74 @@ void main() {
       return (lighter + 0.05) / (darker + 0.05);
     }
 
-    test('text pairings the app actually uses clear AA', () {
-      final pairs = <String, (Color, Color)>{
-        'Ink on Mist': (BrandColours.ink, BrandColours.mist),
-        'Ink on Warm Sand': (BrandColours.ink, BrandColours.warmSand),
-        'Ink on White': (BrandColours.ink, BrandColours.white),
-        'Slate on White': (BrandColours.slate, BrandColours.white),
-        'Slate on Mist': (BrandColours.slate, BrandColours.mist),
-        'Slate on Warm Sand': (BrandColours.slate, BrandColours.warmSand),
-        'White on Trust Burgundy': (
-          BrandColours.white,
-          BrandColours.trustBurgundy,
-        ),
-        'White on Deep Burgundy': (
-          BrandColours.white,
-          BrandColours.deepBurgundy,
-        ),
-        'Trust Burgundy on White': (
-          BrandColours.trustBurgundy,
-          BrandColours.white,
-        ),
-        'Error Red on White': (BrandColours.errorRed, BrandColours.white),
-        'Dark text on dark background': (
-          BrandColours.darkTextPrimary,
-          BrandColours.darkBackground,
-        ),
-        'Dark secondary text on dark surface': (
-          BrandColours.darkTextSecondary,
-          BrandColours.darkSurface,
-        ),
-        // The text tint added in 0.23, against the darkest-contrast surface
-        // it is drawn on. The fill colour it replaces for text was 2.95:1
-        // here.
-        'Dark burgundy text on the elevated dark surface': (
-          BrandColours.darkBurgundyText,
-          BrandColours.darkElevated,
-        ),
-      };
-
-      pairs.forEach((name, pair) {
-        expect(
-          contrast(pair.$1, pair.$2),
-          greaterThanOrEqualTo(4.5),
-          reason: '$name must clear WCAG AA for normal text',
-        );
+    // **Every role pair the app draws, in both themes.** Since 0.24 the
+    // palette lives in AppColours, so this checks the roles rather than a
+    // list of brand colours somebody had to keep in step by hand — and a
+    // reskin is held to it the moment its values change.
+    for (final (name, roles) in [
+      ('light', AppColours.light),
+      ('dark', AppColours.dark),
+    ]) {
+      test('every text role clears AA on what it sits on ($name)', () {
+        final pairs = <String, (Color, Color)>{
+          'text on page': (roles.text, roles.page),
+          'text on surface': (roles.text, roles.surface),
+          'text on raised': (roles.text, roles.raised),
+          'text on tint': (roles.text, roles.tint),
+          'text on selection': (roles.text, roles.selection),
+          'text on intro': (roles.text, roles.intro),
+          'muted on page': (roles.textMuted, roles.page),
+          'muted on surface': (roles.textMuted, roles.surface),
+          'muted on raised': (roles.textMuted, roles.raised),
+          'muted on tint': (roles.textMuted, roles.tint),
+          'accent text on page': (roles.accentText, roles.page),
+          'accent text on surface': (roles.accentText, roles.surface),
+          'accent text on raised': (roles.accentText, roles.raised),
+          'on action': (roles.onAction, roles.action),
+          'on highlight': (roles.onHighlight, roles.highlight),
+          'on voice': (roles.onVoice, roles.voice),
+          'voice on surface': (roles.voice, roles.surface),
+          'on good': (roles.onSignal, roles.good),
+          'on bad': (roles.onSignal, roles.bad),
+          'on info': (roles.onSignal, roles.info),
+          'bad on surface': (roles.bad, roles.surface),
+          'good on surface': (roles.good, roles.surface),
+          'warn on surface': (roles.warn, roles.surface),
+          'info on surface': (roles.info, roles.surface),
+          'fare on surface': (roles.fare, roles.surface),
+          'on feature': (roles.onFeature, roles.feature),
+          'on avatar': (roles.onAvatar, roles.avatar),
+          'on inverse': (roles.onInverse, roles.inverse),
+          'on shell': (roles.onShell, roles.shell),
+          'quiet on shell': (roles.shellMuted, roles.shell),
+        };
+        pairs.forEach((pair, colours) {
+          expect(
+            contrast(colours.$1, colours.$2),
+            greaterThanOrEqualTo(4.5),
+            reason: '$pair ($name) must clear WCAG AA for normal text',
+          );
+        });
       });
-    });
 
-    test('white on copper is not used for small text', () {
-      // Section 9 warns against it and the numbers agree: it lands just under
-      // 3:1, so copper carries icons and fills, never body copy.
-      final ratio = contrast(BrandColours.white, BrandColours.copper);
-      expect(ratio, lessThan(4.5));
-    });
+      test('borders and the shell indicator clear 3:1 ($name)', () {
+        // WCAG 1.4.11: a control's boundary, and the mark that says which
+        // destination is selected.
+        expect(
+          contrast(roles.lineStrong, roles.surface),
+          greaterThanOrEqualTo(3),
+        );
+        expect(contrast(roles.highlight, roles.shell), greaterThanOrEqualTo(3));
+      });
+    }
 
-    test('warning amber is a fill colour, not a text colour', () {
-      // 2.65:1 on white. The notice panel therefore carries the tone in its
-      // icon and border while the message itself stays in Ink.
-      final ratio = contrast(BrandColours.warningAmber, BrandColours.white);
-      expect(ratio, lessThan(3.0));
+    test('turmeric is never text on white, which is why accentText exists', () {
+      // 1.8:1. The signature colour carries ink on top of it; as words it is
+      // the darker turmericText.
+      expect(
+        contrast(AppColours.light.highlight, AppColours.light.surface),
+        lessThan(3),
+      );
     });
   });
 
@@ -222,21 +232,32 @@ void main() {
   });
 
   group('the themes', () {
-    test('both use Inter with an Arabic-script fallback', () {
-      for (final theme in [BrandTheme.light, BrandTheme.dark]) {
-        expect(theme.textTheme.bodyLarge?.fontFamily, 'Inter');
-        expect(
-          theme.textTheme.bodyLarge?.fontFamilyFallback,
-          contains('Noto Sans Arabic'),
-        );
-      }
-    });
+    test(
+      'both use Atkinson Hyperlegible Next with an Arabic-script fallback',
+      () {
+        for (final theme in [BrandTheme.light, BrandTheme.dark]) {
+          expect(
+            theme.textTheme.bodyLarge?.fontFamily,
+            'Atkinson Hyperlegible Next',
+          );
+          expect(
+            theme.textTheme.bodyLarge?.fontFamilyFallback,
+            contains('Noto Sans Arabic'),
+          );
+        }
+      },
+    );
 
     test('controls are at least the preferred touch target', () {
       final button = BrandTheme.light.elevatedButtonTheme.style;
       final size = button?.minimumSize?.resolve({});
 
-      expect(size?.height, BrandSizing.touchTargetPreferred);
+      // 52 since 0.24, above the preferred 48: a chunky pill for one hand.
+      expect(size?.height, BrandSizing.controlHeight);
+      expect(
+        BrandSizing.controlHeight,
+        greaterThanOrEqualTo(BrandSizing.touchTargetPreferred),
+      );
     });
   });
 }

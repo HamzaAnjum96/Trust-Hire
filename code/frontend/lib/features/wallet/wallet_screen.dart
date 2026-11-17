@@ -103,7 +103,7 @@ class WalletScreen extends StatelessWidget {
                       backgroundColor: context.colours.onFeature,
                       foregroundColor: context.colours.feature,
                     ),
-                    icon: const Icon(Icons.add),
+                    icon: const Icon(Icons.add_rounded),
                     label: Text(strings.topUpTitle),
                   ),
                 ],
@@ -114,7 +114,7 @@ class WalletScreen extends StatelessWidget {
             if (controller.isLockedOut)
               NoticePanel(
                 message: strings.walletLocked,
-                icon: Icons.lock_outline,
+                icon: Icons.lock_outline_rounded,
                 tone: NoticeTone.warning,
               )
             else if (controller.isInDebt)
@@ -122,7 +122,7 @@ class WalletScreen extends StatelessWidget {
                 message: strings.walletInDebt(
                   Format.fare(strings, -wallet.balance),
                 ),
-                icon: Icons.error_outline,
+                icon: Icons.error_outline_rounded,
                 tone: NoticeTone.warning,
               )
             else
@@ -171,13 +171,13 @@ class _EntryRow extends StatelessWidget {
         children: [
           Icon(
             switch (entry.kind) {
-              WalletEntryKind.topUp => Icons.add_circle_outline,
-              WalletEntryKind.commission => Icons.percent,
-              WalletEntryKind.firstJobCredit => Icons.card_giftcard,
-              WalletEntryKind.loyaltyBonus => Icons.stars_outlined,
+              WalletEntryKind.topUp => Icons.add_circle_outline_rounded,
+              WalletEntryKind.commission => Icons.percent_rounded,
+              WalletEntryKind.firstJobCredit => Icons.card_giftcard_rounded,
+              WalletEntryKind.loyaltyBonus => Icons.stars_rounded,
               WalletEntryKind.cancellationPenalty =>
-                Icons.remove_circle_outline,
-              WalletEntryKind.adminAdjustment => Icons.build_outlined,
+                Icons.remove_circle_outline_rounded,
+              WalletEntryKind.adminAdjustment => Icons.build_rounded,
             },
             size: 20,
             color: theme.colorScheme.onSurfaceVariant,

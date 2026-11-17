@@ -1,90 +1,96 @@
 import 'package:flutter/material.dart';
 
-/// Design tokens from `documents/brand-guidelines/brand-guidelines.md`.
+/// Design tokens from `documents/brand-guidelines/brand-guidelines.md`, v0.2.
 ///
-/// This file is the Dart equivalent of the CSS custom properties in section 31
-/// of the guidelines. It is the single source of truth for colour, radius,
-/// spacing, type and motion in the app — screens should reference these rather
-/// than hard-coding values, so a brand change lands in one place.
+/// The palette, radii, spacing, type and motion, written down once. Screens do
+/// not read [BrandColours] directly: they ask for a role from `AppColours` in
+/// `roles.dart`, which maps these onto jobs (page, action, voice, the map).
+/// `test/design_rules_test.dart` enforces that.
+///
+/// **0.24: ink and turmeric on lime-wash.** The colours of a working street —
+/// lime-washed walls, lettering in near-black ink, turmeric for the one thing
+/// that matters now — used with the discipline of something read in bright
+/// sun. The reasoning is in `documents/design/2026-11-17-reskin-direction.md`.
 class BrandColours {
   const BrandColours._();
 
-  // --- Primary palette (section 5) ---
+  // --- Light ---------------------------------------------------------------
 
-  /// The main brand colour. Prominent, but not on every surface.
-  static const trustBurgundy = Color(0xFF7A263A);
-
-  /// High-contrast states and darker brand surfaces.
-  static const deepBurgundy = Color(0xFF4A1524);
-
-  /// Secondary accent — voice notes, new-job badges, radius controls.
-  /// Contrast on white is 3.82:1, so it is large-text-only for type.
-  static const copper = Color(0xFFC56A3A);
-
-  /// Soft background that keeps the product from feeling clinical.
-  static const warmSand = Color(0xFFF4E9DE);
-
-  // --- Neutrals (section 6) ---
-
-  static const ink = Color(0xFF211B1D);
-  static const slate = Color(0xFF625A5D);
-  static const stone = Color(0xFFB9AFB1);
-  static const mist = Color(0xFFF7F4F3);
+  /// The page: a cool lime-wash white. Not cream.
+  static const limeWash = Color(0xFFF3F5F7);
   static const white = Color(0xFFFFFFFF);
 
-  /// Card border from section 24.
-  static const cardBorder = Color(0xFFE7DFE1);
+  /// Hairlines between rows, round cards.
+  static const line = Color(0xFFDCE1E6);
 
-  // --- Functional (section 7) ---
-  // Deliberately distinct from the brand palette. Success is a muted
-  // blue-teal rather than green, per the guidelines.
+  /// Input borders and anything a line must be seen against: 3.6:1 on white.
+  static const lineStrong = Color(0xFF7D8893);
 
-  static const successTeal = Color(0xFF287C7A);
-  static const informationBlue = Color(0xFF356A8A);
+  /// A quiet filled area: chips, tiles, a pill at rest.
+  static const mist = Color(0xFFE7EBEF);
 
-  /// Contrast on white is 2.65:1 — never use as text on a light surface.
-  /// Use as a fill with Ink on top, or as an icon at large sizes.
-  static const warningAmber = Color(0xFFD3922E);
-  static const errorRed = Color(0xFFB63A3A);
+  /// Text, and every filled action in light mode: 15:1 on the page.
+  static const ink = Color(0xFF16202A);
 
-  // --- Dark mode (section 30) ---
-  // Warm rather than pure black, and no neon.
+  /// Secondary text: 5.8:1 on the page.
+  static const inkMuted = Color(0xFF56616C);
 
-  static const darkBackground = Color(0xFF181315);
-  static const darkSurface = Color(0xFF241C1F);
-  static const darkElevated = Color(0xFF302429);
-  static const darkTextPrimary = Color(0xFFFAF6F4);
-  static const darkTextSecondary = Color(0xFFC7BFC1);
+  /// The signature: what is selected, new or waiting. Never text on white
+  /// (1.8:1); always carries ink on top of it (8.2:1).
+  static const turmeric = Color(0xFFF2A900);
 
-  /// Lighter burgundy for visibility on dark surfaces. 3.64:1 on the dark
-  /// background — large text and UI elements, not body copy.
-  static const darkBurgundy = Color(0xFFB44C65);
+  /// A selected row's fill, quieter than [turmeric].
+  static const turmericWash = Color(0xFFFFF0C2);
 
-  /// Burgundy for *text* on dark surfaces: links, text buttons, the selected
-  /// tab, "Switch account". Added in 0.23. [darkBurgundy] is 3.3:1 on the
-  /// dark surface and 2.95:1 on the elevated one, which fails AA for anything
-  /// smaller than large text — and every text button in dark mode was using
-  /// it. This tint of the same hue is 5.0:1 or better on all three dark
-  /// surfaces. Fills keep [darkBurgundy]; white text on this would fail.
-  static const darkBurgundyText = Color(0xFFD9798F);
-  static const darkCopper = Color(0xFFDB8453);
+  /// Turmeric as words, links and text buttons: 6.3:1 on white.
+  static const turmericText = Color(0xFF8A5300);
 
-  // --- Map surface (section 15) ---
+  /// Voice notes and nothing else: 6.1:1 on white, white on it 6.1:1.
+  static const peacock = Color(0xFF0B6E6B);
+  static const peacockWash = Color(0xFFE3F1F0);
 
-  static const markerDefault = trustBurgundy;
-  static const markerSelected = deepBurgundy;
-  static const markerSelectedOutline = copper;
+  /// Loss: errors, destructive actions, a debt.
+  static const brick = Color(0xFFB8321E);
+  static const leaf = Color(0xFF2F7D4A);
+  static const amber = Color(0xFF9A5B00);
+  static const indigo = Color(0xFF2F5E8C);
 
-  /// Locally created jobs are marked in copper so they stand out from seeded
-  /// ones — the POC stores them on device only.
-  static const markerLocal = copper;
+  /// A person's initials, when they are not the person holding the phone.
+  static const slateBlue = Color(0xFF3B4A5A);
 
-  static const jobRadiusFill = Color(0x1F7A263A); // rgba(122, 38, 58, 0.12)
-  static const jobRadiusBorder = Color(0x8C7A263A); // rgba(122, 38, 58, 0.55)
+  /// What shadows are made from.
+  static const shadow = Color(0xFF0B1219);
 
-  /// User location uses Information Blue, not green.
-  static const userLocation = informationBlue;
-  static const userLocationRing = Color(0x33356A8A); // rgba(53, 106, 138, 0.20)
+  /// The shell — the navigation bar and rail — is ink in both themes, and
+  /// this is its quiet text and icons: 9.1:1 on ink.
+  static const shellMuted = Color(0xFFB8C2CC);
+
+  // --- Dark ----------------------------------------------------------------
+
+  /// Night slate, not black.
+  static const night = Color(0xFF0E141A);
+  static const nightSurface = Color(0xFF16202A);
+  static const nightRaised = Color(0xFF1F2B37);
+  static const nightLine = Color(0xFF263241);
+  static const nightLineStrong = Color(0xFF6B7A8B);
+  static const nightText = Color(0xFFEEF2F5);
+  static const nightTextMuted = Color(0xFF9BA7B2);
+
+  /// Turmeric in the dark: the action fill, under ink text (10.2:1), and the
+  /// accent as words (8.0:1 on the raised surface).
+  static const nightTurmeric = Color(0xFFF5B629);
+  static const nightTurmericWash = Color(0xFF33321F);
+  static const nightPeacock = Color(0xFF5BBDB7);
+  static const nightBrick = Color(0xFFF07A63);
+  static const nightLeaf = Color(0xFF7CC28A);
+  static const nightAmber = Color(0xFFF0A54A);
+  static const nightIndigo = Color(0xFF7FAEDB);
+
+  /// A pin at rest on the dark basemap: 12:1 against the night ground.
+  static const nightPin = Color(0xFFC9D2DA);
+
+  /// Your own pins in the dark: warm sand, apart from the turmeric selection.
+  static const nightOwnPin = Color(0xFFD9B38C);
 }
 
 /// Corner radii (section 31).
@@ -94,7 +100,7 @@ class BrandRadius {
   static const double small = 8;
   static const double medium = 12; // buttons, inputs
   static const double large = 16; // cards
-  static const double sheet = 20; // bottom sheets
+  static const double sheet = 24; // bottom sheets and dialogs
 
   static const smallAll = BorderRadius.all(Radius.circular(small));
   static const mediumAll = BorderRadius.all(Radius.circular(medium));
@@ -112,6 +118,9 @@ class BrandSizing {
 
   /// Preferred tappable size — buttons and controls use this.
   static const double touchTargetPreferred = 48;
+
+  /// A button's height since 0.24: a chunky pill, easy to hit one-handed.
+  static const double controlHeight = 52;
 
   static const double spaceXs = 4;
   static const double spaceSm = 8;
@@ -133,26 +142,13 @@ class BrandSizing {
   static const double readableWidth = 720;
 }
 
-/// Elevation (section 24) — subtle, never heavy, no glow.
-class BrandShadows {
-  const BrandShadows._();
-
-  static const card = <BoxShadow>[
-    BoxShadow(
-      color: Color(0x14211B1D), // rgba(33, 27, 29, 0.08)
-      blurRadius: 16,
-      offset: Offset(0, 4),
-    ),
-  ];
-
-  static const sheet = <BoxShadow>[
-    BoxShadow(color: Color(0x1F211B1D), blurRadius: 24, offset: Offset(0, -4)),
-  ];
-}
-
 /// Type scale (section 11). Nothing smaller than 12px.
 ///
-/// **Every style sets its tracking to 0**, Inter's own. Section 11 gives
+/// **Atkinson Hyperlegible Next** since 0.24: drawn for readers with low vision,
+/// so I, l and 1 differ, and so do 0 and O. Many people here read slowly, on
+/// small screens, outdoors. It carries tabular figures, which fares need.
+///
+/// **Every style sets its tracking to 0**, the face's own. Section 11 gives
 /// sizes and weights and no tracking, so until 0.23 Material's defaults
 /// filled the gap when these were merged into the theme: half a pixel on
 /// 16px body copy and on 12px captions, which spread the small text out and
@@ -160,7 +156,7 @@ class BrandShadows {
 class BrandType {
   const BrandType._();
 
-  static const String family = 'Inter';
+  static const String family = 'Atkinson Hyperlegible Next';
 
   /// Urdu and Arabic-script fallback for mixed-language content.
   static const List<String> fallback = <String>['Noto Sans Arabic'];

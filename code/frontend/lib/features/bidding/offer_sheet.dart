@@ -224,7 +224,7 @@ class OfferAction extends StatelessWidget {
         ],
         FilledButton.icon(
           onPressed: () => OfferSheet.open(context, job: job),
-          icon: const Icon(Icons.local_offer_outlined),
+          icon: const Icon(Icons.local_offer_rounded),
           label: Text(hasOpenBid ? strings.changeMyOffer : strings.offerAFare),
         ),
       ],

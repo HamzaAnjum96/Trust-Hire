@@ -140,8 +140,8 @@ class _VerificationScreenState extends State<VerificationScreen> {
                       ? strings.verifySimMatched
                       : strings.verifySimFlagged,
                   icon: mine.simNameMatches
-                      ? Icons.check_circle_outline
-                      : Icons.flag_outlined,
+                      ? Icons.check_circle_outline_rounded
+                      : Icons.flag_rounded,
                   tone: mine.simNameMatches
                       ? NoticeTone.success
                       : NoticeTone.warning,
@@ -203,7 +203,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
             ),
             TextButton.icon(
               onPressed: _pickDate,
-              icon: const Icon(Icons.calendar_today_outlined),
+              icon: const Icon(Icons.calendar_today_rounded),
               label: Text(strings.verifyChooseDate),
             ),
           ],
@@ -213,7 +213,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
         const SizedBox(height: BrandSizing.spaceMd),
         FilledButton.icon(
           onPressed: _submitCnic,
-          icon: const Icon(Icons.badge_outlined),
+          icon: const Icon(Icons.badge_rounded),
           label: Text(strings.verifyCnicSubmit),
         ),
       ],
@@ -308,7 +308,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
         const SizedBox(height: BrandSizing.spaceMd),
         OutlinedButton.icon(
           onPressed: wait > Duration.zero ? null : _sendCode,
-          icon: const Icon(Icons.sms_outlined),
+          icon: const Icon(Icons.sms_rounded),
           label: Text(
             wait > Duration.zero
                 ? strings.verifyResendIn(wait.inSeconds)
@@ -325,7 +325,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
               message:
                   '${strings.verifyDemoSms}\n\n'
                   '${controller.demoMessage}',
-              icon: Icons.smartphone_outlined,
+              icon: Icons.smartphone_rounded,
               tone: NoticeTone.warning,
             ),
             const SizedBox(height: BrandSizing.spaceXs),
@@ -458,8 +458,8 @@ class _CnicOnFile extends StatelessWidget {
               ? strings.verifyCnicPlausible
               : strings.verifyCnicNotPlausible,
           icon: verification.cnicPlausible
-              ? Icons.check_circle_outline
-              : Icons.hourglass_empty,
+              ? Icons.check_circle_outline_rounded
+              : Icons.hourglass_empty_rounded,
           tone: verification.cnicPlausible
               ? NoticeTone.success
               : NoticeTone.warning,
@@ -502,7 +502,7 @@ class _Limits extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Icon(
-                  Icons.info_outline,
+                  Icons.info_outline_rounded,
                   size: 16,
                   color: theme.colorScheme.onSurfaceVariant,
                 ),

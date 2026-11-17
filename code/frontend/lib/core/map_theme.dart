@@ -85,16 +85,16 @@ class MapTheme {
         ? null
         : '$_esri/World_Light_Gray_Reference/MapServer/tile/{z}/{y}/{x}',
     maxNativeZoom: _lightOverride != '' ? 19 : 16,
-    backgroundColour: BrandColours.warmSand,
-    tint: BrandColours.warmSand,
-    tintOpacity: 0.30,
+    backgroundColour: BrandColours.limeWash,
+    tint: BrandColours.limeWash,
+    tintOpacity: 0.25,
     attribution: _attributionOverride != ''
         ? _attributionOverride
         : _esriAttribution,
   );
 
-  /// Esri Dark Gray Canvas — a true dark basemap, warmed towards the brand
-  /// rather than left blue-black.
+  /// Esri Dark Gray Canvas — a true dark basemap, cooled towards the night
+  /// slate of the rest of the app.
   static const dark = MapTheme(
     tileUrl: _darkOverride != ''
         ? _darkOverride
@@ -103,9 +103,9 @@ class MapTheme {
         ? null
         : '$_esri/World_Dark_Gray_Reference/MapServer/tile/{z}/{y}/{x}',
     maxNativeZoom: _darkOverride != '' ? 19 : 16,
-    backgroundColour: BrandColours.darkBackground,
-    tint: BrandColours.deepBurgundy,
-    tintOpacity: 0.22,
+    backgroundColour: BrandColours.night,
+    tint: BrandColours.night,
+    tintOpacity: 0.25,
     attribution: _attributionOverride != ''
         ? _attributionOverride
         : _esriAttribution,
@@ -167,7 +167,6 @@ class MapTheme {
   );
 
   /// Marker outline that separates a pin from the basemap underneath it.
-  Color get markerOutline => tint == BrandColours.deepBurgundy
-      ? BrandColours.darkTextPrimary
-      : Colors.white;
+  Color get markerOutline =>
+      tint == BrandColours.night ? BrandColours.night : BrandColours.white;
 }

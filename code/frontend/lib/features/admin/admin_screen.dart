@@ -96,7 +96,7 @@ class _UsersTab extends StatelessWidget {
 
     if (admin.reviews.isEmpty) {
       return EmptyView(
-        icon: Icons.how_to_reg_outlined,
+        icon: Icons.how_to_reg_rounded,
         title: strings.adminQueueEmpty,
         message: strings.adminQueueEmptyMessage,
       );
@@ -274,7 +274,7 @@ class _ReviewCard extends StatelessWidget {
                       onConfirm: (note, _) =>
                           admin.unlockWallet(review.userId, note: note),
                     ),
-                    icon: const Icon(Icons.lock_open_outlined),
+                    icon: const Icon(Icons.lock_open_rounded),
                     label: Text(strings.adminUnlockWallet),
                   ),
                 TextButton.icon(
@@ -288,7 +288,7 @@ class _ReviewCard extends StatelessWidget {
                       note: note,
                     ),
                   ),
-                  icon: const Icon(Icons.account_balance_wallet_outlined),
+                  icon: const Icon(Icons.account_balance_wallet_rounded),
                   label: Text(strings.adminAdjustWallet),
                 ),
                 _CnicButton(userId: review.userId),
@@ -364,7 +364,7 @@ class _CnicButton extends StatelessWidget {
       message: allowed ? strings.adminOpenCnic : strings.adminCnicLocked,
       child: TextButton.icon(
         onPressed: allowed ? () => _open(context) : null,
-        icon: Icon(allowed ? Icons.badge_outlined : Icons.lock_outline),
+        icon: Icon(allowed ? Icons.badge_rounded : Icons.lock_outline_rounded),
         label: Text(strings.adminOpenCnic),
       ),
     );
@@ -383,7 +383,7 @@ class _DisputesTab extends StatelessWidget {
 
     if (admin.disputes.isEmpty) {
       return EmptyView(
-        icon: Icons.gavel_outlined,
+        icon: Icons.gavel_rounded,
         title: strings.adminNoDisputes,
         message: strings.adminNoDisputesMessage,
       );
@@ -555,7 +555,7 @@ class _LogTab extends StatelessWidget {
 
     if (admin.log.isEmpty) {
       return EmptyView(
-        icon: Icons.receipt_long_outlined,
+        icon: Icons.receipt_long_rounded,
         title: strings.adminLogEmpty,
         message: strings.adminLogEmptyMessage,
       );
@@ -591,8 +591,8 @@ class _LogTab extends StatelessWidget {
             contentPadding: EdgeInsets.zero,
             leading: Icon(
               entry.action.isOverride
-                  ? Icons.priority_high
-                  : Icons.check_circle_outline,
+                  ? Icons.priority_high_rounded
+                  : Icons.check_circle_outline_rounded,
               color: entry.action.isOverride ? context.colours.special : null,
             ),
             title: Text(_label(strings, entry.action)),
@@ -637,7 +637,7 @@ class _Signal extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         Icon(
-          ok ? Icons.check : Icons.close,
+          ok ? Icons.check_rounded : Icons.close_rounded,
           size: 16,
           color: ok ? context.colours.good : context.colours.bad,
         ),

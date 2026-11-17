@@ -161,7 +161,7 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
                   : strings.editJobTitle,
             ),
             leading: IconButton(
-              icon: const Icon(Icons.close),
+              icon: const Icon(Icons.close_rounded),
               tooltip: strings.close,
               onPressed: () => Navigator.of(context).pop(),
             ),
@@ -234,7 +234,7 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Icon(
-                        Icons.hearing_disabled_outlined,
+                        Icons.hearing_disabled_rounded,
                         size: 18,
                         color: theme.colorScheme.onSurfaceVariant,
                       ),
@@ -311,7 +311,7 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
                   const SizedBox(height: BrandSizing.spaceLg),
                   NoticePanel(
                     message: strings.couldNotSave,
-                    icon: Icons.error_outline,
+                    icon: Icons.error_outline_rounded,
                     tone: NoticeTone.warning,
                   ),
                 ],
@@ -419,7 +419,7 @@ class _WhenField extends StatelessWidget {
         Expanded(
           child: OutlinedButton.icon(
             onPressed: onPick,
-            icon: const Icon(Icons.event_outlined),
+            icon: const Icon(Icons.event_rounded),
             label: Align(
               alignment: Alignment.centerLeft,
               child: Text(
@@ -433,7 +433,7 @@ class _WhenField extends StatelessWidget {
         if (scheduledTime != null)
           IconButton(
             onPressed: onClear,
-            icon: const Icon(Icons.close),
+            icon: const Icon(Icons.close_rounded),
             tooltip: strings.clearTime,
             color: theme.colorScheme.onSurfaceVariant,
           ),

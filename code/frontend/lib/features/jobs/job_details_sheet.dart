@@ -204,7 +204,7 @@ class _Body extends StatelessWidget {
                   message: job.hasContact
                       ? strings.audioOnlyJobHelp
                       : strings.audioOnlyJob,
-                  icon: Icons.hearing_disabled_outlined,
+                  icon: Icons.hearing_disabled_rounded,
                 ),
               ],
 
@@ -231,12 +231,12 @@ class _Body extends StatelessWidget {
                           .join(' · '),
                     ),
                   _DetailRow(
-                    icon: Icons.schedule,
+                    icon: Icons.schedule_rounded,
                     label: strings.detailWhen,
                     value: Format.scheduled(strings, job.scheduledTime, now),
                   ),
                   _DetailRow(
-                    icon: Icons.place_outlined,
+                    icon: Icons.place_rounded,
                     label: strings.fieldArea,
                     value: [
                       // The neighbourhood first: it is the part a person
@@ -249,7 +249,7 @@ class _Body extends StatelessWidget {
                   ),
                   if (poster != null)
                     _DetailRow(
-                      icon: Icons.person_outline,
+                      icon: Icons.person_outline_rounded,
                       label: strings.detailPostedBy,
                       value: poster!.area == null
                           ? poster!.name
@@ -434,7 +434,7 @@ class _SaveButton extends StatelessWidget {
           ),
         );
       },
-      icon: Icon(isSaved ? Icons.bookmark : Icons.bookmark_border),
+      icon: Icon(isSaved ? Icons.bookmark_rounded : Icons.bookmark_border_rounded),
       // Colour is never the only cue: the icon fills as well.
       color: isSaved ? context.colours.accentText : null,
       tooltip: isSaved ? strings.removeFromSaved : strings.saveThisJob,
@@ -540,7 +540,7 @@ class _MoreMenu extends StatelessWidget {
 
     return PopupMenuButton<_More>(
       tooltip: strings.moreActions,
-      icon: const Icon(Icons.more_horiz),
+      icon: const Icon(Icons.more_horiz_rounded),
       position: PopupMenuPosition.under,
       onSelected: (choice) => switch (choice) {
         _More.edit => _edit(context),
@@ -551,20 +551,20 @@ class _MoreMenu extends StatelessWidget {
         // Edit, then a line, then the two that cannot be taken back. A
         // worker's menu has only the one, so no line.
         if (mine) ...[
-          item(_More.edit, Icons.edit_outlined, strings.editJob),
+          item(_More.edit, Icons.edit_rounded, strings.editJob),
           const PopupMenuDivider(),
         ],
         if (canCallOff)
           item(
             _More.callOff,
-            Icons.do_not_disturb_on_outlined,
+            Icons.do_not_disturb_on_rounded,
             strings.cancelJob,
             danger: true,
           ),
         if (mine)
           item(
             _More.delete,
-            Icons.delete_outline,
+            Icons.delete_outline_rounded,
             strings.deleteJob,
             danger: true,
           ),
@@ -754,8 +754,8 @@ class _MessagesRow extends StatelessWidget {
       child: OutlinedButton.icon(
         onPressed: () => ThreadScreen.open(context, jobId: job.id),
         icon: unread == 0
-            ? const Icon(Icons.forum_outlined)
-            : Badge.count(count: unread, child: const Icon(Icons.forum)),
+            ? const Icon(Icons.forum_rounded)
+            : Badge.count(count: unread, child: const Icon(Icons.forum_rounded)),
         label: Text(
           unread == 0
               ? strings.openMessages

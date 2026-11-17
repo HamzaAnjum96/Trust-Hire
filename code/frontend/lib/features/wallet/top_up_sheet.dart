@@ -134,7 +134,7 @@ class _TopUpSheetState extends State<TopUpSheet> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Icon(
-                Icons.info_outline,
+                Icons.info_outline_rounded,
                 size: 18,
                 color: theme.colorScheme.onSurfaceVariant,
               ),
@@ -165,7 +165,7 @@ class _TopUpSheetState extends State<TopUpSheet> {
             const SizedBox(height: BrandSizing.spaceMd),
             NoticePanel(
               message: _problem!,
-              icon: Icons.error_outline,
+              icon: Icons.error_outline_rounded,
               tone: NoticeTone.warning,
             ),
           ],

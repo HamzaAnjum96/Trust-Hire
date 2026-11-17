@@ -81,19 +81,21 @@ flutter:
     - assets/images/jobs/
     - assets/audio/
 
-  # Inter, per section 10 of the brand guidelines. Bundled rather than fetched
-  # at runtime so the app keeps its typography with no internet connection —
-  # the POC must work fully offline.
+  # Atkinson Hyperlegible Next (SIL Open Font License, beside the files),
+  # since 0.24: drawn for readers with low vision, so I, l and 1 differ, and
+  # 0 and O. Static weights cut from Google Fonts' variable file with
+  # fontTools; it keeps its tabular figures for fares. Bundled rather than
+  # fetched so the app keeps its typography with no internet connection.
   fonts:
-    - family: Inter
+    - family: Atkinson Hyperlegible Next
       fonts:
-        - asset: assets/fonts/Inter-Regular.ttf
+        - asset: assets/fonts/AtkinsonHyperlegibleNext-Regular.ttf
           weight: 400
-        - asset: assets/fonts/Inter-Medium.ttf
+        - asset: assets/fonts/AtkinsonHyperlegibleNext-Medium.ttf
           weight: 500
-        - asset: assets/fonts/Inter-SemiBold.ttf
+        - asset: assets/fonts/AtkinsonHyperlegibleNext-SemiBold.ttf
           weight: 600
-        - asset: assets/fonts/Inter-Bold.ttf
+        - asset: assets/fonts/AtkinsonHyperlegibleNext-Bold.ttf
           weight: 700
 
     # Section 10 asks for Noto Nastaliq Urdu for expressive Urdu, and warns

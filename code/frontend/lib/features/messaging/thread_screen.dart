@@ -112,7 +112,7 @@ class _ThreadScreenState extends State<ThreadScreen> {
       return Scaffold(
         appBar: AppBar(title: Text(strings.messagesTitle)),
         body: EmptyView(
-          icon: Icons.forum_outlined,
+          icon: Icons.forum_rounded,
           title: strings.savedJobGone,
           message: strings.messagesEmptyMessage,
         ),
@@ -168,7 +168,7 @@ class _ThreadScreenState extends State<ThreadScreen> {
             Expanded(
               child: thread.isEmpty
                   ? EmptyView(
-                      icon: Icons.forum_outlined,
+                      icon: Icons.forum_rounded,
                       title: strings.messagesEmpty,
                       message: strings.messagesEmptyMessage,
                     )
@@ -242,7 +242,7 @@ class _ThreadScreenState extends State<ThreadScreen> {
                         onPressed: _draft.text.trim().isEmpty
                             ? null
                             : () => _send(job),
-                        icon: const Icon(Icons.send),
+                        icon: const Icon(Icons.send_rounded),
                         tooltip: strings.sendMessage,
                         constraints: const BoxConstraints(
                           minWidth: BrandSizing.touchTargetPreferred,

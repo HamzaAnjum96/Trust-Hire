@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../core/roles.dart';
 import '../core/tokens.dart';
 
 /// The box a search field sits in, with room for actions at its end.
@@ -39,7 +40,7 @@ class SearchBarFrame extends StatelessWidget {
         border: floating
             ? null
             : Border.all(color: theme.colorScheme.outlineVariant),
-        boxShadow: floating ? BrandShadows.card : null,
+        boxShadow: floating ? context.colours.lift : null,
       ),
       child: Row(
         children: [
@@ -67,7 +68,7 @@ InputDecoration searchBarDecoration({
   Widget? suffixIcon,
 }) => InputDecoration(
   hintText: hint,
-  prefixIcon: const Icon(Icons.search),
+  prefixIcon: const Icon(Icons.search_rounded),
   suffixIcon: suffixIcon,
   filled: false,
   border: InputBorder.none,

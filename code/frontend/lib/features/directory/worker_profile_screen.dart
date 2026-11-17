@@ -50,7 +50,7 @@ class WorkerProfileScreen extends StatelessWidget {
       return Scaffold(
         appBar: AppBar(title: Text(name)),
         body: EmptyView(
-          icon: Icons.badge_outlined,
+          icon: Icons.badge_rounded,
           title: strings.directoryEmpty,
           message: strings.bookingUnavailable,
         ),
@@ -281,7 +281,7 @@ class _CredentialRow extends StatelessWidget {
     ].join(' · ');
 
     return ListTile(
-      leading: const Icon(Icons.workspace_premium_outlined),
+      leading: const Icon(Icons.workspace_premium_rounded),
       title: Text(credential.title),
       subtitle: Text(detail),
     );

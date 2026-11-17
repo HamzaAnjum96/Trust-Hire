@@ -3,91 +3,60 @@ import 'package:flutter/material.dart';
 import 'roles.dart';
 import 'tokens.dart';
 
-/// Material themes assembled from the brand tokens.
+/// Material themes assembled from the role tokens.
 ///
-/// Component styling follows sections 22–25 of the brand guidelines: 48px
-/// minimum control height, 12px control radius, 16px card radius, 20px sheet
-/// corners, subtle shadows, and burgundy reserved for primary actions.
+/// **The Material colour scheme is built from [AppColours]**, so the palette is
+/// written down once (in `roles.dart`) and Material's own components — buttons,
+/// chips, inputs, tabs, sheets — follow it without being told. Since 0.24 the
+/// action colour is ink in light mode and turmeric in dark; controls are pills;
+/// cards 16px, sheets 24px.
 class BrandTheme {
   const BrandTheme._();
 
-  static ThemeData get light {
-    const scheme = ColorScheme.light(
-      primary: BrandColours.trustBurgundy,
-      onPrimary: BrandColours.white,
-      primaryContainer: BrandColours.deepBurgundy,
-      onPrimaryContainer: BrandColours.white,
-      secondary: BrandColours.copper,
-      onSecondary: BrandColours.white,
-      secondaryContainer: BrandColours.warmSand,
-      onSecondaryContainer: BrandColours.ink,
-      surface: BrandColours.white,
-      onSurface: BrandColours.ink,
-      surfaceContainerLowest: BrandColours.white,
-      surfaceContainerLow: BrandColours.mist,
-      surfaceContainer: BrandColours.warmSand,
-      // Material's default here is a lavender grey, which is not a colour in
-      // this brand; the quiet status pill ("Taking offers", "Called off")
-      // sits on it.
-      surfaceContainerHighest: BrandColours.cardBorder,
-      onSurfaceVariant: BrandColours.slate,
-      outline: BrandColours.stone,
-      outlineVariant: BrandColours.cardBorder,
-      error: BrandColours.errorRed,
-      onError: BrandColours.white,
-      // The view switch and the snack bar: things that float over content
-      // and must read against both the map and the list.
-      inverseSurface: BrandColours.ink,
-      onInverseSurface: BrandColours.white,
-    );
+  static ThemeData get light => _base(AppColours.light, Brightness.light);
 
-    return _base(scheme, ground: BrandColours.mist, roles: AppColours.light);
-  }
+  static ThemeData get dark => _base(AppColours.dark, Brightness.dark);
 
-  static ThemeData get dark {
-    const scheme = ColorScheme.dark(
-      primary: BrandColours.darkBurgundy,
-      onPrimary: BrandColours.white,
-      primaryContainer: BrandColours.trustBurgundy,
-      onPrimaryContainer: BrandColours.darkTextPrimary,
-      secondary: BrandColours.darkCopper,
-      onSecondary: BrandColours.ink,
-      secondaryContainer: BrandColours.darkElevated,
-      onSecondaryContainer: BrandColours.darkTextPrimary,
-      surface: BrandColours.darkSurface,
-      onSurface: BrandColours.darkTextPrimary,
-      surfaceContainerLowest: BrandColours.darkBackground,
-      surfaceContainerLow: BrandColours.darkSurface,
-      surfaceContainer: BrandColours.darkElevated,
-      surfaceContainerHighest: BrandColours.darkElevated,
-      onSurfaceVariant: BrandColours.darkTextSecondary,
-      outline: BrandColours.slate,
-      outlineVariant: BrandColours.darkElevated,
-      error: BrandColours.errorRed,
-      onError: BrandColours.white,
-      inverseSurface: BrandColours.darkTextPrimary,
-      onInverseSurface: BrandColours.ink,
-    );
+  static ColorScheme _scheme(AppColours r, Brightness brightness) =>
+      ColorScheme(
+        brightness: brightness,
+        primary: r.action,
+        onPrimary: r.onAction,
+        primaryContainer: r.actionPressed,
+        onPrimaryContainer: r.onAction,
+        secondary: r.voice,
+        onSecondary: r.onVoice,
+        // Selected segments and tonal buttons sit on this: the quiet
+        // turmeric wash, under ink text.
+        secondaryContainer: r.selection,
+        onSecondaryContainer: r.text,
+        tertiary: r.highlight,
+        onTertiary: r.onHighlight,
+        surface: r.surface,
+        onSurface: r.text,
+        surfaceContainerLowest: r.surface,
+        surfaceContainerLow: r.page,
+        surfaceContainer: r.tint,
+        surfaceContainerHigh: r.tint,
+        surfaceContainerHighest: r.tint,
+        onSurfaceVariant: r.textMuted,
+        outline: r.lineStrong,
+        outlineVariant: r.line,
+        error: r.bad,
+        onError: r.onSignal,
+        inverseSurface: r.inverse,
+        onInverseSurface: r.onInverse,
+        shadow: r.shadow,
+        scrim: r.shadow,
+      );
 
-    return _base(
-      scheme,
-      ground: BrandColours.darkBackground,
-      roles: AppColours.dark,
-    );
-  }
-
-  /// [ground] is the page: the colour every screen and its app bar sit on.
-  static ThemeData _base(
-    ColorScheme scheme, {
-    required Color ground,
-    required AppColours roles,
-  }) {
-    final isLight = scheme.brightness == Brightness.light;
+  static ThemeData _base(AppColours roles, Brightness brightness) {
+    final scheme = _scheme(roles, brightness);
+    final ground = roles.page;
+    final isLight = brightness == Brightness.light;
     final textColour = scheme.onSurface;
     final mutedColour = scheme.onSurfaceVariant;
-    // Burgundy as text: the brand colour on light surfaces, a lighter tint of
-    // it on dark ones, where the fill colour fails AA as text.
-    final accentText = isLight ? scheme.primary : BrandColours.darkBurgundyText;
+    final accentText = roles.accentText;
 
     final textTheme = TextTheme(
       displayLarge: BrandType.display.copyWith(color: textColour),
@@ -121,7 +90,7 @@ class BrandTheme {
         backgroundColor: ground,
         foregroundColor: scheme.onSurface,
         surfaceTintColor: Colors.transparent,
-        shadowColor: BrandColours.ink.withValues(alpha: isLight ? 0.18 : 0.6),
+        shadowColor: roles.shadow.withValues(alpha: isLight ? 0.18 : 0.6),
         elevation: 0,
         scrolledUnderElevation: 1,
         centerTitle: false,
@@ -134,27 +103,23 @@ class BrandTheme {
             ElevatedButton.styleFrom(
               backgroundColor: scheme.primary,
               foregroundColor: scheme.onPrimary,
-              disabledBackgroundColor: BrandColours.stone,
-              disabledForegroundColor: BrandColours.white,
-              minimumSize: const Size(0, BrandSizing.touchTargetPreferred),
+              disabledBackgroundColor: roles.tint,
+              disabledForegroundColor: roles.textMuted,
+              minimumSize: const Size(0, BrandSizing.controlHeight),
               padding: const EdgeInsets.symmetric(
                 horizontal: BrandSizing.spaceLg,
               ),
               elevation: 0,
               textStyle: BrandType.button,
-              shape: const RoundedRectangleBorder(
-                borderRadius: BrandRadius.mediumAll,
-              ),
+              shape: const StadiumBorder(),
             ).copyWith(
               // Pressed state darkens to Deep Burgundy in light mode.
               backgroundColor: WidgetStateProperty.resolveWith((states) {
                 if (states.contains(WidgetState.disabled)) {
-                  return BrandColours.stone;
+                  return roles.tint;
                 }
                 if (states.contains(WidgetState.pressed)) {
-                  return isLight
-                      ? BrandColours.deepBurgundy
-                      : BrandColours.trustBurgundy;
+                  return roles.actionPressed;
                 }
                 return scheme.primary;
               }),
@@ -165,13 +130,11 @@ class BrandTheme {
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
           foregroundColor: accentText,
-          minimumSize: const Size(0, BrandSizing.touchTargetPreferred),
+          minimumSize: const Size(0, BrandSizing.controlHeight),
           padding: const EdgeInsets.symmetric(horizontal: BrandSizing.spaceLg),
           side: BorderSide(color: scheme.primary),
           textStyle: BrandType.button,
-          shape: const RoundedRectangleBorder(
-            borderRadius: BrandRadius.mediumAll,
-          ),
+          shape: const StadiumBorder(),
         ),
       ),
 
@@ -181,12 +144,10 @@ class BrandTheme {
       // rectangles that were meant to be the same control.
       filledButtonTheme: FilledButtonThemeData(
         style: FilledButton.styleFrom(
-          minimumSize: const Size(0, BrandSizing.touchTargetPreferred),
+          minimumSize: const Size(0, BrandSizing.controlHeight),
           padding: const EdgeInsets.symmetric(horizontal: BrandSizing.spaceLg),
           textStyle: BrandType.button,
-          shape: const RoundedRectangleBorder(
-            borderRadius: BrandRadius.mediumAll,
-          ),
+          shape: const StadiumBorder(),
         ),
       ),
 
@@ -195,9 +156,7 @@ class BrandTheme {
           foregroundColor: accentText,
           minimumSize: const Size(0, BrandSizing.touchTargetMinimum),
           textStyle: BrandType.button,
-          shape: const RoundedRectangleBorder(
-            borderRadius: BrandRadius.mediumAll,
-          ),
+          shape: const StadiumBorder(),
         ),
       ),
 
@@ -205,7 +164,7 @@ class BrandTheme {
       // 2px burgundy focus ring, labels always visible above the field.
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: isLight ? BrandColours.white : BrandColours.darkElevated,
+        fillColor: isLight ? roles.surface : roles.raised,
         contentPadding: const EdgeInsets.symmetric(
           horizontal: BrandSizing.spaceMd,
           vertical: BrandSizing.spaceMd - 2,
@@ -215,9 +174,9 @@ class BrandTheme {
         ),
         hintStyle: BrandType.body.copyWith(color: mutedColour),
         labelStyle: BrandType.supporting.copyWith(color: mutedColour),
-        border: const OutlineInputBorder(
+        border: OutlineInputBorder(
           borderRadius: BrandRadius.mediumAll,
-          borderSide: BorderSide(color: BrandColours.stone),
+          borderSide: BorderSide(color: roles.lineStrong),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BrandRadius.mediumAll,
@@ -227,13 +186,13 @@ class BrandTheme {
           borderRadius: BrandRadius.mediumAll,
           borderSide: BorderSide(color: scheme.primary, width: 2),
         ),
-        errorBorder: const OutlineInputBorder(
+        errorBorder: OutlineInputBorder(
           borderRadius: BrandRadius.mediumAll,
-          borderSide: BorderSide(color: BrandColours.errorRed, width: 2),
+          borderSide: BorderSide(color: roles.bad, width: 2),
         ),
-        focusedErrorBorder: const OutlineInputBorder(
+        focusedErrorBorder: OutlineInputBorder(
           borderRadius: BrandRadius.mediumAll,
-          borderSide: BorderSide(color: BrandColours.errorRed, width: 2),
+          borderSide: BorderSide(color: roles.bad, width: 2),
         ),
       ),
 
@@ -256,32 +215,49 @@ class BrandTheme {
         modalBackgroundColor: scheme.surface,
         elevation: 0,
         showDragHandle: true,
-        dragHandleColor: BrandColours.stone,
+        dragHandleColor: roles.lineStrong,
         shape: const RoundedRectangleBorder(borderRadius: BrandRadius.sheetTop),
       ),
 
+      // **The shell is ink, in both themes.** The navigation bar and rail are
+      // the one committed field of colour: an ink band with the selected
+      // destination on a turmeric pill. It reads in sunlight, and it marks
+      // where the app's own controls are, apart from the work above it.
       navigationBarTheme: NavigationBarThemeData(
-        backgroundColor: scheme.surface,
+        backgroundColor: roles.shell,
         surfaceTintColor: Colors.transparent,
-        indicatorColor: isLight
-            ? BrandColours.warmSand
-            : BrandColours.darkElevated,
+        indicatorColor: roles.highlight,
         height: 68,
         elevation: 0,
         labelTextStyle: WidgetStateProperty.resolveWith((states) {
           final selected = states.contains(WidgetState.selected);
           return BrandType.caption.copyWith(
-            color: selected ? scheme.primary : mutedColour,
-            fontWeight: selected ? FontWeight.w600 : FontWeight.w500,
+            color: selected ? roles.onShell : roles.shellMuted,
+            fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
           );
         }),
         iconTheme: WidgetStateProperty.resolveWith((states) {
           final selected = states.contains(WidgetState.selected);
           return IconThemeData(
             size: 24,
-            color: selected ? scheme.primary : mutedColour,
+            color: selected ? roles.onHighlight : roles.shellMuted,
           );
         }),
+      ),
+
+      navigationRailTheme: NavigationRailThemeData(
+        backgroundColor: roles.shell,
+        indicatorColor: roles.highlight,
+        selectedIconTheme: IconThemeData(color: roles.onHighlight, size: 24),
+        unselectedIconTheme: IconThemeData(color: roles.shellMuted, size: 24),
+        selectedLabelTextStyle: BrandType.supporting.copyWith(
+          color: roles.onShell,
+          fontWeight: FontWeight.w700,
+        ),
+        unselectedLabelTextStyle: BrandType.supporting.copyWith(
+          color: roles.shellMuted,
+          fontWeight: FontWeight.w500,
+        ),
       ),
 
       // A row in a settings group: the title carries a little more weight than
@@ -306,9 +282,7 @@ class BrandTheme {
             BrandType.supporting.copyWith(fontWeight: FontWeight.w600),
           ),
           side: WidgetStatePropertyAll(BorderSide(color: scheme.outline)),
-          shape: const WidgetStatePropertyAll(
-            RoundedRectangleBorder(borderRadius: BrandRadius.mediumAll),
-          ),
+          shape: const WidgetStatePropertyAll(StadiumBorder()),
         ),
       ),
 
@@ -320,7 +294,7 @@ class BrandTheme {
         hoverElevation: 3,
         highlightElevation: 1,
         extendedTextStyle: BrandType.button,
-        shape: const RoundedRectangleBorder(borderRadius: BrandRadius.largeAll),
+        shape: const StadiumBorder(),
       ),
 
       // Section 25 — a dialogue is a sheet that sits in the middle, so it has
@@ -334,21 +308,15 @@ class BrandTheme {
       ),
 
       chipTheme: ChipThemeData(
-        backgroundColor: isLight
-            ? BrandColours.white
-            : BrandColours.darkElevated,
-        selectedColor: isLight
-            ? BrandColours.warmSand
-            : BrandColours.darkElevated,
+        backgroundColor: roles.surface,
+        selectedColor: roles.selection,
         side: BorderSide(color: scheme.outlineVariant),
         labelStyle: BrandType.supporting.copyWith(color: scheme.onSurface),
         padding: const EdgeInsets.symmetric(
           horizontal: BrandSizing.spaceSm + 4,
           vertical: BrandSizing.spaceSm,
         ),
-        shape: const RoundedRectangleBorder(
-          borderRadius: BrandRadius.mediumAll,
-        ),
+        shape: const StadiumBorder(),
       ),
 
       tabBarTheme: TabBarThemeData(
@@ -370,7 +338,7 @@ class BrandTheme {
         color: scheme.surface,
         surfaceTintColor: Colors.transparent,
         elevation: 3,
-        shadowColor: BrandColours.ink.withValues(alpha: 0.25),
+        shadowColor: roles.shadow.withValues(alpha: 0.25),
         shape: const RoundedRectangleBorder(
           borderRadius: BrandRadius.mediumAll,
         ),
@@ -384,10 +352,8 @@ class BrandTheme {
       ),
 
       snackBarTheme: SnackBarThemeData(
-        backgroundColor: isLight ? BrandColours.ink : BrandColours.darkElevated,
-        contentTextStyle: BrandType.supporting.copyWith(
-          color: BrandColours.white,
-        ),
+        backgroundColor: roles.inverse,
+        contentTextStyle: BrandType.supporting.copyWith(color: roles.onInverse),
         behavior: SnackBarBehavior.floating,
         shape: const RoundedRectangleBorder(
           borderRadius: BrandRadius.mediumAll,
@@ -414,18 +380,14 @@ class BrandTheme {
 
 /// Brand styles that Material's text theme has no slot for.
 extension BrandTextStyles on ThemeData {
-  /// Burgundy for text and small glyphs: Trust Burgundy on a light surface,
-  /// [BrandColours.darkBurgundyText] on a dark one. Use this, not
-  /// `colorScheme.primary`, whenever burgundy is the colour of words.
-  Color get accentText => brightness == Brightness.light
-      ? colorScheme.primary
-      : BrandColours.darkBurgundyText;
+  AppColours get _roles =>
+      extension<AppColours>() ??
+      (brightness == Brightness.dark ? AppColours.dark : AppColours.light);
 
-  /// A fare, in the one colour fares are given: Deep Burgundy on a light
-  /// surface, near-white on a dark one, where Deep Burgundy would disappear.
-  TextStyle get fareStyle => BrandType.fare.copyWith(
-    color: brightness == Brightness.light
-        ? BrandColours.deepBurgundy
-        : BrandColours.darkTextPrimary,
-  );
+  /// The accent as words. Prefer `context.colours.accentText`; this is for
+  /// code that holds a [ThemeData] and no context.
+  Color get accentText => _roles.accentText;
+
+  /// A fare, in figures that line up down a list, in the fare role's colour.
+  TextStyle get fareStyle => BrandType.fare.copyWith(color: _roles.fare);
 }

@@ -163,7 +163,7 @@ class _AccountTile extends StatelessWidget {
       title: Text(accountName(account, strings)),
       subtitle: Text(subtitle),
       trailing: isActive
-          ? Icon(Icons.check_circle, color: context.colours.accentText)
+          ? Icon(Icons.check_circle_rounded, color: context.colours.accentText)
           : null,
       selected: isActive,
       onTap: isActive
@@ -242,7 +242,7 @@ class AccountCard extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Icon(
-                          Icons.swap_horiz,
+                          Icons.swap_horiz_rounded,
                           size: 18,
                           color: theme.accentText,
                         ),

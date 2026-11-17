@@ -118,17 +118,17 @@ class ProfileScreen extends StatelessWidget {
                             ButtonSegment(
                               value: ThemeMode.system,
                               label: Text(strings.themeSystem),
-                              icon: const Icon(Icons.brightness_auto_outlined),
+                              icon: const Icon(Icons.brightness_auto_rounded),
                             ),
                             ButtonSegment(
                               value: ThemeMode.light,
                               label: Text(strings.themeLight),
-                              icon: const Icon(Icons.light_mode_outlined),
+                              icon: const Icon(Icons.light_mode_rounded),
                             ),
                             ButtonSegment(
                               value: ThemeMode.dark,
                               label: Text(strings.themeDark),
-                              icon: const Icon(Icons.dark_mode_outlined),
+                              icon: const Icon(Icons.dark_mode_rounded),
                             ),
                           ],
                           selected: {settings.themeMode},
@@ -145,7 +145,7 @@ class ProfileScreen extends StatelessWidget {
                             ButtonSegment(
                               value: '',
                               label: Text(strings.themeSystem),
-                              icon: const Icon(Icons.translate),
+                              icon: const Icon(Icons.translate_rounded),
                             ),
                             for (final locale
                                 in SettingsController.supportedLocales)
@@ -185,7 +185,7 @@ class ProfileScreen extends StatelessWidget {
                   caption: strings.settingsStorageNotice,
                   children: [
                     ListTile(
-                      leading: const Icon(Icons.slideshow_outlined),
+                      leading: const Icon(Icons.slideshow_rounded),
                       title: Text(strings.showIntroAgain),
                       onTap: () async {
                         final messenger = ScaffoldMessenger.of(context);
@@ -200,7 +200,7 @@ class ProfileScreen extends StatelessWidget {
                       // read as text on the dark theme's surfaces. The words say
                       // what it does, and a confirmation says it again.
                       leading: Icon(
-                        Icons.restart_alt,
+                        Icons.restart_alt_rounded,
                         color: context.colours.bad,
                       ),
                       // Section 21 — explicit label, never "Confirm".
@@ -312,14 +312,14 @@ class _VerificationTile extends StatelessWidget {
 
     return ListTile(
       leading: Icon(
-        mine.isComplete ? Icons.verified_user : Icons.badge_outlined,
+        mine.isComplete ? Icons.verified_user_rounded : Icons.badge_rounded,
         color: mine.isFlagged
             ? context.colours.warn
             : (mine.isComplete ? context.colours.good : null),
       ),
       title: Text(strings.verificationTile),
       subtitle: Text(strings.verificationSubtitle(mine.stepsDone)),
-      trailing: const Icon(Icons.chevron_right),
+      trailing: const Icon(Icons.chevron_right_rounded),
       onTap: () => VerificationScreen.open(context),
     );
   }
@@ -398,7 +398,7 @@ class _BackendSection extends StatelessWidget {
           },
         ),
         ListTile(
-          leading: const Icon(Icons.sync),
+          leading: const Icon(Icons.sync_rounded),
           title: Text(strings.syncNow),
           onTap: () async {
             await sync.push();
@@ -417,7 +417,7 @@ class _BackendSection extends StatelessWidget {
                     padding: const EdgeInsets.only(bottom: BrandSizing.spaceSm),
                     child: NoticePanel(
                       message: _wordFor(strings, refusal.code),
-                      icon: Icons.error_outline,
+                      icon: Icons.error_outline_rounded,
                       tone: NoticeTone.warning,
                     ),
                   ),
@@ -473,13 +473,13 @@ class _WalletTile extends StatelessWidget {
     return ListTile(
       leading: Icon(
         wallet.isLockedOut
-            ? Icons.lock_outline
-            : Icons.account_balance_wallet_outlined,
+            ? Icons.lock_outline_rounded
+            : Icons.account_balance_wallet_rounded,
         color: wallet.isInDebt ? context.colours.bad : null,
       ),
       title: Text(strings.navWallet),
       subtitle: Text(Format.fare(strings, wallet.balance)),
-      trailing: const Icon(Icons.chevron_right),
+      trailing: const Icon(Icons.chevron_right_rounded),
       onTap: () => WalletScreen.open(context),
     );
   }
@@ -510,10 +510,10 @@ class _AdminSection extends StatelessWidget {
         title: strings.adminPanel,
         children: [
           ListTile(
-            leading: const Icon(Icons.shield_outlined),
+            leading: const Icon(Icons.shield_rounded),
             title: Text(strings.adminPanelTile),
             subtitle: Text(strings.adminSubtitle(waiting)),
-            trailing: const Icon(Icons.chevron_right),
+            trailing: const Icon(Icons.chevron_right_rounded),
             onTap: () => AdminScreen.open(context),
           ),
         ],
@@ -537,7 +537,7 @@ class _ListingTile extends StatelessWidget {
 
     return ListTile(
       leading: Icon(
-        premium.isPremium ? Icons.badge : Icons.badge_outlined,
+        premium.isPremium ? Icons.badge_rounded : Icons.badge_rounded,
         color: premium.isPremium ? context.colours.special : null,
       ),
       title: Text(strings.myListing),
@@ -546,7 +546,7 @@ class _ListingTile extends StatelessWidget {
             ? strings.premiumLapsed
             : strings.myListingSubtitle(premium.mine.services.length),
       ),
-      trailing: const Icon(Icons.chevron_right),
+      trailing: const Icon(Icons.chevron_right_rounded),
       onTap: () => MyListingScreen.open(context),
     );
   }
@@ -609,7 +609,7 @@ class _RolePicker extends StatelessWidget {
             children: [
               Expanded(
                 child: _RoleCard(
-                  icon: Icons.handyman_outlined,
+                  icon: Icons.handyman_rounded,
                   label: strings.roleWorker,
                   selected: profile.isWorker,
                   onTap: () => profile.setRole(UserRole.worker),
@@ -618,7 +618,7 @@ class _RolePicker extends StatelessWidget {
               const SizedBox(width: BrandSizing.spaceSm + 4),
               Expanded(
                 child: _RoleCard(
-                  icon: Icons.post_add_outlined,
+                  icon: Icons.post_add_rounded,
                   label: strings.roleHirer,
                   selected: !profile.isWorker,
                   onTap: () => profile.setRole(UserRole.hirer),
@@ -657,10 +657,10 @@ class _RolePicker extends StatelessWidget {
               ),
               const _VerificationTile(),
               ListTile(
-                leading: const Icon(Icons.construction_outlined),
+                leading: const Icon(Icons.construction_rounded),
                 title: Text(strings.myTrades),
                 subtitle: Text(strings.tradeCount(profile.specialities.length)),
-                trailing: const Icon(Icons.chevron_right),
+                trailing: const Icon(Icons.chevron_right_rounded),
                 onTap: () => MyTradesScreen.open(context),
               ),
               const _WalletTile(),
@@ -727,7 +727,7 @@ class _RoleCard extends StatelessWidget {
                     ),
                     const Spacer(),
                     if (selected)
-                      Icon(Icons.check_circle, size: 20, color: scheme.primary),
+                      Icon(Icons.check_circle_rounded, size: 20, color: scheme.primary),
                   ],
                 ),
                 const SizedBox(height: BrandSizing.spaceSm + 4),

@@ -167,7 +167,7 @@ class _BookingSheetState extends State<BookingSheet> {
                 message:
                     '${strings.bookingSaving(Format.fare(strings, saving))} '
                     '${strings.bookingDiscountWhy}',
-                icon: Icons.savings_outlined,
+                icon: Icons.savings_rounded,
               ),
             ],
 

@@ -120,19 +120,19 @@ class AiSettingsSection extends StatelessWidget {
 
         if (ai.available && !ai.enabled)
           ListTile(
-            leading: const Icon(Icons.download_for_offline_outlined),
+            leading: const Icon(Icons.download_for_offline_rounded),
             title: Text(strings.aiTurnOn),
             onTap: () => askToTurnOnAi(context),
           ),
         if (ai.available && ai.enabled && ai.state == AiState.failed)
           ListTile(
-            leading: const Icon(Icons.refresh),
+            leading: const Icon(Icons.refresh_rounded),
             title: Text(strings.aiTryAgain),
             onTap: ai.ensureReady,
           ),
         if (ai.available && ai.enabled)
           ListTile(
-            leading: const Icon(Icons.pause_circle_outline),
+            leading: const Icon(Icons.pause_circle_outline_rounded),
             title: Text(strings.aiTurnOff),
             onTap: ai.disable,
           ),
@@ -140,7 +140,7 @@ class AiSettingsSection extends StatelessWidget {
         // as plainly as putting them on.
         if (!ai.isRemote && ai.downloaded == true)
           ListTile(
-            leading: Icon(Icons.delete_outline, color: context.colours.bad),
+            leading: Icon(Icons.delete_outline_rounded, color: context.colours.bad),
             title: Text(strings.aiRemoveDownload),
             onTap: ai.removeDownload,
           ),

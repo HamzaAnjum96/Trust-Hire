@@ -197,7 +197,7 @@ class _YourJobsState extends State<_YourJobs> {
           child: switch (showing) {
             _Mine.posted => _JobsTab(
               jobs: myPostings,
-              emptyIcon: Icons.work_outline,
+              emptyIcon: Icons.work_outline_rounded,
               emptyTitle: strings.noPostings,
               emptyMessage: strings.noPostingsMessage,
               marksOwnPostings: false,
@@ -205,7 +205,7 @@ class _YourJobsState extends State<_YourJobs> {
             _Mine.offers => _OffersTab(offers: myOffers, jobs: byId),
             _Mine.saved => _JobsTab(
               jobs: savedJobs,
-              emptyIcon: Icons.bookmark_border,
+              emptyIcon: Icons.bookmark_border_rounded,
               emptyTitle: strings.noSavedJobs,
               emptyMessage: strings.noSavedJobsMessage,
               // Said once, rather than letting the list quietly shrink.
@@ -236,7 +236,7 @@ class _OffersTab extends StatelessWidget {
 
     if (offers.isEmpty) {
       return EmptyView(
-        icon: Icons.local_offer_outlined,
+        icon: Icons.local_offer_rounded,
         title: strings.noOffers,
         message: strings.noOffersMessage,
       );

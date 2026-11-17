@@ -138,8 +138,10 @@ class _LoadingBlockState extends State<LoadingBlock>
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isLight = theme.brightness == Brightness.light;
-    final base = isLight ? BrandColours.warmSand : BrandColours.darkElevated;
-    final highlight = isLight ? BrandColours.mist : BrandColours.darkSurface;
+    final base = isLight ? BrandColours.mist : BrandColours.nightRaised;
+    final highlight = isLight
+        ? BrandColours.limeWash
+        : BrandColours.nightSurface;
 
     if (Motion.isReduced(context)) {
       return Container(

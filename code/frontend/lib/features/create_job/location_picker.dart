@@ -106,7 +106,7 @@ class _LocationPickerState extends State<LocationPicker> {
                 // Lift it so the point, not the middle, marks the centre.
                 padding: const EdgeInsets.only(bottom: 36),
                 child: Icon(
-                  Icons.place,
+                  Icons.place_rounded,
                   size: 44,
                   color: context.colours.pin,
                   shadows: [
@@ -155,7 +155,7 @@ class _AreaChip extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Icon(
-            Icons.my_location,
+            Icons.my_location_rounded,
             size: 16,
             color: theme.colorScheme.onSurfaceVariant,
           ),

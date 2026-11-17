@@ -49,7 +49,7 @@ class ThreadsTab extends StatelessWidget {
 
     if (rows.isEmpty) {
       return EmptyView(
-        icon: Icons.forum_outlined,
+        icon: Icons.forum_rounded,
         title: strings.noThreads,
         message: strings.noThreadsMessage,
       );

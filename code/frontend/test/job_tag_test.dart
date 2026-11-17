@@ -98,9 +98,9 @@ void main() {
     });
 
     test('falls back to what the job carries when there is no tag', () {
-      expect(job(voice: 'v.wav').icon, Icons.mic);
-      expect(job(photos: const ['p.png']).icon, Icons.photo_camera);
-      expect(job().icon, Icons.work);
+      expect(job(voice: 'v.wav').icon, Icons.mic_rounded);
+      expect(job(photos: const ['p.png']).icon, Icons.photo_camera_rounded);
+      expect(job().icon, Icons.work_rounded);
     });
 
     test('a chosen tag wins over the media the job carries', () {
@@ -108,7 +108,7 @@ void main() {
       // the whole reason for having tags.
       final tagged = job(tags: {JobTag.painting}, voice: 'v.wav');
       expect(tagged.icon, JobTag.painting.icon);
-      expect(tagged.icon, isNot(Icons.mic));
+      expect(tagged.icon, isNot(Icons.mic_rounded));
     });
 
     test('several tags lead with the first', () {
