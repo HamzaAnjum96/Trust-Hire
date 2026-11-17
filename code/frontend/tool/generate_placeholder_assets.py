@@ -28,12 +28,13 @@ ROOT = pathlib.Path(__file__).resolve().parent.parent
 IMAGE_DIR = ROOT / "assets" / "images" / "jobs"
 AUDIO_DIR = ROOT / "assets" / "audio"
 
-# Brand palette, section 5-6 of the brand guidelines.
-TRUST_BURGUNDY = (0x7A, 0x26, 0x3A)
-DEEP_BURGUNDY = (0x4A, 0x15, 0x24)
-COPPER = (0xC5, 0x6A, 0x3A)
-WARM_SAND = (0xF4, 0xE9, 0xDE)
-INK = (0x21, 0x1B, 0x1D)
+# Brand palette v0.2 (0.24): ink and turmeric on lime-wash, with peacock.
+# The names say the role each hue plays in these graphics.
+PEACOCK = (0x0B, 0x6E, 0x6B)
+SLATE_BLUE = (0x3B, 0x4A, 0x5A)
+TURMERIC = (0xF2, 0xA9, 0x00)
+LIME_WASH = (0xF3, 0xF5, 0xF7)
+INK = (0x16, 0x20, 0x2A)
 
 WIDTH, HEIGHT = 800, 600
 
@@ -94,7 +95,7 @@ def build_image(seed: int, accent, base) -> list[bytearray]:
             dx = (x - WIDTH / 2) / (WIDTH / 2)
             dy = (y - HEIGHT / 2) / (HEIGHT / 2)
             vignette = min(1.0, (dx * dx + dy * dy) * 0.28)
-            colour = mix(colour, DEEP_BURGUNDY, vignette * 0.18)
+            colour = mix(colour, SLATE_BLUE, vignette * 0.18)
 
             row.extend(colour)
         rows.append(row)
@@ -138,16 +139,16 @@ def write_wav(path: pathlib.Path, seconds: float, seed: int) -> None:
 
 
 PHOTOS = [
-    ("plumbing-01", COPPER, WARM_SAND),
-    ("plumbing-02", TRUST_BURGUNDY, WARM_SAND),
-    ("electrical-01", COPPER, WARM_SAND),
-    ("painting-01", TRUST_BURGUNDY, WARM_SAND),
-    ("painting-02", COPPER, WARM_SAND),
-    ("carpentry-01", DEEP_BURGUNDY, WARM_SAND),
-    ("ac-repair-01", TRUST_BURGUNDY, WARM_SAND),
-    ("masonry-01", COPPER, WARM_SAND),
-    ("delivery-01", DEEP_BURGUNDY, WARM_SAND),
-    ("cleaning-01", TRUST_BURGUNDY, WARM_SAND),
+    ("plumbing-01", TURMERIC, LIME_WASH),
+    ("plumbing-02", PEACOCK, LIME_WASH),
+    ("electrical-01", TURMERIC, LIME_WASH),
+    ("painting-01", PEACOCK, LIME_WASH),
+    ("painting-02", TURMERIC, LIME_WASH),
+    ("carpentry-01", SLATE_BLUE, LIME_WASH),
+    ("ac-repair-01", PEACOCK, LIME_WASH),
+    ("masonry-01", TURMERIC, LIME_WASH),
+    ("delivery-01", SLATE_BLUE, LIME_WASH),
+    ("cleaning-01", PEACOCK, LIME_WASH),
 ]
 
 VOICE_NOTES = [

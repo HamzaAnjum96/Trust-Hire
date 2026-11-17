@@ -16,11 +16,12 @@
   <meta name="description" content="Trust Hire shows work happening near you, on a map. Post a job with a voice note, a photo, or a few words — no account, nothing to fill in.">
 
   <!--
-    The address bar and the PWA splash take their colour from here. Trust
-    Burgundy, per section 5 of the brand guidelines; the Flutter default was a
-    blue that appears nowhere else in the product.
+    The address bar takes its colour from here: the page's own ground, so the
+    browser's chrome and the app read as one surface (brand v0.2, 0.24). The
+    Flutter default was a blue that appears nowhere in the product.
   -->
-  <meta name="theme-color" content="#7A263A">
+  <meta name="theme-color" content="#F3F5F7" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0E141A" media="(prefers-color-scheme: dark)">
 
   <!--
     The page follows the device's light or dark setting, so say so: without
@@ -57,11 +58,11 @@
       margin: 0;
       padding: 0;
       height: 100%;
-      background: #F4E9DE; /* Warm Sand */
+      background: #F3F5F7; /* Lime-wash */
     }
 
     @media (prefers-color-scheme: dark) {
-      html, body { background: #1A1214; }
+      html, body { background: #0E141A; }
     }
 
     #boot {
@@ -76,13 +77,13 @@
       box-sizing: border-box;
       text-align: center;
       font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-      color: #7A263A;
+      color: #16202A;
       /* Fades out once Flutter paints, rather than cutting to the app. */
       transition: opacity 240ms ease-out;
     }
 
     @media (prefers-color-scheme: dark) {
-      #boot { color: #F4E9DE; }
+      #boot { color: #EEF2F5; }
     }
 
     #boot.ready { opacity: 0; pointer-events: none; }
@@ -100,12 +101,12 @@
       width: 160px;
       height: 3px;
       border-radius: 2px;
-      background: rgba(122, 38, 58, 0.18);
+      background: rgba(22, 32, 42, 0.18);
       overflow: hidden;
     }
 
     @media (prefers-color-scheme: dark) {
-      #boot .track { background: rgba(244, 233, 222, 0.2); }
+      #boot .track { background: rgba(238, 242, 245, 0.2); }
     }
 
     /*

@@ -29,9 +29,10 @@ ROOT = pathlib.Path(__file__).resolve().parent.parent
 WEB_DIR = ROOT / "web"
 ICON_DIR = WEB_DIR / "icons"
 
-# Brand palette, sections 5-6 of the brand guidelines.
-TRUST_BURGUNDY = (0x7A, 0x26, 0x3A)
-WHITE = (0xFF, 0xFF, 0xFF)
+# Brand palette v0.2 (0.24): a turmeric square with an ink pin, the same mark
+# that heads the navigation rail.
+TURMERIC = (0xF2, 0xA9, 0x00)
+INK = (0x16, 0x20, 0x2A)
 
 # Samples per axis. 4 is enough to keep the pin's curve clean at 192px and
 # costs nothing at these sizes.
@@ -159,7 +160,7 @@ def build_icon(size: int, *, full_bleed: bool, pin_scale: float) -> list[bytearr
             # Coverage of the mark within the ground that is actually painted.
             t = mark / ground
             colour = tuple(
-                round(TRUST_BURGUNDY[i] + (WHITE[i] - TRUST_BURGUNDY[i]) * t)
+                round(TURMERIC[i] + (INK[i] - TURMERIC[i]) * t)
                 for i in range(3)
             )
             row.extend((*colour, alpha))

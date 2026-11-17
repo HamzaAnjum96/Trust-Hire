@@ -45,8 +45,23 @@ void main() {
       }
     });
 
-    test('wears the brand colour', () {
-      expect(index, contains('<meta name="theme-color" content="#7A263A">'));
+    test('the address bar matches the page, in both themes', () {
+      // Brand v0.2: the browser's chrome takes the page's own ground, so the
+      // two read as one surface.
+      expect(
+        index,
+        contains(
+          '<meta name="theme-color" content="#F3F5F7" '
+          'media="(prefers-color-scheme: light)">',
+        ),
+      );
+      expect(
+        index,
+        contains(
+          '<meta name="theme-color" content="#0E141A" '
+          'media="(prefers-color-scheme: dark)">',
+        ),
+      );
       expect(index, isNot(contains('0175C2')));
     });
 
@@ -80,8 +95,10 @@ void main() {
     });
 
     test('wears the brand colours', () {
-      expect(manifest['theme_color'], '#7A263A');
-      expect(manifest['background_color'], '#F4E9DE');
+      // Brand v0.2: an installed app's title bar is the ink shell, and its
+      // splash the lime-wash page.
+      expect(manifest['theme_color'], '#16202A');
+      expect(manifest['background_color'], '#F3F5F7');
     });
 
     test('is not locked to portrait', () {
