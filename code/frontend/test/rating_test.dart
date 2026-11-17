@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -5,13 +6,18 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trust_hire/app/account_controller.dart';
 import 'package:trust_hire/app/rating_controller.dart';
 import 'package:trust_hire/features/lifecycle/job_lifecycle.dart';
+import 'package:trust_hire/features/ratings/worker_standing_view.dart';
 import 'package:trust_hire/features/ratings/rating_rules.dart';
 import 'package:trust_hire/models/account.dart';
 import 'package:trust_hire/models/job.dart';
 import 'package:trust_hire/models/job_status.dart';
 import 'package:trust_hire/models/job_tag.dart';
 import 'package:trust_hire/models/rating.dart';
+import 'package:trust_hire/services/job_repository.dart';
 import 'package:trust_hire/services/local_store.dart';
+import 'package:trust_hire/services/media_store.dart';
+
+import 'support/harness.dart';
 
 /// Section 10, and the one asymmetry in it.
 ///
@@ -59,13 +65,7 @@ void main() {
     String jobId = 'job-1',
     RatedSide side = RatedSide.worker,
     int stars = 5,
-  }) => Rating(
-    id: id,
-    jobId: jobId,
-    side: side,
-    stars: stars,
-    createdAt: now,
-  );
+  }) => Rating(id: id, jobId: jobId, side: side, stars: stars, createdAt: now);
 
   group('who may rate, and when', () {
     test('both sides may, once the job is finished', () {
@@ -114,9 +114,15 @@ void main() {
     test('nobody rates twice', () {
       final given = [rating('r1')];
 
-      expect(rules.canRate(job(), role: JobRole.hirer, existing: given), isFalse);
+      expect(
+        rules.canRate(job(), role: JobRole.hirer, existing: given),
+        isFalse,
+      );
       // The other side has not gone yet, and is not blocked by the first.
-      expect(rules.canRate(job(), role: JobRole.worker, existing: given), isTrue);
+      expect(
+        rules.canRate(job(), role: JobRole.worker, existing: given),
+        isTrue,
+      );
     });
 
     test('the two sides are always opposite', () {
@@ -289,11 +295,17 @@ void main() {
     test('a second rating from the same side is refused', () async {
       final ratings = await controller();
 
-      expect(await ratings.rate(job(), role: JobRole.hirer, stars: 5), isNotNull);
+      expect(
+        await ratings.rate(job(), role: JobRole.hirer, stars: 5),
+        isNotNull,
+      );
       expect(await ratings.rate(job(), role: JobRole.hirer, stars: 1), isNull);
 
       // The other side is still free to rate — the two are independent.
-      expect(await ratings.rate(job(), role: JobRole.worker, stars: 3), isNotNull);
+      expect(
+        await ratings.rate(job(), role: JobRole.worker, stars: 3),
+        isNotNull,
+      );
       expect(ratings.forJob('job-1'), hasLength(2));
     });
 
@@ -360,5 +372,86 @@ void main() {
       isNull,
     );
     expect(rules.internalHirerRatings(ratings.all), hasLength(1));
+  });
+
+  group('a worker\'s record on screen', () {
+    /// A seeded worker with all three facts: a rating, finished jobs, and so
+    /// a usual fare.
+    Future<(LocalStore, String)> workerWithARecord() async {
+      final store = await LocalStore.open();
+      final repository = JobRepository(store, MediaStore(store));
+      await repository.ensureSeeded();
+      final jobs = await repository.fetchJobs();
+      final ratings = RatingController(store)..load();
+      final worker = jobs
+          .map((job) => job.acceptedWorkerId)
+          .whereType<String>()
+          .firstWhere((id) {
+            final standing = ratings.standingFor(id, jobs: jobs);
+            return standing.hasRating && standing.averageFare != null;
+          });
+      return (store, worker);
+    }
+
+    for (final locale in const [Locale('en'), Locale('ur')]) {
+      testWidgets(
+        'reads across as one bar, at 320px (${locale.languageCode})',
+        (tester) async {
+          // WP5: three facts of one kind, side by side, so a hirer comparing
+          // two workers reads the same place for the same number. At the
+          // narrowest phone the bar must still read across, not stack.
+          tester.view.physicalSize = const Size(320, 720);
+          tester.view.devicePixelRatio = 1;
+          addTearDown(tester.view.resetPhysicalSize);
+          addTearDown(tester.view.resetDevicePixelRatio);
+
+          final (store, worker) = await workerWithARecord();
+          await tester.pumpWidget(
+            appHarness(
+              store: store,
+              locale: locale,
+              child: Scaffold(
+                body: Padding(
+                  padding: const EdgeInsets.all(32),
+                  child: WorkerStandingView(workerId: worker),
+                ),
+              ),
+            ),
+          );
+          for (var i = 0; i < 5; i++) {
+            await tester.pump(const Duration(milliseconds: 100));
+          }
+
+          expect(tester.takeException(), isNull);
+          final dividers = find.byType(VerticalDivider);
+          expect(dividers, findsNWidgets(2));
+          // Read across: the hairlines sit side by side, not one above the
+          // other.
+          final first = tester.getRect(dividers.at(0));
+          final second = tester.getRect(dividers.at(1));
+          expect(first.top, second.top);
+          expect(first.left, isNot(second.left));
+        },
+      );
+    }
+
+    testWidgets('a worker with no history shows no fare cell, and no zero', (
+      tester,
+    ) async {
+      final store = await LocalStore.open();
+      await tester.pumpWidget(
+        appHarness(
+          store: store,
+          child: const Scaffold(
+            body: WorkerStandingView(workerId: 'nobody-yet'),
+          ),
+        ),
+      );
+      await tester.pump();
+
+      expect(find.text('Not rated yet'), findsOneWidget);
+      expect(find.text('Usual fare'), findsNothing);
+      expect(find.byType(VerticalDivider), findsOneWidget);
+    });
   });
 }

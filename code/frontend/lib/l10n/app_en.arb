@@ -805,6 +805,18 @@
   "@newToTrustHire": {
     "description": "Shown for a worker with no history"
   },
+  "factRating": "Rating",
+  "@factRating": {
+    "description": "Label under a worker's average star rating in their record's fact bar."
+  },
+  "factJobsFinished": "Jobs finished",
+  "@factJobsFinished": {
+    "description": "Label under the count of jobs a worker has finished, in their record's fact bar."
+  },
+  "factUsualFare": "Usual fare",
+  "@factUsualFare": {
+    "description": "Label under the average fare a worker charges, in their record's fact bar. An aggregate, never per job."
+  },
   "demoAccounts": "Demo accounts",
   "@demoAccounts": {
     "description": "Heading for the account switcher"
@@ -1486,6 +1498,23 @@
   "walletHistory": "History",
   "@walletHistory": {
     "description": "Heading over the wallet's ledger"
+  },
+  "walletColumnEntry": "Entry",
+  "@walletColumnEntry": {
+    "description": "Column heading over what each wallet ledger line was (a top-up, a commission)."
+  },
+  "walletColumnAmount": "Amount",
+  "@walletColumnAmount": {
+    "description": "Column heading over the signed amount of each wallet ledger line."
+  },
+  "walletBalanceAfter": "Balance {amount}",
+  "@walletBalanceAfter": {
+    "description": "The wallet balance after one ledger line, shown under its amount.",
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
   },
   "aiSection": "On-device AI",
   "@aiSection": {

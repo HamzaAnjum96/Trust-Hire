@@ -1049,6 +1049,15 @@ class AppStringsEn extends AppStrings {
   String get newToTrustHire => 'New to Trust Hire';
 
   @override
+  String get factRating => 'Rating';
+
+  @override
+  String get factJobsFinished => 'Jobs finished';
+
+  @override
+  String get factUsualFare => 'Usual fare';
+
+  @override
   String get demoAccounts => 'Demo accounts';
 
   @override
@@ -2151,6 +2160,17 @@ class AppStringsEn extends AppStrings {
 
   @override
   String get walletHistory => 'History';
+
+  @override
+  String get walletColumnEntry => 'Entry';
+
+  @override
+  String get walletColumnAmount => 'Amount';
+
+  @override
+  String walletBalanceAfter(String amount) {
+    return 'Balance $amount';
+  }
 
   @override
   String get aiSection => 'On-device AI';

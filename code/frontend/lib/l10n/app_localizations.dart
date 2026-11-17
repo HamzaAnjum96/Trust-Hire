@@ -1850,6 +1850,24 @@ abstract class AppStrings {
   /// **'New to Trust Hire'**
   String get newToTrustHire;
 
+  /// Label under a worker's average star rating in their record's fact bar.
+  ///
+  /// In en, this message translates to:
+  /// **'Rating'**
+  String get factRating;
+
+  /// Label under the count of jobs a worker has finished, in their record's fact bar.
+  ///
+  /// In en, this message translates to:
+  /// **'Jobs finished'**
+  String get factJobsFinished;
+
+  /// Label under the average fare a worker charges, in their record's fact bar. An aggregate, never per job.
+  ///
+  /// In en, this message translates to:
+  /// **'Usual fare'**
+  String get factUsualFare;
+
   /// Heading for the account switcher
   ///
   /// In en, this message translates to:
@@ -3577,6 +3595,24 @@ abstract class AppStrings {
   /// In en, this message translates to:
   /// **'History'**
   String get walletHistory;
+
+  /// Column heading over what each wallet ledger line was (a top-up, a commission).
+  ///
+  /// In en, this message translates to:
+  /// **'Entry'**
+  String get walletColumnEntry;
+
+  /// Column heading over the signed amount of each wallet ledger line.
+  ///
+  /// In en, this message translates to:
+  /// **'Amount'**
+  String get walletColumnAmount;
+
+  /// The wallet balance after one ledger line, shown under its amount.
+  ///
+  /// In en, this message translates to:
+  /// **'Balance {amount}'**
+  String walletBalanceAfter(String amount);
 
   /// Profile group for the in-browser language model
   ///

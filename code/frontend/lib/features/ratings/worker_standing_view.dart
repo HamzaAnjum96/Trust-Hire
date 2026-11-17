@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import '../../app/job_controller.dart';
 import '../../app/rating_controller.dart';
 import '../../core/formatters.dart';
+import '../../core/theme.dart';
 import '../../core/tokens.dart';
 import '../../l10n/app_localizations.dart';
 import '../../models/rating.dart';
@@ -74,6 +75,11 @@ class WorkerStandingView extends StatelessWidget {
       );
     }
 
+    // **A fact bar, since 0.24.** Three facts of the same kind, read across:
+    // one card, three cells, hairlines between. As three stacked sentences
+    // they read as prose, and the number a hirer is comparing sat at the
+    // end of a different line each time.
+    final rating = standing.averageStars;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -81,40 +87,58 @@ class WorkerStandingView extends StatelessWidget {
           heading ?? strings.workerStanding,
           style: theme.textTheme.titleMedium,
         ),
-        const SizedBox(height: BrandSizing.spaceXs),
-        Row(
-          children: [
-            Icon(
-              standing.hasRating ? Icons.star_rounded : Icons.star_border_rounded,
-              size: 20,
-              color: standing.hasRating
-                  ? context.colours.rating
-                  : theme.colorScheme.outline,
-            ),
-            const SizedBox(width: BrandSizing.spaceXs),
-            // Flexible, because this is a number in English and a phrase in
-            // Urdu. "Not rated yet" is three short words; its translation is
-            // long enough to run off a 390px phone, which it did.
-            Flexible(
-              child: Text(
-                standing.hasRating
-                    ? standing.averageStars!.toStringAsFixed(1)
-                    : strings.notRatedYet,
-                style: theme.textTheme.titleMedium,
+        const SizedBox(height: BrandSizing.spaceSm),
+        IntrinsicHeight(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Expanded(
+                child: _Fact(
+                  label: strings.factRating,
+                  // New is not bad: no stars, and the words say why.
+                  value: rating == null
+                      ? strings.notRatedYet
+                      : rating.toStringAsFixed(1),
+                  isNumber: rating != null,
+                  leading: Icon(
+                    rating == null
+                        ? Icons.star_border_rounded
+                        : Icons.star_rounded,
+                    size: 20,
+                    color: rating == null
+                        ? context.colours.textMuted
+                        : context.colours.rating,
+                  ),
+                ),
               ),
-            ),
-          ],
-        ),
-        const SizedBox(height: BrandSizing.spaceXs),
-        Text(
-          strings.jobsCompleted(standing.completedJobs),
-          style: theme.textTheme.bodyMedium,
-        ),
-        if (standing.averageFare != null)
-          Text(
-            strings.averageFare(Format.fare(strings, standing.averageFare!)),
-            style: theme.textTheme.bodyMedium,
+              const VerticalDivider(width: BrandSizing.spaceMd),
+              Expanded(
+                child: _Fact(
+                  label: strings.factJobsFinished,
+                  value: '${standing.completedJobs}',
+                  spoken: strings.jobsCompleted(standing.completedJobs),
+                  isNumber: true,
+                ),
+              ),
+              // Aggregated, never per job: Section 10's reason this is shown
+              // at all. With no finished job there is nothing to average,
+              // and a cell saying so would be a third "not yet".
+              if (standing.averageFare != null) ...[
+                const VerticalDivider(width: BrandSizing.spaceMd),
+                Expanded(
+                  child: _Fact(
+                    label: strings.factUsualFare,
+                    value: Format.fare(strings, standing.averageFare!),
+                    spoken: strings.averageFare(
+                      Format.fare(strings, standing.averageFare!),
+                    ),
+                    isNumber: true,
+                  ),
+                ),
+              ],
+            ],
           ),
+        ),
       ],
     );
   }
@@ -130,5 +154,71 @@ class WorkerStandingView extends StatelessWidget {
         strings.notRatedYet,
       strings.jobsCompleted(standing.completedJobs),
     ].join(' · ');
+  }
+}
+
+/// One cell of the fact bar: the value large, its label small beneath.
+///
+/// A number shrinks to fit rather than wrap: "Rs. 12,500" broken over two
+/// lines is two numbers. Words ("Not rated yet") wrap instead. Read aloud as
+/// one sentence, so a screen reader does not say "12, Jobs finished".
+class _Fact extends StatelessWidget {
+  const _Fact({
+    required this.label,
+    required this.value,
+    required this.isNumber,
+    this.spoken,
+    this.leading,
+  });
+
+  final String label;
+  final String value;
+  final bool isNumber;
+  final String? spoken;
+  final Widget? leading;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final valueText = Text(
+      value,
+      style: isNumber ? theme.fareStyle : theme.textTheme.bodyMedium,
+      maxLines: isNumber ? 1 : 3,
+    );
+
+    return Semantics(
+      label: spoken ?? '$label, $value',
+      excludeSemantics: true,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          Row(
+            children: [
+              if (leading != null) ...[
+                leading!,
+                const SizedBox(width: BrandSizing.spaceXs),
+              ],
+              Flexible(
+                child: isNumber
+                    ? FittedBox(
+                        fit: BoxFit.scaleDown,
+                        alignment: AlignmentDirectional.centerStart,
+                        child: valueText,
+                      )
+                    : valueText,
+              ),
+            ],
+          ),
+          const SizedBox(height: 2),
+          Text(
+            label,
+            style: theme.textTheme.labelSmall?.copyWith(
+              color: context.colours.textMuted,
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

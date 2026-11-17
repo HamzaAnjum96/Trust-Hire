@@ -1,14 +1,18 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trust_hire/app/wallet_controller.dart';
 import 'package:trust_hire/features/bidding/bidding_rules.dart';
 import 'package:trust_hire/features/wallet/wallet_rules.dart';
+import 'package:trust_hire/features/wallet/wallet_screen.dart';
 import 'package:trust_hire/models/job.dart';
 import 'package:trust_hire/models/job_tag.dart';
 import 'package:trust_hire/models/wallet.dart';
 import 'package:trust_hire/models/worker_profile.dart';
 import 'package:trust_hire/services/local_store.dart';
+
+import 'support/harness.dart';
 
 /// Section 11.
 ///
@@ -553,5 +557,43 @@ void main() {
       wallet.wallet.entries.fold<int>(0, (sum, e) => sum + e.tokens),
       wallet.balance,
     );
+  });
+
+  testWidgets('the ledger is a table: amounts in one column, each with the '
+      'balance it left', (tester) async {
+    // WP5. The balance after each line is the same replay the wallet does,
+    // shown, so a worker can see how they reached the number at the top. At
+    // the narrowest phone, so the two money figures still fit beside a
+    // description.
+    tester.view.physicalSize = const Size(320, 720);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    final store = await LocalStore.open();
+    final wallet = WalletController(store)..load();
+    await wallet.recordCompletion(jobId: 'j1', agreedFare: 6000, at: now);
+    await wallet.recordCompletion(jobId: 'j2', agreedFare: 20000, at: now);
+    expect(wallet.balance, -1000);
+
+    await tester.pumpWidget(
+      appHarness(store: store, wallet: wallet, child: const WalletScreen()),
+    );
+    await tester.pump();
+
+    expect(tester.takeException(), isNull);
+    expect(find.text('Entry'), findsOneWidget);
+    expect(find.text('Amount'), findsOneWidget);
+    // The newest line is on top, and it left the balance the wallet shows.
+    expect(find.text('Balance −Rs. 1,000'), findsOneWidget);
+
+    // One column: every amount ends at the same right edge.
+    final amounts = find.textContaining(RegExp(r'^[+−] Rs\.'));
+    expect(amounts, findsAtLeastNWidgets(2));
+    final edges = {
+      for (final element in amounts.evaluate())
+        tester.getRect(find.byWidget(element.widget)).right,
+    };
+    expect(edges, hasLength(1));
   });
 }

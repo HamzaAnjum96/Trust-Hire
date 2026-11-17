@@ -1055,6 +1055,15 @@ class AppStringsUr extends AppStrings {
   String get newToTrustHire => 'ٹرسٹ ہائر پر نئے ہیں';
 
   @override
+  String get factRating => 'درجہ';
+
+  @override
+  String get factJobsFinished => 'مکمل کام';
+
+  @override
+  String get factUsualFare => 'عام کرایہ';
+
+  @override
   String get demoAccounts => 'ڈیمو اکاؤنٹس';
 
   @override
@@ -2156,6 +2165,17 @@ class AppStringsUr extends AppStrings {
 
   @override
   String get walletHistory => 'لین دین';
+
+  @override
+  String get walletColumnEntry => 'اندراج';
+
+  @override
+  String get walletColumnAmount => 'رقم';
+
+  @override
+  String walletBalanceAfter(String amount) {
+    return 'بیلنس $amount';
+  }
 
   @override
   String get aiSection => 'ڈیوائس پر AI';
