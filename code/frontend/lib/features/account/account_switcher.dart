@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 
 import '../../app/account_controller.dart';
 import '../../app/job_controller.dart';
-import '../../core/theme.dart';
 import '../../core/tokens.dart';
 import '../../l10n/app_localizations.dart';
 import '../../models/account.dart';
@@ -250,14 +249,14 @@ class AccountCard extends StatelessWidget {
                           Icon(
                             Icons.swap_horiz_rounded,
                             size: 18,
-                            color: theme.accentText,
+                            color: context.colours.text,
                           ),
                           const SizedBox(width: BrandSizing.spaceXs + 2),
                           Flexible(
                             child: Text(
                               strings.switchAccount,
                               style: BrandType.supporting.copyWith(
-                                color: theme.accentText,
+                                color: context.colours.text,
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
