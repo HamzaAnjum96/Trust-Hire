@@ -184,4 +184,33 @@ void main() {
     expect(find.byType(AccountSheet), findsNothing);
     expect(FocusManager.instance.primaryFocus, opener);
   });
+
+  testWidgets('a click hides the ring; the next key brings it back', (
+    tester,
+  ) async {
+    // As the web's :focus-visible. The map takes focus when clicked on the
+    // web, for its arrow keys, and with a mouse a ring round the whole map
+    // read as the map being selected. Flutter calls a mouse "traditional"
+    // highlight mode, so that alone did not hide it.
+    await pumpShell(tester, const Size(390, 844));
+
+    Future<FocusRingState> tabToARing() async {
+      var context = await tab(tester);
+      while (context.findAncestorStateOfType<FocusRingState>() == null) {
+        context = await tab(tester);
+      }
+      return context.findAncestorStateOfType<FocusRingState>()!;
+    }
+
+    final ring = await tabToARing();
+    expect(ring.isShowing, isTrue);
+
+    // A press on the map's open ground, away from every control.
+    await tester.tapAt(const Offset(8, 420));
+    // Past the map's double-tap window, so its timer is not left running.
+    await tester.pump(const Duration(milliseconds: 300));
+    expect(ring.isShowing, isFalse);
+
+    expect((await tabToARing()).isShowing, isTrue);
+  });
 }

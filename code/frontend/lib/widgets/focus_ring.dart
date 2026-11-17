@@ -1,4 +1,6 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../core/roles.dart';
 
@@ -11,8 +13,12 @@ import '../core/roles.dart';
 /// custom control. This draws a 2px ring in the action colour (turmeric on the
 /// ink shell), which clears 3:1 against what it sits on.
 ///
-/// Only in keyboard mode: a finger already knows where it is, and a ring left
-/// behind after a tap reads as a selection.
+/// Only when the last thing somebody did was press a key, as the web's
+/// `:focus-visible` does. A finger or a mouse already knows where it is, and a
+/// ring left behind after a click reads as a selection. Flutter's own
+/// highlight mode is not enough for this: it calls a mouse "traditional", so
+/// clicking the map (which takes focus for its arrow keys) ringed the whole
+/// map.
 ///
 /// It takes no focus itself. It wraps whatever is focusable inside it and
 /// listens, so focus order, semantics and the control's own behaviour are
@@ -41,23 +47,23 @@ class FocusRingState extends State<FocusRing> {
   bool _focused = false;
 
   /// Whether the ring is drawn now. For tests.
-  bool get isShowing =>
-      _focused &&
-      FocusManager.instance.highlightMode == FocusHighlightMode.traditional;
+  bool get isShowing => _focused && _LastInput.instance.wasKey;
 
   @override
   void initState() {
     super.initState();
-    FocusManager.instance.addHighlightModeListener(_onModeChanged);
+    _LastInput.instance
+      ..listen()
+      ..addListener(_onInputChanged);
   }
 
   @override
   void dispose() {
-    FocusManager.instance.removeHighlightModeListener(_onModeChanged);
+    _LastInput.instance.removeListener(_onInputChanged);
     super.dispose();
   }
 
-  void _onModeChanged(FocusHighlightMode _) {
+  void _onInputChanged() {
     if (_focused && mounted) setState(() {});
   }
 
@@ -83,5 +89,45 @@ class FocusRingState extends State<FocusRing> {
         child: widget.child,
       ),
     );
+  }
+}
+
+/// Whether the most recent input was a key press or a pointer.
+///
+/// One listener for the whole app, installed the first time a ring is built:
+/// every key event says "keyboard", every pointer press says "not".
+class _LastInput extends ChangeNotifier {
+  _LastInput._() {
+    GestureBinding.instance.pointerRouter.addGlobalRoute(_onPointer);
+  }
+
+  static final instance = _LastInput._();
+
+  /// (Re)attaches the key handler. Idempotent: the handler is removed before
+  /// it is added. Something can clear the keyboard's handlers (the test
+  /// binding does, between tests), and a ring that stops hearing keys fails
+  /// silently.
+  void listen() {
+    HardwareKeyboard.instance
+      ..removeHandler(_onKey)
+      ..addHandler(_onKey);
+  }
+
+  bool wasKey = false;
+
+  bool _onKey(KeyEvent event) {
+    if (!wasKey) {
+      wasKey = true;
+      notifyListeners();
+    }
+    // Only listening; the key goes on to whoever handles it.
+    return false;
+  }
+
+  void _onPointer(PointerEvent event) {
+    if (event is PointerDownEvent && wasKey) {
+      wasKey = false;
+      notifyListeners();
+    }
   }
 }
