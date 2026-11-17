@@ -1,7 +1,13 @@
 Trust Hire Brand Guidelines
 
-Version: 0.1
-Status: POC Brand Direction
+Version: 0.2
+Status: As built in app 0.24, after Impeccable's finish review
+
+---
+
+Section numbers match version 0.1 wherever a topic carried over, because
+comments in the app's code cite them ("Section 28: motion"). Topics new in
+0.2 are numbered from 32.
 
 ---
 
@@ -107,272 +113,140 @@ Find work. Find help. Nearby.
 
 ---
 
+---
+
 4. Colour Direction
 
-Trust Hire uses burgundy as its defining colour.
+Ink and turmeric on lime-wash.
 
-Burgundy communicates:
+The colours come from a working street in Pakistan: walls washed with lime,
+lettering in near-black ink, and turmeric for the one thing that matters now.
+They are used with the discipline of an instrument read in bright sun, not as
+decoration.
 
-- Trust
-- Warmth
-- Maturity
-- Confidence
-- Craft
-- Human connection
+What this means in practice:
 
-It provides a distinct alternative to:
+- Everything at rest is ink and neutrals.
+- Turmeric means "selected" or "waiting for you". Nothing else is turmeric.
+- Peacock means "voice note". Nothing else is peacock.
+- Brick means loss: an error, a destructive action, a debt.
+- There is no fourth hue. Success, information and a person's location are
+  said in ink, in words and in shapes, never in green or blue.
 
-- Pakistan-focused green branding
+It is a deliberate alternative to:
+
+- Pakistan-themed green and white
 - Generic technology blue
-- AI-product purple gradients
-- Bright startup neon palettes
+- AI-product purple gradients and neon on black
+- The cream-and-terracotta palette AI tools now default to
+- A white screen with one brand accent sprinkled on every link
 
-The supporting palette uses copper, sand, warm neutrals, and a restrained blue-grey.
-
----
-
-5. Primary Colour Palette
-
-Trust Burgundy
-
-The main brand colour.
-
-Name: Trust Burgundy
-Hex: #7A263A
-RGB: 122, 38, 58
-
-Use for:
-
-- Primary buttons
-- Active navigation
-- Selected map markers
-- Key headings
-- Brand accents
-- Focus states
-- Important icons
-
-Burgundy should be prominent, but it should not cover every surface.
+Version 0.1 of these guidelines used burgundy, copper and sand. It was
+replaced in 0.24 (November 2026); the reasoning is in
+documents/design/2026-11-17-reskin-direction.md.
 
 ---
 
-Deep Burgundy
+5. The Palette
 
-Used for high-contrast states and darker brand surfaces.
+Every value lives in code/frontend/lib/core/tokens.dart (BrandColours). Screens
+never name these colours; they ask for a role (section 6).
 
-Name: Deep Burgundy
-Hex: #4A1524
-RGB: 74, 21, 36
+Ground and neutrals (light)
 
-Use for:
+Lime-wash          #F3F5F7   The page. Cool, never cream.
+White              #FFFFFF   Sheets, rows, search bar, chips.
+Mist               #E7EBEF   Neutral tint: notices, input fills, quiet panels.
+Line               #DCE1E6   Hairlines between rows.
+Line strong        #7D8893   A control's boundary. 3.6:1 on white.
+Ink                #16202A   Text and every filled action. 16.5:1 on white.
+Ink muted          #56616C   Supporting text. 6.3:1 on white, 5.8:1 on lime-wash.
+Slate              #3B4A5A   The pressed state of an ink fill.
 
-- Dark headers
-- Pressed button states
-- Text on light warm backgrounds
-- Premium or high-trust moments
-- Dark mode surfaces
+Signals (light)
 
----
+Turmeric           #F2A900   Selection fill: the selected pin, its area, the
+                             fare flag, the navigation indicator. Ink on it 8.2:1.
+                             Never text on white (2.0:1).
+Turmeric wash      #FFF0C2   A selected row, offer or choice. Ink on it 14.5:1.
+Turmeric text      #8A5300   Turmeric as words: a selected tab, an offer waiting,
+                             a warning. 6.3:1 on white. Never a link colour.
+Peacock            #0B6E6B   Voice notes and nothing else. 6.1:1 on white.
+Brick              #B8321E   Loss. 6.0:1 on white.
 
-Copper
+Night (dark theme)
 
-The main secondary accent.
-
-Name: Copper
-Hex: #C56A3A
-RGB: 197, 106, 58
-
-Use for:
-
-- Voice-note indicators
-- New-job badges
-- Secondary highlights
-- Map radius controls
-- Illustration details
-- Selected media states
-
-Copper gives the brand energy without becoming loud or playful.
-
-Do not use copper for large blocks of body text.
-
----
-
-Warm Sand
-
-The main soft background colour.
-
-Name: Warm Sand
-Hex: #F4E9DE
-RGB: 244, 233, 222
-
-Use for:
-
-- Page backgrounds
-- Empty states
-- Cards
-- Onboarding screens
-- Photo placeholders
-- Soft section separation
-
-Warm Sand should make the product feel approachable and less clinical than a pure white interface.
+Night              #0E141A   The page.
+Night surface      #16202A   Sheets and the navigation shell.
+Night raised       #1F2B37   Inputs, raised panels.
+Night line         #263241   Hairlines.
+Night line strong  #6B7A8B   A control's boundary. 3.8:1 on night surface.
+Night text         #EEF2F5   Text. 16.5:1 on night.
+Night text muted   #9BA7B2   Supporting text. 6.7:1 on night surface.
+Night turmeric     #F5B629   The action fill in dark, and selection. Night text
+                             on it 10.2:1.
+Night turmeric wash #33321F  A selected row in dark.
+Night peacock      #5BBDB7   Voice notes. 7.4:1 on night surface.
+Night brick        #F07A63   Loss. 6.0:1 on night surface.
+Night pin          #C9D2DA   A pin at rest on the dark map.
 
 ---
 
-6. Neutral Palette
+6. Colour Roles
 
-Ink
+The app's screens never use a palette colour directly. They ask
+context.colours (code/frontend/lib/core/roles.dart) for a role, and each role
+has a value in both themes. A reskin changes roles.dart and tokens.dart, not
+the screens. test/design_rules_test.dart fails the build if a screen names a
+palette colour, a raw colour value or a Material colour constant.
 
-Name: Ink
-Hex: #211B1D
-RGB: 33, 27, 29
+Role            Light            Dark              Job
+page            lime-wash        night             The ground.
+surface         white            night surface     Sheets, rows, cards.
+text            ink              night text        Words.
+textMuted       ink muted        night text muted  Supporting words.
+action          ink              night turmeric    Every filled button.
+onAction        white            night             Words on a filled button.
+highlight       turmeric         night turmeric    Selection fill.
+selection       turmeric wash    night turmeric wash  A selected row or choice.
+accentText      turmeric text    night turmeric    Turmeric as words (selected
+                                                   tab, waiting). Not links.
+voice           peacock          night peacock     Voice notes.
+bad             brick            night brick       Loss.
+good, info      ink              night text        Said in words, not hue.
+warn            turmeric text    night turmeric    Something waiting on you.
+pin             ink              night pin         A pin at rest.
+pinSelected     turmeric         night turmeric    The job in hand.
+pinOwn          white            night             Your own pin, drawn inverted.
+shell           ink              night surface     The navigation bar and rail.
+onShell         white            night text        Labels on the shell.
 
-Use for:
-
-- Primary text
-- Strong headings
-- High-contrast icons
-
----
-
-Slate
-
-Name: Slate
-Hex: #625A5D
-RGB: 98, 90, 93
-
-Use for:
-
-- Secondary text
-- Metadata
-- Helper text
-- Inactive icons
-
----
-
-Stone
-
-Name: Stone
-Hex: #B9AFB1
-RGB: 185, 175, 177
-
-Use for:
-
-- Borders
-- Disabled controls
-- Dividers
-- Placeholder icons
+The contrast test (test/accessibility_test.dart) checks every pair a role is
+drawn on, in both themes: 4.5:1 for text, 3:1 for a control's boundary and for
+the shell's selected mark.
 
 ---
 
-Mist
+7. Signals
 
-Name: Mist
-Hex: #F7F4F3
-RGB: 247, 244, 243
+Three signal hues, each with one meaning, and ink for the rest.
 
-Use for:
-
-- Main application background
-- Input fields
-- Neutral cards
-- Bottom sheets
-
----
-
-White
-
-Name: White
-Hex: #FFFFFF
-RGB: 255, 255, 255
-
-Use for:
-
-- Cards
-- Modals
-- Text on dark surfaces
-- High-clarity content areas
+- Loss is brick (#B8321E; night brick #F07A63): an error, a destructive
+  action, a debt, a balance below zero.
+- Something waiting on the person is turmeric: an offer waiting, a warning
+  (turmeric text on a tenth-strength turmeric wash). The words say what.
+- A voice note is peacock.
+- Success and information are ink, on the neutral tint with a hairline. A
+  green "done" or a blue "note" would be a fourth and fifth hue; the words
+  and the icon carry the meaning instead.
+- A person's own location is an ink dot, not the usual blue.
 
 ---
 
-7. Functional Colours
+8. Colour Ratio
 
-Functional colours should remain distinct from the brand palette.
-
-Success
-
-Avoid bright Pakistan-associated green.
-
-Use a muted blue-teal instead.
-
-Name: Success Teal
-Hex: #287C7A
-RGB: 40, 124, 122
-
-Use for:
-
-- Successful saves
-- Completed actions
-- Available status
-- Confirmation messages
-
----
-
-Information
-
-Name: Information Blue
-Hex: #356A8A
-RGB: 53, 106, 138
-
-Use for:
-
-- Help messages
-- Location information
-- Neutral notices
-- Permission explanations
-
----
-
-Warning
-
-Name: Warning Amber
-Hex: #D3922E
-RGB: 211, 146, 46
-
-Use for:
-
-- Missing optional information
-- Time-sensitive jobs
-- Permission warnings
-- Actions requiring attention
-
----
-
-Error
-
-Name: Error Red
-Hex: #B63A3A
-RGB: 182, 58, 58
-
-Use for:
-
-- Validation errors
-- Failed uploads
-- Destructive actions
-- Unavailable media
-
-Error red must not replace burgundy in brand elements.
-
----
-
-8. Recommended Colour Ratios
-
-A typical Trust Hire screen should use approximately:
-
-60% Warm neutral backgrounds
-25% White or card surfaces
-10% Burgundy
-5% Copper or functional colours
-
-This keeps the interface calm and prevents burgundy from becoming visually heavy.
+Colour ratio, roughly: 70% ground and white, 25% ink, under 5% turmeric,
+with peacock and brick only where they mean something.
 
 ---
 
@@ -380,329 +254,133 @@ This keeps the interface calm and prevents burgundy from becoming visually heavy
 
 Preferred
 
-Trust Burgundy on White
-Deep Burgundy on Warm Sand
-White on Trust Burgundy
-Ink on Mist
-Ink on Warm Sand
-Copper on White
+Ink on lime-wash or white
+White on ink
+Ink on turmeric
+Ink on turmeric wash
+White on peacock
+Night text on night or night surface
+Night on night turmeric
 
 Avoid
 
-Burgundy text on Copper
-Copper text on Warm Sand
-Stone text on White
-White text on Copper for small text
-Large areas of Burgundy beside bright red
-Burgundy-to-purple gradients
-
-Gradients should generally be avoided.
-
-When a gradient is necessary, use a subtle burgundy tonal gradient:
-
-background: linear-gradient(
-  135deg,
-  #7A263A 0%,
-  #4A1524 100%
-);
-
-Do not combine burgundy with neon purple, electric blue, or bright green gradients.
+Turmeric as text on white or lime-wash (2.0:1): use turmeric text instead
+Turmeric text as a link or a general accent
+Turmeric next to brick at the same size: loss must never look selected
+Peacock on anything that is not a voice note
+Grey text on the turmeric fill
 
 ---
 
 10. Typography
 
-Trust Hire typography should feel direct, friendly, and highly readable on inexpensive mobile devices.
+Typeface
 
-Recommended Typeface
+Atkinson Hyperlegible Next, for every Latin character.
 
-Primary
+It was designed for low-vision readers: letters that are easy to confuse
+(I l 1, O 0, rn m) are drawn apart. That matters to somebody reading a fare
+on a cheap phone in bright sun. It has tabular figures, so fares and times
+line up in columns. The app bundles four static weights (400, 500, 600, 700),
+about 190 KB, cut from the variable font.
 
-Inter
+Urdu
 
-Use for:
+- Noto Sans Arabic for Urdu body text, labels and anything small.
+- Noto Nastaliq Urdu for Urdu headings, titles, the app bar and dialogs,
+  with taller lines (1.9) for its descenders. Urdu is read in Nastaliq; it is
+  not used below title size.
 
-- Interface text
-- Buttons
-- Forms
-- Job details
-- Navigation
-- English content
+The theme applies Nastaliq whenever the app is in Urdu
+(BrandTheme.urdu in lib/core/theme.dart), and the Latin letters on the same
+line stay in Atkinson.
 
-Inter is readable at small sizes and performs well across mobile screens.
+Fallback stack (web)
 
-Urdu Support
+  "Atkinson Hyperlegible Next", "Noto Sans Arabic", system-ui, sans-serif
 
-Noto Nastaliq Urdu for expressive Urdu content.
+Rules
 
-For dense UI labels, test:
-
-Noto Sans Arabic
-
-Nastaliq type should not be used at very small sizes.
-
-Fallback Stack
-
-font-family:
-  Inter,
-  "Noto Sans Arabic",
-  system-ui,
-  -apple-system,
-  BlinkMacSystemFont,
-  "Segoe UI",
-  sans-serif;
+- Sentence case everywhere, buttons included.
+- No letter spacing outside the type scale (enforced by design_rules_test).
+- Nothing smaller than 12px (enforced by design_rules_test and
+  accessibility_test).
+- Figures that are compared are tabular and right-aligned.
 
 ---
 
 11. Type Scale
 
-Display
+Style            Size / line   Weight   Use
+Display          32 / 38       700      The intro's headline.
+Page heading     24 / 30       700      Screen titles.
+Section heading  18 / 24       600      Sheet titles, section heads.
+Body             16 / 24       400      Everything people read.
+Supporting       14 / 20       400      Location, time, distance on a row.
+Caption          12 / 16       500      Labels under figures, chips.
+Button           16 / 24       600      Every button.
+Fare             18 / 24       700      Money. Tabular figures.
 
-Size: 32px
-Line height: 38px
-Weight: 700
-
-Use for:
-
-- Landing-page headlines
-- Major onboarding statements
-
-Page Heading
-
-Size: 24px
-Line height: 30px
-Weight: 700
-
-Use for:
-
-- Screen titles
-- Job titles
-- Main section headings
-
-Section Heading
-
-Size: 18px
-Line height: 24px
-Weight: 600
-
-Use for:
-
-- Card headings
-- Form sections
-- Bottom-sheet titles
-
-Body
-
-Size: 16px
-Line height: 24px
-Weight: 400
-
-Use for:
-
-- Descriptions
-- Instructions
-- General content
-
-Supporting Text
-
-Size: 14px
-Line height: 20px
-Weight: 400
-
-Use for:
-
-- Location details
-- Dates
-- Distance
-- Helper text
-
-Caption
-
-Size: 12px
-Line height: 16px
-Weight: 500
-
-Use sparingly for:
-
-- File details
-- Small badges
-- Secondary metadata
-
-Do not use text smaller than 12px.
+Values live in BrandType (lib/core/tokens.dart). Tracking is 0 throughout:
+Atkinson is spaced for reading as drawn.
 
 ---
 
-12. Logo Direction
+12. Logo and App Icon
 
-The Trust Hire logo should be simple, recognisable, and usable as a mobile application icon.
+The mark is the map pin: one circle for the head and two tangent lines down to
+a point, the same construction the map's markers use. It is drawn in ink on a
+turmeric ground.
 
-Recommended Concept
+- App icon (Android, iOS, web): an ink pin on a turmeric square, rounded on
+  Android and the web, square and opaque on iOS (iOS applies its own mask).
+- Maskable web icons keep the pin inside the 80% safe zone.
+- Favicon: square, the pin larger, because a rounded corner at 16px is mush.
+- At the head of the navigation rail: the same pin, turmeric on the ink shell,
+  with the wordmark "Trust Hire" in the shell's text colour.
 
-A combined symbol representing:
-
-- A location pin
-- A handshake or connection
-- A simple letter “T”
-- A job marker
-
-The symbol should remain clear at 24px.
-
-Logo Personality
-
-The logo should feel:
-
-- Solid
-- Rounded
-- Practical
-- Friendly
-- Stable
-
-It should not feel:
-
-- Luxury-focused
-- Financial
-- Governmental
-- Futuristic
-- Artificially intelligent
-- Overly corporate
-
-Wordmark
-
-Use a clean, bold sans-serif wordmark.
-
-Recommended treatment:
-
-Trust
-
-in Ink or Deep Burgundy.
-
-Hire
-
-in Trust Burgundy.
-
-Avoid using two unrelated typefaces in the wordmark.
+All icons are drawn by code/frontend/tool/generate_app_icons.py; regenerate
+them after any change to the mark. Each file carries its provenance.
 
 ---
 
 13. Logo Usage
 
-Minimum Clear Space
+Wordmark
 
-Maintain clear space equal to the height of the capital “T” around the full logo.
+"Trust Hire" in Atkinson Hyperlegible Next, bold, one colour. Never TrustHire
+or TRUST HIRE (section 3).
 
-Minimum Size
-
-Digital full logo: 120px wide
-Digital symbol: 24px square
-App icon: 48px square minimum
-
-Approved Backgrounds
-
-- White
-- Mist
-- Warm Sand
-- Trust Burgundy
-- Deep Burgundy
-
-Do Not
-
-- Stretch the logo
-- Rotate the logo
-- Add shadows
-- Add outlines
-- Place it inside a green shape
-- Apply a purple gradient
-- Use Copper as the main logo colour
-- Place it over visually busy photographs
-- Replace the wordmark font casually
+Minimum size: the pin stays clear at 24px; below that, use the mark alone.
 
 ---
 
 14. Iconography
 
-Icons should be:
-
-- Simple
-- Rounded
-- Medium weight
-- Recognisable without labels where possible
-- Consistent in stroke width
-
-Recommended icon style:
-
-Rounded outline icons
-2px stroke
-24px standard size
-20px compact size
-
-Important icons include:
-
-- Microphone
-- Camera
-- Image
-- Map pin
-- Clock
-- Calendar
-- Distance
-- Play
-- Pause
-- Delete
-- Edit
-- Share
-- Search
-- Filter
-
-Use filled icons only for:
-
-- Active navigation
-- Selected states
-- Primary map markers
-
-Avoid decorative or highly detailed icons.
+- Material Symbols, the rounded set, filled. Filled shapes read better than
+  thin outlines at small sizes in bright light.
+- An outline that carries state (an unsaved bookmark, an empty star) is the
+  rounded set's own _border variant.
+- One family only: test/design_rules_test.dart fails on any icon outside it.
+- Icons are 20px in rows and 24px in navigation, and always sit beside a word
+  unless the control has a label for screen readers and a tooltip.
 
 ---
 
 15. Map Styling
 
-The map is a core brand surface.
-
-It should feel visually connected to Trust Hire without becoming difficult to read.
-
-Map Principles
-
-- Use a light, neutral map
-- Reduce visual noise
-- Keep road labels readable
-- Avoid highly saturated map colours
-- Make job markers immediately recognisable
-- Show approximate areas rather than precise addresses
-
-Default Job Marker
-
-Fill: Trust Burgundy #7A263A
-Icon: White
-
-Selected Job Marker
-
-Fill: Deep Burgundy #4A1524
-Outline: Copper #C56A3A
-
-New Local Job Marker
-
-Fill: Copper #C56A3A
-Icon: White
-
-Approximate Job Radius
-
-Fill: rgba(122, 38, 58, 0.12)
-Border: rgba(122, 38, 58, 0.55)
-
-User Location
-
-Use Information Blue instead of green.
-
-Fill: #356A8A
-Outer ring: rgba(53, 106, 138, 0.20)
+- Basemap: Esri Light Gray Canvas in light and Dark Gray Canvas in dark,
+  tinted toward the page colour (lime-wash, night) so the map sits in the
+  world. Place names are a separate layer drawn above the tint.
+- Pins at rest are ink with a white glyph (light) or night pin with a night
+  glyph (dark).
+- The selected pin is turmeric with an ink glyph, larger, with an ink outline.
+  Its approximate area is a turmeric wash with a turmeric edge, and its fare
+  flies above it on a turmeric flag with ink figures.
+- Your own jobs are drawn inverted: the ground's colour inside, the pin colour
+  as outline and glyph.
+- Your location is an ink dot with a white ring and a faint ink halo.
+- The exact spot is never shown until a worker is chosen; the area is.
 
 ---
 
@@ -764,7 +442,7 @@ Illustration Style
 - Simple geometric forms
 - Rounded edges
 - Limited detail
-- Burgundy, Copper, Sand, and Ink
+- Ink, turmeric, white and lime-wash, as the app uses them
 - Human proportions that feel natural
 - Subtle local context
 
@@ -890,495 +568,291 @@ The word “worker” should be used respectfully and contextually.
 
 21. Calls to Action
 
-Primary Actions
+A button says what happens when you press it, in sentence case.
 
-Post a Job
-Add Voice Note
-Add Photos
-Choose Area
-Save Job
-View Job
+Primary actions (filled, one per screen)
 
-Secondary Actions
+Post a job
+Post job
+Offer a fare
+Choose Rs. 2,500
+Show number
+Open details
+Add tokens
 
-Add More Details
-Change Area
-Listen Again
-Edit Job
-Remove Photo
+Secondary actions (outlined or text)
+
+Add a voice note
+Add a trade
+Change area
+Listen again
+Edit job
+Switch account
 
 Avoid
 
 Submit
 Proceed
-Execute
-Confirm Record
-Create Entity
-Initiate Application
+OK
+Confirm
+Click here
+Title Case Buttons
+
+The full string rules are in documents/product/product-context.md.
 
 ---
 
 22. UI Components
 
-Primary Button
+Buttons
 
-Background: Trust Burgundy
-Text: White
-Height: 48px minimum
-Corner radius: 12px
-Font weight: 600
+- Filled: ink (night turmeric in dark), white (night) text, a 52px pill.
+- Outlined: transparent, ink border and text, 52px pill.
+- Text: ink, at least 44px tall.
+- Pressed: the fill darkens a step (slate). Disabled: mist fill, muted text.
 
-Pressed state:
+Navigation
 
-Background: Deep Burgundy
+- An ink shell: the bottom bar on a phone, a rail on a tablet or desktop.
+  Four destinations (Jobs, Directory, Activity, Profile) and one action.
+- The selected destination is a turmeric pill under an ink icon, with a white
+  label. Unselected labels are a muted near-white.
+- "Post a job" is a white pill with an ink plus, in the middle of the bar or at
+  the head of the rail. It is an action, never a place, so it is never
+  turmeric.
 
-Disabled state:
+Search and filters
 
-Background: Stone
-Text: White
+- A white search bar with "Ask" (ink) and the account avatar, over the map.
+- White filter chips with a hairline; a selected chip takes the turmeric fill
+  with ink text.
 
----
+Map controls
 
-Secondary Button
-
-Background: Transparent
-Border: 1px solid Trust Burgundy
-Text: Trust Burgundy
-Height: 48px minimum
-Corner radius: 12px
-
----
-
-Text Button
-
-Background: Transparent
-Text: Trust Burgundy
-Font weight: 600
-
-Use for low-priority actions.
-
----
-
-Destructive Button
-
-Background: Error Red
-Text: White
-
-Destructive actions should always use explicit labels:
-
-Delete Job
-Remove Photo
-Discard Recording
-
-Do not label destructive actions only as:
-
-Confirm
-Continue
-Yes
+- White round buttons with ink icons, over the map. The view switch is an ink
+  pill ("16 jobs" / "Map").
 
 ---
 
 23. Form Controls
 
-Forms should be minimal and flexible.
-
-Input Style
-
-Background: White
-Border: 1px solid Stone
-Text: Ink
-Placeholder: Slate
-Corner radius: 12px
-Minimum height: 48px
-
-Focused state:
-
-Border: 2px solid Trust Burgundy
-
-Error state:
-
-Border: 2px solid Error Red
-
-Field Labels
-
-Labels must remain visible above fields.
-
-Do not rely only on placeholders.
-
-Required Fields
-
-Use as few required fields as possible.
-
-Do not mark every field with an asterisk.
-
-Where appropriate, explain:
-
-Add at least one voice note, photo, or message.
-
-This is better than making each media option individually required.
+- Inputs: white (night raised in dark), a 1px line-strong border, a 2px ink
+  border when focused, labels always visible above the field, 48px minimum.
+- Chips and segments: stadium shape; selected takes the turmeric wash or fill.
+- Radios and checkboxes: ink when on (turmeric in dark), with the row around
+  them as the larger target.
 
 ---
 
-24. Cards
+24. Rows and Cards
 
-Cards should use:
-
-Background: White
-Border: 1px solid #E7DFE1
-Corner radius: 16px
-Shadow: subtle or none
-
-Recommended shadow:
-
-box-shadow: 0 4px 16px rgba(33, 27, 29, 0.08);
-
-Avoid:
-
-- Heavy shadows
-- Glassmorphism
-- Coloured glowing borders
-- Excessive nested cards
+- A job row: title, fare in the right column with its kind of fare under it
+  ("Starting fare", "Agreed fare"), then location, time and distance at 14px,
+  then what the job carries (voice note, photos). Hairline below.
+- The selected row takes the turmeric wash.
+- The map's preview is the one card on the jobs screen: white, 16px corners,
+  the lift shadow, one filled "Open details" button.
 
 ---
 
-25. Bottom Sheets
+25. Bottom Sheets and Dialogs
 
-Bottom sheets are the preferred presentation pattern for map details.
-
-Styling
-
-Background: White
-Top corners: 20px
-Handle: Stone
-Title: Ink
-Primary action: Trust Burgundy
-
-Bottom sheets should:
-
-- Open quickly
-- Preserve map context
-- Support swipe-to-close
-- Display the most useful information first
-- Avoid long, form-like layouts
+- White (night surface), 24px top corners, a drag handle.
+- A job's sheet opens in a fixed order: title and status, fare, the voice note
+  if there is one, the details, then the actions.
+- Dialogs share the sheet's corners and ask with the action's own words
+  ("Choose Rs. 2,500"), never "OK".
 
 ---
 
 26. Voice Notes
 
-Voice should be treated as a first-class content type.
-
-Voice Record Button
-
-Default:
-
-Background: Copper
-Icon: White
-
-Recording:
-
-Background: Error Red
-Icon: White
-
-Recorded:
-
-Background: Warm Sand
-Play icon: Trust Burgundy
-Waveform: Copper
-
-Voice Labels
-
-Prefer:
-
-Hold to Record
-Recording…
-Voice Note Added
-Listen
-Record Again
-
-Avoid:
-
-Capture Audio
-Upload Audio Asset
-Begin Multimedia Recording
+- Peacock is the voice note's colour and nothing else's: the play button, the
+  played part of the waveform, the microphone on the post form.
+- The unplayed waveform is a neutral line. Length is shown as 0:00 / 0:12.
+- A job described only by voice says so on its row ("Described by voice
+  only"), so nobody opens it expecting text.
 
 ---
 
-27. Photo Uploads
+27. Photos
 
-Photos should appear as large, tappable thumbnails.
-
-Add Photo Tile
-
-Background: Warm Sand
-Border: 1px dashed Copper
-Icon: Copper
-Text: Ink
-Corner radius: 12px
-
-Use simple labels:
-
-Add Photo
-Take Photo
-Choose Photo
-
-Do not require captions for every image.
+- Photos sit in a horizontal strip with 12px corners and open full-screen on
+  an ink ground.
+- Placeholder photos in the demo are drawn by
+  tool/generate_placeholder_assets.py: bands of brand colour, obviously not
+  photographs.
 
 ---
 
 28. Motion
 
-Motion should communicate state changes rather than decorate the interface.
+Motion says what changed; it never decorates.
 
-Recommended
-
-- Bottom sheet slides upward
-- Marker gently enlarges when selected
-- Saved job appears smoothly on the map
-- Voice waveform moves during playback
-- Upload progress is clearly visible
-- Buttons respond immediately when tapped
-
-Timing
-
-Fast interaction: 120–180ms
-Standard transition: 200–280ms
-Large transition: 300–400ms
-
-Avoid
-
-- Long splash animations
-- Bouncing buttons
-- Constant pulsing effects
-- Large parallax movements
-- Decorative loading animations
-- Motion that delays task completion
-
-Support reduced-motion preferences.
+- Durations: fast 160ms (a press, a toggle), standard 240ms (a sheet, a card),
+  large 340ms (a screen).
+- One curve: Cubic(0.22, 1, 0.36, 1), a quick start and a long settle.
+- The selected pin grows; the preview card slides up; the map's controls move
+  up with it.
+- With reduced motion switched on, transitions become fades or nothing.
 
 ---
 
 29. Accessibility
 
-Trust Hire should remain usable on:
-
-- Small screens
-- Low-cost devices
-- Bright outdoor environments
-- Unstable mobile connections
-- One-handed use
-- Mixed English and Urdu interfaces
-
-Requirements
-
-- Minimum touch target: 44px × 44px
-- Preferred touch target: 48px × 48px
-- Body text: 16px where possible
-- Strong text contrast
-- Visible keyboard focus
-- Icons accompanied by labels where meaning is unclear
-- Audio controls accessible without gestures alone
-- Colour must not be the only indicator of state
-- Images should support alternative text
-- Error messages should explain recovery
+- Contrast: 4.5:1 for all text, 3:1 for a control's boundary and the shell's
+  selected mark, in both themes, checked for every role pair by a test.
+- Targets: 48px preferred, 44px minimum; buttons are 52px.
+- Text: body 16px, nothing under 12px, and the app survives 2x text scaling
+  without overflowing (tested).
+- Colour is never the only carrier: a sign on money, a word on a status, a
+  filled icon for a saved job, a wider dot for the current page.
+- Keyboard: every control reachable by Tab, a visible ring when it is,
+  arrow keys along the bar and rail, Escape closes sheets and dialogs and
+  returns focus to what opened them.
+- Every screen works right to left in Urdu.
 
 ---
 
 30. Dark Mode
 
-Dark mode should remain warm rather than using pure black.
-
-Background
-
-Hex: #181315
-
-Surface
-
-Hex: #241C1F
-
-Elevated Surface
-
-Hex: #302429
-
-Primary Text
-
-Hex: #FAF6F4
-
-Secondary Text
-
-Hex: #C7BFC1
-
-Dark Mode Burgundy
-
-Use a slightly lighter burgundy for visibility.
-
-Hex: #B44C65
-
-Use it for fills (buttons, the selected navigation pill, markers) and large
-text only. It is 3.3:1 on the dark surface, which fails AA for normal text.
-
-Dark Mode Burgundy Text
-
-Added in 0.23. A lighter tint of the same hue, for burgundy *words* on dark
-surfaces: links, text buttons, the selected tab, "Switch account".
-
-Hex: #D9798F
-
-At least 5.0:1 on the background, the surface and the elevated surface. Never
-put white text on it.
-
-Dark Mode Copper
-
-Hex: #DB8453
-
-Avoid neon highlights in dark mode.
+- The page is night (#0E141A), not black; sheets and the shell are night
+  surface.
+- Turmeric becomes the action fill, under night text: in dark, the filled
+  button and the selection share a colour, because ink would vanish.
+- Pins at rest are a light grey (night pin) with night glyphs; the selected
+  pin stays turmeric.
+- Every text role has its own dark value; none is a fill reused as text.
 
 ---
 
-31. Example Design Tokens
+31. Design Tokens
 
-:root {
-  --colour-brand-primary: #7A263A;
-  --colour-brand-primary-dark: #4A1524;
-  --colour-brand-secondary: #C56A3A;
+The source of truth is code, not this table:
 
-  --colour-background: #F7F4F3;
-  --colour-background-warm: #F4E9DE;
-  --colour-surface: #FFFFFF;
-
-  --colour-text-primary: #211B1D;
-  --colour-text-secondary: #625A5D;
-  --colour-border: #B9AFB1;
-
-  --colour-success: #287C7A;
-  --colour-information: #356A8A;
-  --colour-warning: #D3922E;
-  --colour-error: #B63A3A;
-
-  --radius-small: 8px;
-  --radius-medium: 12px;
-  --radius-large: 16px;
-  --radius-sheet: 20px;
-
-  --touch-target-minimum: 44px;
-  --touch-target-preferred: 48px;
-
-  --shadow-card: 0 4px 16px rgba(33, 27, 29, 0.08);
-}
+- code/frontend/lib/core/tokens.dart: palette (BrandColours), type (BrandType),
+  radii (BrandRadius: 8, 12, 16, 24), spacing (BrandSizing: 4, 8, 16, 24, 32,
+  40, 56), control height 52, readable width 720, motion (BrandMotion).
+- code/frontend/lib/core/roles.dart: the colour roles in both themes, and the
+  card and lift shadows.
+- code/frontend/lib/core/theme.dart: Material's theme, built from the roles.
+- DESIGN.md at the repository root: the design system as built, written by
+  Impeccable's documenter after the 0.24 finish review.
 
 ---
 
-32. Example Tailwind Theme
+32. Design Language
 
-export default {
-  theme: {
-    extend: {
-      colors: {
-        brand: {
-          DEFAULT: "#7A263A",
-          dark: "#4A1524",
-          copper: "#C56A3A",
-          sand: "#F4E9DE",
-        },
-        ink: "#211B1D",
-        slate: "#625A5D",
-        stone: "#B9AFB1",
-        mist: "#F7F4F3",
-        success: "#287C7A",
-        information: "#356A8A",
-        warning: "#D3922E",
-        error: "#B63A3A",
-      },
-      borderRadius: {
-        control: "12px",
-        card: "16px",
-        sheet: "20px",
-      },
-      boxShadow: {
-        card: "0 4px 16px rgba(33, 27, 29, 0.08)",
-      },
-    },
-  },
-};
+These are the rules the app is built on. Each says where it is enforced, so
+the next change is held to it rather than to memory.
 
----
+Surfaces
 
-33. Example UI Copy
+- The page is lime-wash (night in dark). Sheets, rows and the search bar are
+  white (night surface). A surface that floats above the page carries a
+  hairline ring and a soft shadow (AppColours.card); something lifted over the
+  map carries a deeper one (AppColours.lift). There are no other shadows.
+- Enforced by: roles.dart (card, lift); no BoxShadow outside lib/core in
+  practice, checked in review.
 
-Empty Map Area
+Rows, not cards
 
-No jobs are posted in this area yet.
+- A list is rows on one surface with hairlines between them. A card is for
+  something that sits above the page (the map's preview, a sheet), never for
+  an item in a list.
+- Enforced by: design_rules_test.dart ("rows are rows"), for the job and inbox
+  rows.
 
-Move the map or post the first job nearby.
+One loud status
 
-New Job
+- Only work agreed or under way gets a filled status pill (ink). Every other
+  state (taking offers, finished, called off, expired) is the quiet pill, and
+  the word says which.
+- Enforced by: StatusPill (lib/widgets/status_pill.dart).
 
-What work do you need?
+The job in hand glows turmeric
 
-Add a voice note, photo, or short message.
+- The selected pin, its area, its fare flag and its row are turmeric.
+  Selection everywhere else (a picked offer, the chosen role, a selected
+  segment or tab) takes the same turmeric wash. Nothing at rest is turmeric.
+- Enforced by: the roles (highlight, selection, accentText); turmeric text is
+  never a link colour.
 
-Location
+One filled button per screen
 
-Choose the general area
+- The action the screen is for is filled; everything else is outlined or text.
+  A hirer's offers are a radio group with one "Choose Rs. 2,500" button, not a
+  button on every offer.
 
-Your exact location will not be shown.
+Accent text in dark mode
 
-Voice Recording
+- In dark the action fill is turmeric under night text, and turmeric as words
+  is night turmeric. Fills are never used as text colours; each role has its
+  own text value (accentText), which is how dark mode passed AA.
+- Enforced by: accessibility_test.dart over every role pair.
 
-Tell people about the job
+Switch or table
 
-Speak naturally. You do not need to prepare anything.
+- Short parallel facts are read across, not down: a worker's record is one bar
+  of three cells (rating, jobs finished, usual fare) with hairlines between;
+  the wallet's history is a table with column headings and right-aligned
+  tabular amounts. Fares and times sit in fixed columns so a list reads down
+  like a departures board.
+- Enforced by: rating_test.dart and wallet_test.dart, both at 320px.
 
-Save Confirmation
+One motion curve
 
-Your job has been posted on this device.
+- Cubic(0.22, 1, 0.36, 1) for everything, at three durations (section 28).
+- Enforced by: design_rules_test.dart ("one motion curve").
 
-Local Storage Notice
+Keyboard focus is always visible
 
-This POC stores jobs only on this device.
-
-Permission Denied
-
-Location access is off
-
-You can still move the map and choose an area manually.
+- Every control shows a 2px ring when reached by keyboard, and only then:
+  ink on the page, turmeric on the ink shell, just outside a Material button.
+- Enforced by: keyboard_test.dart, which walks the app by Tab.
 
 ---
 
-34. Brand Do and Don’t
+33. Urdu
+
+- Right to left throughout, mirrored layout, figures left to right.
+- Headings in Nastaliq, body in Noto Sans Arabic (section 10).
+- Times name the part of the day: صبح، دوپہر، شام، رات, never a Latin a or p.
+
+---
+
+34. Brand Do and Don't
 
 Do
 
-- Use burgundy as the recognisable brand colour
-- Use warm neutral backgrounds
-- Make voice and photo actions visually prominent
-- Keep layouts spacious
-- Use familiar language
-- Design for narrow mobile screens first
-- Represent locations approximately
-- Use real-world photography
-- Make optional information genuinely optional
-- Show clear recovery steps when something fails
+- Keep the page calm: ink, white and lime-wash.
+- Spend turmeric only on the job in hand and what is waiting.
+- Keep peacock for voice.
+- Say states in words.
+- Line figures up in columns.
 
-Don’t
+Don't
 
-- Use green as the primary brand colour
-- Use generic purple AI gradients
-- Add sparkle or robot imagery
-- Make the interface look like a government form
-- Require long written descriptions
-- Overuse burgundy across every surface
-- Use tiny grey text
-- Hide important actions inside menus
-- Use exact home addresses by default
-- Introduce complex recruitment terminology
-- Use cultural symbols merely to signal “Pakistan”
-- Make the product feel designed only for office workers
+- Use turmeric for links, icons or decoration.
+- Add a green "success" or blue "info" colour.
+- Put a list item in a card.
+- Put two filled buttons on one screen.
+- Use a second icon family, a second curve, or text under 12px.
+- Use green-and-white "Pakistan" theming, purple gradients or neon.
 
 ---
 
 35. Brand Summary
 
-Trust Hire should be recognised by
+Trust Hire is ink and turmeric on lime-wash: a calm, legible tool for finding
+nearby work, where the one thing that matters now is the one thing that glows.
 
-[Section 35 is incomplete in the source document — the summary ends mid-sentence.
-Awaiting the remaining text.]
+---
+
+Version history
+
+0.2 (November 2026, app 0.24): ink, turmeric and lime-wash replace burgundy,
+copper and sand; Atkinson Hyperlegible Next replaces Inter; colour roles,
+design language and the rules that enforce them added; written from the app
+as built and reviewed.
+0.1: POC brand direction.

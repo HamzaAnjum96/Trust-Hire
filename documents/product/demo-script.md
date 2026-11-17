@@ -46,6 +46,13 @@ bottom of the map ("16 jobs") is how many are visible *to you* — not how many
 exist. Pins are approximate on purpose: the circle is the area, not the
 address. Tap the switch for the same jobs as a list; tap it again for the map.
 
+**Tap a pin.** It turns turmeric, with its area washed turmeric and its fare
+on a turmeric flag above it; the same job's row in the list is turmeric too.
+That is the one thing on screen that glows. Everything else is ink on the
+lime-wash ground, peacock marks a voice note and nothing else, and brick only
+ever means a loss. The switch stays above the preview card, so the list is
+still one tap away.
+
 **The notice under the search bar.** *"Jobs only reach you when they match a trade
 you do."* This is Section 8 working, and it is why the count is lower than the
 183 jobs in the seed. Tap the ✕ to dismiss it; it stays dismissed for this
@@ -94,9 +101,12 @@ What to point at, in this order:
    after acceptance, and the copy was changed in the same sprint as the
    behaviour — a promise left in place after it stops being true is worse than
    never having made it.
-4. **Choose an offer.** The fare locks at that number. It is written once, at
-   acceptance, and nothing in the app can rewrite it — which is what makes the
-   commission trustworthy.
+4. **Choose an offer.** The offers are a radio group: tap one and it takes
+   the turmeric wash, and the one button under them now names the fare,
+   *Choose Rs. 4,500*. Nothing is chosen for her, so until she picks, the
+   button says *Choose an offer* and does nothing. The fare locks at that
+   number. It is written once, at acceptance, and nothing in the app can
+   rewrite it — which is what makes the commission trustworthy.
 
 **Also worth showing:** a posting described only by a voice note carries
 *"Described by voice only"*. That is a partial WCAG 1.2.1 conformance stated
@@ -134,11 +144,15 @@ on (Stop 8b), a model explains the range — and is held to the same evidence.
 
 **Go:** Profile. A worker's profile carries what a hirer will judge them on:
 their public record, their trades, their wallet, their directory listing. Hina's
-profile has none of that, because she is hiring.
+profile has none of that, because she is hiring. The record reads across as one
+bar of three figures (rating, jobs finished, usual fare), the same place for
+the same number on every worker.
 
 **Wallet.** Every line is an event — a top-up, a commission, the first-job
 credit. **There is no balance field anywhere**: the balance is those entries
 added up. Nothing can drift, because there is no second number to drift from.
+The history is a table: each amount in one right-aligned column, and under it
+the balance that line left, so you can follow the arithmetic down the page.
 
 **Then be:** Bilal Awan, Karachi.
 

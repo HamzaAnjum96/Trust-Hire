@@ -18,6 +18,8 @@ deployment configuration. Every notable change is recorded in
 Trust-Hire/
 ├── README.md                     ← you are here; explains every folder below
 ├── CHANGELOG.md                  ← running log of notable changes
+├── PRODUCT.md                    ← who the app is for and how it must feel; Impeccable reads it
+├── DESIGN.md                     ← the design system as built (0.24), written by Impeccable's documenter
 ├── AGENTS.md                     ← instructions for AI coding agents
 ├── CLAUDE.md                     ← Claude Code entry point → AGENTS.md
 │
@@ -71,9 +73,9 @@ it is for.
 | `agile/sprint-planning/` | [`poc-sprint-plan.md`](documents/agile/sprint-planning/poc-sprint-plan.md) is the master plan for the POC — vision, goals, constraints, and Sprints 0–6 as originally scoped — the build ran to Sprint 13. [`phase-1-sprint-plan.md`](documents/agile/sprint-planning/phase-1-sprint-plan.md) plans what follows it, P1-1 to P1-9. Alongside them, one document per sprint as it is planned in detail: sprint goal, committed scope, team capacity, risks and dependencies, definition of done. Name those `sprint-NN-planning.md`, zero-padded. |
 | `agile/backlog/` | Epics (`epic-<slug>.md`) and user stories (`story-<slug>.md`) with testable acceptance criteria. A story is *ready* when its criteria are testable and its open questions are resolved — only ready stories get pulled into planning. |
 | `agile/retrospectives/` | `sprint-NN-retro.md`, matching the sprint number, or `phase-N-retro.md` for a whole phase — [`phase-1-retro.md`](documents/agile/retrospectives/phase-1-retro.md) covers P1-1 to P1-7 and [`p1-8a-p1-9-retro.md`](documents/agile/retrospectives/p1-8a-p1-9-retro.md) the two after it, and [`0-15-x-retro.md`](documents/agile/retrospectives/0-15-x-retro.md) the three UI and refactor rounds after *that* — which is where the carried actions' current status lives. What went well, what did not, and **actions with named owners**. Carry unfinished actions forward explicitly. Write it at the end of the sprint; a retro covering seven of them at once is archaeology. |
-| `brand-guidelines/` | [`brand-guidelines.md`](documents/brand-guidelines/brand-guidelines.md) is the source of truth: positioning, the burgundy/copper/sand palette, typography, logo direction, iconography, map styling, voice and tone, component specs, motion, accessibility, dark mode, and design tokens. Anything user-facing should be traceable back to it. Add new colours with their hex value *and* intended use; keep source assets next to exports. |
-| `product/` | [`roadmap.md`](documents/product/roadmap.md) sets out what comes after the POC. [`phase-1-system-logic.md`](documents/product/phase-1-system-logic.md) specifies a fuller two-sided marketplace, and [`poc-vs-phase-1.md`](documents/product/poc-vs-phase-1.md) reconciles the two — **read that before building against either**. [`demo-script.md`](documents/product/demo-script.md) walks somebody through the built app in about fifteen minutes, stop by stop — the fare suggestion, a Stripe test payment, the assistant and the on-device AI included — and every stop is checked by `test/demo_walkthrough_test.dart`, so the script cannot rot quietly. [`ux-audit-response.md`](documents/product/ux-audit-response.md) answers the UI/UX audit finding by finding: done, scheduled, or declined with a reason. [`prd-payments-and-fare-agent.md`](documents/product/prd-payments-and-fare-agent.md) covers the Stripe integration and the AI fare agent the evaluators asked for — requirements, non-goals, and a three-minute demo on the deployed site; the agent runs in the visitor's own browser. Alongside them: vision, PRDs (`prd-<slug>.md`), personas, success metrics. State non-goals as clearly as goals, and number requirements so backlog stories can reference them. |
-| `design/` | User flows, wireframes, mockups, design-system and accessibility decisions. Link the live design tool **and** commit a dated export — links rot. Record the reasoning, not just the picture. [`2026-11-04-redesign.md`](documents/design/2026-11-04-redesign.md) records the 0.23 redesign: what was wrong with the structure, what each control is for now, and what was kept on purpose. |
+| `brand-guidelines/` | [`brand-guidelines.md`](documents/brand-guidelines/brand-guidelines.md) is the source of truth: positioning, the ink, turmeric and lime-wash palette (v0.2, since 0.24), typography, logo direction, iconography, map styling, voice and tone, component specs, motion, accessibility, dark mode, and design tokens. Anything user-facing should be traceable back to it. Add new colours with their hex value *and* intended use; keep source assets next to exports. |
+| `product/` | [`roadmap.md`](documents/product/roadmap.md) sets out what comes after the POC. [`phase-1-system-logic.md`](documents/product/phase-1-system-logic.md) specifies a fuller two-sided marketplace, and [`poc-vs-phase-1.md`](documents/product/poc-vs-phase-1.md) reconciles the two — **read that before building against either**. [`demo-script.md`](documents/product/demo-script.md) walks somebody through the built app in about fifteen minutes, stop by stop — the fare suggestion, a Stripe test payment, the assistant and the on-device AI included — and every stop is checked by `test/demo_walkthrough_test.dart`, so the script cannot rot quietly. [`ux-audit-response.md`](documents/product/ux-audit-response.md) answers the UI/UX audit finding by finding: done, scheduled, or declined with a reason. [`prd-payments-and-fare-agent.md`](documents/product/prd-payments-and-fare-agent.md) covers the Stripe integration and the AI fare agent the evaluators asked for — requirements, non-goals, and a three-minute demo on the deployed site; the agent runs in the visitor's own browser. [`product-context.md`](documents/product/product-context.md) is the voice: who reads the app, the string rules (sentence case, no em dashes, a button says what happens), the glossary and the never-say list. [`claims.md`](documents/product/claims.md) registers every promise the interface makes ("The fare is fixed once you choose") with the string key and the test-sweep rule that keeps it true; `test/claims_test.dart` fails if either disappears. [`2026-11-17-copy-audit.md`](documents/product/2026-11-17-copy-audit.md) is the 0.24 copy pass, before and after. Alongside them: vision, PRDs (`prd-<slug>.md`), personas, success metrics. State non-goals as clearly as goals, and number requirements so backlog stories can reference them. |
+| `design/` | User flows, wireframes, mockups, design-system and accessibility decisions. Link the live design tool **and** commit a dated export — links rot. Record the reasoning, not just the picture. [`2026-11-04-redesign.md`](documents/design/2026-11-04-redesign.md) records the 0.23 redesign: what was wrong with the structure, what each control is for now, and what was kept on purpose. [`2026-11-17-playbook-plan.md`](documents/design/2026-11-17-playbook-plan.md) is the 0.24 plan (WP1–WP12 and the reskin, RS1–RS9) and [`2026-11-17-reskin-direction.md`](documents/design/2026-11-17-reskin-direction.md) the reskin's direction contract, the committed copy of what Impeccable reviewed against; [`2026-11-17-reskin-before-after.jpg`](documents/design/2026-11-17-reskin-before-after.jpg) shows 0.23.3 above 0.24.0. |
 | `research/` | User interviews, competitor analysis, market sizing, surveys. Separate observation from interpretation. **No personal data** — refer to participants by reference (`P3`), and keep names, CVs, and recordings out of the repository. |
 | `meeting-notes/` | `YYYY-MM-DD-<topic>.md`. Decisions and owner-assigned actions are the part worth keeping; reflect anything structural into `product/` or `code/` too, because nobody will find it here later. |
 
@@ -607,7 +609,8 @@ only presence outside the app — the browser tab, the shared link, the installe
 icon, and everything a crawler that does not run JavaScript can see. They are
 deliberately not Flutter's defaults, and `test/web_shell_test.dart` fails if
 they drift back. Regenerate the icons with `python3 tool/generate_app_icons.py`
-after any change to the mark.
+after any change to the mark: it draws the web's icons, the favicon, Android's
+launcher icons and the iOS set, and writes each file's provenance into it.
 
 **Running it**
 
@@ -643,6 +646,24 @@ name on the rail. Activity holds *Updates*, *Messages* and *Your jobs*, and
 the last is one list filtered three ways — Posted, Offers, Saved. The
 reasoning is in
 [`documents/design/2026-11-04-redesign.md`](documents/design/2026-11-04-redesign.md).
+
+**The design system (since 0.24).** Screens never name a colour. They ask
+`context.colours` for a role (`action`, `accentText`, `highlight`, `voice`,
+`bad`, `pin`, `shell`…) from `lib/core/roles.dart`, which holds both themes;
+`lib/core/tokens.dart` holds the palette, type scale, radii and the one motion
+curve, and `lib/core/theme.dart` builds Material's theme from the roles. A
+reskin changes those three files. `test/design_rules_test.dart` reads the
+source and fails on a palette colour, a raw `Color(0x…)`, a Material colour
+constant or a curve outside `lib/core/`, on text under 12px, on tracking set
+anywhere but the type scale, on an icon outside the rounded set, on peacock
+anywhere but a voice note, and on a card inside a list row. `DESIGN.md` at the
+root describes the system as built, with its named rules, and
+`documents/brand-guidelines/` is the brand file (v0.2) that cites the test or
+token behind each rule. Type is Atkinson Hyperlegible Next, cut to four static
+weights with tabular figures, plus Noto Sans Arabic and Noto Nastaliq Urdu.
+Custom controls show keyboard focus with `lib/widgets/focus_ring.dart`, and
+`test/keyboard_test.dart` walks the shell by Tab and fails on any stop with no
+visible ring.
 
 **Checks**
 
@@ -687,9 +708,9 @@ value measures nothing.
 
 The suite includes an accessibility audit
 (`test/accessibility_test.dart`) that runs Flutter's tap-target, semantic-label
-and text-contrast guidelines against the live app, and checks the palette's
-contrast ratios against WCAG AA — so a regression there fails the build rather
-than shipping.
+and text-contrast guidelines against the live app, and checks every colour
+role pair in both themes against WCAG AA (3:1 for borders and the shell's
+selected mark) — so a regression there fails the build rather than shipping.
 
 **`test/surfaces_test.dart` runs every screen at six window shapes, in both
 themes and both languages.** It asserts almost nothing about what is on screen
@@ -750,7 +771,8 @@ python3 -m http.server 8099 --directory /tmp/serve
 purpose-built style per brightness rather than a filter over a shared raster,
 since darkening a standard map produces muddy greens and hurts label
 legibility. Place names come from a separate label layer drawn *above* the
-brand tint, so the tint never dims them. Neither needs an API key, so the app
+brand tint (lime-wash by day, night slate in dark), so the tint never dims
+them. Neither needs an API key, so the app
 runs from a fresh checkout with no setup.
 
 It used to be CARTO's Positron and Dark Matter, until CARTO started answering
@@ -896,7 +918,9 @@ dashboards; `artifact-design` covers shareable HTML pages.
 **Project design skills** live in `.claude/skills/`, committed, so they load
 for anyone who opens the repository in Claude Code. `skills-lock.json` records
 where three of them came from; Impeccable has its own installer. The 0.23
-redesign was done with all four, held to `documents/brand-guidelines/`.
+redesign and the 0.24 reskin were done with all four, held to
+`documents/brand-guidelines/`; the reskin's direction, finish review and
+`DESIGN.md` came from Impeccable.
 
 | Skill | Source | Licence | What it is for |
 | --- | --- | --- | --- |

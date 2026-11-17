@@ -326,3 +326,35 @@ RS4–RS9 start once WP2, WP4, WP6 and WP8 are in.
 
 - Marketing-site devices (see the table above).
 - Real backend work. None of this touches `code/backend/`.
+
+## Built (0.24.0)
+
+Everything above was built on 2026-11-17, unattended at the owner's word ("Do
+everything up to RS9. Don't ask me."). Decisions taken on the way:
+
+- **The Post slot is white, not turmeric.** Built as the direction said, a
+  turmeric Post pill beside the turmeric "you are here" indicator read as a
+  second selected tab. The finish reviewer agreed: the signature move (turmeric
+  only for selection and what is waiting) outranks the first-viewport detail.
+- **Sentence case everywhere**, buttons included, and no em dashes in strings.
+- **Offers are a radio group with one button that names the fare**, rather than
+  a filled button per offer (WP3). The light-mode radio stays ink for contrast;
+  the selected row's turmeric wash carries the selection.
+- **The ledger shows the balance under each amount**, not in a second column:
+  two money columns do not fit beside a description at 320px (WP5).
+- **Focus rings follow `:focus-visible`**, showing only after a key press:
+  Flutter treats a mouse as keyboard mode, and clicking the map ringed it
+  (WP11).
+- **Section numbers in the brand file were kept** wherever a topic carried
+  over, because code comments cite them (WP12).
+- **The finish review returned *fix*** with eight findings: blue and green
+  signal hues, turmeric used as a link colour, a white fare flag, Urdu headings
+  not in Nastaliq, "7:30 a" in Urdu, the view switch hidden with a job
+  selected, four different selection treatments, and colour fields used as
+  decoration (the turmeric intro, the ink wallet slab). All eight were fixed;
+  the verdict passes scored them resolved and returned *ship*. Still open, as
+  a ceiling note only: the dark basemap is a neutral grey, not tinted to
+  night slate.
+
+Before and after: [`2026-11-17-reskin-before-after.jpg`](2026-11-17-reskin-before-after.jpg)
+(0.23.3 above, 0.24.0 below: map, selected pin, list, job, profile, dark, Urdu).

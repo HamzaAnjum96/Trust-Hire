@@ -12,6 +12,106 @@ that heading to the version and date, and open a fresh `[Unreleased]`.
 
 ## [Unreleased]
 
+### 0.24.0 — The reskin: ink and turmeric on lime-wash
+
+The 0.23 structure is unchanged; the look is new, and the rules behind it are
+now enforced by tests. Planned in
+`documents/design/2026-11-17-playbook-plan.md` (WP1–WP12, RS1–RS9), directed in
+`documents/design/2026-11-17-reskin-direction.md`, built with the four design
+skills and reviewed by Impeccable's finish reviewer, which returned *fix* with
+eight findings and *ship* once all eight were resolved.
+
+#### Changed
+
+- **A new palette.** A cool lime-wash page (#F3F5F7), white sheets, ink
+  (#16202A) for text and every filled action. Turmeric (#F2A900) marks only
+  what is selected or waiting: the selected pin, its area and its fare flag,
+  its row, the navigation indicator, a picked offer. Peacock (#0B6E6B) is for
+  voice notes and nothing else; brick (#B8321E) for loss. Success,
+  information and a person's location are ink, said in words rather than in
+  green or blue. Dark mode is night slate (#0E141A), where turmeric becomes
+  the action fill. Burgundy, copper and sand are gone.
+- **The navigation shell is ink**, the bar and the rail, with a turmeric
+  indicator. *Post a job* is a white pill with an ink plus, so it can never be
+  mistaken for the selected tab.
+- **Type is Atkinson Hyperlegible Next**, with tabular figures, in four static
+  weights (about 190 KB; Inter was 1.3 MB). Urdu headings, titles, the app bar
+  and dialogs are in Noto Nastaliq Urdu, bundled since 0.18 and never used
+  until now; Urdu body text stays in Noto Sans Arabic.
+- **Rounded, filled Material icons** throughout; an outline only where it
+  carries state (an unsaved bookmark).
+- **Pill buttons, 52px tall.** One filled button per screen.
+- **The hirer's offers are a radio group** with one button that names the
+  fare: *Choose Rs. 4,500*. It was a filled *Choose* on every offer.
+- **A worker's record is a fact bar**: rating, jobs finished and usual fare,
+  side by side with hairlines between, read aloud as the old sentences.
+- **The wallet's history is a table**, with column headings, amounts in one
+  right-aligned column, and the balance each line left. The balance leads the
+  page in ink (brick in debt) instead of on a coloured slab.
+- **The map**: ink pins with white glyphs; the selected pin, its area and its
+  fare flag turmeric; your own pins drawn inverted; your location an ink dot.
+  The basemap is tinted toward the page colour. The *16 jobs* switch stays on
+  screen while a job's preview is open.
+- **The intro** is on the page's ground; the current page dot is turmeric.
+- **Urdu times name the part of the day** (صبح، دوپہر، شام، رات). intl's Urdu
+  data printed "7:30 a".
+- **Copy**: sentence case everywhere, no em dashes, and buttons that say what
+  happens (*Post job*, *Show number*). 44 strings rewritten; the audit is in
+  `documents/product/2026-11-17-copy-audit.md`.
+- **App icons**: an ink pin on turmeric for the web, Android and iOS. Android
+  and iOS were still Flutter's blue logo.
+- The deploy runs on `ubuntu-24.04` instead of `ubuntu-latest`.
+
+#### Added
+
+- **Colour roles** (`lib/core/roles.dart`): screens ask for `action`,
+  `highlight`, `voice`, `bad`… and never name a palette colour. Both themes
+  live there; a reskin changes it and `tokens.dart`.
+- **`test/design_rules_test.dart`** fails the build on a palette colour, a raw
+  colour value or a Material colour constant outside `lib/core/`, on text
+  under 12px, on tracking outside the type scale, on a second motion curve, on
+  an icon outside the rounded set, on peacock anywhere but a voice note, and
+  on a card inside a list row.
+- **The contrast test checks every role pair in both themes**, instead of a
+  hand-kept list of brand colours.
+- **Keyboard focus is visible on every control.** A 2px ring (`FocusRing`) on
+  the app's own controls and an outline on Material's buttons, shown only
+  after a key press, as the web's `:focus-visible`. Arrow keys move along the
+  bar and down the rail. `test/keyboard_test.dart` walks the shell by Tab and
+  fails on any stop with no visible ring.
+- **`PRODUCT.md`** at the root (who the app is for, read by Impeccable),
+  **`documents/product/product-context.md`** (voice, string rules, glossary)
+  and **`documents/product/claims.md`**, a register of every promise the
+  interface makes with the test that keeps it true; `test/claims_test.dart`
+  fails if a listed string or rule disappears.
+- **`tool/look_web.js`** drives the web build through Flutter's semantics tree
+  by ARB key, so one script runs in English and Urdu, and captures a standard
+  set at 390 (light, dark, Urdu), 768, 980 and 1440. With `--smoke` it fails
+  on page errors, console errors, failed requests or a missing control.
+- **The deploy smoke-tests the built site in Chromium** before publishing.
+- Every shipping raster records its provenance in a PNG text chunk.
+- The design skills' licences and sources, under `.claude/skills/*/`.
+
+#### Fixed
+
+- **Peacock was on three things that are not voice notes**: the "Your
+  posting" badge, the post form's photo tiles and the missing-photo glyph.
+  The badge is now drawn inverted, like your own pins; the others are ink.
+
+#### Removed
+
+- The `feature` and `intro` colour roles; leaf, amber and indigo from the
+  palette; one motion curve (`emphasisCurve`); the Inter font files.
+
+#### Docs
+
+- `documents/brand-guidelines/brand-guidelines.md` is v0.2, written from the
+  app as built, with a *Design language* section that names the test or token
+  behind each rule. Section numbers are kept where a topic carried over,
+  since the code cites them.
+- `DESIGN.md` at the root, written by Impeccable's documenter after the finish
+  review.
+
 ### 0.23.3 — The redesign, verdict pass
 
 #### Changed
