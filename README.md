@@ -545,11 +545,12 @@ code/frontend/
 │   ├── seed/         ← jobs, users, offers, ratings, accounts, directory, admin
 │   ├── images/       ← placeholder job photos
 │   ├── audio/        ← placeholder voice notes
-│   └── fonts/        ← Inter, Noto Sans Arabic, Noto Nastaliq Urdu
+│   └── fonts/        ← Atkinson Hyperlegible Next, Noto Sans Arabic, Noto Nastaliq Urdu
 ├── web/              ← the web shell: metadata, manifest, boot screen, icons,
 │                        and ai/ — the WebLLM bridge, loaded only when switched on
 ├── test/
-└── tool/             ← dev scripts (seed data, assets, icons, the test sweep)
+└── tool/             ← dev scripts (seed data, assets, icons, the test sweep,
+                         look_web.js for looking at the web build)
 ```
 
 **Translations.** Every word on screen is in `lib/l10n/app_en.arb` and
@@ -717,9 +718,24 @@ python3 -m http.server 8099 --directory /tmp/serve
 - **Give it 10–15 seconds.** CanvasKit is bundled rather than fetched, and the
   boot screen sits there for a long time before the first frame.
 - **Flutter renders to a canvas, so there is no text to select.** Playwright's
-  `getByText` finds nothing and clicks silently do nothing — drive it with
-  `page.mouse.click(x, y)` read off a screenshot, and re-screenshot after each
-  step rather than assuming a click landed.
+  `getByText` finds nothing and clicks silently do nothing. Don't click by
+  coordinates read off a screenshot, either: a layout that shifts by a row
+  turns every later click into a miss. Use `tool/look_web.js`, which turns on
+  Flutter's semantics tree and taps controls by label, named by ARB key so the
+  same steps work in Urdu:
+
+  ```bash
+  node tool/look_web.js                        # the standard set → build/look/
+  node tool/look_web.js --only phone,phone-urdu
+  node tool/look_web.js --steps steps.json     # your own: shot, tap, key, dump
+  node tool/look_web.js --smoke                # fail on any error (CI runs this)
+  ```
+
+  The standard set is the intro, the map, the list, one job, and every
+  destination, at 390 (light, dark, Urdu), 768, 980 and 1440. 980 is
+  Chrome on Android with "Desktop site" ticked: a phone user who lands on the
+  rail layout sees it at about 40%. `{"dump": true}` prints every labelled
+  node on screen, which is the quickest way to find what to tap.
 - **Tiles never render in a sandbox** that blocks outbound image requests. The
   map still positions its pins correctly over a plain background; a blank
   basemap in a screenshot is the network, not the app.
