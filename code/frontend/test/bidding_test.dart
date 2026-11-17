@@ -311,7 +311,7 @@ void main() {
 
       expect(find.text('Offers'), findsOneWidget);
       expect(find.textContaining('Nobody has offered yet'), findsOneWidget);
-      expect(find.text('Choose'), findsNothing);
+      expect(find.textContaining('Choose'), findsNothing);
     });
 
     testWidgets('choosing locks the fare and closes bidding', (tester) async {
@@ -323,7 +323,23 @@ void main() {
       await harness.revealOffers();
       expect(find.text('Rs. 1,800'), findsWidgets);
 
-      await tester.tap(find.text('Choose').first);
+      // Nothing is selected for the hirer: the one button waits, and says
+      // what it is waiting for.
+      final waiting = tester.widget<FilledButton>(
+        find.ancestor(
+          of: find.text('Choose an offer', skipOffstage: false),
+          matching: find.byType(FilledButton),
+        ),
+      );
+      expect(waiting.onPressed, isNull);
+
+      // Selecting an offer names it on the button, so the hirer sees what
+      // they are agreeing to before they press.
+      await tester.ensureVisible(find.byType(Radio<String>).first);
+      await tester.tap(find.byType(Radio<String>).first);
+      await harness.settle();
+      await tester.ensureVisible(find.text('Choose Rs. 1,800'));
+      await tester.tap(find.text('Choose Rs. 1,800'));
       await harness.settle();
       // The warning is repeated in the dialog, deliberately: it is the last
       // moment the hirer can change their mind.
@@ -340,7 +356,8 @@ void main() {
       expect(harness.jobs.jobById(posted.id)!.agreedFare, 1800);
       expect(harness.bids.myBidOn(posted.id)!.status, BidStatus.accepted);
       // No second choice is on offer once one is made.
-      expect(find.text('Choose'), findsNothing);
+      expect(find.textContaining('Choose', skipOffstage: false), findsNothing);
+      expect(find.byType(Radio<String>, skipOffstage: false), findsNothing);
       // skipOffstage: the sheet is a ListView and the offers can sit outside
       // the built range once the dialog has closed and it has re-laid out.
       expect(find.text('Chosen', skipOffstage: false), findsOneWidget);

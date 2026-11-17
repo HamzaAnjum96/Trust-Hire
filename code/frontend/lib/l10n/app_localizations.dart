@@ -134,6 +134,18 @@ abstract class AppStrings {
   /// **'Post a job'**
   String get postAJob;
 
+  /// The one button under a hirer's offers, once one is selected
+  ///
+  /// In en, this message translates to:
+  /// **'Choose {amount}'**
+  String chooseOffer(String amount);
+
+  /// The same button before an offer is selected; disabled
+  ///
+  /// In en, this message translates to:
+  /// **'Choose an offer'**
+  String get chooseAnOffer;
+
   /// How many jobs the filters leave, out of how many there are; a heading over the results
   ///
   /// In en, this message translates to:

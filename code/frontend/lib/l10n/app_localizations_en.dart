@@ -27,6 +27,14 @@ class AppStringsEn extends AppStrings {
   String get postAJob => 'Post a job';
 
   @override
+  String chooseOffer(String amount) {
+    return 'Choose $amount';
+  }
+
+  @override
+  String get chooseAnOffer => 'Choose an offer';
+
+  @override
   String jobCountOf(int shown, int total) {
     return '$shown of $total jobs';
   }

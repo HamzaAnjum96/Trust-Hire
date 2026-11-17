@@ -27,6 +27,14 @@ class AppStringsUr extends AppStrings {
   String get postAJob => 'کام لگائیں';
 
   @override
+  String chooseOffer(String amount) {
+    return '$amount پر منتخب کریں';
+  }
+
+  @override
+  String get chooseAnOffer => 'کوئی پیشکش منتخب کریں';
+
+  @override
   String jobCountOf(int shown, int total) {
     return '$total میں سے $shown کام';
   }

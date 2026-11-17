@@ -211,11 +211,20 @@ class _VerificationScreenState extends State<VerificationScreen> {
         const SizedBox(height: BrandSizing.spaceSm),
         Text(strings.verifyCnicPhotoNote, style: theme.textTheme.labelSmall),
         const SizedBox(height: BrandSizing.spaceMd),
-        FilledButton.icon(
-          onPressed: _submitCnic,
-          icon: const Icon(Icons.badge_rounded),
-          label: Text(strings.verifyCnicSubmit),
-        ),
+        // One filled button on the screen. While a code is waiting to be
+        // typed in, confirming it is the step in flight, so this steps back.
+        if (context.read<VerificationController>().hasCodeOutstanding)
+          OutlinedButton.icon(
+            onPressed: _submitCnic,
+            icon: const Icon(Icons.badge_rounded),
+            label: Text(strings.verifyCnicSubmit),
+          )
+        else
+          FilledButton.icon(
+            onPressed: _submitCnic,
+            icon: const Icon(Icons.badge_rounded),
+            label: Text(strings.verifyCnicSubmit),
+          ),
       ],
     );
   }

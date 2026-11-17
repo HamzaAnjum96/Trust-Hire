@@ -6,6 +6,19 @@
   "navJobs": "Jobs",
   "navSettings": "Settings",
   "postAJob": "Post a job",
+  "chooseOffer": "Choose {amount}",
+  "@chooseOffer": {
+    "description": "The one button under a hirer's offers, once one is selected",
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "chooseAnOffer": "Choose an offer",
+  "@chooseAnOffer": {
+    "description": "The same button before an offer is selected; disabled"
+  },
   "jobCountOf": "{shown} of {total} jobs",
   "@jobCountOf": {
     "description": "How many jobs the filters leave, out of how many there are; a heading over the results",

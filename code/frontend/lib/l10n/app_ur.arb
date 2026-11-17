@@ -6,6 +6,8 @@
   "navJobs": "کام",
   "navSettings": "ترتیبات",
   "postAJob": "کام لگائیں",
+  "chooseOffer": "{amount} پر منتخب کریں",
+  "chooseAnOffer": "کوئی پیشکش منتخب کریں",
   "jobCountOf": "{total} میں سے {shown} کام",
   "contactYours": "یہ آپ کا نمبر ہے۔ باقی سب اسے \"نمبر دکھائیں\" کے پیچھے دیکھتے ہیں۔",
   "showAsList": "فہرست میں دکھائیں",
