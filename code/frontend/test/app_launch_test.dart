@@ -86,7 +86,7 @@ void main() {
     expect(find.text('Profile'), findsOneWidget);
 
     // Primary action is reachable from the landing screen.
-    expect(find.text('Post a Job'), findsOneWidget);
+    expect(find.text('Post a job'), findsOneWidget);
 
     // The map is the landing surface, under the search bar.
     expect(find.byType(JobMap), findsOneWidget);
@@ -155,7 +155,7 @@ void main() {
     await tester.pumpWidget(TrustHireApp(store: store));
     await settle(tester);
 
-    await tester.tap(find.text('Post a Job'));
+    await tester.tap(find.text('Post a job'));
     await settle(tester);
 
     expect(find.text('Post a job'), findsOneWidget);

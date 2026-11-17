@@ -33,7 +33,7 @@ class AppStringsUr extends AppStrings {
 
   @override
   String get contactYours =>
-      'یہ آپ کا نمبر ہے۔ باقی سب اسے \"رابطہ دکھائیں\" کے پیچھے دیکھتے ہیں۔';
+      'یہ آپ کا نمبر ہے۔ باقی سب اسے \"نمبر دکھائیں\" کے پیچھے دیکھتے ہیں۔';
 
   @override
   String get showAsList => 'فہرست میں دکھائیں';
@@ -344,7 +344,7 @@ class AppStringsUr extends AppStrings {
   String get couldNotSave => 'آپ کا کام محفوظ نہیں ہو سکا۔ دوبارہ کوشش کریں۔';
 
   @override
-  String get saveJob => 'کام محفوظ کریں';
+  String get saveJob => 'کام لگائیں';
 
   @override
   String get saveChanges => 'تبدیلیاں محفوظ کریں';
@@ -520,7 +520,7 @@ class AppStringsUr extends AppStrings {
   String get contact => 'رابطہ';
 
   @override
-  String get contactShow => 'رابطہ دکھائیں';
+  String get contactShow => 'نمبر دکھائیں';
 
   @override
   String get contactHiddenNotice =>

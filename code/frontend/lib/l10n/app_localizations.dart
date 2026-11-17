@@ -131,7 +131,7 @@ abstract class AppStrings {
   /// No description provided for @postAJob.
   ///
   /// In en, this message translates to:
-  /// **'Post a Job'**
+  /// **'Post a job'**
   String get postAJob;
 
   /// How many jobs the filters leave, out of how many there are; a heading over the results
@@ -143,7 +143,7 @@ abstract class AppStrings {
   /// On the poster's own job, in place of the Show Contact button
   ///
   /// In en, this message translates to:
-  /// **'This is your number. Everyone else sees it behind Show Contact.'**
+  /// **'This is your number. Everyone else sees it behind Show number.'**
   String get contactYours;
 
   /// Switches the Jobs destination from the map to a list of the same results
@@ -305,7 +305,7 @@ abstract class AppStrings {
   /// No description provided for @todaysJobs.
   ///
   /// In en, this message translates to:
-  /// **'Today\'s Jobs'**
+  /// **'Today\'s jobs'**
   String get todaysJobs;
 
   /// No description provided for @tomorrow.
@@ -329,7 +329,7 @@ abstract class AppStrings {
   /// No description provided for @nearMe.
   ///
   /// In en, this message translates to:
-  /// **'Near Me'**
+  /// **'Near me'**
   String get nearMe;
 
   /// No description provided for @anyDistance.
@@ -377,19 +377,19 @@ abstract class AppStrings {
   /// No description provided for @clearAll.
   ///
   /// In en, this message translates to:
-  /// **'Clear All'**
+  /// **'Clear all'**
   String get clearAll;
 
   /// No description provided for @clearFilters.
   ///
   /// In en, this message translates to:
-  /// **'Clear Filters'**
+  /// **'Clear filters'**
   String get clearFilters;
 
   /// No description provided for @showJobs.
   ///
   /// In en, this message translates to:
-  /// **'Show Jobs'**
+  /// **'Show jobs'**
   String get showJobs;
 
   /// No description provided for @filterHowFar.
@@ -575,13 +575,13 @@ abstract class AppStrings {
   /// No description provided for @voiceNoteAdded.
   ///
   /// In en, this message translates to:
-  /// **'Voice Note Added'**
+  /// **'Voice note added'**
   String get voiceNoteAdded;
 
   /// No description provided for @recordAgain.
   ///
   /// In en, this message translates to:
-  /// **'Record Again'**
+  /// **'Record again'**
   String get recordAgain;
 
   /// No description provided for @removeVoiceNote.
@@ -599,13 +599,13 @@ abstract class AppStrings {
   /// No description provided for @takePhoto.
   ///
   /// In en, this message translates to:
-  /// **'Take Photo'**
+  /// **'Take photo'**
   String get takePhoto;
 
   /// No description provided for @choosePhoto.
   ///
   /// In en, this message translates to:
-  /// **'Choose Photo'**
+  /// **'Choose photo'**
   String get choosePhoto;
 
   /// No description provided for @removePhoto.
@@ -647,7 +647,7 @@ abstract class AppStrings {
   /// No description provided for @areaHelp.
   ///
   /// In en, this message translates to:
-  /// **'Choose the general area. Only this area is shown until you choose someone — then they get the exact spot.'**
+  /// **'Choose the general area. Only this area is shown until you choose someone. Then they get the exact spot.'**
   String get areaHelp;
 
   /// No description provided for @moveMapToChooseArea.
@@ -689,13 +689,13 @@ abstract class AppStrings {
   /// No description provided for @saveJob.
   ///
   /// In en, this message translates to:
-  /// **'Save Job'**
+  /// **'Post job'**
   String get saveJob;
 
   /// No description provided for @saveChanges.
   ///
   /// In en, this message translates to:
-  /// **'Save Changes'**
+  /// **'Save changes'**
   String get saveChanges;
 
   /// No description provided for @postedOnThisDevice.
@@ -713,13 +713,13 @@ abstract class AppStrings {
   /// No description provided for @editJob.
   ///
   /// In en, this message translates to:
-  /// **'Edit Job'**
+  /// **'Edit job'**
   String get editJob;
 
   /// No description provided for @deleteJob.
   ///
   /// In en, this message translates to:
-  /// **'Delete Job'**
+  /// **'Delete job'**
   String get deleteJob;
 
   /// No description provided for @deleteThisJob.
@@ -737,7 +737,7 @@ abstract class AppStrings {
   /// No description provided for @keepJob.
   ///
   /// In en, this message translates to:
-  /// **'Keep Job'**
+  /// **'Keep job'**
   String get keepJob;
 
   /// No description provided for @jobDeleted.
@@ -791,7 +791,7 @@ abstract class AppStrings {
   /// No description provided for @restoreSeedData.
   ///
   /// In en, this message translates to:
-  /// **'Restore Seed Data'**
+  /// **'Restore demo data'**
   String get restoreSeedData;
 
   /// No description provided for @restoreSeedTitle.
@@ -809,7 +809,7 @@ abstract class AppStrings {
   /// No description provided for @keepMyJobs.
   ///
   /// In en, this message translates to:
-  /// **'Keep My Jobs'**
+  /// **'Keep my jobs'**
   String get keepMyJobs;
 
   /// No description provided for @seedRestored.
@@ -941,7 +941,7 @@ abstract class AppStrings {
   /// No description provided for @contactShow.
   ///
   /// In en, this message translates to:
-  /// **'Show Contact'**
+  /// **'Show number'**
   String get contactShow;
 
   /// No description provided for @contactHiddenNotice.
@@ -965,7 +965,7 @@ abstract class AppStrings {
   /// No description provided for @copyNumber.
   ///
   /// In en, this message translates to:
-  /// **'Copy Number'**
+  /// **'Copy number'**
   String get copyNumber;
 
   /// No description provided for @numberCopied.
@@ -1103,7 +1103,7 @@ abstract class AppStrings {
   /// No description provided for @onboardVoiceBody.
   ///
   /// In en, this message translates to:
-  /// **'Post a job with a voice note, a photo, or a few words. Any one of them is enough — you never have to fill in a form.'**
+  /// **'Post a job with a voice note, a photo, or a few words. Any one of them is enough, and there is never a form to fill in.'**
   String get onboardVoiceBody;
 
   /// No description provided for @onboardLocationTitle.
@@ -1115,7 +1115,7 @@ abstract class AppStrings {
   /// No description provided for @onboardLocationBody.
   ///
   /// In en, this message translates to:
-  /// **'If you share your location, jobs are sorted by how close they are. You can say no and still use everything — just move the map yourself.'**
+  /// **'If you share your location, jobs are sorted by how close they are. You can say no and still use everything. Just move the map yourself.'**
   String get onboardLocationBody;
 
   /// No description provided for @onboardPrivacyNote.
@@ -1139,13 +1139,13 @@ abstract class AppStrings {
   /// No description provided for @onboardAllowLocation.
   ///
   /// In en, this message translates to:
-  /// **'Share My Location'**
+  /// **'Share my location'**
   String get onboardAllowLocation;
 
   /// No description provided for @onboardNotNow.
   ///
   /// In en, this message translates to:
-  /// **'Not Now'**
+  /// **'Not now'**
   String get onboardNotNow;
 
   /// No description provided for @onboardStepOf.
@@ -1157,7 +1157,7 @@ abstract class AppStrings {
   /// No description provided for @showIntroAgain.
   ///
   /// In en, this message translates to:
-  /// **'Show Intro Again'**
+  /// **'Show intro again'**
   String get showIntroAgain;
 
   /// No description provided for @introReset.
@@ -1421,7 +1421,7 @@ abstract class AppStrings {
   /// Explains the starting fare
   ///
   /// In en, this message translates to:
-  /// **'Optional. A starting point, not a price — workers will offer their own.'**
+  /// **'Optional. Workers see it as a starting point and offer their own fare.'**
   String get startingFareHelp;
 
   /// Placeholder in a fare field
@@ -1847,7 +1847,7 @@ abstract class AppStrings {
   /// Explains why an app with no accounts has an account switcher
   ///
   /// In en, this message translates to:
-  /// **'Signing in comes later. For now you can be any of these people — post a job as one, make an offer as another, and see both sides of the same hire.'**
+  /// **'Signing in comes later. For now you can be any of these people. Post a job as one, make an offer as another, and see both sides of the same hire.'**
   String get demoAccountsExplain;
 
   /// Name of the account the app starts on
@@ -2075,7 +2075,7 @@ abstract class AppStrings {
   /// No description provided for @notifSubscriptionLapsed.
   ///
   /// In en, this message translates to:
-  /// **'Your directory listing has ended — people can no longer find you'**
+  /// **'Your directory listing has ended, so people can no longer find you'**
   String get notifSubscriptionLapsed;
 
   /// No description provided for @notifVerificationApproved.
@@ -2087,7 +2087,7 @@ abstract class AppStrings {
   /// No description provided for @notifVerificationRejected.
   ///
   /// In en, this message translates to:
-  /// **'Your account has been suspended — see CNIC and phone'**
+  /// **'Your account has been suspended. See CNIC and phone'**
   String get notifVerificationRejected;
 
   /// No description provided for @refusalMessageEdited.
@@ -2153,7 +2153,7 @@ abstract class AppStrings {
   /// No description provided for @noThreadsMessage.
   ///
   /// In en, this message translates to:
-  /// **'A thread opens once a job is accepted — the same moment you each get the other\'s location.'**
+  /// **'A thread opens once a job is accepted, the same moment you each get the other\'s location.'**
   String get noThreadsMessage;
 
   /// No description provided for @messagesNotYetOpen.
@@ -2357,7 +2357,7 @@ abstract class AppStrings {
   /// No description provided for @serviceAreaRemote.
   ///
   /// In en, this message translates to:
-  /// **'Works remotely — no travel needed'**
+  /// **'Works remotely, no travel needed'**
   String get serviceAreaRemote;
 
   /// No description provided for @bookThis.
@@ -2435,7 +2435,7 @@ abstract class AppStrings {
   /// No description provided for @premiumPitch.
   ///
   /// In en, this message translates to:
-  /// **'Hirers search the directory and book you at your own price — no bidding. Listing is a subscription.'**
+  /// **'Hirers search the directory and book you at your own price, with no bidding. Listing is a subscription.'**
   String get premiumPitch;
 
   /// No description provided for @premiumActive.
@@ -2615,7 +2615,7 @@ abstract class AppStrings {
   /// No description provided for @workFromNotSet.
   ///
   /// In en, this message translates to:
-  /// **'Not set — you appear to everyone, wherever they are'**
+  /// **'Not set. You appear to everyone, wherever they are'**
   String get workFromNotSet;
 
   /// No description provided for @workFromSet.
@@ -2873,7 +2873,7 @@ abstract class AppStrings {
   /// No description provided for @adminWalletLocked.
   ///
   /// In en, this message translates to:
-  /// **'Locked out — {amount} owed'**
+  /// **'Locked out, {amount} owed'**
   String adminWalletLocked(String amount);
 
   /// No description provided for @adminWalletBalance.
@@ -2915,7 +2915,7 @@ abstract class AppStrings {
   /// No description provided for @adminLogEmptyMessage.
   ///
   /// In en, this message translates to:
-  /// **'Every admin action lands here — what it was, who it was about, why, and when.'**
+  /// **'Every admin action lands here, with what it was, who it was about, why, and when.'**
   String get adminLogEmptyMessage;
 
   /// No description provided for @adminLogIntro.
@@ -2987,7 +2987,7 @@ abstract class AppStrings {
   /// Subtitle for the staff demo account
   ///
   /// In en, this message translates to:
-  /// **'Trust Hire\'s own account — the admin panel'**
+  /// **'Trust Hire\'s own account, for the admin panel'**
   String get accountStaffHelp;
 
   /// What the admin panel holds, on the tile that opens it
@@ -3107,7 +3107,7 @@ abstract class AppStrings {
   /// No description provided for @verifyCnicMaskExplain.
   ///
   /// In en, this message translates to:
-  /// **'Only this much is kept. The whole number never leaves this screen — there is nothing the app could do with it, and holding one would be keeping a national identity number for no reason.'**
+  /// **'Only this much is kept. The whole number never leaves this screen. The app has no use for it, and holding one would mean keeping a national identity number for no reason.'**
   String get verifyCnicMaskExplain;
 
   /// No description provided for @verifyCnicNotPlausible.
@@ -3221,7 +3221,7 @@ abstract class AppStrings {
   /// No description provided for @verifyDemoSmsWhy.
   ///
   /// In en, this message translates to:
-  /// **'There is no server yet to send from, so nothing leaves the device. Everything else about this step — the expiry, the tries, the wait before you can ask again — is real.'**
+  /// **'There is no server yet to send from, so nothing leaves the device. Everything else about this step is real: the expiry, the tries, and the wait before you can ask again.'**
   String get verifyDemoSmsWhy;
 
   /// No description provided for @verifySimHeading.
@@ -3239,7 +3239,7 @@ abstract class AppStrings {
   /// No description provided for @verifySimFlagged.
   ///
   /// In en, this message translates to:
-  /// **'The name on your card does not match the name on this account. Someone will look at it — this is not a rejection, and using a family member\'s SIM is an ordinary reason for it.'**
+  /// **'The name on your card does not match the name on this account. Someone will look at it. This is not a rejection, and using a family member\'s SIM is an ordinary reason for it.'**
   String get verifySimFlagged;
 
   /// No description provided for @verifySimNotWired.
@@ -3293,7 +3293,7 @@ abstract class AppStrings {
   /// No description provided for @backendExplain.
   ///
   /// In en, this message translates to:
-  /// **'There is no server yet. This is a stand-in that behaves like one — it refuses the same things the real database would, and it can be switched off so you can see what happens when the network goes.'**
+  /// **'There is no server yet. This is a stand-in that behaves like one. It refuses the same things the real database would, and it can be switched off so you can see what happens when the network goes.'**
   String get backendExplain;
 
   /// No description provided for @syncSettled.
@@ -3311,7 +3311,7 @@ abstract class AppStrings {
   /// No description provided for @syncOffline.
   ///
   /// In en, this message translates to:
-  /// **'No connection — your work is safe'**
+  /// **'No connection. Your work is safe'**
   String get syncOffline;
 
   /// No description provided for @syncNeedsAttention.
@@ -3467,13 +3467,13 @@ abstract class AppStrings {
   /// When only asked fares exist
   ///
   /// In en, this message translates to:
-  /// **'{count, plural, =1{No agreed fares yet — this is from what 1 hirer opened at.} other{No agreed fares yet — this is from what {count} hirers opened at.}}'**
+  /// **'{count, plural, =1{No agreed fares yet, so this is from what 1 hirer opened at.} other{No agreed fares yet, so this is from what {count} hirers opened at.}}'**
   String fareAdviceFromAsked(int count);
 
   /// When there is nothing to base a suggestion on
   ///
   /// In en, this message translates to:
-  /// **'No similar jobs to compare with yet. Choose what you think is fair — workers will tell you if it is not.'**
+  /// **'No similar jobs to compare with yet. Choose what you think is fair, and workers will tell you if it is not.'**
   String get fareAdviceNothing;
 
   /// Puts the suggested fare into the field
@@ -3515,7 +3515,7 @@ abstract class AppStrings {
   /// Explains a Stripe Payment Link top-up on the GitHub Pages site
   ///
   /// In en, this message translates to:
-  /// **'Stripe test mode. No real money moves — pay with card 4242 4242 4242 4242, any future date and any CVC, and untick “Save my information with Link”. Stripe brings you back here once it is paid.'**
+  /// **'Stripe test mode. No real money moves. Pay with card 4242 4242 4242 4242, any future date and any CVC, and untick “Save my information with Link”. Stripe brings you back here once it is paid.'**
   String get topUpStripeLinkNotice;
 
   /// What a Payment Link top-up does not establish

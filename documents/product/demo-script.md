@@ -86,7 +86,7 @@ What to point at, in this order:
    row gets no extra emphasis. Edit, *Call this off* and Delete are in the ⋯
    menu beside the title, out of the way of the choice.
 2. **Contact.** Her own number is not offered back to her. The line says
-   everyone else sees it behind *Show Contact*, a button rather than a number
+   everyone else sees it behind *Show number*, a button rather than a number
    printed on the card. Asking is the moment it is revealed: as Usman, open
    the same job to see it.
 3. **The circle, and the line under it:** *"This is the general area. The exact
@@ -107,7 +107,7 @@ needs a server.
 
 ## Stop 3b — A starting fare
 
-**Still Hina.** **Tap:** **Post a Job**, in the middle of the bottom bar (at the
+**Still Hina.** **Tap:** **Post a job**, in the middle of the bottom bar (at the
 top of the rail on a wide window). Pick
 *Plumbing*, write "Kitchen tap leaking" as the message, and tap **Suggest a
 fare**.

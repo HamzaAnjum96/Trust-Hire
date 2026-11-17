@@ -5,7 +5,7 @@
   "navMap": "Map",
   "navJobs": "Jobs",
   "navSettings": "Settings",
-  "postAJob": "Post a Job",
+  "postAJob": "Post a job",
   "jobCountOf": "{shown} of {total} jobs",
   "@jobCountOf": {
     "description": "How many jobs the filters leave, out of how many there are; a heading over the results",
@@ -18,7 +18,7 @@
       }
     }
   },
-  "contactYours": "This is your number. Everyone else sees it behind Show Contact.",
+  "contactYours": "This is your number. Everyone else sees it behind Show number.",
   "@contactYours": {
     "description": "On the poster's own job, in place of the Show Contact button"
   },
@@ -87,11 +87,11 @@
   "locationNotFound": "Could not find your location. You can still move the map and choose an area manually.",
   "searchJobs": "Search jobs",
   "clearSearch": "Clear search",
-  "todaysJobs": "Today's Jobs",
+  "todaysJobs": "Today's jobs",
   "tomorrow": "Tomorrow",
   "thisWeek": "This week",
   "anyTime": "Any time",
-  "nearMe": "Near Me",
+  "nearMe": "Near me",
   "anyDistance": "Any distance",
   "withinFive": "Within 5 km",
   "withinTen": "Within 10 km",
@@ -99,9 +99,9 @@
   "photos": "Photos",
   "more": "More",
   "clear": "Clear",
-  "clearAll": "Clear All",
-  "clearFilters": "Clear Filters",
-  "showJobs": "Show Jobs",
+  "clearAll": "Clear all",
+  "clearFilters": "Clear filters",
+  "showJobs": "Show jobs",
   "filterHowFar": "How far",
   "filterIncludes": "What it includes",
   "filterKindWarning": "Jobs that did not say what kind they are will be hidden.",
@@ -156,34 +156,34 @@
   "recording": "Recording…",
   "stopRecording": "Stop recording",
   "discard": "Discard",
-  "voiceNoteAdded": "Voice Note Added",
-  "recordAgain": "Record Again",
+  "voiceNoteAdded": "Voice note added",
+  "recordAgain": "Record again",
   "removeVoiceNote": "Remove voice note",
   "microphoneOff": "Microphone access is off. You can still add a photo or type a short message.",
-  "takePhoto": "Take Photo",
-  "choosePhoto": "Choose Photo",
+  "takePhoto": "Take photo",
+  "choosePhoto": "Choose photo",
   "removePhoto": "Remove photo",
   "fieldTitle": "Title",
   "titleHint": "Short title. You can add this later.",
   "fieldMessage": "Message",
   "messageHint": "Anything else worth knowing.",
   "fieldArea": "Area",
-  "areaHelp": "Choose the general area. Only this area is shown until you choose someone — then they get the exact spot.",
+  "areaHelp": "Choose the general area. Only this area is shown until you choose someone. Then they get the exact spot.",
   "moveMapToChooseArea": "Move the map to choose the area",
   "clearTime": "Clear time",
   "whenIsWorkNeeded": "When is the work needed?",
   "whatTime": "What time?",
   "addAtLeastOne": "Add at least one voice note, photo, or message.",
   "couldNotSave": "Could not save your job. Try again.",
-  "saveJob": "Save Job",
-  "saveChanges": "Save Changes",
+  "saveJob": "Post job",
+  "saveChanges": "Save changes",
   "postedOnThisDevice": "Your job has been posted on this device.",
   "changesSaved": "Your changes have been saved on this device.",
-  "editJob": "Edit Job",
-  "deleteJob": "Delete Job",
+  "editJob": "Edit job",
+  "deleteJob": "Delete job",
   "deleteThisJob": "Delete this job?",
   "deleteJobExplanation": "It will be removed from this device. This cannot be undone.",
-  "keepJob": "Keep Job",
+  "keepJob": "Keep job",
   "jobDeleted": "Job deleted from this device.",
   "settingsStorageNotice": "This POC stores jobs only on this device. Nothing is uploaded and no account is needed.",
   "appearance": "Appearance",
@@ -192,10 +192,10 @@
   "themeDark": "Dark",
   "language": "Language",
   "restoreSeedExplanation": "Restoring the seed data removes every job you created on this device and brings back the original examples.",
-  "restoreSeedData": "Restore Seed Data",
+  "restoreSeedData": "Restore demo data",
   "restoreSeedTitle": "Restore seed data?",
   "restoreSeedWarning": "Jobs you created on this device will be removed. This cannot be undone.",
-  "keepMyJobs": "Keep My Jobs",
+  "keepMyJobs": "Keep my jobs",
   "seedRestored": "Seed data restored.",
   "voiceNoteJob": "Voice note job",
   "photoJob": "Photo job",
@@ -318,11 +318,11 @@
     }
   },
   "contact": "Contact",
-  "contactShow": "Show Contact",
+  "contactShow": "Show number",
   "contactHiddenNotice": "Contact details are shown only when you ask for them.",
   "callNumber": "Call",
   "whatsAppNumber": "WhatsApp",
-  "copyNumber": "Copy Number",
+  "copyNumber": "Copy number",
   "numberCopied": "Number copied.",
   "couldNotOpenDialer": "Could not open the phone app. The number is above, so you can dial it yourself.",
   "couldNotOpenWhatsApp": "Could not open WhatsApp. The number is above, so you can message it yourself.",
@@ -345,14 +345,14 @@
   "onboardWelcomeTitle": "Nearby work, made simple",
   "onboardWelcomeBody": "Trust Hire shows work happening near you, on a map. No account, nothing to fill in.",
   "onboardVoiceTitle": "Say it, do not type it",
-  "onboardVoiceBody": "Post a job with a voice note, a photo, or a few words. Any one of them is enough — you never have to fill in a form.",
+  "onboardVoiceBody": "Post a job with a voice note, a photo, or a few words. Any one of them is enough, and there is never a form to fill in.",
   "onboardLocationTitle": "Work near you",
-  "onboardLocationBody": "If you share your location, jobs are sorted by how close they are. You can say no and still use everything — just move the map yourself.",
+  "onboardLocationBody": "If you share your location, jobs are sorted by how close they are. You can say no and still use everything. Just move the map yourself.",
   "onboardPrivacyNote": "Your exact location stays hidden while people are offering. It is shared only with the person you choose.",
   "onboardNext": "Next",
   "onboardSkip": "Skip",
-  "onboardAllowLocation": "Share My Location",
-  "onboardNotNow": "Not Now",
+  "onboardAllowLocation": "Share my location",
+  "onboardNotNow": "Not now",
   "onboardStepOf": "Step {step} of {total}",
   "@onboardStepOf": {
     "placeholders": {
@@ -364,7 +364,7 @@
       }
     }
   },
-  "showIntroAgain": "Show Intro Again",
+  "showIntroAgain": "Show intro again",
   "introReset": "The intro will show next time you open the app.",
   "tagPlumbing": "Plumbing",
   "tagElectrical": "Electrical",
@@ -460,7 +460,7 @@
   "@fieldStartingFare": {
     "description": "Label on the fare field of the posting form"
   },
-  "startingFareHelp": "Optional. A starting point, not a price — workers will offer their own.",
+  "startingFareHelp": "Optional. Workers see it as a starting point and offer their own fare.",
   "@startingFareHelp": {
     "description": "Explains the starting fare"
   },
@@ -796,7 +796,7 @@
   "@demoAccounts": {
     "description": "Heading for the account switcher"
   },
-  "demoAccountsExplain": "Signing in comes later. For now you can be any of these people — post a job as one, make an offer as another, and see both sides of the same hire.",
+  "demoAccountsExplain": "Signing in comes later. For now you can be any of these people. Post a job as one, make an offer as another, and see both sides of the same hire.",
   "@demoAccountsExplain": {
     "description": "Explains why an app with no accounts has an account switcher"
   },
@@ -912,9 +912,9 @@
   },
   "notifWalletLocked": "Bidding is paused until you settle what you owe",
   "notifSubscriptionExpiring": "Your directory listing is ending soon",
-  "notifSubscriptionLapsed": "Your directory listing has ended — people can no longer find you",
+  "notifSubscriptionLapsed": "Your directory listing has ended, so people can no longer find you",
   "notifVerificationApproved": "Your account has been approved",
-  "notifVerificationRejected": "Your account has been suspended — see CNIC and phone",
+  "notifVerificationRejected": "Your account has been suspended. See CNIC and phone",
   "refusalMessageEdited": "A message cannot be changed after it is sent.",
   "you": "You",
   "messagesTitle": "Messages",
@@ -932,7 +932,7 @@
   "messagesEmpty": "No messages yet",
   "messagesEmptyMessage": "Anything you agree here stays with the job, so both of you can look it up later.",
   "noThreads": "No conversations yet",
-  "noThreadsMessage": "A thread opens once a job is accepted — the same moment you each get the other's location.",
+  "noThreadsMessage": "A thread opens once a job is accepted, the same moment you each get the other's location.",
   "messagesNotYetOpen": "Messages open once somebody is chosen for this job.",
   "messagesClosed": "This job is over, so the thread is read-only.",
   "messagesNotYours": "This conversation is between the hirer and the worker.",
@@ -1008,7 +1008,7 @@
       }
     }
   },
-  "serviceAreaRemote": "Works remotely — no travel needed",
+  "serviceAreaRemote": "Works remotely, no travel needed",
   "bookThis": "Book this",
   "bookingTitle": "Book {service}",
   "@bookingTitle": {
@@ -1049,7 +1049,7 @@
     }
   },
   "premiumHeading": "Be found in the directory",
-  "premiumPitch": "Hirers search the directory and book you at your own price — no bidding. Listing is a subscription.",
+  "premiumPitch": "Hirers search the directory and book you at your own price, with no bidding. Listing is a subscription.",
   "premiumActive": "Listed until {date}",
   "@premiumActive": {
     "placeholders": {
@@ -1093,7 +1093,7 @@
   "whereYouWorkFrom": "Where you travel from",
   "whereYouWorkFromHelp": "Your radius is measured from here. Only the area is shown, never an address.",
   "useMyLocation": "Use my current location",
-  "workFromNotSet": "Not set — you appear to everyone, wherever they are",
+  "workFromNotSet": "Not set. You appear to everyone, wherever they are",
   "workFromSet": "Set. People further than your radius will not see you.",
   "listingNeedsService": "Add at least one service before hirers can find you.",
   "someone": "Someone",
@@ -1166,7 +1166,7 @@
   "adminCloseDispute": "Close it",
   "adminAdjustWallet": "Adjust the balance",
   "adminUnlockWallet": "Unlock the account",
-  "adminWalletLocked": "Locked out — {amount} owed",
+  "adminWalletLocked": "Locked out, {amount} owed",
   "@adminWalletLocked": {
     "placeholders": {
       "amount": {
@@ -1187,7 +1187,7 @@
   "adminApply": "Do it",
   "adminAmountLabel": "How many tokens, plus or minus",
   "adminLogEmpty": "Nothing logged yet",
-  "adminLogEmptyMessage": "Every admin action lands here — what it was, who it was about, why, and when.",
+  "adminLogEmptyMessage": "Every admin action lands here, with what it was, who it was about, why, and when.",
   "adminLogIntro": "Every admin action, oldest at the bottom. Nothing here can be edited or removed.",
   "actionApproveUser": "Approved an account",
   "actionSuspendUser": "Suspended an account",
@@ -1206,7 +1206,7 @@
       }
     }
   },
-  "accountStaffHelp": "Trust Hire's own account — the admin panel",
+  "accountStaffHelp": "Trust Hire's own account, for the admin panel",
   "@accountStaffHelp": {
     "description": "Subtitle for the staff demo account"
   },
@@ -1253,7 +1253,7 @@
       }
     }
   },
-  "verifyCnicMaskExplain": "Only this much is kept. The whole number never leaves this screen — there is nothing the app could do with it, and holding one would be keeping a national identity number for no reason.",
+  "verifyCnicMaskExplain": "Only this much is kept. The whole number never leaves this screen. The app has no use for it, and holding one would mean keeping a national identity number for no reason.",
   "verifyCnicNotPlausible": "The card is on file, but the automated check could not confirm it. Someone will look.",
   "verifyCnicPlausible": "The number is the right shape, and the card has a name and a date of birth.",
   "verifyPhoneHeading": "Your phone",
@@ -1300,10 +1300,10 @@
     }
   },
   "verifyDemoSms": "In this demo the message appears here instead of arriving by SMS",
-  "verifyDemoSmsWhy": "There is no server yet to send from, so nothing leaves the device. Everything else about this step — the expiry, the tries, the wait before you can ask again — is real.",
+  "verifyDemoSmsWhy": "There is no server yet to send from, so nothing leaves the device. Everything else about this step is real: the expiry, the tries, and the wait before you can ask again.",
   "verifySimHeading": "Name on the SIM",
   "verifySimMatched": "The name on your card matches the name on this account.",
-  "verifySimFlagged": "The name on your card does not match the name on this account. Someone will look at it — this is not a rejection, and using a family member's SIM is an ordinary reason for it.",
+  "verifySimFlagged": "The name on your card does not match the name on this account. Someone will look at it. This is not a rejection, and using a family member's SIM is an ordinary reason for it.",
   "verifySimNotWired": "A real check asks the network who a number is registered to. That is not wired up here, so this compares against your account name instead.",
   "verifyLimitNoLookup": "Nobody has asked NADRA whether this card exists. That check is out of scope.",
   "verifyLimitPhotoUnreviewed": "Your photo has not been looked at, and will not be unless a dispute is raised about you.",
@@ -1312,10 +1312,10 @@
   "verifyStatusApproved": "Approved",
   "verifyStatusSuspended": "Suspended",
   "backendSection": "Backend",
-  "backendExplain": "There is no server yet. This is a stand-in that behaves like one — it refuses the same things the real database would, and it can be switched off so you can see what happens when the network goes.",
+  "backendExplain": "There is no server yet. This is a stand-in that behaves like one. It refuses the same things the real database would, and it can be switched off so you can see what happens when the network goes.",
   "syncSettled": "Everything is saved",
   "syncSending": "Sending",
-  "syncOffline": "No connection — your work is safe",
+  "syncOffline": "No connection. Your work is safe",
   "syncNeedsAttention": "Something needs you",
   "syncWaiting": "{count, plural, =0{Nothing waiting} =1{1 change waiting} other{{count} changes waiting}}",
   "@syncWaiting": {
@@ -1391,7 +1391,7 @@
       }
     }
   },
-  "fareAdviceFromAsked": "{count, plural, =1{No agreed fares yet — this is from what 1 hirer opened at.} other{No agreed fares yet — this is from what {count} hirers opened at.}}",
+  "fareAdviceFromAsked": "{count, plural, =1{No agreed fares yet, so this is from what 1 hirer opened at.} other{No agreed fares yet, so this is from what {count} hirers opened at.}}",
   "@fareAdviceFromAsked": {
     "description": "When only asked fares exist",
     "placeholders": {
@@ -1400,7 +1400,7 @@
       }
     }
   },
-  "fareAdviceNothing": "No similar jobs to compare with yet. Choose what you think is fair — workers will tell you if it is not.",
+  "fareAdviceNothing": "No similar jobs to compare with yet. Choose what you think is fair, and workers will tell you if it is not.",
   "@fareAdviceNothing": {
     "description": "When there is nothing to base a suggestion on"
   },
@@ -1438,7 +1438,7 @@
   "@refusalPaymentCredited": {
     "description": "The server refused crediting a Stripe payment twice"
   },
-  "topUpStripeLinkNotice": "Stripe test mode. No real money moves — pay with card 4242 4242 4242 4242, any future date and any CVC, and untick “Save my information with Link”. Stripe brings you back here once it is paid.",
+  "topUpStripeLinkNotice": "Stripe test mode. No real money moves. Pay with card 4242 4242 4242 4242, any future date and any CVC, and untick “Save my information with Link”. Stripe brings you back here once it is paid.",
   "@topUpStripeLinkNotice": {
     "description": "Explains a Stripe Payment Link top-up on the GitHub Pages site"
   },

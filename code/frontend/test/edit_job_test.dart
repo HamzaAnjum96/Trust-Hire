@@ -214,8 +214,8 @@ void main() {
       await openSheet(tester, controller, media, 'local-1');
       await openMenu(tester);
 
-      expect(find.text('Edit Job'), findsOneWidget);
-      expect(find.text('Delete Job'), findsOneWidget);
+      expect(find.text('Edit job'), findsOneWidget);
+      expect(find.text('Delete job'), findsOneWidget);
     });
 
     testWidgets('offers neither for seeded jobs', (tester) async {
@@ -226,8 +226,8 @@ void main() {
       // Not even the menu: a seeded job open to offers is not this account's,
       // and there is nothing on it this account could call off.
       expect(find.byTooltip('More actions'), findsNothing);
-      expect(find.text('Edit Job'), findsNothing);
-      expect(find.text('Delete Job'), findsNothing);
+      expect(find.text('Edit job'), findsNothing);
+      expect(find.text('Delete job'), findsNothing);
     });
 
     testWidgets('deleting asks first, and can be declined', (tester) async {
@@ -237,14 +237,14 @@ void main() {
       await openSheet(tester, controller, media, 'local-1');
       await openMenu(tester);
 
-      await tester.tap(find.text('Delete Job'));
+      await tester.tap(find.text('Delete job'));
       await tester.pumpAndSettle();
 
       // Section 22 — the destructive choice is named, never "Yes".
       expect(find.text('Delete this job?'), findsOneWidget);
-      expect(find.text('Keep Job'), findsOneWidget);
+      expect(find.text('Keep job'), findsOneWidget);
 
-      await tester.tap(find.text('Keep Job'));
+      await tester.tap(find.text('Keep job'));
       await tester.pumpAndSettle();
 
       expect(controller.jobById('local-1'), isNotNull);

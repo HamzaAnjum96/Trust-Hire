@@ -636,7 +636,7 @@ to say the rail scrolled. `LayoutSize.fromSize` is where that lives.
 **Navigation (since 0.23): four destinations and one action.** *Jobs* is the
 map and the list of the same results, switched by the pill at the bottom of
 the screen; on a desktop both are on screen at once. *Directory*, *Activity*
-and *Profile* follow. **Post a Job** is a button, never a destination: the
+and *Profile* follow. **Post a job** is a button, never a destination: the
 middle slot of the bottom bar on a phone, the first thing under the product's
 name on the rail. Activity holds *Updates*, *Messages* and *Your jobs*, and
 the last is one list filtered three ways — Posted, Offers, Saved. The

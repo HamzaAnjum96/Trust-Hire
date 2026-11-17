@@ -98,7 +98,7 @@ void main() {
       // the list are one destination, Jobs, and posting sits in the bar.
       for (final destination in [
         'Jobs',
-        'Post a Job',
+        'Post a job',
         'Directory',
         'Activity',
         'Profile',

@@ -24,7 +24,7 @@ class AppStringsEn extends AppStrings {
   String get navSettings => 'Settings';
 
   @override
-  String get postAJob => 'Post a Job';
+  String get postAJob => 'Post a job';
 
   @override
   String jobCountOf(int shown, int total) {
@@ -33,7 +33,7 @@ class AppStringsEn extends AppStrings {
 
   @override
   String get contactYours =>
-      'This is your number. Everyone else sees it behind Show Contact.';
+      'This is your number. Everyone else sees it behind Show number.';
 
   @override
   String get showAsList => 'Show as a list';
@@ -132,7 +132,7 @@ class AppStringsEn extends AppStrings {
   String get clearSearch => 'Clear search';
 
   @override
-  String get todaysJobs => 'Today\'s Jobs';
+  String get todaysJobs => 'Today\'s jobs';
 
   @override
   String get tomorrow => 'Tomorrow';
@@ -144,7 +144,7 @@ class AppStringsEn extends AppStrings {
   String get anyTime => 'Any time';
 
   @override
-  String get nearMe => 'Near Me';
+  String get nearMe => 'Near me';
 
   @override
   String get anyDistance => 'Any distance';
@@ -168,13 +168,13 @@ class AppStringsEn extends AppStrings {
   String get clear => 'Clear';
 
   @override
-  String get clearAll => 'Clear All';
+  String get clearAll => 'Clear all';
 
   @override
-  String get clearFilters => 'Clear Filters';
+  String get clearFilters => 'Clear filters';
 
   @override
-  String get showJobs => 'Show Jobs';
+  String get showJobs => 'Show jobs';
 
   @override
   String get filterHowFar => 'How far';
@@ -283,10 +283,10 @@ class AppStringsEn extends AppStrings {
   String get discard => 'Discard';
 
   @override
-  String get voiceNoteAdded => 'Voice Note Added';
+  String get voiceNoteAdded => 'Voice note added';
 
   @override
-  String get recordAgain => 'Record Again';
+  String get recordAgain => 'Record again';
 
   @override
   String get removeVoiceNote => 'Remove voice note';
@@ -296,10 +296,10 @@ class AppStringsEn extends AppStrings {
       'Microphone access is off. You can still add a photo or type a short message.';
 
   @override
-  String get takePhoto => 'Take Photo';
+  String get takePhoto => 'Take photo';
 
   @override
-  String get choosePhoto => 'Choose Photo';
+  String get choosePhoto => 'Choose photo';
 
   @override
   String get removePhoto => 'Remove photo';
@@ -321,7 +321,7 @@ class AppStringsEn extends AppStrings {
 
   @override
   String get areaHelp =>
-      'Choose the general area. Only this area is shown until you choose someone — then they get the exact spot.';
+      'Choose the general area. Only this area is shown until you choose someone. Then they get the exact spot.';
 
   @override
   String get moveMapToChooseArea => 'Move the map to choose the area';
@@ -342,10 +342,10 @@ class AppStringsEn extends AppStrings {
   String get couldNotSave => 'Could not save your job. Try again.';
 
   @override
-  String get saveJob => 'Save Job';
+  String get saveJob => 'Post job';
 
   @override
-  String get saveChanges => 'Save Changes';
+  String get saveChanges => 'Save changes';
 
   @override
   String get postedOnThisDevice => 'Your job has been posted on this device.';
@@ -354,10 +354,10 @@ class AppStringsEn extends AppStrings {
   String get changesSaved => 'Your changes have been saved on this device.';
 
   @override
-  String get editJob => 'Edit Job';
+  String get editJob => 'Edit job';
 
   @override
-  String get deleteJob => 'Delete Job';
+  String get deleteJob => 'Delete job';
 
   @override
   String get deleteThisJob => 'Delete this job?';
@@ -367,7 +367,7 @@ class AppStringsEn extends AppStrings {
       'It will be removed from this device. This cannot be undone.';
 
   @override
-  String get keepJob => 'Keep Job';
+  String get keepJob => 'Keep job';
 
   @override
   String get jobDeleted => 'Job deleted from this device.';
@@ -396,7 +396,7 @@ class AppStringsEn extends AppStrings {
       'Restoring the seed data removes every job you created on this device and brings back the original examples.';
 
   @override
-  String get restoreSeedData => 'Restore Seed Data';
+  String get restoreSeedData => 'Restore demo data';
 
   @override
   String get restoreSeedTitle => 'Restore seed data?';
@@ -406,7 +406,7 @@ class AppStringsEn extends AppStrings {
       'Jobs you created on this device will be removed. This cannot be undone.';
 
   @override
-  String get keepMyJobs => 'Keep My Jobs';
+  String get keepMyJobs => 'Keep my jobs';
 
   @override
   String get seedRestored => 'Seed data restored.';
@@ -518,7 +518,7 @@ class AppStringsEn extends AppStrings {
   String get contact => 'Contact';
 
   @override
-  String get contactShow => 'Show Contact';
+  String get contactShow => 'Show number';
 
   @override
   String get contactHiddenNotice =>
@@ -531,7 +531,7 @@ class AppStringsEn extends AppStrings {
   String get whatsAppNumber => 'WhatsApp';
 
   @override
-  String get copyNumber => 'Copy Number';
+  String get copyNumber => 'Copy number';
 
   @override
   String get numberCopied => 'Number copied.';
@@ -604,14 +604,14 @@ class AppStringsEn extends AppStrings {
 
   @override
   String get onboardVoiceBody =>
-      'Post a job with a voice note, a photo, or a few words. Any one of them is enough — you never have to fill in a form.';
+      'Post a job with a voice note, a photo, or a few words. Any one of them is enough, and there is never a form to fill in.';
 
   @override
   String get onboardLocationTitle => 'Work near you';
 
   @override
   String get onboardLocationBody =>
-      'If you share your location, jobs are sorted by how close they are. You can say no and still use everything — just move the map yourself.';
+      'If you share your location, jobs are sorted by how close they are. You can say no and still use everything. Just move the map yourself.';
 
   @override
   String get onboardPrivacyNote =>
@@ -624,10 +624,10 @@ class AppStringsEn extends AppStrings {
   String get onboardSkip => 'Skip';
 
   @override
-  String get onboardAllowLocation => 'Share My Location';
+  String get onboardAllowLocation => 'Share my location';
 
   @override
-  String get onboardNotNow => 'Not Now';
+  String get onboardNotNow => 'Not now';
 
   @override
   String onboardStepOf(int step, int total) {
@@ -635,7 +635,7 @@ class AppStringsEn extends AppStrings {
   }
 
   @override
-  String get showIntroAgain => 'Show Intro Again';
+  String get showIntroAgain => 'Show intro again';
 
   @override
   String get introReset => 'The intro will show next time you open the app.';
@@ -782,7 +782,7 @@ class AppStringsEn extends AppStrings {
 
   @override
   String get startingFareHelp =>
-      'Optional. A starting point, not a price — workers will offer their own.';
+      'Optional. Workers see it as a starting point and offer their own fare.';
 
   @override
   String get fareHint => 'Rs. 2,000';
@@ -1045,7 +1045,7 @@ class AppStringsEn extends AppStrings {
 
   @override
   String get demoAccountsExplain =>
-      'Signing in comes later. For now you can be any of these people — post a job as one, make an offer as another, and see both sides of the same hire.';
+      'Signing in comes later. For now you can be any of these people. Post a job as one, make an offer as another, and see both sides of the same hire.';
 
   @override
   String get accountYou => 'You';
@@ -1196,14 +1196,14 @@ class AppStringsEn extends AppStrings {
 
   @override
   String get notifSubscriptionLapsed =>
-      'Your directory listing has ended — people can no longer find you';
+      'Your directory listing has ended, so people can no longer find you';
 
   @override
   String get notifVerificationApproved => 'Your account has been approved';
 
   @override
   String get notifVerificationRejected =>
-      'Your account has been suspended — see CNIC and phone';
+      'Your account has been suspended. See CNIC and phone';
 
   @override
   String get refusalMessageEdited =>
@@ -1241,7 +1241,7 @@ class AppStringsEn extends AppStrings {
 
   @override
   String get noThreadsMessage =>
-      'A thread opens once a job is accepted — the same moment you each get the other\'s location.';
+      'A thread opens once a job is accepted, the same moment you each get the other\'s location.';
 
   @override
   String get messagesNotYetOpen =>
@@ -1369,7 +1369,7 @@ class AppStringsEn extends AppStrings {
   }
 
   @override
-  String get serviceAreaRemote => 'Works remotely — no travel needed';
+  String get serviceAreaRemote => 'Works remotely, no travel needed';
 
   @override
   String get bookThis => 'Book this';
@@ -1426,7 +1426,7 @@ class AppStringsEn extends AppStrings {
 
   @override
   String get premiumPitch =>
-      'Hirers search the directory and book you at your own price — no bidding. Listing is a subscription.';
+      'Hirers search the directory and book you at your own price, with no bidding. Listing is a subscription.';
 
   @override
   String premiumActive(String date) {
@@ -1532,7 +1532,7 @@ class AppStringsEn extends AppStrings {
 
   @override
   String get workFromNotSet =>
-      'Not set — you appear to everyone, wherever they are';
+      'Not set. You appear to everyone, wherever they are';
 
   @override
   String get workFromSet =>
@@ -1683,7 +1683,7 @@ class AppStringsEn extends AppStrings {
 
   @override
   String adminWalletLocked(String amount) {
-    return 'Locked out — $amount owed';
+    return 'Locked out, $amount owed';
   }
 
   @override
@@ -1709,7 +1709,7 @@ class AppStringsEn extends AppStrings {
 
   @override
   String get adminLogEmptyMessage =>
-      'Every admin action lands here — what it was, who it was about, why, and when.';
+      'Every admin action lands here, with what it was, who it was about, why, and when.';
 
   @override
   String get adminLogIntro =>
@@ -1756,7 +1756,8 @@ class AppStringsEn extends AppStrings {
   }
 
   @override
-  String get accountStaffHelp => 'Trust Hire\'s own account — the admin panel';
+  String get accountStaffHelp =>
+      'Trust Hire\'s own account, for the admin panel';
 
   @override
   String get adminPanelTile => 'Approvals, disputes and the log';
@@ -1834,7 +1835,7 @@ class AppStringsEn extends AppStrings {
 
   @override
   String get verifyCnicMaskExplain =>
-      'Only this much is kept. The whole number never leaves this screen — there is nothing the app could do with it, and holding one would be keeping a national identity number for no reason.';
+      'Only this much is kept. The whole number never leaves this screen. The app has no use for it, and holding one would mean keeping a national identity number for no reason.';
 
   @override
   String get verifyCnicNotPlausible =>
@@ -1909,7 +1910,7 @@ class AppStringsEn extends AppStrings {
 
   @override
   String get verifyDemoSmsWhy =>
-      'There is no server yet to send from, so nothing leaves the device. Everything else about this step — the expiry, the tries, the wait before you can ask again — is real.';
+      'There is no server yet to send from, so nothing leaves the device. Everything else about this step is real: the expiry, the tries, and the wait before you can ask again.';
 
   @override
   String get verifySimHeading => 'Name on the SIM';
@@ -1920,7 +1921,7 @@ class AppStringsEn extends AppStrings {
 
   @override
   String get verifySimFlagged =>
-      'The name on your card does not match the name on this account. Someone will look at it — this is not a rejection, and using a family member\'s SIM is an ordinary reason for it.';
+      'The name on your card does not match the name on this account. Someone will look at it. This is not a rejection, and using a family member\'s SIM is an ordinary reason for it.';
 
   @override
   String get verifySimNotWired =>
@@ -1952,7 +1953,7 @@ class AppStringsEn extends AppStrings {
 
   @override
   String get backendExplain =>
-      'There is no server yet. This is a stand-in that behaves like one — it refuses the same things the real database would, and it can be switched off so you can see what happens when the network goes.';
+      'There is no server yet. This is a stand-in that behaves like one. It refuses the same things the real database would, and it can be switched off so you can see what happens when the network goes.';
 
   @override
   String get syncSettled => 'Everything is saved';
@@ -1961,7 +1962,7 @@ class AppStringsEn extends AppStrings {
   String get syncSending => 'Sending';
 
   @override
-  String get syncOffline => 'No connection — your work is safe';
+  String get syncOffline => 'No connection. Your work is safe';
 
   @override
   String get syncNeedsAttention => 'Something needs you';
@@ -2078,15 +2079,16 @@ class AppStringsEn extends AppStrings {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'No agreed fares yet — this is from what $count hirers opened at.',
-      one: 'No agreed fares yet — this is from what 1 hirer opened at.',
+      other:
+          'No agreed fares yet, so this is from what $count hirers opened at.',
+      one: 'No agreed fares yet, so this is from what 1 hirer opened at.',
     );
     return '$_temp0';
   }
 
   @override
   String get fareAdviceNothing =>
-      'No similar jobs to compare with yet. Choose what you think is fair — workers will tell you if it is not.';
+      'No similar jobs to compare with yet. Choose what you think is fair, and workers will tell you if it is not.';
 
   @override
   String fareAdviceUse(String amount) {
@@ -2115,7 +2117,7 @@ class AppStringsEn extends AppStrings {
 
   @override
   String get topUpStripeLinkNotice =>
-      'Stripe test mode. No real money moves — pay with card 4242 4242 4242 4242, any future date and any CVC, and untick “Save my information with Link”. Stripe brings you back here once it is paid.';
+      'Stripe test mode. No real money moves. Pay with card 4242 4242 4242 4242, any future date and any CVC, and untick “Save my information with Link”. Stripe brings you back here once it is paid.';
 
   @override
   String get topUpStripeLinkCaveat =>
