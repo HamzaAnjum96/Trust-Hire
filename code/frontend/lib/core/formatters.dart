@@ -67,6 +67,24 @@ class Format {
     );
   }
 
+  /// A time of day. English keeps its own "7:30 AM". intl's Urdu data has
+  /// "a" and "p" for AM and PM, which printed "7:30 a"; Urdu names the part
+  /// of the day instead ("صبح 7:30"), through the ARB's `clock` message.
+  static String _clock(AppStrings strings, String locale, DateTime time) {
+    if (!locale.startsWith('ur')) {
+      return strings.clock(DateFormat.jm(locale).format(time), '');
+    }
+    final hour = time.hour;
+    final period = hour >= 4 && hour < 12
+        ? 'morning'
+        : hour >= 12 && hour < 16
+        ? 'afternoon'
+        : hour >= 16 && hour < 19
+        ? 'evening'
+        : 'night';
+    return strings.clock(DateFormat('h:mm', locale).format(time), period);
+  }
+
   /// When the work needs to happen, relative to [now] where that reads better.
   static String scheduled(AppStrings strings, DateTime? time, DateTime now) {
     if (time == null) return strings.anyTime;
@@ -75,7 +93,7 @@ class Format {
     final today = DateTime(now.year, now.month, now.day);
     final day = DateTime(time.year, time.month, time.day);
     final dayDifference = day.difference(today).inDays;
-    final clock = DateFormat.jm(locale).format(time);
+    final clock = _clock(strings, locale, time);
 
     if (dayDifference == 0) return strings.todayAt(clock);
     if (dayDifference == 1) return strings.tomorrowAt(clock);

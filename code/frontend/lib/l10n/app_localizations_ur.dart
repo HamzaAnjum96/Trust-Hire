@@ -469,6 +469,17 @@ class AppStringsUr extends AppStrings {
   }
 
   @override
+  String clock(String time, String period) {
+    String _temp0 = intl.Intl.selectLogic(period, {
+      'morning': 'صبح $time',
+      'afternoon': 'دوپہر $time',
+      'evening': 'شام $time',
+      'other': 'رات $time',
+    });
+    return '$_temp0';
+  }
+
+  @override
   String tomorrowAt(String time) {
     return 'کل، $time';
   }

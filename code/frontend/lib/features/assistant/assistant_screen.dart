@@ -273,7 +273,7 @@ class _AiStatusBar extends StatelessWidget {
                 ),
                 child: Row(
                   children: [
-                    Icon(icon, size: 18, color: context.colours.accentText),
+                    Icon(icon, size: 18, color: context.colours.text),
                     const SizedBox(width: BrandSizing.spaceSm),
                     Expanded(
                       child: Text(
@@ -333,7 +333,7 @@ class _Welcome extends StatelessWidget {
             child: Icon(
               Icons.question_answer_rounded,
               size: 30,
-              color: context.colours.accentText,
+              color: context.colours.text,
             ),
           ),
         ),

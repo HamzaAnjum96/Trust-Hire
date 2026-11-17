@@ -436,7 +436,7 @@ class _SaveButton extends StatelessWidget {
       },
       icon: Icon(isSaved ? Icons.bookmark_rounded : Icons.bookmark_border_rounded),
       // Colour is never the only cue: the icon fills as well.
-      color: isSaved ? context.colours.accentText : null,
+      color: isSaved ? context.colours.text : null,
       tooltip: isSaved ? strings.removeFromSaved : strings.saveThisJob,
     );
   }

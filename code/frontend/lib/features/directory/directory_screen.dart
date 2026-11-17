@@ -328,12 +328,12 @@ class _DirectoryControls extends StatelessWidget {
                   Text(
                     _label(strings, order),
                     style: theme.textTheme.labelLarge?.copyWith(
-                      color: context.colours.accentText,
+                      color: context.colours.text,
                     ),
                   ),
                   Icon(
                     Icons.arrow_drop_down_rounded,
-                    color: context.colours.accentText,
+                    color: context.colours.text,
                     semanticLabel: strings.directoryOrderLabel,
                   ),
                 ],

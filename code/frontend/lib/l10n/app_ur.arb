@@ -133,6 +133,7 @@
   "metresArea": "{metres} میٹر کا علاقہ",
   "kilometresArea": "{km} کلومیٹر کا علاقہ",
   "todayAt": "آج، {time}",
+  "clock": "{period, select, morning{صبح {time}} afternoon{دوپہر {time}} evening{شام {time}} other{رات {time}}}",
   "tomorrowAt": "کل، {time}",
   "yesterdayAt": "گزشتہ کل، {time}",
   "dayAt": "{day}، {time}",

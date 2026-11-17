@@ -896,6 +896,12 @@ abstract class AppStrings {
   /// **'Today, {time}'**
   String todayAt(String time);
 
+  /// A time of day. English shows the formatted time with its own AM or PM. Urdu has no usable AM/PM in the date data (it printed 'a' and 'p'), so it names the part of the day instead: period is morning, afternoon, evening or night.
+  ///
+  /// In en, this message translates to:
+  /// **'{time}'**
+  String clock(String time, String period);
+
   /// No description provided for @tomorrowAt.
   ///
   /// In en, this message translates to:

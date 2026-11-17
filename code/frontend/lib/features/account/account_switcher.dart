@@ -36,17 +36,20 @@ class AccountAvatar extends StatelessWidget {
 
     return CircleAvatar(
       radius: radius,
+      // The device's own account is the inverse pair (ink in light, near
+      // white in dark), never the action fill: in dark that is turmeric,
+      // and an avatar is not the job in hand.
       backgroundColor: account.isDevice
-          ? context.colours.action
+          ? context.colours.inverse
           : context.colours.avatar,
       foregroundColor: account.isDevice
-          ? context.colours.onAction
+          ? context.colours.onInverse
           : context.colours.onAvatar,
       child: Text(
         account.initialsOf(strings.accountYou),
         style: theme.textTheme.labelLarge?.copyWith(
           color: account.isDevice
-              ? context.colours.onAction
+              ? context.colours.onInverse
               : context.colours.onAvatar,
           fontSize: radius * 0.7,
         ),

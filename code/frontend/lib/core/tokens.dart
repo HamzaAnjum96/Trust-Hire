@@ -42,20 +42,21 @@ class BrandColours {
   /// A selected row's fill, quieter than [turmeric].
   static const turmericWash = Color(0xFFFFF0C2);
 
-  /// Turmeric as words, links and text buttons: 6.3:1 on white.
+  /// Turmeric as words, for what is selected or waiting (a selected tab, an
+  /// offer waiting, a warning): 6.3:1 on white. Never a general link colour;
+  /// links and text buttons are ink.
   static const turmericText = Color(0xFF8A5300);
 
   /// Voice notes and nothing else: 6.1:1 on white, white on it 6.1:1.
   static const peacock = Color(0xFF0B6E6B);
-  static const peacockWash = Color(0xFFE3F1F0);
 
-  /// Loss: errors, destructive actions, a debt.
+  /// Loss: errors, destructive actions, a debt. With ink, turmeric and
+  /// peacock, the only hues in the app; success, information and a person's
+  /// own location are ink, said in words and shapes rather than in green or
+  /// blue (0.24 review).
   static const brick = Color(0xFFB8321E);
-  static const leaf = Color(0xFF2F7D4A);
-  static const amber = Color(0xFF9A5B00);
-  static const indigo = Color(0xFF2F5E8C);
 
-  /// A person's initials, when they are not the person holding the phone.
+  /// The pressed state of an ink fill.
   static const slateBlue = Color(0xFF3B4A5A);
 
   /// What shadows are made from.
@@ -82,9 +83,6 @@ class BrandColours {
   static const nightTurmericWash = Color(0xFF33321F);
   static const nightPeacock = Color(0xFF5BBDB7);
   static const nightBrick = Color(0xFFF07A63);
-  static const nightLeaf = Color(0xFF7CC28A);
-  static const nightAmber = Color(0xFFF0A54A);
-  static const nightIndigo = Color(0xFF7FAEDB);
 
   /// A pin at rest on the dark basemap: 12:1 against the night ground.
   static const nightPin = Color(0xFFC9D2DA);

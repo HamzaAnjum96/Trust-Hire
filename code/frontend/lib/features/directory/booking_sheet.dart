@@ -216,7 +216,7 @@ class _PriceRow extends StatelessWidget {
             amount,
             style: emphasised
                 ? theme.textTheme.titleLarge?.copyWith(
-                    color: context.colours.accentText,
+                    color: context.colours.text,
                   )
                 : theme.textTheme.titleMedium?.copyWith(
                     color: theme.colorScheme.onSurfaceVariant,

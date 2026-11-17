@@ -149,6 +149,30 @@ void main() {
       );
     });
 
+    test(
+      'an Urdu time names the part of the day, never a Latin a or p',
+      () async {
+        // intl's Urdu data has "a" and "p" for AM and PM, so a job at 7:30 in
+        // the morning read "7:30 a" in a sentence of Urdu (0.24 review).
+        final ur = await loadStrings('ur');
+        final en = await loadStrings('en');
+        final now = DateTime(2026, 7, 27, 6);
+
+        String at(AppStrings strings, int hour) =>
+            Format.scheduled(strings, DateTime(2026, 7, 27, hour, 30), now);
+
+        expect(at(ur, 7), contains('صبح 7:30'));
+        expect(at(ur, 13), contains('دوپہر 1:30'));
+        expect(at(ur, 17), contains('شام 5:30'));
+        expect(at(ur, 21), contains('رات 9:30'));
+        for (final hour in [7, 13, 17, 21]) {
+          expect(at(ur, hour), isNot(matches(RegExp(r'\d [ap]\b'))));
+        }
+        // English keeps its own AM and PM.
+        expect(at(en, 7), matches(RegExp(r'7:30\sAM')));
+      },
+    );
+
     test('a timecode stays a timecode in both languages', () async {
       // Read as a number, so translating the separator would hurt.
       expect(Format.duration(const Duration(seconds: 75)), '1:15');
@@ -321,6 +345,34 @@ void main() {
       await settle(tester);
 
       expect(tester.takeException(), isNull);
+    });
+
+    testWidgets('Urdu headings are in Nastaliq; Urdu body text is not', (
+      tester,
+    ) async {
+      // The 0.24 direction names Nastaliq for display. The font was bundled
+      // and unused, so every Urdu heading was in Noto Sans Arabic.
+      Future<TextTheme> textThemeIn(Locale locale) async {
+        final store = await LocalStore.open();
+        await (SettingsController(store)..load()).markIntroSeen();
+        await SettingsController(store).setLocale(locale);
+        // A fresh app each time: pumping the same widget type would keep the
+        // first one's settings.
+        await tester.pumpWidget(const SizedBox());
+        await tester.pumpWidget(TrustHireApp(store: store));
+        await settle(tester);
+        return Theme.of(tester.element(find.byType(Scaffold).first)).textTheme;
+      }
+
+      final ur = await textThemeIn(const Locale('ur'));
+      for (final style in [ur.headlineMedium, ur.titleLarge, ur.titleMedium]) {
+        expect(style?.fontFamilyFallback?.first, 'Noto Nastaliq Urdu');
+        expect(style?.height, greaterThanOrEqualTo(1.8));
+      }
+      expect(ur.bodyLarge?.fontFamilyFallback?.first, 'Noto Sans Arabic');
+
+      final en = await textThemeIn(const Locale('en'));
+      expect(en.titleLarge?.fontFamilyFallback?.first, 'Noto Sans Arabic');
     });
   });
 

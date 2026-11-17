@@ -270,6 +270,18 @@
       }
     }
   },
+  "clock": "{time}",
+  "@clock": {
+    "description": "A time of day. English shows the formatted time with its own AM or PM. Urdu has no usable AM/PM in the date data (it printed 'a' and 'p'), so it names the part of the day instead: period is morning, afternoon, evening or night.",
+    "placeholders": {
+      "time": {
+        "type": "String"
+      },
+      "period": {
+        "type": "String"
+      }
+    }
+  },
   "tomorrowAt": "Tomorrow, {time}",
   "@tomorrowAt": {
     "placeholders": {

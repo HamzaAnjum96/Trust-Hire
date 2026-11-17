@@ -28,9 +28,10 @@ class JobMarker extends StatelessWidget {
   final bool isSelected;
   final VoidCallback onTap;
 
-  /// Whether the active demo account posted this job. Drives the copper
-  /// treatment from section 15 of the brand guidelines — your own pins should
-  /// be findable among everybody else's.
+  /// Whether the active demo account posted this job. Your own pins should
+  /// be findable among everybody else's, so they are drawn inverted: the
+  /// ground's colour inside, the pin colour as outline and glyph. Not
+  /// turmeric, which is kept for the job in hand.
   final bool isMine;
 
   // 48, not the 44 minimum: section 29 names 48 as the preferred target and
@@ -71,8 +72,10 @@ class JobMarker extends StatelessWidget {
                     fill: fill,
                     outline: isSelected
                         ? context.colours.pinSelectedOutline
-                        : context.colours.pinOutline,
-                    outlineWidth: isSelected ? 3 : 2,
+                        : (isMine
+                              ? context.colours.pin
+                              : context.colours.pinOutline),
+                    outlineWidth: isSelected || isMine ? 3 : 2,
                     shadow: context.colours.shadow,
                   ),
                 ),
@@ -85,7 +88,9 @@ class JobMarker extends StatelessWidget {
                   size: isSelected ? 20 : 17,
                   color: isSelected
                       ? context.colours.pinSelectedGlyph
-                      : context.colours.pinGlyph,
+                      : (isMine
+                            ? context.colours.pin
+                            : context.colours.pinGlyph),
                 ),
               ),
             ],
@@ -126,10 +131,12 @@ class PinFareLabel extends StatelessWidget {
       child: Container(
         height: height,
         padding: const EdgeInsets.symmetric(horizontal: BrandSizing.spaceSm),
+        // Turmeric, like its pin and its area: the job in hand glows
+        // wherever it appears, and nothing else on the map does.
         decoration: BoxDecoration(
-          color: context.colours.raised,
+          color: context.colours.highlight,
           borderRadius: BrandRadius.smallAll,
-          border: Border.all(color: context.colours.lineStrong),
+          border: Border.all(color: context.colours.pinSelectedOutline),
           boxShadow: context.colours.card,
         ),
         alignment: Alignment.center,
@@ -139,7 +146,7 @@ class PinFareLabel extends StatelessWidget {
           style: BrandType.caption.copyWith(
             fontWeight: FontWeight.w700,
             fontFeatures: const [FontFeature.tabularFigures()],
-            color: context.colours.fare,
+            color: context.colours.onHighlight,
           ),
         ),
       ),

@@ -802,27 +802,39 @@ class _MapBody extends StatelessWidget {
               // would be pushed up into the header. The card is what was
               // just asked for, so it wins until it is closed.
               if (!cardShown || MediaQuery.sizeOf(context).height >= 600)
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      MapButton(
-                        icon: Icons.zoom_out_map_rounded,
-                        label: strings.showAllJobs,
-                        onPressed: jobs.isEmpty
-                            ? null
-                            : () => onFitToJobs(jobs),
-                      ),
-                      const SizedBox(height: BrandSizing.spaceSm),
-                      MapButton(
-                        icon: Icons.my_location_rounded,
-                        label: strings.nearMeLabel,
-                        isBusy: location.isRequesting,
-                        onPressed: onMyLocationPressed,
-                      ),
-                    ],
-                  ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    // While a preview is up, the view switch rides here, in
+                    // the middle of the controls' row above the card. It used
+                    // to be hidden then, so the screen the direction is built
+                    // around (a job selected) had no way to the list on it.
+                    // The leading gap matches the buttons, to keep it centred.
+                    if (cardShown && viewSwitch != null) ...[
+                      const SizedBox(width: BrandSizing.touchTargetPreferred),
+                      Expanded(child: Center(child: viewSwitch)),
+                    ] else
+                      const Spacer(),
+                    Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        MapButton(
+                          icon: Icons.zoom_out_map_rounded,
+                          label: strings.showAllJobs,
+                          onPressed: jobs.isEmpty
+                              ? null
+                              : () => onFitToJobs(jobs),
+                        ),
+                        const SizedBox(height: BrandSizing.spaceSm),
+                        MapButton(
+                          icon: Icons.my_location_rounded,
+                          label: strings.nearMeLabel,
+                          isBusy: location.isRequesting,
+                          onPressed: onMyLocationPressed,
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
 
               // Section 28 — the preview slides up rather than appearing
@@ -869,8 +881,8 @@ class _MapBody extends StatelessWidget {
           ),
         ),
 
-        // The view switch, while there is no preview card: the card is what
-        // was just asked for, and the switch would sit on top of it.
+        // The view switch at the bottom while there is no preview card. With
+        // one, it moves up into the controls' row above the card.
         if (viewSwitch != null && !cardShown)
           Positioned(
             left: 0,

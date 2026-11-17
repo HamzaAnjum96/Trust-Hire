@@ -17,6 +17,44 @@ class BrandTheme {
 
   static ThemeData get dark => _base(AppColours.dark, Brightness.dark);
 
+  /// The same theme for Urdu: display text in Nastaliq.
+  ///
+  /// Urdu is read in Nastaliq, and the 0.24 direction names it for display.
+  /// The font was bundled and nothing used it, so every heading fell back to
+  /// Noto Sans Arabic, a Naskh. Headings, titles, the app bar and dialogs now
+  /// prefer Nastaliq for Arabic script; body text stays in Noto Sans Arabic,
+  /// which reads better small. Latin letters in the same line (a job title
+  /// typed in English) are still Atkinson Hyperlegible Next.
+  ///
+  /// Nastaliq's letters drop well below the line, so its lines are taller.
+  static ThemeData urdu(ThemeData base) {
+    TextStyle? nastaliq(TextStyle? style) => style?.copyWith(
+      fontFamilyFallback: const ['Noto Nastaliq Urdu', ...BrandType.fallback],
+      height: urduDisplayHeight,
+    );
+
+    final text = base.textTheme;
+    return base.copyWith(
+      textTheme: text.copyWith(
+        displayLarge: nastaliq(text.displayLarge),
+        displayMedium: nastaliq(text.displayMedium),
+        headlineLarge: nastaliq(text.headlineLarge),
+        headlineMedium: nastaliq(text.headlineMedium),
+        titleLarge: nastaliq(text.titleLarge),
+        titleMedium: nastaliq(text.titleMedium),
+      ),
+      appBarTheme: base.appBarTheme.copyWith(
+        titleTextStyle: nastaliq(base.appBarTheme.titleTextStyle),
+      ),
+      dialogTheme: base.dialogTheme.copyWith(
+        titleTextStyle: nastaliq(base.dialogTheme.titleTextStyle),
+      ),
+    );
+  }
+
+  /// Line height for Nastaliq display text: its descenders clip below this.
+  static const urduDisplayHeight = 1.9;
+
   static ColorScheme _scheme(AppColours r, Brightness brightness) =>
       ColorScheme(
         brightness: brightness,
@@ -152,7 +190,9 @@ class BrandTheme {
       outlinedButtonTheme: OutlinedButtonThemeData(
         style:
             OutlinedButton.styleFrom(
-              foregroundColor: accentText,
+              // Ink, not turmeric: turmeric is for what is selected or
+              // waiting, never a general accent (0.24 review).
+              foregroundColor: textColour,
               minimumSize: const Size(0, BrandSizing.controlHeight),
               padding: const EdgeInsets.symmetric(
                 horizontal: BrandSizing.spaceLg,
@@ -182,7 +222,7 @@ class BrandTheme {
 
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
-          foregroundColor: accentText,
+          foregroundColor: textColour,
           minimumSize: const Size(0, BrandSizing.touchTargetMinimum),
           textStyle: BrandType.button,
           shape: const StadiumBorder(),

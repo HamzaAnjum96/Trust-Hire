@@ -139,7 +139,11 @@ class ErrorView extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.error_outline_rounded, size: 40, color: context.colours.bad),
+            Icon(
+              Icons.error_outline_rounded,
+              size: 40,
+              color: context.colours.bad,
+            ),
             const SizedBox(height: BrandSizing.spaceMd),
             Text(
               message,
@@ -174,25 +178,33 @@ class NoticePanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final colour = switch (tone) {
-      NoticeTone.information => context.colours.info,
-      NoticeTone.warning => context.colours.warn,
-      NoticeTone.success => context.colours.good,
+    // Information and success are ink on the neutral tint with a hairline:
+    // the app's only hues are turmeric, peacock and brick, and a blue or
+    // green callout was a fourth and fifth (0.24 review). A warning is
+    // something waiting on the person, so it is turmeric, at a tenth.
+    final colours = context.colours;
+    final (colour, fill, edge) = switch (tone) {
+      NoticeTone.information => (colours.info, colours.tint, colours.line),
+      NoticeTone.success => (colours.good, colours.tint, colours.line),
+      NoticeTone.warning => (
+        colours.warn,
+        colours.warn.withValues(alpha: 0.10),
+        colours.warn.withValues(alpha: 0.35),
+      ),
     };
 
     return Container(
       padding: const EdgeInsets.all(BrandSizing.spaceMd),
       decoration: BoxDecoration(
-        // A 10% tint of the tone colour keeps the panel calm.
-        color: colour.withValues(alpha: 0.10),
+        color: fill,
         borderRadius: BrandRadius.mediumAll,
-        border: Border.all(color: colour.withValues(alpha: 0.35)),
+        border: Border.all(color: edge),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Amber fails contrast as text on light surfaces, so the tone is
-          // carried by the icon and border while the message stays in Ink.
+          // The tone is carried by the icon (and a warning's wash); the
+          // message stays in ink, which reads on every one of them.
           Icon(icon, size: 20, color: colour),
           const SizedBox(width: BrandSizing.spaceSm + 4),
           Expanded(

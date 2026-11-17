@@ -702,7 +702,7 @@ class _RoleCard extends StatelessWidget {
       selected: selected,
       inMutuallyExclusiveGroup: true,
       child: Material(
-        color: selected ? (context.colours.tint) : scheme.surface,
+        color: selected ? context.colours.selection : scheme.surface,
         shape: RoundedRectangleBorder(
           borderRadius: BrandRadius.largeAll,
           side: BorderSide(

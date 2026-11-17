@@ -467,6 +467,11 @@ class AppStringsEn extends AppStrings {
   }
 
   @override
+  String clock(String time, String period) {
+    return '$time';
+  }
+
+  @override
   String tomorrowAt(String time) {
     return 'Tomorrow, $time';
   }

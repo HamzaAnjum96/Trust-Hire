@@ -90,6 +90,7 @@ class _OfferListState extends State<OfferList> {
           _OfferRow(
             bid: bid,
             selectable: open,
+            selected: open && bid.id == _selectedId,
             onSelect: () => setState(() => _selectedId = bid.id),
           ),
         ],
@@ -166,11 +167,17 @@ class _OfferRow extends StatelessWidget {
   const _OfferRow({
     required this.bid,
     required this.selectable,
+    required this.selected,
     required this.onSelect,
   });
 
   final Bid bid;
   final bool selectable;
+
+  /// The offer the hirer has picked, before confirming. It takes the same
+  /// turmeric wash as a selected row in the job list, so selection reads one
+  /// way across the app.
+  final bool selected;
   final VoidCallback onSelect;
 
   @override
@@ -236,6 +243,9 @@ class _OfferRow extends StatelessWidget {
     if (!selectable) return content;
     // The radio takes keyboard focus; the row is the bigger target for a
     // finger. One stop per offer, not two.
-    return InkWell(onTap: onSelect, canRequestFocus: false, child: content);
+    return Material(
+      color: selected ? context.colours.selection : Colors.transparent,
+      child: InkWell(onTap: onSelect, canRequestFocus: false, child: content),
+    );
   }
 }

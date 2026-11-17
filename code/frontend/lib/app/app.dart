@@ -80,8 +80,7 @@ class TrustHireApp extends StatelessWidget {
         // `initState` somewhere would let a screen forget to re-read.
         ChangeNotifierProxyProvider<AccountController, SavedJobsController>(
           create: (_) => SavedJobsController(store)..load(),
-          update: (_, account, saved) =>
-              saved!..setAccount(account.activeId),
+          update: (_, account, saved) => saved!..setAccount(account.activeId),
         ),
         ChangeNotifierProxyProvider<AccountController, ProfileController>(
           create: (_) => ProfileController(store)..load(),
@@ -96,8 +95,7 @@ class TrustHireApp extends StatelessWidget {
         ),
         ChangeNotifierProxyProvider<AccountController, WalletController>(
           create: (_) => WalletController(store)..load(),
-          update: (_, account, wallet) =>
-              wallet!..setAccount(account.activeId),
+          update: (_, account, wallet) => wallet!..setAccount(account.activeId),
         ),
         ChangeNotifierProvider(create: (_) => RatingController(store)..load()),
         ChangeNotifierProxyProvider<AccountController, PremiumController>(
@@ -116,8 +114,9 @@ class TrustHireApp extends StatelessWidget {
         // knew only an id would have nothing to compare.
         ChangeNotifierProxyProvider<AccountController, VerificationController>(
           create: (_) => VerificationController(store)..load(),
-          update: (_, account, verification) => verification!
-            ..setAccount(account.activeId, name: account.active.name ?? ''),
+          update: (_, account, verification) =>
+              verification!
+                ..setAccount(account.activeId, name: account.active.name ?? ''),
         ),
         // After SyncController, like every other repository-backed controller:
         // a write made before the outbox exists is a write nobody queues.
@@ -162,6 +161,12 @@ class TrustHireApp extends StatelessWidget {
             theme: BrandTheme.light,
             darkTheme: BrandTheme.dark,
             themeMode: settings.themeMode,
+            // Urdu headings in Nastaliq. Here rather than in the theme
+            // getters because the locale is only known below Localizations.
+            builder: (context, child) =>
+                Localizations.localeOf(context).languageCode == 'ur'
+                ? Theme(data: BrandTheme.urdu(Theme.of(context)), child: child!)
+                : child!,
             home: _Entry(location: location),
           );
         },

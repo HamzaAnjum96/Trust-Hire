@@ -46,14 +46,16 @@ class WalletScreen extends StatelessWidget {
         child: ListView(
           padding: const EdgeInsets.all(BrandSizing.spaceMd),
           children: [
-            // **The one bold surface in the app.** Everything else is white
-            // on sand; the balance is the number a worker opens this screen
-            // for, and it is money, so it gets the brand's deepest colour.
-            Container(
-              padding: const EdgeInsets.all(BrandSizing.spaceLg),
-              decoration: BoxDecoration(
-                color: context.colours.feature,
-                borderRadius: BrandRadius.sheetAll,
+            // **The balance leads the page, plainly.** It used to sit on an
+            // ink slab, the one bold surface in the app; the reskin keeps ink
+            // fills for actions, and a big number on a coloured panel with a
+            // pill under it is a dashboard template, not this product. The
+            // figure is ink, or brick when it is a debt, which the notice
+            // below says in words too.
+            Padding(
+              padding: const EdgeInsetsDirectional.only(
+                start: BrandSizing.spaceXs,
+                top: BrandSizing.spaceSm,
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -61,7 +63,7 @@ class WalletScreen extends StatelessWidget {
                   Text(
                     strings.walletBalance,
                     style: BrandType.supporting.copyWith(
-                      color: context.colours.onFeature.withValues(alpha: 0.8),
+                      color: context.colours.textMuted,
                     ),
                   ),
                   const SizedBox(height: BrandSizing.spaceXs),
@@ -70,13 +72,12 @@ class WalletScreen extends StatelessWidget {
                     alignment: AlignmentDirectional.centerStart,
                     child: Text(
                       Format.fare(strings, wallet.balance),
-                      // Debt is said in the notice under the card as well:
-                      // section 29 rules out colour as the only carrier of
-                      // meaning, and red would not read on burgundy anyway.
                       style: BrandType.fare.copyWith(
                         fontSize: 36,
                         height: 44 / 36,
-                        color: context.colours.onFeature,
+                        color: wallet.balance < 0
+                            ? context.colours.bad
+                            : context.colours.text,
                       ),
                     ),
                   ),
@@ -93,21 +94,17 @@ class WalletScreen extends StatelessWidget {
                             Format.fare(strings, toNextBonus),
                           ),
                     style: BrandType.caption.copyWith(
-                      color: context.colours.onFeature.withValues(alpha: 0.8),
+                      color: context.colours.textMuted,
                     ),
-                  ),
-                  const SizedBox(height: BrandSizing.spaceMd),
-                  FilledButton.icon(
-                    onPressed: () => TopUpSheet.open(context),
-                    style: FilledButton.styleFrom(
-                      backgroundColor: context.colours.onFeature,
-                      foregroundColor: context.colours.feature,
-                    ),
-                    icon: const Icon(Icons.add_rounded),
-                    label: Text(strings.topUpTitle),
                   ),
                 ],
               ),
+            ),
+            const SizedBox(height: BrandSizing.spaceMd),
+            FilledButton.icon(
+              onPressed: () => TopUpSheet.open(context),
+              icon: const Icon(Icons.add_rounded),
+              label: Text(strings.topUpTitle),
             ),
 
             const SizedBox(height: BrandSizing.spaceMd),

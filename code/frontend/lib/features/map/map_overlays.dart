@@ -410,7 +410,7 @@ class MapButton extends StatelessWidget {
                 : Icon(
                     icon,
                     color: enabled
-                        ? context.colours.accentText
+                        ? context.colours.text
                         : theme.colorScheme.outline,
                     semanticLabel: label,
                   ),

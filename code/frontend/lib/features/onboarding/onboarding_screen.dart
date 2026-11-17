@@ -82,7 +82,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     final strings = AppStrings.of(context);
 
     return Scaffold(
-      backgroundColor: context.colours.intro,
+      // The page's own ground. It was a full-bleed turmeric field, which
+      // spent the selection colour on decoration and drowned the turmeric
+      // pin in the picture it was meant to point at.
+      backgroundColor: context.colours.page,
       // **One column, about the width of a phone held sideways.** On a
       // desktop browser the intro stretched edge to edge: a 1,400px "Next"
       // under a sentence that ended a third of the way across.
@@ -108,11 +111,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     padding: const EdgeInsets.all(BrandSizing.spaceSm),
                     child: TextButton(
                       onPressed: widget.onFinished,
-                      // Ink, not the accent: the intro's ground is turmeric
-                      // in light mode, and the accent text on it is faint.
-                      style: TextButton.styleFrom(
-                        foregroundColor: context.colours.text,
-                      ),
                       child: Text(strings.onboardSkip),
                     ),
                   ),
@@ -271,7 +269,7 @@ class _Panel extends StatelessWidget {
               child: Icon(
                 icon,
                 size: isShort ? 28 : 44,
-                color: context.colours.accentText,
+                color: context.colours.text,
               ),
             ),
           SizedBox(height: gap),
@@ -288,7 +286,11 @@ class _Panel extends StatelessWidget {
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Icon(Icons.lock_outline_rounded, size: 18, color: context.colours.info),
+                Icon(
+                  Icons.lock_outline_rounded,
+                  size: 18,
+                  color: context.colours.info,
+                ),
                 const SizedBox(width: BrandSizing.spaceSm),
                 Expanded(
                   child: Text(footnote!, style: theme.textTheme.bodyMedium),
@@ -324,10 +326,11 @@ class _Dots extends StatelessWidget {
               width: i == current ? 24 : 8,
               height: 8,
               decoration: BoxDecoration(
-                // On the intro's turmeric ground a turmeric dot vanishes:
-                // the current page is ink, the others ink at a third.
+                // Where you are is turmeric, like the selected tab; the
+                // other pages are ink at a third. The current dot is also
+                // three times as wide, so colour is never the only cue.
                 color: i == current
-                    ? context.colours.text
+                    ? context.colours.highlight
                     : context.colours.text.withValues(alpha: 0.3),
                 borderRadius: BorderRadius.circular(4),
               ),
@@ -338,9 +341,9 @@ class _Dots extends StatelessWidget {
   }
 }
 
-/// The surface each picture is drawn on: section 17's simple geometric forms
-/// and rounded edges, in sand, burgundy, copper and ink — no glass, no
-/// gradient, no sparkle.
+/// The surface each picture is drawn on: simple geometric forms and rounded
+/// edges, in the app's own white, ink and turmeric. No glass, no gradient, no
+/// sparkle.
 class _PictureFrame extends StatelessWidget {
   const _PictureFrame({required this.child});
 
@@ -373,8 +376,7 @@ class _MapPicture extends StatelessWidget {
   Widget build(BuildContext context) {
     final strings = AppStrings.of(context);
     final theme = Theme.of(context);
-    // Deep Burgundy disappears on the dark surface; the dark theme's own
-    // burgundy does not.
+    // The app's own pin colours, so the picture follows the theme.
     final pin = context.colours.pin;
     final chosen = context.colours.pinSelected;
 
@@ -401,14 +403,20 @@ class _MapPicture extends StatelessWidget {
                       horizontal: BrandSizing.spaceSm + 2,
                       vertical: BrandSizing.spaceXs,
                     ),
+                    // The chosen job's fare flag, turmeric as on the map.
                     decoration: BoxDecoration(
-                      color: theme.colorScheme.surface,
+                      color: context.colours.highlight,
                       borderRadius: BrandRadius.smallAll,
-                      border: Border.all(color: theme.colorScheme.outline),
+                      border: Border.all(
+                        color: context.colours.pinSelectedOutline,
+                      ),
                     ),
                     child: Text(
                       Format.fare(strings, 2500),
-                      style: theme.fareStyle.copyWith(fontSize: 14),
+                      style: theme.fareStyle.copyWith(
+                        fontSize: 14,
+                        color: context.colours.onHighlight,
+                      ),
                     ),
                   ),
                   const SizedBox(height: 2),
