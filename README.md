@@ -653,7 +653,13 @@ python3 tool/sweep_tests.py     # minutes — run it when a rule changes
 python3 -m unittest discover ../backend/stripe   # the Payment Links script, no network
 ```
 
-The first two gate the deploy.
+The first two gate the deploy, and so does a third the workflow runs on the
+built site: `node tool/look_web.js --smoke` loads it in Chromium, visits every
+destination and opens a job, and fails on a page error, a console error from
+the site, a failed request for one of its own files, or a control it cannot
+find. On failure the run keeps its screenshots as an artifact. The workflow
+runs on `ubuntu-24.04` rather than `ubuntu-latest`, so a new runner image is a
+change somebody commits.
 
 **`sweep_tests.py` asks whether the tests test anything.** `flutter test`
 proves the app behaves as the suite describes; it cannot prove the suite

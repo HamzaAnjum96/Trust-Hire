@@ -22,7 +22,9 @@ env:
 jobs:
   build:
     name: Build site
-    runs-on: ubuntu-latest
+    # A named release rather than ubuntu-latest, so the image changing under
+    # the build is a commit here and not a surprise.
+    runs-on: ubuntu-24.04
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -58,6 +60,45 @@ jobs:
             --release \
             --no-web-resources-cdn \
             --base-href "/${{ github.event.repository.name }}/"
+
+      # The suite tests widgets; nothing above has loaded the site in a
+      # browser. This does, the way a visitor would: it waits for the first
+      # frame, visits every destination and opens a job, and fails on a page
+      # error, a console error, a failed request for one of the site's own
+      # files, or a control it cannot find.
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install the browser
+        working-directory: code/frontend
+        run: |
+          npm install --no-save --no-package-lock playwright@1.63.0
+          npx playwright install --with-deps chromium
+
+      - name: Smoke test the built site
+        working-directory: code/frontend
+        env:
+          REPO: ${{ github.event.repository.name }}
+        run: |
+          mkdir -p /tmp/serve
+          cp -R build/web "/tmp/serve/$REPO"
+          python3 -m http.server 8099 --directory /tmp/serve &
+          for i in $(seq 1 20); do
+            curl -sf "http://localhost:8099/$REPO/" > /dev/null && break
+            sleep 1
+          done
+          node tool/look_web.js --smoke \
+            --url "http://localhost:8099/$REPO/" \
+            --out smoke
+
+      - name: Keep the smoke test's screenshots
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: smoke-screenshots
+          path: code/frontend/smoke
 
       - name: Stage the built app
         run: cp -R code/frontend/build/web _site
@@ -95,7 +136,7 @@ jobs:
   deploy:
     name: Deploy
     needs: build
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}

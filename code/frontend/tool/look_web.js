@@ -112,7 +112,12 @@ async function look(browser, name, preset, steps, args, problems) {
   };
   page.on('pageerror', (e) => problem('page error', e.message));
   page.on('console', (m) => {
-    if (m.type() === 'error') problem('console error', m.text());
+    if (m.type() !== 'error') return;
+    // A tile server's 400 is logged against the tile server's URL; that is
+    // the network, not the app.
+    const source = m.location().url;
+    if (source && !source.startsWith(origin)) return;
+    problem('console error', m.text());
   });
   // Only the site's own files: map tiles come from elsewhere and a sandbox
   // may block them, which is the network, not the app.
