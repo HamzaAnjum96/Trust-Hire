@@ -8,6 +8,7 @@ import 'job_filter_controller.dart';
 import '../../l10n/app_localizations.dart';
 import '../../widgets/fading_row.dart';
 import '../../widgets/search_bar_frame.dart';
+import '../../widgets/focus_ring.dart';
 
 /// Quick filters: the two the sprint plan names, plus a way into the rest.
 ///
@@ -129,39 +130,42 @@ class _FilterChip extends StatelessWidget {
         borderRadius: BrandRadius.mediumAll,
         elevation: floating ? 2 : 0,
         shadowColor: context.colours.shadow.withValues(alpha: 0.2),
-        child: InkWell(
-          onTap: onTap,
-          borderRadius: BrandRadius.mediumAll,
-          child: Container(
-            height: BrandSizing.touchTargetMinimum,
-            padding: const EdgeInsets.symmetric(
-              horizontal: BrandSizing.spaceSm + 4,
-            ),
-            decoration: BoxDecoration(
-              borderRadius: BrandRadius.mediumAll,
-              border: Border.all(
-                color: selected
-                    ? context.colours.highlight
-                    : theme.colorScheme.outlineVariant,
+        child: FocusRing(
+          radius: BrandRadius.mediumAll,
+          child: InkWell(
+            onTap: onTap,
+            borderRadius: BrandRadius.mediumAll,
+            child: Container(
+              height: BrandSizing.touchTargetMinimum,
+              padding: const EdgeInsets.symmetric(
+                horizontal: BrandSizing.spaceSm + 4,
               ),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(
-                  selected ? Icons.check_rounded : icon,
-                  size: 16,
-                  color: foreground,
+              decoration: BoxDecoration(
+                borderRadius: BrandRadius.mediumAll,
+                border: Border.all(
+                  color: selected
+                      ? context.colours.highlight
+                      : theme.colorScheme.outlineVariant,
                 ),
-                const SizedBox(width: BrandSizing.spaceXs + 2),
-                Text(
-                  label,
-                  style: theme.textTheme.labelMedium?.copyWith(
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    selected ? Icons.check_rounded : icon,
+                    size: 16,
                     color: foreground,
-                    fontWeight: selected ? FontWeight.w600 : FontWeight.w500,
                   ),
-                ),
-              ],
+                  const SizedBox(width: BrandSizing.spaceXs + 2),
+                  Text(
+                    label,
+                    style: theme.textTheme.labelMedium?.copyWith(
+                      color: foreground,
+                      fontWeight: selected ? FontWeight.w600 : FontWeight.w500,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

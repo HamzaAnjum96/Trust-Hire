@@ -14,6 +14,7 @@ import '../../widgets/initials_avatar.dart';
 import '../../widgets/state_views.dart';
 import 'messaging_rules.dart';
 import 'thread_screen.dart';
+import '../../widgets/focus_ring.dart';
 
 /// Every conversation this account is part of.
 ///
@@ -103,85 +104,87 @@ class _ThreadRow extends StatelessWidget {
 
     final name = otherName ?? strings.someone;
 
-    return InkWell(
-      onTap: () => ThreadScreen.open(context, jobId: job.id),
-      child: Padding(
-        padding: const EdgeInsets.all(BrandSizing.spaceMd),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            InitialsAvatar(name: name),
-            const SizedBox(width: BrandSizing.spaceSm + 4),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          name,
-                          style: theme.textTheme.titleMedium,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                      const SizedBox(width: BrandSizing.spaceSm),
-                      Text(
-                        Format.posted(strings, latest.sentAt, DateTime.now()),
-                        style: theme.textTheme.labelSmall?.copyWith(
-                          color: theme.colorScheme.onSurfaceVariant,
-                        ),
-                      ),
-                    ],
-                  ),
-                  Text(
-                    job.displayTitle(strings),
-                    style: theme.textTheme.labelSmall?.copyWith(
-                      color: theme.colorScheme.onSurfaceVariant,
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  const SizedBox(height: BrandSizing.spaceXs),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        child: Text(
-                          // Prefixed when it is yours, so a row showing your
-                          // own last line does not read as something they
-                          // said.
-                          isMine
-                              ? '${strings.you}: ${latest.body}'
-                              : latest.body,
-                          style: theme.textTheme.bodyMedium?.copyWith(
-                            // Unread is said by the edge and the count; the
-                            // line itself reads stronger as well.
-                            color: unread > 0
-                                ? theme.colorScheme.onSurface
-                                : null,
+    return FocusRing(
+      child: InkWell(
+        onTap: () => ThreadScreen.open(context, jobId: job.id),
+        child: Padding(
+          padding: const EdgeInsets.all(BrandSizing.spaceMd),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              InitialsAvatar(name: name),
+              const SizedBox(width: BrandSizing.spaceSm + 4),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            name,
+                            style: theme.textTheme.titleMedium,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                           ),
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
                         ),
-                      ),
-                      if (unread > 0) ...[
                         const SizedBox(width: BrandSizing.spaceSm),
-                        // Burgundy, not Material's error red: an unread message
-                        // is news, not a fault.
-                        Badge.count(
-                          count: unread,
-                          backgroundColor: context.colours.highlight,
-                          textColor: context.colours.onHighlight,
+                        Text(
+                          Format.posted(strings, latest.sentAt, DateTime.now()),
+                          style: theme.textTheme.labelSmall?.copyWith(
+                            color: theme.colorScheme.onSurfaceVariant,
+                          ),
                         ),
                       ],
-                    ],
-                  ),
-                ],
+                    ),
+                    Text(
+                      job.displayTitle(strings),
+                      style: theme.textTheme.labelSmall?.copyWith(
+                        color: theme.colorScheme.onSurfaceVariant,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    const SizedBox(height: BrandSizing.spaceXs),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          child: Text(
+                            // Prefixed when it is yours, so a row showing your
+                            // own last line does not read as something they
+                            // said.
+                            isMine
+                                ? '${strings.you}: ${latest.body}'
+                                : latest.body,
+                            style: theme.textTheme.bodyMedium?.copyWith(
+                              // Unread is said by the edge and the count; the
+                              // line itself reads stronger as well.
+                              color: unread > 0
+                                  ? theme.colorScheme.onSurface
+                                  : null,
+                            ),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        if (unread > 0) ...[
+                          const SizedBox(width: BrandSizing.spaceSm),
+                          // Burgundy, not Material's error red: an unread message
+                          // is news, not a fault.
+                          Badge.count(
+                            count: unread,
+                            backgroundColor: context.colours.highlight,
+                            textColor: context.colours.onHighlight,
+                          ),
+                        ],
+                      ],
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

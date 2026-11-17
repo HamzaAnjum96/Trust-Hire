@@ -10,6 +10,7 @@ import '../core/formatters.dart';
 import '../core/tokens.dart';
 import '../services/media_store.dart';
 import '../l10n/app_localizations.dart';
+import 'focus_ring.dart';
 
 /// Plays a job's voice note.
 ///
@@ -151,16 +152,21 @@ class _VoiceNotePlayerState extends State<VoiceNotePlayer> {
             child: Material(
               color: context.colours.voice,
               shape: const CircleBorder(),
-              child: InkWell(
-                onTap: _toggle,
-                customBorder: const CircleBorder(),
-                child: SizedBox(
-                  width: BrandSizing.touchTargetPreferred,
-                  height: BrandSizing.touchTargetPreferred,
-                  child: Icon(
-                    _isPlaying ? Icons.pause_rounded : Icons.play_arrow_rounded,
-                    color: context.colours.onVoice,
-                    size: 26,
+              child: FocusRing(
+                radius: BorderRadius.all(Radius.circular(999)),
+                child: InkWell(
+                  onTap: _toggle,
+                  customBorder: const CircleBorder(),
+                  child: SizedBox(
+                    width: BrandSizing.touchTargetPreferred,
+                    height: BrandSizing.touchTargetPreferred,
+                    child: Icon(
+                      _isPlaying
+                          ? Icons.pause_rounded
+                          : Icons.play_arrow_rounded,
+                      color: context.colours.onVoice,
+                      size: 26,
+                    ),
                   ),
                 ),
               ),

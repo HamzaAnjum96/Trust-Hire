@@ -5,6 +5,7 @@ import '../core/motion.dart';
 import '../core/tokens.dart';
 import '../l10n/app_localizations.dart';
 import '../models/job_tag.dart';
+import 'focus_ring.dart';
 
 /// A selectable kind of work: icon above, plain word below.
 ///
@@ -56,50 +57,53 @@ class TagTile extends StatelessWidget {
       child: Material(
         color: background,
         borderRadius: BrandRadius.mediumAll,
-        child: InkWell(
-          onTap: enabled ? onTap : null,
-          borderRadius: BrandRadius.mediumAll,
-          child: AnimatedContainer(
-            duration: Motion.fast(context),
-            width: width,
-            // Room for a two-line label on every tile, so a row whose labels
-            // wrap and a row whose labels do not are the same height.
-            constraints: const BoxConstraints(minHeight: 84),
-            // Narrow at the sides: the label needs the width more than the
-            // tile needs the margin. At 8px a side "Appliance repair" and
-            // "Legal advice" were shrunk to about 10px to fit one line.
-            padding: const EdgeInsets.symmetric(
-              horizontal: 2,
-              vertical: BrandSizing.spaceSm,
-            ),
-            decoration: BoxDecoration(
-              borderRadius: BrandRadius.mediumAll,
-              border: Border.all(
-                color: selected
-                    ? context.colours.highlight
-                    : theme.colorScheme.outlineVariant,
+        child: FocusRing(
+          radius: BrandRadius.mediumAll,
+          child: InkWell(
+            onTap: enabled ? onTap : null,
+            borderRadius: BrandRadius.mediumAll,
+            child: AnimatedContainer(
+              duration: Motion.fast(context),
+              width: width,
+              // Room for a two-line label on every tile, so a row whose labels
+              // wrap and a row whose labels do not are the same height.
+              constraints: const BoxConstraints(minHeight: 84),
+              // Narrow at the sides: the label needs the width more than the
+              // tile needs the margin. At 8px a side "Appliance repair" and
+              // "Legal advice" were shrunk to about 10px to fit one line.
+              padding: const EdgeInsets.symmetric(
+                horizontal: 2,
+                vertical: BrandSizing.spaceSm,
               ),
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(tag.icon, size: 28, color: foreground),
-                const SizedBox(height: BrandSizing.spaceXs + 2),
-                // Two-word labels wrap at the space; a single word too long
-                // for the tile is shrunk rather than broken mid-word, which
-                // read as a rendering fault ("Constructio / n"). Since 0.23
-                // the shrink is the exception — at large text sizes — not
-                // what happens to every long label: these labels exist so
-                // somebody who reads slowly can check the icon against a
-                // word, and 10px defeats that.
-                _TileLabel(
-                  text: tag.label(strings),
-                  style: theme.textTheme.labelSmall!.copyWith(
-                    color: foreground,
-                    fontWeight: selected ? FontWeight.w600 : FontWeight.w500,
-                  ),
+              decoration: BoxDecoration(
+                borderRadius: BrandRadius.mediumAll,
+                border: Border.all(
+                  color: selected
+                      ? context.colours.highlight
+                      : theme.colorScheme.outlineVariant,
                 ),
-              ],
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(tag.icon, size: 28, color: foreground),
+                  const SizedBox(height: BrandSizing.spaceXs + 2),
+                  // Two-word labels wrap at the space; a single word too long
+                  // for the tile is shrunk rather than broken mid-word, which
+                  // read as a rendering fault ("Constructio / n"). Since 0.23
+                  // the shrink is the exception — at large text sizes — not
+                  // what happens to every long label: these labels exist so
+                  // somebody who reads slowly can check the icon against a
+                  // word, and 10px defeats that.
+                  _TileLabel(
+                    text: tag.label(strings),
+                    style: theme.textTheme.labelSmall!.copyWith(
+                      color: foreground,
+                      fontWeight: selected ? FontWeight.w600 : FontWeight.w500,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

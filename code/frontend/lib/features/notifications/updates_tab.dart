@@ -24,6 +24,7 @@ import '../../widgets/inbox_row.dart';
 import '../../widgets/state_views.dart';
 import '../jobs/job_details_sheet.dart';
 import '../messaging/thread_screen.dart';
+import '../../widgets/focus_ring.dart';
 
 /// What happened, newest first.
 ///
@@ -165,10 +166,16 @@ class _UpdateRow extends StatelessWidget {
         Icons.play_circle_outline_rounded,
         scheme.primary,
       ),
-      NotificationKind.jobCompleted => (Icons.task_alt_rounded, context.colours.good),
+      NotificationKind.jobCompleted => (
+        Icons.task_alt_rounded,
+        context.colours.good,
+      ),
       NotificationKind.jobCancelled => (Icons.cancel_rounded, scheme.outline),
       NotificationKind.jobExpired => (Icons.timer_off_rounded, scheme.outline),
-      NotificationKind.ratingReceived => (Icons.star_outline_rounded, scheme.primary),
+      NotificationKind.ratingReceived => (
+        Icons.star_outline_rounded,
+        scheme.primary,
+      ),
       NotificationKind.commissionCharged => (
         Icons.receipt_long_rounded,
         scheme.onSurfaceVariant,
@@ -177,7 +184,10 @@ class _UpdateRow extends StatelessWidget {
         Icons.account_balance_wallet_rounded,
         context.colours.good,
       ),
-      NotificationKind.walletLocked => (Icons.lock_outline_rounded, scheme.error),
+      NotificationKind.walletLocked => (
+        Icons.lock_outline_rounded,
+        scheme.error,
+      ),
       NotificationKind.subscriptionExpiring => (
         Icons.schedule_rounded,
         context.colours.info,
@@ -194,10 +204,7 @@ class _UpdateRow extends StatelessWidget {
         Icons.gpp_bad_rounded,
         scheme.error,
       ),
-      NotificationKind.messageReceived => (
-        Icons.forum_rounded,
-        scheme.primary,
-      ),
+      NotificationKind.messageReceived => (Icons.forum_rounded, scheme.primary),
     };
   }
 
@@ -259,72 +266,74 @@ class _UpdateRow extends StatelessWidget {
     final (icon, colour) = _glyph(context);
     final target = job;
 
-    return InkWell(
-      onTap: target == null
-          ? null
-          // A message entry goes to the conversation. Opening the job sheet
-          // instead would put the reader one more tap from the thing they
-          // were told about.
-          : entry.kind == NotificationKind.messageReceived
-          ? () => ThreadScreen.open(context, jobId: target.id)
-          : () => JobDetailsSheet.open(
-              context,
-              jobId: target.id,
-              mediaStore: context.read<MediaStore>(),
-            ),
-      child: Padding(
-        padding: const EdgeInsets.all(BrandSizing.spaceMd),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              width: 40,
-              height: 40,
-              decoration: BoxDecoration(
-                color: colour.withValues(alpha: 0.12),
-                shape: BoxShape.circle,
+    return FocusRing(
+      child: InkWell(
+        onTap: target == null
+            ? null
+            // A message entry goes to the conversation. Opening the job sheet
+            // instead would put the reader one more tap from the thing they
+            // were told about.
+            : entry.kind == NotificationKind.messageReceived
+            ? () => ThreadScreen.open(context, jobId: target.id)
+            : () => JobDetailsSheet.open(
+                context,
+                jobId: target.id,
+                mediaStore: context.read<MediaStore>(),
               ),
-              child: Icon(icon, color: colour, size: 22),
-            ),
-            const SizedBox(width: BrandSizing.spaceSm + 4),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    _line(context, strings),
-                    style: theme.textTheme.bodyLarge,
-                  ),
-                  if (target != null) ...[
+        child: Padding(
+          padding: const EdgeInsets.all(BrandSizing.spaceMd),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  color: colour.withValues(alpha: 0.12),
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(icon, color: colour, size: 22),
+              ),
+              const SizedBox(width: BrandSizing.spaceSm + 4),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      _line(context, strings),
+                      style: theme.textTheme.bodyLarge,
+                    ),
+                    if (target != null) ...[
+                      const SizedBox(height: BrandSizing.spaceXs),
+                      Text(
+                        // What the update is *about*. Without it the list is a
+                        // column of "Job finished" with no way to tell which.
+                        target.title ?? target.area ?? strings.untitledJob,
+                        style: theme.textTheme.bodyMedium?.copyWith(
+                          color: theme.colorScheme.onSurfaceVariant,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
                     const SizedBox(height: BrandSizing.spaceXs),
                     Text(
-                      // What the update is *about*. Without it the list is a
-                      // column of "Job finished" with no way to tell which.
-                      target.title ?? target.area ?? strings.untitledJob,
-                      style: theme.textTheme.bodyMedium?.copyWith(
+                      Format.posted(strings, entry.at, DateTime.now()),
+                      style: theme.textTheme.labelSmall?.copyWith(
                         color: theme.colorScheme.onSurfaceVariant,
                       ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
                     ),
                   ],
-                  const SizedBox(height: BrandSizing.spaceXs),
-                  Text(
-                    Format.posted(strings, entry.at, DateTime.now()),
-                    style: theme.textTheme.labelSmall?.copyWith(
-                      color: theme.colorScheme.onSurfaceVariant,
-                    ),
-                  ),
-                ],
+                ),
               ),
-            ),
-            if (target != null)
-              Icon(
-                Icons.chevron_right_rounded,
-                color: theme.colorScheme.outline,
-                semanticLabel: strings.openDetails,
-              ),
-          ],
+              if (target != null)
+                Icon(
+                  Icons.chevron_right_rounded,
+                  color: theme.colorScheme.outline,
+                  semanticLabel: strings.openDetails,
+                ),
+            ],
+          ),
         ),
       ),
     );

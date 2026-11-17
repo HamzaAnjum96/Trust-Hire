@@ -9,6 +9,7 @@ import '../../services/media_store.dart';
 import '../../widgets/job_photo.dart';
 import 'job_draft_controller.dart';
 import '../../l10n/app_localizations.dart';
+import '../../widgets/focus_ring.dart';
 
 /// Recording a voice note.
 ///
@@ -127,7 +128,11 @@ class _VoiceRecorderFieldState extends State<VoiceRecorderField> {
         isLight: isLight,
         child: Row(
           children: [
-            Icon(Icons.graphic_eq_rounded, color: context.colours.voice, size: 26),
+            Icon(
+              Icons.graphic_eq_rounded,
+              color: context.colours.voice,
+              size: 26,
+            ),
             const SizedBox(width: BrandSizing.spaceMd),
             Expanded(
               child: Column(
@@ -262,31 +267,34 @@ class _AddTile extends StatelessWidget {
     final theme = Theme.of(context);
     final accent = context.colours.voice;
 
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BrandRadius.mediumAll,
-      child: Container(
-        width: PhotoField._tileSize,
-        padding: const EdgeInsets.all(BrandSizing.spaceSm),
-        decoration: BoxDecoration(
-          // Section 27 — Warm Sand tile with a dashed copper edge.
-          color: context.colours.tint,
-          borderRadius: BrandRadius.mediumAll,
-          border: Border.all(color: accent.withValues(alpha: 0.6)),
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(icon, color: accent, size: 26),
-            const SizedBox(height: BrandSizing.spaceXs),
-            Text(
-              label,
-              style: theme.textTheme.labelSmall?.copyWith(
-                color: theme.colorScheme.onSurface,
+    return FocusRing(
+      radius: BrandRadius.mediumAll,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BrandRadius.mediumAll,
+        child: Container(
+          width: PhotoField._tileSize,
+          padding: const EdgeInsets.all(BrandSizing.spaceSm),
+          decoration: BoxDecoration(
+            // Section 27 — Warm Sand tile with a dashed copper edge.
+            color: context.colours.tint,
+            borderRadius: BrandRadius.mediumAll,
+            border: Border.all(color: accent.withValues(alpha: 0.6)),
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(icon, color: accent, size: 26),
+              const SizedBox(height: BrandSizing.spaceXs),
+              Text(
+                label,
+                style: theme.textTheme.labelSmall?.copyWith(
+                  color: theme.colorScheme.onSurface,
+                ),
+                textAlign: TextAlign.center,
               ),
-              textAlign: TextAlign.center,
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -328,16 +336,19 @@ class _PhotoTile extends StatelessWidget {
             child: Material(
               color: context.colours.shadow.withValues(alpha: 0.6),
               shape: const CircleBorder(),
-              child: InkWell(
-                onTap: onRemove,
-                customBorder: const CircleBorder(),
-                child: Padding(
-                  padding: EdgeInsets.all(4),
-                  child: Icon(
-                    Icons.close_rounded,
-                    size: 16,
-                    color: context.colours.onInverse,
-                    semanticLabel: strings.removePhoto,
+              child: FocusRing(
+                radius: BorderRadius.all(Radius.circular(999)),
+                child: InkWell(
+                  onTap: onRemove,
+                  customBorder: const CircleBorder(),
+                  child: Padding(
+                    padding: EdgeInsets.all(4),
+                    child: Icon(
+                      Icons.close_rounded,
+                      size: 16,
+                      color: context.colours.onInverse,
+                      semanticLabel: strings.removePhoto,
+                    ),
                   ),
                 ),
               ),
@@ -370,13 +381,16 @@ class _RoundButton extends StatelessWidget {
       child: Material(
         color: colour,
         shape: const CircleBorder(),
-        child: InkWell(
-          onTap: onTap,
-          customBorder: const CircleBorder(),
-          child: SizedBox(
-            width: BrandSizing.touchTargetPreferred,
-            height: BrandSizing.touchTargetPreferred,
-            child: Icon(icon, color: context.colours.onVoice, size: 26),
+        child: FocusRing(
+          radius: BorderRadius.all(Radius.circular(999)),
+          child: InkWell(
+            onTap: onTap,
+            customBorder: const CircleBorder(),
+            child: SizedBox(
+              width: BrandSizing.touchTargetPreferred,
+              height: BrandSizing.touchTargetPreferred,
+              child: Icon(icon, color: context.colours.onVoice, size: 26),
+            ),
           ),
         ),
       ),

@@ -11,6 +11,7 @@ import '../../models/job.dart';
 import '../../widgets/fare_tag.dart';
 import '../../widgets/meta_chip.dart';
 import '../../widgets/mine_badge.dart';
+import '../../widgets/focus_ring.dart';
 
 /// One job in a list.
 ///
@@ -82,117 +83,123 @@ class JobRow extends StatelessWidget {
       selected: isSelected,
       child: Material(
         color: isSelected ? selectedFill : Colors.transparent,
-        child: InkWell(
-          onTap: onTap,
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(
-              BrandSizing.spaceMd,
-              BrandSizing.spaceMd - 2,
-              BrandSizing.spaceMd,
-              BrandSizing.spaceMd,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                LayoutBuilder(
-                  builder: (context, constraints) => Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              job.displayTitle(strings),
-                              style: theme.textTheme.titleMedium?.copyWith(
-                                color: isSelected ? theme.accentText : null,
+        child: FocusRing(
+          child: InkWell(
+            onTap: onTap,
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(
+                BrandSizing.spaceMd,
+                BrandSizing.spaceMd - 2,
+                BrandSizing.spaceMd,
+                BrandSizing.spaceMd,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  LayoutBuilder(
+                    builder: (context, constraints) => Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                job.displayTitle(strings),
+                                style: theme.textTheme.titleMedium?.copyWith(
+                                  color: isSelected ? theme.accentText : null,
+                                ),
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
                               ),
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                            if (mine) ...[
-                              const SizedBox(height: BrandSizing.spaceXs),
-                              const MineBadge(),
+                              if (mine) ...[
+                                const SizedBox(height: BrandSizing.spaceXs),
+                                const MineBadge(),
+                              ],
                             ],
-                          ],
+                          ),
+                        ),
+                        const SizedBox(width: BrandSizing.spaceMd),
+                        // Never more than about two fifths of the row: a large
+                        // fare at the largest text size must not squeeze the
+                        // title down to a word a line.
+                        ConstrainedBox(
+                          constraints: BoxConstraints(
+                            maxWidth: constraints.maxWidth * 0.42,
+                          ),
+                          child: FareTag(job: job),
+                        ),
+                      ],
+                    ),
+                  ),
+                  if (job.supportingDescription != null) ...[
+                    const SizedBox(height: BrandSizing.spaceXs),
+                    Text(
+                      job.supportingDescription!,
+                      style: theme.textTheme.bodyMedium,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+                  const SizedBox(height: BrandSizing.spaceSm),
+                  Wrap(
+                    spacing: BrandSizing.spaceMd,
+                    runSpacing: BrandSizing.spaceXs,
+                    children: [
+                      // Where, before when. Once the jobs span a country, a row
+                      // that says only what and when is a row a worker cannot
+                      // use.
+                      if (job.area != null)
+                        MetaChip(icon: Icons.place_rounded, label: job.area!),
+                      if (distance != null)
+                        MetaChip(icon: Icons.near_me_rounded, label: distance),
+                      MetaChip(
+                        icon: Icons.schedule_rounded,
+                        label: Format.scheduled(
+                          strings,
+                          job.scheduledTime,
+                          now,
                         ),
                       ),
-                      const SizedBox(width: BrandSizing.spaceMd),
-                      // Never more than about two fifths of the row: a large
-                      // fare at the largest text size must not squeeze the
-                      // title down to a word a line.
-                      ConstrainedBox(
-                        constraints: BoxConstraints(
-                          maxWidth: constraints.maxWidth * 0.42,
+                      // One tag only, and never the one the heading already
+                      // said. A row is for scanning; the sheet lists all three
+                      // for the worker actually deciding whether to bid.
+                      if (job.supportingTags.isNotEmpty)
+                        MetaChip(
+                          icon: job.supportingTags.first.icon,
+                          label: job.supportingTags.first.label(strings),
                         ),
-                        child: FareTag(job: job),
-                      ),
+                      if (job.hasVoiceNote)
+                        MetaChip(
+                          icon: Icons.mic_rounded,
+                          iconColor: context.colours.voice,
+                          // Distinguishes "has a voice note as well" from "the
+                          // voice note is all there is", which decides whether
+                          // this row is worth opening at all.
+                          label: job.isAudioOnly
+                              ? strings.audioOnlyJob
+                              : strings.voiceNote,
+                        ),
+                      if (job.hasPhotos)
+                        MetaChip(
+                          icon: Icons.photo_library_rounded,
+                          label: strings.photoCount(job.photoPaths.length),
+                        ),
                     ],
                   ),
-                ),
-                if (job.supportingDescription != null) ...[
-                  const SizedBox(height: BrandSizing.spaceXs),
-                  Text(
-                    job.supportingDescription!,
-                    style: theme.textTheme.bodyMedium,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ],
-                const SizedBox(height: BrandSizing.spaceSm),
-                Wrap(
-                  spacing: BrandSizing.spaceMd,
-                  runSpacing: BrandSizing.spaceXs,
-                  children: [
-                    // Where, before when. Once the jobs span a country, a row
-                    // that says only what and when is a row a worker cannot
-                    // use.
-                    if (job.area != null)
-                      MetaChip(icon: Icons.place_rounded, label: job.area!),
-                    if (distance != null)
-                      MetaChip(icon: Icons.near_me_rounded, label: distance),
-                    MetaChip(
-                      icon: Icons.schedule_rounded,
-                      label: Format.scheduled(strings, job.scheduledTime, now),
-                    ),
-                    // One tag only, and never the one the heading already
-                    // said. A row is for scanning; the sheet lists all three
-                    // for the worker actually deciding whether to bid.
-                    if (job.supportingTags.isNotEmpty)
-                      MetaChip(
-                        icon: job.supportingTags.first.icon,
-                        label: job.supportingTags.first.label(strings),
-                      ),
-                    if (job.hasVoiceNote)
-                      MetaChip(
-                        icon: Icons.mic_rounded,
-                        iconColor: context.colours.voice,
-                        // Distinguishes "has a voice note as well" from "the
-                        // voice note is all there is", which decides whether
-                        // this row is worth opening at all.
-                        label: job.isAudioOnly
-                            ? strings.audioOnlyJob
-                            : strings.voiceNote,
-                      ),
-                    if (job.hasPhotos)
-                      MetaChip(
-                        icon: Icons.photo_library_rounded,
-                        label: strings.photoCount(job.photoPaths.length),
-                      ),
-                  ],
-                ),
 
-                // Only on the row that is selected. On every row of the rail
-                // it was the same button forty times, louder than the jobs.
-                if (onOpen != null && isSelected) ...[
-                  const SizedBox(height: BrandSizing.spaceSm),
-                  FilledButton.icon(
-                    onPressed: onOpen,
-                    icon: const Icon(Icons.open_in_full_rounded, size: 18),
-                    label: Text(strings.openDetails),
-                  ),
+                  // Only on the row that is selected. On every row of the rail
+                  // it was the same button forty times, louder than the jobs.
+                  if (onOpen != null && isSelected) ...[
+                    const SizedBox(height: BrandSizing.spaceSm),
+                    FilledButton.icon(
+                      onPressed: onOpen,
+                      icon: const Icon(Icons.open_in_full_rounded, size: 18),
+                      label: Text(strings.openDetails),
+                    ),
+                  ],
                 ],
-              ],
+              ),
             ),
           ),
         ),

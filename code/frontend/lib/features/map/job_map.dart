@@ -9,6 +9,7 @@ import '../../core/tokens.dart';
 import '../../models/job.dart';
 import 'job_marker.dart';
 import 'marker_cluster.dart';
+import '../../widgets/focus_ring.dart';
 import '../../l10n/app_localizations.dart';
 
 /// The map itself — tiles, job radii, markers and the user's position.
@@ -159,121 +160,152 @@ class _JobMapState extends State<JobMap> {
         // unnamed button covering the screen.
         Semantics(
           label: strings.mapLabel,
-          child: FlutterMap(
-            mapController: widget.controller,
-            options: MapOptions(
-              initialCenter: LatLng(
-                widget.centre.latitude,
-                widget.centre.longitude,
-              ),
-              initialZoom: widget.initialZoom,
-              initialCameraFit: widget.openingFit,
-              minZoom: 4,
-              maxZoom: 18,
-              backgroundColor: mapTheme.backgroundColour,
-              onTap: (_, _) => widget.onMapTapped(),
-              onMapEvent: _onMapEvent,
-              interactionOptions: const InteractionOptions(
-                // Rotation adds nothing here and makes one-handed panning
-                // fiddly, so it is off.
-                flags:
-                    InteractiveFlag.drag |
-                    InteractiveFlag.pinchZoom |
-                    InteractiveFlag.doubleTapZoom |
-                    InteractiveFlag.scrollWheelZoom,
-              ),
-            ),
-            children: [
-              mapTheme.tileLayer(
-                context,
-                provider: widget.tileProvider,
-                onTileError: _onTileError,
-              ),
-
-              // A whisper of brand colour over the basemap, under everything
-              // else, so markers and work areas stay untinted.
-              IgnorePointer(
-                child: ColoredBox(
-                  color: mapTheme.tint.withValues(alpha: mapTheme.tintOpacity),
-                  child: const SizedBox.expand(),
-                ),
-              ),
-
-              // Place names above the tint, so it never dims them.
-              mapTheme.labelLayer(context, provider: widget.tileProvider),
-
-              // The approximate work area of the selected job. Only the
-              // selected one is drawn — every radius at once turns the map into
-              // noise, which section 15 warns against.
-              if (selected != null)
-                CircleLayer(
-                  circles: [
-                    CircleMarker(
-                      point: LatLng(
-                        selected.location.latitude,
-                        selected.location.longitude,
-                      ),
-                      radius: selected.radiusMetres,
-                      useRadiusInMeter: true,
-                      color: context.colours.radiusFill,
-                      borderColor: context.colours.radiusBorder,
-                      borderStrokeWidth: 1.5,
+          child: // The map takes keyboard focus (arrow keys pan it), so it shows
+              // that it has it, like every other control.
+              FocusRing(
+                child: FlutterMap(
+                  mapController: widget.controller,
+                  options: MapOptions(
+                    initialCenter: LatLng(
+                      widget.centre.latitude,
+                      widget.centre.longitude,
                     ),
-                  ],
-                ),
-
-              if (widget.userLocation != null)
-                MarkerLayer(
-                  markers: [
-                    Marker(
-                      point: LatLng(
-                        widget.userLocation!.latitude,
-                        widget.userLocation!.longitude,
-                      ),
-                      width: UserLocationMarker.size,
-                      height: UserLocationMarker.size,
-                      child: const UserLocationMarker(),
+                    initialZoom: widget.initialZoom,
+                    initialCameraFit: widget.openingFit,
+                    minZoom: 4,
+                    maxZoom: 18,
+                    backgroundColor: mapTheme.backgroundColour,
+                    onTap: (_, _) => widget.onMapTapped(),
+                    onMapEvent: _onMapEvent,
+                    interactionOptions: const InteractionOptions(
+                      // Rotation adds nothing here and makes one-handed panning
+                      // fiddly, so it is off.
+                      flags:
+                          InteractiveFlag.drag |
+                          InteractiveFlag.pinchZoom |
+                          InteractiveFlag.doubleTapZoom |
+                          InteractiveFlag.scrollWheelZoom,
                     ),
-                  ],
-                ),
+                  ),
+                  children: [
+                    mapTheme.tileLayer(
+                      context,
+                      provider: widget.tileProvider,
+                      onTileError: _onTileError,
+                    ),
 
-              // Clustering needs the camera, which only exists inside the map.
-              Builder(
-                builder: (context) {
-                  final held = _clusters;
-                  final clusters = (_isMoving && held != null)
-                      ? held
-                      : const MarkerClusterer().cluster(
-                          widget.jobs,
-                          camera: MapCamera.of(context),
-                        );
-                  _clusters = clusters;
+                    // A whisper of brand colour over the basemap, under everything
+                    // else, so markers and work areas stay untinted.
+                    IgnorePointer(
+                      child: ColoredBox(
+                        color: mapTheme.tint.withValues(
+                          alpha: mapTheme.tintOpacity,
+                        ),
+                        child: const SizedBox.expand(),
+                      ),
+                    ),
 
-                  return MarkerLayer(
-                    markers: [
-                      for (final cluster in clusters)
-                        if (cluster.isSingle &&
-                            cluster.only.id == widget.selectedJobId)
-                          // The selected pin carries its fare above it, so
-                          // its box grows upwards; the bottom-centre anchor
-                          // keeps the point on the coordinate.
+                    // Place names above the tint, so it never dims them.
+                    mapTheme.labelLayer(context, provider: widget.tileProvider),
+
+                    // The approximate work area of the selected job. Only the
+                    // selected one is drawn — every radius at once turns the map into
+                    // noise, which section 15 warns against.
+                    if (selected != null)
+                      CircleLayer(
+                        circles: [
+                          CircleMarker(
+                            point: LatLng(
+                              selected.location.latitude,
+                              selected.location.longitude,
+                            ),
+                            radius: selected.radiusMetres,
+                            useRadiusInMeter: true,
+                            color: context.colours.radiusFill,
+                            borderColor: context.colours.radiusBorder,
+                            borderStrokeWidth: 1.5,
+                          ),
+                        ],
+                      ),
+
+                    if (widget.userLocation != null)
+                      MarkerLayer(
+                        markers: [
                           Marker(
                             point: LatLng(
-                              cluster.only.location.latitude,
-                              cluster.only.location.longitude,
+                              widget.userLocation!.latitude,
+                              widget.userLocation!.longitude,
                             ),
-                            width: PinFareLabel.width,
-                            height:
-                                JobMarker.selectedSize +
-                                PinFareLabel.height +
-                                PinFareLabel.gap,
-                            alignment: Alignment.topCenter,
-                            child: Column(
-                              children: [
-                                PinFareLabel(job: cluster.only),
-                                const SizedBox(height: PinFareLabel.gap),
-                                SizedBox.square(
-                                  dimension: JobMarker.selectedSize,
+                            width: UserLocationMarker.size,
+                            height: UserLocationMarker.size,
+                            child: const UserLocationMarker(),
+                          ),
+                        ],
+                      ),
+
+                    // Clustering needs the camera, which only exists inside the map.
+                    Builder(
+                      builder: (context) {
+                        final held = _clusters;
+                        final clusters = (_isMoving && held != null)
+                            ? held
+                            : const MarkerClusterer().cluster(
+                                widget.jobs,
+                                camera: MapCamera.of(context),
+                              );
+                        _clusters = clusters;
+
+                        return MarkerLayer(
+                          markers: [
+                            for (final cluster in clusters)
+                              if (cluster.isSingle &&
+                                  cluster.only.id == widget.selectedJobId)
+                                // The selected pin carries its fare above it, so
+                                // its box grows upwards; the bottom-centre anchor
+                                // keeps the point on the coordinate.
+                                Marker(
+                                  point: LatLng(
+                                    cluster.only.location.latitude,
+                                    cluster.only.location.longitude,
+                                  ),
+                                  width: PinFareLabel.width,
+                                  height:
+                                      JobMarker.selectedSize +
+                                      PinFareLabel.height +
+                                      PinFareLabel.gap,
+                                  alignment: Alignment.topCenter,
+                                  child: Column(
+                                    children: [
+                                      PinFareLabel(job: cluster.only),
+                                      const SizedBox(height: PinFareLabel.gap),
+                                      SizedBox.square(
+                                        dimension: JobMarker.selectedSize,
+                                        child: JobMarker(
+                                          job: cluster.only,
+                                          isMine:
+                                              widget.myAccountId != null &&
+                                              cluster.only.isPostedBy(
+                                                widget.myAccountId!,
+                                              ),
+                                          isSelected: true,
+                                          onTap: () =>
+                                              widget.onJobTapped(cluster.only),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              else if (cluster.isSingle)
+                                Marker(
+                                  point: LatLng(
+                                    cluster.only.location.latitude,
+                                    cluster.only.location.longitude,
+                                  ),
+                                  width: JobMarker.selectedSize,
+                                  height: JobMarker.selectedSize,
+                                  // Anchor the pin's point at the coordinate rather
+                                  // than its centre, so it marks the right spot.
+                                  alignment: Alignment.topCenter,
                                   child: JobMarker(
                                     job: cluster.only,
                                     isMine:
@@ -281,57 +313,35 @@ class _JobMapState extends State<JobMap> {
                                         cluster.only.isPostedBy(
                                           widget.myAccountId!,
                                         ),
-                                    isSelected: true,
+                                    isSelected: false,
                                     onTap: () =>
                                         widget.onJobTapped(cluster.only),
                                   ),
+                                )
+                              else
+                                Marker(
+                                  point: LatLng(
+                                    cluster.centre.latitude,
+                                    cluster.centre.longitude,
+                                  ),
+                                  width: ClusterMarker.size,
+                                  height: ClusterMarker.size,
+                                  child: ClusterMarker(
+                                    count: cluster.count,
+                                    icon: cluster.isUniform
+                                        ? cluster.jobs.first.icon
+                                        : null,
+                                    onTap: () =>
+                                        widget.onClusterTapped?.call(cluster),
+                                  ),
                                 ),
-                              ],
-                            ),
-                          )
-                        else if (cluster.isSingle)
-                          Marker(
-                            point: LatLng(
-                              cluster.only.location.latitude,
-                              cluster.only.location.longitude,
-                            ),
-                            width: JobMarker.selectedSize,
-                            height: JobMarker.selectedSize,
-                            // Anchor the pin's point at the coordinate rather
-                            // than its centre, so it marks the right spot.
-                            alignment: Alignment.topCenter,
-                            child: JobMarker(
-                              job: cluster.only,
-                              isMine:
-                                  widget.myAccountId != null &&
-                                  cluster.only.isPostedBy(widget.myAccountId!),
-                              isSelected: false,
-                              onTap: () => widget.onJobTapped(cluster.only),
-                            ),
-                          )
-                        else
-                          Marker(
-                            point: LatLng(
-                              cluster.centre.latitude,
-                              cluster.centre.longitude,
-                            ),
-                            width: ClusterMarker.size,
-                            height: ClusterMarker.size,
-                            child: ClusterMarker(
-                              count: cluster.count,
-                              icon: cluster.isUniform
-                                  ? cluster.jobs.first.icon
-                                  : null,
-                              onTap: () =>
-                                  widget.onClusterTapped?.call(cluster),
-                            ),
-                          ),
-                    ],
-                  );
-                },
+                          ],
+                        );
+                      },
+                    ),
+                  ],
+                ),
               ),
-            ],
-          ),
         ),
 
         // The basemap's licence requires visible attribution.

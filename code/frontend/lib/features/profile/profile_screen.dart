@@ -34,6 +34,7 @@ import '../ai/ai_settings_section.dart';
 import '../directory/my_listing_screen.dart';
 import '../ratings/worker_standing_view.dart';
 import '../../app/account_controller.dart';
+import '../../widgets/focus_ring.dart';
 
 /// Who you are here, and how the app behaves for you.
 ///
@@ -710,35 +711,42 @@ class _RoleCard extends StatelessWidget {
           ),
         ),
         clipBehavior: Clip.antiAlias,
-        child: InkWell(
-          onTap: onTap,
-          child: Padding(
-            padding: const EdgeInsets.all(BrandSizing.spaceMd),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Icon(
-                      icon,
-                      color: selected
-                          ? scheme.primary
-                          : scheme.onSurfaceVariant,
-                    ),
-                    const Spacer(),
-                    if (selected)
-                      Icon(Icons.check_circle_rounded, size: 20, color: scheme.primary),
-                  ],
-                ),
-                const SizedBox(height: BrandSizing.spaceSm + 4),
-                Text(
-                  label,
-                  style: BrandType.body.copyWith(
-                    fontWeight: FontWeight.w600,
-                    color: scheme.onSurface,
+        child: FocusRing(
+          radius: BrandRadius.largeAll,
+          child: InkWell(
+            onTap: onTap,
+            child: Padding(
+              padding: const EdgeInsets.all(BrandSizing.spaceMd),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Icon(
+                        icon,
+                        color: selected
+                            ? scheme.primary
+                            : scheme.onSurfaceVariant,
+                      ),
+                      const Spacer(),
+                      if (selected)
+                        Icon(
+                          Icons.check_circle_rounded,
+                          size: 20,
+                          color: scheme.primary,
+                        ),
+                    ],
                   ),
-                ),
-              ],
+                  const SizedBox(height: BrandSizing.spaceSm + 4),
+                  Text(
+                    label,
+                    style: BrandType.body.copyWith(
+                      fontWeight: FontWeight.w600,
+                      color: scheme.onSurface,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

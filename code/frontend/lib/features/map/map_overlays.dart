@@ -10,6 +10,7 @@ import '../assistant/assistant_screen.dart';
 import '../jobs/filter_bar.dart';
 import '../jobs/job_filter_controller.dart';
 import '../../widgets/search_bar_frame.dart';
+import '../../widgets/focus_ring.dart';
 
 /// The things that float on top of the map.
 ///
@@ -68,18 +69,21 @@ class JobsSearchBar extends StatelessWidget {
         // account switcher off.
         Tooltip(
           message: strings.switchAccount,
-          child: InkWell(
-            customBorder: const CircleBorder(),
-            onTap: () => AccountSheet.open(context),
-            // The avatar is drawn at 28px, but section 29 asks for a 48px
-            // target. The box is invisible; only the reach changes.
-            child: SizedBox(
-              width: BrandSizing.touchTargetPreferred,
-              height: BrandSizing.touchTargetPreferred,
-              child: Center(
-                child: AccountAvatar(
-                  account: context.watch<AccountController>().active,
-                  radius: 14,
+          child: FocusRing(
+            radius: BorderRadius.all(Radius.circular(999)),
+            child: InkWell(
+              customBorder: const CircleBorder(),
+              onTap: () => AccountSheet.open(context),
+              // The avatar is drawn at 28px, but section 29 asks for a 48px
+              // target. The box is invisible; only the reach changes.
+              child: SizedBox(
+                width: BrandSizing.touchTargetPreferred,
+                height: BrandSizing.touchTargetPreferred,
+                child: Center(
+                  child: AccountAvatar(
+                    account: context.watch<AccountController>().active,
+                    radius: 14,
+                  ),
                 ),
               ),
             ),
@@ -136,34 +140,37 @@ class JobsViewSwitch extends StatelessWidget {
         shape: const StadiumBorder(),
         elevation: 3,
         shadowColor: context.colours.shadow.withValues(alpha: 0.3),
-        child: InkWell(
-          onTap: onPressed,
-          customBorder: const StadiumBorder(),
-          child: Container(
-            height: JobsViewSwitch.height,
-            constraints: const BoxConstraints(minWidth: 96),
-            padding: const EdgeInsets.symmetric(
-              horizontal: BrandSizing.spaceMd,
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  showingMap ? Icons.view_list_rounded : Icons.map_rounded,
-                  size: 20,
-                  color: foreground,
-                ),
-                const SizedBox(width: BrandSizing.spaceSm),
-                Text(
-                  showingMap ? count : strings.navMap,
-                  style: BrandType.supporting.copyWith(
+        child: FocusRing(
+          radius: BorderRadius.all(Radius.circular(999)),
+          child: InkWell(
+            onTap: onPressed,
+            customBorder: const StadiumBorder(),
+            child: Container(
+              height: JobsViewSwitch.height,
+              constraints: const BoxConstraints(minWidth: 96),
+              padding: const EdgeInsets.symmetric(
+                horizontal: BrandSizing.spaceMd,
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    showingMap ? Icons.view_list_rounded : Icons.map_rounded,
+                    size: 20,
                     color: foreground,
-                    fontWeight: FontWeight.w600,
-                    fontFeatures: const [FontFeature.tabularFigures()],
                   ),
-                ),
-              ],
+                  const SizedBox(width: BrandSizing.spaceSm),
+                  Text(
+                    showingMap ? count : strings.navMap,
+                    style: BrandType.supporting.copyWith(
+                      color: foreground,
+                      fontWeight: FontWeight.w600,
+                      fontFeatures: const [FontFeature.tabularFigures()],
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -387,24 +394,27 @@ class MapButton extends StatelessWidget {
       borderRadius: BrandRadius.mediumAll,
       elevation: 2,
       shadowColor: context.colours.shadow.withValues(alpha: 0.2),
-      child: InkWell(
-        onTap: enabled ? onPressed : null,
-        borderRadius: BrandRadius.mediumAll,
-        child: SizedBox(
-          width: BrandSizing.touchTargetPreferred,
-          height: BrandSizing.touchTargetPreferred,
-          child: isBusy
-              ? const Padding(
-                  padding: EdgeInsets.all(14),
-                  child: CircularProgressIndicator(strokeWidth: 2.5),
-                )
-              : Icon(
-                  icon,
-                  color: enabled
-                      ? context.colours.accentText
-                      : theme.colorScheme.outline,
-                  semanticLabel: label,
-                ),
+      child: FocusRing(
+        radius: BrandRadius.mediumAll,
+        child: InkWell(
+          onTap: enabled ? onPressed : null,
+          borderRadius: BrandRadius.mediumAll,
+          child: SizedBox(
+            width: BrandSizing.touchTargetPreferred,
+            height: BrandSizing.touchTargetPreferred,
+            child: isBusy
+                ? const Padding(
+                    padding: EdgeInsets.all(14),
+                    child: CircularProgressIndicator(strokeWidth: 2.5),
+                  )
+                : Icon(
+                    icon,
+                    color: enabled
+                        ? context.colours.accentText
+                        : theme.colorScheme.outline,
+                    semanticLabel: label,
+                  ),
+          ),
         ),
       ),
     );

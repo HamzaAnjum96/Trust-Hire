@@ -58,6 +58,27 @@ class BrandTheme {
     final mutedColour = scheme.onSurfaceVariant;
     final accentText = roles.accentText;
 
+    // **Keyboard focus, drawn one way everywhere** (WP11): a 2px ring just
+    // outside a focused control, as FocusRing draws round the app's own.
+    // Material's default is a wash a few percent darker, which on a text
+    // button over the map was close to invisible. Around a filled button the
+    // ring is turmeric (near-white in dark), since ink beside ink would only
+    // make the button look bigger.
+    final ring = BorderSide(
+      color: roles.action,
+      width: 2,
+      strokeAlign: BorderSide.strokeAlignOutside,
+    );
+    final ringOnFill = ring.copyWith(
+      color: isLight ? roles.highlight : roles.text,
+    );
+    WidgetStateProperty<BorderSide?> focusSide(
+      BorderSide focused, [
+      BorderSide? rest,
+    ]) => WidgetStateProperty.resolveWith(
+      (states) => states.contains(WidgetState.focused) ? focused : rest,
+    );
+
     final textTheme = TextTheme(
       displayLarge: BrandType.display.copyWith(color: textColour),
       displayMedium: BrandType.display.copyWith(color: textColour),
@@ -97,7 +118,7 @@ class BrandTheme {
         titleTextStyle: BrandType.pageHeading.copyWith(color: scheme.onSurface),
       ),
 
-      // Section 22 — primary button: burgundy, white text, 48px, 12px radius.
+      // Section 22 — primary button: ink, white text, a 52px pill.
       elevatedButtonTheme: ElevatedButtonThemeData(
         style:
             ElevatedButton.styleFrom(
@@ -113,7 +134,8 @@ class BrandTheme {
               textStyle: BrandType.button,
               shape: const StadiumBorder(),
             ).copyWith(
-              // Pressed state darkens to Deep Burgundy in light mode.
+              side: focusSide(ringOnFill),
+              // Pressed, the fill darkens a step.
               backgroundColor: WidgetStateProperty.resolveWith((states) {
                 if (states.contains(WidgetState.disabled)) {
                   return roles.tint;
@@ -126,16 +148,23 @@ class BrandTheme {
             ),
       ),
 
-      // Section 22 — secondary button: transparent with a burgundy border.
+      // Section 22 — secondary button: transparent with an ink border.
       outlinedButtonTheme: OutlinedButtonThemeData(
-        style: OutlinedButton.styleFrom(
-          foregroundColor: accentText,
-          minimumSize: const Size(0, BrandSizing.controlHeight),
-          padding: const EdgeInsets.symmetric(horizontal: BrandSizing.spaceLg),
-          side: BorderSide(color: scheme.primary),
-          textStyle: BrandType.button,
-          shape: const StadiumBorder(),
-        ),
+        style:
+            OutlinedButton.styleFrom(
+              foregroundColor: accentText,
+              minimumSize: const Size(0, BrandSizing.controlHeight),
+              padding: const EdgeInsets.symmetric(
+                horizontal: BrandSizing.spaceLg,
+              ),
+              textStyle: BrandType.button,
+              shape: const StadiumBorder(),
+            ).copyWith(
+              side: focusSide(
+                ring.copyWith(width: 3),
+                BorderSide(color: scheme.primary),
+              ),
+            ),
       ),
 
       // The same button as the elevated one, for the screens that ask for a
@@ -148,7 +177,7 @@ class BrandTheme {
           padding: const EdgeInsets.symmetric(horizontal: BrandSizing.spaceLg),
           textStyle: BrandType.button,
           shape: const StadiumBorder(),
-        ),
+        ).copyWith(side: focusSide(ringOnFill)),
       ),
 
       textButtonTheme: TextButtonThemeData(
@@ -157,11 +186,15 @@ class BrandTheme {
           minimumSize: const Size(0, BrandSizing.touchTargetMinimum),
           textStyle: BrandType.button,
           shape: const StadiumBorder(),
-        ),
+        ).copyWith(side: focusSide(ring)),
+      ),
+
+      iconButtonTheme: IconButtonThemeData(
+        style: ButtonStyle(side: focusSide(ring)),
       ),
 
       // Section 23 — inputs: white, Stone border, 12px radius, 48px min,
-      // 2px burgundy focus ring, labels always visible above the field.
+      // 2px ink focus ring, labels always visible above the field.
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: isLight ? roles.surface : roles.raised,
@@ -281,7 +314,10 @@ class BrandTheme {
           textStyle: WidgetStatePropertyAll(
             BrandType.supporting.copyWith(fontWeight: FontWeight.w600),
           ),
-          side: WidgetStatePropertyAll(BorderSide(color: scheme.outline)),
+          side: focusSide(
+            ring.copyWith(strokeAlign: BorderSide.strokeAlignInside),
+            BorderSide(color: scheme.outline),
+          ),
           shape: const WidgetStatePropertyAll(StadiumBorder()),
         ),
       ),
@@ -310,7 +346,11 @@ class BrandTheme {
       chipTheme: ChipThemeData(
         backgroundColor: roles.surface,
         selectedColor: roles.selection,
-        side: BorderSide(color: scheme.outlineVariant),
+        side: WidgetStateBorderSide.resolveWith(
+          (states) => states.contains(WidgetState.focused)
+              ? ring.copyWith(strokeAlign: BorderSide.strokeAlignInside)
+              : BorderSide(color: scheme.outlineVariant),
+        ),
         labelStyle: BrandType.supporting.copyWith(color: scheme.onSurface),
         padding: const EdgeInsets.symmetric(
           horizontal: BrandSizing.spaceSm + 4,

@@ -22,6 +22,7 @@ import '../map/location_controller.dart';
 import '../premium/premium_rules.dart';
 import '../ratings/worker_standing_view.dart';
 import 'worker_profile_screen.dart';
+import '../../widgets/focus_ring.dart';
 
 /// Mode B: the people, rather than the work.
 ///
@@ -224,7 +225,9 @@ class _DirectoryScreenState extends State<DirectoryScreen> {
 
                 if (listings.isEmpty)
                   EmptyView(
-                    icon: isFiltered ? Icons.search_off_rounded : Icons.badge_rounded,
+                    icon: isFiltered
+                        ? Icons.search_off_rounded
+                        : Icons.badge_rounded,
                     title: isFiltered
                         ? strings.directoryNoMatch
                         : strings.directoryEmpty,
@@ -350,6 +353,9 @@ class _DirectoryControls extends StatelessWidget {
             ),
             Expanded(
               child: InkWell(
+                // The checkbox beside it takes keyboard focus; one stop, not
+                // two, for one setting.
+                canRequestFocus: false,
                 onTap: () => onWithinReach(!withinReach),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(
@@ -418,102 +424,104 @@ class DirectoryListingCard extends StatelessWidget {
     // A row, like a job: flat on the page, the list draws the hairline.
     return Material(
       type: MaterialType.transparency,
-      child: InkWell(
-        onTap: () => WorkerProfileScreen.open(context, listing: listing),
-        child: Padding(
-          padding: const EdgeInsets.all(BrandSizing.spaceMd),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              LayoutBuilder(
-                builder: (context, constraints) => Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    InitialsAvatar(name: shownName),
-                    const SizedBox(width: BrandSizing.spaceSm + 4),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(shownName, style: theme.textTheme.titleLarge),
-                          if (listing.headline != null) ...[
-                            const SizedBox(height: 2),
-                            Text(
-                              listing.headline!,
-                              style: theme.textTheme.bodyMedium,
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ],
-                        ],
-                      ),
-                    ),
-                    if (from != null) ...[
-                      const SizedBox(width: BrandSizing.spaceSm),
-                      // The same shape as a fare on a job row: the number,
-                      // and what kind of number it is.
-                      ConstrainedBox(
-                        constraints: BoxConstraints(
-                          maxWidth: constraints.maxWidth * 0.36,
-                        ),
+      child: FocusRing(
+        child: InkWell(
+          onTap: () => WorkerProfileScreen.open(context, listing: listing),
+          child: Padding(
+            padding: const EdgeInsets.all(BrandSizing.spaceMd),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                LayoutBuilder(
+                  builder: (context, constraints) => Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      InitialsAvatar(name: shownName),
+                      const SizedBox(width: BrandSizing.spaceSm + 4),
+                      Expanded(
                         child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.end,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            FittedBox(
-                              fit: BoxFit.scaleDown,
-                              alignment: AlignmentDirectional.centerEnd,
-                              child: Text(
-                                Format.fare(strings, from),
-                                style: theme.fareStyle,
+                            Text(shownName, style: theme.textTheme.titleLarge),
+                            if (listing.headline != null) ...[
+                              const SizedBox(height: 2),
+                              Text(
+                                listing.headline!,
+                                style: theme.textTheme.bodyMedium,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
                               ),
-                            ),
-                            Text(
-                              strings.directoryPriceFrom,
-                              style: theme.textTheme.labelSmall,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
+                            ],
                           ],
                         ),
                       ),
+                      if (from != null) ...[
+                        const SizedBox(width: BrandSizing.spaceSm),
+                        // The same shape as a fare on a job row: the number,
+                        // and what kind of number it is.
+                        ConstrainedBox(
+                          constraints: BoxConstraints(
+                            maxWidth: constraints.maxWidth * 0.36,
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              FittedBox(
+                                fit: BoxFit.scaleDown,
+                                alignment: AlignmentDirectional.centerEnd,
+                                child: Text(
+                                  Format.fare(strings, from),
+                                  style: theme.fareStyle,
+                                ),
+                              ),
+                              Text(
+                                strings.directoryPriceFrom,
+                                style: theme.textTheme.labelSmall,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
                     ],
+                  ),
+                ),
+
+                // How far, how far they will come, and what they do. The second
+                // is the number the worker chose, and it is the reason they are
+                // on this screen at all rather than a different one.
+                const SizedBox(height: BrandSizing.spaceSm + 4),
+                Wrap(
+                  spacing: BrandSizing.spaceMd,
+                  runSpacing: BrandSizing.spaceXs,
+                  children: [
+                    if (distanceMetres != null)
+                      MetaChip(
+                        icon: Icons.near_me_rounded,
+                        label: Format.distance(strings, distanceMetres!),
+                      ),
+                    MetaChip(
+                      icon: listing.remoteOnly
+                          ? Icons.language_rounded
+                          : Icons.directions_car_rounded,
+                      label: listing.remoteOnly
+                          ? strings.worksRemotely
+                          : strings.travelsUpTo(
+                              Format.span(strings, listing.serviceRadiusMetres),
+                            ),
+                    ),
+                    // Facts, like the rest of the row — not chips, which read
+                    // as buttons and are not.
+                    for (final tag in listing.tags)
+                      MetaChip(icon: tag.icon, label: tag.label(strings)),
                   ],
                 ),
-              ),
 
-              // How far, how far they will come, and what they do. The second
-              // is the number the worker chose, and it is the reason they are
-              // on this screen at all rather than a different one.
-              const SizedBox(height: BrandSizing.spaceSm + 4),
-              Wrap(
-                spacing: BrandSizing.spaceMd,
-                runSpacing: BrandSizing.spaceXs,
-                children: [
-                  if (distanceMetres != null)
-                    MetaChip(
-                      icon: Icons.near_me_rounded,
-                      label: Format.distance(strings, distanceMetres!),
-                    ),
-                  MetaChip(
-                    icon: listing.remoteOnly
-                        ? Icons.language_rounded
-                        : Icons.directions_car_rounded,
-                    label: listing.remoteOnly
-                        ? strings.worksRemotely
-                        : strings.travelsUpTo(
-                            Format.span(strings, listing.serviceRadiusMetres),
-                          ),
-                  ),
-                  // Facts, like the rest of the row — not chips, which read
-                  // as buttons and are not.
-                  for (final tag in listing.tags)
-                    MetaChip(icon: tag.icon, label: tag.label(strings)),
-                ],
-              ),
-
-              const SizedBox(height: BrandSizing.spaceSm),
-              WorkerStandingView(workerId: listing.workerId, compact: true),
-            ],
+                const SizedBox(height: BrandSizing.spaceSm),
+                WorkerStandingView(workerId: listing.workerId, compact: true),
+              ],
+            ),
           ),
         ),
       ),

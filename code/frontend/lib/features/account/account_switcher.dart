@@ -8,6 +8,7 @@ import '../../core/theme.dart';
 import '../../core/tokens.dart';
 import '../../l10n/app_localizations.dart';
 import '../../models/account.dart';
+import '../../widgets/focus_ring.dart';
 
 /// The name to show for an account, in the reader's language.
 ///
@@ -204,64 +205,67 @@ class AccountCard extends StatelessWidget {
 
     return Material(
       type: MaterialType.transparency,
-      child: InkWell(
-        onTap: () => AccountSheet.open(context),
-        borderRadius: BrandRadius.largeAll,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: BrandSizing.spaceXs,
-            vertical: BrandSizing.spaceSm,
-          ),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              AccountAvatar(account: account, radius: 30),
-              const SizedBox(width: BrandSizing.spaceMd),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Section size, bold: under the page's own "Profile" a
-                    // second 24px heading would compete with it.
-                    Text(
-                      accountName(account, strings),
-                      style: theme.textTheme.titleLarge?.copyWith(
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    const SizedBox(height: 2),
-                    Text(
-                      account.area ??
-                          (account.isAdmin
-                              ? strings.accountStaffHelp
-                              : strings.accountYouHelp),
-                      style: theme.textTheme.bodyMedium,
-                    ),
-                    const SizedBox(height: BrandSizing.spaceSm),
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(
-                          Icons.swap_horiz_rounded,
-                          size: 18,
-                          color: theme.accentText,
+      child: FocusRing(
+        radius: BrandRadius.largeAll,
+        child: InkWell(
+          onTap: () => AccountSheet.open(context),
+          borderRadius: BrandRadius.largeAll,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: BrandSizing.spaceXs,
+              vertical: BrandSizing.spaceSm,
+            ),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                AccountAvatar(account: account, radius: 30),
+                const SizedBox(width: BrandSizing.spaceMd),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Section size, bold: under the page's own "Profile" a
+                      // second 24px heading would compete with it.
+                      Text(
+                        accountName(account, strings),
+                        style: theme.textTheme.titleLarge?.copyWith(
+                          fontWeight: FontWeight.w700,
                         ),
-                        const SizedBox(width: BrandSizing.spaceXs + 2),
-                        Flexible(
-                          child: Text(
-                            strings.switchAccount,
-                            style: BrandType.supporting.copyWith(
-                              color: theme.accentText,
-                              fontWeight: FontWeight.w600,
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        account.area ??
+                            (account.isAdmin
+                                ? strings.accountStaffHelp
+                                : strings.accountYouHelp),
+                        style: theme.textTheme.bodyMedium,
+                      ),
+                      const SizedBox(height: BrandSizing.spaceSm),
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            Icons.swap_horiz_rounded,
+                            size: 18,
+                            color: theme.accentText,
+                          ),
+                          const SizedBox(width: BrandSizing.spaceXs + 2),
+                          Flexible(
+                            child: Text(
+                              strings.switchAccount,
+                              style: BrandType.supporting.copyWith(
+                                color: theme.accentText,
+                                fontWeight: FontWeight.w600,
+                              ),
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                  ],
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

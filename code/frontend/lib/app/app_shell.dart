@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import '../core/roles.dart';
 
 import 'package:provider/provider.dart';
@@ -21,6 +22,7 @@ import 'job_controller.dart';
 import 'message_controller.dart';
 import 'notification_controller.dart';
 import 'wallet_controller.dart';
+import '../widgets/focus_ring.dart';
 
 /// The navigation scaffold.
 ///
@@ -110,12 +112,20 @@ class _AppShellState extends State<AppShell> {
   List<_Destination> _destinations(AppStrings strings, int waiting) => [
     // The map and the list of the same jobs. Named for what is in it rather
     // than for one of its two views.
-    _Destination(Icons.work_outline_rounded, Icons.work_rounded, strings.navJobs),
+    _Destination(
+      Icons.work_outline_rounded,
+      Icons.work_rounded,
+      strings.navJobs,
+    ),
     // Mode B, and a destination rather than a filter on the map. Section 9
     // calls it "a second, parallel discovery mode": the map answers where
     // there is work, the directory answers who can do a thing and what they
     // charge. Folding one into the other would make both worse.
-    _Destination(Icons.badge_rounded, Icons.badge_rounded, strings.navDirectory),
+    _Destination(
+      Icons.badge_rounded,
+      Icons.badge_rounded,
+      strings.navDirectory,
+    ),
     _Destination(
       Icons.bookmark_border_rounded,
       Icons.bookmark_rounded,
@@ -129,7 +139,11 @@ class _AppShellState extends State<AppShell> {
     // "Profile", not "Settings": role and trades decide what the rest of the
     // app shows, which is not a setting — and a marketplace with no profile
     // destination has nowhere to put trust signals later.
-    _Destination(Icons.person_outline_rounded, Icons.person_rounded, strings.navProfile),
+    _Destination(
+      Icons.person_outline_rounded,
+      Icons.person_rounded,
+      strings.navProfile,
+    ),
   ];
 
   void _openCreateJob() {
@@ -213,23 +227,37 @@ class _AppShellState extends State<AppShell> {
         decoration: BoxDecoration(
           border: Border(top: BorderSide(color: context.colours.shell)),
         ),
-        child: NavigationBar(
-          selectedIndex: _barIndexOf(_index),
-          onDestinationSelected: (value) {
-            // The posting slot handles its own tap; it is never a place.
-            if (value == _postSlot) return;
-            setState(() => _index = _pageOf(value));
+        // Arrow keys move along the bar, as they do along any row of tabs.
+        // On the web they would otherwise scroll the page underneath.
+        child: Shortcuts(
+          shortcuts: const {
+            SingleActivator(LogicalKeyboardKey.arrowLeft):
+                DirectionalFocusIntent(TraversalDirection.left),
+            SingleActivator(LogicalKeyboardKey.arrowRight):
+                DirectionalFocusIntent(TraversalDirection.right),
           },
-          destinations: [
-            for (final (i, destination) in destinations.indexed) ...[
-              if (i == _postSlot)
-                PostJobButton(
-                  onPressed: _openCreateJob,
-                  shape: PostJobShape.barSlot,
+          child: NavigationBar(
+            selectedIndex: _barIndexOf(_index),
+            onDestinationSelected: (value) {
+              // The posting slot handles its own tap; it is never a place.
+              if (value == _postSlot) return;
+              setState(() => _index = _pageOf(value));
+            },
+            destinations: [
+              for (final (i, destination) in destinations.indexed) ...[
+                if (i == _postSlot)
+                  PostJobButton(
+                    onPressed: _openCreateJob,
+                    shape: PostJobShape.barSlot,
+                  ),
+                FocusRing(
+                  onShell: true,
+                  radius: BrandRadius.mediumAll,
+                  child: destination.forBar,
                 ),
-              destination.forBar,
+              ],
             ],
-          ],
+          ),
         ),
       ),
     );
@@ -306,15 +334,22 @@ class PostJobButton extends StatelessWidget {
             label: label!,
           );
 
+    // On the ink rail, where a focused white button on ink changes too
+    // little to find.
+    Widget ringed(Widget button) =>
+        FocusRing(onShell: true, radius: BrandRadius.mediumAll, child: button);
+
     return switch (shape) {
       // Section 21 — say what the action does, never "Submit".
-      PostJobShape.wide => fab(
-        icon: const Icon(Icons.add_rounded),
-        label: Text(strings.postAJob, style: BrandType.button),
+      PostJobShape.wide => ringed(
+        fab(
+          icon: const Icon(Icons.add_rounded),
+          label: Text(strings.postAJob, style: BrandType.button),
+        ),
       ),
       PostJobShape.stacked => Column(
         children: [
-          fab(child: const Icon(Icons.add_rounded)),
+          ringed(fab(child: const Icon(Icons.add_rounded))),
           const SizedBox(height: BrandSizing.spaceXs),
           Text(
             strings.postAJob,
@@ -357,41 +392,45 @@ class _BarSlot extends StatelessWidget {
       excludeSemantics: true,
       child: Tooltip(
         message: strings.postAJob,
-        child: InkWell(
-          onTap: onPressed,
-          customBorder: const RoundedRectangleBorder(
-            borderRadius: BrandRadius.mediumAll,
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                width: 56,
-                height: 32,
-                decoration: BoxDecoration(
-                  color: context.colours.onShell,
-                  borderRadius: BrandRadius.mediumAll,
-                ),
-                child: Icon(
-                  Icons.add_rounded,
-                  size: 24,
-                  color: context.colours.shell,
-                ),
-              ),
-              const SizedBox(height: BrandSizing.spaceXs),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 2),
-                child: Text(
-                  strings.postAJob,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: BrandType.caption.copyWith(
+        child: FocusRing(
+          radius: BrandRadius.mediumAll,
+          onShell: true,
+          child: InkWell(
+            onTap: onPressed,
+            customBorder: const RoundedRectangleBorder(
+              borderRadius: BrandRadius.mediumAll,
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  width: 56,
+                  height: 32,
+                  decoration: BoxDecoration(
                     color: context.colours.onShell,
-                    fontWeight: FontWeight.w600,
+                    borderRadius: BrandRadius.mediumAll,
+                  ),
+                  child: Icon(
+                    Icons.add_rounded,
+                    size: 24,
+                    color: context.colours.shell,
                   ),
                 ),
-              ),
-            ],
+                const SizedBox(height: BrandSizing.spaceXs),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 2),
+                  child: Text(
+                    strings.postAJob,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: BrandType.caption.copyWith(
+                      color: context.colours.onShell,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -431,39 +470,48 @@ class _NavigationRail extends StatelessWidget {
         child: ConstrainedBox(
           constraints: BoxConstraints(minHeight: constraints.maxHeight),
           child: IntrinsicHeight(
-            child: NavigationRail(
-              selectedIndex: index,
-              onDestinationSelected: onSelected,
-              extended: extended,
-              labelType: extended ? null : NavigationRailLabelType.all,
-              leading: Padding(
-                padding: const EdgeInsets.only(
-                  top: BrandSizing.spaceMd,
-                  bottom: BrandSizing.spaceLg,
-                ),
-                // The rail centres whatever leads it. Extended, that left the
-                // name and the button floating mid-rail over destinations that
-                // start at the left edge; held to the rail's width, they start
-                // where the destinations' indicator does.
-                child: SizedBox(
-                  width: extended ? _extendedLeadingWidth : null,
-                  child: Column(
-                    crossAxisAlignment: extended
-                        ? CrossAxisAlignment.start
-                        : CrossAxisAlignment.center,
-                    children: [
-                      _RailMark(extended: extended),
-                      if (action != null) ...[
-                        const SizedBox(height: BrandSizing.spaceLg),
-                        action!,
+            // Arrow keys move down the rail, as they do along the bar.
+            child: Shortcuts(
+              shortcuts: const {
+                SingleActivator(LogicalKeyboardKey.arrowUp):
+                    DirectionalFocusIntent(TraversalDirection.up),
+                SingleActivator(LogicalKeyboardKey.arrowDown):
+                    DirectionalFocusIntent(TraversalDirection.down),
+              },
+              child: NavigationRail(
+                selectedIndex: index,
+                onDestinationSelected: onSelected,
+                extended: extended,
+                labelType: extended ? null : NavigationRailLabelType.all,
+                leading: Padding(
+                  padding: const EdgeInsets.only(
+                    top: BrandSizing.spaceMd,
+                    bottom: BrandSizing.spaceLg,
+                  ),
+                  // The rail centres whatever leads it. Extended, that left the
+                  // name and the button floating mid-rail over destinations that
+                  // start at the left edge; held to the rail's width, they start
+                  // where the destinations' indicator does.
+                  child: SizedBox(
+                    width: extended ? _extendedLeadingWidth : null,
+                    child: Column(
+                      crossAxisAlignment: extended
+                          ? CrossAxisAlignment.start
+                          : CrossAxisAlignment.center,
+                      children: [
+                        _RailMark(extended: extended),
+                        if (action != null) ...[
+                          const SizedBox(height: BrandSizing.spaceLg),
+                          action!,
+                        ],
                       ],
-                    ],
+                    ),
                   ),
                 ),
+                destinations: [
+                  for (final destination in destinations) destination.forRail,
+                ],
               ),
-              destinations: [
-                for (final destination in destinations) destination.forRail,
-              ],
             ),
           ),
         ),

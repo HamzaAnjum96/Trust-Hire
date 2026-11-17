@@ -234,6 +234,8 @@ class _OfferRow extends StatelessWidget {
     );
 
     if (!selectable) return content;
-    return InkWell(onTap: onSelect, child: content);
+    // The radio takes keyboard focus; the row is the bigger target for a
+    // finger. One stop per offer, not two.
+    return InkWell(onTap: onSelect, canRequestFocus: false, child: content);
   }
 }
