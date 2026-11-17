@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../core/roles.dart';
 import 'package:provider/provider.dart';
 
 import '../../app/job_controller.dart';
@@ -80,7 +81,7 @@ class _ThreadScreenState extends State<ThreadScreen> {
       _scroll.animateTo(
         _scroll.position.maxScrollExtent,
         duration: const Duration(milliseconds: 220),
-        curve: Curves.easeOut,
+        curve: BrandMotion.curve,
       );
     }
   }
@@ -295,7 +296,7 @@ class _Bubble extends StatelessWidget {
               ),
               decoration: BoxDecoration(
                 color: isMine
-                    ? theme.colorScheme.primary
+                    ? context.colours.action
                     : theme.colorScheme.surfaceContainerHighest,
                 borderRadius: BrandRadius.mediumAll,
               ),
@@ -303,7 +304,7 @@ class _Bubble extends StatelessWidget {
                 message.body,
                 style: theme.textTheme.bodyLarge?.copyWith(
                   color: isMine
-                      ? theme.colorScheme.onPrimary
+                      ? context.colours.onAction
                       : theme.colorScheme.onSurface,
                 ),
               ),

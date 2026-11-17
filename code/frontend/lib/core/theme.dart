@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'roles.dart';
 import 'tokens.dart';
 
 /// Material themes assembled from the brand tokens.
@@ -40,7 +41,7 @@ class BrandTheme {
       onInverseSurface: BrandColours.white,
     );
 
-    return _base(scheme, ground: BrandColours.mist);
+    return _base(scheme, ground: BrandColours.mist, roles: AppColours.light);
   }
 
   static ThemeData get dark {
@@ -68,11 +69,19 @@ class BrandTheme {
       onInverseSurface: BrandColours.ink,
     );
 
-    return _base(scheme, ground: BrandColours.darkBackground);
+    return _base(
+      scheme,
+      ground: BrandColours.darkBackground,
+      roles: AppColours.dark,
+    );
   }
 
   /// [ground] is the page: the colour every screen and its app bar sit on.
-  static ThemeData _base(ColorScheme scheme, {required Color ground}) {
+  static ThemeData _base(
+    ColorScheme scheme, {
+    required Color ground,
+    required AppColours roles,
+  }) {
     final isLight = scheme.brightness == Brightness.light;
     final textColour = scheme.onSurface;
     final mutedColour = scheme.onSurfaceVariant;
@@ -98,6 +107,7 @@ class BrandTheme {
       useMaterial3: true,
       colorScheme: scheme,
       scaffoldBackgroundColor: ground,
+      extensions: <ThemeExtension<dynamic>>[roles],
       fontFamily: BrandType.family,
       fontFamilyFallback: BrandType.fallback,
       textTheme: textTheme,

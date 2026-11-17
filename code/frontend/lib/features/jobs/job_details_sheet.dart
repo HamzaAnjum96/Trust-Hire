@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../core/roles.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
@@ -435,7 +436,7 @@ class _SaveButton extends StatelessWidget {
       },
       icon: Icon(isSaved ? Icons.bookmark : Icons.bookmark_border),
       // Colour is never the only cue: the icon fills as well.
-      color: isSaved ? Theme.of(context).colorScheme.primary : null,
+      color: isSaved ? context.colours.accentText : null,
       tooltip: isSaved ? strings.removeFromSaved : strings.saveThisJob,
     );
   }
@@ -490,7 +491,7 @@ class _MoreMenu extends StatelessWidget {
             child: Text(strings.keepJob),
           ),
           TextButton(
-            style: TextButton.styleFrom(foregroundColor: BrandColours.errorRed),
+            style: TextButton.styleFrom(foregroundColor: context.colours.bad),
             // Section 22 — destructive actions are labelled explicitly, never
             // "Confirm" or "Yes".
             onPressed: () => Navigator.of(dialogContext).pop(true),
@@ -524,7 +525,7 @@ class _MoreMenu extends StatelessWidget {
       String label, {
       bool danger = false,
     }) {
-      final colour = danger ? BrandColours.errorRed : null;
+      final colour = danger ? context.colours.bad : null;
       return PopupMenuItem(
         value: value,
         child: Row(
@@ -644,8 +645,8 @@ class _MapPreview extends StatelessWidget {
                       point: centre,
                       radius: job.radiusMetres,
                       useRadiusInMeter: true,
-                      color: BrandColours.jobRadiusFill,
-                      borderColor: BrandColours.jobRadiusBorder,
+                      color: context.colours.radiusFill,
+                      borderColor: context.colours.radiusBorder,
                       borderStrokeWidth: 1.5,
                     ),
                   ],

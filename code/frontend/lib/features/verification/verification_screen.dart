@@ -30,9 +30,9 @@ class VerificationScreen extends StatefulWidget {
   const VerificationScreen({super.key});
 
   static Future<void> open(BuildContext context) {
-    return Navigator.of(context).push(
-      MaterialPageRoute<void>(builder: (_) => const VerificationScreen()),
-    );
+    return Navigator.of(
+      context,
+    ).push(MaterialPageRoute<void>(builder: (_) => const VerificationScreen()));
   }
 
   @override
@@ -276,7 +276,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
         if (mine.phoneVerified) ...[
           Row(
             children: [
-              StatusPill.good(strings.verifyPhoneDone),
+              StatusPill.good(context, strings.verifyPhoneDone),
               const SizedBox(width: BrandSizing.spaceSm),
               Expanded(
                 child: Text(
@@ -322,7 +322,8 @@ class _VerificationScreenState extends State<VerificationScreen> {
           const SizedBox(height: BrandSizing.spaceLg),
           if (controller.demoMessage != null) ...[
             NoticePanel(
-              message: '${strings.verifyDemoSms}\n\n'
+              message:
+                  '${strings.verifyDemoSms}\n\n'
                   '${controller.demoMessage}',
               icon: Icons.smartphone_outlined,
               tone: NoticeTone.warning,
@@ -427,7 +428,7 @@ class _CnicOnFile extends StatelessWidget {
       children: [
         Row(
           children: [
-            StatusPill.good(strings.verifyCnicDone),
+            StatusPill.good(context, strings.verifyCnicDone),
             const SizedBox(width: BrandSizing.spaceSm),
             Expanded(
               child: Text(

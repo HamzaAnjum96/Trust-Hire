@@ -1,4 +1,5 @@
 import 'dart:async';
+import '../../core/roles.dart';
 
 import 'package:flutter/material.dart';
 
@@ -68,11 +69,7 @@ class _VoiceRecorderFieldState extends State<VoiceRecorderField> {
         isLight: isLight,
         child: Row(
           children: [
-            const Icon(
-              Icons.mic_off_outlined,
-              color: BrandColours.informationBlue,
-              size: 22,
-            ),
+            Icon(Icons.mic_off_outlined, color: context.colours.info, size: 22),
             const SizedBox(width: BrandSizing.spaceSm + 4),
             Expanded(
               child: Text(
@@ -92,7 +89,7 @@ class _VoiceRecorderFieldState extends State<VoiceRecorderField> {
           children: [
             // Section 26 — recording turns the control Error Red.
             _RoundButton(
-              colour: BrandColours.errorRed,
+              colour: context.colours.bad,
               icon: Icons.stop,
               label: strings.stopRecording,
               onTap: draft.stopRecording,
@@ -130,7 +127,7 @@ class _VoiceRecorderFieldState extends State<VoiceRecorderField> {
         isLight: isLight,
         child: Row(
           children: [
-            const Icon(Icons.graphic_eq, color: BrandColours.copper, size: 26),
+            Icon(Icons.graphic_eq, color: context.colours.voice, size: 26),
             const SizedBox(width: BrandSizing.spaceMd),
             Expanded(
               child: Column(
@@ -169,7 +166,7 @@ class _VoiceRecorderFieldState extends State<VoiceRecorderField> {
       child: Row(
         children: [
           _RoundButton(
-            colour: BrandColours.copper,
+            colour: context.colours.voice,
             icon: Icons.mic,
             label: strings.recordAVoiceNote,
             onTap: draft.startRecording,
@@ -263,7 +260,7 @@ class _AddTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final accent = isLight ? BrandColours.copper : BrandColours.darkCopper;
+    final accent = context.colours.voice;
 
     return InkWell(
       onTap: onTap,
@@ -273,7 +270,7 @@ class _AddTile extends StatelessWidget {
         padding: const EdgeInsets.all(BrandSizing.spaceSm),
         decoration: BoxDecoration(
           // Section 27 — Warm Sand tile with a dashed copper edge.
-          color: isLight ? BrandColours.warmSand : BrandColours.darkElevated,
+          color: context.colours.tint,
           borderRadius: BrandRadius.mediumAll,
           border: Border.all(color: accent.withValues(alpha: 0.6)),
         ),
@@ -329,7 +326,7 @@ class _PhotoTile extends StatelessWidget {
             top: 2,
             right: 2,
             child: Material(
-              color: BrandColours.ink.withValues(alpha: 0.6),
+              color: context.colours.shadow.withValues(alpha: 0.6),
               shape: const CircleBorder(),
               child: InkWell(
                 onTap: onRemove,
@@ -339,7 +336,7 @@ class _PhotoTile extends StatelessWidget {
                   child: Icon(
                     Icons.close,
                     size: 16,
-                    color: BrandColours.white,
+                    color: context.colours.onInverse,
                     semanticLabel: strings.removePhoto,
                   ),
                 ),
@@ -379,7 +376,7 @@ class _RoundButton extends StatelessWidget {
           child: SizedBox(
             width: BrandSizing.touchTargetPreferred,
             height: BrandSizing.touchTargetPreferred,
-            child: Icon(icon, color: BrandColours.white, size: 26),
+            child: Icon(icon, color: context.colours.onVoice, size: 26),
           ),
         ),
       ),
@@ -398,7 +395,7 @@ class _Surface extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(BrandSizing.spaceSm + 4),
       decoration: BoxDecoration(
-        color: isLight ? BrandColours.warmSand : BrandColours.darkElevated,
+        color: context.colours.tint,
         borderRadius: BrandRadius.mediumAll,
       ),
       child: child,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../core/roles.dart';
 import 'package:provider/provider.dart';
 
 import '../../app/ai_controller.dart';
@@ -27,13 +28,13 @@ class AiSettingsSection extends StatelessWidget {
         strings.aiStatusUnsupported,
       ),
       AiState.off => StatusPill.muted(context, strings.aiStatusOff),
-      AiState.idle => StatusPill.good(strings.aiStatusIdle),
+      AiState.idle => StatusPill.good(context, strings.aiStatusIdle),
       AiState.loading => StatusPill.muted(
         context,
         strings.aiStatusLoading((ai.progress * 100).round()),
       ),
-      AiState.ready => StatusPill.good(strings.aiStatusReady),
-      AiState.failed => StatusPill.bad(strings.aiStatusFailed),
+      AiState.ready => StatusPill.good(context, strings.aiStatusReady),
+      AiState.failed => StatusPill.bad(context, strings.aiStatusFailed),
     };
 
     return SettingsGroup(
@@ -139,10 +140,7 @@ class AiSettingsSection extends StatelessWidget {
         // as plainly as putting them on.
         if (!ai.isRemote && ai.downloaded == true)
           ListTile(
-            leading: const Icon(
-              Icons.delete_outline,
-              color: BrandColours.errorRed,
-            ),
+            leading: Icon(Icons.delete_outline, color: context.colours.bad),
             title: Text(strings.aiRemoveDownload),
             onTap: ai.removeDownload,
           ),

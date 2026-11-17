@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../core/roles.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
@@ -170,9 +171,7 @@ class _OfferSheetState extends State<OfferSheet> {
             const SizedBox(height: BrandSizing.spaceSm),
             TextButton(
               onPressed: _isSaving ? null : _withdraw,
-              style: TextButton.styleFrom(
-                foregroundColor: BrandColours.errorRed,
-              ),
+              style: TextButton.styleFrom(foregroundColor: context.colours.bad),
               child: Text(strings.withdrawOffer),
             ),
           ],

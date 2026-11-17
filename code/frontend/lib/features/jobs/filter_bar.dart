@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../core/roles.dart';
 
 import '../../core/tokens.dart';
 import '../../models/job_tag.dart';
@@ -117,17 +118,17 @@ class _FilterChip extends StatelessWidget {
     // Selection carries a filled background *and* a tick, so colour is never
     // the only signal (section 29).
     final foreground = selected
-        ? theme.colorScheme.onPrimary
+        ? context.colours.onHighlight
         : theme.colorScheme.onSurface;
 
     return Semantics(
       button: true,
       selected: selected,
       child: Material(
-        color: selected ? theme.colorScheme.primary : theme.colorScheme.surface,
+        color: selected ? context.colours.highlight : theme.colorScheme.surface,
         borderRadius: BrandRadius.mediumAll,
         elevation: floating ? 2 : 0,
-        shadowColor: BrandColours.ink.withValues(alpha: 0.2),
+        shadowColor: context.colours.shadow.withValues(alpha: 0.2),
         child: InkWell(
           onTap: onTap,
           borderRadius: BrandRadius.mediumAll,
@@ -140,7 +141,7 @@ class _FilterChip extends StatelessWidget {
               borderRadius: BrandRadius.mediumAll,
               border: Border.all(
                 color: selected
-                    ? theme.colorScheme.primary
+                    ? context.colours.highlight
                     : theme.colorScheme.outlineVariant,
               ),
             ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../core/roles.dart';
 
 import '../core/tokens.dart';
 
@@ -138,11 +139,7 @@ class ErrorView extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(
-              Icons.error_outline,
-              size: 40,
-              color: BrandColours.errorRed,
-            ),
+            Icon(Icons.error_outline, size: 40, color: context.colours.bad),
             const SizedBox(height: BrandSizing.spaceMd),
             Text(
               message,
@@ -178,9 +175,9 @@ class NoticePanel extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colour = switch (tone) {
-      NoticeTone.information => BrandColours.informationBlue,
-      NoticeTone.warning => BrandColours.warningAmber,
-      NoticeTone.success => BrandColours.successTeal,
+      NoticeTone.information => context.colours.info,
+      NoticeTone.warning => context.colours.warn,
+      NoticeTone.success => context.colours.good,
     };
 
     return Container(

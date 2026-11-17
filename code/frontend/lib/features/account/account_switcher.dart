@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../core/roles.dart';
 import 'package:provider/provider.dart';
 
 import '../../app/account_controller.dart';
@@ -35,17 +36,17 @@ class AccountAvatar extends StatelessWidget {
     return CircleAvatar(
       radius: radius,
       backgroundColor: account.isDevice
-          ? theme.colorScheme.primary
-          : BrandColours.copper,
+          ? context.colours.action
+          : context.colours.avatar,
       foregroundColor: account.isDevice
-          ? theme.colorScheme.onPrimary
-          : Colors.white,
+          ? context.colours.onAction
+          : context.colours.onAvatar,
       child: Text(
         account.initialsOf(strings.accountYou),
         style: theme.textTheme.labelLarge?.copyWith(
           color: account.isDevice
-              ? theme.colorScheme.onPrimary
-              : Colors.white,
+              ? context.colours.onAction
+              : context.colours.onAvatar,
           fontSize: radius * 0.7,
         ),
       ),
@@ -162,7 +163,7 @@ class _AccountTile extends StatelessWidget {
       title: Text(accountName(account, strings)),
       subtitle: Text(subtitle),
       trailing: isActive
-          ? Icon(Icons.check_circle, color: Theme.of(context).colorScheme.primary)
+          ? Icon(Icons.check_circle, color: context.colours.accentText)
           : null,
       selected: isActive,
       onTap: isActive

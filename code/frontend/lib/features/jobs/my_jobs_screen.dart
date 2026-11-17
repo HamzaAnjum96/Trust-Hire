@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../core/roles.dart';
 import 'package:provider/provider.dart';
 
 import '../../app/account_controller.dart';
@@ -283,7 +284,7 @@ class _OfferOutcome extends StatelessWidget {
     final theme = Theme.of(context);
 
     final (label, colour) = switch (offer.status) {
-      BidStatus.accepted => (strings.chosen, BrandColours.successTeal),
+      BidStatus.accepted => (strings.chosen, context.colours.good),
       BidStatus.passedOver => (
         strings.offerNotChosen,
         theme.colorScheme.onSurfaceVariant,
@@ -292,7 +293,7 @@ class _OfferOutcome extends StatelessWidget {
         strings.offerWithdrawn,
         theme.colorScheme.onSurfaceVariant,
       ),
-      BidStatus.offered => (strings.offerWaiting, theme.colorScheme.primary),
+      BidStatus.offered => (strings.offerWaiting, context.colours.accentText),
     };
 
     return Padding(

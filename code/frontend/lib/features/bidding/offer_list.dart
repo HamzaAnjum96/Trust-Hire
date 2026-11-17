@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../core/roles.dart';
 import 'package:provider/provider.dart';
 
 import '../../app/bid_controller.dart';
@@ -118,7 +119,7 @@ class _OfferRow extends StatelessWidget {
         borderRadius: BrandRadius.mediumAll,
         side: BorderSide(
           color: isChosen
-              ? theme.colorScheme.primary
+              ? context.colours.highlight
               : theme.colorScheme.outlineVariant,
           width: isChosen ? 2 : 1,
         ),

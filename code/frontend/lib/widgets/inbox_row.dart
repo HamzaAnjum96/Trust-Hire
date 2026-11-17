@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import '../core/tokens.dart';
+import '../core/roles.dart';
 
 /// One row of an inbox: Updates and Messages both use it.
 ///
@@ -34,9 +33,7 @@ class InboxRow extends StatelessWidget {
     final theme = Theme.of(context);
     final scheme = theme.colorScheme;
     final last = index == count - 1;
-    final fill = theme.brightness == Brightness.light
-        ? BrandColours.warmSand
-        : BrandColours.darkElevated;
+    final fill = context.colours.selection;
 
     return Material(
       color: highlighted ? fill : Colors.transparent,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../core/roles.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
@@ -508,12 +509,12 @@ class _SaveBar extends StatelessWidget {
                     child: ElevatedButton(
                       onPressed: draft.canSave ? onSave : null,
                       child: draft.isSaving
-                          ? const SizedBox(
+                          ? SizedBox(
                               width: 20,
                               height: 20,
                               child: CircularProgressIndicator(
                                 strokeWidth: 2.5,
-                                color: BrandColours.white,
+                                color: context.colours.onAction,
                               ),
                             )
                           // Section 21 — never "Submit".

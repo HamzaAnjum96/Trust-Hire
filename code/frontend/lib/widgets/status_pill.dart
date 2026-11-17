@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../core/roles.dart';
 
 import '../core/tokens.dart';
 
@@ -70,16 +71,16 @@ class StatusPill extends StatelessWidget {
   }
 
   /// Finished, and finished well.
-  factory StatusPill.good(String label) => StatusPill(
+  factory StatusPill.good(BuildContext context, String label) => StatusPill(
     label: label,
-    background: BrandColours.successTeal,
-    foreground: BrandColours.white,
+    background: context.colours.good,
+    foreground: context.colours.onSignal,
   );
 
   /// Stopped by somebody, rather than simply over.
-  factory StatusPill.bad(String label) => StatusPill(
+  factory StatusPill.bad(BuildContext context, String label) => StatusPill(
     label: label,
-    background: BrandColours.errorRed,
-    foreground: BrandColours.white,
+    background: context.colours.bad,
+    foreground: context.colours.onSignal,
   );
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../core/roles.dart';
 import 'package:provider/provider.dart';
 
 import '../../app/account_controller.dart';
@@ -75,9 +76,7 @@ class JobRow extends StatelessWidget {
     //
     // Selection is a sand fill and a burgundy title. It used to be a border,
     // when there was a border to change.
-    final selectedFill = theme.brightness == Brightness.light
-        ? BrandColours.warmSand
-        : BrandColours.darkElevated;
+    final selectedFill = context.colours.selection;
 
     return Semantics(
       selected: isSelected,
@@ -167,7 +166,7 @@ class JobRow extends StatelessWidget {
                     if (job.hasVoiceNote)
                       MetaChip(
                         icon: Icons.mic,
-                        iconColor: theme.colorScheme.secondary,
+                        iconColor: context.colours.voice,
                         // Distinguishes "has a voice note as well" from "the
                         // voice note is all there is", which decides whether
                         // this row is worth opening at all.

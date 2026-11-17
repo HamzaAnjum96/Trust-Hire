@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../core/roles.dart';
 import 'package:provider/provider.dart';
 
 import '../../app/job_controller.dart';
@@ -324,12 +325,12 @@ class _DirectoryControls extends StatelessWidget {
                   Text(
                     _label(strings, order),
                     style: theme.textTheme.labelLarge?.copyWith(
-                      color: theme.colorScheme.primary,
+                      color: context.colours.accentText,
                     ),
                   ),
                   Icon(
                     Icons.arrow_drop_down,
-                    color: theme.colorScheme.primary,
+                    color: context.colours.accentText,
                     semanticLabel: strings.directoryOrderLabel,
                   ),
                 ],

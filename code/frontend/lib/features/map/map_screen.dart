@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../core/roles.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
@@ -977,7 +978,7 @@ class JobPreviewCard extends StatelessWidget {
               if (job.hasVoiceNote)
                 MetaChip(
                   icon: Icons.mic,
-                  iconColor: theme.colorScheme.secondary,
+                  iconColor: context.colours.voice,
                   label: strings.voiceNote,
                 ),
               if (job.hasPhotos)

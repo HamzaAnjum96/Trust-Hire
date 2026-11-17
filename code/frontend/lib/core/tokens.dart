@@ -256,6 +256,9 @@ class BrandMotion {
   /// Large transitions — full-screen route changes.
   static const large = Duration(milliseconds: 340);
 
-  static const curve = Curves.easeOutCubic;
-  static const emphasisCurve = Curves.easeOutBack;
+  /// **One curve for everything** that moves: a quick start that settles
+  /// gently, with no overshoot. There used to be a second, `easeOutBack`,
+  /// whose bounce section 28 rules out, and a third written inline.
+  /// `design_rules_test.dart` fails on any curve named outside this file.
+  static const curve = Cubic(0.22, 1, 0.36, 1);
 }

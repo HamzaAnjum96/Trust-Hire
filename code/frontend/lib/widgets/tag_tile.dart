@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../core/roles.dart';
 
 import '../core/motion.dart';
 import '../core/tokens.dart';
@@ -38,13 +39,12 @@ class TagTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final strings = AppStrings.of(context);
     final theme = Theme.of(context);
-    final isLight = theme.brightness == Brightness.light;
 
     final background = selected
-        ? theme.colorScheme.primary
-        : (isLight ? BrandColours.warmSand : BrandColours.darkElevated);
+        ? context.colours.highlight
+        : (context.colours.tint);
     final foreground = selected
-        ? theme.colorScheme.onPrimary
+        ? context.colours.onHighlight
         : (enabled
               ? theme.colorScheme.onSurface
               : theme.colorScheme.onSurfaceVariant);
@@ -76,7 +76,7 @@ class TagTile extends StatelessWidget {
               borderRadius: BrandRadius.mediumAll,
               border: Border.all(
                 color: selected
-                    ? theme.colorScheme.primary
+                    ? context.colours.highlight
                     : theme.colorScheme.outlineVariant,
               ),
             ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../core/roles.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
@@ -215,7 +216,7 @@ class _PriceRow extends StatelessWidget {
             amount,
             style: emphasised
                 ? theme.textTheme.titleLarge?.copyWith(
-                    color: theme.colorScheme.primary,
+                    color: context.colours.accentText,
                   )
                 : theme.textTheme.titleMedium?.copyWith(
                     color: theme.colorScheme.onSurfaceVariant,

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import '../core/roles.dart';
 
-import '../core/tokens.dart';
 import '../services/media_store.dart';
 
 /// Renders a photo from either the asset bundle (seed data) or local storage
@@ -46,15 +46,13 @@ class _MissingPhoto extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isLight = Theme.of(context).brightness == Brightness.light;
-
     return ColoredBox(
-      color: isLight ? BrandColours.warmSand : BrandColours.darkElevated,
+      color: context.colours.tint,
       child: Center(
         child: Icon(
           Icons.image_not_supported_outlined,
           size: 28,
-          color: isLight ? BrandColours.copper : BrandColours.darkCopper,
+          color: context.colours.voice,
         ),
       ),
     );

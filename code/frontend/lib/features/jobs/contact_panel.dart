@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../core/roles.dart';
 import 'package:flutter/services.dart';
 
 import '../../core/tokens.dart';
@@ -66,13 +67,12 @@ class _ContactPanelState extends State<ContactPanel> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final strings = AppStrings.of(context);
-    final isLight = theme.brightness == Brightness.light;
 
     if (!_revealed) {
       return Container(
         padding: const EdgeInsets.all(BrandSizing.spaceMd),
         decoration: BoxDecoration(
-          color: isLight ? BrandColours.warmSand : BrandColours.darkElevated,
+          color: context.colours.tint,
           borderRadius: BrandRadius.mediumAll,
         ),
         child: Column(
@@ -99,7 +99,7 @@ class _ContactPanelState extends State<ContactPanel> {
     return Container(
       padding: const EdgeInsets.all(BrandSizing.spaceMd),
       decoration: BoxDecoration(
-        color: isLight ? BrandColours.warmSand : BrandColours.darkElevated,
+        color: context.colours.tint,
         borderRadius: BrandRadius.mediumAll,
       ),
       child: Column(

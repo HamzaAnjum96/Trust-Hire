@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../core/roles.dart';
 
 import 'package:provider/provider.dart';
 
@@ -283,8 +284,8 @@ class PostJobButton extends StatelessWidget {
         ? FloatingActionButton(
             heroTag: null,
             onPressed: onPressed,
-            backgroundColor: theme.colorScheme.primary,
-            foregroundColor: theme.colorScheme.onPrimary,
+            backgroundColor: context.colours.action,
+            foregroundColor: context.colours.onAction,
             elevation: 0,
             focusElevation: 0,
             hoverElevation: 1,
@@ -297,8 +298,8 @@ class PostJobButton extends StatelessWidget {
         : FloatingActionButton.extended(
             heroTag: null,
             onPressed: onPressed,
-            backgroundColor: theme.colorScheme.primary,
-            foregroundColor: theme.colorScheme.onPrimary,
+            backgroundColor: context.colours.action,
+            foregroundColor: context.colours.onAction,
             elevation: 0,
             focusElevation: 0,
             hoverElevation: 1,
@@ -370,13 +371,13 @@ class _BarSlot extends StatelessWidget {
                 width: 56,
                 height: 32,
                 decoration: BoxDecoration(
-                  color: theme.colorScheme.primary,
+                  color: context.colours.action,
                   borderRadius: BrandRadius.mediumAll,
                 ),
                 child: Icon(
                   Icons.add,
                   size: 24,
-                  color: theme.colorScheme.onPrimary,
+                  color: context.colours.onAction,
                 ),
               ),
               const SizedBox(height: BrandSizing.spaceXs),
@@ -492,14 +493,10 @@ class _RailMark extends StatelessWidget {
       width: 32,
       height: 32,
       decoration: BoxDecoration(
-        color: theme.colorScheme.primary,
+        color: context.colours.action,
         borderRadius: BrandRadius.smallAll,
       ),
-      child: Icon(
-        Icons.location_on,
-        size: 22,
-        color: theme.colorScheme.onPrimary,
-      ),
+      child: Icon(Icons.location_on, size: 22, color: context.colours.onAction),
     );
 
     if (!extended) {

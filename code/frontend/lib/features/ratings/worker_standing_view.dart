@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../core/roles.dart';
 import 'package:provider/provider.dart';
 
 import '../../app/job_controller.dart';
@@ -87,7 +88,7 @@ class WorkerStandingView extends StatelessWidget {
               standing.hasRating ? Icons.star : Icons.star_border,
               size: 20,
               color: standing.hasRating
-                  ? BrandColours.copper
+                  ? context.colours.rating
                   : theme.colorScheme.outline,
             ),
             const SizedBox(width: BrandSizing.spaceXs),

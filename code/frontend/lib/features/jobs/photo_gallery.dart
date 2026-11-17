@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../core/roles.dart';
 
 import '../../core/motion.dart';
 import '../../core/tokens.dart';
@@ -91,7 +92,7 @@ class _PhotoGalleryState extends State<PhotoGallery> {
                   height: 7,
                   decoration: BoxDecoration(
                     color: i == _page
-                        ? theme.colorScheme.primary
+                        ? context.colours.highlight
                         : theme.colorScheme.outline,
                     borderRadius: BorderRadius.circular(4),
                   ),
@@ -119,10 +120,10 @@ class _PhotoViewer extends StatelessWidget {
   Widget build(BuildContext context) {
     final strings = AppStrings.of(context);
     return Scaffold(
-      backgroundColor: BrandColours.ink,
+      backgroundColor: context.colours.inverse,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        foregroundColor: BrandColours.white,
+        foregroundColor: context.colours.onInverse,
         leading: IconButton(
           icon: const Icon(Icons.close),
           tooltip: strings.close,

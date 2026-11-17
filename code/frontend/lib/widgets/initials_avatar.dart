@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../core/roles.dart';
 
 import '../core/tokens.dart';
 
@@ -27,13 +28,10 @@ class InitialsAvatar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final isLight = theme.brightness == Brightness.light;
 
     return CircleAvatar(
       radius: radius,
-      backgroundColor: isLight
-          ? BrandColours.warmSand
-          : BrandColours.darkElevated,
+      backgroundColor: context.colours.tint,
       child: Text(
         initialsOf(name),
         style: BrandType.button.copyWith(

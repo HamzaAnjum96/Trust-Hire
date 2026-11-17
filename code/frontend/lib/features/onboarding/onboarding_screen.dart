@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../core/roles.dart';
 
 import '../../core/formatters.dart';
 import '../../core/motion.dart';
@@ -78,14 +79,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     final strings = AppStrings.of(context);
-    final isLight = theme.brightness == Brightness.light;
 
     return Scaffold(
-      backgroundColor: isLight
-          ? BrandColours.warmSand
-          : BrandColours.darkBackground,
+      backgroundColor: context.colours.intro,
       // **One column, about the width of a phone held sideways.** On a
       // desktop browser the intro stretched edge to edge: a 1,400px "Next"
       // under a sentence that ended a third of the way across.
@@ -164,12 +161,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                               child: ElevatedButton(
                                 onPressed: _requesting ? null : _askForLocation,
                                 child: _requesting
-                                    ? const SizedBox(
+                                    ? SizedBox(
                                         width: 20,
                                         height: 20,
                                         child: CircularProgressIndicator(
                                           strokeWidth: 2.5,
-                                          color: BrandColours.white,
+                                          color: context.colours.onAction,
                                         ),
                                       )
                                     : Text(strings.onboardAllowLocation),
@@ -235,7 +232,6 @@ class _Panel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final isLight = theme.brightness == Brightness.light;
 
     // **A phone held sideways has about 380px, and the full-size panel needs
     // more than that before it reaches the body text.** It scrolls, so nothing
@@ -264,13 +260,13 @@ class _Panel extends StatelessWidget {
               width: medallion,
               height: medallion,
               decoration: BoxDecoration(
-                color: isLight ? BrandColours.white : BrandColours.darkSurface,
+                color: context.colours.surface,
                 shape: BoxShape.circle,
               ),
               child: Icon(
                 icon,
                 size: isShort ? 28 : 44,
-                color: theme.colorScheme.primary,
+                color: context.colours.accentText,
               ),
             ),
           SizedBox(height: gap),
@@ -287,11 +283,7 @@ class _Panel extends StatelessWidget {
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Icon(
-                  Icons.lock_outline,
-                  size: 18,
-                  color: BrandColours.informationBlue,
-                ),
+                Icon(Icons.lock_outline, size: 18, color: context.colours.info),
                 const SizedBox(width: BrandSizing.spaceSm),
                 Expanded(
                   child: Text(footnote!, style: theme.textTheme.bodyMedium),
@@ -329,7 +321,7 @@ class _Dots extends StatelessWidget {
               height: 8,
               decoration: BoxDecoration(
                 color: i == current
-                    ? theme.colorScheme.primary
+                    ? context.colours.highlight
                     : theme.colorScheme.outline,
                 borderRadius: BorderRadius.circular(4),
               ),
@@ -352,14 +344,12 @@ class _PictureFrame extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isLight = Theme.of(context).brightness == Brightness.light;
-
     return Container(
       height: height,
       width: double.infinity,
       clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
-        color: isLight ? BrandColours.white : BrandColours.darkSurface,
+        color: context.colours.surface,
         borderRadius: BrandRadius.sheetAll,
       ),
       // A picture of the product, not part of it: nothing here is announced
@@ -377,21 +367,14 @@ class _MapPicture extends StatelessWidget {
   Widget build(BuildContext context) {
     final strings = AppStrings.of(context);
     final theme = Theme.of(context);
-    final isLight = theme.brightness == Brightness.light;
     // Deep Burgundy disappears on the dark surface; the dark theme's own
     // burgundy does not.
-    final pin = isLight
-        ? BrandColours.trustBurgundy
-        : BrandColours.darkBurgundy;
-    final chosen = isLight
-        ? BrandColours.deepBurgundy
-        : BrandColours.darkBurgundy;
+    final pin = context.colours.pin;
+    final chosen = context.colours.pinSelected;
 
     return _PictureFrame(
       child: CustomPaint(
-        painter: _StreetsPainter(
-          colour: isLight ? BrandColours.warmSand : BrandColours.darkElevated,
-        ),
+        painter: _StreetsPainter(colour: context.colours.tint),
         child: Stack(
           children: [
             Align(
@@ -506,14 +489,13 @@ class _VoicePicture extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final isLight = theme.brightness == Brightness.light;
 
     return _PictureFrame(
       child: Center(
         child: Container(
           padding: const EdgeInsets.all(BrandSizing.spaceMd),
           decoration: BoxDecoration(
-            color: isLight ? BrandColours.warmSand : BrandColours.darkElevated,
+            color: context.colours.tint,
             borderRadius: BrandRadius.largeAll,
           ),
           child: Row(
@@ -523,14 +505,12 @@ class _VoicePicture extends StatelessWidget {
                 width: 56,
                 height: 56,
                 decoration: BoxDecoration(
-                  color: isLight
-                      ? BrandColours.copper
-                      : BrandColours.darkCopper,
+                  color: context.colours.voice,
                   shape: BoxShape.circle,
                 ),
-                child: const Icon(
+                child: Icon(
                   Icons.mic,
-                  color: BrandColours.white,
+                  color: context.colours.onVoice,
                   size: 28,
                 ),
               ),
@@ -561,8 +541,6 @@ class _LocationPicture extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isLight = Theme.of(context).brightness == Brightness.light;
-
     return _PictureFrame(
       child: Stack(
         alignment: Alignment.center,
@@ -573,21 +551,17 @@ class _LocationPicture extends StatelessWidget {
             height: 128,
             child: DecoratedBox(
               decoration: BoxDecoration(
-                color: BrandColours.jobRadiusFill,
+                color: context.colours.radiusFill,
                 shape: BoxShape.circle,
                 border: Border.fromBorderSide(
-                  BorderSide(color: BrandColours.jobRadiusBorder, width: 1.5),
+                  BorderSide(color: context.colours.radiusBorder, width: 1.5),
                 ),
               ),
             ),
           ),
           Align(
             alignment: const Alignment(0.18, -0.15),
-            child: _Pin(
-              colour: isLight
-                  ? BrandColours.trustBurgundy
-                  : BrandColours.darkBurgundy,
-            ),
+            child: _Pin(colour: context.colours.pin),
           ),
           // You, as the map draws you: Information Blue, never green.
           Align(
@@ -597,7 +571,7 @@ class _LocationPicture extends StatelessWidget {
               height: 40,
               child: DecoratedBox(
                 decoration: BoxDecoration(
-                  color: BrandColours.userLocationRing,
+                  color: context.colours.userRing,
                   shape: BoxShape.circle,
                 ),
                 child: Center(
@@ -606,10 +580,10 @@ class _LocationPicture extends StatelessWidget {
                     height: 18,
                     child: DecoratedBox(
                       decoration: BoxDecoration(
-                        color: BrandColours.userLocation,
+                        color: context.colours.user,
                         shape: BoxShape.circle,
                         border: Border.fromBorderSide(
-                          BorderSide(color: BrandColours.white, width: 3),
+                          BorderSide(color: context.colours.surface, width: 3),
                         ),
                       ),
                     ),

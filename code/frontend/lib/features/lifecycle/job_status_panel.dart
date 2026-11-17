@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../core/roles.dart';
 import 'package:provider/provider.dart';
 
 import '../../app/account_controller.dart';
@@ -122,7 +123,7 @@ class JobStatusPanel extends StatelessWidget {
             OutlinedButton(
               onPressed: () => _run(context, action),
               style: OutlinedButton.styleFrom(
-                foregroundColor: BrandColours.errorRed,
+                foregroundColor: context.colours.bad,
               ),
               child: Text(strings.cancelJob),
             )
@@ -261,7 +262,7 @@ Future<void> runJobAction(
           ),
           TextButton(
             style: TextButton.styleFrom(
-              foregroundColor: isDecline ? null : BrandColours.errorRed,
+              foregroundColor: isDecline ? null : context.colours.bad,
             ),
             onPressed: () => Navigator.of(dialogContext).pop(true),
             child: Text(isDecline ? strings.declineBooking : strings.cancelJob),

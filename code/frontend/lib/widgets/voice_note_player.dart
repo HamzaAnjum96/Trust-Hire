@@ -1,4 +1,5 @@
 import 'dart:async';
+import '../core/roles.dart';
 import 'dart:math' as math;
 
 import 'package:audioplayers/audioplayers.dart';
@@ -127,11 +128,7 @@ class _VoiceNotePlayerState extends State<VoiceNotePlayer> {
         isLight: isLight,
         child: Row(
           children: [
-            const Icon(
-              Icons.mic_off_outlined,
-              color: BrandColours.errorRed,
-              size: 22,
-            ),
+            Icon(Icons.mic_off_outlined, color: context.colours.bad, size: 22),
             const SizedBox(width: BrandSizing.spaceSm + 4),
             Expanded(
               child: Text(
@@ -152,7 +149,7 @@ class _VoiceNotePlayerState extends State<VoiceNotePlayer> {
             button: true,
             label: _isPlaying ? strings.pause : strings.listen,
             child: Material(
-              color: theme.colorScheme.primary,
+              color: context.colours.voice,
               shape: const CircleBorder(),
               child: InkWell(
                 onTap: _toggle,
@@ -162,7 +159,7 @@ class _VoiceNotePlayerState extends State<VoiceNotePlayer> {
                   height: BrandSizing.touchTargetPreferred,
                   child: Icon(
                     _isPlaying ? Icons.pause : Icons.play_arrow,
-                    color: theme.colorScheme.onPrimary,
+                    color: context.colours.onVoice,
                     size: 26,
                   ),
                 ),
@@ -200,12 +197,8 @@ class _VoiceNotePlayerState extends State<VoiceNotePlayer> {
                     painter: _WaveformPainter(
                       seed: widget.reference.hashCode,
                       progress: _progress,
-                      playedColour: isLight
-                          ? BrandColours.copper
-                          : BrandColours.darkCopper,
-                      remainingColour: isLight
-                          ? BrandColours.stone
-                          : BrandColours.slate,
+                      playedColour: context.colours.voice,
+                      remainingColour: context.colours.voiceTrack,
                     ),
                   ),
                 ),
@@ -230,7 +223,7 @@ class _Surface extends StatelessWidget {
       padding: const EdgeInsets.all(BrandSizing.spaceSm + 4),
       decoration: BoxDecoration(
         // Section 26 — a recorded note sits on Warm Sand.
-        color: isLight ? BrandColours.warmSand : BrandColours.darkElevated,
+        color: context.colours.tint,
         borderRadius: BrandRadius.mediumAll,
       ),
       child: child,

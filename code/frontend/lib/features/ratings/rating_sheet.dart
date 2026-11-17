@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../core/roles.dart';
 import 'package:provider/provider.dart';
 
 import '../../app/rating_controller.dart';
@@ -176,9 +177,11 @@ class _StarPicker extends StatelessWidget {
       children: [
         Row(
           children: [
-            for (var value = RatingRules.minStars;
-                value <= RatingRules.maxStars;
-                value++)
+            for (
+              var value = RatingRules.minStars;
+              value <= RatingRules.maxStars;
+              value++
+            )
               IconButton(
                 onPressed: () => onChanged(value),
                 iconSize: 36,
@@ -186,7 +189,7 @@ class _StarPicker extends StatelessWidget {
                 icon: Icon(
                   value <= stars ? Icons.star : Icons.star_border,
                   color: value <= stars
-                      ? BrandColours.copper
+                      ? context.colours.rating
                       : theme.colorScheme.outline,
                 ),
               ),

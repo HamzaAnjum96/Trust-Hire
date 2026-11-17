@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../core/roles.dart';
 import 'package:provider/provider.dart';
 
 import '../../app/bid_controller.dart';
@@ -198,9 +199,9 @@ class ProfileScreen extends StatelessWidget {
                       // The colour is on the icon only: Error Red is too dark to
                       // read as text on the dark theme's surfaces. The words say
                       // what it does, and a confirmation says it again.
-                      leading: const Icon(
+                      leading: Icon(
                         Icons.restart_alt,
-                        color: BrandColours.errorRed,
+                        color: context.colours.bad,
                       ),
                       // Section 21 — explicit label, never "Confirm".
                       title: Text(strings.restoreSeedData),
@@ -258,7 +259,7 @@ class ProfileScreen extends StatelessWidget {
             child: Text(strings.keepMyJobs),
           ),
           TextButton(
-            style: TextButton.styleFrom(foregroundColor: BrandColours.errorRed),
+            style: TextButton.styleFrom(foregroundColor: context.colours.bad),
             onPressed: () => Navigator.of(dialogContext).pop(true),
             child: Text(strings.restoreSeedData),
           ),
@@ -313,8 +314,8 @@ class _VerificationTile extends StatelessWidget {
       leading: Icon(
         mine.isComplete ? Icons.verified_user : Icons.badge_outlined,
         color: mine.isFlagged
-            ? BrandColours.warningAmber
-            : (mine.isComplete ? BrandColours.successTeal : null),
+            ? context.colours.warn
+            : (mine.isComplete ? context.colours.good : null),
       ),
       title: Text(strings.verificationTile),
       subtitle: Text(strings.verificationSubtitle(mine.stepsDone)),
@@ -360,8 +361,8 @@ class _BackendSection extends StatelessWidget {
               Row(
                 children: [
                   switch (state) {
-                    SyncState.settled => StatusPill.good(label),
-                    SyncState.needsAttention => StatusPill.bad(label),
+                    SyncState.settled => StatusPill.good(context, label),
+                    SyncState.needsAttention => StatusPill.bad(context, label),
                     _ => StatusPill.muted(context, label),
                   },
                   const SizedBox(width: BrandSizing.spaceSm),
@@ -474,7 +475,7 @@ class _WalletTile extends StatelessWidget {
         wallet.isLockedOut
             ? Icons.lock_outline
             : Icons.account_balance_wallet_outlined,
-        color: wallet.isInDebt ? BrandColours.errorRed : null,
+        color: wallet.isInDebt ? context.colours.bad : null,
       ),
       title: Text(strings.navWallet),
       subtitle: Text(Format.fare(strings, wallet.balance)),
@@ -537,7 +538,7 @@ class _ListingTile extends StatelessWidget {
     return ListTile(
       leading: Icon(
         premium.isPremium ? Icons.badge : Icons.badge_outlined,
-        color: premium.isPremium ? BrandColours.copper : null,
+        color: premium.isPremium ? context.colours.special : null,
       ),
       title: Text(strings.myListing),
       subtitle: Text(
@@ -694,16 +695,13 @@ class _RoleCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final scheme = theme.colorScheme;
-    final isLight = theme.brightness == Brightness.light;
 
     return Semantics(
       button: true,
       selected: selected,
       inMutuallyExclusiveGroup: true,
       child: Material(
-        color: selected
-            ? (isLight ? BrandColours.warmSand : BrandColours.darkElevated)
-            : scheme.surface,
+        color: selected ? (context.colours.tint) : scheme.surface,
         shape: RoundedRectangleBorder(
           borderRadius: BrandRadius.largeAll,
           side: BorderSide(

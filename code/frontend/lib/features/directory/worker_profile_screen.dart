@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../core/roles.dart';
 import 'package:provider/provider.dart';
 
 import '../../app/job_controller.dart';
@@ -234,7 +235,7 @@ class _ServiceCard extends StatelessWidget {
                             Format.fare(strings, service.priceRupees - youPay),
                           ),
                           style: theme.textTheme.labelSmall?.copyWith(
-                            color: BrandColours.successTeal,
+                            color: context.colours.good,
                           ),
                         ),
                     ],

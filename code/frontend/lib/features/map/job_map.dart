@@ -1,4 +1,5 @@
 import 'dart:async';
+import '../../core/roles.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -214,8 +215,8 @@ class _JobMapState extends State<JobMap> {
                       ),
                       radius: selected.radiusMetres,
                       useRadiusInMeter: true,
-                      color: BrandColours.jobRadiusFill,
-                      borderColor: BrandColours.jobRadiusBorder,
+                      color: context.colours.radiusFill,
+                      borderColor: context.colours.radiusBorder,
                       borderStrokeWidth: 1.5,
                     ),
                   ],
@@ -358,12 +359,14 @@ class _JobMapState extends State<JobMap> {
                 constraints: BoxConstraints(
                   // Clamped: a zero-width surface makes this negative, which
                   // is not a constraint. `accessibility_test.dart` caught it.
-                  maxWidth: (MediaQuery.sizeOf(context).width - 24)
-                      .clamp(0.0, double.infinity),
+                  maxWidth: (MediaQuery.sizeOf(context).width - 24).clamp(
+                    0.0,
+                    double.infinity,
+                  ),
                 ),
                 child: Text(
                   mapTheme.attribution,
-                  style: theme.textTheme.labelSmall?.copyWith(fontSize: 10),
+                  style: theme.textTheme.labelSmall,
                 ),
               ),
             ),

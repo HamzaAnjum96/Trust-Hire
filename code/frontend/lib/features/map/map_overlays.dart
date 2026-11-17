@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../core/roles.dart';
 import 'package:provider/provider.dart';
 
 import '../../app/account_controller.dart';
@@ -134,7 +135,7 @@ class JobsViewSwitch extends StatelessWidget {
         color: theme.colorScheme.inverseSurface,
         shape: const StadiumBorder(),
         elevation: 3,
-        shadowColor: BrandColours.ink.withValues(alpha: 0.3),
+        shadowColor: context.colours.shadow.withValues(alpha: 0.3),
         child: InkWell(
           onTap: onPressed,
           customBorder: const StadiumBorder(),
@@ -295,7 +296,7 @@ class MapNotice extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.only(top: 2),
-            child: Icon(icon, size: 20, color: BrandColours.informationBlue),
+            child: Icon(icon, size: 20, color: context.colours.info),
           ),
           const SizedBox(width: BrandSizing.spaceSm + 4),
           Expanded(
@@ -385,7 +386,7 @@ class MapButton extends StatelessWidget {
       color: theme.colorScheme.surface,
       borderRadius: BrandRadius.mediumAll,
       elevation: 2,
-      shadowColor: BrandColours.ink.withValues(alpha: 0.2),
+      shadowColor: context.colours.shadow.withValues(alpha: 0.2),
       child: InkWell(
         onTap: enabled ? onPressed : null,
         borderRadius: BrandRadius.mediumAll,
@@ -400,7 +401,7 @@ class MapButton extends StatelessWidget {
               : Icon(
                   icon,
                   color: enabled
-                      ? theme.colorScheme.primary
+                      ? context.colours.accentText
                       : theme.colorScheme.outline,
                   semanticLabel: label,
                 ),

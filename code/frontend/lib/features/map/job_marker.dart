@@ -1,4 +1,5 @@
 import 'dart:math' as math;
+import '../../core/roles.dart';
 
 import 'package:flutter/material.dart';
 
@@ -42,8 +43,8 @@ class JobMarker extends StatelessWidget {
   Widget build(BuildContext context) {
     final strings = AppStrings.of(context);
     final fill = isSelected
-        ? BrandColours.markerSelected
-        : (isMine ? BrandColours.markerLocal : BrandColours.markerDefault);
+        ? context.colours.pinSelected
+        : (isMine ? context.colours.pinOwn : context.colours.pin);
 
     return Semantics(
       button: true,
@@ -69,9 +70,10 @@ class JobMarker extends StatelessWidget {
                   painter: _PinPainter(
                     fill: fill,
                     outline: isSelected
-                        ? BrandColours.markerSelectedOutline
-                        : Colors.white,
+                        ? context.colours.pinSelectedOutline
+                        : context.colours.pinOutline,
                     outlineWidth: isSelected ? 3 : 2,
+                    shadow: context.colours.shadow,
                   ),
                 ),
               ),
@@ -81,7 +83,9 @@ class JobMarker extends StatelessWidget {
                 child: Icon(
                   job.icon,
                   size: isSelected ? 20 : 17,
-                  color: Colors.white,
+                  color: isSelected
+                      ? context.colours.pinSelectedGlyph
+                      : context.colours.pinGlyph,
                 ),
               ),
             ],
@@ -117,18 +121,15 @@ class PinFareLabel extends StatelessWidget {
     if (fare == null) return const SizedBox(height: height);
 
     final strings = AppStrings.of(context);
-    final light = Theme.of(context).brightness == Brightness.light;
 
     return ExcludeSemantics(
       child: Container(
         height: height,
         padding: const EdgeInsets.symmetric(horizontal: BrandSizing.spaceSm),
         decoration: BoxDecoration(
-          color: light ? BrandColours.white : BrandColours.darkElevated,
+          color: context.colours.raised,
           borderRadius: BrandRadius.smallAll,
-          border: Border.all(
-            color: light ? BrandColours.cardBorder : BrandColours.slate,
-          ),
+          border: Border.all(color: context.colours.lineStrong),
           boxShadow: BrandShadows.card,
         ),
         alignment: Alignment.center,
@@ -138,9 +139,7 @@ class PinFareLabel extends StatelessWidget {
           style: BrandType.caption.copyWith(
             fontWeight: FontWeight.w700,
             fontFeatures: const [FontFeature.tabularFigures()],
-            color: light
-                ? BrandColours.deepBurgundy
-                : BrandColours.darkTextPrimary,
+            color: context.colours.fare,
           ),
         ),
       ),
@@ -154,11 +153,13 @@ class _PinPainter extends CustomPainter {
     required this.fill,
     required this.outline,
     required this.outlineWidth,
+    required this.shadow,
   });
 
   final Color fill;
   final Color outline;
   final double outlineWidth;
+  final Color shadow;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -194,7 +195,7 @@ class _PinPainter extends CustomPainter {
       ..close();
 
     // A soft drop shadow so pins stay legible over busy map tiles.
-    canvas.drawShadow(path, BrandColours.ink.withValues(alpha: 0.5), 3, false);
+    canvas.drawShadow(path, shadow.withValues(alpha: 0.5), 3, false);
 
     canvas.drawPath(path, Paint()..color = fill);
     canvas.drawPath(
@@ -210,7 +211,8 @@ class _PinPainter extends CustomPainter {
   bool shouldRepaint(_PinPainter oldDelegate) =>
       oldDelegate.fill != fill ||
       oldDelegate.outline != outline ||
-      oldDelegate.outlineWidth != outlineWidth;
+      oldDelegate.outlineWidth != outlineWidth ||
+      oldDelegate.shadow != shadow;
 }
 
 /// The device's own position — Information Blue with a soft ring, never green
@@ -228,8 +230,8 @@ class UserLocationMarker extends StatelessWidget {
       child: Container(
         width: size,
         height: size,
-        decoration: const BoxDecoration(
-          color: BrandColours.userLocationRing,
+        decoration: BoxDecoration(
+          color: context.colours.userRing,
           shape: BoxShape.circle,
         ),
         child: Center(
@@ -237,9 +239,9 @@ class UserLocationMarker extends StatelessWidget {
             width: 14,
             height: 14,
             decoration: BoxDecoration(
-              color: BrandColours.userLocation,
+              color: context.colours.user,
               shape: BoxShape.circle,
-              border: Border.all(color: Colors.white, width: 2),
+              border: Border.all(color: context.colours.surface, width: 2),
             ),
           ),
         ),
@@ -284,12 +286,12 @@ class ClusterMarker extends StatelessWidget {
           width: size,
           height: size,
           decoration: BoxDecoration(
-            color: BrandColours.trustBurgundy,
+            color: context.colours.pin,
             shape: BoxShape.circle,
-            border: Border.all(color: Colors.white, width: 2.5),
+            border: Border.all(color: context.colours.pinOutline, width: 2.5),
             boxShadow: [
               BoxShadow(
-                color: BrandColours.ink.withValues(alpha: 0.28),
+                color: context.colours.shadow.withValues(alpha: 0.28),
                 blurRadius: 6,
                 offset: const Offset(0, 2),
               ),
@@ -298,11 +300,12 @@ class ClusterMarker extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              if (icon != null) Icon(icon, size: 14, color: BrandColours.white),
+              if (icon != null)
+                Icon(icon, size: 14, color: context.colours.pinGlyph),
               Text(
                 '$count',
                 style: theme.textTheme.labelMedium?.copyWith(
-                  color: BrandColours.white,
+                  color: context.colours.pinGlyph,
                   fontWeight: FontWeight.w700,
                   height: 1.1,
                 ),

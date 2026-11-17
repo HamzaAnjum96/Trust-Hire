@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../core/roles.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
@@ -145,7 +146,7 @@ class _ReviewCard extends StatelessWidget {
         borderRadius: BrandRadius.largeAll,
         side: BorderSide(
           color: review.isFlagged
-              ? BrandColours.errorRed.withValues(alpha: 0.5)
+              ? context.colours.bad.withValues(alpha: 0.5)
               : theme.colorScheme.outlineVariant,
         ),
       ),
@@ -165,9 +166,11 @@ class _ReviewCard extends StatelessWidget {
                     strings.statusPending,
                   ),
                   ReviewStatus.approved => StatusPill.good(
+                    context,
                     strings.statusApproved,
                   ),
                   ReviewStatus.suspended => StatusPill.bad(
+                    context,
                     strings.statusSuspended,
                   ),
                 },
@@ -221,7 +224,7 @@ class _ReviewCard extends StatelessWidget {
                       Format.fare(strings, wallet.balance),
                     ),
               style: theme.textTheme.labelMedium?.copyWith(
-                color: locked ? BrandColours.errorRed : null,
+                color: locked ? context.colours.bad : null,
               ),
             ),
 
@@ -252,7 +255,7 @@ class _ReviewCard extends StatelessWidget {
                           admin.suspend(review.userId, note: note),
                     ),
                     style: OutlinedButton.styleFrom(
-                      foregroundColor: BrandColours.errorRed,
+                      foregroundColor: context.colours.bad,
                     ),
                     child: Text(strings.adminSuspend),
                   ),
@@ -418,7 +421,7 @@ class _DisputesTab extends StatelessWidget {
                               : strings.disputeClosed,
                           style: theme.textTheme.labelMedium?.copyWith(
                             color: dispute.isOpen
-                                ? BrandColours.errorRed
+                                ? context.colours.bad
                                 : theme.colorScheme.onSurfaceVariant,
                             fontWeight: FontWeight.w600,
                           ),
@@ -590,7 +593,7 @@ class _LogTab extends StatelessWidget {
               entry.action.isOverride
                   ? Icons.priority_high
                   : Icons.check_circle_outline,
-              color: entry.action.isOverride ? BrandColours.copper : null,
+              color: entry.action.isOverride ? context.colours.special : null,
             ),
             title: Text(_label(strings, entry.action)),
             subtitle: Text(
@@ -636,7 +639,7 @@ class _Signal extends StatelessWidget {
         Icon(
           ok ? Icons.check : Icons.close,
           size: 16,
-          color: ok ? BrandColours.successTeal : BrandColours.errorRed,
+          color: ok ? context.colours.good : context.colours.bad,
         ),
         const SizedBox(width: 4),
         Text(label, style: theme.textTheme.labelSmall),

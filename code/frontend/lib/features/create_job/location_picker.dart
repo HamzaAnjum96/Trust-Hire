@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../core/roles.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 
@@ -45,7 +46,6 @@ class _LocationPickerState extends State<LocationPicker> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     final mapTheme = MapTheme.of(context);
     final centre = LatLng(widget.location.latitude, widget.location.longitude);
 
@@ -90,8 +90,8 @@ class _LocationPickerState extends State<LocationPicker> {
                       point: centre,
                       radius: widget.radiusMetres,
                       useRadiusInMeter: true,
-                      color: BrandColours.jobRadiusFill,
-                      borderColor: BrandColours.jobRadiusBorder,
+                      color: context.colours.radiusFill,
+                      borderColor: context.colours.radiusBorder,
                       borderStrokeWidth: 1.5,
                     ),
                   ],
@@ -108,8 +108,13 @@ class _LocationPickerState extends State<LocationPicker> {
                 child: Icon(
                   Icons.place,
                   size: 44,
-                  color: theme.colorScheme.primary,
-                  shadows: const [Shadow(color: Colors.black26, blurRadius: 6)],
+                  color: context.colours.pin,
+                  shadows: [
+                    Shadow(
+                      color: context.colours.shadow.withValues(alpha: 0.26),
+                      blurRadius: 6,
+                    ),
+                  ],
                 ),
               ),
             ),

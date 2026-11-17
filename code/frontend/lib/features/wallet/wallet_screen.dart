@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../core/roles.dart';
 import 'package:provider/provider.dart';
 
 import '../../app/wallet_controller.dart';
@@ -50,8 +51,8 @@ class WalletScreen extends StatelessWidget {
             // for, and it is money, so it gets the brand's deepest colour.
             Container(
               padding: const EdgeInsets.all(BrandSizing.spaceLg),
-              decoration: const BoxDecoration(
-                color: BrandColours.deepBurgundy,
+              decoration: BoxDecoration(
+                color: context.colours.feature,
                 borderRadius: BrandRadius.sheetAll,
               ),
               child: Column(
@@ -60,7 +61,7 @@ class WalletScreen extends StatelessWidget {
                   Text(
                     strings.walletBalance,
                     style: BrandType.supporting.copyWith(
-                      color: BrandColours.white.withValues(alpha: 0.8),
+                      color: context.colours.onFeature.withValues(alpha: 0.8),
                     ),
                   ),
                   const SizedBox(height: BrandSizing.spaceXs),
@@ -75,7 +76,7 @@ class WalletScreen extends StatelessWidget {
                       style: BrandType.fare.copyWith(
                         fontSize: 36,
                         height: 44 / 36,
-                        color: BrandColours.white,
+                        color: context.colours.onFeature,
                       ),
                     ),
                   ),
@@ -92,15 +93,15 @@ class WalletScreen extends StatelessWidget {
                             Format.fare(strings, toNextBonus),
                           ),
                     style: BrandType.caption.copyWith(
-                      color: BrandColours.white.withValues(alpha: 0.8),
+                      color: context.colours.onFeature.withValues(alpha: 0.8),
                     ),
                   ),
                   const SizedBox(height: BrandSizing.spaceMd),
                   FilledButton.icon(
                     onPressed: () => TopUpSheet.open(context),
                     style: FilledButton.styleFrom(
-                      backgroundColor: BrandColours.white,
-                      foregroundColor: BrandColours.deepBurgundy,
+                      backgroundColor: context.colours.onFeature,
+                      foregroundColor: context.colours.feature,
                     ),
                     icon: const Icon(Icons.add),
                     label: Text(strings.topUpTitle),
@@ -203,7 +204,7 @@ class _EntryRow extends StatelessWidget {
             style: BrandType.fare.copyWith(
               fontSize: 16,
               color: isCredit
-                  ? BrandColours.successTeal
+                  ? context.colours.good
                   : theme.colorScheme.onSurface,
             ),
           ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../core/roles.dart';
 import 'package:provider/provider.dart';
 
 import '../../app/bid_controller.dart';
@@ -154,7 +155,7 @@ class _UpdateRow extends StatelessWidget {
       ),
       NotificationKind.offerAccepted => (
         Icons.check_circle_outline,
-        BrandColours.successTeal,
+        context.colours.good,
       ),
       NotificationKind.offerPassedOver => (
         Icons.do_not_disturb_on_outlined,
@@ -164,10 +165,7 @@ class _UpdateRow extends StatelessWidget {
         Icons.play_circle_outline,
         scheme.primary,
       ),
-      NotificationKind.jobCompleted => (
-        Icons.task_alt,
-        BrandColours.successTeal,
-      ),
+      NotificationKind.jobCompleted => (Icons.task_alt, context.colours.good),
       NotificationKind.jobCancelled => (Icons.cancel_outlined, scheme.outline),
       NotificationKind.jobExpired => (Icons.timer_off_outlined, scheme.outline),
       NotificationKind.ratingReceived => (Icons.star_outline, scheme.primary),
@@ -177,12 +175,12 @@ class _UpdateRow extends StatelessWidget {
       ),
       NotificationKind.walletCredited => (
         Icons.account_balance_wallet_outlined,
-        BrandColours.successTeal,
+        context.colours.good,
       ),
       NotificationKind.walletLocked => (Icons.lock_outline, scheme.error),
       NotificationKind.subscriptionExpiring => (
         Icons.schedule,
-        BrandColours.informationBlue,
+        context.colours.info,
       ),
       NotificationKind.subscriptionLapsed => (
         Icons.badge_outlined,
@@ -190,7 +188,7 @@ class _UpdateRow extends StatelessWidget {
       ),
       NotificationKind.verificationApproved => (
         Icons.verified_outlined,
-        BrandColours.successTeal,
+        context.colours.good,
       ),
       NotificationKind.verificationRejected => (
         Icons.gpp_bad_outlined,

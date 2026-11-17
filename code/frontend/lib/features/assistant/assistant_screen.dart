@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../core/roles.dart';
 import 'package:provider/provider.dart';
 
 import '../../app/ai_controller.dart';
@@ -218,7 +219,6 @@ class _AiStatusBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final strings = AppStrings.of(context);
     final theme = Theme.of(context);
-    final isLight = theme.brightness == Brightness.light;
     final ai = context.watch<AiController>();
 
     final (IconData icon, String text, Widget? action) = switch (ai.state) {
@@ -256,7 +256,7 @@ class _AiStatusBar extends StatelessWidget {
     };
 
     return Material(
-      color: isLight ? BrandColours.warmSand : BrandColours.darkElevated,
+      color: context.colours.tint,
       child: ReadableWidth(
         child: Padding(
           padding: const EdgeInsetsDirectional.fromSTEB(
@@ -273,7 +273,7 @@ class _AiStatusBar extends StatelessWidget {
                 ),
                 child: Row(
                   children: [
-                    Icon(icon, size: 18, color: theme.colorScheme.primary),
+                    Icon(icon, size: 18, color: context.colours.accentText),
                     const SizedBox(width: BrandSizing.spaceSm),
                     Expanded(
                       child: Text(
@@ -311,7 +311,6 @@ class _Welcome extends StatelessWidget {
   Widget build(BuildContext context) {
     final strings = AppStrings.of(context);
     final theme = Theme.of(context);
-    final isLight = theme.brightness == Brightness.light;
     final examples = [
       strings.assistantExampleJobs,
       strings.assistantExampleWiring,
@@ -328,15 +327,13 @@ class _Welcome extends StatelessWidget {
             width: 64,
             height: 64,
             decoration: BoxDecoration(
-              color: isLight
-                  ? BrandColours.warmSand
-                  : BrandColours.darkElevated,
+              color: context.colours.tint,
               shape: BoxShape.circle,
             ),
             child: Icon(
               Icons.question_answer_outlined,
               size: 30,
-              color: theme.colorScheme.primary,
+              color: context.colours.accentText,
             ),
           ),
         ),
@@ -389,13 +386,13 @@ class _Asked extends StatelessWidget {
           vertical: BrandSizing.spaceSm + 2,
         ),
         decoration: BoxDecoration(
-          color: theme.colorScheme.primary,
+          color: context.colours.action,
           borderRadius: BrandRadius.largeAll,
         ),
         child: Text(
           text,
           style: theme.textTheme.bodyLarge?.copyWith(
-            color: theme.colorScheme.onPrimary,
+            color: context.colours.onAction,
           ),
         ),
       ),

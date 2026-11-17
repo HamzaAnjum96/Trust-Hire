@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../core/roles.dart';
 import 'package:provider/provider.dart';
 
 import '../../app/job_controller.dart';
@@ -171,8 +172,8 @@ class _ThreadRow extends StatelessWidget {
                         // is news, not a fault.
                         Badge.count(
                           count: unread,
-                          backgroundColor: theme.colorScheme.primary,
-                          textColor: theme.colorScheme.onPrimary,
+                          backgroundColor: context.colours.highlight,
+                          textColor: context.colours.onHighlight,
                         ),
                       ],
                     ],
