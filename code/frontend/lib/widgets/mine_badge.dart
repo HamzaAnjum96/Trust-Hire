@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../core/roles.dart';
 
 import '../core/tokens.dart';
 import '../l10n/app_localizations.dart';
@@ -7,9 +8,9 @@ import '../l10n/app_localizations.dart';
 ///
 /// **There were three copies of this** — the job row, the map's preview card
 /// and the job sheet — and all three set 12px white type on solid copper,
-/// which is 3.8:1: below what small text needs. One widget now, with the
-/// copper as a tint and a border instead, so it still reads as the colour the
-/// map marks the same jobs in, and the words are ink on near-white.
+/// which is 3.8:1: below what small text needs. One widget now. Since 0.24 it
+/// is drawn the way the map draws your own pins, inverted: the surface inside
+/// and an ink edge. It was briefly peacock, which is for voice notes only.
 class MineBadge extends StatelessWidget {
   const MineBadge({super.key});
 
@@ -24,9 +25,9 @@ class MineBadge extends StatelessWidget {
         vertical: 2,
       ),
       decoration: BoxDecoration(
-        color: scheme.secondary.withValues(alpha: 0.16),
+        color: context.colours.surface,
         borderRadius: BrandRadius.smallAll,
-        border: Border.all(color: scheme.secondary.withValues(alpha: 0.7)),
+        border: Border.all(color: context.colours.text),
       ),
       child: Text(
         strings.onThisDevice,

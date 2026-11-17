@@ -15,8 +15,8 @@ import 'focus_ring.dart';
 /// Plays a job's voice note.
 ///
 /// Voice is a first-class content type (section 26), so this is a prominent
-/// control rather than a small icon: Warm Sand surface, a burgundy play
-/// button, and a copper waveform that fills as it plays. Labels are the plain
+/// control rather than a small icon: a neutral tinted surface, a peacock play
+/// button, and a waveform that fills with peacock as it plays. Labels are the plain
 /// ones the guidelines ask for — "Listen", "Record Again" — never "Play Audio
 /// Asset".
 class VoiceNotePlayer extends StatefulWidget {
@@ -228,7 +228,7 @@ class _Surface extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(BrandSizing.spaceSm + 4),
       decoration: BoxDecoration(
-        // Section 26 — a recorded note sits on Warm Sand.
+        // Section 26 — a recorded note sits on the neutral tint.
         color: context.colours.tint,
         borderRadius: BrandRadius.mediumAll,
       ),

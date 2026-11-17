@@ -6,8 +6,7 @@ import '../core/tokens.dart';
 /// A round avatar with somebody's initials, in neutral colours.
 ///
 /// For people in the directory, who are not demo accounts and so have no
-/// `AccountAvatar`. Neutral on purpose — sand and ink, never burgundy or
-/// copper: Section 9 sells *visibility*, and a listing that looked marked out
+/// `AccountAvatar`. Neutral on purpose — ink on the neutral tint, never turmeric: Section 9 sells *visibility*, and a listing that looked marked out
 /// by the brand's own colours would look endorsed.
 class InitialsAvatar extends StatelessWidget {
   const InitialsAvatar({super.key, required this.name, this.radius = 20});

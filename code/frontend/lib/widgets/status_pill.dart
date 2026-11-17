@@ -62,11 +62,10 @@ class StatusPill extends StatelessWidget {
 
   /// The brand treatment — for the state that is currently in force.
   factory StatusPill.emphasised(BuildContext context, String label) {
-    final scheme = Theme.of(context).colorScheme;
     return StatusPill(
       label: label,
-      background: scheme.primary,
-      foreground: scheme.onPrimary,
+      background: context.colours.action,
+      foreground: context.colours.onAction,
     );
   }
 

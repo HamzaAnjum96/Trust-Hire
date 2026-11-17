@@ -214,8 +214,8 @@ class Job {
   /// Whether [accountId] is the hirer here.
   ///
   /// This decides who may edit the job, who sees the offers on it, who cannot
-  /// bid on it, and which marker gets the copper treatment from section 15 of
-  /// the brand guidelines.
+  /// bid on it, and which marker is drawn inverted (section 15 of the brand
+  /// guidelines).
   ///
   /// The fallback covers jobs written before the switcher existed: they were
   /// created on this device by the one identity there was, so they belong to

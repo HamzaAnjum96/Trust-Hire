@@ -8,7 +8,7 @@ import '../core/roles.dart';
 /// as one bordered card a row at a time, which made the inbox the one list in
 /// the app with a frame round it.
 ///
-/// [highlighted] marks something new with a sand fill *and* a burgundy dot at
+/// [highlighted] marks something new with a turmeric wash *and* a turmeric dot at
 /// the leading edge. It used to be a 3px coloured bar, which was colour alone
 /// doing the work; a dot is what every inbox people already use draws, and it
 /// survives being glanced at in either theme.
@@ -56,7 +56,7 @@ class InboxRow extends StatelessWidget {
                     width: 7,
                     height: 7,
                     decoration: BoxDecoration(
-                      color: scheme.primary,
+                      color: context.colours.accentText,
                       shape: BoxShape.circle,
                     ),
                   ),

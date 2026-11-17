@@ -38,8 +38,8 @@ class JobPhoto extends StatelessWidget {
   }
 }
 
-/// Shown when a photo cannot be loaded. Warm Sand with a Copper glyph, the
-/// same treatment as the photo placeholder in section 27 — a gap in the
+/// Shown when a photo cannot be loaded: the neutral tint with a muted glyph,
+/// the same treatment as the photo placeholder in section 27. A gap in the
 /// gallery should look intentional, not broken.
 class _MissingPhoto extends StatelessWidget {
   const _MissingPhoto();
@@ -52,7 +52,7 @@ class _MissingPhoto extends StatelessWidget {
         child: Icon(
           Icons.image_not_supported_rounded,
           size: 28,
-          color: context.colours.voice,
+          color: context.colours.textMuted,
         ),
       ),
     );

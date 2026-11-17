@@ -75,7 +75,7 @@ class JobRow extends StatelessWidget {
     // the page, a hairline between them (the list draws it), the fare across
     // from the title.
     //
-    // Selection is a sand fill and a burgundy title. It used to be a border,
+    // Selection is a turmeric wash and a turmeric title. It used to be a border,
     // when there was a border to change.
     final selectedFill = context.colours.selection;
 

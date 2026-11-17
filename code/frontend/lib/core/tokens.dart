@@ -87,8 +87,6 @@ class BrandColours {
   /// A pin at rest on the dark basemap: 12:1 against the night ground.
   static const nightPin = Color(0xFFC9D2DA);
 
-  /// Your own pins in the dark: warm sand, apart from the turmeric selection.
-  static const nightOwnPin = Color(0xFFD9B38C);
 }
 
 /// Corner radii (section 31).

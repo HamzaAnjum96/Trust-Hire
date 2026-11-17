@@ -78,11 +78,45 @@ void main() {
     // highlight.
     expect(
       offences(
-        RegExp(r'colorScheme\.(primary|onPrimary|secondary)\b'),
+        // Through any name: a local `scheme.secondary` is the same colour,
+        // and it is how peacock reached the "Your posting" badge.
+        RegExp(
+          r'\b(colorScheme|scheme)\.(primary|onPrimary|secondary|onSecondary|tertiary)\b',
+        ),
         except: inCore,
       ),
       isEmpty,
       reason: 'use context.colours.action / accentText / highlight / voice',
+    );
+  });
+
+  test('peacock is for voice notes and nothing else', () {
+    // The direction's rule. The voice role may appear only where a voice
+    // note is drawn: the player, the recorder on the post form, the voice
+    // chips on a row and a preview, and the intro's voice picture. In 0.24
+    // it had spread to the photo tiles and a missing-photo glyph.
+    const voiceFiles = {
+      'lib/widgets/voice_note_player.dart',
+      'lib/features/create_job/media_fields.dart',
+      'lib/features/jobs/job_row.dart',
+      'lib/features/map/map_screen.dart',
+      'lib/features/onboarding/onboarding_screen.dart',
+    };
+    expect(
+      offences(
+        RegExp(r'colours\.voice\b'),
+        except: (f) => inCore(f) || voiceFiles.contains(f.path),
+      ),
+      isEmpty,
+    );
+    // And within the post form, only on its voice controls.
+    final media = File(
+      'lib/features/create_job/media_fields.dart',
+    ).readAsStringSync();
+    final photoTile = media.substring(media.indexOf('class _AddTile'));
+    expect(
+      photoTile.substring(0, photoTile.indexOf('\n}\n')),
+      isNot(contains('colours.voice')),
     );
   });
 

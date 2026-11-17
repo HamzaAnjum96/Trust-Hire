@@ -265,7 +265,8 @@ class _AddTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final accent = context.colours.voice;
+    // Ink: peacock is for voice notes, and these add photos.
+    final accent = context.colours.text;
 
     return FocusRing(
       radius: BrandRadius.mediumAll,
@@ -276,7 +277,7 @@ class _AddTile extends StatelessWidget {
           width: PhotoField._tileSize,
           padding: const EdgeInsets.all(BrandSizing.spaceSm),
           decoration: BoxDecoration(
-            // Section 27 — Warm Sand tile with a dashed copper edge.
+            // Section 27: a neutral tile with an ink edge.
             color: context.colours.tint,
             borderRadius: BrandRadius.mediumAll,
             border: Border.all(color: accent.withValues(alpha: 0.6)),

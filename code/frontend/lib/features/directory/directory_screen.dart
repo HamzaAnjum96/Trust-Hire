@@ -396,7 +396,7 @@ class _DirectoryControls extends StatelessWidget {
 /// Name, one line, what they start at, and their record. Deliberately not a
 /// photograph and not a badge: Section 9 sells *visibility*, and anything that
 /// made a paid listing look endorsed would be selling something else. The
-/// initials are in neutral sand for the same reason.
+/// initials are neutral for the same reason.
 class DirectoryListingCard extends StatelessWidget {
   const DirectoryListingCard({
     super.key,

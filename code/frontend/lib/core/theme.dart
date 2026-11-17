@@ -233,7 +233,7 @@ class BrandTheme {
         style: ButtonStyle(side: focusSide(ring)),
       ),
 
-      // Section 23 — inputs: white, Stone border, 12px radius, 48px min,
+      // Section 23 — inputs: white, line-strong border, 12px radius, 48px min,
       // 2px ink focus ring, labels always visible above the field.
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
@@ -281,7 +281,7 @@ class BrandTheme {
         ),
       ),
 
-      // Section 25 — bottom sheets: 20px top corners.
+      // Section 25 — bottom sheets: 24px top corners.
       bottomSheetTheme: BottomSheetThemeData(
         backgroundColor: scheme.surface,
         surfaceTintColor: Colors.transparent,
@@ -344,8 +344,8 @@ class BrandTheme {
         subtitleTextStyle: BrandType.supporting.copyWith(color: mutedColour),
       ),
 
-      // Section 22 — a control is 48px tall with a 12px radius, segmented ones
-      // included; Material's default is a 40px pill.
+      // Section 22 — a control is at least 48px tall, segmented ones
+      // included, and pill-shaped like every button.
       segmentedButtonTheme: SegmentedButtonThemeData(
         style: ButtonStyle(
           minimumSize: const WidgetStatePropertyAll(

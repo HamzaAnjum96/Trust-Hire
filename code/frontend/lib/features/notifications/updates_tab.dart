@@ -152,7 +152,7 @@ class _UpdateRow extends StatelessWidget {
     return switch (entry.kind) {
       NotificationKind.offerReceived => (
         Icons.local_offer_rounded,
-        scheme.primary,
+        context.colours.text,
       ),
       NotificationKind.offerAccepted => (
         Icons.check_circle_outline_rounded,
@@ -164,7 +164,7 @@ class _UpdateRow extends StatelessWidget {
       ),
       NotificationKind.jobStarted => (
         Icons.play_circle_outline_rounded,
-        scheme.primary,
+        context.colours.text,
       ),
       NotificationKind.jobCompleted => (
         Icons.task_alt_rounded,
@@ -174,7 +174,7 @@ class _UpdateRow extends StatelessWidget {
       NotificationKind.jobExpired => (Icons.timer_off_rounded, scheme.outline),
       NotificationKind.ratingReceived => (
         Icons.star_outline_rounded,
-        scheme.primary,
+        context.colours.text,
       ),
       NotificationKind.commissionCharged => (
         Icons.receipt_long_rounded,
@@ -204,7 +204,10 @@ class _UpdateRow extends StatelessWidget {
         Icons.gpp_bad_rounded,
         scheme.error,
       ),
-      NotificationKind.messageReceived => (Icons.forum_rounded, scheme.primary),
+      NotificationKind.messageReceived => (
+        Icons.forum_rounded,
+        context.colours.text,
+      ),
     };
   }
 

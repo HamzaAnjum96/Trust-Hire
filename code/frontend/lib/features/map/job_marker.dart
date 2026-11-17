@@ -11,9 +11,9 @@ import '../../l10n/app_localizations.dart';
 
 /// A job pin, styled per section 15 of the brand guidelines.
 ///
-/// Default jobs are Trust Burgundy with a white icon; the selected pin is
-/// Deep Burgundy with a Copper outline; jobs created on this device are
-/// Copper. Selection also enlarges the pin — colour is never the only
+/// Pins at rest are ink with a white glyph; the selected pin is turmeric with
+/// an ink outline and glyph; the active account's own jobs are drawn
+/// inverted. Selection also enlarges the pin — colour is never the only
 /// indicator of state (section 29).
 class JobMarker extends StatelessWidget {
   const JobMarker({
@@ -222,7 +222,7 @@ class _PinPainter extends CustomPainter {
       oldDelegate.shadow != shadow;
 }
 
-/// The device's own position — Information Blue with a soft ring, never green
+/// The device's own position: an ink dot with a soft ring, never green or blue
 /// (section 15).
 class UserLocationMarker extends StatelessWidget {
   const UserLocationMarker({super.key});

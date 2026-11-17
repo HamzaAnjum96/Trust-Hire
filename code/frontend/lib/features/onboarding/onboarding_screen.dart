@@ -474,7 +474,7 @@ class _StreetsPainter extends CustomPainter {
       oldDelegate.colour != colour;
 }
 
-/// A voice note: the copper button and the shape of somebody speaking.
+/// A voice note: the peacock button and the shape of somebody speaking.
 class _VoicePicture extends StatelessWidget {
   const _VoicePicture();
 
@@ -577,7 +577,7 @@ class _LocationPicture extends StatelessWidget {
             alignment: const Alignment(0.18, -0.15),
             child: _Pin(colour: context.colours.pin),
           ),
-          // You, as the map draws you: Information Blue, never green.
+          // You, as the map draws you: an ink dot, never green or blue.
           Align(
             alignment: Alignment(-0.3, 0.45),
             child: SizedBox(

@@ -162,7 +162,7 @@ class ErrorView extends StatelessWidget {
 }
 
 /// A soft informational panel — used for the local-storage notice and
-/// permission explanations. Information Blue, never alarming.
+/// permission explanations. Ink on the neutral tint, never alarming.
 class NoticePanel extends StatelessWidget {
   const NoticePanel({
     super.key,

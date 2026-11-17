@@ -68,7 +68,7 @@ class JobMap extends StatefulWidget {
   /// first layout is already the right one.
   final CameraFit? openingFit;
 
-  /// The demo account whose pins get the copper treatment. Passed in rather
+  /// The demo account whose pins are drawn inverted. Passed in rather
   /// than read from a provider: the map is given its jobs, its centre and its
   /// selection, and taking one of the four things it draws from somewhere
   /// else would make it untestable on its own.

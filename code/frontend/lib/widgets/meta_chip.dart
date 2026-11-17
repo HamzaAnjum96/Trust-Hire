@@ -20,7 +20,7 @@ class MetaChip extends StatelessWidget {
   final IconData icon;
   final String label;
 
-  /// Only for a fact the brand gives a colour of its own — copper for a
+  /// Only for a fact the brand gives a colour of its own — peacock for a
   /// voice note. Everything else stays muted, so the one that is not stands
   /// out.
   final Color? iconColor;

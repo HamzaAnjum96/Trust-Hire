@@ -706,7 +706,7 @@ class _RoleCard extends StatelessWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BrandRadius.largeAll,
           side: BorderSide(
-            color: selected ? scheme.primary : scheme.outlineVariant,
+            color: selected ? context.colours.text : scheme.outlineVariant,
             width: selected ? 2 : 1,
           ),
         ),
@@ -725,7 +725,7 @@ class _RoleCard extends StatelessWidget {
                       Icon(
                         icon,
                         color: selected
-                            ? scheme.primary
+                            ? context.colours.text
                             : scheme.onSurfaceVariant,
                       ),
                       const Spacer(),
@@ -733,7 +733,7 @@ class _RoleCard extends StatelessWidget {
                         Icon(
                           Icons.check_circle_rounded,
                           size: 20,
-                          color: scheme.primary,
+                          color: context.colours.text,
                         ),
                     ],
                   ),

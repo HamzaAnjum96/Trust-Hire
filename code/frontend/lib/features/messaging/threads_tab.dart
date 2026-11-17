@@ -170,7 +170,7 @@ class _ThreadRow extends StatelessWidget {
                         ),
                         if (unread > 0) ...[
                           const SizedBox(width: BrandSizing.spaceSm),
-                          // Burgundy, not Material's error red: an unread message
+                          // Turmeric, not Material's error red: an unread message
                           // is news, not a fault.
                           Badge.count(
                             count: unread,

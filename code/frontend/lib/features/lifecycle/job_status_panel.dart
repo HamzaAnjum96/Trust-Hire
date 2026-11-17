@@ -194,7 +194,7 @@ class _RatingPrompt extends StatelessWidget {
 /// can say where each one stands without opening it.
 ///
 /// **One loud style, for the one kind of state that needs somebody**: work
-/// agreed or under way is burgundy. Everything else — taking offers,
+/// agreed or under way is ink (the action colour). Everything else — taking offers,
 /// finished, called off, expired — is the quiet pill, and the word says
 /// which. Finished used to be a filled teal pill, so in a list of postings
 /// the job that needed nothing was the heaviest thing on the screen.

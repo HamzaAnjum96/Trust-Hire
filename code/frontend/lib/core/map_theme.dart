@@ -12,8 +12,8 @@ import 'tokens.dart';
 /// and unreadable labels.
 ///
 /// So each brightness gets a purpose-built basemap: Esri's Light Gray and Dark
-/// Gray Canvas. Both are deliberately desaturated, which leaves the burgundy
-/// markers as the only saturated thing on the map. A gentle brand tint is laid
+/// Gray Canvas. Both are deliberately desaturated, which leaves the turmeric
+/// selection as the only saturated thing on the map. A gentle brand tint is laid
 /// over the tiles to tie the surface to the palette, and the place names sit
 /// on a layer of their own *above* that tint, so it never touches legibility.
 ///
