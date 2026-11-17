@@ -1,4 +1,4 @@
-# Plan: applying the site design playbook to the app
+# Plan: the site design playbook, applied, and a reskin
 
 Date: 2026-11-17 · Status: **plan only.** Nothing here is built, and nothing
 is pushed until the owner says so.
@@ -7,6 +7,17 @@ Source: "Site design playbook: skills, lessons and patterns" (Hamza, Nov 2026),
 written for a static marketing site. This plan keeps what transfers to a
 Flutter app that people use for tasks, and drops the rest. It builds on the
 0.23 redesign (`2026-11-04-redesign.md`).
+
+Two parts:
+
+- **Part 1** applies the playbook's rules to the app as it looks now
+  (WP1–WP12).
+- **Part 2** is a **reskin**: a new visual world over the 0.23 structure
+  (RS1–RS9).
+
+Part 1 lays the ground Part 2 needs. Rules become tests, depth and motion
+become tokens, and the product context gets written down. Part 2 then changes
+the look without touching the structure.
 
 ## What transfers, and what does not
 
@@ -17,6 +28,7 @@ Flutter app that people use for tasks, and drops the rest. It builds on the
 | The accent is rare: one accent button per screenful | **Yes** | A hirer's offer list has a filled "Choose" on every offer |
 | Switch or table | **Yes** | Choosing an offer sets a value, which is the radio-group job. Short parallel facts (a worker's record, the ledger) suit a table or fact bar |
 | One motion curve | **Yes** | Two curves today, one of them a bounce (`easeOutBack`) |
+| Theme-neutral tokens named by role (page, raised surface, card, line, muted text, accent) | **Yes** | It makes a reskin a token swap. Today it is not one: features and shared widgets name brand colours directly 123 times, in 32 files |
 | Claims register | **Yes, adapted** | Here the claims are promises in the interface ("The fare is fixed once you choose"), each kept true by a rule the sweep already tests |
 | Product context file before copy | **Yes** | It also closes the review's PRODUCT.md finding, in this repo's place for it |
 | Helper scripts for looking; check at 1440, 980, 768, 390 | **Yes** | The semantics-driven Playwright driver from 0.23 lives in a scratch folder; 980 is Chrome's "Desktop site" width on a phone |
@@ -40,7 +52,9 @@ Flutter app that people use for tasks, and drops the rest. It builds on the
 6. `flutter analyze`, `flutter test` and `tool/sweep_tests.py` stay green.
 7. Commit locally; push only on the owner's word.
 
-## Decisions for the owner before copy work starts
+## Decisions for the owner
+
+Before the copy work (Part 1):
 
 1. **Casing of buttons.** Brand guidelines §21 lists Title Case calls to action
    ("Post a Job", "Save Job", "Edit Job"). The playbook asks for sentence
@@ -52,7 +66,24 @@ Flutter app that people use for tasks, and drops the rest. It builds on the
    pinned "Choose" button, the same shape as the worker's "Offer a fare" bar.
    It changes Stop 3 of the demo script.
 
-## Work packages
+Before the reskin (Part 2):
+
+4. **Evolve or replace.** Evolve keeps burgundy as the one recognisable
+   colour and changes everything around it: neutrals, type, shape, depth,
+   icons. Replace starts the palette over. Evolve keeps what evaluators and
+   the app icon already carry; replace is the bigger visual gain and the
+   bigger risk to recognition.
+5. **What must not change.** Suggested fixed points:
+   - the brand guidelines' "should not look like" list (§1);
+   - no green-and-white "Pakistan-themed" look;
+   - a voice note that looks different from everything else;
+   - Urdu set in a face made for it.
+   Confirm, add or remove.
+6. **Picking the direction.** RS3 shows three directions and the plain "evolve
+   what is there" option on Impeccable's decision page. The owner picks one,
+   or steers and re-rolls. Nothing is built before that choice.
+
+## Part 1: the playbook's rules
 
 In order. S is under an hour of work, M a few hours, L most of a day.
 
@@ -140,8 +171,158 @@ dark mode, the motion curve and the switch-or-table rule, each pointing to the
 token or test that enforces it. *Done when* the guidelines describe the app as
 built.
 
+## Part 2: the reskin
+
+**What it changes:**
+
+- palette;
+- type;
+- depth and shape;
+- iconography;
+- map styling;
+- illustration;
+- the app icon and web shell.
+
+**What it keeps:**
+
+- the 0.23 structure: four destinations and one action, the map/list switch,
+  rows not cards, one loud status style, the job sheet's order;
+- every behaviour and rule;
+- the accessibility floors: 44–48px targets, 16px body text, 12px minimum,
+  AA contrast;
+- full Urdu, right to left.
+
+It is a brand change, so `documents/brand-guidelines/` moves to version 0.2 in
+the same work. Release 0.24.0.
+
+Impeccable runs this as a replacement world:
+
+1. Product context first.
+2. A concept roll and direction round.
+3. A recorded direction contract.
+4. A code-led build. An app screen is an *Operate* surface, so it is built in
+   code rather than from an image comp.
+5. A finish review.
+6. DESIGN.md (here, the design-language section of the brand file) written
+   from what shipped.
+
+**RS1 · Role tokens, with no visual change (L).** Prerequisite for everything
+below.
+
+- Add a `ThemeExtension` of roles:
+  - page, surface, raised, card, line;
+  - strong and muted text;
+  - accent, on-accent and accent text;
+  - the status set: quiet, active, good, bad;
+  - voice;
+  - the map roles: pin, selected pin, own pin, radius, user.
+- Move the 123 direct `BrandColours.*` uses in features and widgets onto those
+  roles.
+- Extend WP2 so a feature or widget that names a brand colour fails the build.
+
+*Done when* the app looks identical, screenshot for screenshot, and a palette
+change touches one file.
+
+**RS2 · Brief and anti-references (S).**
+- Use WP8's product context, adding the scene: outdoors, one-handed, cheap
+  screens, bright sun, weak signal.
+- Record the owner's answers to decisions 4 and 5.
+- Collect anti-references: §1's "should not look like" list, the generic AI
+  looks Impeccable names, and competitors' screens.
+
+*Done when* the brief fits on a page and the owner agrees with it.
+
+**RS3 · Direction round (M).**
+- Run Impeccable's concept roll (`concept-seed --scope direction --mode
+  operate`), then weigh its challengers against the brief.
+- Show three directions plus "evolve what is there" on the decision page.
+- Each card shows the palette, the type pairing (Latin and Urdu), the depth
+  and corner language, icons, map styling, and one screen sketched (Jobs on a
+  phone), with its honest risk.
+
+*Done when* the owner has picked, and the direction contract is recorded with
+its seed reference. That also closes the reviewer's process finding from
+0.23.
+
+**RS4 · Type (M).**
+- Choose the Latin face for the chosen direction. It must have:
+  - an open (OFL) licence;
+  - files bundled for offline use;
+  - tabular figures, because fares line up;
+  - real weights from 400 to 700;
+  - a pairing with Noto Sans Arabic, and Nastaliq for display Urdu.
+- Re-tune the scale with tracking 0, and check how much it adds to the web
+  bundle.
+- Run `surfaces_test.dart`, since new font metrics are where Urdu overflows
+  come from.
+
+*Done when* both languages pass the six-shape matrix.
+
+**RS5 · Palette, depth and shape (M).**
+- Fill the RS1 roles for light and dark, including the dark-mode text tint for
+  the accent.
+- Retune the `card` and `lift` shadows from WP4, and the radius-by-role scale.
+- Turn the contrast gate in `accessibility_test.dart` from a list of pairs into
+  every role pair the app draws.
+
+*Done when* the gate passes in both themes.
+
+**RS6 · Icons (S–M).**
+- Pick one family, decided in RS3. Options are Material Symbols Rounded, which
+  the brand's §14 already describes, or another drawn set.
+- Use one weight, one stroke and one size scale: 24px standard, 20px compact.
+- Remove any glyph standing in for an icon.
+
+*Done when* WP2 finds no mixed families.
+
+**RS7 · The map (M).**
+- Choose tile styles for both themes from the keyless options, or note the
+  paid one the README describes.
+- Redraw the pin, the selected pin with its fare label, own pins, clusters,
+  the radius and the user's position from the roles.
+- Check every pin against its basemap in both themes. The review found
+  burgundy pins faint on the dark tiles.
+
+*Done when* pins read in both themes at a glance.
+
+**RS8 · Assets outside the app (S).** Regenerate from the new roles:
+- the app and PWA icons (`tool/generate_app_icons.py`);
+- the placeholder job images (`tool/generate_placeholder_assets.py`, which
+  hard-codes burgundy, deep burgundy and copper);
+- the onboarding pictures.
+
+Update the boot screen colours and `theme-color` in `web/index.html` and
+`manifest.json`, and `web_shell_test.dart`, which pins `#7A263A`.
+
+*Done when* nothing outside the app shows the old palette.
+
+**RS9 · Review, document, release (M).**
+- Capture the full set from WP9: phone, tablet, desktop, light and dark,
+  English and Urdu, before and after.
+- Run Impeccable's finish reviewer against the direction contract and the
+  quality-bar card, then a verdict pass on the fixes.
+- Write the brand file's design-language section (WP12) from the built
+  result.
+- Bump to 0.24.0, update the CHANGELOG, the README's design notes and the demo
+  script's screen descriptions.
+
+*Done when* the reviewer says ship, or the owner accepts what remains.
+
+**Order.** Run RS1 straight after WP2, so WP3–WP6 are written against roles
+rather than colours. RS2 and RS3 can run in parallel with the rest of Part 1.
+RS4–RS9 start once WP2, WP4, WP6 and WP8 are in.
+
+**Risks.**
+
+| Risk | Mitigation |
+| --- | --- |
+| Recognition: evaluators and the app icon know burgundy | Decision 4, chosen deliberately |
+| New font metrics overflow Urdu at large text | `surfaces_test.dart` plus the large-text accessibility test |
+| Contrast regressions in dark mode | The full role-pair gate from RS5 |
+| A bigger web bundle from new fonts or an icon font | Measure it in RS4 and RS6, and keep tree-shaking on |
+| Scope creep into structure | The structure is fixed in this part. Any structural idea goes back to Part 1 as a new package |
+
 ## Out of scope for now
 
-- A visual reskin. The brand stays.
 - Marketing-site devices (see the table above).
 - Real backend work. None of this touches `code/backend/`.
