@@ -876,12 +876,16 @@ for anyone who opens the repository in Claude Code. `skills-lock.json` records
 where three of them came from; Impeccable has its own installer. The 0.23
 redesign was done with all four, held to `documents/brand-guidelines/`.
 
-| Skill | Source | What it is for |
-| --- | --- | --- |
-| `frontend-design` | `anthropics/skills` | Committing to a visual direction instead of templated defaults |
-| `impeccable` | `pbakaus/impeccable` | Critique, audit, polish and layout passes; its four review agents are in `.claude/agents/` |
-| `ui-ux-pro-max` | `nextlevelbuilder/ui-ux-pro-max-skill` | A searchable rule base: UX guidelines, type, colour, and a Flutter stack guide |
-| `web-design-guidelines` | `vercel-labs/agent-skills` | A review against Vercel's web interface guidelines |
+| Skill | Source | Licence | What it is for |
+| --- | --- | --- | --- |
+| `frontend-design` | `anthropics/skills` | Anthropic's terms, `LICENSE.txt` | Committing to a visual direction instead of templated defaults |
+| `impeccable` | `pbakaus/impeccable` | Apache 2.0 | Critique, audit, polish and layout passes; its four review agents are in `.claude/agents/` |
+| `ui-ux-pro-max` | `nextlevelbuilder/ui-ux-pro-max-skill` | MIT | A searchable rule base: UX guidelines, type, colour, and a Flutter stack guide |
+| `web-design-guidelines` | `vercel-labs/agent-skills` | None declared upstream | A review against Vercel's web interface guidelines |
+
+Each skill folder holds its licence and a `SOURCE.md` with where it came from,
+its version and when it was installed. Keep local notes there, not in the
+skill's own files, so an update does not overwrite them.
 
 ```bash
 # Reinstall or update them:
