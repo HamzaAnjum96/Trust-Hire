@@ -31,6 +31,8 @@
 //                             ARB string for key (or plain text, without @)
 //   {"tapMatch": "regex"}     tap the smallest node whose label matches
 //   {"optional": true}        on a tap step: carry on quietly if not found
+//   {"role": "button"}        on a tap step: only nodes with this ARIA role,
+//                             when a caption shares the control's words
 //   {"key": "Escape"}         press a key
 //   {"type": "text"}          type text
 //   {"wait": 800}             wait, in milliseconds
@@ -175,6 +177,7 @@ async function look(browser, name, preset, steps, args, problems) {
     if (step.tap || step.tapMatch) {
       const want = step.tap ? resolve(step.tap) : new RegExp(step.tapMatch);
       const found = (await nodes())
+        .filter((n) => !step.role || n.role === step.role)
         .filter((n) =>
           typeof want === 'string' ? n.label.includes(want) : want.test(n.label),
         )
