@@ -122,6 +122,8 @@ class AssistantEngine {
             tags: query.tags,
             nearMe: query.nearMe,
             words: query.words,
+            voiceNote: query.voiceNote,
+            mine: query.mine,
           )
         : const <JobHit>[];
     final workers = query.intent == AssistantIntent.workers
@@ -165,6 +167,12 @@ class AssistantEngine {
       'near_me': {'type': 'boolean'},
       'words': {'type': 'string'},
     };
+    // Jobs have two filters workers do not: a voice note, and who posted.
+    final jobParameters = {
+      ...parameters,
+      'voice_note': {'type': 'boolean'},
+      'posted_by_me': {'type': 'boolean'},
+    };
 
     final context = [
       AiPrompts.assistantContext(isWorker: data.isWorker),
@@ -173,6 +181,8 @@ class AssistantEngine {
           workers: read.intent == AssistantIntent.workers,
           tags: [for (final tag in read.tags) tag.id],
           nearMe: read.nearMe,
+          voiceNote: read.voiceNote,
+          mine: read.mine,
         ),
     ].join('\n');
 
@@ -183,7 +193,7 @@ class AssistantEngine {
         AiTool(
           name: 'search_jobs',
           description: AiPrompts.searchJobs,
-          parameters: parameters,
+          parameters: jobParameters,
           run: (arguments) {
             final query = _queryFrom(arguments, AssistantIntent.jobs);
             final hits = search.jobs(
@@ -191,6 +201,8 @@ class AssistantEngine {
               tags: query.tags,
               nearMe: query.nearMe,
               words: query.words,
+              voiceNote: query.voiceNote,
+              mine: query.mine,
             );
             searches.add((query: query, jobs: hits, workers: const []));
             return {
@@ -245,7 +257,11 @@ class AssistantEngine {
     // agree with it count: the right trade, and jobs or workers as asked.
     bool fits(AssistantQuery search) =>
         search.intent == read.intent &&
-        (read.tags.isEmpty || search.tags.any(read.tags.contains));
+        (read.tags.isEmpty || search.tags.any(read.tags.contains)) &&
+        // Asked for, so kept: a model that dropped the filter and found
+        // other jobs is answering a different question.
+        (!read.voiceNote || search.voiceNote) &&
+        (!read.mine || search.mine);
     final counted = read.intent == AssistantIntent.unclear
         ? searches
         : [
@@ -292,7 +308,9 @@ class AssistantEngine {
       }
     }
 
-    final prose = AiSafety.firstSentences(AiSafety.prose(answer['reply']), 2);
+    // One sentence since 0.37: the cards already say each job's title, place
+    // and fare, and two sentences was room to read all five of them out.
+    final prose = AiSafety.firstSentences(AiSafety.prose(answer['reply']), 1);
     return AssistantReply(
       query: asked,
       jobs: jobs,
@@ -300,10 +318,13 @@ class AssistantEngine {
       // A sentence in the other language is not shown, nor one that repeats
       // the model's own instructions: the app's own sentence, in the
       // language of the screen, always is.
+      // Nor one that names a result by its id: "seed-103 fits best" means
+      // nothing to a person.
       prose:
           prose.isEmpty ||
               !AiSafety.writtenIn(prose, language) ||
-              AiSafety.echoes(prose, '${agent.systemPrompt}\n$context')
+              AiSafety.echoes(prose, '${agent.systemPrompt}\n$context') ||
+              [...jobsFound.keys, ...workersFound.keys].any(prose.contains)
           ? null
           : prose,
       model: model.name,
@@ -332,6 +353,8 @@ class AssistantEngine {
       tags: tags,
       nearMe: arguments['near_me'] == true,
       words: words,
+      voiceNote: arguments['voice_note'] == true,
+      mine: arguments['posted_by_me'] == true,
     );
   }
 

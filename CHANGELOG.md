@@ -12,6 +12,37 @@ that heading to the version and date, and open a fresh `[Unreleased]`.
 
 ## [Unreleased]
 
+### 0.37.0 — Ask Trust Hire: real filters, short answers
+
+#### Fixed
+
+- **"Job with a voice note" came back with five unrelated jobs.** The search
+  had no way to ask for a voice note, so the words went in as search words,
+  matched no title, and were dropped, as unmatched words are; the model then
+  said none were found *and* offered the five. `search_jobs` now has a
+  `voice_note` filter, the word list reads "voice note", "recording",
+  "awaz" and آواز as that filter, and a filter that matches nothing is an
+  answer, not a reason to show something else.
+- **"My posts" listed other people's jobs.** There was no way to search for
+  your own. `search_jobs` now has `posted_by_me`, read from "my posts", "jobs
+  I posted", "posted by me" and, for a hirer, "my jobs". A search for work
+  otherwise leaves your own posts out: nobody looks for work in the jobs they
+  are hiring for.
+- **A model that drops the filter it was asked for is set aside**, like one
+  that searches the wrong trade: the word list's answer shows instead.
+
+#### Changed
+
+- **The model's sentence is one sentence, and adds something.** It read every
+  card aloud (titles, places and fares) in a paragraph above the cards
+  themselves. It is now told the app already gives the count and the cards,
+  and to say which result fits best and why, or what to try if nothing fits;
+  only its first sentence is shown, and none that names a result by its id.
+  Search results tell it which jobs have a voice note or photos, and which
+  are the asker's own.
+- The summary under it says *"1 open job with a voice note."* or *"None of
+  your jobs are open right now. Every job you posted is under Your jobs."*
+
 ### 0.36.0 — The favicon is the app's mark; the docs catch up
 
 #### Fixed

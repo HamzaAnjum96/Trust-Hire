@@ -294,6 +294,13 @@ fare panel does arithmetic. When the AI cannot answer, the screen says why,
 and *Profile → Settings → AI assistant* keeps what went wrong last time, to
 pass on.
 
+**What the assistant can search for** (since 0.37): jobs by trade, place and
+distance, jobs with a voice note, and the asker's own open posts (a search
+for work otherwise leaves them out); workers by trade, best record first. The
+model's sentence is one sentence that adds to the cards (which result fits
+best, or what to try) rather than reading them out; the app's own line says
+how many.
+
 Until 0.25 the model ran **in the visitor's browser** (WebLLM on WebGPU,
 Qwen2.5 0.5B or 1.5B, a 300–900 MB download). Most phones have no WebGPU, an
 answer on a weak GPU took minutes, and it read little Urdu. The request it

@@ -74,6 +74,7 @@ void main() {
     bool isWorker = true,
     Set<JobTag> myTrades = const {JobTag.painting},
     JobLocation? at = here,
+    String? myId,
   }) => AssistantData(
     jobs: jobs,
     listings: listings,
@@ -83,6 +84,7 @@ void main() {
     isWorker: isWorker,
     myTrades: myTrades,
     here: at,
+    myId: myId,
   );
 
   group('understanding a request without a model', () {
@@ -771,5 +773,143 @@ void main() {
       findsWidgets,
       reason: 'the answer names the trade it searched for',
     );
+  });
+
+  // 0.37: asked on the live site for "job with a voice note" and "my posts",
+  // the assistant had no way to search for either, came back with five
+  // unrelated jobs, and read all five out in a paragraph.
+  group('voice notes and your own posts', () {
+    const reader = AssistantIntentReader();
+    const search = AssistantSearch();
+    const engine = AssistantEngine();
+
+    Job made(String id, {bool voice = false, String postedBy = 'someone'}) =>
+        Job(
+          id: id,
+          location: here,
+          createdAt: now,
+          title: 'Job $id',
+          tags: const {JobTag.misc},
+          voiceNotePath: voice ? 'voice/$id.m4a' : null,
+          postedBy: postedBy,
+        );
+
+    final jobs = [
+      made('plain'),
+      made('spoken', voice: true),
+      made('mine', postedBy: 'me'),
+    ];
+
+    test('are read as filters, not as words to narrow by', () {
+      final voice = reader.read('job with a voice note', isWorker: true);
+      expect(voice.intent, AssistantIntent.jobs);
+      expect(voice.voiceNote, isTrue);
+      expect(voice.words, isEmpty);
+
+      expect(reader.read('awaz wala kaam', isWorker: true).voiceNote, isTrue);
+
+      for (final ask in ['my posts', 'my job posts', 'jobs posted by me']) {
+        final query = reader.read(ask, isWorker: true);
+        expect(query.mine, isTrue, reason: ask);
+        expect(query.intent, AssistantIntent.jobs, reason: ask);
+      }
+
+      // "My jobs" is work to a worker, and their own posts to a hirer.
+      expect(reader.read('my jobs', isWorker: true).mine, isFalse);
+      expect(reader.read('my jobs', isWorker: false).mine, isTrue);
+    });
+
+    test('a voice-note search finds only those, and nothing is an answer', () {
+      final found = search.jobs(data(jobs: jobs, myId: 'me'), voiceNote: true);
+      expect([for (final hit in found) hit.id], ['spoken']);
+      expect(found.single.toJson()['voiceNote'], isTrue);
+
+      final none = search.jobs(
+        data(jobs: [made('plain')], myId: 'me'),
+        voiceNote: true,
+      );
+      expect(none, isEmpty, reason: 'not five other jobs in its place');
+    });
+
+    test('work to do leaves out your own posts; "my posts" is only them', () {
+      final work = search.jobs(data(jobs: jobs, myId: 'me'));
+      expect([for (final hit in work) hit.id], isNot(contains('mine')));
+
+      final mine = search.jobs(data(jobs: jobs, myId: 'me'), mine: true);
+      expect([for (final hit in mine) hit.id], ['mine']);
+      expect(mine.single.toJson()['postedByYou'], isTrue);
+    });
+
+    test('a model that drops the asked-for filter is set aside', () async {
+      final model = ScriptedModel([
+        {'action': 'search_jobs', 'arguments': <String, Object?>{}},
+        {
+          'action': 'answer',
+          'answer': {'reply': 'Here are some jobs.'},
+        },
+      ]);
+
+      final reply = await engine.answer(
+        'job with a voice note',
+        data: data(jobs: jobs, myId: 'me'),
+        model: model,
+      );
+
+      expect(reply.aiFailure, AssistantEngine.setAside);
+      expect([for (final hit in reply.jobs) hit.id], ['spoken']);
+    });
+
+    test('a reply is one sentence: the cards carry the details', () async {
+      final model = ScriptedModel([
+        {
+          'action': 'search_jobs',
+          'arguments': {'voice_note': true},
+        },
+        {
+          'action': 'answer',
+          'answer': {
+            'reply':
+                'One job has a voice note. It is Job spoken, in Lahore, for '
+                'Rs 2000.',
+            'job_ids': ['spoken'],
+          },
+        },
+      ]);
+
+      final reply = await engine.answer(
+        'job with a voice note',
+        data: data(jobs: jobs, myId: 'me'),
+        model: model,
+      );
+
+      expect(reply.aiFailure, isNull);
+      expect(reply.prose, 'One job has a voice note.');
+      expect([for (final hit in reply.jobs) hit.id], ['spoken']);
+    });
+
+    test('a reply that names a result by its id is not shown', () async {
+      final model = ScriptedModel([
+        {
+          'action': 'search_jobs',
+          'arguments': {'voice_note': true},
+        },
+        {
+          'action': 'answer',
+          'answer': {
+            'reply': 'spoken fits best as it has a voice note.',
+            'job_ids': ['spoken'],
+          },
+        },
+      ]);
+
+      final reply = await engine.answer(
+        'job with a voice note',
+        data: data(jobs: jobs, myId: 'me'),
+        model: model,
+      );
+
+      expect(reply.prose, isNull);
+      expect([for (final hit in reply.jobs) hit.id], ['spoken']);
+    });
   });
 }

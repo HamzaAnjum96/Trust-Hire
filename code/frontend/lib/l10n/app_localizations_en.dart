@@ -2338,6 +2338,36 @@ class AppStringsEn extends AppStrings {
   String get assistantNoJobsAny => 'No open jobs match that right now.';
 
   @override
+  String assistantFoundVoiceJobs(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count open jobs with a voice note.',
+      one: '1 open job with a voice note.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get assistantNoVoiceJobs =>
+      'No open jobs with a voice note reach you right now.';
+
+  @override
+  String assistantFoundMyJobs(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count open jobs you posted.',
+      one: '1 open job you posted.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get assistantNoMyJobs =>
+      'None of your jobs are open right now. Every job you posted is under Your jobs.';
+
+  @override
   String assistantFoundWorkers(int count, String what) {
     String _temp0 = intl.Intl.pluralLogic(
       count,

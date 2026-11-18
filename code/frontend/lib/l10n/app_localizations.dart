@@ -3866,6 +3866,30 @@ abstract class AppStrings {
   /// **'No open jobs match that right now.'**
   String get assistantNoJobsAny;
 
+  /// Assistant summary when asked for jobs described with a voice note
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 open job with a voice note.} other{{count} open jobs with a voice note.}}'**
+  String assistantFoundVoiceJobs(int count);
+
+  /// Assistant summary: asked for jobs with a voice note, none found
+  ///
+  /// In en, this message translates to:
+  /// **'No open jobs with a voice note reach you right now.'**
+  String get assistantNoVoiceJobs;
+
+  /// Assistant summary when asked for the person's own posts
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 open job you posted.} other{{count} open jobs you posted.}}'**
+  String assistantFoundMyJobs(int count);
+
+  /// Assistant summary: asked for own posts, none open. 'Your jobs' is the tab on Jobs
+  ///
+  /// In en, this message translates to:
+  /// **'None of your jobs are open right now. Every job you posted is under Your jobs.'**
+  String get assistantNoMyJobs;
+
   /// Assistant result count
   ///
   /// In en, this message translates to:

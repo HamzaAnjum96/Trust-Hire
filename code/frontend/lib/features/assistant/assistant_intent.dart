@@ -19,11 +19,24 @@ class AssistantQuery {
     this.tags = const {},
     this.nearMe = false,
     this.words = const [],
+    this.voiceNote = false,
+    this.mine = false,
   });
 
   final AssistantIntent intent;
   final Set<JobTag> tags;
   final bool nearMe;
+
+  /// Only jobs described with a voice note: "a job with a voice note",
+  /// "awaz wala kaam". A filter of its own since 0.37: as search words it
+  /// matched no title, and words that match nothing are dropped, so the
+  /// search came back with five unrelated jobs.
+  final bool voiceNote;
+
+  /// Only jobs this person posted: "my posts", "jobs I posted". Otherwise a
+  /// search for work leaves their own posts out: nobody looks for work in
+  /// the jobs they are hiring for.
+  final bool mine;
 
   /// What is left once the trades and the filler are taken out — a place
   /// name, usually. Matched loosely against titles, areas and headlines.
@@ -253,7 +266,39 @@ class AssistantIntentReader {
     'پاس',
   ];
 
+  /// A voice note: the one way of describing a job the search can ask for
+  /// by name.
+  static const _voice = [
+    'voice',
+    'recording',
+    'audio',
+    '=awaz',
+    '=aawaz',
+    'آواز',
+    'وائس',
+  ];
+
+  /// This person's own posts. "My jobs" counts only for a hirer: a worker
+  /// saying it means work, not the jobs they posted.
+  static const _mine = [
+    'my post',
+    'i posted',
+    'mere post',
+    'meri post',
+    'میری پوسٹ',
+    'میرے پوسٹ',
+  ];
+
   static const _filler = {
+    'my',
+    'mine',
+    'post',
+    'posts',
+    'posted',
+    'note',
+    'notes',
+    'mere',
+    'meri',
     'the',
     'for',
     'and',
@@ -323,6 +368,7 @@ class AssistantIntentReader {
           !_filler.contains(token) &&
           !_claimed(token, _work) &&
           !_claimed(token, _near) &&
+          !_claimed(token, _voice) &&
           !_claimed(token, _person) &&
           !_trade.values.any((terms) => _claimed(token, terms)))
         token,
@@ -356,11 +402,24 @@ class AssistantIntentReader {
     final person = _person.any(has);
     final work = _work.any(has);
     final nearMe = _near.any(has);
+    final voiceNote = _voice.any(has);
+    // "My job posts", "my posted jobs", "posted by me": the words, not the
+    // phrase, so a word between them does not hide the request.
+    final mine =
+        _mine.any(has) ||
+        (has('=my') && has('post')) ||
+        (has('=posted') && has('=me')) ||
+        (!isWorker && has('my job'));
 
     final AssistantIntent intent;
-    if (person && !work) {
+    if (mine) {
+      intent = AssistantIntent.jobs;
+    } else if (person && !work) {
       intent = AssistantIntent.workers;
     } else if (work && !person) {
+      intent = AssistantIntent.jobs;
+    } else if (voiceNote && !person) {
+      // Only a job carries a voice note.
       intent = AssistantIntent.jobs;
     } else if (tags.isNotEmpty || person || work) {
       // A trade with no other clue, or both clues at once: go by what this
@@ -380,6 +439,8 @@ class AssistantIntentReader {
       tags: tags,
       nearMe: nearMe,
       words: words,
+      voiceNote: voiceNote,
+      mine: mine,
     );
   }
 }

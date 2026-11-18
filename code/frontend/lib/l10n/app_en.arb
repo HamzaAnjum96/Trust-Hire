@@ -1743,6 +1743,24 @@
   "@assistantNoJobsAny": {
     "description": "No results"
   },
+  "assistantFoundVoiceJobs": "{count, plural, =1{1 open job with a voice note.} other{{count} open jobs with a voice note.}}",
+  "@assistantFoundVoiceJobs": {
+    "description": "Assistant summary when asked for jobs described with a voice note",
+    "placeholders": {"count": {"type": "int"}}
+  },
+  "assistantNoVoiceJobs": "No open jobs with a voice note reach you right now.",
+  "@assistantNoVoiceJobs": {
+    "description": "Assistant summary: asked for jobs with a voice note, none found"
+  },
+  "assistantFoundMyJobs": "{count, plural, =1{1 open job you posted.} other{{count} open jobs you posted.}}",
+  "@assistantFoundMyJobs": {
+    "description": "Assistant summary when asked for the person's own posts",
+    "placeholders": {"count": {"type": "int"}}
+  },
+  "assistantNoMyJobs": "None of your jobs are open right now. Every job you posted is under Your jobs.",
+  "@assistantNoMyJobs": {
+    "description": "Assistant summary: asked for own posts, none open. 'Your jobs' is the tab on Jobs"
+  },
   "assistantFoundWorkers": "{count, plural, =1{1 person for {what}, best record first.} other{{count} people for {what}, best record first.}}",
   "@assistantFoundWorkers": {
     "description": "Assistant result count",

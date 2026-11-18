@@ -84,12 +84,16 @@ class AiPrompts {
       "You are Trust Hire's assistant. You help people find open jobs and "
       'directory workers on Trust Hire, and nothing else.\n'
       'For work to do, call search_jobs. For somebody to do work, call '
-      'search_workers. Pick the job tags that fit the request.\n'
-      'Then answer: reply is one or two short sentences in '
-      '${language(languageCode)} about what the search found, and job_ids or '
-      'worker_ids are the ids of the results you mention. In reply, name '
-      'results by title or name, never by id. Fares and prices are in '
-      'Pakistani rupees: write them as Rs.\n'
+      'search_workers. Pick the job tags that fit the request, and use '
+      'voice_note or posted_by_me when the request asks for them.\n'
+      'Then answer: reply is one short sentence in '
+      '${language(languageCode)}, under 20 words. The app already says how '
+      'many were found and shows every result as a card with its title, '
+      'place and fare, so do not count them, list them or repeat their '
+      'details: say which fits the request best and why, or, if nothing '
+      'fits, what to try instead. Name a result by its title or name, never '
+      'by its id. job_ids or worker_ids are the ids of the results that fit, '
+      'best first. Never offer other results in place of ones that fit.\n'
       'If the request is not about finding jobs or workers on Trust Hire, '
       'answer straight away with off_topic true and no ids.\n'
       'Only mention jobs and workers a tool returned.';
@@ -104,15 +108,21 @@ class AiPrompts {
     required bool workers,
     required List<String> tags,
     required bool nearMe,
+    bool voiceNote = false,
+    bool mine = false,
   }) =>
       'The app read this request as a search for '
       '${workers ? 'workers, with search_workers' : 'jobs, with search_jobs'}'
       '${tags.isEmpty ? '' : ', tags ${tags.join(', ')}'}'
-      '${nearMe ? ', near_me true' : ''}.';
+      '${nearMe ? ', near_me true' : ''}'
+      '${voiceNote ? ', voice_note true' : ''}'
+      '${mine ? ', posted_by_me true' : ''}.';
 
   static const searchJobs =
       'Open jobs this person can see, for some job tags. near_me keeps to the '
-      'nearest; words narrows by place or title.';
+      'nearest; words narrows by place or title; voice_note keeps jobs '
+      'described with a voice note; posted_by_me gives only the jobs this '
+      'person posted, which are otherwise left out.';
 
   static const searchWorkers =
       'Workers in the directory who would come to this person, best rated '

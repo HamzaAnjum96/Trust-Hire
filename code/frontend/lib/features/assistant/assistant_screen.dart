@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../core/roles.dart';
 import 'package:provider/provider.dart';
 
+import '../../app/account_controller.dart';
 import '../../app/ai_controller.dart';
 import '../../app/job_controller.dart';
 import '../../app/premium_controller.dart';
@@ -97,6 +98,7 @@ class _AssistantScreenState extends State<AssistantScreen> {
       isWorker: profile.isWorker,
       myTrades: profile.profile.tags,
       here: here,
+      myId: context.read<AccountController>().activeId,
     );
   }
 
@@ -425,6 +427,17 @@ class _Answered extends StatelessWidget {
     }
 
     final count = reply.jobs.length;
+    // The two filters say what they are, before the trades do.
+    if (query.mine) {
+      return count == 0
+          ? strings.assistantNoMyJobs
+          : strings.assistantFoundMyJobs(count);
+    }
+    if (query.voiceNote) {
+      return count == 0
+          ? strings.assistantNoVoiceJobs
+          : strings.assistantFoundVoiceJobs(count);
+    }
     if (count == 0) {
       return what.isEmpty
           ? strings.assistantNoJobsAny

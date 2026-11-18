@@ -2350,6 +2350,36 @@ class AppStringsUr extends AppStrings {
   String get assistantNoJobsAny => 'ابھی کوئی کھلا کام اس سے نہیں ملتا۔';
 
   @override
+  String assistantFoundVoiceJobs(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'آواز کے پیغام والے $count کھلے کام۔',
+      one: 'آواز کے پیغام والا 1 کھلا کام۔',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get assistantNoVoiceJobs =>
+      'آواز کے پیغام والا کوئی کھلا کام ابھی آپ تک نہیں پہنچتا۔';
+
+  @override
+  String assistantFoundMyJobs(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'آپ کے پوسٹ کیے ہوئے $count کھلے کام۔',
+      one: 'آپ کا پوسٹ کیا ہوا 1 کھلا کام۔',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get assistantNoMyJobs =>
+      'آپ کا کوئی کام ابھی کھلا نہیں۔ آپ کے پوسٹ کیے ہوئے سب کام «آپ کے کام» میں ہیں۔';
+
+  @override
   String assistantFoundWorkers(int count, String what) {
     String _temp0 = intl.Intl.pluralLogic(
       count,

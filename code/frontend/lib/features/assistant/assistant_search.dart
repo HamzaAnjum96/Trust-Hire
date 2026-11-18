@@ -22,6 +22,7 @@ class AssistantData {
     required this.isWorker,
     this.myTrades = const {},
     this.here,
+    this.myId,
   });
 
   /// Open jobs this person can see.
@@ -40,6 +41,10 @@ class AssistantData {
   final Set<JobTag> myTrades;
 
   final JobLocation? here;
+
+  /// Who is asking: what "my posts" means, and whose posts a search for work
+  /// leaves out.
+  final String? myId;
 }
 
 /// A job, as the assistant may describe it: what and roughly where, never
@@ -53,6 +58,9 @@ class JobHit {
     this.area,
     this.fare,
     this.km,
+    this.voiceNote = false,
+    this.photos = false,
+    this.yours = false,
   });
 
   final String id;
@@ -63,6 +71,12 @@ class JobHit {
   final double? km;
   final int daysAgo;
 
+  /// How it is described, and whether this person posted it: what the cards
+  /// show, so a model can say it without guessing.
+  final bool voiceNote;
+  final bool photos;
+  final bool yours;
+
   Map<String, Object?> toJson() => {
     'id': id,
     'title': ?title,
@@ -71,6 +85,9 @@ class JobHit {
     'startingFareRupees': fare ?? AiPrompts.openToOffers,
     if (km != null) 'km': (km! * 10).round() / 10,
     'daysAgo': daysAgo,
+    if (voiceNote) 'voiceNote': true,
+    if (photos) 'photos': true,
+    if (yours) 'postedByYou': true,
   };
 }
 
@@ -128,14 +145,23 @@ class AssistantSearch {
     Set<JobTag> tags = const {},
     bool nearMe = false,
     List<String> words = const [],
+    bool voiceNote = false,
+    bool mine = false,
   }) {
     final here = data.here;
     double? kmTo(Job job) =>
         here == null ? null : here.distanceTo(job.location) / 1000;
+    final me = data.myId;
+    bool isMine(Job job) => me != null && job.isPostedBy(me);
 
+    // Filters, not words: a filter that matches nothing is an answer ("no
+    // jobs with a voice note"), where unmatched words are dropped.
     var rows = [
       for (final job in data.jobs)
-        if (tags.isEmpty || job.tags.any(tags.contains)) job,
+        if ((tags.isEmpty || job.tags.any(tags.contains)) &&
+            (!voiceNote || job.hasVoiceNote) &&
+            isMine(job) == mine)
+          job,
     ];
     rows = _narrowed(
       rows,
@@ -166,6 +192,9 @@ class AssistantSearch {
           fare: job.startingFare,
           km: kmTo(job),
           daysAgo: data.now.difference(job.createdAt).inDays.clamp(0, 9999),
+          voiceNote: job.hasVoiceNote,
+          photos: job.hasPhotos,
+          yours: isMine(job),
         ),
     ];
   }
