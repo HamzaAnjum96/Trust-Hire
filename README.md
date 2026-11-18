@@ -431,7 +431,7 @@ nobody. A hirer can still ask to see everyone, and a hirer who has declined
 location sees everyone by default: **declining a permission should cost you
 sorting, not access.**
 
-**The app tells you what happened.** Activity leads with a feed of everything
+**The app tells you what happened.** The Inbox leads with a feed of everything
 that concerns you — offers in and decided, work started and finished, ratings,
 commission, the debt lockout, a listing about to lapse — and the navigation
 destination carries a count of those plus the conversations waiting for a
@@ -638,13 +638,15 @@ on the **trade board** (since 0.26): one row per trade near you with how many
 jobs, the nearest and the fares, then the jobs themselves; tapping a trade
 narrows the list and the map's pins to it. The map is the other view, on the
 pill at the bottom, and Jobs remembers which you left it on. On a desktop the
-map and the board-headed list are on screen at once. *Directory*, *Activity*
-and *Profile* follow. **Post a job** is a button, never a destination: the
-middle slot of the bottom bar on a phone, the first thing under the product's
-name on the rail. Activity holds *Updates*, *Messages* and *Your jobs*, and
-the last is one list filtered three ways — Posted, Offers, Saved. The
-reasoning is in
-[`documents/design/2026-11-04-redesign.md`](documents/design/2026-11-04-redesign.md).
+map and the board-headed list are on screen at once. Jobs has two tabs since
+0.26: *Near you* (the board and the map) and *Your jobs* (one list filtered
+three ways: Posted, Offers, Saved). *Directory*, *Inbox* and *Profile*
+follow. **Post a job** is a button, never a destination: the middle slot of
+the bottom bar on a phone, the first thing under the product's name on the
+rail. The Inbox holds *Updates* and *Messages*, and carries the badge for what
+is waiting. The reasoning is in
+[`documents/design/2026-11-04-redesign.md`](documents/design/2026-11-04-redesign.md)
+and [`documents/design/2026-11-18-structure.md`](documents/design/2026-11-18-structure.md).
 
 **The design system (since 0.24).** Screens never name a colour. They ask
 `context.colours` for a role (`action`, `accentText`, `highlight`, `voice`,

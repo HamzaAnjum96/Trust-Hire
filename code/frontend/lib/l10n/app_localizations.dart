@@ -1388,11 +1388,11 @@ abstract class AppStrings {
   /// **'Add a trade'**
   String get addATrade;
 
-  /// Bottom navigation label for saved and posted jobs
+  /// Navigation destination: updates and messages, with a badge for what is waiting.
   ///
   /// In en, this message translates to:
-  /// **'Activity'**
-  String get navActivity;
+  /// **'Inbox'**
+  String get navInbox;
 
   /// Bottom navigation label for role, trades and settings
   ///
@@ -3997,6 +3997,12 @@ abstract class AppStrings {
   /// In en, this message translates to:
   /// **'Show fewer'**
   String get boardShowFewer;
+
+  /// Tab on Jobs: work near you (the trade board and the map).
+  ///
+  /// In en, this message translates to:
+  /// **'Near you'**
+  String get jobsNearYouTab;
 }
 
 class _AppStringsDelegate extends LocalizationsDelegate<AppStrings> {

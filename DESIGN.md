@@ -285,7 +285,7 @@ A near-monochrome of ink on cool lime-wash, punctuated by one warm signal (turme
 
 ### Hierarchy
 - **Display** (700, 32px, 38px line): The largest statement on a screen; rare.
-- **Headline** (700, 24px, 30px line): Page headings and the app bar title ("Activity", "Wallet").
+- **Headline** (700, 24px, 30px line): Page headings and the app bar title ("Inbox", "Wallet").
 - **Title** (600, 18px, 24px line): Section headings, a job's title in a row or card, dialog titles.
 - **Body** (400, 16px, 24px line): Running text and inputs; never smaller. Columns of text and rows stop at a 720px readable width.
 - **Supporting** (400, 14px, 20px line): Secondary lines, meta (place, time, trade), chip and tab labels, notices.

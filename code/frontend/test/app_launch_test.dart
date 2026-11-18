@@ -90,7 +90,7 @@ void main() {
       findsOneWidget,
     );
     expect(find.text('Directory'), findsOneWidget);
-    expect(find.text('Activity'), findsOneWidget);
+    expect(find.text('Inbox'), findsOneWidget);
     expect(find.text('Profile'), findsOneWidget);
 
     // Primary action is reachable from the landing screen.
@@ -128,9 +128,14 @@ void main() {
     await settle(tester);
     expect(find.textContaining('Set prices, no haggling'), findsOneWidget);
 
-    // "Activity", not "Saved" — the screen holds what arrives and what you
-    // keep an eye on, and naming it after one list hid the others.
-    await tester.tap(find.text('Activity'));
+    // Your jobs live on Jobs since 0.26, beside the work near you; the Inbox
+    // holds what arrives.
+    await tester.tap(
+      find.descendant(
+        of: find.byType(NavigationBar),
+        matching: find.text('Jobs'),
+      ),
+    );
     await settle(tester);
     await tester.tap(find.text('Your jobs'));
     await settle(tester);

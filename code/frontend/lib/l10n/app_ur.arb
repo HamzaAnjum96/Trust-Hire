@@ -215,7 +215,7 @@
   "noJobsForTrades": "آپ کے ہنر کے لیے یہاں کچھ نہیں",
   "noJobsForTradesHelp": "کام آپ تک تبھی پہنچتا ہے جب وہ آپ کے کسی ہنر سے ملے۔ مزید دیکھنے کے لیے ہنر شامل کریں۔",
   "addATrade": "ہنر شامل کریں",
-  "navActivity": "سرگرمی",
+  "navInbox": "ان باکس",
   "navProfile": "پروفائل",
   "audioOnlyJob": "صرف آواز میں بتایا گیا",
   "audioOnlyJobHelp": "اس کام کی کوئی تحریری تفصیل نہیں۔ اگر آپ آواز نہیں سن سکتے تو پوسٹ کرنے والے سے پوچھ لیں۔",
@@ -649,5 +649,6 @@
   "boardShowing": "صرف {trade} دکھایا جا رہا ہے۔ سب کے لیے دوبارہ ٹیپ کریں۔",
   "fareRange": "{low}–{high}",
   "boardShowAll": "تمام {count} اقسام دکھائیں",
-  "boardShowFewer": "کم دکھائیں"
+  "boardShowFewer": "کم دکھائیں",
+  "jobsNearYouTab": "آپ کے قریب"
 }

@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:trust_hire/widgets/counted_label.dart';
@@ -52,79 +53,85 @@ void main() {
   }
 
   group('what the seed writes', () {
-    test('is exactly this set, and the reset screen reloads all of it',
-        () async {
-      // **A tripwire, not a description.** Restoring the seed replaces every
-      // key below, and each one is already held in memory by some controller.
-      // The reset handler in `profile_screen.dart` has to re-read all of them
-      // or the app shows a restored map beside stale balances — and the next
-      // write puts the stale ones back.
-      //
-      // Nothing can make a widget method enumerate itself, so this fails when
-      // the seed grows a key instead. If you are reading this because the test
-      // broke: add the new key's controller to `_confirmReset`, then add the
-      // key here.
-      const reloadedOnReset = <String>{
-        StoreKeys.jobs, // JobController
-        StoreKeys.users, // JobController
-        StoreKeys.bids, // BidController
-        StoreKeys.ratings, // RatingController
-        StoreKeys.directory, // PremiumController
-        StoreKeys.accountReviews, // AdminController, VerificationController
-        StoreKeys.cnicRecords, // AdminController, VerificationController
-        StoreKeys.disputes, // AdminController
-        StoreKeys.messages, // MessageController
-      };
+    test(
+      'is exactly this set, and the reset screen reloads all of it',
+      () async {
+        // **A tripwire, not a description.** Restoring the seed replaces every
+        // key below, and each one is already held in memory by some controller.
+        // The reset handler in `profile_screen.dart` has to re-read all of them
+        // or the app shows a restored map beside stale balances — and the next
+        // write puts the stale ones back.
+        //
+        // Nothing can make a widget method enumerate itself, so this fails when
+        // the seed grows a key instead. If you are reading this because the test
+        // broke: add the new key's controller to `_confirmReset`, then add the
+        // key here.
+        const reloadedOnReset = <String>{
+          StoreKeys.jobs, // JobController
+          StoreKeys.users, // JobController
+          StoreKeys.bids, // BidController
+          StoreKeys.ratings, // RatingController
+          StoreKeys.directory, // PremiumController
+          StoreKeys.accountReviews, // AdminController, VerificationController
+          StoreKeys.cnicRecords, // AdminController, VerificationController
+          StoreKeys.disputes, // AdminController
+          StoreKeys.messages, // MessageController
+        };
 
-      // Per-account keys are written suffixed, and read back by the
-      // controllers that follow the active account — ProfileController and
-      // WalletController, both of which the reset handler reloads.
-      const perAccount = <String>{StoreKeys.role, StoreKeys.workerProfile,
-          StoreKeys.wallet};
+        // Per-account keys are written suffixed, and read back by the
+        // controllers that follow the active account — ProfileController and
+        // WalletController, both of which the reset handler reloads.
+        const perAccount = <String>{
+          StoreKeys.role,
+          StoreKeys.workerProfile,
+          StoreKeys.wallet,
+        };
 
-      final store = await LocalStore.open();
-      await JobRepository(store, MediaStore(store)).ensureSeeded();
+        final store = await LocalStore.open();
+        await JobRepository(store, MediaStore(store)).ensureSeeded();
 
-      for (final key in reloadedOnReset) {
+        for (final key in reloadedOnReset) {
+          expect(
+            store.readCollection(key) ?? store.readString(key),
+            isNotNull,
+            reason: '$key is expected to be seeded but was not written',
+          );
+        }
+
+        // And the seed writes nothing outside that set except the flag, the
+        // per-account keys, and the preferences the seed never touches.
+        final known = {
+          ...reloadedOnReset,
+          StoreKeys.seeded,
+          StoreKeys.activeAccount,
+          StoreKeys.introSeen,
+          StoreKeys.themeMode,
+          StoreKeys.language,
+          StoreKeys.savedJobs,
+          StoreKeys.tradesNoticeDismissed,
+          StoreKeys.mediaIndex,
+          ...perAccount,
+        };
+
+        final written = SharedPreferences.getInstance();
+        final prefs = await written;
+        final unexpected = prefs
+            .getKeys()
+            .where((key) => key.startsWith(StoreKeys.prefix))
+            // Per-account keys are `<key>#<account>`.
+            .map((key) => key.split('#').first)
+            .where((key) => !known.contains(key))
+            .toSet();
+
         expect(
-          store.readCollection(key) ?? store.readString(key),
-          isNotNull,
-          reason: '$key is expected to be seeded but was not written',
+          unexpected,
+          isEmpty,
+          reason:
+              'the seed writes $unexpected, which no controller reloads on '
+              'a restore — see _confirmReset in profile_screen.dart',
         );
-      }
-
-      // And the seed writes nothing outside that set except the flag, the
-      // per-account keys, and the preferences the seed never touches.
-      final known = {
-        ...reloadedOnReset,
-        StoreKeys.seeded,
-        StoreKeys.activeAccount,
-        StoreKeys.introSeen,
-        StoreKeys.themeMode,
-        StoreKeys.language,
-        StoreKeys.savedJobs,
-        StoreKeys.tradesNoticeDismissed,
-        StoreKeys.mediaIndex,
-        ...perAccount,
-      };
-
-      final written = SharedPreferences.getInstance();
-      final prefs = await written;
-      final unexpected = prefs
-          .getKeys()
-          .where((key) => key.startsWith(StoreKeys.prefix))
-          // Per-account keys are `<key>#<account>`.
-          .map((key) => key.split('#').first)
-          .where((key) => !known.contains(key))
-          .toSet();
-
-      expect(
-        unexpected,
-        isEmpty,
-        reason: 'the seed writes $unexpected, which no controller reloads on '
-            'a restore — see _confirmReset in profile_screen.dart',
-      );
-    });
+      },
+    );
   });
 
   group('the demo has a past', () {
@@ -287,7 +294,8 @@ void main() {
 
         expect(
           mine.where(
-            (job) => job.status == JobStatus.completed && rated.contains(job.id),
+            (job) =>
+                job.status == JobStatus.completed && rated.contains(job.id),
           ),
           isNotEmpty,
           reason: '${account.name} has no finished, rated posting',
@@ -341,7 +349,8 @@ void main() {
         expect(
           charged,
           finished,
-          reason: '${account.name} was charged for work they did not do, '
+          reason:
+              '${account.name} was charged for work they did not do, '
               'or did work they were not charged for',
         );
       }
@@ -461,8 +470,7 @@ void main() {
         for (final credit in credits) {
           final charge = wallet.entries.firstWhere(
             (e) =>
-                e.kind == WalletEntryKind.commission &&
-                e.jobId == credit.jobId,
+                e.kind == WalletEntryKind.commission && e.jobId == credit.jobId,
           );
           expect(credit.tokens, lessThanOrEqualTo(-charge.tokens));
           expect(
@@ -510,7 +518,12 @@ void main() {
       final usman = DemoAccounts.byId('user-009');
       await pumpAs(tester, usman);
 
-      await tester.tap(find.text('Activity'));
+      await tester.tap(
+        find.descendant(
+          of: find.byType(NavigationBar),
+          matching: find.text('Jobs'),
+        ),
+      );
       await tester.pumpAndSettle();
       await tester.tap(find.text('Your jobs'));
       await tester.pumpAndSettle();
@@ -570,8 +583,9 @@ void main() {
       for (final account in DemoAccounts.roster) {
         if (!account.isSeeded) continue;
 
-        final profile = (ProfileController(store)..setAccount(account.id))
-            .profile;
+        final profile = (ProfileController(
+          store,
+        )..setAccount(account.id)).profile;
 
         for (final bid in bids.where((b) => b.workerId == account.id)) {
           expect(

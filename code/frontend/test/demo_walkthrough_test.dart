@@ -98,7 +98,7 @@ void main() {
         'Jobs',
         'Post a job',
         'Directory',
-        'Activity',
+        'Inbox',
         'Profile',
       ]) {
         expect(

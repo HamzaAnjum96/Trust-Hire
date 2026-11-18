@@ -768,7 +768,7 @@ class AppStringsEn extends AppStrings {
   String get addATrade => 'Add a trade';
 
   @override
-  String get navActivity => 'Activity';
+  String get navInbox => 'Inbox';
 
   @override
   String get navProfile => 'Profile';
@@ -2441,4 +2441,7 @@ class AppStringsEn extends AppStrings {
 
   @override
   String get boardShowFewer => 'Show fewer';
+
+  @override
+  String get jobsNearYouTab => 'Near you';
 }

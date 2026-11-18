@@ -311,7 +311,7 @@ void main() {
       // Since 0.26 who is logged in is said on the profile, not by initials
       // in the corner of every screen.
       await pumpApp(tester);
-      for (final destination in ['Jobs', 'Directory', 'Activity']) {
+      for (final destination in ['Jobs', 'Directory', 'Inbox']) {
         await tester.tap(find.text(destination).last);
         await tester.pumpAndSettle();
         expect(find.byType(AccountAvatar), findsNothing, reason: destination);
@@ -354,7 +354,12 @@ void main() {
 
       expect(find.text('Logged in as ${hina.name}'), findsOneWidget);
 
-      await tester.tap(find.text('Activity'));
+      await tester.tap(
+        find.descendant(
+          of: find.byType(NavigationBar),
+          matching: find.text('Jobs'),
+        ),
+      );
       await tester.pumpAndSettle();
       await tester.tap(find.text('Your jobs'));
       await tester.pumpAndSettle();

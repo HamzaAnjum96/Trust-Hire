@@ -11,6 +11,8 @@ import 'package:trust_hire/app/premium_controller.dart';
 import 'package:trust_hire/app/profile_controller.dart';
 import 'package:trust_hire/app/rating_controller.dart';
 import 'package:trust_hire/app/verification_controller.dart';
+import 'package:trust_hire/app/settings_controller.dart';
+import 'package:trust_hire/features/jobs/job_filter_controller.dart';
 import 'package:trust_hire/app/wallet_controller.dart';
 import 'package:trust_hire/core/theme.dart';
 import 'package:trust_hire/features/jobs/saved_jobs_controller.dart';
@@ -75,12 +77,24 @@ Widget appHarness({
         bids,
         () => BidController(BidRepository(store))..load(),
       ),
-      provide<AccountController>(accounts, () => AccountController(store)..load()),
-      provide<SavedJobsController>(saved, () => SavedJobsController(store)..load()),
-      provide<ProfileController>(profile, () => ProfileController(store)..load()),
+      provide<AccountController>(
+        accounts,
+        () => AccountController(store)..load(),
+      ),
+      provide<SavedJobsController>(
+        saved,
+        () => SavedJobsController(store)..load(),
+      ),
+      provide<ProfileController>(
+        profile,
+        () => ProfileController(store)..load(),
+      ),
       provide<WalletController>(wallet, () => WalletController(store)..load()),
       provide<RatingController>(ratings, () => RatingController(store)..load()),
-      provide<PremiumController>(premium, () => PremiumController(store)..load()),
+      provide<PremiumController>(
+        premium,
+        () => PremiumController(store)..load(),
+      ),
       provide<MessageController>(
         messages,
         () => MessageController(MessageRepository(store))..load(),
@@ -89,9 +103,17 @@ Widget appHarness({
         notifications,
         () => NotificationController(store)..load(),
       ),
-      ChangeNotifierProvider(create: (_) => VerificationController(store)..load()),
+      ChangeNotifierProvider(
+        create: (_) => VerificationController(store)..load(),
+      ),
       ChangeNotifierProvider(create: (_) => LocationController()),
       provide<AiController>(ai, () => AiController(store)..load()),
+      // Jobs reads the view it was left on.
+      provide<SettingsController>(
+        null,
+        () => SettingsController(store)..load(),
+      ),
+      provide<JobFilterController>(null, JobFilterController.new),
       Provider<MediaStore>.value(value: mediaStore),
     ],
     child: MaterialApp(

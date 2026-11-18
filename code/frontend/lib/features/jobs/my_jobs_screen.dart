@@ -37,16 +37,16 @@ import 'saved_jobs_controller.dart';
 ///
 /// The three lists are subsets of one list of jobs, so inside *Your jobs* they
 /// are a segmented control rather than three more tabs.
-class MyJobsScreen extends StatefulWidget {
-  const MyJobsScreen({super.key});
+class InboxScreen extends StatefulWidget {
+  const InboxScreen({super.key});
 
   @override
-  State<MyJobsScreen> createState() => _MyJobsScreenState();
+  State<InboxScreen> createState() => _InboxScreenState();
 }
 
-class _MyJobsScreenState extends State<MyJobsScreen>
+class _InboxScreenState extends State<InboxScreen>
     with SingleTickerProviderStateMixin {
-  late final TabController _tabs = TabController(length: 3, vsync: this);
+  late final TabController _tabs = TabController(length: 2, vsync: this);
 
   @override
   void dispose() {
@@ -73,7 +73,7 @@ class _MyJobsScreenState extends State<MyJobsScreen>
         final inset = readableInset(constraints.maxWidth);
         return Scaffold(
           appBar: AppBar(
-            title: Text(strings.navActivity),
+            title: Text(strings.navInbox),
             titleSpacing: NavigationToolbar.kMiddleSpacing + inset,
             actionsPadding: EdgeInsetsDirectional.only(end: inset),
             bottom: TabBar(
@@ -98,7 +98,6 @@ class _MyJobsScreenState extends State<MyJobsScreen>
                       ? strings.messagesTab
                       : '${strings.messagesTab} · $waiting',
                 ),
-                Tab(text: strings.yourJobsTab),
               ],
             ),
           ),
@@ -112,7 +111,7 @@ class _MyJobsScreenState extends State<MyJobsScreen>
               ),
               LoadState.ready => TabBarView(
                 controller: _tabs,
-                children: const [UpdatesTab(), ThreadsTab(), _YourJobs()],
+                children: const [UpdatesTab(), ThreadsTab()],
               ),
             },
           ),
@@ -126,14 +125,14 @@ class _MyJobsScreenState extends State<MyJobsScreen>
 enum _Mine { posted, offers, saved }
 
 /// The jobs that are yours one way or another, filtered three ways.
-class _YourJobs extends StatefulWidget {
-  const _YourJobs();
+class YourJobsView extends StatefulWidget {
+  const YourJobsView({super.key});
 
   @override
-  State<_YourJobs> createState() => _YourJobsState();
+  State<YourJobsView> createState() => _YourJobsState();
 }
 
-class _YourJobsState extends State<_YourJobs> {
+class _YourJobsState extends State<YourJobsView> {
   /// Null until somebody picks one; until then it follows the role, because a
   /// hirer comes here for their postings and a worker for their offers.
   _Mine? _picked;

@@ -92,6 +92,15 @@ void main() {
       return 'rail focus wash';
     }
 
+    // Tabs are Material's; the theme gives a focused tab a turmeric wash
+    // strong enough to see.
+    if (ancestor<TabBar>(context) != null &&
+        (theme.tabBarTheme.overlayColor?.resolve({WidgetState.focused})?.a ??
+                0) >=
+            0.3) {
+      return 'tab focus wash';
+    }
+
     // Toggles draw their own focus halo.
     if (ancestor<Checkbox>(context) != null ||
         ancestor<Radio<Object?>>(context) != null ||

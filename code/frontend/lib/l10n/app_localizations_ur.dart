@@ -780,7 +780,7 @@ class AppStringsUr extends AppStrings {
   String get addATrade => 'ہنر شامل کریں';
 
   @override
-  String get navActivity => 'سرگرمی';
+  String get navInbox => 'ان باکس';
 
   @override
   String get navProfile => 'پروفائل';
@@ -2453,4 +2453,7 @@ class AppStringsUr extends AppStrings {
 
   @override
   String get boardShowFewer => 'کم دکھائیں';
+
+  @override
+  String get jobsNearYouTab => 'آپ کے قریب';
 }

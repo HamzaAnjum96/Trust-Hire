@@ -453,9 +453,9 @@
   "@addATrade": {
     "description": "Button opening the trades screen"
   },
-  "navActivity": "Activity",
-  "@navActivity": {
-    "description": "Bottom navigation label for saved and posted jobs"
+  "navInbox": "Inbox",
+  "@navInbox": {
+    "description": "Navigation destination: updates and messages, with a badge for what is waiting."
   },
   "navProfile": "Profile",
   "@navProfile": {
@@ -1892,5 +1892,9 @@
   "boardShowFewer": "Show fewer",
   "@boardShowFewer": {
     "description": "Collapses the trade board back to the busiest trades."
+  },
+  "jobsNearYouTab": "Near you",
+  "@jobsNearYouTab": {
+    "description": "Tab on Jobs: work near you (the trade board and the map)."
   }
 }

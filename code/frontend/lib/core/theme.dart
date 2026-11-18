@@ -409,8 +409,12 @@ class BrandTheme {
         indicatorColor: accentText,
         indicatorSize: TabBarIndicatorSize.label,
         dividerColor: scheme.outlineVariant,
-        overlayColor: WidgetStatePropertyAll(
-          scheme.primary.withValues(alpha: 0.06),
+        // Keyboard focus on a tab is a turmeric wash strong enough to see;
+        // Material's own is a few percent (keyboard_test checks it).
+        overlayColor: WidgetStateProperty.resolveWith(
+          (states) => states.contains(WidgetState.focused)
+              ? roles.highlight.withValues(alpha: 0.4)
+              : scheme.primary.withValues(alpha: 0.06),
         ),
       ),
 

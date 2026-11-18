@@ -12,7 +12,7 @@ import '../features/map/location_controller.dart';
 import '../services/location_service.dart';
 import '../features/jobs/my_jobs_screen.dart';
 import '../features/directory/directory_screen.dart';
-import '../features/map/map_screen.dart';
+import '../features/jobs/jobs_screen.dart';
 import '../features/profile/profile_screen.dart';
 import '../features/notifications/updates_tab.dart';
 import '../features/wallet/stripe_return.dart';
@@ -110,8 +110,8 @@ class _AppShellState extends State<AppShell> {
   /// Built per call rather than held as a constant, because the labels change
   /// with the interface language.
   List<_Destination> _destinations(AppStrings strings, int waiting) => [
-    // The map and the list of the same jobs. Named for what is in it rather
-    // than for one of its two views.
+    // Work near you (the board and the map) and your own jobs, on two tabs.
+    // Named for what is in it rather than for one of its views.
     _Destination(
       Icons.work_outline_rounded,
       Icons.work_rounded,
@@ -126,10 +126,13 @@ class _AppShellState extends State<AppShell> {
       Icons.badge_rounded,
       strings.navDirectory,
     ),
+    // Updates and messages: the one destination that can have news in it.
+    // Until 0.26 it was "Activity" and held your jobs as well; they moved to
+    // Jobs, beside the work near you, where a job belongs.
     _Destination(
-      Icons.bookmark_border_rounded,
-      Icons.bookmark_rounded,
-      strings.navActivity,
+      Icons.inbox_rounded,
+      Icons.inbox_rounded,
+      strings.navInbox,
       // **The reason to look.** Everything else in this bar is somewhere you
       // decide to go; this is the one that can have news in it. It counts
       // conversations waiting for a reply as well as unseen updates: until
@@ -185,9 +188,9 @@ class _AppShellState extends State<AppShell> {
     final body = IndexedStack(
       index: _index,
       children: const [
-        MapScreen(),
+        JobsScreen(),
         DirectoryScreen(),
-        MyJobsScreen(),
+        InboxScreen(),
         ProfileScreen(),
       ],
     );

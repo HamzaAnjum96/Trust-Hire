@@ -12,6 +12,20 @@ that heading to the version and date, and open a fresh `[Unreleased]`.
 
 ## [Unreleased]
 
+### 0.27.0 — The tabs: Your jobs on Jobs, Activity becomes the Inbox
+
+#### Changed
+
+- **Your jobs live on Jobs.** Jobs has two tabs, *Near you* (the trade board
+  and the map) and *Your jobs* (Posted, Offers, Saved). Your jobs used to sit
+  in Activity beside the notification feed and the messages, under a
+  destination named for news. The two views are stacked, not paged, so
+  swiping the map never flips the tab and the map keeps its place.
+- **Activity is now the Inbox**: Updates and Messages, with the badge for
+  what is waiting.
+- Tabs show keyboard focus with a turmeric wash; Material's own was a few
+  percent.
+
 ### 0.26.0 — Where things sit: the trade board, log in on the profile
 
 The owner found 0.24 only a refont and recolour. This round changes where

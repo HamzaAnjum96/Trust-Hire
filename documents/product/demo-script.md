@@ -80,7 +80,7 @@ not accounts: no password, no privacy between them, one browser's storage.
 
 ## Stop 3 — The hirer's side (Mode A)
 
-**Be:** Hina Butt, Islamabad. **Go:** Activity → Your jobs. It opens on
+**Be:** Hina Butt, Islamabad. **Go:** Jobs → Your jobs. It opens on
 *Posted* for a hirer.
 
 Four postings, in different states. Open the one marked with offers.
@@ -224,7 +224,7 @@ different searches.
 
 ## Stop 5b — What the app tells you
 
-**Be:** Usman Raza. **Go:** Activity.
+**Be:** Usman Raza. **Go:** Inbox.
 
 The first tab is a feed of everything that concerns him, and the destination
 carries a count.
@@ -245,7 +245,7 @@ carries a count.
 
 ## Stop 5c — Arranging it
 
-**Still Usman.** **Go:** Activity → Messages.
+**Still Usman.** **Go:** Inbox → Messages.
 
 - **A thread per job**, so what was agreed sits with the work it was about. Two
   people can hire each other twice; one rolling conversation would mix them.

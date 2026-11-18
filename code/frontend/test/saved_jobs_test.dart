@@ -4,7 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trust_hire/app/job_controller.dart';
 import 'package:trust_hire/features/jobs/job_details_sheet.dart';
-import 'package:trust_hire/features/jobs/my_jobs_screen.dart';
+import 'package:trust_hire/features/jobs/jobs_screen.dart';
 import 'package:trust_hire/features/jobs/saved_jobs_controller.dart';
 import 'package:trust_hire/l10n/app_localizations.dart';
 import 'package:trust_hire/models/job.dart';
@@ -185,7 +185,7 @@ void main() {
 
     testWidgets('says what to do when nothing is saved', (tester) async {
       final (jobs, media, saved) = await build();
-      await pump(tester, jobs, media, saved, const MyJobsScreen());
+      await pump(tester, jobs, media, saved, const JobsScreen());
       await openTab(tester, strings.savedTab);
 
       expect(find.text(strings.noSavedJobs), findsOneWidget);
@@ -199,7 +199,7 @@ void main() {
       final job = jobs.jobs.first;
       await saved.toggle(job.id);
 
-      await pump(tester, jobs, media, saved, const MyJobsScreen());
+      await pump(tester, jobs, media, saved, const JobsScreen());
       await openTab(tester, strings.savedTab);
 
       expect(find.text(job.displayTitle(strings)), findsOneWidget);
@@ -209,7 +209,7 @@ void main() {
       final (jobs, media, saved) = await build();
       await jobs.saveJob(job('mine', isLocal: true));
 
-      await pump(tester, jobs, media, saved, const MyJobsScreen());
+      await pump(tester, jobs, media, saved, const JobsScreen());
       await openTab(tester, strings.savedTab);
 
       // Nothing saved, so the saved tab is empty …
@@ -228,7 +228,7 @@ void main() {
       await saved.toggle('seed-001');
       await saved.toggle('gone-for-good');
 
-      await pump(tester, jobs, media, saved, const MyJobsScreen());
+      await pump(tester, jobs, media, saved, const JobsScreen());
       await openTab(tester, strings.savedTab);
 
       expect(find.text(strings.savedJobGone), findsOneWidget);
