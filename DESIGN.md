@@ -337,6 +337,7 @@ Chunky and plain, easy to hit one-handed.
 ### Chips
 - **Filter chips (over the map and list):** white, 12px corners, hairline border, 44px tall, supporting-size label with a leading icon. Selected is a turmeric fill and border with an ink label and a tick, so colour is never the only signal. Over the map they float at elevation 2.
 - **Choice chips (directory, listing):** white with a hairline, selected takes the turmeric wash.
+- **Switch chip (directory, since 0.32):** *Travel to me* leads the directory's chip row, set apart from the trade chips by a 1px hairline: it is on or off, not one choice of many.
 
 ### Cards / Containers
 - **Corner Style:** 16px.
@@ -360,6 +361,12 @@ The fare leads. Title at the start, bold tabular fare opposite with its kind ben
 
 ### Map Pins and Fare Flag (signature)
 Pins at rest are ink with white glyphs and a white outline (night-pin in dark); your own posts are inverted. The selected pin is turmeric, larger, with an ink outline and glyph, its area washed in turmeric, and a turmeric fare flag (8px corners, ink hairline, Card shadow, tabular fare) above it. Clusters are ink circles with a count. The person's own location is an ink dot with a soft ring.
+
+### Trade Board (signature)
+The head of *Jobs → Near you* since 0.26: a white 16px card holding a table, one row per trade near the viewer, busiest first. Column labels once at the top in muted small text (Trade, Jobs, Fares); each row a 40px glyph block (mist at rest; turmeric under ink when chosen, with the row in the turmeric wash), the trade's name in semibold with the nearest job's distance under it, the count in the fare style, the fare range in muted tabular figures. Below 350px of board the fares column folds under the name. Five trades, then "Show all". For a worker whose trades leave jobs out, the last row is *Add a trade*: an empty outlined block with a plus where the next trade's glyph goes, the label in turmeric text, and how many jobs a trade would add. Each row is one button with one spoken sentence.
+
+### Job Ticket
+The top of a job's sheet since 0.29: a mist strip (12px corners) holding the three facts a worker decides on, side by side and split by vertical hairlines: the fare, large, then *When*, then *From you* (only when the viewer's position is known). Value above, small muted caption below, like the fact bar.
 
 ### View Switch
 An ink pill, 44px tall, floating bottom centre, carrying the result count in tabular figures ("16 jobs") on the map and "Map" on the list.

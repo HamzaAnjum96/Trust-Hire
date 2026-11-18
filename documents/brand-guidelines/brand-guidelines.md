@@ -329,15 +329,20 @@ Atkinson is spaced for reading as drawn.
 12. Logo and App Icon
 
 The mark is the map pin: one circle for the head and two tangent lines down to
-a point, the same construction the map's markers use. It is drawn in ink on a
-turmeric ground.
+a point, the same construction the map's markers use, with a round hole in the
+head (0.36 of its radius, as in Material's rounded location pin). It is drawn
+in ink on a turmeric ground. The hole is not decoration: at 16px a pin without
+one reads as an ink blob.
 
 - App icon (Android, iOS, web): an ink pin on a turmeric square, rounded on
   Android and the web, square and opaque on iOS (iOS applies its own mask).
 - Maskable web icons keep the pin inside the 80% safe zone.
-- Favicon: square, the pin larger, because a rounded corner at 16px is mush.
-- At the head of the navigation rail: the same pin, turmeric on the ink shell,
-  with the wordmark "Trust Hire" in the shell's text colour.
+- Favicon: the same rounded tile, the pin larger. An SVG (favicon.svg) for
+  every browser that takes one, sharp at any density, and a 64px PNG for the
+  rest. Square corners were tried until 0.36 and made it a different mark from
+  the one beside the name in the app.
+- At the head of the navigation rail: the same tile, 32px, with the wordmark
+  "Trust Hire" in the shell's text colour beside it.
 
 All icons are drawn by code/frontend/tool/generate_app_icons.py; regenerate
 them after any change to the mark. Each file carries its provenance.

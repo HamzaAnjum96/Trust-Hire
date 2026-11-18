@@ -19,7 +19,8 @@ silently.** The reader finds out in front of an audience.
 > no** — the seeded people are in five Pakistani cities, and the rules about
 > how far a job reaches and how far a worker travels would hide them from
 > anywhere else. If somebody has used this browser before, use
-> *Profile → Restore the seed data* first — the demo assumes the seeded state.
+> *Profile → Settings → Restore demo data* first — the demo assumes the seeded
+> state.
 
 ---
 
@@ -41,22 +42,26 @@ and they explain most of the decisions below:
 
 **Be:** the device account ("You"), which is where the app opens.
 
-**Jobs**, on the map. Jobs near you, clustered. The count on the switch at the
-bottom of the map ("16 jobs") is how many are visible *to you* — not how many
-exist. Pins are approximate on purpose: the circle is the area, not the
-address. Tap the switch for the same jobs as a list; tap it again for the map.
+**Jobs → Near you**, on the trade board. *Work near you*: one row per trade,
+how many jobs, how close the nearest, what they pay, and the jobs themselves
+under it ("16 jobs") — how many are visible *to you*, not how many exist. Tap a
+trade to see only its jobs; tap it again for every trade.
 
-**Tap a pin.** It turns turmeric, with its area washed turmeric and its fare
-on a turmeric flag above it; the same job's row in the list is turmeric too.
-That is the one thing on screen that glows. Everything else is ink on the
+**The board's last row.** *"Add a trade — 167 more jobs near you need a
+trade."* This is Section 8 working, and it is why the count is lower than the
+183 jobs in the seed. It covers nothing, so there is nothing to dismiss; it
+goes once the worker has a trade.
+
+**Tap Map** at the bottom for the same jobs as pins. Pins are approximate on
+purpose: the circle is the area, not the address. **Tap a pin.** It turns
+turmeric, with its area washed turmeric and its fare on a turmeric flag above
+it. That is the one thing on screen that glows. Everything else is ink on the
 lime-wash ground, peacock marks a voice note and nothing else, and brick only
-ever means a loss. The switch stays above the preview card, so the list is
-still one tap away.
+ever means a loss. Jobs reopens on whichever view you left it on.
 
-**The notice under the search bar.** *"Jobs only reach you when they match a trade
-you do."* This is Section 8 working, and it is why the count is lower than the
-183 jobs in the seed. Tap the ✕ to dismiss it; it stays dismissed for this
-account.
+**Open a job.** The ticket at the top holds the three things a worker decides
+on: the fare, when, and how far. The map of its area sits under the *Area*
+row.
 
 **Say:** the device account has no history at all. That is what a first launch
 looks like, and it is the reason the other six accounts exist.
@@ -65,16 +70,15 @@ looks like, and it is the reason the other six accounts exist.
 
 ## Stop 2 — Being somebody else
 
-**Tap:** the avatar at the end of the search bar (or *Profile → Switch
-account*).
+**Tap:** *Profile → Log in*. To come back, *Profile → Log out*.
 
-Seven accounts, five of them people from the seed, one per city, plus Trust
-Hire's own staff account. Each row says where they are and how much they have
-posted.
+Six to choose from: five people from the seed, one per city, and Trust Hire's
+own staff account. Each row says where they are and how much they have posted.
 
-**Say:** there is no sign-in — Section 13a puts authentication out of scope —
-so this is how both sides of one hire get demonstrated on one device. These are
-not accounts: no password, no privacy between them, one browser's storage.
+**Say:** there is no password — Section 13a puts authentication out of scope,
+and the sheet says signing in with one comes later — so this is how both sides
+of one hire get demonstrated on one device. These are not accounts: no
+privacy between them, one browser's storage.
 
 ---
 
@@ -207,8 +211,8 @@ balance has moved; reload, and it has not moved twice.
   way.
 - **It only lists people who would come to you.** Each worker sets how far
   they travel, measured from their own area, and the directory applies it.
-  Untick "Only people who travel to me" to see the rest — a hirer booking a
-  lawyer has a good reason to look wider.
+  Tap the *Travel to me* chip, first in the row, to see the rest — a hirer
+  booking a lawyer has a good reason to look wider.
 - **The order is not for sale.** Section 9 already charges for the shelf;
   charging again for the position on it makes it a racket. The hirer can
   reorder it themselves — nearest, cheapest — because a sort somebody asked
@@ -330,7 +334,7 @@ Three things to say, and they matter more than the screen:
 
 ## Stop 8 — The backend that is not there
 
-**Go:** Profile, and scroll to the bottom.
+**Go:** Profile → Settings, and scroll to the bottom.
 
 There is no server. What is here is the seam one goes behind, and a stand-in
 that behaves like one in the ways that matter.
@@ -339,7 +343,8 @@ that behaves like one in the ways that matter.
    of work, give it a title, save. It works — it always works. A local write
    lands locally and immediately, because the people this is for lose signal in
    the middle of a job.
-2. **Come back to Profile → Backend.** It says *1 change waiting*.
+2. **Come back to Profile → Settings → Backend.** It says *1 change
+   waiting*.
 3. **Press Sync now while still offline.** The pill changes to *No connection —
    your work is safe*. Nothing is lost and nothing is blocked.
 4. **Turn the connection back on and press Sync now again.** *Everything is
@@ -356,10 +361,10 @@ that behaves like one in the ways that matter.
 
 ## Stop 8b — The AI assistant
 
-*Optional, and needs the site to have its AI* — the Cloudflare Worker deployed
-and its address set (see the README). **Go:** Profile → AI assistant. On a
-build without it, the group says this version has no AI, and every stop above
-still works.
+*Optional; the deployed site has it since 0.35* — the Cloudflare Worker, on
+Llama 4 Scout (see the README). **Go:** Profile → Settings → AI assistant, or
+just ask (Stop 5d) and turn it on from there. On a build without it, the group
+says this version has no AI, and every stop above still works.
 
 1. **Turn on.** The dialog says where questions go — Llama 4 Scout on
    Cloudflare, for Trust Hire — that phone numbers never do, and that nothing

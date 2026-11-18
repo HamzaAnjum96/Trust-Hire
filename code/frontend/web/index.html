@@ -44,7 +44,10 @@
   <meta name="apple-mobile-web-app-title" content="Trust Hire">
   <link rel="apple-touch-icon" href="icons/Icon-192.png">
 
-  <link rel="icon" type="image/png" href="favicon.png"/>
+  <!-- The SVG is sharp at any size; the PNG is for browsers that do not
+       take SVG favicons. Both drawn by tool/generate_app_icons.py. -->
+  <link rel="icon" type="image/png" sizes="64x64" href="favicon.png"/>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg"/>
   <link rel="manifest" href="manifest.json">
 
   <style>

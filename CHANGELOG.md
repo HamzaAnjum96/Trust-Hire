@@ -12,6 +12,35 @@ that heading to the version and date, and open a fresh `[Unreleased]`.
 
 ## [Unreleased]
 
+### 0.36.0 — The favicon is the app's mark; the docs catch up
+
+#### Fixed
+
+- **The favicon was a blob.** Every icon drew the pin as a solid ink teardrop,
+  and the favicon put it on a square-cornered tile; in a 16px tab it read as
+  an ink smudge, and as a different mark from the one beside the name in the
+  app (Material's rounded location pin, with its hole, on a rounded turmeric
+  tile). `tool/generate_app_icons.py` now cuts the hole (0.36 of the head's
+  radius) in every icon — web, favicon, Android and iOS — and rounds the
+  favicon's tile.
+- **A soft favicon on high-density screens.** It is now an SVG
+  (`web/favicon.svg`), sharp at any size, with a 64px PNG for browsers that do
+  not take SVG favicons. `test/web_shell_test.dart` checks both are linked and
+  shipped, and that the pin keeps its hole.
+
+#### Changed
+
+- **The documents describe the app as it now is.** The demo script opens on
+  the trade board and its *Add a trade* row rather than a dismissible notice,
+  logs in and out from Profile rather than an avatar, turns *Travel to me* off
+  rather than unticking a box, and reaches the backend, the AI and the demo
+  reset through *Profile → Settings*; Stop 8b says the deployed site has the
+  AI. DESIGN.md gains the trade board, the job ticket and the switch chip;
+  the brand guidelines' logo section the pin's hole and the SVG favicon; the
+  structure record 0.31 to 0.34 and the motion review; AGENTS.md's checklist
+  the Worker redeploy and the icon generator; the README the screenshot
+  tool's new standard set.
+
 ### 0.35.0 — The AI is live, on Llama 4 Scout
 
 #### Added

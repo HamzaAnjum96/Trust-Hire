@@ -81,6 +81,20 @@ void main() {
     test('the loading animation stops for reduced motion', () {
       expect(index, contains('prefers-reduced-motion'));
     });
+
+    test('links a sharp favicon and a fallback, both shipped', () {
+      // An SVG for a high-density tab; a PNG for browsers without SVG
+      // favicons, Safari among them. Both drawn by generate_app_icons.py.
+      expect(index, contains('type="image/svg+xml" href="favicon.svg"'));
+      expect(index, contains('href="favicon.png"'));
+      expect(File('web/favicon.png').existsSync(), isTrue);
+
+      final svg = File('web/favicon.svg').readAsStringSync();
+      // The pin carries its hole since 0.36: a second sub-path, cut out by
+      // the even-odd rule. Without it the tab shows an ink blob.
+      expect(svg, contains('fill-rule="evenodd"'));
+      expect(RegExp('Z ?M').hasMatch(svg), isTrue);
+    });
   });
 
   group('manifest.json', () {

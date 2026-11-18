@@ -69,3 +69,22 @@ distance), and the map is one tap away.
 - **0.30** — "Add a trade" left the map. It was a dismissible card over the
   thing it was about; now it is the trade board's last row, with how many
   jobs a trade would add, and it needs no dismissing.
+
+## 0.31 to 0.34: smaller moves from the same review
+
+- **0.31** — a job's area map follows the *Area* row instead of ending the
+  sheet below the phone number.
+- **0.32** — the Directory's "Only people who travel to me" checkbox became
+  the first filter chip, *Travel to me*: a row of height back before the
+  first person.
+- **0.33** — the trade board drops its fares column below 350px, so the
+  desktop rail no longer breaks a trade's name over two lines; its rows carry
+  a semantic tap for screen readers.
+- **0.34** — one page transition, fade-forwards, on every OS the browser
+  reports. A pushed screen zoomed on Windows and Linux and slid on a Mac.
+
+**Motion, reviewed.** What is left all explains a change of state: the
+selected pin grows, a chosen tag tile fills, page dots move, the board and the
+map cross-fade when you switch view, and a pushed screen fades forwards. The
+list's entrance stagger went in 0.26; it replayed on every filter.
+

@@ -84,3 +84,9 @@ Check each of these:
 4. Has the app version been raised in **both** `pubspec.yaml` and
    `lib/core/app_version.dart`?
 5. Are there any secrets, credentials, or personal data in the diff?
+6. Did you change `code/backend/ai-worker/`? The site's deploy does not
+   publish the Worker: run its tests (`node --test`) and redeploy it with
+   `npx wrangler deploy` from that folder, as the README's AI section says.
+   The Cloudflare token and account ID go in the environment, never a file.
+7. Did you change the mark? Regenerate every icon with
+   `python3 code/frontend/tool/generate_app_icons.py`.

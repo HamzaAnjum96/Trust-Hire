@@ -291,7 +291,8 @@ that their question and the job details it needs go to Cloudflare; phone
 numbers never do, and nothing is kept. **A build without the Worker's address
 has no AI, and everything still works:** the assistant matches words and the
 fare panel does arithmetic. When the AI cannot answer, the screen says why,
-and *Profile → AI assistant* keeps what went wrong last time, to pass on.
+and *Profile → Settings → AI assistant* keeps what went wrong last time, to
+pass on.
 
 Until 0.25 the model ran **in the visitor's browser** (WebLLM on WebGPU,
 Qwen2.5 0.5B or 1.5B, a 300–900 MB download). Most phones have no WebGPU, an
@@ -611,8 +612,9 @@ only presence outside the app — the browser tab, the shared link, the installe
 icon, and everything a crawler that does not run JavaScript can see. They are
 deliberately not Flutter's defaults, and `test/web_shell_test.dart` fails if
 they drift back. Regenerate the icons with `python3 tool/generate_app_icons.py`
-after any change to the mark: it draws the web's icons, the favicon, Android's
-launcher icons and the iOS set, and writes each file's provenance into it.
+after any change to the mark: it draws the web's icons, the favicons (an SVG
+for sharp tabs and a 64px PNG for Safari), Android's launcher icons and the
+iOS set, and writes each file's provenance into it.
 
 **Running it**
 
@@ -765,8 +767,11 @@ python3 -m http.server 8099 --directory /tmp/serve
   node tool/look_web.js --smoke                # fail on any error (CI runs this)
   ```
 
-  The standard set is the intro, the map, the list, one job, and every
-  destination, at 390 (light, dark, Urdu), 768, 980 and 1440. 980 is
+  The standard set is the intro, the trade board, one job, the map, *Your
+  jobs*, and every other destination, at 390 (light, dark, Urdu), 768, 980
+  and 1440. A tap step can take `"top": true` to click the highest match
+  rather than the smallest, so a row half under a floating button is never
+  the one clicked. 980 is
   Chrome on Android with "Desktop site" ticked: a phone user who lands on the
   rail layout sees it at about 40%. `{"dump": true}` prints every labelled
   node on screen, which is the quickest way to find what to tap.
