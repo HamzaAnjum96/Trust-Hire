@@ -12,6 +12,15 @@ that heading to the version and date, and open a fresh `[Unreleased]`.
 
 ## [Unreleased]
 
+### 0.31.0 — A job's map sits under its area
+
+#### Changed
+
+- **The map of a job's area follows the *Area* row.** It was the last thing
+  in the sheet, below the contact details, so "where is this?" was answered a
+  long scroll after the row that raised it. It now sits straight under the
+  job's details, with its note on how exact the circle is.
+
 ### 0.30.0 — "Add a trade" moves onto the board
 
 #### Changed

@@ -253,6 +253,26 @@ class _Body extends StatelessWidget {
                     ),
                 ],
               ),
+              // **The area's map under the area, since 0.30.** It sat at the
+              // very end, below the phone number, so "where is this?" was
+              // answered a long scroll after the row that asked it.
+              const SizedBox(height: BrandSizing.spaceSm + 4),
+              _MapPreview(job: job),
+              const SizedBox(height: BrandSizing.spaceSm),
+              Text(
+                // Section 5 of the Phase 1 spec replaced the POC's promise that an
+                // exact location is never shown. It is shown — to the two people who
+                // agreed to work together, and to nobody else — so the line says
+                // which of those two things is happening rather than the old
+                // reassurance that is no longer true.
+                _revealsExactLocation(
+                      job,
+                      context.watch<AccountController>().activeId,
+                    )
+                    ? strings.exactLocationShown
+                    : strings.generalAreaNotice,
+                style: theme.textTheme.labelSmall,
+              ),
 
               const SizedBox(height: BrandSizing.spaceLg),
 
@@ -288,24 +308,6 @@ class _Body extends StatelessWidget {
                 ContactPanel(number: job.contactNumber!)
               else
                 Text(strings.noContactGiven, style: theme.textTheme.bodyMedium),
-
-              const SizedBox(height: BrandSizing.spaceLg),
-              _MapPreview(job: job),
-              const SizedBox(height: BrandSizing.spaceSm),
-              Text(
-                // Section 5 of the Phase 1 spec replaced the POC's promise that an
-                // exact location is never shown. It is shown — to the two people who
-                // agreed to work together, and to nobody else — so the line says
-                // which of those two things is happening rather than the old
-                // reassurance that is no longer true.
-                _revealsExactLocation(
-                      job,
-                      context.watch<AccountController>().activeId,
-                    )
-                    ? strings.exactLocationShown
-                    : strings.generalAreaNotice,
-                style: theme.textTheme.labelSmall,
-              ),
             ],
           ),
         ),

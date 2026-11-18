@@ -31,6 +31,8 @@
 //                             ARB string for key (or plain text, without @)
 //   {"tapMatch": "regex"}     tap the smallest node whose label matches
 //   {"optional": true}        on a tap step: carry on quietly if not found
+//   {"top": true}             on a tap step: the highest match on screen,
+//                             not the smallest
 //   {"role": "button"}        on a tap step: only nodes with this ARIA role,
 //                             when a caption shares the control's words
 //   {"key": "Escape"}         press a key
@@ -67,7 +69,7 @@ const STANDARD = [
   { shot: 'jobs' },
   // A job row's label carries its fare; a trade row's carries a range, with
   // a dash, and only narrows the list.
-  { tapMatch: '^(?!.*–).*(Rs\\.|روپے)' },
+  { tapMatch: '^(?!.*–).*(Rs\\.|روپے)', role: 'button', top: true },
   { shot: 'job' },
   { key: 'Escape' },
   { tap: '@showOnMap', optional: true },
@@ -187,7 +189,10 @@ async function look(browser, name, preset, steps, args, problems) {
         .filter((n) =>
           typeof want === 'string' ? n.label.includes(want) : want.test(n.label),
         )
-        .sort((a, b) => a.area - b.area);
+        // Smallest first, so a row wins over the list that holds it; or,
+        // with "top", highest first, so a row half under a floating button
+        // further down is never the one clicked.
+        .sort((a, b) => (step.top ? a.y - b.y : a.area - b.area));
       const node = found[step.nth || 0];
       if (!node) {
         const what = step.tap || step.tapMatch;
