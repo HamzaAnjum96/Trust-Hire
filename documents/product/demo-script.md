@@ -361,7 +361,7 @@ and its address set (see the README). **Go:** Profile → AI assistant. On a
 build without it, the group says this version has no AI, and every stop above
 still works.
 
-1. **Turn on.** The dialog says where questions go — Llama 3.1 8B on
+1. **Turn on.** The dialog says where questions go — Llama 4 Scout on
    Cloudflare, for Trust Hire — that phone numbers never do, and that nothing
    is kept. Nothing is sent until you agree. It works on any phone: nothing
    downloads and nothing runs on the device.

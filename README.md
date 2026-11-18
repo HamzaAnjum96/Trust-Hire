@@ -281,8 +281,11 @@ shown only if it is in the language of the screen.
 ### The AI and "Ask Trust Hire"
 
 The AI runs on **Cloudflare Workers AI**, behind Trust Hire's own Worker
-(`code/backend/ai-worker/`): Llama 3.1 8B, on the free tier (10,000 neurons a
-day, several hundred answers). **Nothing is sent until somebody switches it
+(`code/backend/ai-worker/`): Llama 4 Scout since 0.35, on the free tier
+(10,000 neurons a day, roughly a hundred questions). Live on the site since
+0.35 too: Llama 3.1 8B, the first choice, answered "Who can fix wiring?" with
+an electrician it made up rather than searching first, and the app rightly
+set its answer aside; so did Llama 3.3 70B. Scout searched. **Nothing is sent until somebody switches it
 on** — from the profile, the fare panel or the assistant — having been told
 that their question and the job details it needs go to Cloudflare; phone
 numbers never do, and nothing is kept. **A build without the Worker's address
@@ -383,10 +386,13 @@ CLOUDFLARE_ACCOUNT_ID=… CLOUDFLARE_API_TOKEN=… npx wrangler deploy
 The token needs permission to edit Workers: one made from Cloudflare's
 "Workers AI" template can run models but cannot deploy. Or paste
 `src/index.js` into a new Worker in the Cloudflare dashboard and add a Workers
-AI binding named `AI`. Then set the repository variable **`AI_ENDPOINT`** to
-`https://trust-hire-ai.<your-subdomain>.workers.dev/v1`; the deploy workflow
-passes it to the build. Until it is set, the site has no AI. The model is
-`MODEL` in `wrangler.toml`.
+AI binding named `AI`. **Deployed since 0.35** at
+`https://trust-hire-ai.aurangzebabdullah320.workers.dev`; the deploy workflow
+passes that address, ending `/v1`, to the build as `AI_ENDPOINT`, and a
+repository variable of the same name overrides it. A build without it (a
+local `flutter run`, say) has no AI. The model is `MODEL` in `wrangler.toml`.
+In a cloud session the token is a saved network secret for
+`api.cloudflare.com`, so deploy with `CLOUDFLARE_API_TOKEN=proxy-injected`.
 
 ### The app (`code/frontend/`)
 

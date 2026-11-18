@@ -71,7 +71,7 @@ class AiFailure implements Exception {
 
 /// A language model the app can ask things.
 abstract interface class AiModel {
-  /// Shown beside everything it says — "Llama 3.1 8B". An answer is never
+  /// Shown beside everything it says — "Llama 4 Scout". An answer is never
   /// shown without its author.
   String get name;
 

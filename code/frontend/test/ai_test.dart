@@ -436,7 +436,7 @@ void main() {
           body['response_format']['json_schema']['schema'],
           request().schema,
         );
-        expect(model.name, 'Llama 3.1 8B');
+        expect(model.name, 'Llama 4 Scout');
       },
     );
 

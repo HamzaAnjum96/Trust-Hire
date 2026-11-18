@@ -48,8 +48,8 @@ class RemoteModel implements AiModel {
 
   /// What the Worker runs unless a build says otherwise. Shown beside every
   /// answer; the Worker, not this, decides the model actually used.
-  static const defaultModel = '@cf/meta/llama-3.1-8b-instruct-fast';
-  static const defaultLabel = 'Llama 3.1 8B';
+  static const defaultModel = '@cf/meta/llama-4-scout-17b-16e-instruct';
+  static const defaultLabel = 'Llama 4 Scout';
 
   /// The model this build was given, or null when it has no AI.
   static RemoteModel? fromBuild() {

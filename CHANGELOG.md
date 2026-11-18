@@ -12,6 +12,30 @@ that heading to the version and date, and open a fresh `[Unreleased]`.
 
 ## [Unreleased]
 
+### 0.35.0 — The AI is live, on Llama 4 Scout
+
+#### Added
+
+- **The Cloudflare Worker is deployed, and the site uses it.** Ask Trust Hire
+  and the fare suggestion now answer on the live site once a visitor turns
+  the AI on. The Worker is at
+  `https://trust-hire-ai.aurangzebabdullah320.workers.dev`; it answers only
+  the site's own origins (any other gets 403) and needs no key in the app.
+  The deploy workflow passes its address to the build; a repository variable
+  `AI_ENDPOINT` still overrides it.
+
+#### Changed
+
+- **The model is Llama 4 Scout, not Llama 3.1 8B.** Tried live, the 8B model
+  answered "Who can fix wiring?" with an electrician it made up instead of
+  searching first; the app set the answer aside, as it should, and showed the
+  word list's match. Llama 3.3 70B did the same. Scout searched for
+  electrical workers, then named the one it found. The cost is time and
+  budget: about 3 seconds a step and some 15 seconds for a fare suggestion,
+  and roughly a hundred questions a day on the free tier.
+- The Worker no longer publishes a preview URL per version
+  (`preview_urls = false`).
+
 ### 0.34.0 — One page transition everywhere
 
 #### Changed

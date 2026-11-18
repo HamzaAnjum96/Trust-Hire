@@ -5,7 +5,7 @@ import worker, { allowedOrigin, check, contentOf } from '../src/index.js';
 
 const SITE = 'https://hamzaanjum96.github.io';
 const env = (over = {}) => ({
-  MODEL: '@cf/meta/llama-3.1-8b-instruct-fast',
+  MODEL: '@cf/meta/llama-4-scout-17b-16e-instruct',
   ALLOWED_ORIGINS: `${SITE},http://localhost:8099`,
   AI: { run: async () => ({ response: { ok: true } }) },
   ...over,
@@ -37,7 +37,7 @@ test('the request cannot choose the model', async () => {
   let used;
   const e = env({ AI: { run: async (model) => ((used = model), { response: 'x' }) } });
   await worker.fetch(post({ ...ask, model: '@cf/meta/llama-3.3-70b-instruct-fp8-fast' }), e);
-  assert.equal(used, '@cf/meta/llama-3.1-8b-instruct-fast');
+  assert.equal(used, '@cf/meta/llama-4-scout-17b-16e-instruct');
 });
 
 test('sizes are capped, and malformed requests refused', () => {

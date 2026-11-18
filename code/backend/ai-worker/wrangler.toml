@@ -5,15 +5,19 @@ name = "trust-hire-ai"
 main = "src/index.js"
 compatibility_date = "2026-10-01"
 workers_dev = true
+# One address only: no per-version preview URLs to keep track of.
+preview_urls = false
 
 # Workers AI, authorised by the account the Worker runs in. No key needed.
 [ai]
 binding = "AI"
 
 [vars]
-# The free tier allows 10,000 neurons a day; an 8B model answers several
-# hundred requests on that, a 70B one about a hundred. Change it here.
-MODEL = "@cf/meta/llama-3.1-8b-instruct-fast"
+# Llama 4 Scout since 0.35: asked "Who can fix wiring?", Llama 3.1 8B and
+# Llama 3.3 70B both answered with an electrician they made up instead of
+# searching first; Scout searched. The free tier allows 10,000 neurons a day,
+# roughly a hundred questions with Scout. Change it here.
+MODEL = "@cf/meta/llama-4-scout-17b-16e-instruct"
 # The site, and a local web build for looking at it. Comma-separated.
 ALLOWED_ORIGINS = "https://hamzaanjum96.github.io,http://localhost:8099"
 
