@@ -1,4 +1,5 @@
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:trust_hire/widgets/counted_label.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -297,38 +298,61 @@ void main() {
       }
     }
 
-    testWidgets('says who you are on the map, and offers the others', (
-      tester,
-    ) async {
-      await pumpApp(tester);
-
-      // The map has no app bar, so the header carries the avatar. It is the
-      // landing screen; a demonstration must not start on an unanswered
-      // "who am I?".
-      expect(find.byType(AccountAvatar), findsWidgets);
-
-      await tester.tap(find.byType(AccountAvatar).first);
+    Future<void> logInAs(WidgetTester tester, String name) async {
+      await tester.tap(find.text('Profile'));
       await tester.pumpAndSettle();
+      await tester.tap(find.widgetWithText(OutlinedButton, 'Log in'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text(name));
+      await tester.pumpAndSettle();
+    }
 
-      expect(find.text('Demo accounts'), findsOneWidget);
-      expect(find.text('You'), findsWidgets);
-      for (final account in DemoAccounts.roster.skip(1)) {
-        expect(find.text(account.name!), findsOneWidget);
+    testWidgets('no avatar at the top of any destination', (tester) async {
+      // Since 0.26 who is logged in is said on the profile, not by initials
+      // in the corner of every screen.
+      await pumpApp(tester);
+      for (final destination in ['Jobs', 'Directory', 'Activity']) {
+        await tester.tap(find.text(destination).last);
+        await tester.pumpAndSettle();
+        expect(find.byType(AccountAvatar), findsNothing, reason: destination);
       }
     });
 
-    testWidgets('switching moves the postings with you', (tester) async {
+    testWidgets('the profile says nobody is logged in, and offers everyone', (
+      tester,
+    ) async {
+      await pumpApp(tester);
+      await tester.tap(find.text('Profile'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Not logged in'), findsOneWidget);
+      expect(find.widgetWithText(OutlinedButton, 'Log out'), findsNothing);
+
+      await tester.tap(find.widgetWithText(OutlinedButton, 'Log in'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Log in'), findsWidgets);
+      for (final account in DemoAccounts.roster.skip(1)) {
+        expect(find.text(account.name!), findsOneWidget);
+      }
+      // The guest is not somebody to log in as: that is logging out.
+      expect(
+        find.descendant(
+          of: find.byType(AccountSheet),
+          matching: find.text('You'),
+        ),
+        findsNothing,
+      );
+    });
+
+    testWidgets('logging in moves the postings with you', (tester) async {
       await pumpApp(tester);
 
-      // Hina Butt has four jobs in the seed; the device account has none.
+      // Hina Butt has four jobs in the seed; the guest has none.
       final hina = DemoAccounts.roster[1];
+      await logInAs(tester, hina.name!);
 
-      await tester.tap(find.byType(AccountAvatar).first);
-      await tester.pumpAndSettle();
-      await tester.tap(find.text(hina.name!));
-      await tester.pumpAndSettle();
-
-      expect(find.text('You are now ${hina.name}'), findsOneWidget);
+      expect(find.text('Logged in as ${hina.name}'), findsOneWidget);
 
       await tester.tap(find.text('Activity'));
       await tester.pumpAndSettle();
@@ -341,21 +365,23 @@ void main() {
       expect(posted.count, 4);
     });
 
-    testWidgets('and the profile follows', (tester) async {
+    testWidgets('the profile follows, and logging out makes you a guest', (
+      tester,
+    ) async {
       await pumpApp(tester);
       final usman = DemoAccounts.roster[2];
 
-      await tester.tap(find.text('Profile'));
-      await tester.pumpAndSettle();
-      expect(find.text('You'), findsWidgets);
-
-      await tester.tap(find.byType(AccountCard));
-      await tester.pumpAndSettle();
-      await tester.tap(find.text(usman.name!));
-      await tester.pumpAndSettle();
-
+      await logInAs(tester, usman.name!);
       expect(find.text(usman.name!), findsWidgets);
       expect(find.text(usman.area!), findsWidgets);
+
+      await tester.tap(find.widgetWithText(OutlinedButton, 'Log out'));
+      await tester.pumpAndSettle();
+      expect(find.text('Not logged in'), findsOneWidget);
+      expect(
+        find.text('Logged out. You are a guest on this device.'),
+        findsOneWidget,
+      );
     });
   });
 

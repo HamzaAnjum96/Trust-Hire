@@ -50,7 +50,6 @@ class ProfileScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final strings = AppStrings.of(context);
     final settings = context.watch<SettingsController>();
-    final theme = Theme.of(context);
     final isAdmin = context.watch<AccountController>().active.isAdmin;
 
     // The bar lines up with the column under it; see [readableInset].
@@ -75,18 +74,6 @@ class ProfileScreen extends StatelessWidget {
                 // account can change the role underneath it — and a control that
                 // silently reorders the one below should sit above it.
                 const AccountCard(),
-                Padding(
-                  padding: const EdgeInsetsDirectional.fromSTEB(
-                    BrandSizing.spaceXs,
-                    BrandSizing.spaceXs,
-                    BrandSizing.spaceXs,
-                    0,
-                  ),
-                  child: Text(
-                    strings.demoAccountsExplain,
-                    style: theme.textTheme.bodyMedium,
-                  ),
-                ),
 
                 // Straight after the account, because for the one account that
                 // has it this is the whole reason to be here — and burying it

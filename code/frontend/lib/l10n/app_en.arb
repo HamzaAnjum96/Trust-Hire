@@ -829,27 +829,47 @@
   "@factUsualFare": {
     "description": "Label under the average fare a worker charges, in their record's fact bar. An aggregate, never per job."
   },
-  "demoAccounts": "Demo accounts",
-  "@demoAccounts": {
-    "description": "Heading for the account switcher"
-  },
-  "demoAccountsExplain": "Signing in comes later. For now you can be any of these people. Post a job as one, make an offer as another, and see both sides of the same hire.",
-  "@demoAccountsExplain": {
-    "description": "Explains why an app with no accounts has an account switcher"
-  },
   "accountYou": "You",
   "@accountYou": {
     "description": "Name of the account the app starts on"
   },
   "accountYouHelp": "The account this device started on",
-  "switchAccount": "Switch account",
-  "nowActingAs": "You are now {name}",
-  "@nowActingAs": {
+  "logIn": "Log in",
+  "@logIn": {
+    "description": "Button on the profile: choose which demo person to be."
+  },
+  "logOut": "Log out",
+  "@logOut": {
+    "description": "Button on the profile: stop being a demo person and go back to being a guest on this device."
+  },
+  "notLoggedIn": "Not logged in",
+  "@notLoggedIn": {
+    "description": "Profile heading when nobody is logged in."
+  },
+  "guestHelp": "You are using Trust Hire as a guest. What you do is kept on this device.",
+  "@guestHelp": {
+    "description": "Under the profile heading when nobody is logged in."
+  },
+  "logInTitle": "Log in",
+  "@logInTitle": {
+    "description": "Title of the sheet listing the people you can log in as."
+  },
+  "logInExplain": "Signing in with a password comes later. For now, choose who to be: post a job as one person, make an offer as another, and see both sides of the same hire.",
+  "@logInExplain": {
+    "description": "Explains the demo log-in sheet."
+  },
+  "loggedInAs": "Logged in as {name}",
+  "@loggedInAs": {
+    "description": "Confirmation after logging in.",
     "placeholders": {
       "name": {
         "type": "String"
       }
     }
+  },
+  "loggedOutNote": "Logged out. You are a guest on this device.",
+  "@loggedOutNote": {
+    "description": "Confirmation after logging out."
   },
   "accountPostings": "{count, plural, =0{No jobs posted} =1{1 job posted} other{{count} jobs posted}}",
   "@accountPostings": {

@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import '../../core/roles.dart';
-import 'package:provider/provider.dart';
 
-import '../../app/account_controller.dart';
 import '../../core/tokens.dart';
 import '../../l10n/app_localizations.dart';
-import '../account/account_switcher.dart';
 import '../assistant/assistant_screen.dart';
 import '../jobs/filter_bar.dart';
 import '../jobs/job_filter_controller.dart';
@@ -54,7 +51,6 @@ class JobsSearchBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final strings = AppStrings.of(context);
 
     return SearchBarFrame(
       floating: floating,
@@ -62,33 +58,9 @@ class JobsSearchBar extends StatelessWidget {
       trailing: [
         // "Painting jobs near me" is a question somebody looking at jobs is
         // about to ask, so the assistant is offered beside the search it is
-        // an alternative to.
+        // an alternative to. Nothing else: who is logged in is said on the
+        // profile, not by a stranger's initials in the corner (0.26).
         const AskButton(),
-        // The landing screen is the one place a demonstration must not leave
-        // "who am I?" unanswered, and the map has no app bar to hang the
-        // account switcher off.
-        Tooltip(
-          message: strings.switchAccount,
-          child: FocusRing(
-            radius: BorderRadius.all(Radius.circular(999)),
-            child: InkWell(
-              customBorder: const CircleBorder(),
-              onTap: () => AccountSheet.open(context),
-              // The avatar is drawn at 28px, but section 29 asks for a 48px
-              // target. The box is invisible; only the reach changes.
-              child: SizedBox(
-                width: BrandSizing.touchTargetPreferred,
-                height: BrandSizing.touchTargetPreferred,
-                child: Center(
-                  child: AccountAvatar(
-                    account: context.watch<AccountController>().active,
-                    radius: 14,
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ),
       ],
     );
   }

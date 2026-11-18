@@ -7,7 +7,6 @@ import '../../app/job_controller.dart';
 import '../../core/tokens.dart';
 import '../../l10n/app_localizations.dart';
 import '../../models/account.dart';
-import '../../widgets/focus_ring.dart';
 
 /// The name to show for an account, in the reader's language.
 ///
@@ -57,28 +56,11 @@ class AccountAvatar extends StatelessWidget {
   }
 }
 
-/// The app-bar control that says who you are and opens the switcher.
+/// Logging in: the people you can be.
 ///
-/// On every destination rather than only on the profile screen: which account
-/// is active changes what the map, the feed and the activity list show, so it
-/// belongs where those are, not two taps away in settings.
-class AccountButton extends StatelessWidget {
-  const AccountButton({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final strings = AppStrings.of(context);
-    final account = context.watch<AccountController>().active;
-
-    return IconButton(
-      tooltip: '${strings.switchAccount} · ${accountName(account, strings)}',
-      onPressed: () => AccountSheet.open(context),
-      icon: AccountAvatar(account: account, radius: 16),
-    );
-  }
-}
-
-/// The list of people you can be.
+/// There is no password yet (Section 13a), so logging in is choosing one of
+/// the demo people. The guest, the device's own account, is not listed: going
+/// back to it is logging out, from the profile.
 class AccountSheet extends StatelessWidget {
   const AccountSheet({super.key});
 
@@ -107,10 +89,10 @@ class AccountSheet extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(strings.demoAccounts, style: theme.textTheme.titleLarge),
+            Text(strings.logInTitle, style: theme.textTheme.titleLarge),
             const SizedBox(height: BrandSizing.spaceXs),
             Text(
-              strings.demoAccountsExplain,
+              strings.logInExplain,
               style: theme.textTheme.bodyMedium?.copyWith(
                 color: theme.colorScheme.onSurfaceVariant,
               ),
@@ -121,10 +103,11 @@ class AccountSheet extends StatelessWidget {
                 shrinkWrap: true,
                 children: [
                   for (final account in accounts.roster)
-                    _AccountTile(
-                      account: account,
-                      isActive: account.id == accounts.activeId,
-                    ),
+                    if (!account.isDevice)
+                      _AccountTile(
+                        account: account,
+                        isActive: account.id == accounts.activeId,
+                      ),
                 ],
               ),
             ),
@@ -177,25 +160,28 @@ class _AccountTile extends StatelessWidget {
               await context.read<AccountController>().switchTo(account);
 
               navigator.pop();
-              messenger.showSnackBar(
-                SnackBar(
-                  content: Text(
-                    strings.nowActingAs(accountName(account, strings)),
+              messenger
+                ..hideCurrentSnackBar()
+                ..showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      strings.loggedInAs(accountName(account, strings)),
+                    ),
                   ),
-                ),
-              );
+                );
             },
     );
   }
 }
 
-/// Who you are, at the head of the profile — and the way to be someone else.
+/// Who you are, at the head of the profile, and the way to log in or out.
 ///
-/// **A header, not a card** since 0.23: a large avatar, the name at page
-/// size, where they are, and "Switch account" said in words under it, the
-/// way a profile with more than one account usually says it. The whole row
-/// opens the switcher. It used to be a bordered list tile under a "Demo
-/// accounts" heading, which put the demo's mechanics above the person.
+/// **Logging in and out lives here, and only here, since 0.26.** It used to
+/// be an avatar at the top right of every destination that opened a
+/// switcher; somebody looking at jobs had a stranger's initials in the
+/// corner of the screen and no word for what the circle did. Now the profile
+/// says plainly who is logged in, with *Log out*, or that nobody is, with
+/// *Log in*.
 class AccountCard extends StatelessWidget {
   const AccountCard({super.key});
 
@@ -203,73 +189,81 @@ class AccountCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final strings = AppStrings.of(context);
     final theme = Theme.of(context);
-    final account = context.watch<AccountController>().active;
+    final accounts = context.watch<AccountController>();
+    final account = accounts.active;
+    final loggedIn = accounts.loggedIn;
 
-    return Material(
-      type: MaterialType.transparency,
-      child: FocusRing(
-        radius: BrandRadius.largeAll,
-        child: InkWell(
-          onTap: () => AccountSheet.open(context),
-          borderRadius: BrandRadius.largeAll,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: BrandSizing.spaceXs,
-              vertical: BrandSizing.spaceSm,
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+        horizontal: BrandSizing.spaceXs,
+        vertical: BrandSizing.spaceSm,
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (loggedIn)
+            AccountAvatar(account: account, radius: 30)
+          else
+            // A guest has no initials: a person glyph, in the same circle.
+            CircleAvatar(
+              radius: 30,
+              backgroundColor: context.colours.tint,
+              child: Icon(
+                Icons.person_outline_rounded,
+                size: 30,
+                color: context.colours.textMuted,
+              ),
             ),
-            child: Row(
+          const SizedBox(width: BrandSizing.spaceMd),
+          Expanded(
+            child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                AccountAvatar(account: account, radius: 30),
-                const SizedBox(width: BrandSizing.spaceMd),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // Section size, bold: under the page's own "Profile" a
-                      // second 24px heading would compete with it.
-                      Text(
-                        accountName(account, strings),
-                        style: theme.textTheme.titleLarge?.copyWith(
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                      const SizedBox(height: 2),
-                      Text(
-                        account.area ??
-                            (account.isAdmin
-                                ? strings.accountStaffHelp
-                                : strings.accountYouHelp),
-                        style: theme.textTheme.bodyMedium,
-                      ),
-                      const SizedBox(height: BrandSizing.spaceSm),
-                      Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(
-                            Icons.swap_horiz_rounded,
-                            size: 18,
-                            color: context.colours.text,
-                          ),
-                          const SizedBox(width: BrandSizing.spaceXs + 2),
-                          Flexible(
-                            child: Text(
-                              strings.switchAccount,
-                              style: BrandType.supporting.copyWith(
-                                color: context.colours.text,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
+                // Section size, bold: under the page's own "Profile" a second
+                // 24px heading would compete with it.
+                Text(
+                  loggedIn
+                      ? accountName(account, strings)
+                      : strings.notLoggedIn,
+                  style: theme.textTheme.titleLarge?.copyWith(
+                    fontWeight: FontWeight.w700,
                   ),
                 ),
+                const SizedBox(height: 2),
+                Text(
+                  !loggedIn
+                      ? strings.guestHelp
+                      : (account.area ??
+                            (account.isAdmin
+                                ? strings.accountStaffHelp
+                                : strings.accountYouHelp)),
+                  style: theme.textTheme.bodyMedium,
+                ),
+                const SizedBox(height: BrandSizing.spaceSm),
+                if (loggedIn)
+                  OutlinedButton.icon(
+                    onPressed: () async {
+                      final messenger = ScaffoldMessenger.of(context);
+                      await context.read<AccountController>().logOut();
+                      messenger
+                        ..hideCurrentSnackBar()
+                        ..showSnackBar(
+                          SnackBar(content: Text(strings.loggedOutNote)),
+                        );
+                    },
+                    icon: const Icon(Icons.logout_rounded),
+                    label: Text(strings.logOut),
+                  )
+                else
+                  OutlinedButton.icon(
+                    onPressed: () => AccountSheet.open(context),
+                    icon: const Icon(Icons.login_rounded),
+                    label: Text(strings.logIn),
+                  ),
               ],
             ),
           ),
-        ),
+        ],
       ),
     );
   }

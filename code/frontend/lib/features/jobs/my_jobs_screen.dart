@@ -26,7 +26,6 @@ import '../../widgets/state_views.dart';
 import 'job_details_sheet.dart';
 import 'job_row.dart';
 import 'saved_jobs_controller.dart';
-import '../account/account_switcher.dart';
 
 /// Activity: what arrived, and what you are keeping an eye on.
 ///
@@ -77,7 +76,6 @@ class _MyJobsScreenState extends State<MyJobsScreen>
             title: Text(strings.navActivity),
             titleSpacing: NavigationToolbar.kMiddleSpacing + inset,
             actionsPadding: EdgeInsetsDirectional.only(end: inset),
-            actions: const [AccountButton()],
             bottom: TabBar(
               padding: EdgeInsetsDirectional.only(start: inset, end: inset),
               controller: _tabs,

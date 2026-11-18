@@ -1063,25 +1063,38 @@ class AppStringsEn extends AppStrings {
   String get factUsualFare => 'Usual fare';
 
   @override
-  String get demoAccounts => 'Demo accounts';
-
-  @override
-  String get demoAccountsExplain =>
-      'Signing in comes later. For now you can be any of these people. Post a job as one, make an offer as another, and see both sides of the same hire.';
-
-  @override
   String get accountYou => 'You';
 
   @override
   String get accountYouHelp => 'The account this device started on';
 
   @override
-  String get switchAccount => 'Switch account';
+  String get logIn => 'Log in';
 
   @override
-  String nowActingAs(String name) {
-    return 'You are now $name';
+  String get logOut => 'Log out';
+
+  @override
+  String get notLoggedIn => 'Not logged in';
+
+  @override
+  String get guestHelp =>
+      'You are using Trust Hire as a guest. What you do is kept on this device.';
+
+  @override
+  String get logInTitle => 'Log in';
+
+  @override
+  String get logInExplain =>
+      'Signing in with a password comes later. For now, choose who to be: post a job as one person, make an offer as another, and see both sides of the same hire.';
+
+  @override
+  String loggedInAs(String name) {
+    return 'Logged in as $name';
   }
+
+  @override
+  String get loggedOutNote => 'Logged out. You are a guest on this device.';
 
   @override
   String accountPostings(int count) {

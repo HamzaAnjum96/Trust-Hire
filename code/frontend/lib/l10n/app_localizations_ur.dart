@@ -1075,25 +1075,38 @@ class AppStringsUr extends AppStrings {
   String get factUsualFare => 'عام کرایہ';
 
   @override
-  String get demoAccounts => 'ڈیمو اکاؤنٹس';
-
-  @override
-  String get demoAccountsExplain =>
-      'لاگ ان بعد میں آئے گا۔ فی الحال آپ ان میں سے کوئی بھی بن سکتے ہیں — ایک کے طور پر کام لگائیں، دوسرے کے طور پر پیشکش کریں، اور ایک ہی کام کے دونوں رخ دیکھیں۔';
-
-  @override
   String get accountYou => 'آپ';
 
   @override
   String get accountYouHelp => 'وہ اکاؤنٹ جس سے اس فون پر شروع ہوا';
 
   @override
-  String get switchAccount => 'اکاؤنٹ بدلیں';
+  String get logIn => 'لاگ اِن کریں';
 
   @override
-  String nowActingAs(String name) {
-    return 'اب آپ $name ہیں';
+  String get logOut => 'لاگ آؤٹ کریں';
+
+  @override
+  String get notLoggedIn => 'لاگ اِن نہیں';
+
+  @override
+  String get guestHelp =>
+      'آپ Trust Hire مہمان کے طور پر استعمال کر رہے ہیں۔ آپ جو کچھ کرتے ہیں وہ اسی فون پر رہتا ہے۔';
+
+  @override
+  String get logInTitle => 'لاگ اِن';
+
+  @override
+  String get logInExplain =>
+      'پاس ورڈ سے سائن اِن بعد میں آئے گا۔ ابھی کے لیے چنیں کہ کون بننا ہے: ایک کے طور پر کام لگائیں، دوسرے کے طور پر پیشکش کریں، اور ایک ہی کام کے دونوں رخ دیکھیں۔';
+
+  @override
+  String loggedInAs(String name) {
+    return '$name کے طور پر لاگ اِن';
   }
+
+  @override
+  String get loggedOutNote => 'لاگ آؤٹ ہو گئے۔ آپ اس فون پر مہمان ہیں۔';
 
   @override
   String accountPostings(int count) {

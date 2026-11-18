@@ -84,6 +84,13 @@ void main() {
     };
     if (side != null && side.width >= 2) return 'theme outline';
 
+    // The rail's destinations are Material's; the rail is given a focus
+    // colour strong enough to see on the ink shell.
+    if (ancestor<NavigationRail>(context) != null &&
+        theme.focusColor.a >= 0.3) {
+      return 'rail focus wash';
+    }
+
     // Toggles draw their own focus halo.
     if (ancestor<Checkbox>(context) != null ||
         ancestor<Radio<Object?>>(context) != null ||
@@ -97,7 +104,7 @@ void main() {
     final chain = <String>[];
     context.visitAncestorElements((element) {
       final name = element.widget.runtimeType.toString();
-      if (!name.startsWith('_') && chain.length < 12) chain.add(name);
+      if (!name.startsWith('_') && chain.length < 40) chain.add(name);
       return true;
     });
     return chain.join(' < ');
@@ -164,15 +171,28 @@ void main() {
     tester,
   ) async {
     await pumpShell(tester, const Size(390, 844));
+    await tester.tap(find.text('Profile'));
+    await settle(tester);
 
-    // The account button, by keyboard.
+    // The profile's Log in button, by keyboard.
     BuildContext context;
     var i = 0;
+    bool isLogIn(BuildContext c) {
+      final button = ancestor<OutlinedButton>(c);
+      return button != null &&
+          find
+              .descendant(
+                of: find.byWidget(button),
+                matching: find.text('Log in'),
+              )
+              .evaluate()
+              .isNotEmpty;
+    }
+
     do {
       context = await tab(tester);
-    } while (context.findAncestorWidgetOfExactType<Tooltip>()?.message !=
-            'Switch account' &&
-        ++i < 40);
+    } while (!isLogIn(context) && ++i < 60);
+    expect(isLogIn(context), isTrue);
     final opener = FocusManager.instance.primaryFocus;
 
     await tester.sendKeyEvent(LogicalKeyboardKey.enter);

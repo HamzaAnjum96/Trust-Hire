@@ -28,6 +28,13 @@ class AccountController extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Whether somebody is logged in. The device's own account is being a
+  /// guest: what it does is kept on this device, under no one's name.
+  bool get loggedIn => !_active.isDevice;
+
+  /// Back to being a guest on this device.
+  Future<void> logOut() => switchTo(DemoAccounts.device);
+
   Future<void> switchTo(DemoAccount account) async {
     if (account.id == _active.id) return;
 

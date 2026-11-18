@@ -16,7 +16,6 @@ import '../../widgets/search_bar_frame.dart';
 import '../../widgets/initials_avatar.dart';
 import '../../widgets/meta_chip.dart';
 import '../../widgets/state_views.dart';
-import '../account/account_switcher.dart';
 import '../assistant/assistant_screen.dart';
 import '../map/location_controller.dart';
 import '../premium/premium_rules.dart';
@@ -138,7 +137,6 @@ class _DirectoryScreenState extends State<DirectoryScreen> {
             title: Text(strings.navDirectory),
             titleSpacing: NavigationToolbar.kMiddleSpacing + inset,
             actionsPadding: EdgeInsetsDirectional.only(end: inset),
-            actions: const [AccountButton()],
           ),
           body: ReadableWidth(
             child: ListView(

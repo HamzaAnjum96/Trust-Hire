@@ -1874,18 +1874,6 @@ abstract class AppStrings {
   /// **'Usual fare'**
   String get factUsualFare;
 
-  /// Heading for the account switcher
-  ///
-  /// In en, this message translates to:
-  /// **'Demo accounts'**
-  String get demoAccounts;
-
-  /// Explains why an app with no accounts has an account switcher
-  ///
-  /// In en, this message translates to:
-  /// **'Signing in comes later. For now you can be any of these people. Post a job as one, make an offer as another, and see both sides of the same hire.'**
-  String get demoAccountsExplain;
-
   /// Name of the account the app starts on
   ///
   /// In en, this message translates to:
@@ -1898,17 +1886,53 @@ abstract class AppStrings {
   /// **'The account this device started on'**
   String get accountYouHelp;
 
-  /// No description provided for @switchAccount.
+  /// Button on the profile: choose which demo person to be.
   ///
   /// In en, this message translates to:
-  /// **'Switch account'**
-  String get switchAccount;
+  /// **'Log in'**
+  String get logIn;
 
-  /// No description provided for @nowActingAs.
+  /// Button on the profile: stop being a demo person and go back to being a guest on this device.
   ///
   /// In en, this message translates to:
-  /// **'You are now {name}'**
-  String nowActingAs(String name);
+  /// **'Log out'**
+  String get logOut;
+
+  /// Profile heading when nobody is logged in.
+  ///
+  /// In en, this message translates to:
+  /// **'Not logged in'**
+  String get notLoggedIn;
+
+  /// Under the profile heading when nobody is logged in.
+  ///
+  /// In en, this message translates to:
+  /// **'You are using Trust Hire as a guest. What you do is kept on this device.'**
+  String get guestHelp;
+
+  /// Title of the sheet listing the people you can log in as.
+  ///
+  /// In en, this message translates to:
+  /// **'Log in'**
+  String get logInTitle;
+
+  /// Explains the demo log-in sheet.
+  ///
+  /// In en, this message translates to:
+  /// **'Signing in with a password comes later. For now, choose who to be: post a job as one person, make an offer as another, and see both sides of the same hire.'**
+  String get logInExplain;
+
+  /// Confirmation after logging in.
+  ///
+  /// In en, this message translates to:
+  /// **'Logged in as {name}'**
+  String loggedInAs(String name);
+
+  /// Confirmation after logging out.
+  ///
+  /// In en, this message translates to:
+  /// **'Logged out. You are a guest on this device.'**
+  String get loggedOutNote;
 
   /// No description provided for @accountPostings.
   ///

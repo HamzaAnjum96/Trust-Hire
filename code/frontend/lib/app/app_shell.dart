@@ -478,39 +478,48 @@ class _NavigationRail extends StatelessWidget {
                 SingleActivator(LogicalKeyboardKey.arrowDown):
                     DirectionalFocusIntent(TraversalDirection.down),
               },
-              child: NavigationRail(
-                selectedIndex: index,
-                onDestinationSelected: onSelected,
-                extended: extended,
-                labelType: extended ? null : NavigationRailLabelType.all,
-                leading: Padding(
-                  padding: const EdgeInsets.only(
-                    top: BrandSizing.spaceMd,
-                    bottom: BrandSizing.spaceLg,
-                  ),
-                  // The rail centres whatever leads it. Extended, that left the
-                  // name and the button floating mid-rail over destinations that
-                  // start at the left edge; held to the rail's width, they start
-                  // where the destinations' indicator does.
-                  child: SizedBox(
-                    width: extended ? _extendedLeadingWidth : null,
-                    child: Column(
-                      crossAxisAlignment: extended
-                          ? CrossAxisAlignment.start
-                          : CrossAxisAlignment.center,
-                      children: [
-                        _RailMark(extended: extended),
-                        if (action != null) ...[
-                          const SizedBox(height: BrandSizing.spaceLg),
-                          action!,
+              // A rail destination is drawn by Material, which marks keyboard
+              // focus with a wash a few percent strong: on the ink shell,
+              // nothing. Its own focus colour, turmeric at 40%, is the rail's
+              // focus ring (keyboard_test checks it).
+              child: Theme(
+                data: Theme.of(context).copyWith(
+                  focusColor: context.colours.highlight.withValues(alpha: 0.4),
+                ),
+                child: NavigationRail(
+                  selectedIndex: index,
+                  onDestinationSelected: onSelected,
+                  extended: extended,
+                  labelType: extended ? null : NavigationRailLabelType.all,
+                  leading: Padding(
+                    padding: const EdgeInsets.only(
+                      top: BrandSizing.spaceMd,
+                      bottom: BrandSizing.spaceLg,
+                    ),
+                    // The rail centres whatever leads it. Extended, that left the
+                    // name and the button floating mid-rail over destinations that
+                    // start at the left edge; held to the rail's width, they start
+                    // where the destinations' indicator does.
+                    child: SizedBox(
+                      width: extended ? _extendedLeadingWidth : null,
+                      child: Column(
+                        crossAxisAlignment: extended
+                            ? CrossAxisAlignment.start
+                            : CrossAxisAlignment.center,
+                        children: [
+                          _RailMark(extended: extended),
+                          if (action != null) ...[
+                            const SizedBox(height: BrandSizing.spaceLg),
+                            action!,
+                          ],
                         ],
-                      ],
+                      ),
                     ),
                   ),
+                  destinations: [
+                    for (final destination in destinations) destination.forRail,
+                  ],
                 ),
-                destinations: [
-                  for (final destination in destinations) destination.forRail,
-                ],
               ),
             ),
           ),
