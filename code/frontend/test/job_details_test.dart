@@ -126,19 +126,6 @@ void main() {
     }
   }
 
-  /// The sheet is a ListView, which does not build children below the fold —
-  /// so anything further down has to be scrolled into view before asserting.
-  Future<void> scrollToBottom(WidgetTester tester) async {
-    // Repeated drags rather than one: the list grows as children build, so a
-    // single large drag stops short of the real bottom.
-    for (var attempt = 0; attempt < 4; attempt++) {
-      await tester.drag(find.byType(ListView), const Offset(0, -400));
-      for (var i = 0; i < 4; i++) {
-        await tester.pump(const Duration(milliseconds: 100));
-      }
-    }
-  }
-
   testWidgets('every shape of seeded job opens without error', (tester) async {
     // One job per distinct *shape*, not one per row.
     //

@@ -1893,6 +1893,11 @@
   "@boardShowFewer": {
     "description": "Collapses the trade board back to the busiest trades."
   },
+  "boardHiddenJobs": "{count, plural, =1{1 more job near you needs a trade} other{{count} more jobs near you need a trade}}",
+  "@boardHiddenJobs": {
+    "description": "Under 'Add a trade' at the foot of the trade board: jobs the worker's trades leave out",
+    "placeholders": {"count": {"type": "int"}}
+  },
   "jobsNearYouTab": "Near you",
   "@jobsNearYouTab": {
     "description": "Tab on Jobs: work near you (the trade board and the map)."

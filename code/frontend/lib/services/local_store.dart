@@ -129,9 +129,6 @@ class StoreKeys {
   /// Which demo account the device is currently being.
   static const activeAccount = 'trust_hire.active_account';
 
-  /// Set once the worker has closed the "add a trade" notice. Per account.
-  static const tradesNoticeDismissed = 'trust_hire.trades_notice_dismissed';
-
   /// Whether Jobs last showed the map rather than the board, so it opens the
   /// way the person left it. Unset, it opens on the board (0.26).
   static const jobsOnMap = 'trust_hire.jobs_on_map';
@@ -218,7 +215,6 @@ class StoreKeys {
     role,
     workerProfile,
     activeAccount,
-    tradesNoticeDismissed,
     jobsOnMap,
     directory,
     auditLog,

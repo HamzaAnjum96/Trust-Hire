@@ -3998,6 +3998,12 @@ abstract class AppStrings {
   /// **'Show fewer'**
   String get boardShowFewer;
 
+  /// Under 'Add a trade' at the foot of the trade board: jobs the worker's trades leave out
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 more job near you needs a trade} other{{count} more jobs near you need a trade}}'**
+  String boardHiddenJobs(int count);
+
   /// Tab on Jobs: work near you (the trade board and the map).
   ///
   /// In en, this message translates to:

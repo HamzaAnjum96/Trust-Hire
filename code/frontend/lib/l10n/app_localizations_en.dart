@@ -2443,6 +2443,17 @@ class AppStringsEn extends AppStrings {
   String get boardShowFewer => 'Show fewer';
 
   @override
+  String boardHiddenJobs(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count more jobs near you need a trade',
+      one: '1 more job near you needs a trade',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get jobsNearYouTab => 'Near you';
 
   @override

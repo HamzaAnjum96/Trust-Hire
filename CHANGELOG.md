@@ -12,6 +12,25 @@ that heading to the version and date, and open a fresh `[Unreleased]`.
 
 ## [Unreleased]
 
+### 0.30.0 — "Add a trade" moves onto the board
+
+#### Changed
+
+- **The trades prompt is the trade board's last row, not a notice over the
+  map.** A worker who has not added a trade saw a card float over the map
+  saying jobs were held back. It covered the thing it was about, so it had to
+  be dismissible, and once dismissed it was gone. It now ends the board under
+  *Work near you*: an empty block with a plus where the next trade's glyph
+  goes, "Add a trade", and how many jobs near you a trade would bring in. It
+  covers nothing, so it no longer needs closing, and it goes as soon as the
+  worker has a trade. The per-account "notice dismissed" flag is gone with it.
+
+#### Fixed
+
+- **A board of one trade read as one button with its heading.** The trade row
+  was not a semantics node of its own, so with a single row a screen reader
+  merged "Work near you" and its hint into the button's label.
+
 ### 0.29.0 — The job sheet's ticket
 
 #### Changed

@@ -253,8 +253,8 @@ class _MapScreenState extends State<MapScreen> {
           // rather than every job, so the badge measures the filters and not
           // the tag rule underneath them.
           totalJobCount: reachable.length,
-          // Only ever non-zero for a worker who has not added a trade — see
-          // the notice this drives.
+          // Only ever non-zero for a worker who has not added a trade: the
+          // board's "Add a trade" row says how many jobs a trade would add.
           hiddenByTags: profile.specialities.isEmpty
               ? jobs.jobs.length - reachable.length
               : 0,
@@ -363,6 +363,7 @@ class _Discovery extends StatelessWidget {
           reachable: reachable,
           visible: jobs,
           boardJobs: boardJobs,
+          hiddenByTags: hiddenByTags,
           filters: filters,
           viewerLocation: location.position,
           viewSwitch: viewSwitch,
@@ -374,7 +375,6 @@ class _Discovery extends StatelessWidget {
       viewSwitch: split ? null : viewSwitch,
       jobs: jobs,
       totalJobCount: totalJobCount,
-      hiddenByTags: hiddenByTags,
       filters: filters,
       selectedJobId: selectedJobId,
       location: location,
@@ -408,6 +408,7 @@ class _Discovery extends StatelessWidget {
           child: _ResultsRail(
             jobs: jobs,
             boardJobs: boardJobs,
+            hiddenByTags: hiddenByTags,
             filters: filters,
             totalJobCount: totalJobCount,
             viewerLocation: location.position,
@@ -426,6 +427,7 @@ class _ResultsRail extends StatelessWidget {
   const _ResultsRail({
     required this.jobs,
     required this.boardJobs,
+    required this.hiddenByTags,
     required this.filters,
     required this.totalJobCount,
     required this.viewerLocation,
@@ -436,6 +438,7 @@ class _ResultsRail extends StatelessWidget {
 
   final List<Job> jobs;
   final List<Job> boardJobs;
+  final int hiddenByTags;
   final JobFilterController filters;
   final int totalJobCount;
   final JobLocation? viewerLocation;
@@ -453,6 +456,7 @@ class _ResultsRail extends StatelessWidget {
     // trade here narrows the pins beside it.
     final head = WorkNearYou(
       boardJobs: boardJobs,
+      hiddenByTags: hiddenByTags,
       filters: filters,
       viewerLocation: viewerLocation,
       shown: jobs.length,
@@ -504,6 +508,7 @@ class WorkNearYou extends StatelessWidget {
   const WorkNearYou({
     super.key,
     required this.boardJobs,
+    required this.hiddenByTags,
     required this.filters,
     required this.viewerLocation,
     required this.shown,
@@ -511,6 +516,7 @@ class WorkNearYou extends StatelessWidget {
   });
 
   final List<Job> boardJobs;
+  final int hiddenByTags;
   final JobFilterController filters;
   final JobLocation? viewerLocation;
   final int shown;
@@ -552,6 +558,8 @@ class WorkNearYou extends StatelessWidget {
             viewerLocation: viewerLocation,
             selected: tags,
             onSelect: filters.selectOnlyTag,
+            hiddenJobs: hiddenByTags,
+            onAddTrade: () => MyTradesScreen.open(context),
           ),
           const SizedBox(height: BrandSizing.spaceLg),
           // The jobs themselves, under their count: "16 jobs", or "4 of 16
@@ -605,6 +613,7 @@ class _ListBody extends StatelessWidget {
     required this.reachable,
     required this.visible,
     required this.boardJobs,
+    required this.hiddenByTags,
     required this.filters,
     required this.viewerLocation,
     required this.viewSwitch,
@@ -614,6 +623,7 @@ class _ListBody extends StatelessWidget {
   final List<Job> reachable;
   final List<Job> visible;
   final List<Job> boardJobs;
+  final int hiddenByTags;
   final JobFilterController filters;
   final JobLocation? viewerLocation;
   final Widget viewSwitch;
@@ -650,6 +660,7 @@ class _ListBody extends StatelessWidget {
                       // scroll, so the board never steals the list's room.
                       header: WorkNearYou(
                         boardJobs: boardJobs,
+                        hiddenByTags: hiddenByTags,
                         filters: filters,
                         viewerLocation: viewerLocation,
                         shown: visible.length,
@@ -681,7 +692,6 @@ class _MapBody extends StatelessWidget {
     required this.viewSwitch,
     required this.jobs,
     required this.totalJobCount,
-    required this.hiddenByTags,
     required this.filters,
     required this.selectedJobId,
     required this.location,
@@ -709,7 +719,6 @@ class _MapBody extends StatelessWidget {
 
   /// How many jobs the tag rule is holding back from a worker who has not
   /// added a trade yet. Zero once they have, or for a hirer.
-  final int hiddenByTags;
   final JobFilterController filters;
   final String? selectedJobId;
   final LocationController location;
@@ -743,7 +752,6 @@ class _MapBody extends StatelessWidget {
     final selected = _selected;
     final cardShown = selected != null && showsPreviewCard;
     final locationExplanation = location.explanation(strings);
-    final profile = context.watch<ProfileController>();
 
     return Stack(
       // Every child here is positioned except the preview switcher, which
@@ -839,25 +847,6 @@ class _MapBody extends StatelessWidget {
                           icon: Icons.search_off_rounded,
                           message: strings.noJobsMatchHere,
                           onDismiss: filters.clear,
-                        ),
-
-                      // Not a filter and not an error: the tag rule is holding jobs
-                      // back, and the only thing that changes it is adding a trade.
-                      // Shown just for a worker who has never added one, so it stops
-                      // appearing as soon as it stops being news.
-                      //
-                      // Dismissible, though closing it changes nothing about the
-                      // rule. It sits over the map — the thing the app is for — and
-                      // somebody who has read it and is happy on general work should
-                      // not have to read it again on every launch. The way back is
-                      // the trades screen, which the profile always links to.
-                      if (hiddenByTags > 0 && !profile.tradesNoticeDismissed)
-                        MapNotice(
-                          icon: Icons.construction_rounded,
-                          message: strings.noJobsForTradesHelp,
-                          actionLabel: strings.addATrade,
-                          onAction: () => MyTradesScreen.open(context),
-                          onDismiss: profile.dismissTradesNotice,
                         ),
                     ],
                   ),

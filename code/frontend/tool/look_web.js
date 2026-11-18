@@ -61,15 +61,21 @@ const PRESETS = {
 const STANDARD = [
   { shot: 'intro' },
   { tap: '@onboardSkip' },
-  { shot: 'jobs' },
+  // Jobs opens on the trade board and its list since 0.26, unless the map
+  // was the last view chosen.
   { tap: '@showAsList', optional: true },
-  { shot: 'list' },
-  // A job row's label carries its fare.
-  { tapMatch: 'Rs\\.|روپے' },
+  { shot: 'jobs' },
+  // A job row's label carries its fare; a trade row's carries a range, with
+  // a dash, and only narrows the list.
+  { tapMatch: '^(?!.*–).*(Rs\\.|روپے)' },
   { shot: 'job' },
   { key: 'Escape' },
-  { tap: '@navActivity' },
-  { shot: 'activity' },
+  { tap: '@showOnMap', optional: true },
+  { shot: 'map' },
+  { tap: '@yourJobsTab' },
+  { shot: 'your-jobs' },
+  { tap: '@navInbox' },
+  { shot: 'inbox' },
   { tap: '@navDirectory' },
   { shot: 'directory' },
   { tap: '@navProfile' },

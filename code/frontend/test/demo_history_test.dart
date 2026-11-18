@@ -108,7 +108,6 @@ void main() {
           StoreKeys.themeMode,
           StoreKeys.language,
           StoreKeys.savedJobs,
-          StoreKeys.tradesNoticeDismissed,
           StoreKeys.mediaIndex,
           ...perAccount,
         };
@@ -632,46 +631,6 @@ void main() {
       // trade they need. First would make it the path of least resistance and
       // quietly undo the rule the whole of Section 8 rests on.
       expect(JobTag.values.first, isNot(JobTag.misc));
-    });
-  });
-
-  group('the add-a-trade notice', () {
-    test('can be closed, and stays closed', () async {
-      final store = await LocalStore.open();
-      final profile = ProfileController(store)..load();
-
-      expect(profile.tradesNoticeDismissed, isFalse);
-      await profile.dismissTradesNotice();
-
-      final reopened = ProfileController(store)..load();
-      expect(reopened.tradesNoticeDismissed, isTrue);
-    });
-
-    test('separately for each account', () async {
-      // It is advice about one person's feed. Closing it as one demo account
-      // should not hide it from the next, who has not read it.
-      final store = await LocalStore.open();
-      final profile = ProfileController(store)..load();
-      await profile.dismissTradesNotice();
-
-      profile.setAccount('user-017');
-      expect(profile.tradesNoticeDismissed, isFalse);
-
-      profile.setAccount(DemoAccounts.deviceId);
-      expect(profile.tradesNoticeDismissed, isTrue);
-    });
-
-    test('closing it does not narrow the feed', () async {
-      // The notice explains a rule; dismissing it is about the notice, not
-      // about the rule. A worker who closes it still sees general work.
-      final store = await LocalStore.open();
-      final profile = ProfileController(store)..load();
-
-      final before = profile.tags;
-      await profile.dismissTradesNotice();
-
-      expect(profile.tags, before);
-      expect(profile.tags, contains(JobTag.misc));
     });
   });
 }

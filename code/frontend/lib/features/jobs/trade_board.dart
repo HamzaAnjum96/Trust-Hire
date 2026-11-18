@@ -48,12 +48,21 @@ class TradeBoard extends StatefulWidget {
     required this.viewerLocation,
     required this.selected,
     required this.onSelect,
+    this.hiddenJobs = 0,
+    this.onAddTrade,
   });
 
   final List<Job> jobs;
   final JobLocation? viewerLocation;
   final Set<JobTag> selected;
   final ValueChanged<JobTag> onSelect;
+
+  /// Jobs near the viewer that none of their trades reach: non-zero only for
+  /// a worker who has not added one. The board ends with an "Add a trade"
+  /// row that says how many, since 0.30; before, a notice floated over the
+  /// map to say it, covering the thing the app is for.
+  final int hiddenJobs;
+  final VoidCallback? onAddTrade;
 
   /// The board's rows: busiest trade first, then in the trades' own order.
   static List<TradeLine> linesFor(List<Job> jobs, JobLocation? viewer) {
@@ -96,7 +105,8 @@ class _TradeBoardState extends State<TradeBoard> {
     final strings = AppStrings.of(context);
     final selected = widget.selected;
     final all = TradeBoard.linesFor(widget.jobs, widget.viewerLocation);
-    if (all.isEmpty) return const SizedBox.shrink();
+    final addTrade = widget.hiddenJobs > 0 && widget.onAddTrade != null;
+    if (all.isEmpty && !addTrade) return const SizedBox.shrink();
 
     // The busiest few, and the chosen trade wherever it ranks: a choice that
     // scrolled off the board would look like no choice at all.
@@ -136,6 +146,13 @@ class _TradeBoardState extends State<TradeBoard> {
                     isSelected:
                         selected.length == 1 && selected.contains(line.tag),
                     onTap: () => widget.onSelect(line.tag),
+                  ),
+                ],
+                if (addTrade) ...[
+                  if (lines.isNotEmpty) const Divider(height: 1, indent: 68),
+                  _AddTradeRow(
+                    hiddenJobs: widget.hiddenJobs,
+                    onTap: widget.onAddTrade!,
                   ),
                 ],
                 if (long) ...[
@@ -253,7 +270,11 @@ class _TradeRow extends StatelessWidget {
       fares,
     ].join(', ');
 
+    // A node of its own: without `container`, a board of one row merged
+    // into the heading above it, and a screen reader read "Work near you"
+    // and the hint as part of the button.
     return Semantics(
+      container: true,
       button: true,
       selected: isSelected,
       label: spoken,
@@ -331,6 +352,79 @@ class _TradeRow extends StatelessWidget {
                   ],
                 ),
               ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// The board's last row, for a worker whose trades leave jobs out: what a
+/// trade would add, and the way to add one. A row of the board rather than a
+/// notice over it, so it never covers the work it is about.
+class _AddTradeRow extends StatelessWidget {
+  const _AddTradeRow({required this.hiddenJobs, required this.onTap});
+
+  final int hiddenJobs;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final strings = AppStrings.of(context);
+    final theme = Theme.of(context);
+    final colours = context.colours;
+    final more = strings.boardHiddenJobs(hiddenJobs);
+
+    return Semantics(
+      container: true,
+      button: true,
+      label: '${strings.addATrade}, $more',
+      excludeSemantics: true,
+      child: FocusRing(
+        child: InkWell(
+          onTap: onTap,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: BrandSizing.spaceMd,
+              vertical: BrandSizing.spaceSm + 4,
+            ),
+            child: Row(
+              children: [
+                // An empty block where a trade's glyph would be: the place
+                // the next trade goes.
+                Container(
+                  width: 40,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    border: Border.all(color: colours.lineStrong),
+                    borderRadius: BrandRadius.mediumAll,
+                  ),
+                  child: Icon(Icons.add_rounded, size: 22, color: colours.text),
+                ),
+                const SizedBox(width: BrandSizing.spaceSm + 4),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        strings.addATrade,
+                        style: theme.textTheme.bodyLarge?.copyWith(
+                          fontWeight: FontWeight.w600,
+                          color: colours.accentText,
+                        ),
+                      ),
+                      Text(
+                        more,
+                        style: theme.textTheme.bodyMedium?.copyWith(
+                          color: colours.textMuted,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Icon(Icons.chevron_right_rounded, color: colours.textMuted),
+              ],
             ),
           ),
         ),

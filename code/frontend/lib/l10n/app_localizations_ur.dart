@@ -2455,6 +2455,17 @@ class AppStringsUr extends AppStrings {
   String get boardShowFewer => 'کم دکھائیں';
 
   @override
+  String boardHiddenJobs(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'آپ کے قریب $count اور کاموں کے لیے ہنر درکار ہے',
+      one: 'آپ کے قریب 1 اور کام کے لیے ہنر درکار ہے',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get jobsNearYouTab => 'آپ کے قریب';
 
   @override

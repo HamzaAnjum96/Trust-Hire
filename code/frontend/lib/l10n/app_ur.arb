@@ -650,6 +650,7 @@
   "fareRange": "{low}–{high}",
   "boardShowAll": "تمام {count} اقسام دکھائیں",
   "boardShowFewer": "کم دکھائیں",
+  "boardHiddenJobs": "{count, plural, =1{آپ کے قریب 1 اور کام کے لیے ہنر درکار ہے} other{آپ کے قریب {count} اور کاموں کے لیے ہنر درکار ہے}}",
   "jobsNearYouTab": "آپ کے قریب",
   "settingsSummary": "ظاہری شکل، زبان، AI معاون، ڈیمو",
   "detailFromYou": "آپ سے فاصلہ"

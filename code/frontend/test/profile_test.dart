@@ -199,10 +199,12 @@ void main() {
   });
 
   group('the app', () {
-    testWidgets('a new worker is told why the map is quieter', (tester) async {
+    testWidgets('a new worker is told why the board is quieter', (
+      tester,
+    ) async {
+      // On the trade board's last row since 0.30, not over the map.
       final store = await LocalStore.open();
       await (SettingsController(store)..load()).markIntroSeen();
-      await store.writeFlag(StoreKeys.jobsOnMap, true);
 
       await tester.pumpWidget(TrustHireApp(store: store));
       await settle(tester);
@@ -210,12 +212,15 @@ void main() {
       // The seed data is mostly specialty work, so a worker on general work
       // alone sees a fraction of it — and must be able to find out why.
       expect(find.text('Add a trade'), findsOneWidget);
+      expect(
+        find.textContaining('more jobs near you need a trade'),
+        findsOneWidget,
+      );
     });
 
     testWidgets('adding a trade puts those jobs back', (tester) async {
       final store = await LocalStore.open();
       await (SettingsController(store)..load()).markIntroSeen();
-      await store.writeFlag(StoreKeys.jobsOnMap, true);
 
       await tester.pumpWidget(TrustHireApp(store: store));
       await settle(tester);
@@ -231,7 +236,7 @@ void main() {
       final profile = ProfileController(store)..load();
       expect(profile.specialities, {JobTag.plumbing});
 
-      // Back on the map, the prompt has done its job and gone.
+      // Back on the board, the prompt has done its job and gone.
       await tester.pageBack();
       await settle(tester);
       expect(find.text('Add a trade'), findsNothing);
@@ -240,7 +245,6 @@ void main() {
     testWidgets('a hirer is not shown the trades prompt', (tester) async {
       final store = await LocalStore.open();
       await (SettingsController(store)..load()).markIntroSeen();
-      await store.writeFlag(StoreKeys.jobsOnMap, true);
       await (ProfileController(store)..load()).setRole(UserRole.hirer);
 
       await tester.pumpWidget(TrustHireApp(store: store));

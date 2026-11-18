@@ -60,3 +60,12 @@ still glows turmeric wherever it appears.
 The map was the first thing anyone saw; now a list is. Location still leads
 in the data (each trade carries its nearest job's distance, each row its
 distance), and the map is one tap away.
+
+## 0.29 and 0.30: the job sheet's ticket, and the trades prompt on the board
+
+- **0.29** — a job's sheet opens on a ticket: fare, when, and distance in one
+  tinted strip. They are what a worker decides on, and they were three rows
+  apart.
+- **0.30** — "Add a trade" left the map. It was a dismissible card over the
+  thing it was about; now it is the trade board's last row, with how many
+  jobs a trade would add, and it needs no dismissing.
