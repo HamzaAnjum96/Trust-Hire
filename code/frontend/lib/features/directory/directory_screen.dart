@@ -102,6 +102,27 @@ class _DirectoryScreenState extends State<DirectoryScreen> {
     final isFiltered = query.trim().isNotEmpty || tag != null;
 
     final categories = [
+      // **Who comes to you, as the first chip since 0.32.** It was a checkbox
+      // on a line of its own under the count, a form control in a list a
+      // person browses, and a whole row of height before the first person.
+      // A chip says the same with the other filters: on by default, turmeric
+      // while on, and off with a tap.
+      FilterChip(
+        avatar: const Icon(Icons.directions_car_rounded, size: 18),
+        showCheckmark: false,
+        label: Text(strings.directoryTravelsToMe),
+        tooltip: strings.directoryWithinReach,
+        selected: _withinReach,
+        onSelected: (value) => setState(() => _withinReach = value),
+      ),
+      // A hairline between the one switch and the categories, which choose
+      // one of many.
+      Container(
+        width: 1,
+        height: 24,
+        margin: const EdgeInsets.symmetric(horizontal: BrandSizing.spaceXs),
+        color: context.colours.line,
+      ),
       ChoiceChip(
         label: Text(strings.directoryAllWork),
         selected: tag == null,
@@ -213,8 +234,6 @@ class _DirectoryScreenState extends State<DirectoryScreen> {
                     canSortByDistance: here != null,
                     onOrder: (value) => setState(() => _order = value),
                     withinReach: _withinReach,
-                    onWithinReach: (value) =>
-                        setState(() => _withinReach = value),
                   ),
                 ),
 
@@ -266,7 +285,6 @@ class _DirectoryControls extends StatelessWidget {
     required this.canSortByDistance,
     required this.onOrder,
     required this.withinReach,
-    required this.onWithinReach,
   });
 
   final int count;
@@ -274,7 +292,6 @@ class _DirectoryControls extends StatelessWidget {
   final bool canSortByDistance;
   final ValueChanged<DirectoryOrder> onOrder;
   final bool withinReach;
-  final ValueChanged<bool> onWithinReach;
 
   String _label(AppStrings strings, DirectoryOrder value) => switch (value) {
     DirectoryOrder.byName => strings.directoryOrderByName,
@@ -340,40 +357,11 @@ class _DirectoryControls extends StatelessWidget {
           ],
         ),
 
-        // Not a Switch in a settings row: this changes what the list *is*, so
-        // it sits with the list rather than somewhere the hirer has to
-        // remember visiting.
-        Row(
-          children: [
-            Checkbox(
-              value: withinReach,
-              onChanged: (value) => onWithinReach(value ?? true),
-            ),
-            Expanded(
-              child: InkWell(
-                // The checkbox beside it takes keyboard focus; one stop, not
-                // two, for one setting.
-                canRequestFocus: false,
-                onTap: () => onWithinReach(!withinReach),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: BrandSizing.spaceSm,
-                  ),
-                  child: Text(
-                    strings.directoryWithinReach,
-                    style: theme.textTheme.bodyMedium,
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-
         // Only when it is off, and only as a statement of fact. A hirer who
         // widened the net deliberately does not need talking out of it.
         if (!withinReach)
           Padding(
-            padding: const EdgeInsets.only(left: BrandSizing.spaceMd),
+            padding: const EdgeInsets.only(top: BrandSizing.spaceXs),
             child: Text(
               strings.directoryWithinReachOff,
               style: theme.textTheme.labelSmall?.copyWith(

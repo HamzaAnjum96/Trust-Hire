@@ -1361,6 +1361,9 @@ class AppStringsUr extends AppStrings {
   String get directoryWithinReach => 'صرف وہ لوگ جو میرے پاس آتے ہیں';
 
   @override
+  String get directoryTravelsToMe => 'میرے پاس آئیں';
+
+  @override
   String get directoryWithinReachOff =>
       'سب دکھائے جا رہے ہیں، وہ بھی جو اتنی دور نہیں آتے۔';
 

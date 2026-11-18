@@ -1350,6 +1350,9 @@ class AppStringsEn extends AppStrings {
   String get directoryWithinReach => 'Only people who travel to me';
 
   @override
+  String get directoryTravelsToMe => 'Travel to me';
+
+  @override
   String get directoryWithinReachOff =>
       'Showing everyone, including people who do not travel this far.';
 

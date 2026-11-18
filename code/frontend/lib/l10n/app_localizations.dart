@@ -2342,6 +2342,12 @@ abstract class AppStrings {
   /// **'Only people who travel to me'**
   String get directoryWithinReach;
 
+  /// Directory filter chip: only people who travel to the hirer. Short; the tooltip says it in full
+  ///
+  /// In en, this message translates to:
+  /// **'Travel to me'**
+  String get directoryTravelsToMe;
+
   /// No description provided for @directoryWithinReachOff.
   ///
   /// In en, this message translates to:

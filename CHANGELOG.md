@@ -12,6 +12,17 @@ that heading to the version and date, and open a fresh `[Unreleased]`.
 
 ## [Unreleased]
 
+### 0.32.0 — Directory: who comes to you is a chip
+
+#### Changed
+
+- **"Travel to me" is the first of the Directory's filter chips.** It was a
+  checkbox on a line of its own under the count — a form control in a list
+  people browse, and a whole row before the first person. It now leads the
+  chip row, on by default and turmeric while on, set apart from the trade
+  chips by a hairline because it is a switch, not one choice of many. The
+  line saying the list includes everyone still appears when it is off.
+
 ### 0.31.0 — A job's map sits under its area
 
 #### Changed

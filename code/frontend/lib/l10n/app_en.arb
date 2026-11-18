@@ -1025,6 +1025,10 @@
   "directoryOrderByDistance": "Nearest first",
   "directoryOrderByPrice": "Cheapest first",
   "directoryWithinReach": "Only people who travel to me",
+  "directoryTravelsToMe": "Travel to me",
+  "@directoryTravelsToMe": {
+    "description": "Directory filter chip: only people who travel to the hirer. Short; the tooltip says it in full"
+  },
   "directoryWithinReachOff": "Showing everyone, including people who do not travel this far.",
   "directoryNoMatch": "Nothing matches that",
   "directoryNoMatchMessage": "Try fewer words, another kind of work, or turn off \"Only people who travel to me\".",
