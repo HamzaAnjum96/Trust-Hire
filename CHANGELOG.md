@@ -12,6 +12,25 @@ that heading to the version and date, and open a fresh `[Unreleased]`.
 
 ## [Unreleased]
 
+### 0.33.0 — The trade board, tested and fitted to the rail
+
+#### Fixed
+
+- **"General work" broke over two lines on the desktop rail.** The board
+  kept its fares column down to 340px; the rail beside a desktop map gives it
+  348, too little for a trade's name, a count and a fare range side by side.
+  It now drops the column below 350px and puts the fares under the name.
+- **A screen reader could not activate a trade row.** The rows hid their
+  InkWell's semantics behind one spoken sentence and carried no tap action of
+  their own, so activation relied on a pointer landing on the row. The rows,
+  and the *Add a trade* row, now carry the tap themselves.
+
+#### Added
+
+- `test/trade_board_test.dart`: the board's lines (order, double counting,
+  fare ranges, nearest), choosing a trade, the narrow layout, the *Add a
+  trade* row, and each row as its own button.
+
 ### 0.32.0 — Directory: who comes to you is a chip
 
 #### Changed

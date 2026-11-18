@@ -127,12 +127,14 @@ class _TradeBoardState extends State<TradeBoard> {
       ),
       child: ClipRRect(
         borderRadius: BrandRadius.largeAll,
-        // Below about 300px of row there is no room for a fares column beside
-        // a trade's name; the fares move under the name instead, so a name is
-        // never squeezed to one word a line.
+        // Below about 350px of board there is no room for a fares column
+        // beside a trade's name; the fares move under the name instead, so a
+        // name is never squeezed to one word a line. A phone's board is about
+        // 358px; the rail beside a desktop map, 348, where "General work"
+        // broke over two lines at 340.
         child: LayoutBuilder(
           builder: (context, constraints) {
-            final wide = constraints.maxWidth >= 340;
+            final wide = constraints.maxWidth >= 350;
             return Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
@@ -278,6 +280,10 @@ class _TradeRow extends StatelessWidget {
       button: true,
       selected: isSelected,
       label: spoken,
+      // The InkWell's own action is excluded with its text, so the row
+      // carries the tap itself: a screen reader activates the row, not a
+      // point on it.
+      onTap: onTap,
       excludeSemantics: true,
       child: Material(
         color: isSelected ? colours.selection : Colors.transparent,
@@ -380,6 +386,7 @@ class _AddTradeRow extends StatelessWidget {
       container: true,
       button: true,
       label: '${strings.addATrade}, $more',
+      onTap: onTap,
       excludeSemantics: true,
       child: FocusRing(
         child: InkWell(
