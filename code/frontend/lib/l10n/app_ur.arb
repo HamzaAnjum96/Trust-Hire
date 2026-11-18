@@ -651,5 +651,6 @@
   "boardShowAll": "تمام {count} اقسام دکھائیں",
   "boardShowFewer": "کم دکھائیں",
   "jobsNearYouTab": "آپ کے قریب",
-  "settingsSummary": "ظاہری شکل، زبان، AI معاون، ڈیمو"
+  "settingsSummary": "ظاہری شکل، زبان، AI معاون، ڈیمو",
+  "detailFromYou": "آپ سے فاصلہ"
 }

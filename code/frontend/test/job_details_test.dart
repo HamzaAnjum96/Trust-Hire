@@ -206,6 +206,8 @@ void main() {
 
     final spoken = jobWhere(controller, (j) => j.hasVoiceNote);
     await openSheet(tester, controller, media, spoken.id);
+    // Under the ticket since 0.28, so below what the sheet builds at first.
+    await scrollTo(tester, find.byType(VoiceNotePlayer));
     expect(find.byType(VoiceNotePlayer), findsOneWidget);
 
     final written = jobWhere(controller, (j) => !j.hasVoiceNote);
@@ -252,8 +254,10 @@ void main() {
     final (controller, media) = await buildControllers();
 
     final anyJob = controller.jobs.first;
+    // The distance sits in the ticket at the top since 0.29, beside the fare
+    // and when, so the sheet is read where it opens.
     await openSheet(tester, controller, media, anyJob.id);
-    await scrollToBottom(tester);
+    expect(find.text('From you'), findsNothing);
     expect(find.textContaining('away'), findsNothing);
 
     await openSheet(
@@ -263,7 +267,7 @@ void main() {
       anyJob.id,
       viewerLocation: const JobLocation(latitude: 31.60, longitude: 74.40),
     );
-    await scrollToBottom(tester);
+    expect(find.text('From you'), findsOneWidget);
     expect(find.textContaining('away'), findsOneWidget);
   });
 

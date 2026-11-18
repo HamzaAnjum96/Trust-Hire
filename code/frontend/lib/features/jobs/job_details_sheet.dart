@@ -147,7 +147,7 @@ class _Body extends StatelessWidget {
                   ),
                   const SizedBox(width: BrandSizing.spaceSm),
                   // Saving is for finding somebody else's job again; your own
-                  // are already under Activity → Your jobs → Posted.
+                  // are already under Jobs → Your jobs → Posted.
                   if (!mine) _SaveButton(jobId: job.id),
                   _MoreMenu(job: job, mine: mine),
                 ],
@@ -177,10 +177,12 @@ class _Body extends StatelessWidget {
                 ),
               ],
 
-              // The fare is the headline, not one detail among five: it is what a
-              // worker decides on, and what a hirer most wants to see they set.
+              // **The ticket, since 0.28:** what it pays, when, and how far,
+              // side by side, the three facts a worker decides on. When and
+              // where used to sit in a list under the voice note, a scroll
+              // away from the fare they are weighed against.
               const SizedBox(height: BrandSizing.spaceMd),
-              FareTag(job: job, large: true),
+              _Ticket(job: job, now: now, distance: distance),
 
               if (job.hasPhotos) ...[
                 const SizedBox(height: BrandSizing.spaceMd),
@@ -231,11 +233,6 @@ class _Body extends StatelessWidget {
                           .join(' · '),
                     ),
                   _DetailRow(
-                    icon: Icons.schedule_rounded,
-                    label: strings.detailWhen,
-                    value: Format.scheduled(strings, job.scheduledTime, now),
-                  ),
-                  _DetailRow(
                     icon: Icons.place_rounded,
                     label: strings.fieldArea,
                     value: [
@@ -243,7 +240,6 @@ class _Body extends StatelessWidget {
                       // recognises, and the only part that means anything without
                       // a position.
                       ?job.area,
-                      ?distance,
                       Format.radius(strings, job.radiusMetres),
                     ].join(' · '),
                   ),
@@ -434,7 +430,9 @@ class _SaveButton extends StatelessWidget {
           ),
         );
       },
-      icon: Icon(isSaved ? Icons.bookmark_rounded : Icons.bookmark_border_rounded),
+      icon: Icon(
+        isSaved ? Icons.bookmark_rounded : Icons.bookmark_border_rounded,
+      ),
       // Colour is never the only cue: the icon fills as well.
       color: isSaved ? context.colours.text : null,
       tooltip: isSaved ? strings.removeFromSaved : strings.saveThisJob,
@@ -755,7 +753,10 @@ class _MessagesRow extends StatelessWidget {
         onPressed: () => ThreadScreen.open(context, jobId: job.id),
         icon: unread == 0
             ? const Icon(Icons.forum_rounded)
-            : Badge.count(count: unread, child: const Icon(Icons.forum_rounded)),
+            : Badge.count(
+                count: unread,
+                child: const Icon(Icons.forum_rounded),
+              ),
         label: Text(
           unread == 0
               ? strings.openMessages
@@ -763,6 +764,77 @@ class _MessagesRow extends StatelessWidget {
         ),
         style: OutlinedButton.styleFrom(
           minimumSize: const Size.fromHeight(BrandSizing.touchTargetPreferred),
+        ),
+      ),
+    );
+  }
+}
+
+/// The three facts a worker decides on, read across: the fare and what kind
+/// of fare it is, when, and how far from you. One strip with hairlines
+/// between, the same form as a worker's record.
+class _Ticket extends StatelessWidget {
+  const _Ticket({required this.job, required this.now, required this.distance});
+
+  final Job job;
+  final DateTime now;
+  final String? distance;
+
+  @override
+  Widget build(BuildContext context) {
+    final strings = AppStrings.of(context);
+    final theme = Theme.of(context);
+    final colours = context.colours;
+
+    final value = theme.textTheme.bodyLarge?.copyWith(
+      fontWeight: FontWeight.w600,
+    );
+    final label = theme.textTheme.labelSmall?.copyWith(
+      color: colours.textMuted,
+    );
+
+    Widget cell(String text, String caption) => Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        Text(text, style: value, maxLines: 2),
+        const SizedBox(height: 2),
+        Text(caption, style: label),
+      ],
+    );
+
+    return Container(
+      padding: const EdgeInsets.all(BrandSizing.spaceSm + 4),
+      decoration: BoxDecoration(
+        color: colours.tint,
+        borderRadius: BrandRadius.mediumAll,
+      ),
+      child: IntrinsicHeight(
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Expanded(
+              flex: 4,
+              child: Align(
+                alignment: AlignmentDirectional.bottomStart,
+                child: FareTag(job: job, large: true),
+              ),
+            ),
+            const VerticalDivider(width: BrandSizing.spaceMd),
+            Expanded(
+              flex: 3,
+              child: cell(
+                Format.scheduled(strings, job.scheduledTime, now),
+                strings.detailWhen,
+              ),
+            ),
+            // How far, only when it is known: the area itself is in the
+            // details below, and saying it twice tells nobody anything.
+            if (distance != null) ...[
+              const VerticalDivider(width: BrandSizing.spaceMd),
+              Expanded(flex: 3, child: cell(distance!, strings.detailFromYou)),
+            ],
+          ],
         ),
       ),
     );

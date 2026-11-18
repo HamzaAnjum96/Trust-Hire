@@ -2448,4 +2448,7 @@ class AppStringsEn extends AppStrings {
   @override
   String get settingsSummary =>
       'Appearance, language, the AI assistant, the demo';
+
+  @override
+  String get detailFromYou => 'From you';
 }

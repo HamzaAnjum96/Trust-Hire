@@ -4009,6 +4009,12 @@ abstract class AppStrings {
   /// In en, this message translates to:
   /// **'Appearance, language, the AI assistant, the demo'**
   String get settingsSummary;
+
+  /// Label under the distance in a job's ticket: how far it is from you.
+  ///
+  /// In en, this message translates to:
+  /// **'From you'**
+  String get detailFromYou;
 }
 
 class _AppStringsDelegate extends LocalizationsDelegate<AppStrings> {

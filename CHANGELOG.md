@@ -12,6 +12,18 @@ that heading to the version and date, and open a fresh `[Unreleased]`.
 
 ## [Unreleased]
 
+### 0.29.0 — The job sheet's ticket
+
+#### Changed
+
+- **A job's sheet opens on a ticket: fare, when, and how far, side by side.**
+  The fare used to stand alone at the top, with when the job is and how far
+  away it is scattered through the rows beneath. They are the three things a
+  worker decides on, so they now share one tinted strip under the title, each
+  with its caption. The separate *When* row is gone, and *Area* no longer
+  repeats the distance. Without the viewer's position the ticket shows fare
+  and when only, rather than a blank cell.
+
 ### 0.28.0 — Settings get a screen of their own
 
 #### Changed

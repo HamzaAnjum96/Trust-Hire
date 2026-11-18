@@ -2459,4 +2459,7 @@ class AppStringsUr extends AppStrings {
 
   @override
   String get settingsSummary => 'ظاہری شکل، زبان، AI معاون، ڈیمو';
+
+  @override
+  String get detailFromYou => 'آپ سے فاصلہ';
 }
