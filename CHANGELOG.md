@@ -12,6 +12,16 @@ that heading to the version and date, and open a fresh `[Unreleased]`.
 
 ## [Unreleased]
 
+### 0.34.0 — One page transition everywhere
+
+#### Changed
+
+- **A pushed screen fades forwards on every OS.** The theme set the
+  transition for Android and iOS only, and the app ships as a website, where
+  the browser reports the visitor's OS: on Windows and Linux a new screen
+  zoomed in, on a Mac it slid across like an iPhone's. Now one transition,
+  whatever the computer, and `test/design_rules_test.dart` holds it.
+
 ### 0.33.0 — The trade board, tested and fitted to the rail
 
 #### Fixed

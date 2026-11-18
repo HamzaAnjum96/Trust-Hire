@@ -1,6 +1,8 @@
 import 'dart:io';
 
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:trust_hire/core/theme.dart';
 
 /// The design rules that can be checked by reading the source.
 ///
@@ -174,6 +176,20 @@ void main() {
     ]) {
       final source = File(path).readAsStringSync();
       expect(source.contains(RegExp(r'\bCard\(')), isFalse, reason: path);
+    }
+  });
+
+  test('one page transition, whatever OS the browser reports', () {
+    // The site is the app, and a browser reports the visitor's OS: before
+    // 0.34 a screen zoomed in on Windows, slid on a Mac, faded on a phone.
+    for (final theme in [BrandTheme.light, BrandTheme.dark]) {
+      for (final platform in TargetPlatform.values) {
+        expect(
+          theme.pageTransitionsTheme.builders[platform],
+          isA<FadeForwardsPageTransitionsBuilder>(),
+          reason: platform.name,
+        );
+      }
     }
   });
 }

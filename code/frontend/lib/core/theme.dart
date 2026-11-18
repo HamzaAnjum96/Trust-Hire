@@ -451,11 +451,15 @@ class BrandTheme {
       ),
 
       // Section 28 — transitions communicate the change and get out of the
-      // way. A fade-forward on both platforms, no bounce or parallax.
-      pageTransitionsTheme: const PageTransitionsTheme(
+      // way. A fade-forward, no bounce or parallax.
+      pageTransitionsTheme: PageTransitionsTheme(
+        // Every platform, since 0.34. The app ships as a website, and a
+        // browser reports the visitor's OS: on Windows and Linux a pushed
+        // screen zoomed in, on a Mac it slid across like an iPhone's, and on
+        // a phone it faded forwards. One app, one way of going deeper.
         builders: <TargetPlatform, PageTransitionsBuilder>{
-          TargetPlatform.android: FadeForwardsPageTransitionsBuilder(),
-          TargetPlatform.iOS: FadeForwardsPageTransitionsBuilder(),
+          for (final platform in TargetPlatform.values)
+            platform: const FadeForwardsPageTransitionsBuilder(),
         },
       ),
     );
