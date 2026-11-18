@@ -2456,4 +2456,7 @@ class AppStringsUr extends AppStrings {
 
   @override
   String get jobsNearYouTab => 'آپ کے قریب';
+
+  @override
+  String get settingsSummary => 'ظاہری شکل، زبان، AI معاون، ڈیمو';
 }

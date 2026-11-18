@@ -650,5 +650,6 @@
   "fareRange": "{low}–{high}",
   "boardShowAll": "تمام {count} اقسام دکھائیں",
   "boardShowFewer": "کم دکھائیں",
-  "jobsNearYouTab": "آپ کے قریب"
+  "jobsNearYouTab": "آپ کے قریب",
+  "settingsSummary": "ظاہری شکل، زبان، AI معاون، ڈیمو"
 }

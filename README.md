@@ -524,7 +524,7 @@ code/frontend/
 │   │   ├── assistant/    ← "Ask Trust Hire": word list, searches, engine
 │   │   ├── ai/           ← switching the AI on, and its consent
 │   │   ├── account/      ← the demo account switcher
-│   │   ├── profile/      ← role, trades, and the app's settings
+│   │   ├── profile/      ← who you are, role, trades; Settings one row away
 │   │   └── onboarding/   ← first-run intro and permission priming
 │   ├── l10n/         ← app_en.arb, app_ur.arb (generated AppStrings)
 │   ├── models/       ← Job, JobTag, Bid, Wallet, Rating, DemoAccount,

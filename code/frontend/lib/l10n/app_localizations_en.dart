@@ -2444,4 +2444,8 @@ class AppStringsEn extends AppStrings {
 
   @override
   String get jobsNearYouTab => 'Near you';
+
+  @override
+  String get settingsSummary =>
+      'Appearance, language, the AI assistant, the demo';
 }

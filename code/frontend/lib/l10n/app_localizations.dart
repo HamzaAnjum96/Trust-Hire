@@ -4003,6 +4003,12 @@ abstract class AppStrings {
   /// In en, this message translates to:
   /// **'Near you'**
   String get jobsNearYouTab;
+
+  /// Under the Settings row on the profile: what is in there.
+  ///
+  /// In en, this message translates to:
+  /// **'Appearance, language, the AI assistant, the demo'**
+  String get settingsSummary;
 }
 
 class _AppStringsDelegate extends LocalizationsDelegate<AppStrings> {

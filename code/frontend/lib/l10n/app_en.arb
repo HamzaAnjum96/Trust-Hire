@@ -1896,5 +1896,9 @@
   "jobsNearYouTab": "Near you",
   "@jobsNearYouTab": {
     "description": "Tab on Jobs: work near you (the trade board and the map)."
+  },
+  "settingsSummary": "Appearance, language, the AI assistant, the demo",
+  "@settingsSummary": {
+    "description": "Under the Settings row on the profile: what is in there."
   }
 }

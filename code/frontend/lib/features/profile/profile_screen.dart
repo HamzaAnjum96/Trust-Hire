@@ -49,7 +49,6 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final strings = AppStrings.of(context);
-    final settings = context.watch<SettingsController>();
     final isAdmin = context.watch<AccountController>().active.isAdmin;
 
     // The bar lines up with the column under it; see [readableInset].
@@ -94,115 +93,21 @@ class ProfileScreen extends StatelessWidget {
                   const _RolePicker(),
                 ],
 
+                // Settings are one row away, not the bottom half of this
+                // screen: appearance, language, the AI and the demo's tools
+                // used to push the person's own work out of view (0.27).
                 const SizedBox(height: BrandSizing.spaceLg),
                 SettingsGroup(
-                  title: strings.navSettings,
                   children: [
-                    GroupPadding(
-                      child: _Labelled(
-                        label: strings.appearance,
-                        child: SegmentedButton<ThemeMode>(
-                          segments: [
-                            ButtonSegment(
-                              value: ThemeMode.system,
-                              label: Text(strings.themeSystem),
-                              icon: const Icon(Icons.brightness_auto_rounded),
-                            ),
-                            ButtonSegment(
-                              value: ThemeMode.light,
-                              label: Text(strings.themeLight),
-                              icon: const Icon(Icons.light_mode_rounded),
-                            ),
-                            ButtonSegment(
-                              value: ThemeMode.dark,
-                              label: Text(strings.themeDark),
-                              icon: const Icon(Icons.dark_mode_rounded),
-                            ),
-                          ],
-                          selected: {settings.themeMode},
-                          onSelectionChanged: (selection) =>
-                              settings.setThemeMode(selection.first),
-                        ),
-                      ),
-                    ),
-                    GroupPadding(
-                      child: _Labelled(
-                        label: strings.language,
-                        child: SegmentedButton<String>(
-                          segments: [
-                            ButtonSegment(
-                              value: '',
-                              label: Text(strings.themeSystem),
-                              icon: const Icon(Icons.translate_rounded),
-                            ),
-                            for (final locale
-                                in SettingsController.supportedLocales)
-                              ButtonSegment(
-                                value: locale.languageCode,
-                                // Each language names itself, so someone who
-                                // cannot read the current one can still find
-                                // their own.
-                                label: Text(
-                                  strings.localeName == locale.languageCode
-                                      ? strings.languageName
-                                      : _languageName(locale.languageCode),
-                                ),
-                              ),
-                          ],
-                          selected: {settings.locale?.languageCode ?? ''},
-                          onSelectionChanged: (selection) => settings.setLocale(
-                            selection.first.isEmpty
-                                ? null
-                                : Locale(selection.first),
-                          ),
-                        ),
-                      ),
+                    ListTile(
+                      leading: const Icon(Icons.settings_rounded),
+                      title: Text(strings.navSettings),
+                      subtitle: Text(strings.settingsSummary),
+                      trailing: const Icon(Icons.chevron_right_rounded),
+                      onTap: () => SettingsScreen.open(context),
                     ),
                   ],
                 ),
-
-                const SizedBox(height: BrandSizing.spaceLg),
-                const AiSettingsSection(),
-
-                // The proof-of-concept small print, at the foot rather than the
-                // head. It used to be the first thing on this screen, which put
-                // a disclaimer above the person's own name.
-                const SizedBox(height: BrandSizing.spaceLg),
-                SettingsGroup(
-                  title: strings.profileThisDemo,
-                  caption: strings.settingsStorageNotice,
-                  children: [
-                    ListTile(
-                      leading: const Icon(Icons.slideshow_rounded),
-                      title: Text(strings.showIntroAgain),
-                      onTap: () async {
-                        final messenger = ScaffoldMessenger.of(context);
-                        await settings.resetIntro();
-                        messenger.showSnackBar(
-                          SnackBar(content: Text(strings.introReset)),
-                        );
-                      },
-                    ),
-                    ListTile(
-                      // The colour is on the icon only: Error Red is too dark to
-                      // read as text on the dark theme's surfaces. The words say
-                      // what it does, and a confirmation says it again.
-                      leading: Icon(
-                        Icons.restart_alt_rounded,
-                        color: context.colours.bad,
-                      ),
-                      // Section 21 — explicit label, never "Confirm".
-                      title: Text(strings.restoreSeedData),
-                      subtitle: Text(strings.restoreSeedExplanation),
-                      onTap: () => _confirmReset(context),
-                    ),
-                  ],
-                ),
-
-                const SizedBox(height: BrandSizing.spaceLg),
-                const _BackendSection(),
-
-                const _VersionLine(),
               ],
             ),
           ),
@@ -218,7 +123,7 @@ class ProfileScreen extends StatelessWidget {
     _ => 'English',
   };
 
-  Future<void> _confirmReset(BuildContext context) async {
+  static Future<void> _confirmReset(BuildContext context) async {
     final strings = AppStrings.of(context);
     final controller = context.read<JobController>();
     final messenger = ScaffoldMessenger.of(context);
@@ -766,6 +671,152 @@ class _Labelled extends StatelessWidget {
         const SizedBox(height: BrandSizing.spaceSm),
         child,
       ],
+    );
+  }
+}
+
+/// Appearance, language, the AI assistant, and the demo's own tools.
+///
+/// **Its own screen since 0.27.** They were the bottom half of the profile,
+/// which put a light/dark switch and a "pretend there is no connection"
+/// toggle between a person and their own work. Now the profile is about the
+/// person, and these are one row away.
+class SettingsScreen extends StatelessWidget {
+  const SettingsScreen({super.key});
+
+  static Future<void> open(BuildContext context) => Navigator.of(
+    context,
+  ).push(MaterialPageRoute<void>(builder: (_) => const SettingsScreen()));
+
+  @override
+  Widget build(BuildContext context) {
+    final strings = AppStrings.of(context);
+    final settings = context.watch<SettingsController>();
+
+    return Scaffold(
+      appBar: AppBar(title: Text(strings.navSettings)),
+      body: ReadableWidth(
+        child: ListView(
+          padding: const EdgeInsets.fromLTRB(
+            BrandSizing.spaceMd,
+            BrandSizing.spaceSm,
+            BrandSizing.spaceMd,
+            BrandSizing.spaceXl,
+          ),
+          children: [
+            SettingsGroup(
+              title: strings.navSettings,
+              children: [
+                GroupPadding(
+                  child: _Labelled(
+                    label: strings.appearance,
+                    child: SegmentedButton<ThemeMode>(
+                      segments: [
+                        ButtonSegment(
+                          value: ThemeMode.system,
+                          label: Text(strings.themeSystem),
+                          icon: const Icon(Icons.brightness_auto_rounded),
+                        ),
+                        ButtonSegment(
+                          value: ThemeMode.light,
+                          label: Text(strings.themeLight),
+                          icon: const Icon(Icons.light_mode_rounded),
+                        ),
+                        ButtonSegment(
+                          value: ThemeMode.dark,
+                          label: Text(strings.themeDark),
+                          icon: const Icon(Icons.dark_mode_rounded),
+                        ),
+                      ],
+                      selected: {settings.themeMode},
+                      onSelectionChanged: (selection) =>
+                          settings.setThemeMode(selection.first),
+                    ),
+                  ),
+                ),
+                GroupPadding(
+                  child: _Labelled(
+                    label: strings.language,
+                    child: SegmentedButton<String>(
+                      segments: [
+                        ButtonSegment(
+                          value: '',
+                          label: Text(strings.themeSystem),
+                          icon: const Icon(Icons.translate_rounded),
+                        ),
+                        for (final locale
+                            in SettingsController.supportedLocales)
+                          ButtonSegment(
+                            value: locale.languageCode,
+                            // Each language names itself, so someone who
+                            // cannot read the current one can still find
+                            // their own.
+                            label: Text(
+                              strings.localeName == locale.languageCode
+                                  ? strings.languageName
+                                  : ProfileScreen._languageName(
+                                      locale.languageCode,
+                                    ),
+                            ),
+                          ),
+                      ],
+                      selected: {settings.locale?.languageCode ?? ''},
+                      onSelectionChanged: (selection) => settings.setLocale(
+                        selection.first.isEmpty
+                            ? null
+                            : Locale(selection.first),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+
+            const SizedBox(height: BrandSizing.spaceLg),
+            const AiSettingsSection(),
+
+            // The proof-of-concept small print, at the foot rather than the
+            // head. It used to be the first thing on this screen, which put
+            // a disclaimer above the person's own name.
+            const SizedBox(height: BrandSizing.spaceLg),
+            SettingsGroup(
+              title: strings.profileThisDemo,
+              caption: strings.settingsStorageNotice,
+              children: [
+                ListTile(
+                  leading: const Icon(Icons.slideshow_rounded),
+                  title: Text(strings.showIntroAgain),
+                  onTap: () async {
+                    final messenger = ScaffoldMessenger.of(context);
+                    await settings.resetIntro();
+                    messenger.showSnackBar(
+                      SnackBar(content: Text(strings.introReset)),
+                    );
+                  },
+                ),
+                ListTile(
+                  // The colour is on the icon only: Error Red is too dark to
+                  // read as text on the dark theme's surfaces. The words say
+                  // what it does, and a confirmation says it again.
+                  leading: Icon(
+                    Icons.restart_alt_rounded,
+                    color: context.colours.bad,
+                  ),
+                  // Section 21 — explicit label, never "Confirm".
+                  title: Text(strings.restoreSeedData),
+                  subtitle: Text(strings.restoreSeedExplanation),
+                  onTap: () => ProfileScreen._confirmReset(context),
+                ),
+              ],
+            ),
+
+            const SizedBox(height: BrandSizing.spaceLg),
+            const _BackendSection(),
+
+            const _VersionLine(),
+          ],
+        ),
+      ),
     );
   }
 }

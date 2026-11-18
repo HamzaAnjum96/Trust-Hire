@@ -12,6 +12,16 @@ that heading to the version and date, and open a fresh `[Unreleased]`.
 
 ## [Unreleased]
 
+### 0.28.0 — Settings get a screen of their own
+
+#### Changed
+
+- **Profile is about the person.** Appearance, language, the AI assistant,
+  the demo's tools, the backend switch and the version moved to a *Settings*
+  screen, one row at the foot of the profile. They were its bottom half, so a
+  light/dark switch and "pretend there is no connection" sat between a person
+  and their own work.
+
 ### 0.27.0 — The tabs: Your jobs on Jobs, Activity becomes the Inbox
 
 #### Changed

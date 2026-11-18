@@ -150,11 +150,11 @@ void main() {
     expect(find.byType(AccountCard), findsOneWidget);
     expect(find.text('What brings you here'), findsOneWidget);
 
-    // Scrolled far enough to be about *order* rather than about how tall the
-    // list happens to be this sprint. A fixed drag makes this test fail every
-    // time the profile grows a row, which teaches whoever is looking at it to
-    // nudge the number rather than to check the claim.
-    await tester.scrollUntilVisible(find.text('Appearance'), 200);
+    // The preferences are one row away since 0.27, on their own screen, so
+    // they never push a person's own work out of view.
+    expect(find.text('Appearance'), findsNothing);
+    await tester.scrollUntilVisible(find.text('Settings'), 200);
+    await tester.tap(find.text('Settings'));
     await settle(tester);
     expect(find.text('Appearance'), findsOneWidget);
   });
