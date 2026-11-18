@@ -202,6 +202,7 @@ void main() {
     testWidgets('a new worker is told why the map is quieter', (tester) async {
       final store = await LocalStore.open();
       await (SettingsController(store)..load()).markIntroSeen();
+      await store.writeFlag(StoreKeys.jobsOnMap, true);
 
       await tester.pumpWidget(TrustHireApp(store: store));
       await settle(tester);
@@ -214,6 +215,7 @@ void main() {
     testWidgets('adding a trade puts those jobs back', (tester) async {
       final store = await LocalStore.open();
       await (SettingsController(store)..load()).markIntroSeen();
+      await store.writeFlag(StoreKeys.jobsOnMap, true);
 
       await tester.pumpWidget(TrustHireApp(store: store));
       await settle(tester);
@@ -238,6 +240,7 @@ void main() {
     testWidgets('a hirer is not shown the trades prompt', (tester) async {
       final store = await LocalStore.open();
       await (SettingsController(store)..load()).markIntroSeen();
+      await store.writeFlag(StoreKeys.jobsOnMap, true);
       await (ProfileController(store)..load()).setRole(UserRole.hirer);
 
       await tester.pumpWidget(TrustHireApp(store: store));

@@ -38,6 +38,7 @@ void main() {
   Future<LocalStore> readyStore() async {
     final store = await LocalStore.open();
     await (SettingsController(store)..load()).markIntroSeen();
+    await store.writeFlag(StoreKeys.jobsOnMap, true);
     return store;
   }
 
@@ -142,7 +143,12 @@ void main() {
       await settle(tester);
       expect(find.textContaining('Set prices, no haggling'), findsOneWidget);
 
-      await tester.tap(find.text('Jobs'));
+      await tester.tap(
+        find.descendant(
+          of: find.byType(NavigationRail),
+          matching: find.text('Jobs'),
+        ),
+      );
       await settle(tester);
       expect(find.byType(JobMap), findsOneWidget);
 
@@ -297,9 +303,6 @@ void main() {
     testWidgets('job rows stop stretching on a wide window', (tester) async {
       await tester.useExpandedSurface();
       await tester.pumpWidget(TrustHireApp(store: await readyStore()));
-      await settle(tester);
-
-      await tester.tap(find.text('Jobs'));
       await settle(tester);
 
       final rows = find.byType(JobRow);

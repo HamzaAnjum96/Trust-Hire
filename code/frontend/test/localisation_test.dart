@@ -260,6 +260,7 @@ void main() {
       // The intro is covered in onboarding_test; these assert the
       // shell that follows it.
       await (SettingsController(store)..load()).markIntroSeen();
+      await store.writeFlag(StoreKeys.jobsOnMap, true);
 
       await tester.pumpWidget(TrustHireApp(store: store));
       await settle(tester);
@@ -278,6 +279,7 @@ void main() {
       // The intro is covered in onboarding_test; these assert the
       // shell that follows it.
       await (SettingsController(store)..load()).markIntroSeen();
+      await store.writeFlag(StoreKeys.jobsOnMap, true);
       final settings = SettingsController(store)..load();
       await settings.setLocale(const Locale('ur'));
 
@@ -339,6 +341,7 @@ void main() {
       // The intro is covered in onboarding_test; these assert the
       // shell that follows it.
       await (SettingsController(store)..load()).markIntroSeen();
+      await store.writeFlag(StoreKeys.jobsOnMap, true);
       await SettingsController(store).setLocale(const Locale('ur'));
 
       await tester.pumpWidget(TrustHireApp(store: store));
@@ -355,6 +358,7 @@ void main() {
       Future<TextTheme> textThemeIn(Locale locale) async {
         final store = await LocalStore.open();
         await (SettingsController(store)..load()).markIntroSeen();
+        await store.writeFlag(StoreKeys.jobsOnMap, true);
         await SettingsController(store).setLocale(locale);
         // A fresh app each time: pumping the same widget type would keep the
         // first one's settings.
@@ -382,6 +386,7 @@ void main() {
       // The intro is covered in onboarding_test; these assert the
       // shell that follows it.
       await (SettingsController(store)..load()).markIntroSeen();
+      await store.writeFlag(StoreKeys.jobsOnMap, true);
       final settings = SettingsController(store)..load();
 
       expect(settings.locale, isNull);
@@ -392,6 +397,7 @@ void main() {
       // The intro is covered in onboarding_test; these assert the
       // shell that follows it.
       await (SettingsController(store)..load()).markIntroSeen();
+      await store.writeFlag(StoreKeys.jobsOnMap, true);
       await (SettingsController(store)..load()).setLocale(const Locale('ur'));
 
       final reloaded = SettingsController(store)..load();
@@ -403,6 +409,7 @@ void main() {
       // The intro is covered in onboarding_test; these assert the
       // shell that follows it.
       await (SettingsController(store)..load()).markIntroSeen();
+      await store.writeFlag(StoreKeys.jobsOnMap, true);
       final settings = SettingsController(store)..load();
 
       await settings.setLocale(const Locale('ur'));

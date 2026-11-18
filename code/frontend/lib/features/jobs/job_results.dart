@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../core/motion.dart';
 import '../../core/tokens.dart';
 import '../../models/job.dart';
 import '../../services/media_store.dart';
@@ -29,6 +28,7 @@ class JobResults extends StatelessWidget {
     required this.visible,
     required this.filters,
     required this.viewerLocation,
+    this.header,
     this.bottomPadding = BrandSizing.spaceXl,
   });
 
@@ -43,6 +43,9 @@ class JobResults extends StatelessWidget {
 
   /// Room under the last row for whatever floats over the bottom of the list.
   final double bottomPadding;
+
+  /// Scrolls with the rows, above them: the trade board on Jobs.
+  final Widget? header;
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +74,7 @@ class JobResults extends StatelessWidget {
     }
 
     if (visible.isEmpty) {
-      return EmptyView(
+      final empty = EmptyView(
         icon: Icons.search_off_rounded,
         title: strings.noJobsMatch,
         message: strings.tryWiderArea,
@@ -80,18 +83,32 @@ class JobResults extends StatelessWidget {
           child: Text(strings.clearFilters),
         ),
       );
+      // The board stays, so the way back to every trade is still on screen.
+      if (header == null) return empty;
+      return ListView(
+        padding: EdgeInsets.only(bottom: bottomPadding),
+        children: [header!, empty],
+      );
     }
 
     final now = DateTime.now();
 
+    final head = header;
+    final offset = head == null ? 0 : 1;
+
     return ListView.separated(
       padding: EdgeInsets.only(top: BrandSizing.spaceXs, bottom: bottomPadding),
-      itemCount: visible.length,
-      separatorBuilder: (_, _) => const Divider(indent: BrandSizing.spaceMd),
-      itemBuilder: (context, index) => SettleIn(
-        // A short stagger so the list assembles rather than snapping in.
-        delay: Duration(milliseconds: (index * 40).clamp(0, 240)),
-        child: JobRow(
+      itemCount: visible.length + offset,
+      separatorBuilder: (_, index) => head != null && index == 0
+          ? const Divider(height: 1)
+          : const Divider(indent: BrandSizing.spaceMd),
+      itemBuilder: (context, i) {
+        if (head != null && i == 0) return head;
+        final index = i - offset;
+        // No entrance stagger since 0.26: it replayed every time a filter or
+        // the trade board narrowed the list, making people wait to read the
+        // list they had just asked for.
+        return JobRow(
           job: visible[index],
           now: now,
           viewerLocation: viewerLocation,
@@ -101,8 +118,8 @@ class JobResults extends StatelessWidget {
             mediaStore: context.read<MediaStore>(),
             viewerLocation: viewerLocation,
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }

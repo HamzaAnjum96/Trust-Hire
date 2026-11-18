@@ -633,9 +633,12 @@ action and four labelled destinations are about 450px of rail — and on a phone
 held sideways the last destination fell below the fold with nothing on screen
 to say the rail scrolled. `LayoutSize.fromSize` is where that lives.
 
-**Navigation (since 0.23): four destinations and one action.** *Jobs* is the
-map and the list of the same results, switched by the pill at the bottom of
-the screen; on a desktop both are on screen at once. *Directory*, *Activity*
+**Navigation (since 0.23): four destinations and one action.** *Jobs* opens
+on the **trade board** (since 0.26): one row per trade near you with how many
+jobs, the nearest and the fares, then the jobs themselves; tapping a trade
+narrows the list and the map's pins to it. The map is the other view, on the
+pill at the bottom, and Jobs remembers which you left it on. On a desktop the
+map and the board-headed list are on screen at once. *Directory*, *Activity*
 and *Profile* follow. **Post a job** is a button, never a destination: the
 middle slot of the bottom bar on a phone, the first thing under the product's
 name on the rail. Activity holds *Updates*, *Messages* and *Your jobs*, and

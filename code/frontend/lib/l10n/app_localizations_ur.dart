@@ -2415,4 +2415,42 @@ class AppStringsUr extends AppStrings {
   @override
   String get fareAiSetAside =>
       'AI کا اندازہ ملتے جلتے کاموں پر مبنی نہیں تھا، اس لیے یہ انہی سے نکالا گیا ہے۔';
+
+  @override
+  String get workNearYou => 'آپ کے قریب کام';
+
+  @override
+  String get boardTrade => 'کام کی قسم';
+
+  @override
+  String get boardJobs => 'کام';
+
+  @override
+  String get boardFares => 'کرایے';
+
+  @override
+  String nearestAt(String distance) {
+    return 'قریب ترین $distance';
+  }
+
+  @override
+  String get boardHint => 'صرف اس کے کام دیکھنے کے لیے کام کی قسم پر ٹیپ کریں۔';
+
+  @override
+  String boardShowing(String trade) {
+    return 'صرف $trade دکھایا جا رہا ہے۔ سب کے لیے دوبارہ ٹیپ کریں۔';
+  }
+
+  @override
+  String fareRange(String low, String high) {
+    return '$low–$high';
+  }
+
+  @override
+  String boardShowAll(int count) {
+    return 'تمام $count اقسام دکھائیں';
+  }
+
+  @override
+  String get boardShowFewer => 'کم دکھائیں';
 }

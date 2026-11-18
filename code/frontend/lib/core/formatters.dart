@@ -29,6 +29,14 @@ class Format {
     return strings.rupees(grouped);
   }
 
+  /// A range of fares, "Rs. 1,500–7,000": the currency once, the figures
+  /// grouped in the reader's language. One figure when the ends meet.
+  static String fareRange(AppStrings strings, int low, int high) {
+    if (low == high) return fare(strings, low);
+    final grouped = NumberFormat.decimalPattern(_localeOf(strings));
+    return strings.fareRange(fare(strings, low), grouped.format(high));
+  }
+
   /// Distance from the viewer to a job, phrased approximately.
   static String distance(AppStrings strings, double metres) {
     if (metres < 100) return strings.veryClose;

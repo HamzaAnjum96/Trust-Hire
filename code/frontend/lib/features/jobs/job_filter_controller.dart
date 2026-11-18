@@ -72,6 +72,14 @@ class JobFilterController extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Shows only [tag], as the trade board does; choosing it again shows
+  /// every trade.
+  void selectOnlyTag(JobTag tag) {
+    final only = _filter.tags.length == 1 && _filter.tags.contains(tag);
+    _filter = _filter.copyWith(tags: only ? <JobTag>{} : {tag});
+    notifyListeners();
+  }
+
   void clear() {
     if (!_filter.isActive) return;
     _filter = const JobFilter();
@@ -89,4 +97,15 @@ class JobFilterController extends ChangeNotifier {
     strings: strings,
     from: from,
   );
+
+  /// The same, without the trade filter: what the trade board counts, so its
+  /// numbers answer "how much of each" whichever trade is chosen.
+  List<Job> applyIgnoringTrades(
+    List<Job> jobs, {
+    required AppStrings strings,
+    DateTime? now,
+    JobLocation? from,
+  }) => _filter
+      .copyWith(tags: const <JobTag>{})
+      .apply(jobs, now: now ?? DateTime.now(), strings: strings, from: from);
 }

@@ -37,6 +37,7 @@ void main() {
 
     final store = await LocalStore.open();
     await (SettingsController(store)..load()).markIntroSeen();
+    await store.writeFlag(StoreKeys.jobsOnMap, true);
     await tester.pumpWidget(TrustHireApp(store: store));
     await settle(tester);
   }

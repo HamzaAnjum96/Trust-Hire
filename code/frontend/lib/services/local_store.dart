@@ -132,6 +132,10 @@ class StoreKeys {
   /// Set once the worker has closed the "add a trade" notice. Per account.
   static const tradesNoticeDismissed = 'trust_hire.trades_notice_dismissed';
 
+  /// Whether Jobs last showed the map rather than the board, so it opens the
+  /// way the person left it. Unset, it opens on the board (0.26).
+  static const jobsOnMap = 'trust_hire.jobs_on_map';
+
   /// Every directory listing — subscription, service menu, credentials and
   /// service area — as a JSON list. Shared rather than per account: a
   /// directory only one person can see is not a directory.
@@ -215,6 +219,7 @@ class StoreKeys {
     workerProfile,
     activeAccount,
     tradesNoticeDismissed,
+    jobsOnMap,
     directory,
     auditLog,
     accountReviews,

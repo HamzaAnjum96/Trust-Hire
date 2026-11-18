@@ -1828,5 +1828,69 @@
   "fareAiSetAside": "The AI's figure was not based on similar jobs, so this one was worked out from them instead.",
   "@fareAiSetAside": {
     "description": "The AI answered without looking at the evidence, or far outside it; the arithmetic answered"
+  },
+  "workNearYou": "Work near you",
+  "@workNearYou": {
+    "description": "Heading over the trade board on Jobs."
+  },
+  "boardTrade": "Trade",
+  "@boardTrade": {
+    "description": "Column heading on the trade board: the kind of work."
+  },
+  "boardJobs": "Jobs",
+  "@boardJobs": {
+    "description": "Column heading on the trade board: how many open jobs near you."
+  },
+  "boardFares": "Fares",
+  "@boardFares": {
+    "description": "Column heading on the trade board: the range of fares."
+  },
+  "nearestAt": "Nearest {distance}",
+  "@nearestAt": {
+    "description": "Under a trade on the board: how far the closest job is.",
+    "placeholders": {
+      "distance": {
+        "type": "String",
+        "example": "1.2 km"
+      }
+    }
+  },
+  "boardHint": "Tap a trade to see only its jobs.",
+  "@boardHint": {
+    "description": "Under the board heading when no trade is chosen."
+  },
+  "boardShowing": "Showing {trade} only. Tap it again for every trade.",
+  "@boardShowing": {
+    "description": "Under the board heading when one trade is chosen.",
+    "placeholders": {
+      "trade": {
+        "type": "String"
+      }
+    }
+  },
+  "fareRange": "{low}–{high}",
+  "@fareRange": {
+    "description": "A range of fares, the second without the currency.",
+    "placeholders": {
+      "low": {
+        "type": "String"
+      },
+      "high": {
+        "type": "String"
+      }
+    }
+  },
+  "boardShowAll": "Show all {count} trades",
+  "@boardShowAll": {
+    "description": "Last row of the trade board when it shows only the busiest trades.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "boardShowFewer": "Show fewer",
+  "@boardShowFewer": {
+    "description": "Collapses the trade board back to the busiest trades."
   }
 }

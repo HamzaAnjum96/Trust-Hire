@@ -53,6 +53,7 @@ void main() {
     // have run, which is exactly why the bug survived a green suite.
     final store = await LocalStore.open();
     await (SettingsController(store)..load()).markIntroSeen();
+    await store.writeFlag(StoreKeys.jobsOnMap, true);
 
     await tester.useCompactSurface();
     await tester.pumpWidget(TrustHireApp(store: store));
@@ -71,6 +72,7 @@ void main() {
     // The intro is covered in onboarding_test; these assert the
     // shell that follows it.
     await (SettingsController(store)..load()).markIntroSeen();
+    await store.writeFlag(StoreKeys.jobsOnMap, true);
 
     await tester.useCompactSurface();
     await tester.pumpWidget(TrustHireApp(store: store));
@@ -80,7 +82,13 @@ void main() {
     // the map and the list are one destination, Jobs.
     expect(find.byType(NavigationBar), findsOneWidget);
     expect(find.byType(NavigationRail), findsNothing);
-    expect(find.text('Jobs'), findsOneWidget);
+    expect(
+      find.descendant(
+        of: find.byType(NavigationBar),
+        matching: find.text('Jobs'),
+      ),
+      findsOneWidget,
+    );
     expect(find.text('Directory'), findsOneWidget);
     expect(find.text('Activity'), findsOneWidget);
     expect(find.text('Profile'), findsOneWidget);
@@ -104,6 +112,7 @@ void main() {
     // The intro is covered in onboarding_test; these assert the
     // shell that follows it.
     await (SettingsController(store)..load()).markIntroSeen();
+    await store.writeFlag(StoreKeys.jobsOnMap, true);
 
     await tester.useCompactSurface();
     await tester.pumpWidget(TrustHireApp(store: store));
@@ -150,6 +159,7 @@ void main() {
     // The intro is covered in onboarding_test; these assert the
     // shell that follows it.
     await (SettingsController(store)..load()).markIntroSeen();
+    await store.writeFlag(StoreKeys.jobsOnMap, true);
 
     await tester.useCompactSurface();
     await tester.pumpWidget(TrustHireApp(store: store));
@@ -166,6 +176,7 @@ void main() {
     // The intro is covered in onboarding_test; these assert the
     // shell that follows it.
     await (SettingsController(store)..load()).markIntroSeen();
+    await store.writeFlag(StoreKeys.jobsOnMap, true);
 
     // geolocator has no platform implementation under test, so no position is
     // ever produced — the same situation as a refusal.
@@ -188,6 +199,7 @@ void main() {
     // The intro is covered in onboarding_test; these assert the
     // shell that follows it.
     await (SettingsController(store)..load()).markIntroSeen();
+    await store.writeFlag(StoreKeys.jobsOnMap, true);
 
     await tester.useCompactSurface();
     await tester.pumpWidget(TrustHireApp(store: store));

@@ -12,6 +12,34 @@ that heading to the version and date, and open a fresh `[Unreleased]`.
 
 ## [Unreleased]
 
+### 0.26.0 — Where things sit: the trade board, log in on the profile
+
+The owner found 0.24 only a refont and recolour. This round changes where
+things sit, from a structure Impeccable's surface round dealt
+(`documents/design/2026-11-18-structure.md`).
+
+#### Changed
+
+- **Jobs opens on the trade board**: one row per trade near you, read down
+  like a departures board, with how many jobs, the nearest and the range of
+  fares in fixed columns. Tap a trade and its row turns turmeric while the list
+  under it, and the map's pins, narrow to it; tap again for every trade. The
+  five busiest trades show, with *Show all*. The map is the other view, and
+  Jobs remembers which one you left it on. On a desktop the board heads the
+  list beside the map.
+- **Logging in and out is on the profile.** The avatar at the top right of
+  Jobs, Directory and Activity is gone. The profile says who is logged in,
+  with *Log out*, or that nobody is, with *Log in*; being nobody is being a
+  guest on this device.
+- **Motion:** the job list no longer staggers in. It replayed every time a
+  filter or the board narrowed it. Board and map crossfade instead of
+  cutting, which shows they are the same results drawn two ways.
+
+#### Fixed
+
+- The navigation rail shows keyboard focus (turmeric at 40% on the ink
+  shell); Material's own was a few percent.
+
 ### 0.25.0 — The AI moves to Cloudflare
 
 The model that ran in the visitor's browser is gone. The AI is now

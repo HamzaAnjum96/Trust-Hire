@@ -3937,6 +3937,66 @@ abstract class AppStrings {
   /// In en, this message translates to:
   /// **'The AI\'s figure was not based on similar jobs, so this one was worked out from them instead.'**
   String get fareAiSetAside;
+
+  /// Heading over the trade board on Jobs.
+  ///
+  /// In en, this message translates to:
+  /// **'Work near you'**
+  String get workNearYou;
+
+  /// Column heading on the trade board: the kind of work.
+  ///
+  /// In en, this message translates to:
+  /// **'Trade'**
+  String get boardTrade;
+
+  /// Column heading on the trade board: how many open jobs near you.
+  ///
+  /// In en, this message translates to:
+  /// **'Jobs'**
+  String get boardJobs;
+
+  /// Column heading on the trade board: the range of fares.
+  ///
+  /// In en, this message translates to:
+  /// **'Fares'**
+  String get boardFares;
+
+  /// Under a trade on the board: how far the closest job is.
+  ///
+  /// In en, this message translates to:
+  /// **'Nearest {distance}'**
+  String nearestAt(String distance);
+
+  /// Under the board heading when no trade is chosen.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap a trade to see only its jobs.'**
+  String get boardHint;
+
+  /// Under the board heading when one trade is chosen.
+  ///
+  /// In en, this message translates to:
+  /// **'Showing {trade} only. Tap it again for every trade.'**
+  String boardShowing(String trade);
+
+  /// A range of fares, the second without the currency.
+  ///
+  /// In en, this message translates to:
+  /// **'{low}–{high}'**
+  String fareRange(String low, String high);
+
+  /// Last row of the trade board when it shows only the busiest trades.
+  ///
+  /// In en, this message translates to:
+  /// **'Show all {count} trades'**
+  String boardShowAll(int count);
+
+  /// Collapses the trade board back to the busiest trades.
+  ///
+  /// In en, this message translates to:
+  /// **'Show fewer'**
+  String get boardShowFewer;
 }
 
 class _AppStringsDelegate extends LocalizationsDelegate<AppStrings> {

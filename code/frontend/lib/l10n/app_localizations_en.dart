@@ -2403,4 +2403,42 @@ class AppStringsEn extends AppStrings {
   @override
   String get fareAiSetAside =>
       'The AI\'s figure was not based on similar jobs, so this one was worked out from them instead.';
+
+  @override
+  String get workNearYou => 'Work near you';
+
+  @override
+  String get boardTrade => 'Trade';
+
+  @override
+  String get boardJobs => 'Jobs';
+
+  @override
+  String get boardFares => 'Fares';
+
+  @override
+  String nearestAt(String distance) {
+    return 'Nearest $distance';
+  }
+
+  @override
+  String get boardHint => 'Tap a trade to see only its jobs.';
+
+  @override
+  String boardShowing(String trade) {
+    return 'Showing $trade only. Tap it again for every trade.';
+  }
+
+  @override
+  String fareRange(String low, String high) {
+    return '$low–$high';
+  }
+
+  @override
+  String boardShowAll(int count) {
+    return 'Show all $count trades';
+  }
+
+  @override
+  String get boardShowFewer => 'Show fewer';
 }

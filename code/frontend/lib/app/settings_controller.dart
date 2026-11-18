@@ -25,8 +25,20 @@ class SettingsController extends ChangeNotifier {
   bool _introSeen = false;
   bool get introSeen => _introSeen;
 
+  /// Whether Jobs opens on the map rather than the board: the view the
+  /// person last chose.
+  bool _jobsOnMap = false;
+  bool get jobsOnMap => _jobsOnMap;
+
+  Future<void> setJobsOnMap(bool value) async {
+    if (_jobsOnMap == value) return;
+    _jobsOnMap = value;
+    await _store.writeFlag(StoreKeys.jobsOnMap, value);
+  }
+
   void load() {
     _introSeen = _store.readFlag(StoreKeys.introSeen);
+    _jobsOnMap = _store.readFlag(StoreKeys.jobsOnMap);
 
     final language = _store.readString(StoreKeys.language);
     _locale = language == null || language.isEmpty ? null : Locale(language);

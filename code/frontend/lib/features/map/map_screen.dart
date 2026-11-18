@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 
 import '../../app/account_controller.dart';
 import '../../app/job_controller.dart';
+import '../../app/settings_controller.dart';
 import '../../app/profile_controller.dart';
 import '../../core/formatters.dart';
 import '../../core/layout.dart';
@@ -18,6 +19,7 @@ import '../jobs/filter_bar.dart';
 import '../jobs/job_details_sheet.dart';
 import '../jobs/job_filter_controller.dart';
 import '../jobs/job_results.dart';
+import '../jobs/trade_board.dart';
 import '../jobs/job_row.dart';
 import '../profile/my_trades_screen.dart';
 import '../../widgets/meta_chip.dart';
@@ -52,15 +54,21 @@ class _MapScreenState extends State<MapScreen> {
   String? _selectedJobId;
   bool _tilesUnavailable = false;
 
-  /// Whether the list is showing instead of the map, where only one fits.
-  /// The map is the default: it is the product.
-  bool _showingList = false;
+  /// Whether the board and list are showing instead of the map, where only
+  /// one fits. **The board is the default since 0.26**: what a worker reads
+  /// first is how much work there is, in which trade, how close; the map is
+  /// one tap away (documents/design/2026-11-18-structure.md).
+  late bool _showingList = !context.read<SettingsController>().jobsOnMap;
 
-  void _toggleView() => setState(() {
-    _showingList = !_showingList;
-    // A pin selected on the map means nothing in the list.
-    _selectedJobId = null;
-  });
+  void _toggleView() {
+    setState(() {
+      _showingList = !_showingList;
+      // A pin selected on the map means nothing in the list.
+      _selectedJobId = null;
+    });
+    // Remembered, so Jobs opens the way it was left.
+    context.read<SettingsController>().setJobsOnMap(!_showingList);
+  }
 
   /// The opening camera, worked out once the jobs are known.
   ///
@@ -236,6 +244,11 @@ class _MapScreenState extends State<MapScreen> {
             strings: strings,
             from: location.position,
           ),
+          boardJobs: filters.applyIgnoringTrades(
+            reachable,
+            strings: strings,
+            from: location.position,
+          ),
           // The count the "showing x of y" badge compares against. Reachable
           // rather than every job, so the badge measures the filters and not
           // the tag rule underneath them.
@@ -280,6 +293,7 @@ class _Discovery extends StatelessWidget {
     required this.showingList,
     required this.onToggleView,
     required this.jobs,
+    required this.boardJobs,
     required this.totalJobCount,
     required this.hiddenByTags,
     required this.filters,
@@ -296,6 +310,9 @@ class _Discovery extends StatelessWidget {
     required this.onClusterTapped,
     required this.onFitToJobs,
   });
+
+  /// What the trade board counts: every filter but the trade one.
+  final List<Job> boardJobs;
 
   /// Every job on the device, and those the visibility rule lets through —
   /// the list's empty states need both to say the right thing.
@@ -338,13 +355,18 @@ class _Discovery extends StatelessWidget {
     );
 
     if (!split && showingList) {
-      return _ListBody(
-        allJobs: allJobs,
-        reachable: reachable,
-        visible: jobs,
-        filters: filters,
-        viewerLocation: location.position,
-        viewSwitch: viewSwitch,
+      return _fadeThrough(
+        context,
+        'board',
+        _ListBody(
+          allJobs: allJobs,
+          reachable: reachable,
+          visible: jobs,
+          boardJobs: boardJobs,
+          filters: filters,
+          viewerLocation: location.position,
+          viewSwitch: viewSwitch,
+        ),
       );
     }
 
@@ -372,7 +394,7 @@ class _Discovery extends StatelessWidget {
       onFitToJobs: onFitToJobs,
     );
 
-    if (!split) return map;
+    if (!split) return _fadeThrough(context, 'map', map);
 
     return Row(
       children: [
@@ -385,6 +407,8 @@ class _Discovery extends StatelessWidget {
           width: 380,
           child: _ResultsRail(
             jobs: jobs,
+            boardJobs: boardJobs,
+            filters: filters,
             totalJobCount: totalJobCount,
             viewerLocation: location.position,
             selectedJobId: selectedJobId,
@@ -401,6 +425,8 @@ class _Discovery extends StatelessWidget {
 class _ResultsRail extends StatelessWidget {
   const _ResultsRail({
     required this.jobs,
+    required this.boardJobs,
+    required this.filters,
     required this.totalJobCount,
     required this.viewerLocation,
     required this.selectedJobId,
@@ -409,6 +435,8 @@ class _ResultsRail extends StatelessWidget {
   });
 
   final List<Job> jobs;
+  final List<Job> boardJobs;
+  final JobFilterController filters;
   final int totalJobCount;
   final JobLocation? viewerLocation;
   final String? selectedJobId;
@@ -421,54 +449,117 @@ class _ResultsRail extends StatelessWidget {
     final theme = Theme.of(context);
     final now = DateTime.now();
 
+    // The board heads the rail as it heads the list on a phone: choosing a
+    // trade here narrows the pins beside it.
+    final head = WorkNearYou(
+      boardJobs: boardJobs,
+      filters: filters,
+      viewerLocation: viewerLocation,
+      shown: jobs.length,
+      total: totalJobCount,
+    );
+
     return Material(
       color: theme.colorScheme.surface,
+      child: jobs.isEmpty
+          ? ListView(
+              children: [
+                head,
+                EmptyView(
+                  icon: Icons.search_off_rounded,
+                  title: strings.noJobsMatch,
+                  message: strings.tryWiderArea,
+                ),
+              ],
+            )
+          : ListView.separated(
+              itemCount: jobs.length + 1,
+              separatorBuilder: (_, index) => index == 0
+                  ? const Divider(height: 1)
+                  : const Divider(indent: BrandSizing.spaceMd),
+              itemBuilder: (context, index) {
+                if (index == 0) return head;
+                final job = jobs[index - 1];
+                return JobRow(
+                  job: job,
+                  now: now,
+                  viewerLocation: viewerLocation,
+                  isSelected: job.id == selectedJobId,
+                  // One tap moves the map to it; the details are a
+                  // second, deliberate tap. Opening a sheet on every
+                  // click would make the list unbrowsable.
+                  onTap: () => onSelect(job),
+                  onOpen: () => onOpen(job),
+                );
+              },
+            ),
+    );
+  }
+}
+
+/// "Work near you": the board, and the count of the jobs under it.
+///
+/// Heads the list on a phone and the rail beside the map on a desktop.
+class WorkNearYou extends StatelessWidget {
+  const WorkNearYou({
+    super.key,
+    required this.boardJobs,
+    required this.filters,
+    required this.viewerLocation,
+    required this.shown,
+    required this.total,
+  });
+
+  final List<Job> boardJobs;
+  final JobFilterController filters;
+  final JobLocation? viewerLocation;
+  final int shown;
+  final int total;
+
+  @override
+  Widget build(BuildContext context) {
+    final strings = AppStrings.of(context);
+    final theme = Theme.of(context);
+    final tags = filters.filter.tags;
+    final only = tags.length == 1 ? tags.first : null;
+
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(
+        BrandSizing.spaceMd,
+        BrandSizing.spaceMd,
+        BrandSizing.spaceMd,
+        BrandSizing.spaceSm + 4,
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(
-              BrandSizing.spaceMd,
-              BrandSizing.spaceMd + 2,
-              BrandSizing.spaceMd,
-              BrandSizing.spaceSm + 4,
-            ),
-            // The count *is* the heading. This list is every result under
-            // the filters, wherever it is; it used to be headed "Work on
-            // this map" over a map showing one city of them.
-            child: _ResultCount(
-              shown: jobs.length,
-              total: totalJobCount,
-              style: theme.textTheme.titleMedium,
+          Text(
+            strings.workNearYou,
+            style: theme.textTheme.titleLarge?.copyWith(
+              fontWeight: FontWeight.w700,
             ),
           ),
-          const Divider(height: 1),
-          Expanded(
-            child: jobs.isEmpty
-                ? EmptyView(
-                    icon: Icons.search_off_rounded,
-                    title: strings.noJobsMatch,
-                    message: strings.tryWiderArea,
-                  )
-                : ListView.separated(
-                    itemCount: jobs.length,
-                    separatorBuilder: (_, _) =>
-                        const Divider(indent: BrandSizing.spaceMd),
-                    itemBuilder: (context, index) {
-                      final job = jobs[index];
-                      return JobRow(
-                        job: job,
-                        now: now,
-                        viewerLocation: viewerLocation,
-                        isSelected: job.id == selectedJobId,
-                        // One tap moves the map to it; the details are a
-                        // second, deliberate tap. Opening a sheet on every
-                        // click would make the list unbrowsable.
-                        onTap: () => onSelect(job),
-                        onOpen: () => onOpen(job),
-                      );
-                    },
-                  ),
+          const SizedBox(height: 2),
+          Text(
+            only == null
+                ? strings.boardHint
+                : strings.boardShowing(only.label(strings)),
+            style: theme.textTheme.bodyMedium,
+          ),
+          const SizedBox(height: BrandSizing.spaceSm + 4),
+          TradeBoard(
+            jobs: boardJobs,
+            viewerLocation: viewerLocation,
+            selected: tags,
+            onSelect: filters.selectOnlyTag,
+          ),
+          const SizedBox(height: BrandSizing.spaceLg),
+          // The jobs themselves, under their count: "16 jobs", or "4 of 16
+          // jobs" while a trade or a filter narrows them.
+          _ResultCount(
+            shown: shown,
+            total: total,
+            style: theme.textTheme.titleMedium,
           ),
         ],
       ),
@@ -513,6 +604,7 @@ class _ListBody extends StatelessWidget {
     required this.allJobs,
     required this.reachable,
     required this.visible,
+    required this.boardJobs,
     required this.filters,
     required this.viewerLocation,
     required this.viewSwitch,
@@ -521,6 +613,7 @@ class _ListBody extends StatelessWidget {
   final List<Job> allJobs;
   final List<Job> reachable;
   final List<Job> visible;
+  final List<Job> boardJobs;
   final JobFilterController filters;
   final JobLocation? viewerLocation;
   final Widget viewSwitch;
@@ -546,25 +639,6 @@ class _ListBody extends StatelessWidget {
                     child: JobsSearchBar(filters: filters),
                   ),
                   QuickFilterBar(controller: filters),
-                  // The same count the map's switch carries, so it does not
-                  // disappear when the list is what is showing.
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(
-                      BrandSizing.spaceMd,
-                      BrandSizing.spaceSm + 4,
-                      BrandSizing.spaceMd,
-                      BrandSizing.spaceSm,
-                    ),
-                    child: _ResultCount(
-                      shown: visible.length,
-                      total: reachable.length,
-                      style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                        color: Theme.of(context).colorScheme.onSurface,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                  const Divider(height: 1),
                   Expanded(
                     child: JobResults(
                       all: allJobs,
@@ -572,6 +646,15 @@ class _ListBody extends StatelessWidget {
                       visible: visible,
                       filters: filters,
                       viewerLocation: viewerLocation,
+                      // The board leads, then the jobs under their count; one
+                      // scroll, so the board never steals the list's room.
+                      header: WorkNearYou(
+                        boardJobs: boardJobs,
+                        filters: filters,
+                        viewerLocation: viewerLocation,
+                        shown: visible.length,
+                        total: reachable.length,
+                      ),
                       // Clear of the view switch floating over the bottom.
                       bottomPadding:
                           JobsViewSwitch.height + BrandSizing.spaceXl * 2,
@@ -1014,4 +1097,16 @@ class JobPreviewCard extends StatelessWidget {
       ),
     );
   }
+}
+
+/// The board and the map are the same results drawn two ways, so changing
+/// between them crossfades rather than cutting: the one motion curve, the
+/// standard duration, nothing at all with reduced motion.
+Widget _fadeThrough(BuildContext context, String view, Widget child) {
+  return AnimatedSwitcher(
+    duration: Motion.standard(context),
+    switchInCurve: BrandMotion.curve,
+    switchOutCurve: BrandMotion.curve,
+    child: KeyedSubtree(key: ValueKey(view), child: child),
+  );
 }

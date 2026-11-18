@@ -26,69 +26,6 @@ class Motion {
       isReduced(context) ? Duration.zero : BrandMotion.large;
 }
 
-/// Fades and lifts its child in on first build.
-///
-/// Used to settle content into place rather than having it appear abruptly —
-/// the "saved job appears smoothly" case from section 28. It moves 8 logical
-/// pixels, not a parallax sweep.
-class SettleIn extends StatefulWidget {
-  const SettleIn({super.key, required this.child, this.delay = Duration.zero});
-
-  final Widget child;
-  final Duration delay;
-
-  @override
-  State<SettleIn> createState() => _SettleInState();
-}
-
-class _SettleInState extends State<SettleIn>
-    with SingleTickerProviderStateMixin {
-  late final AnimationController _controller;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-      vsync: this,
-      duration: BrandMotion.standard,
-    );
-    if (widget.delay == Duration.zero) {
-      _controller.forward();
-    } else {
-      Future<void>.delayed(widget.delay, () {
-        if (mounted) _controller.forward();
-      });
-    }
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    if (Motion.isReduced(context)) return widget.child;
-
-    final curve = CurvedAnimation(
-      parent: _controller,
-      curve: BrandMotion.curve,
-    );
-
-    return FadeTransition(
-      opacity: curve,
-      child: SlideTransition(
-        position: Tween<Offset>(
-          begin: const Offset(0, 0.04),
-          end: Offset.zero,
-        ).animate(curve),
-        child: widget.child,
-      ),
-    );
-  }
-}
-
 /// A shimmering placeholder for content that is loading.
 ///
 /// Section 28 rules out decorative loading animations, so this is a slow,

@@ -208,7 +208,7 @@ void main() {
       expect(find.byType(JobMap), findsNothing);
     });
 
-    testWidgets('later runs go straight to the map', (tester) async {
+    testWidgets('later runs go straight to Jobs, on the board', (tester) async {
       final store = await LocalStore.open();
       await (SettingsController(store)..load()).markIntroSeen();
 
@@ -216,7 +216,7 @@ void main() {
       await settle(tester);
 
       expect(find.byType(OnboardingScreen), findsNothing);
-      expect(find.byType(JobMap), findsOneWidget);
+      expect(find.text('Work near you'), findsOneWidget);
     });
 
     testWidgets('finishing the intro reveals the app', (tester) async {
@@ -229,7 +229,7 @@ void main() {
       await settle(tester);
 
       expect(find.byType(OnboardingScreen), findsNothing);
-      expect(find.byType(JobMap), findsOneWidget);
+      expect(find.text('Work near you'), findsOneWidget);
     });
   });
 
