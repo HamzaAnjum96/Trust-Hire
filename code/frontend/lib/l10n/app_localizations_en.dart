@@ -382,7 +382,7 @@ class AppStringsEn extends AppStrings {
 
   @override
   String get settingsStorageNotice =>
-      'This POC stores jobs only on this device. Nothing is uploaded and no account is needed.';
+      'This POC keeps jobs only on this device and needs no account. Nothing is uploaded, except what the AI assistant sends once you turn it on.';
 
   @override
   String get appearance => 'Appearance';
@@ -2178,59 +2178,22 @@ class AppStringsEn extends AppStrings {
   }
 
   @override
-  String get aiSection => 'On-device AI';
+  String get aiSection => 'AI assistant';
 
   @override
-  String get aiExplain =>
-      'A small language model that runs in this browser. It explains fare suggestions and answers questions about jobs and workers. Nothing you type leaves this device, and it can only show what the app already shows you.';
-
-  @override
-  String aiRemoteExplain(String model) {
-    return 'This build uses $model, a hosted model, through Trust Hire\'s own server. Job text leaves this device; phone numbers never do.';
+  String aiExplain(String model) {
+    return '$model, running on Cloudflare for Trust Hire, explains fare suggestions and answers questions about jobs and workers. When it is on, your question and the job details it needs go there to be answered. Phone numbers never do, nothing is kept, and it can only show what the app already shows you.';
   }
 
   @override
-  String get aiUnsupported =>
-      'This browser cannot run a model: it needs WebGPU, which most recent desktop browsers and some phones have. The assistant and fare suggestions still work, from the app\'s own data.';
-
-  @override
-  String get aiStatusChecking => 'Checking';
-
-  @override
-  String get aiStatusUnsupported => 'Not on this device';
+  String get aiNotInThisBuild =>
+      'This version of the app has no AI. The assistant and fare suggestions still work, from the app\'s own data.';
 
   @override
   String get aiStatusOff => 'Off';
 
   @override
-  String get aiStatusIdle => 'On, starts when used';
-
-  @override
-  String aiStatusLoading(int percent) {
-    return 'Loading $percent%';
-  }
-
-  @override
-  String get aiStatusReady => 'Ready';
-
-  @override
-  String get aiStatusFailed => 'Could not start';
-
-  @override
-  String get aiModelStandard => 'Standard';
-
-  @override
-  String get aiModelLight => 'Lighter';
-
-  @override
-  String aiModelSize(String model, int size) {
-    return '$model: about $size MB, downloaded once.';
-  }
-
-  @override
-  String aiModelDownloaded(String model) {
-    return '$model is already on this device.';
-  }
+  String get aiStatusReady => 'On';
 
   @override
   String get aiTurnOn => 'Turn on';
@@ -2242,50 +2205,24 @@ class AppStringsEn extends AppStrings {
   String get aiTryAgain => 'Try again';
 
   @override
-  String get aiRemoveDownload => 'Remove the download';
+  String get aiConsentTitle => 'Turn on the AI assistant?';
 
   @override
-  String get aiConsentTitle => 'Turn on the on-device AI?';
-
-  @override
-  String aiConsentBody(String model, int size) {
-    return '$model runs in this browser. It is about $size MB, downloaded once over your connection and kept for next time. Nothing you type leaves this device.';
-  }
-
-  @override
-  String aiConsentBodyDownloaded(String model) {
-    return '$model is already on this device, so switching it on costs no data. Nothing you type leaves this device.';
-  }
-
-  @override
-  String aiConsentRemoteBody(String model) {
-    return 'Questions go to $model, a hosted model, through Trust Hire\'s own server. Job text leaves this device; phone numbers never do.';
+  String aiConsentBody(String model) {
+    return '$model answers on Cloudflare, for Trust Hire. Your question, and the job details it needs to answer, are sent there. Phone numbers never are, and nothing is kept. You can turn it off in your profile.';
   }
 
   @override
   String get aiConsentCancel => 'Not now';
 
   @override
-  String get aiConsentDownload => 'Download and turn on';
-
-  @override
   String aiAnsweredBy(String model) {
-    return 'Answered by $model, running on this device.';
+    return 'Answered by $model, through Cloudflare.';
   }
 
   @override
   String aiAnswersHere(String model) {
-    return '$model answers here, running on this device.';
-  }
-
-  @override
-  String aiAnswersHereRemote(String model) {
-    return '$model answers here, a hosted model.';
-  }
-
-  @override
-  String aiAnsweredByRemote(String model) {
-    return 'Answered by $model, a hosted model.';
+    return '$model answers here, through Cloudflare.';
   }
 
   @override
@@ -2327,7 +2264,7 @@ class AppStringsEn extends AppStrings {
 
   @override
   String get assistantAiOffNote =>
-      'Matching your words. The on-device AI can also read ways of asking the word list does not know.';
+      'Matching your words. The AI assistant can also read ways of asking the word list does not know.';
 
   @override
   String get assistantAiFailedNote =>
@@ -2343,11 +2280,7 @@ class AppStringsEn extends AppStrings {
 
   @override
   String get aiStartFailedNote =>
-      'The on-device AI could not start here, so your words are matched instead.';
-
-  @override
-  String get aiUnsupportedSoftware =>
-      'This browser has only a software stand-in for a graphics chip here, far too slow to run a model. The assistant and fare suggestions still work, from the app\'s own data.';
+      'The AI could not answer just now, so your words are matched instead.';
 
   @override
   String aiLastProblem(String problem) {
@@ -2426,20 +2359,15 @@ class AppStringsEn extends AppStrings {
 
   @override
   String fareAdviceByAi(String model) {
-    return 'Explained by $model, running on this device.';
+    return 'Explained by $model, through Cloudflare.';
   }
 
   @override
-  String fareAdviceByRemoteAi(String model) {
-    return 'Explained by $model, a hosted model.';
-  }
-
-  @override
-  String get fareAdviceTurnOnAi => 'Explain it with the on-device AI';
+  String get fareAdviceTurnOnAi => 'Explain it with the AI assistant';
 
   @override
   String fareAdviceAsking(String model) {
-    return 'Asking $model. On a phone this can take a minute.';
+    return 'Asking $model. This takes a few seconds.';
   }
 
   @override

@@ -4,26 +4,27 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:http/http.dart' as http;
+import 'package:http/testing.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trust_hire/app/ai_controller.dart';
 import 'package:trust_hire/features/ai/ai_settings_section.dart';
 import 'package:trust_hire/services/ai/ai_agent.dart';
 import 'package:trust_hire/services/ai/ai_model.dart';
 import 'package:trust_hire/services/ai/ai_safety.dart';
-import 'package:trust_hire/services/ai/browser_engine.dart';
-import 'package:trust_hire/services/ai/browser_model.dart';
+import 'package:trust_hire/services/ai/remote_model.dart';
 import 'package:trust_hire/services/local_store.dart';
 
 import 'support/fake_ai.dart';
 import 'support/harness.dart';
 
-/// The AI layer: what a model is told, what it is believed, and when it is
-/// allowed to download at all.
+/// The AI layer: what a model is told, what it is believed, and when anything
+/// is sent at all.
 ///
-/// Nothing here needs a browser or a model. A [ScriptedModel] says exactly
-/// what a misbehaving small model would, and a [FakeBrowserEngine] stands in
-/// for WebLLM — so what is under test is the app's side: the checks, the loop
-/// and the consent.
+/// Nothing here needs a network or a model. A [ScriptedModel] says exactly
+/// what a misbehaving model would, and a mock HTTP client stands in for the
+/// Cloudflare Worker — so what is under test is the app's side: the checks,
+/// the loop, the request and the consent.
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
@@ -298,39 +299,9 @@ void main() {
       expect(model.cancels, 1);
     });
 
-    test('**a reply given up on no longer blocks every question after '
-        'it**', () async {
-      // On a slow GPU the first answer ran past the time limit and went on
-      // being written; the next question queued behind it and timed out
-      // too, and so on — "the AI could not answer", every time.
-      final engine = FakeBrowserEngine(hangs: true);
-      final model = BrowserModel(engine, BrowserModelChoice.light);
-      final agent = AiAgent(
-        model: model,
-        instructions: 'Answer.',
-        tools: const [],
-        answer: const {
-          'reply': {'type': 'string'},
-        },
-        timeout: const Duration(milliseconds: 100),
-      );
-
-      await expectLater(agent.run('first'), throwsA(isA<AiFailure>()));
-      expect(engine.interrupts, 1, reason: 'the abandoned reply is stopped');
-
-      engine
-        ..hangs = false
-        ..reply = jsonEncode({
-          'action': 'answer',
-          'answer': {'reply': 'second'},
-        });
-      final outcome = await agent.run('second');
-      expect(outcome.answer['reply'], 'second');
-    });
-
     test("the model's own words go back to it as it wrote them", () async {
-      // WebLLM reuses what it has already read only when the conversation
-      // comes back word for word; re-encoded, it read everything again.
+      // The conversation goes back as it happened. Re-encoded, the model
+      // would read a reply it never wrote.
       const written = '{"action": "lookup",  "arguments": {"word": "tap"}}';
       final model = ScriptedModel([
         written,
@@ -357,173 +328,155 @@ void main() {
   });
 
   group('the controller', () {
-    Future<(AiController, FakeBrowserEngine, LocalStore)> controller({
-      FakeBrowserEngine? engine,
-      AiModel? remote,
-    }) async {
+    Future<(AiController, LocalStore)> controller({AiModel? model}) async {
       final store = await LocalStore.open();
-      final fake = engine ?? FakeBrowserEngine();
-      final ai = AiController(
-        store,
-        engine: fake,
-        remote: remote,
-        remoteFromBuild: false,
-      );
+      final ai = AiController(store, model: model, modelFromBuild: false);
       await ai.load();
-      return (ai, fake, store);
+      return (ai, store);
     }
 
-    test('**downloads nothing until somebody says yes**', () async {
-      final (ai, engine, _) = await controller();
+    test('**sends nothing until somebody says yes**', () async {
+      final model = ScriptedModel(const []);
+      final (ai, _) = await controller(model: model);
 
       expect(ai.state, AiState.off);
       expect(await ai.ensureReady(), isNull);
-      expect(engine.loads, isEmpty);
+      expect(ai.readyModel, isNull);
+      expect(model.requests, isEmpty);
     });
 
-    test('switched on, it downloads once and answers', () async {
-      final (ai, engine, store) = await controller();
+    test('switched on, the cloud model answers, and the yes is kept', () async {
+      final model = ScriptedModel(const [], name: 'Llama 3.1 8B');
+      final (ai, store) = await controller(model: model);
 
-      final model = await ai.enable();
-
-      expect(model, isA<BrowserModel>());
-      expect(ai.state, AiState.ready);
-      expect(engine.loads, [BrowserModelChoice.standard.f16Id]);
+      expect(await ai.enable(), same(model));
+      expect(ai.state, AiState.on);
+      expect(ai.modelName, 'Llama 3.1 8B');
       expect(store.readFlag(StoreKeys.aiEnabled), isTrue);
-      expect(await ai.ensureReady(), same(model), reason: 'loaded once');
-      expect(engine.loads, hasLength(1));
+
+      final reloaded = AiController(store, model: model, modelFromBuild: false);
+      await reloaded.load();
+      expect(reloaded.state, AiState.on);
     });
 
-    test(
-      'remembered as on, it still waits to be used before loading',
-      () async {
-        final store = await LocalStore.open();
-        await store.writeFlag(StoreKeys.aiEnabled, true);
-        final engine = FakeBrowserEngine();
-        final ai = AiController(store, engine: engine, remoteFromBuild: false);
-        await ai.load();
-
-        expect(ai.state, AiState.idle);
-        expect(engine.loads, isEmpty, reason: 'not on every page load');
-
-        await ai.ensureReady();
-        expect(engine.loads, hasLength(1));
-      },
-    );
-
-    test('a browser without WebGPU is told so and never asked', () async {
-      final engine = FakeBrowserEngine(
-        supported: const BrowserSupport.unsupported('no-webgpu'),
-      );
-      final (ai, _, _) = await controller(engine: engine);
-
-      expect(ai.state, AiState.unsupported);
-      expect(ai.available, isFalse);
-      await ai.enable();
-      expect(await ai.ensureReady(), isNull);
-      expect(engine.loads, isEmpty);
-    });
-
-    test(
-      'a GPU without half precision gets the build that runs on it',
-      () async {
-        final engine = FakeBrowserEngine(
-          supported: const BrowserSupport.supported(f16: false),
-        );
-        final (ai, _, _) = await controller(engine: engine);
-
-        await ai.enable();
-        expect(engine.loads, [BrowserModelChoice.standard.f32Id]);
-      },
-    );
-
-    test('a failed start is kept, in the browser\'s words', () async {
-      final engine = FakeBrowserEngine(
-        loadFailure: const AiFailure('failed', 'GPUDevice was lost'),
-      );
-      final (ai, _, _) = await controller(engine: engine);
-
-      await ai.enable();
-
-      expect(ai.lastProblem, 'failed: GPUDevice was lost');
-    });
-
-    test('a software stand-in for a GPU is not offered the model', () async {
-      // An answer took 55 minutes on one. Every question would time out.
-      final engine = FakeBrowserEngine(
-        supported: const BrowserSupport.unsupported('software-gpu'),
-      );
-      final (ai, _, _) = await controller(engine: engine);
-
-      expect(ai.state, AiState.unsupported);
-      expect(ai.unsupportedReason, 'software-gpu');
-      await ai.enable();
-      expect(engine.loads, isEmpty);
-    });
-
-    test('a good answer clears the last problem', () async {
-      final (ai, _, _) = await controller();
-      ai.noteProblem('timeout');
-      expect(ai.lastProblem, 'timeout');
-      ai.noteAnswered();
-      expect(ai.lastProblem, isNull);
-    });
-
-    test('a failed start is reported and can be tried again', () async {
-      final engine = FakeBrowserEngine(loadFailure: const AiFailure('failed'));
-      final (ai, _, _) = await controller(engine: engine);
-
-      expect(await ai.enable(), isNull);
-      expect(ai.state, AiState.failed);
-
-      engine.loadFailure = null;
-      expect(await ai.ensureReady(), isNotNull);
-      expect(ai.state, AiState.ready);
-    });
-
-    test('switching off keeps the download; removing it does not', () async {
-      final (ai, engine, store) = await controller();
+    test('switching off sends nothing more', () async {
+      final (ai, store) = await controller(model: ScriptedModel(const []));
       await ai.enable();
 
       await ai.disable();
       expect(ai.state, AiState.off);
       expect(await ai.ensureReady(), isNull);
       expect(store.readFlag(StoreKeys.aiEnabled), isFalse);
-      expect(engine.forgets, isEmpty);
-
-      await ai.removeDownload();
-      expect(engine.forgets, isNotEmpty);
-      expect(ai.downloaded, isFalse);
     });
 
-    test('choosing the other size starts that one next time', () async {
-      final (ai, engine, store) = await controller();
+    test('a build without an AI says so, and cannot be switched on', () async {
+      final (ai, _) = await controller();
+
+      expect(ai.state, AiState.unavailable);
+      expect(ai.available, isFalse);
       await ai.enable();
-
-      await ai.setChoice(BrowserModelChoice.light);
-      expect(ai.state, AiState.idle);
-      expect(store.readString(StoreKeys.aiModel), 'light');
-
-      await ai.ensureReady();
-      expect(engine.loads.last, BrowserModelChoice.light.f16Id);
+      expect(await ai.ensureReady(), isNull);
     });
 
-    test('a hosted model, when a build has one, takes over', () async {
-      final remote = ScriptedModel(const [], name: 'Hosted', onDevice: false);
-      final (ai, engine, _) = await controller(remote: remote);
+    test('a good answer clears the last problem', () async {
+      final (ai, _) = await controller(model: ScriptedModel(const []));
+      ai.noteProblem('timeout');
+      expect(ai.lastProblem, 'timeout');
+      ai.noteAnswered();
+      expect(ai.lastProblem, isNull);
+    });
+  });
 
-      expect(ai.isRemote, isTrue);
-      expect(ai.onDevice, isFalse);
-      expect(await ai.ensureReady(), isNull, reason: 'still needs a yes');
+  group('the cloud model', () {
+    AiRequest request() => const AiRequest(
+      messages: [AiMessage.system('rules'), AiMessage.user('plumber chahiye')],
+      schema: {
+        'type': 'object',
+        'properties': {
+          'reply': {'type': 'string'},
+        },
+      },
+    );
 
-      await ai.enable();
-      expect(
-        ai.state,
-        AiState.ready,
-        reason: 'switched on, it says so — not "off" while it answers',
+    test(
+      'asks the Worker in the shape it reads, and returns its words',
+      () async {
+        late http.Request sent;
+        final model = RemoteModel(
+          endpoint: Uri.parse('https://ai.example/v1'),
+          model: RemoteModel.defaultModel,
+          label: RemoteModel.defaultLabel,
+          client: MockClient((r) async {
+            sent = r;
+            return http.Response(
+              jsonEncode({
+                'choices': [
+                  {
+                    'message': {
+                      'role': 'assistant',
+                      'content': '{"reply":"ok"}',
+                    },
+                  },
+                ],
+              }),
+              200,
+            );
+          }),
+        );
+
+        expect(await model.complete(request()), '{"reply":"ok"}');
+        expect(sent.url.toString(), 'https://ai.example/v1/chat/completions');
+        final body = jsonDecode(sent.body) as Map;
+        expect(body['messages'], [
+          {'role': 'system', 'content': 'rules'},
+          {'role': 'user', 'content': 'plumber chahiye'},
+        ]);
+        expect(body['response_format']['type'], 'json_schema');
+        expect(
+          body['response_format']['json_schema']['schema'],
+          request().schema,
+        );
+        expect(model.name, 'Llama 3.1 8B');
+      },
+    );
+
+    test(
+      'a refusal or a limit is a failure the features fall back from',
+      () async {
+        for (final status in [403, 429, 502]) {
+          final model = RemoteModel(
+            endpoint: Uri.parse('https://ai.example/v1'),
+            model: RemoteModel.defaultModel,
+            client: MockClient((_) async => http.Response('{}', status)),
+          );
+          await expectLater(
+            model.complete(request()),
+            throwsA(
+              isA<AiFailure>().having(
+                (f) => f.detail,
+                'detail',
+                'HTTP $status',
+              ),
+            ),
+          );
+        }
+      },
+    );
+
+    test('a reply with no answer in it is a bad reply, not a guess', () async {
+      final model = RemoteModel(
+        endpoint: Uri.parse('https://ai.example/v1'),
+        model: RemoteModel.defaultModel,
+        client: MockClient((_) async => http.Response('{"choices":[]}', 200)),
       );
-      expect(await ai.ensureReady(), same(remote));
-      expect(engine.loads, isEmpty);
+      await expectLater(
+        model.complete(request()),
+        throwsA(isA<AiFailure>().having((f) => f.code, 'code', 'bad_reply')),
+      );
+    });
+
+    test('a test build has no AI unless it is given an endpoint', () {
+      expect(RemoteModel.fromBuild(), isNull);
     });
   });
 
@@ -544,20 +497,38 @@ void main() {
       await tester.pumpAndSettle();
     }
 
-    testWidgets('says when the browser has only a software GPU', (
+    testWidgets('says where the AI runs, and asks before turning it on', (
       tester,
     ) async {
       final store = (await tester.runAsync(LocalStore.open))!;
       final ai = AiController(
         store,
-        engine: FakeBrowserEngine(
-          supported: const BrowserSupport.unsupported('software-gpu'),
-        ),
-        remoteFromBuild: false,
+        model: ScriptedModel(const [], name: 'Llama 3.1 8B'),
+        modelFromBuild: false,
       );
       await show(tester, ai);
 
-      expect(find.textContaining('software stand-in'), findsOneWidget);
+      expect(find.textContaining('running on Cloudflare'), findsOneWidget);
+      await tester.tap(find.text('Turn on'));
+      await tester.pumpAndSettle();
+      expect(find.text('Turn on the AI assistant?'), findsOneWidget);
+      expect(find.textContaining('Phone numbers never are'), findsOneWidget);
+      expect(ai.enabled, isFalse, reason: 'not until they say yes');
+
+      await tester.tap(find.widgetWithText(FilledButton, 'Turn on'));
+      await tester.pumpAndSettle();
+      expect(ai.state, AiState.on);
+    });
+
+    testWidgets('a build without an AI says so, and offers nothing to press', (
+      tester,
+    ) async {
+      final store = (await tester.runAsync(LocalStore.open))!;
+      final ai = AiController(store, modelFromBuild: false);
+      await show(tester, ai);
+
+      expect(find.textContaining('has no AI'), findsOneWidget);
+      expect(find.text('Turn on'), findsNothing);
     });
 
     testWidgets('shows what went wrong last time, to be passed on', (
@@ -566,22 +537,22 @@ void main() {
       final store = (await tester.runAsync(LocalStore.open))!;
       final ai = AiController(
         store,
-        engine: FakeBrowserEngine(),
-        remoteFromBuild: false,
+        model: ScriptedModel(const []),
+        modelFromBuild: false,
       );
       await show(tester, ai);
 
-      ai.noteProblem('failed', 'GPUDevice was lost');
+      ai.noteProblem('failed', 'HTTP 429');
       await tester.pumpAndSettle();
 
       expect(
-        find.text('What went wrong last time: failed: GPUDevice was lost'),
+        find.text('What went wrong last time: failed: HTTP 429'),
         findsOneWidget,
       );
     });
   });
 
-  test('a request is JSON a browser bridge can carry', () {
+  test('a request is JSON the Worker can read', () {
     const request = AiRequest(
       messages: [AiMessage.system('rules'), AiMessage.user('hi')],
       schema: {'type': 'object'},

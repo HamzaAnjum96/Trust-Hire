@@ -198,7 +198,7 @@
   "deleteJobExplanation": "It will be removed from this device. This cannot be undone.",
   "keepJob": "Keep job",
   "jobDeleted": "Job deleted from this device.",
-  "settingsStorageNotice": "This POC stores jobs only on this device. Nothing is uploaded and no account is needed.",
+  "settingsStorageNotice": "This POC keeps jobs only on this device and needs no account. Nothing is uploaded, except what the AI assistant sends once you turn it on.",
   "appearance": "Appearance",
   "themeSystem": "System",
   "themeLight": "Light",
@@ -1528,88 +1528,31 @@
       }
     }
   },
-  "aiSection": "On-device AI",
+  "aiSection": "AI assistant",
   "@aiSection": {
-    "description": "Profile group for the in-browser language model"
+    "description": "Heading of the profile group for the AI, which runs on Cloudflare for Trust Hire."
   },
-  "aiExplain": "A small language model that runs in this browser. It explains fare suggestions and answers questions about jobs and workers. Nothing you type leaves this device, and it can only show what the app already shows you.",
+  "aiExplain": "{model}, running on Cloudflare for Trust Hire, explains fare suggestions and answers questions about jobs and workers. When it is on, your question and the job details it needs go there to be answered. Phone numbers never do, nothing is kept, and it can only show what the app already shows you.",
+  "aiNotInThisBuild": "This version of the app has no AI. The assistant and fare suggestions still work, from the app's own data.",
+  "@aiNotInThisBuild": {
+    "description": "Shown in the AI group when the build was made without an AI endpoint."
+  },
   "@aiExplain": {
-    "description": "What the on-device AI is, under its profile group"
-  },
-  "aiRemoteExplain": "This build uses {model}, a hosted model, through Trust Hire's own server. Job text leaves this device; phone numbers never do.",
-  "@aiRemoteExplain": {
-    "description": "What the AI is, when a build points at a hosted model",
+    "description": "What the AI is and what leaves the device when it is on.",
     "placeholders": {
       "model": {
-        "type": "String"
+        "type": "String",
+        "example": "Llama 3.1 8B"
       }
     }
-  },
-  "aiUnsupported": "This browser cannot run a model: it needs WebGPU, which most recent desktop browsers and some phones have. The assistant and fare suggestions still work, from the app's own data.",
-  "@aiUnsupported": {
-    "description": "Why the AI cannot be switched on here"
-  },
-  "aiStatusChecking": "Checking",
-  "@aiStatusChecking": {
-    "description": "AI status pill"
-  },
-  "aiStatusUnsupported": "Not on this device",
-  "@aiStatusUnsupported": {
-    "description": "AI status pill"
   },
   "aiStatusOff": "Off",
   "@aiStatusOff": {
     "description": "AI status pill"
   },
-  "aiStatusIdle": "On, starts when used",
-  "@aiStatusIdle": {
-    "description": "AI status pill: switched on, not loaded yet"
-  },
-  "aiStatusLoading": "Loading {percent}%",
-  "@aiStatusLoading": {
-    "description": "AI status while the model downloads or loads",
-    "placeholders": {
-      "percent": {
-        "type": "int"
-      }
-    }
-  },
-  "aiStatusReady": "Ready",
+  "aiStatusReady": "On",
   "@aiStatusReady": {
-    "description": "AI status pill"
-  },
-  "aiStatusFailed": "Could not start",
-  "@aiStatusFailed": {
-    "description": "AI status pill"
-  },
-  "aiModelStandard": "Standard",
-  "@aiModelStandard": {
-    "description": "The larger on-device model"
-  },
-  "aiModelLight": "Lighter",
-  "@aiModelLight": {
-    "description": "The smaller on-device model"
-  },
-  "aiModelSize": "{model}: about {size} MB, downloaded once.",
-  "@aiModelSize": {
-    "description": "Download size of the chosen model",
-    "placeholders": {
-      "model": {
-        "type": "String"
-      },
-      "size": {
-        "type": "int"
-      }
-    }
-  },
-  "aiModelDownloaded": "{model} is already on this device.",
-  "@aiModelDownloaded": {
-    "description": "The chosen model is cached",
-    "placeholders": {
-      "model": {
-        "type": "String"
-      }
-    }
+    "description": "Status pill: the AI is switched on."
   },
   "aiTurnOn": "Turn on",
   "@aiTurnOn": {
@@ -1623,41 +1566,17 @@
   "@aiTryAgain": {
     "description": "Retry starting the AI"
   },
-  "aiRemoveDownload": "Remove the download",
-  "@aiRemoveDownload": {
-    "description": "Delete the cached model"
-  },
-  "aiConsentTitle": "Turn on the on-device AI?",
+  "aiConsentTitle": "Turn on the AI assistant?",
   "@aiConsentTitle": {
-    "description": "Consent dialog title"
+    "description": "Title of the dialog asking consent before anything is sent to the AI."
   },
-  "aiConsentBody": "{model} runs in this browser. It is about {size} MB, downloaded once over your connection and kept for next time. Nothing you type leaves this device.",
+  "aiConsentBody": "{model} answers on Cloudflare, for Trust Hire. Your question, and the job details it needs to answer, are sent there. Phone numbers never are, and nothing is kept. You can turn it off in your profile.",
   "@aiConsentBody": {
-    "description": "Consent dialog: what switching on costs",
+    "description": "Body of the consent dialog: what is sent, to whom, and what is not.",
     "placeholders": {
       "model": {
-        "type": "String"
-      },
-      "size": {
-        "type": "int"
-      }
-    }
-  },
-  "aiConsentBodyDownloaded": "{model} is already on this device, so switching it on costs no data. Nothing you type leaves this device.",
-  "@aiConsentBodyDownloaded": {
-    "description": "Consent dialog when the model is cached",
-    "placeholders": {
-      "model": {
-        "type": "String"
-      }
-    }
-  },
-  "aiConsentRemoteBody": "Questions go to {model}, a hosted model, through Trust Hire's own server. Job text leaves this device; phone numbers never do.",
-  "@aiConsentRemoteBody": {
-    "description": "Consent dialog for a hosted model",
-    "placeholders": {
-      "model": {
-        "type": "String"
+        "type": "String",
+        "example": "Llama 3.1 8B"
       }
     }
   },
@@ -1665,43 +1584,23 @@
   "@aiConsentCancel": {
     "description": "Decline the consent dialog"
   },
-  "aiConsentDownload": "Download and turn on",
-  "@aiConsentDownload": {
-    "description": "Accept the consent dialog"
-  },
-  "aiAnsweredBy": "Answered by {model}, running on this device.",
+  "aiAnsweredBy": "Answered by {model}, through Cloudflare.",
   "@aiAnsweredBy": {
-    "description": "Who answered: the on-device model",
+    "description": "Signs an answer the AI gave.",
     "placeholders": {
       "model": {
-        "type": "String"
+        "type": "String",
+        "example": "Llama 3.1 8B"
       }
     }
   },
-  "aiAnswersHere": "{model} answers here, running on this device.",
+  "aiAnswersHere": "{model} answers here, through Cloudflare.",
   "@aiAnswersHere": {
-    "description": "The assistant's status bar, before and between answers: who will answer",
+    "description": "Says which model answers in the assistant.",
     "placeholders": {
       "model": {
-        "type": "String"
-      }
-    }
-  },
-  "aiAnswersHereRemote": "{model} answers here, a hosted model.",
-  "@aiAnswersHereRemote": {
-    "description": "The assistant's status bar when a hosted model will answer",
-    "placeholders": {
-      "model": {
-        "type": "String"
-      }
-    }
-  },
-  "aiAnsweredByRemote": "Answered by {model}, a hosted model.",
-  "@aiAnsweredByRemote": {
-    "description": "Who answered: a hosted model",
-    "placeholders": {
-      "model": {
-        "type": "String"
+        "type": "String",
+        "example": "Llama 3.1 8B"
       }
     }
   },
@@ -1753,7 +1652,7 @@
   "@assistantThinking": {
     "description": "While the assistant works"
   },
-  "assistantAiOffNote": "Matching your words. The on-device AI can also read ways of asking the word list does not know.",
+  "assistantAiOffNote": "Matching your words. The AI assistant can also read ways of asking the word list does not know.",
   "@assistantAiOffNote": {
     "description": "Assistant status when the AI is off"
   },
@@ -1766,13 +1665,9 @@
   "@assistantAiSlowNote": {
     "description": "Assistant status when the AI ran out of time"
   },
-  "aiStartFailedNote": "The on-device AI could not start here, so your words are matched instead.",
+  "aiStartFailedNote": "The AI could not answer just now, so your words are matched instead.",
   "@aiStartFailedNote": {
-    "description": "Assistant status bar when the model failed to load"
-  },
-  "aiUnsupportedSoftware": "This browser has only a software stand-in for a graphics chip here, far too slow to run a model. The assistant and fare suggestions still work, from the app's own data.",
-  "@aiUnsupportedSoftware": {
-    "description": "Why the AI is unavailable: WebGPU is a software fallback adapter"
+    "description": "Shown when the AI failed and the word list answered instead."
   },
   "aiLastProblem": "What went wrong last time: {problem}",
   "@aiLastProblem": {
@@ -1867,7 +1762,7 @@
       }
     }
   },
-  "fareAdviceByAi": "Explained by {model}, running on this device.",
+  "fareAdviceByAi": "Explained by {model}, through Cloudflare.",
   "@fareAdviceByAi": {
     "description": "Who answers the fare question",
     "placeholders": {
@@ -1876,20 +1771,11 @@
       }
     }
   },
-  "fareAdviceByRemoteAi": "Explained by {model}, a hosted model.",
-  "@fareAdviceByRemoteAi": {
-    "description": "Who answers the fare question",
-    "placeholders": {
-      "model": {
-        "type": "String"
-      }
-    }
-  },
-  "fareAdviceTurnOnAi": "Explain it with the on-device AI",
+  "fareAdviceTurnOnAi": "Explain it with the AI assistant",
   "@fareAdviceTurnOnAi": {
     "description": "Link to switch the AI on, from the fare panel"
   },
-  "fareAdviceAsking": "Asking {model}. On a phone this can take a minute.",
+  "fareAdviceAsking": "Asking {model}. This takes a few seconds.",
   "@fareAdviceAsking": {
     "description": "While the AI works out a fare",
     "placeholders": {

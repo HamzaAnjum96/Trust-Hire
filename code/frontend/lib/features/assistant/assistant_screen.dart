@@ -60,18 +60,6 @@ class _AssistantScreenState extends State<AssistantScreen> {
   bool _thinking = false;
 
   @override
-  void initState() {
-    super.initState();
-    // Somebody who switched the AI on and opened this screen is about to ask
-    // something: start loading now rather than when they press send.
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!mounted) return;
-      final ai = context.read<AiController>();
-      if (ai.state == AiState.idle) ai.ensureReady();
-    });
-  }
-
-  @override
   void dispose() {
     _input.dispose();
     _scroll.dispose();
@@ -136,7 +124,7 @@ class _AssistantScreenState extends State<AssistantScreen> {
     );
     if (!mounted) return;
 
-    // Kept where it can be read back — Profile, On-device AI — so a failure
+    // Kept where it can be read back — Profile, AI assistant — so a failure
     // can be reported rather than only seen.
     if (model != null) {
       switch (reply.aiFailure) {
@@ -223,16 +211,9 @@ class _AiStatusBar extends StatelessWidget {
 
     final (IconData icon, String text, Widget? action) = switch (ai.state) {
       // Who will answer, not who did: nothing has been asked yet.
-      AiState.ready || AiState.idle => (
-        ai.onDevice ? Icons.devices_rounded : Icons.cloud_rounded,
-        ai.onDevice
-            ? strings.aiAnswersHere(ai.modelName)
-            : strings.aiAnswersHereRemote(ai.modelName),
-        null,
-      ),
-      AiState.loading => (
-        Icons.downloading_rounded,
-        strings.aiStatusLoading((ai.progress * 100).round()),
+      AiState.on => (
+        Icons.cloud_rounded,
+        strings.aiAnswersHere(ai.modelName),
         null,
       ),
       AiState.off => (
@@ -243,12 +224,7 @@ class _AiStatusBar extends StatelessWidget {
           child: Text(strings.aiTurnOn),
         ),
       ),
-      AiState.failed => (
-        Icons.text_fields_rounded,
-        strings.aiStartFailedNote,
-        TextButton(onPressed: ai.ensureReady, child: Text(strings.aiTryAgain)),
-      ),
-      AiState.checking || AiState.unsupported => (
+      AiState.unavailable => (
         Icons.text_fields_rounded,
         strings.aiAnsweredByWords,
         null,
@@ -287,13 +263,6 @@ class _AiStatusBar extends StatelessWidget {
                   ],
                 ),
               ),
-              if (ai.state == AiState.loading)
-                Padding(
-                  padding: const EdgeInsets.only(bottom: BrandSizing.spaceXs),
-                  child: LinearProgressIndicator(
-                    value: ai.progress > 0 ? ai.progress : null,
-                  ),
-                ),
             ],
           ),
         ),
@@ -478,9 +447,7 @@ class _Answered extends StatelessWidget {
 
     final author = reply.model == null
         ? strings.aiAnsweredByWords
-        : reply.modelOnDevice
-        ? strings.aiAnsweredBy(reply.model!)
-        : strings.aiAnsweredByRemote(reply.model!);
+        : strings.aiAnsweredBy(reply.model!);
 
     return Padding(
       padding: const EdgeInsets.only(bottom: BrandSizing.spaceLg),
@@ -548,9 +515,7 @@ class _Answered extends StatelessWidget {
               Icon(
                 reply.model == null
                     ? Icons.text_fields_rounded
-                    : (reply.modelOnDevice
-                          ? Icons.devices_rounded
-                          : Icons.cloud_rounded),
+                    : Icons.cloud_rounded,
                 size: 14,
                 color: theme.colorScheme.onSurfaceVariant,
               ),

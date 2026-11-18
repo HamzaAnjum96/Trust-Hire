@@ -26,7 +26,6 @@ class FareAdvice {
     this.source = FareAdviceSource.onDevice,
     this.reasoning,
     this.model,
-    this.modelOnDevice = true,
     this.clamped = false,
     this.agentFailure,
     this.agentFailureDetail = '',
@@ -48,7 +47,6 @@ class FareAdvice {
 
   /// Which model answered, so a figure is never shown without its author.
   final String? model;
-  final bool modelOnDevice;
 
   /// [FareGuard] had to pull the AI's figure back inside the evidence.
   final bool clamped;
@@ -203,7 +201,6 @@ class FareAdvisor {
         evidence: range,
         reasoning: shown ? reasoning : null,
         model: model.name,
-        modelOnDevice: model.onDevice,
         clamped: held.clamped,
         toolsUsed: outcome.toolsUsed,
       );

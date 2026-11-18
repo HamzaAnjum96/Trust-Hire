@@ -133,10 +133,9 @@ class AiAgent {
           'no JSON in a ${reply.length}-character reply',
         );
       }
-      // Exactly as it was written: WebLLM keeps the conversation it has
-      // already read, and reuses it only if what comes back matches word for
-      // word. Re-encoded, the spacing differs, and it reads the whole
-      // conversation again on every step.
+      // Exactly as it was written. Re-encoded, the model would read back a
+      // reply it never wrote. (It began with WebLLM, which reused what it had
+      // read only when the conversation came back word for word.)
       messages.add(AiMessage.assistant(reply));
 
       final name = action['action'];

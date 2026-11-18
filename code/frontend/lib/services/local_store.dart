@@ -73,7 +73,9 @@ class LocalStore {
   /// whichever demo accounts have been used. Anything the app wrote starts
   /// with [StoreKeys.prefix]; nothing else is touched.
   Future<void> clear() async {
-    final ours = _prefs.getKeys().where((key) => key.startsWith(StoreKeys.prefix));
+    final ours = _prefs.getKeys().where(
+      (key) => key.startsWith(StoreKeys.prefix),
+    );
     for (final key in ours.toList(growable: false)) {
       await _prefs.remove(key);
     }
@@ -189,11 +191,13 @@ class StoreKeys {
   /// live under `trust_hire.media.<id>` and are enumerated through this index.
   static const mediaIndex = 'trust_hire.media_index';
 
-  /// Whether somebody switched the on-device AI on — the consent its download
-  /// needs. Off until they do; see `AiController`.
+  /// Whether somebody switched the AI on — the consent sending to it needs.
+  /// Off until they do; see `AiController`.
   static const aiEnabled = 'trust_hire.ai_enabled';
 
-  /// Which size of on-device model they chose.
+  /// Which size of in-browser model somebody chose, before 0.25 removed that
+  /// model. Nothing reads it; it is listed in [all] so clearing the app's
+  /// data still removes it from a browser that has it.
   static const aiModel = 'trust_hire.ai_model';
 
   static const all = <String>[

@@ -53,8 +53,8 @@ buried.
   hirer chooses and the fare locks; **Mode B**, the directory: a paid listing
   with fixed prices, booked directly.
 - Offline-first: everything works on the device; a sync queue reconciles
-  later. Map tiles, Stripe's checkout and the optional on-device AI are the
-  only network uses.
+  later. Map tiles, Stripe's checkout and the optional AI (a Cloudflare
+  Worker) are the only network uses.
 - English and Urdu, Urdu right to left.
 - A demo with seven switchable accounts, walked through in
   `documents/product/demo-script.md`.
@@ -64,8 +64,9 @@ buried.
 - No sign-in in the proof of concept; demo accounts stand in.
 - Payments are Stripe test mode through Payment Links on the deployed site;
   simulated top-ups elsewhere.
-- An on-device AI (WebLLM) answers "Ask Trust Hire" and suggests fares, only
-  after the person agrees to a download of stated size.
+- An AI on Cloudflare Workers AI, behind Trust Hire's own Worker, answers
+  "Ask Trust Hire" and explains fare suggestions, only after the person agrees
+  to their question going there.
 - Nothing required on a job: a voice note alone, a photo alone or a title
   alone is postable.
 - 44–48px touch targets, 16px body text, nothing under 12px, AA contrast, in

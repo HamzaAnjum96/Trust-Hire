@@ -5,7 +5,7 @@ publish_to: 'none'
 # Source of truth for the app version. Mirrored in lib/core/app_version.dart,
 # which test/version_test.dart checks against this line. Bump both on every
 # push that changes the app.
-version: 0.24.0+49
+version: 0.25.0+50
 
 environment:
   sdk: ^3.12.2
@@ -48,10 +48,10 @@ dependencies:
   record: ^7.1.1
   url_launcher: ^6.3.2
 
-  # Only for a hosted model, later: `RemoteModel` posts to your own proxy when
-  # a build is given one (`--dart-define=AI_ENDPOINT=…`). Already in the tree
+  # The AI: `RemoteModel` posts to Trust Hire's Cloudflare Worker when a build
+  # is given its address (`--dart-define=AI_ENDPOINT=…`). Already in the tree
   # through flutter_map; listed because the app uses it directly. Nothing
-  # calls out unless that is set.
+  # calls out unless that is set and the person has switched the AI on.
   http: ^1.5.0
 
   # Tidies the address bar after a return from Stripe on the web build. Also

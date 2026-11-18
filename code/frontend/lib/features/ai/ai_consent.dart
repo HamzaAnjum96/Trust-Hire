@@ -4,34 +4,28 @@ import 'package:provider/provider.dart';
 import '../../app/ai_controller.dart';
 import '../../l10n/app_localizations.dart';
 
-/// Asks before the AI is switched on — and so before anything is downloaded.
+/// Asks before the AI is switched on — and so before anything is sent.
 ///
-/// Says how big the download is and that it happens once, because the people
-/// this app is for pay for data by the megabyte; says nothing typed leaves
-/// the device, because that is the reason to run it here at all. A model
-/// already in this browser's cache costs nothing, and the dialog says that
-/// instead.
+/// The AI is Trust Hire's Cloudflare Worker, so a question and the job details
+/// it needs leave the device. The dialog says so, says what never does (phone
+/// numbers), and that nothing is kept. It used to ask about a download of
+/// hundreds of megabytes for a model that ran in the browser; that model is
+/// gone (0.25).
 ///
 /// Returns whether the AI is now on.
 Future<bool> askToTurnOnAi(BuildContext context) async {
   final ai = context.read<AiController>();
   final strings = AppStrings.of(context);
-  final size = ai.choice.downloadMb;
-
-  final body = ai.isRemote
-      ? strings.aiConsentRemoteBody(ai.modelName)
-      : ai.downloaded == true
-      ? strings.aiConsentBodyDownloaded(ai.modelName)
-      : strings.aiConsentBody(ai.modelName, size);
+  if (!ai.available) return false;
 
   final confirmed = await showDialog<bool>(
     context: context,
     builder: (dialogContext) => AlertDialog(
-      // A download, said with a download — not a sparkle: the brand
-      // guidelines rule those out, and what this asks for is data.
-      icon: const Icon(Icons.download_for_offline_rounded),
+      // Where it goes, said with a cloud — not a sparkle: the brand
+      // guidelines rule those out.
+      icon: const Icon(Icons.cloud_rounded),
       title: Text(strings.aiConsentTitle),
-      content: Text(body),
+      content: Text(strings.aiConsentBody(ai.modelName)),
       actions: [
         TextButton(
           onPressed: () => Navigator.of(dialogContext).pop(false),
@@ -39,19 +33,13 @@ Future<bool> askToTurnOnAi(BuildContext context) async {
         ),
         FilledButton(
           onPressed: () => Navigator.of(dialogContext).pop(true),
-          child: Text(
-            ai.isRemote || ai.downloaded == true
-                ? strings.aiTurnOn
-                : strings.aiConsentDownload,
-          ),
+          child: Text(strings.aiTurnOn),
         ),
       ],
     ),
   );
 
   if (confirmed != true) return false;
-  // Not awaited: the download can take minutes, and the screens show its
-  // progress from the controller rather than holding a dialog open.
-  ai.enable();
+  await ai.enable();
   return true;
 }

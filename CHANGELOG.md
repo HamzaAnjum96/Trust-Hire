@@ -12,6 +12,53 @@ that heading to the version and date, and open a fresh `[Unreleased]`.
 
 ## [Unreleased]
 
+### 0.25.0 — The AI moves to Cloudflare
+
+The model that ran in the visitor's browser is gone. The AI is now
+Cloudflare Workers AI, behind Trust Hire's own Worker. **Not live yet:** the
+Worker is written and tested, but deploying it needs a Cloudflare token that
+can edit Workers (see the README). Until the repository variable
+`AI_ENDPOINT` is set, the site has no AI, and the assistant and fare
+suggestions work from the app's own data, as they always could.
+
+#### Added
+
+- **`code/backend/ai-worker/`**: a Cloudflare Worker in front of Workers AI.
+  It speaks the OpenAI-style chat completion `RemoteModel` already sent and
+  holds no key, because the Workers AI binding is authorised by the account.
+  It answers only the site's origins, fixes the model (Llama 3.1 8B "fast", on
+  the free tier), caps message count, length, tokens and temperature, limits
+  each address to 20 requests a minute, and never logs what people typed.
+  Eight `node --test` tests, nothing to install.
+- The deploy workflow passes the repository variable `AI_ENDPOINT` to the
+  build.
+
+#### Changed
+
+- **The AI is the cloud model only.** `AiController` has three states: no AI
+  in this build, off, and on. Consent stays: nothing is sent until somebody
+  switches it on, and the dialog says the question and the job details go to
+  Cloudflare, phone numbers never do, and nothing is kept.
+- Tried before the switch: Llama 3.1 8B, Llama 3.3 70B and Qwen2.5 Coder 32B
+  on Workers AI all read "rang ka kaam chahiye Lahore mein" as painting in
+  Lahore, in the schema, in under 1.2 seconds. The browser model (Qwen2.5
+  1.5B) had searched cleaning and gardening.
+- Copy: *AI assistant*, not *On-device AI*; "Answered by Llama 3.1 8B,
+  through Cloudflare"; the storage notice says what the AI sends once on.
+  English and Urdu.
+
+#### Removed
+
+- The in-browser model: WebLLM's bridge (`web/ai/`), the browser engine and
+  model, the 300 and 900 MB downloads, the WebGPU and software-GPU checks, the
+  model-size choice and *Remove the download*. Eighteen strings went with them.
+
+#### Checked
+
+- `tool/sweep_tests.py`: all 75 promises held at 0.24.0. The consent promise
+  is now *nothing is sent before consent*, and it and the other AI promises
+  still hold.
+
 ### 0.24.0 — The reskin: ink and turmeric on lime-wash
 
 The 0.23 structure is unchanged; the look is new, and the rules behind it are

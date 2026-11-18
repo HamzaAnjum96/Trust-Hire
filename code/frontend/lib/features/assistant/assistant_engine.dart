@@ -14,7 +14,6 @@ class AssistantReply {
     this.workers = const [],
     this.prose,
     this.model,
-    this.modelOnDevice = true,
     this.aiFailure,
     this.aiFailureDetail = '',
     this.missingTrades = const {},
@@ -34,7 +33,6 @@ class AssistantReply {
 
   /// Who answered: a model's name, or null for the word list.
   final String? model;
-  final bool modelOnDevice;
 
   /// Set when the AI was asked and its answer is not what is shown, so the
   /// word list's is: an [AiFailure] code, or [AssistantEngine.setAside].
@@ -309,7 +307,6 @@ class AssistantEngine {
           ? null
           : prose,
       model: model.name,
-      modelOnDevice: model.onDevice,
       missingTrades: _missing(asked, data, found: jobs.isNotEmpty),
     );
   }

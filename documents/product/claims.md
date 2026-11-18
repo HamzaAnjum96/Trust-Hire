@@ -34,6 +34,6 @@ rule?** Read the rows that name it first.
 | `syncOffline` | Losing the connection loses no work | `offline-keeps-the-queue` | |
 | `verifyCnicMaskExplain` | The whole CNIC number is never kept | `cnic-mask` | |
 | `verifySimFlagged` | A name mismatch is not a rejection | `sim-mismatch-is-not-a-rejection` | |
-| `aiConsentBody` | Nothing is downloaded before the person agrees | `nothing-downloads-before-consent` | "Nothing you type leaves this device" has no mutation: the on-device engine has no network path to test |
+| `aiConsentBody` | Nothing is sent to the AI before the person agrees, and phone numbers never are | `nothing-is-sent-before-consent` | Since 0.25 the AI is a Cloudflare Worker; the dialog used to promise nothing downloads before consent |
 | `topUpStripeLinkNotice` | Stripe here is test mode, and no real money moves | `stripe-return-is-test-money-only` | |
-| `settingsStorageNotice` | Nothing is uploaded and no account is needed | none | Architecture: there is no backend to upload to. A real backend must rewrite this string |
+| `settingsStorageNotice` | Nothing is uploaded and no account is needed, except what the AI sends once turned on | none | Architecture: there is no backend to upload to; the AI's sending is held by `nothing-is-sent-before-consent`. A real backend must rewrite this string |

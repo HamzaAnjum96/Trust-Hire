@@ -384,7 +384,7 @@ class AppStringsUr extends AppStrings {
 
   @override
   String get settingsStorageNotice =>
-      'یہ آزمائشی ایپ کام صرف اسی فون پر رکھتی ہے۔ کچھ بھی اپ لوڈ نہیں ہوتا اور کوئی اکاؤنٹ نہیں چاہیے۔';
+      'یہ آزمائشی ایپ کام صرف اسی فون پر رکھتی ہے اور کوئی اکاؤنٹ نہیں چاہیے۔ کچھ بھی اپ لوڈ نہیں ہوتا، سوائے اس کے جو AI معاون چالو کرنے کے بعد بھیجتا ہے۔';
 
   @override
   String get appearance => 'شکل و صورت';
@@ -2189,59 +2189,22 @@ class AppStringsUr extends AppStrings {
   }
 
   @override
-  String get aiSection => 'ڈیوائس پر AI';
+  String get aiSection => 'AI معاون';
 
   @override
-  String get aiExplain =>
-      'ایک چھوٹا لینگویج ماڈل جو اسی براؤزر میں چلتا ہے۔ یہ کرایے کی تجویز سمجھاتا ہے اور کاموں اور کاریگروں کے بارے میں سوالوں کے جواب دیتا ہے۔ آپ جو لکھتے ہیں وہ اس ڈیوائس سے باہر نہیں جاتا، اور یہ صرف وہی دکھا سکتا ہے جو ایپ آپ کو پہلے سے دکھاتی ہے۔';
-
-  @override
-  String aiRemoteExplain(String model) {
-    return 'یہ ورژن Trust Hire کے اپنے سرور کے ذریعے $model استعمال کرتا ہے، جو ایک آن لائن ماڈل ہے۔ کام کی تفصیل اس ڈیوائس سے باہر جاتی ہے؛ فون نمبر کبھی نہیں۔';
+  String aiExplain(String model) {
+    return '$model، جو Trust Hire کے لیے Cloudflare پر چلتا ہے، کرایے کی تجویز سمجھاتا ہے اور کاموں اور کاریگروں کے بارے میں سوالوں کے جواب دیتا ہے۔ جب یہ چالو ہو تو آپ کا سوال اور اس کے لیے ضروری کام کی تفصیل جواب کے لیے وہاں جاتی ہے۔ فون نمبر کبھی نہیں جاتے، کچھ محفوظ نہیں کیا جاتا، اور یہ صرف وہی دکھا سکتا ہے جو ایپ آپ کو پہلے سے دکھاتی ہے۔';
   }
 
   @override
-  String get aiUnsupported =>
-      'یہ براؤزر ماڈل نہیں چلا سکتا: اس کے لیے WebGPU چاہیے، جو زیادہ تر نئے کمپیوٹر براؤزرز اور کچھ فونز میں ہوتا ہے۔ اسسٹنٹ اور کرایے کی تجویز پھر بھی ایپ کے اپنے ڈیٹا سے کام کرتے ہیں۔';
-
-  @override
-  String get aiStatusChecking => 'جانچ ہو رہی ہے';
-
-  @override
-  String get aiStatusUnsupported => 'اس ڈیوائس پر نہیں';
+  String get aiNotInThisBuild =>
+      'ایپ کے اس ورژن میں AI نہیں ہے۔ معاون اور کرایے کی تجویز پھر بھی ایپ کے اپنے ڈیٹا سے کام کرتے ہیں۔';
 
   @override
   String get aiStatusOff => 'بند';
 
   @override
-  String get aiStatusIdle => 'چالو، استعمال پر شروع ہوگا';
-
-  @override
-  String aiStatusLoading(int percent) {
-    return 'لوڈ ہو رہا ہے $percent%';
-  }
-
-  @override
-  String get aiStatusReady => 'تیار';
-
-  @override
-  String get aiStatusFailed => 'شروع نہیں ہو سکا';
-
-  @override
-  String get aiModelStandard => 'معیاری';
-
-  @override
-  String get aiModelLight => 'ہلکا';
-
-  @override
-  String aiModelSize(String model, int size) {
-    return '$model: تقریباً $size MB، ایک بار ڈاؤن لوڈ۔';
-  }
-
-  @override
-  String aiModelDownloaded(String model) {
-    return '$model پہلے سے اس ڈیوائس پر موجود ہے۔';
-  }
+  String get aiStatusReady => 'چالو';
 
   @override
   String get aiTurnOn => 'چالو کریں';
@@ -2253,50 +2216,24 @@ class AppStringsUr extends AppStrings {
   String get aiTryAgain => 'دوبارہ کوشش کریں';
 
   @override
-  String get aiRemoveDownload => 'ڈاؤن لوڈ حذف کریں';
+  String get aiConsentTitle => 'AI معاون چالو کریں؟';
 
   @override
-  String get aiConsentTitle => 'اس ڈیوائس پر AI چالو کریں؟';
-
-  @override
-  String aiConsentBody(String model, int size) {
-    return '$model اسی براؤزر میں چلتا ہے۔ یہ تقریباً $size MB ہے، ایک بار آپ کے انٹرنیٹ سے ڈاؤن لوڈ ہوتا ہے اور اگلی بار کے لیے رکھا جاتا ہے۔ آپ جو لکھتے ہیں وہ اس ڈیوائس سے باہر نہیں جاتا۔';
-  }
-
-  @override
-  String aiConsentBodyDownloaded(String model) {
-    return '$model پہلے سے اس ڈیوائس پر موجود ہے، اس لیے اسے چالو کرنے میں کوئی ڈیٹا خرچ نہیں ہوگا۔ آپ جو لکھتے ہیں وہ اس ڈیوائس سے باہر نہیں جاتا۔';
-  }
-
-  @override
-  String aiConsentRemoteBody(String model) {
-    return 'سوالات Trust Hire کے اپنے سرور کے ذریعے $model کو جاتے ہیں، جو ایک آن لائن ماڈل ہے۔ کام کی تفصیل اس ڈیوائس سے باہر جاتی ہے؛ فون نمبر کبھی نہیں۔';
+  String aiConsentBody(String model) {
+    return '$model آپ کو Trust Hire کے لیے Cloudflare پر جواب دیتا ہے۔ آپ کا سوال، اور جواب کے لیے ضروری کام کی تفصیل، وہاں بھیجی جاتی ہے۔ فون نمبر کبھی نہیں بھیجے جاتے، اور کچھ محفوظ نہیں کیا جاتا۔ آپ اسے اپنی پروفائل میں بند کر سکتے ہیں۔';
   }
 
   @override
   String get aiConsentCancel => 'ابھی نہیں';
 
   @override
-  String get aiConsentDownload => 'ڈاؤن لوڈ کر کے چالو کریں';
-
-  @override
   String aiAnsweredBy(String model) {
-    return '$model نے جواب دیا، اسی ڈیوائس پر۔';
+    return '$model نے Cloudflare کے ذریعے جواب دیا۔';
   }
 
   @override
   String aiAnswersHere(String model) {
-    return 'یہاں $model جواب دیتا ہے، اسی ڈیوائس پر۔';
-  }
-
-  @override
-  String aiAnswersHereRemote(String model) {
-    return 'یہاں $model جواب دیتا ہے، جو ایک آن لائن ماڈل ہے۔';
-  }
-
-  @override
-  String aiAnsweredByRemote(String model) {
-    return '$model نے جواب دیا، جو ایک آن لائن ماڈل ہے۔';
+    return 'یہاں $model Cloudflare کے ذریعے جواب دیتا ہے۔';
   }
 
   @override
@@ -2339,7 +2276,7 @@ class AppStringsUr extends AppStrings {
 
   @override
   String get assistantAiOffNote =>
-      'آپ کے الفاظ سے ملایا جا رہا ہے۔ ڈیوائس پر AI پوچھنے کے وہ انداز بھی سمجھ سکتا ہے جو الفاظ کی فہرست میں نہیں۔';
+      'آپ کے الفاظ سے ملایا جا رہا ہے۔ AI معاون پوچھنے کے وہ انداز بھی سمجھ سکتا ہے جو الفاظ کی فہرست میں نہیں۔';
 
   @override
   String get assistantAiFailedNote =>
@@ -2355,11 +2292,7 @@ class AppStringsUr extends AppStrings {
 
   @override
   String get aiStartFailedNote =>
-      'ڈیوائس پر AI یہاں شروع نہیں ہو سکا، اس لیے آپ کے الفاظ سے ملایا جا رہا ہے۔';
-
-  @override
-  String get aiUnsupportedSoftware =>
-      'اس براؤزر کے پاس یہاں گرافکس چِپ کی جگہ صرف ایک سافٹ ویئر متبادل ہے، جو ماڈل چلانے کے لیے بہت سست ہے۔ اسسٹنٹ اور کرایے کی تجویز پھر بھی ایپ کے اپنے ڈیٹا سے کام کرتے ہیں۔';
+      'AI ابھی جواب نہیں دے سکا، اس لیے آپ کے الفاظ سے ملایا جا رہا ہے۔';
 
   @override
   String aiLastProblem(String problem) {
@@ -2438,20 +2371,15 @@ class AppStringsUr extends AppStrings {
 
   @override
   String fareAdviceByAi(String model) {
-    return '$model وضاحت کرے گا، اسی ڈیوائس پر۔';
+    return '$model Cloudflare کے ذریعے وضاحت کرے گا۔';
   }
 
   @override
-  String fareAdviceByRemoteAi(String model) {
-    return '$model وضاحت کرے گا، جو ایک آن لائن ماڈل ہے۔';
-  }
-
-  @override
-  String get fareAdviceTurnOnAi => 'ڈیوائس پر AI سے وضاحت کروائیں';
+  String get fareAdviceTurnOnAi => 'AI معاون سے وضاحت کروائیں';
 
   @override
   String fareAdviceAsking(String model) {
-    return '$model سے پوچھا جا رہا ہے۔ فون پر اس میں ایک منٹ لگ سکتا ہے۔';
+    return '$model سے پوچھا جا رہا ہے۔ اس میں چند سیکنڈ لگتے ہیں۔';
   }
 
   @override

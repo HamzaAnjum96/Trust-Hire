@@ -1,0 +1,4 @@
+# wrangler's local state and anything npm fetches; never commit them.
+.wrangler/
+node_modules/
+.dev.vars

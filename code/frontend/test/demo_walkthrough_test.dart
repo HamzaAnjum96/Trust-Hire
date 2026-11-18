@@ -10,8 +10,6 @@ import 'package:trust_hire/features/assistant/assistant_screen.dart';
 import 'package:trust_hire/features/directory/directory_screen.dart';
 import 'package:trust_hire/features/fare_advice/fare_evidence.dart';
 import 'package:trust_hire/features/wallet/stripe_links.dart';
-import 'package:trust_hire/services/ai/browser_engine.dart';
-import 'package:trust_hire/services/ai/browser_model.dart';
 import 'package:trust_hire/app/admin_controller.dart';
 import 'package:trust_hire/features/notifications/notification_rules.dart';
 import 'package:trust_hire/models/notification.dart';
@@ -111,8 +109,9 @@ void main() {
       }
     });
 
-    testWidgets('the device account is clean, which is what a new user sees',
-        (tester) async {
+    testWidgets('the device account is clean, which is what a new user sees', (
+      tester,
+    ) async {
       final store = await ready();
       final account = AccountController(store)..load();
 
@@ -130,8 +129,9 @@ void main() {
   });
 
   group('stop 2 — Hina Butt, the hirer', () {
-    testWidgets('has postings, and at least one with offers to choose between',
-        (tester) async {
+    testWidgets('has postings, and at least one with offers to choose between', (
+      tester,
+    ) async {
       // The screen bidding exists for. This is the exact reachability the seed
       // lacked for three sprints while every coherence test passed.
       final store = await ready();
@@ -149,7 +149,9 @@ void main() {
       final withOffers = hers.where(
         (job) =>
             job.status == JobStatus.open &&
-            bids.forJob(job.id).where((b) => b.status == BidStatus.offered)
+            bids
+                .forJob(job.id)
+                .where((b) => b.status == BidStatus.offered)
                 .isNotEmpty,
       );
 
@@ -160,8 +162,9 @@ void main() {
       );
     });
 
-    testWidgets('and one finished job she can be shown a rating on',
-        (tester) async {
+    testWidgets('and one finished job she can be shown a rating on', (
+      tester,
+    ) async {
       final store = await ready();
       const hina = 'user-003';
 
@@ -206,8 +209,9 @@ void main() {
   });
 
   group('stop 4 — Shahid Siddiqui, nearly new', () {
-    testWidgets('has the first-job credit still visible in his ledger',
-        (tester) async {
+    testWidgets('has the first-job credit still visible in his ledger', (
+      tester,
+    ) async {
       final store = await ready();
       const shahid = 'user-017';
 
@@ -225,8 +229,9 @@ void main() {
   });
 
   group('stop 5 — the directory, and Mode B', () {
-    testWidgets('has listings a hirer can book, at fixed prices',
-        (tester) async {
+    testWidgets('has listings a hirer can book, at fixed prices', (
+      tester,
+    ) async {
       final store = await ready();
       final premium = PremiumController(store)..load();
       await tester.pump();
@@ -241,8 +246,9 @@ void main() {
       );
     });
 
-    testWidgets('and it leaves out the people who would not travel to you',
-        (tester) async {
+    testWidgets('and it leaves out the people who would not travel to you', (
+      tester,
+    ) async {
       // The script says the directory applies each worker's own radius. It is
       // seeded across the whole country, so standing in Karachi must exclude
       // somebody — otherwise the claim is true of an empty rule.
@@ -278,7 +284,8 @@ void main() {
       expect(
         found,
         isNotEmpty,
-        reason: 'the script tells the presenter to type kitchen; something '
+        reason:
+            'the script tells the presenter to type kitchen; something '
             'has to come back',
       );
       expect(
@@ -290,15 +297,15 @@ void main() {
   });
 
   group('stop 5b — what the app tells you', () {
-    testWidgets('a worker with history has a feed, including a loss',
-        (tester) async {
+    testWidgets('a worker with history has a feed, including a loss', (
+      tester,
+    ) async {
       // The script puts the presenter on Usman and says he is told when he
       // wins *and* when he loses. Both have to actually be reachable from the
       // seed, or the stop is a claim about an empty screen.
       final store = await ready();
-      final jobs = JobController(
-        JobRepository(store, MediaStore(store)),
-      )..load();
+      final jobs = JobController(JobRepository(store, MediaStore(store)))
+        ..load();
       final bids = BidController(BidRepository(store))..load();
       final ratings = RatingController(store)..load();
       await tester.pump();
@@ -318,10 +325,7 @@ void main() {
         contains(NotificationKind.offerPassedOver),
         reason: 'the script promises he is told when he loses',
       );
-      expect(
-        feed.map((e) => e.kind),
-        contains(NotificationKind.offerAccepted),
-      );
+      expect(feed.map((e) => e.kind), contains(NotificationKind.offerAccepted));
     });
 
     testWidgets('and it reaches nobody it should not', (tester) async {
@@ -329,9 +333,8 @@ void main() {
       // feature. Checked here as well as in the unit tests because the seed is
       // the only place it runs against real data.
       final store = await ready();
-      final jobs = JobController(
-        JobRepository(store, MediaStore(store)),
-      )..load();
+      final jobs = JobController(JobRepository(store, MediaStore(store)))
+        ..load();
       final bids = BidController(BidRepository(store))..load();
       await tester.pump();
 
@@ -352,12 +355,12 @@ void main() {
   });
 
   group('stop 5c — arranging it', () {
-    testWidgets('the demo has conversations, and one with a reply waiting',
-        (tester) async {
+    testWidgets('the demo has conversations, and one with a reply waiting', (
+      tester,
+    ) async {
       final store = await ready();
-      final jobs = JobController(
-        JobRepository(store, MediaStore(store)),
-      )..load();
+      final jobs = JobController(JobRepository(store, MediaStore(store)))
+        ..load();
       final messages = MessageController(MessageRepository(store));
       await messages.load();
       await tester.pump();
@@ -387,9 +390,8 @@ void main() {
     testWidgets('and a job still taking offers has no thread', (tester) async {
       // The claim the script makes about *why* it opens at acceptance.
       final store = await ready();
-      final jobs = JobController(
-        JobRepository(store, MediaStore(store)),
-      )..load();
+      final jobs = JobController(JobRepository(store, MediaStore(store)))
+        ..load();
       await tester.pump();
 
       const rules = MessagingRules();
@@ -410,8 +412,9 @@ void main() {
   });
 
   group('stop 6 — Trust Hire staff, and oversight', () {
-    testWidgets('has a queue to work through and a dispute to justify a CNIC',
-        (tester) async {
+    testWidgets('has a queue to work through and a dispute to justify a CNIC', (
+      tester,
+    ) async {
       final store = await ready();
       final admin = AdminController(store)..load();
       await tester.pump();
@@ -441,8 +444,9 @@ void main() {
   });
 
   group('stop 8 — the backend that is not there', () {
-    testWidgets('posting with the connection off queues, and then drains',
-        (tester) async {
+    testWidgets('posting with the connection off queues, and then drains', (
+      tester,
+    ) async {
       // **The stop that was fiction when it was written.** 0.15.0 shipped the
       // outbox, the panel and the rules, and nothing in `lib/` ever enqueued —
       // so the script's "turn the connection off and do something, the pill
@@ -526,27 +530,29 @@ void main() {
   });
 
   group('stop 7 — verification', () {
-    testWidgets('a persona has a record to look at, the device account does not',
-        (tester) async {
-      final store = await ready();
+    testWidgets(
+      'a persona has a record to look at, the device account does not',
+      (tester) async {
+        final store = await ready();
 
-      final usman = VerificationController(store)
-        ..setAccount('user-009', name: 'Usman Raza');
-      await tester.pump();
+        final usman = VerificationController(store)
+          ..setAccount('user-009', name: 'Usman Raza');
+        await tester.pump();
 
-      expect(usman.mine.cnicOnFile, isTrue);
-      expect(usman.mine.cnicMasked, contains('*'));
-      expect(usman.mine.phoneVerified, isTrue);
+        expect(usman.mine.cnicOnFile, isTrue);
+        expect(usman.mine.cnicMasked, contains('*'));
+        expect(usman.mine.phoneVerified, isTrue);
 
-      final device = VerificationController(store)..load();
-      await tester.pump();
+        final device = VerificationController(store)..load();
+        await tester.pump();
 
-      expect(
-        device.mine.isEmpty,
-        isTrue,
-        reason: 'the script walks the empty state on the device account',
-      );
-    });
+        expect(
+          device.mine.isEmpty,
+          isTrue,
+          reason: 'the script walks the empty state on the device account',
+        );
+      },
+    );
   });
 
   group('stop 3b — a starting fare', () {
@@ -645,18 +651,16 @@ void main() {
     });
   });
 
-  group('stop 8b — the on-device AI', () {
-    testWidgets('a browser that can run it offers Lighter, and says about '
-        '300 MB before anything downloads', (tester) async {
+  group('stop 8b — the AI assistant', () {
+    testWidgets('it says it runs on Cloudflare, and asks before anything is '
+        'sent', (tester) async {
       final store = await ready();
       tester.view.physicalSize = const Size(800, 1600);
       tester.view.devicePixelRatio = 1;
       addTearDown(tester.view.reset);
 
-      final engine = FakeBrowserEngine(
-        supported: const BrowserSupport.supported(f16: true),
-      );
-      final ai = AiController(store, engine: engine, remoteFromBuild: false);
+      final model = ScriptedModel(const [], name: 'Llama 3.1 8B');
+      final ai = AiController(store, model: model, modelFromBuild: false);
       await tester.runAsync(ai.load);
 
       await tester.pumpWidget(
@@ -668,24 +672,13 @@ void main() {
       );
       await tester.pumpAndSettle();
 
-      expect(find.text('On-device AI'), findsOneWidget);
-      await tester.tap(find.text('Lighter'));
-      await tester.pumpAndSettle();
+      expect(find.text('AI assistant'), findsOneWidget);
+      expect(find.textContaining('running on Cloudflare'), findsOneWidget);
       await tester.tap(find.text('Turn on'));
       await tester.pumpAndSettle();
 
-      expect(
-        BrowserModelChoice.light.downloadMb,
-        300,
-        reason: 'the script says about 300 MB',
-      );
-      expect(
-        BrowserModelChoice.standard.downloadMb,
-        900,
-        reason: 'and Standard about 900 MB',
-      );
-      expect(find.textContaining('about 300 MB'), findsWidgets);
-      expect(engine.loads, isEmpty, reason: 'nothing until somebody agrees');
+      expect(find.text('Turn on the AI assistant?'), findsOneWidget);
+      expect(model.requests, isEmpty, reason: 'nothing until somebody agrees');
     });
   });
 }

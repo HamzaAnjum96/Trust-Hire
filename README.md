@@ -51,7 +51,8 @@ Trust-Hire/
 │   │   ├── migrations/           ← the PostgreSQL schema, applied in order
 │   │   ├── test/                 ← what the schema refuses
 │   │   ├── tool/                 ← verify_schema.sh, sweep_schema.sh
-│   │   └── stripe/               ← makes the Stripe Payment Links the site sells with
+│   │   ├── stripe/               ← makes the Stripe Payment Links the site sells with
+│   │   └── ai-worker/            ← the Cloudflare Worker the app's AI runs behind
 │   └── frontend/
 │
 └── deployment/                   ← deployment configuration and assets
@@ -260,7 +261,7 @@ range similar work went for, agreed fares ahead of what hirers merely asked.
 It is asked for, never automatic, and always says what it rests on. **The
 evidence is fares, never people:** no phone number, poster or worker is in it.
 
-**With the on-device AI switched on**, a model looks at the same evidence
+**With the AI switched on**, a model looks at the same evidence
 through two read-only tools (`market_summary`, `comparable_jobs`), proposes a
 range and explains it in a sentence or two, signed with its name. It does not
 get the last word on the number: `FareGuard` puts whatever it proposes in
@@ -277,23 +278,24 @@ failure — too slow, not JSON, never settles — falls back to the arithmetic
 too, and says so. Its explanation is required, kept to two sentences, and
 shown only if it is in the language of the screen.
 
-### The on-device AI and "Ask Trust Hire"
+### The AI and "Ask Trust Hire"
 
-The evaluators asked for an AI agent; there is no server to run one on. So it
-runs **in the visitor's own browser**: WebLLM on WebGPU, a Qwen2.5 model of
-1.5B parameters (about 900 MB) or 0.5B (about 300 MB), downloaded once into the
-browser's cache. **Nothing is fetched until somebody switches it on** — from
-the profile, the fare panel or the assistant — having been told the size; the
-people this is for pay for data by the megabyte. Nothing typed leaves the
-device. A browser without WebGPU (most phones today, every Android and iOS
-build) is told so plainly, and everything still works without it — as is one
-whose WebGPU is only a software stand-in for a graphics chip, where one answer
-took 55 minutes. **When the AI cannot answer, the screen says why** — it took
-too long, it could not start (with *Try again*), or it wrote something the app
-could not read — and *Profile → On-device AI* keeps what went wrong last time,
-in the browser's own words, to pass on. An answer that runs past its time
-limit is interrupted, not left writing: on a slow GPU, one abandoned reply
-used to make every question after it wait, and fail too.
+The AI runs on **Cloudflare Workers AI**, behind Trust Hire's own Worker
+(`code/backend/ai-worker/`): Llama 3.1 8B, on the free tier (10,000 neurons a
+day, several hundred answers). **Nothing is sent until somebody switches it
+on** — from the profile, the fare panel or the assistant — having been told
+that their question and the job details it needs go to Cloudflare; phone
+numbers never do, and nothing is kept. **A build without the Worker's address
+has no AI, and everything still works:** the assistant matches words and the
+fare panel does arithmetic. When the AI cannot answer, the screen says why,
+and *Profile → AI assistant* keeps what went wrong last time, to pass on.
+
+Until 0.25 the model ran **in the visitor's browser** (WebLLM on WebGPU,
+Qwen2.5 0.5B or 1.5B, a 300–900 MB download). Most phones have no WebGPU, an
+answer on a weak GPU took minutes, and it read little Urdu. The request it
+misread, "rang ka kaam chahiye Lahore mein", Llama 3.1 8B on Workers AI reads
+as painting in Lahore, as JSON, in about half a second. The browser model, its
+bridge (`web/ai/`), its download and its consent screens are gone.
 
 ```
 lib/services/ai/
@@ -301,13 +303,11 @@ lib/services/ai/
 ├── ai_agent.dart        ← a JSON-action loop over read-only tools
 ├── ai_safety.dart       ← framing, limits, and cleaning what a model says
 ├── ai_prompts.dart      ← everything the app says to a model, in one file
-├── browser_model.dart   ← the on-device model, and its two sizes
-├── browser_engine*.dart ← WebLLM through web/ai/bridge.js; a stub off the web
-└── remote_model.dart    ← a hosted model behind your own proxy — for later
-lib/app/ai_controller.dart  ← consent, size, state; which model answers
+└── remote_model.dart    ← the client for Trust Hire's Worker
+lib/app/ai_controller.dart  ← consent and state: off, on, or none in this build
 lib/features/assistant/     ← "Ask Trust Hire": word list, searches, engine
 lib/features/ai/            ← the consent dialog and the profile group
-web/ai/                     ← bridge.js and worker.js, loaded only when on
+code/backend/ai-worker/     ← the Worker: origins, limits, the model, Workers AI
 ```
 
 **"Ask Trust Hire"** — the **Ask** button inside the search bar on Jobs (map
@@ -326,9 +326,9 @@ What keeps a model honest, in order of how much it matters:
   search returned it this turn, matched by id; an id the model invents matches
   nothing. If it answers without searching at all, its words are dropped and
   the request is answered from the data.
-- **It cannot do worse than the word list.** A model small enough for a
-  browser knows little Urdu — asked "rang ka kaam chahiye", Qwen2.5 1.5B
-  searched cleaning and gardening. Where the list understood a request, only
+- **It cannot do worse than the word list.** The small model that ran in the
+  browser until 0.25 knew little Urdu — asked "rang ka kaam chahiye", Qwen2.5
+  1.5B searched cleaning and gardening. Where the list understood a request, only
   the model's searches that agree with it count — the right trade, jobs or
   workers as asked — and a model with none is overruled; where the list finds
   something and the model found nothing, the list's answer is shown. Either
@@ -339,8 +339,8 @@ What keeps a model honest, in order of how much it matters:
   books, pays or changes anything — so the worst a misled model can do is
   search.
 - **It answers in a shape, not in prose to act on.** Each turn is one JSON
-  action fixed by schema: WebLLM constrains generation to it, and the app
-  validates it again.
+  action fixed by schema: Workers AI's JSON mode holds the model to it, and
+  the app validates it again.
 - **What people wrote is data.** It is framed between markers the model is
   told never to take instructions from, and the markers are stripped from
   inside it first, so nobody can close the frame early.
@@ -358,38 +358,35 @@ What keeps a model honest, in order of how much it matters:
   five words in a row of what the model was told is not shown, here or in the
   fare panel; the app's own sentence is.
 
-**Tried on a real model, not only on scripts.** The tests drive the agent with
+**Tried on real models, not only on scripts.** The tests drive the agent with
 scripted replies, which say exactly what a misbehaving model would. Before
-0.22.0 shipped, the same code was also run against Qwen2.5 1.5B — the on-device
-default's own model, served by llama.cpp through `RemoteModel` — on English,
-Urdu and Roman Urdu requests, an off-topic one and two injection attempts.
-That run is where the Urdu misreadings, the injected fare, the borrowed rating
-and the five-sentence replies above were found; after the fixes, every request
-in it came back with the right results. The browser path was run as well —
-WebLLM from its CDN, the 0.5B download, a reply held to its schema — in
-headless Chromium on a software GPU, which is how the sizes the consent prompt
-quotes were found to be too high. And then the app itself, the same way:
-Flutter, the JavaScript bridge, WebLLM and back. The 0.5B model loaded in
-under a minute and searched correctly; its answer took 55 minutes on a
-software GPU (seconds on a real one) and was two sentences of its own
-instructions — which is why a reply that repeats its prompt is no longer
-shown.
+0.22.0 shipped, the same code was run against Qwen2.5 1.5B, served by
+llama.cpp, on English, Urdu and Roman Urdu requests, an off-topic one and two
+injection attempts; that run is where the Urdu misreadings, the injected fare,
+the borrowed rating and the five-sentence replies above were found. For 0.25
+the Worker's candidate models were asked the same Roman Urdu request through
+the Workers AI API: Llama 3.1 8B, Llama 3.3 70B and Qwen2.5 Coder 32B all
+answered correctly, in the schema, in under 1.2 seconds.
 
-**Swapping in a premium model later is a build flag**, not a rewrite: every
-feature talks to `AiModel`, and `RemoteModel` is a second implementation of
-it that posts an OpenAI-style chat completion with structured output to
-**your own** proxy (a Cloudflare Worker, a Supabase Edge Function), which
-holds the vendor's key. Never the vendor's API from the app — anything
-shipped to a browser is public.
+**The Worker** (`code/backend/ai-worker/src/index.js`) holds no key: the
+Workers AI binding is authorised by the account it runs in. It answers only
+the site's own origins, fixes the model (a request cannot choose a dearer
+one), caps messages, length, tokens and temperature, limits each address to 20
+requests a minute, and never logs what people typed. `node --test` in that
+folder runs its tests, with nothing to install. To deploy it:
 
 ```bash
-flutter build web --dart-define=AI_ENDPOINT=https://ai.example.com/v1 \
-                  --dart-define=AI_MODEL=<the provider's model id> \
-                  --dart-define=AI_MODEL_LABEL='<what people are shown>'
+cd code/backend/ai-worker
+CLOUDFLARE_ACCOUNT_ID=… CLOUDFLARE_API_TOKEN=… npx wrangler deploy
 ```
 
-With that set the app uses the hosted model and says so — job text then
-leaves the device, which the consent dialog says too. https only.
+The token needs permission to edit Workers: one made from Cloudflare's
+"Workers AI" template can run models but cannot deploy. Or paste
+`src/index.js` into a new Worker in the Cloudflare dashboard and add a Workers
+AI binding named `AI`. Then set the repository variable **`AI_ENDPOINT`** to
+`https://trust-hire-ai.<your-subdomain>.workers.dev/v1`; the deploy workflow
+passes it to the build. Until it is set, the site has no AI. The model is
+`MODEL` in `wrangler.toml`.
 
 ### The app (`code/frontend/`)
 
@@ -525,7 +522,7 @@ code/frontend/
 │   │   │                    Payment Link on the deployed site)
 │   │   ├── fare_advice/  ← "Suggest a fare": the evidence, the AI, the guard
 │   │   ├── assistant/    ← "Ask Trust Hire": word list, searches, engine
-│   │   ├── ai/           ← switching the on-device AI on, and its consent
+│   │   ├── ai/           ← switching the AI on, and its consent
 │   │   ├── account/      ← the demo account switcher
 │   │   ├── profile/      ← role, trades, and the app's settings
 │   │   └── onboarding/   ← first-run intro and permission priming
@@ -534,7 +531,7 @@ code/frontend/
 │   │                    listings, Verification
 │   ├── services/     ← local storage, seed loading, repositories
 │   │   ├── backend/  ← the RemoteApi seam, and the mock behind it
-│   │   ├── ai/       ← the model layer — see "The on-device AI" above
+│   │   ├── ai/       ← the model layer — see "The AI" above
 │   │   └── browser_location.dart ← the address bar, on the web build only
 │   └── widgets/      ← shared UI (status pills, skeletons, empty states,
 │                        meta chips, fading scroll rows, settings groups,
@@ -548,8 +545,7 @@ code/frontend/
 │   ├── images/       ← placeholder job photos
 │   ├── audio/        ← placeholder voice notes
 │   └── fonts/        ← Atkinson Hyperlegible Next, Noto Sans Arabic, Noto Nastaliq Urdu
-├── web/              ← the web shell: metadata, manifest, boot screen, icons,
-│                        and ai/ — the WebLLM bridge, loaded only when switched on
+├── web/              ← the web shell: metadata, manifest, boot screen, icons
 ├── test/
 └── tool/             ← dev scripts (seed data, assets, icons, the test sweep,
                          look_web.js for looking at the web build)
@@ -794,8 +790,8 @@ flutter build web --dart-define=MAP_TILES_LIGHT='https://…/{z}/{x}/{y}.png?key
 ```
 
 Tiles are one of only three things in the app that use a network (the others
-are Stripe's checkout page, on the deployed site, and the on-device AI's
-one-time download, once somebody switches it on): everything else works
+are Stripe's checkout page, on the deployed site, and the AI, once somebody
+switches it on): everything else works
 offline, and when tiles
 cannot be fetched the map still positions jobs correctly over a plain
 background and says so. Release Android builds now declare the INTERNET
@@ -816,9 +812,8 @@ speech, and exist so playback and the waveform can be demonstrated.
 - **Missing information is acceptable.** A job is postable with a voice note
   alone, a photo alone, or a title alone — do not add required fields.
 - **No network calls in the POC** — except map tiles, Stripe's own checkout
-  page when somebody pays, and the on-device AI's one-time download (WebLLM
-  from jsDelivr, the model from Hugging Face) once somebody switches it on,
-  having been told its size. Everything runs against local storage; seed data is copied
+  page when somebody pays, and the AI (Trust Hire's Cloudflare Worker) once
+  somebody switches it on, having been told what it sends. Everything runs against local storage; seed data is copied
   in on first run and edited locally from then on. Anything that does reach
   the network must work, and say so, when it cannot.
 - **No secrets in the repository.** Commit a `.env.example` listing required

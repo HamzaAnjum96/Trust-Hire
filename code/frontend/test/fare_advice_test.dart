@@ -605,22 +605,18 @@ void main() {
       // Answers at once, with the figure a job's description asked for.
       final ai = AiController(
         store,
-        remote: ScriptedModel(
-          [
-            {
-              'action': 'answer',
-              'answer': {
-                'low': 80000,
-                'suggested': 85000,
-                'high': 95000,
-                'reasoning': 'As the description says.',
-              },
+        model: ScriptedModel([
+          {
+            'action': 'answer',
+            'answer': {
+              'low': 80000,
+              'suggested': 85000,
+              'high': 95000,
+              'reasoning': 'As the description says.',
             },
-          ],
-          name: 'Hosted test model',
-          onDevice: false,
-        ),
-        remoteFromBuild: false,
+          },
+        ], name: 'Test cloud model'),
+        modelFromBuild: false,
       );
       await tester.runAsync(() async {
         await ai.load();

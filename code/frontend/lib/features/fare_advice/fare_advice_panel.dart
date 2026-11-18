@@ -112,7 +112,7 @@ class _FareAdvicePanelState extends State<FareAdvicePanel> {
     final ai = context.watch<AiController>();
     final hasTags = widget.draft.tags.isNotEmpty;
     final current = _asked && setEquals(_askedAbout, widget.draft.tags);
-    final aiOn = ai.enabled && ai.available && ai.state != AiState.failed;
+    final aiOn = ai.state == AiState.on;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -130,9 +130,7 @@ class _FareAdvicePanelState extends State<FareAdvicePanel> {
           !hasTags
               ? strings.fareAdviceNeedsTags
               : aiOn
-              ? (ai.onDevice
-                    ? strings.fareAdviceByAi(ai.modelName)
-                    : strings.fareAdviceByRemoteAi(ai.modelName))
+              ? strings.fareAdviceByAi(ai.modelName)
               : strings.fareAdviceOnDevice,
           style: theme.textTheme.labelSmall,
         ),

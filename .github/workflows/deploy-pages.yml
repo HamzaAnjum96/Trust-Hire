@@ -55,11 +55,15 @@ jobs:
         # the POC is meant to work offline.
         # base-href matches the repository name, since project Pages sites are
         # served from /<repo>/ rather than the domain root.
+        # AI_ENDPOINT is a repository variable (Settings → Secrets and
+        # variables → Actions → Variables): the Cloudflare Worker's address,
+        # ending /v1. Not a secret; unset, the site has no AI.
         run: |
           flutter build web \
             --release \
             --no-web-resources-cdn \
-            --base-href "/${{ github.event.repository.name }}/"
+            --base-href "/${{ github.event.repository.name }}/" \
+            --dart-define=AI_ENDPOINT="${{ vars.AI_ENDPOINT }}"
 
       # The suite tests widgets; nothing above has loaded the site in a
       # browser. This does, the way a visitor would: it waits for the first

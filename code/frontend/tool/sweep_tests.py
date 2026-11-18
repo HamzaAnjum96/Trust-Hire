@@ -648,14 +648,14 @@ MUTATIONS = [
         replace="      true;",
         tests=["test/payments_test.dart"],
     ),
-    # --- 0.22: the on-device AI and the assistant ------------------------------
+    # --- 0.22: the AI and the assistant (in the cloud since 0.25) --------------
     # A model is asked, and believed, only as far as these let it be.
     Mutation(
-        name="nothing-downloads-before-consent",
-        promise="the model is fetched only after somebody switches the AI on",
+        name="nothing-is-sent-before-consent",
+        promise="nothing goes to the AI until somebody switches it on",
         path="lib/app/ai_controller.dart",
-        find="    if (!_enabled || !(_support?.ok ?? false)) return Future.value(null);",
-        replace="    if (!(_support?.ok ?? false)) return Future.value(null);",
+        find="      Future.value(!_enabled || _model == null ? null : _model);",
+        replace="      Future.value(_model == null ? null : _model);",
         tests=["test/ai_test.dart"],
     ),
     Mutation(
@@ -724,7 +724,7 @@ MUTATIONS = [
     ),
     Mutation(
         name="the-models-words-go-back-as-written",
-        promise="a model's reply is handed back word for word, so WebLLM can reuse what it has read",
+        promise="a model's reply is handed back word for word, not re-encoded into words it never wrote",
         path="lib/services/ai/ai_agent.dart",
         find="      messages.add(AiMessage.assistant(reply));",
         replace="      messages.add(AiMessage.assistant(jsonEncode(action)));",

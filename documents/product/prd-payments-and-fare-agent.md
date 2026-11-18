@@ -1,5 +1,14 @@
 # PRD — Stripe payments and the AI fare agent
 
+> **0.25 update (2026-11-18).** The AI no longer runs in the visitor's browser.
+> It runs on Cloudflare Workers AI, behind Trust Hire's own Worker
+> (`code/backend/ai-worker/`), with Llama 3.1 8B on the free tier. The owner
+> chose it, reversing the "no hosted AI" non-goal below. The WebLLM model, its
+> download and its WebGPU checks are gone. R16 held: no feature changed,
+> because each speaks only to `AiModel`. Where this document describes the
+> on-device model, it is describing 0.22 to 0.24. The README has the current
+> design.
+
 **Status:** payments built, test mode only, and verified end to end on the
 deployed GitHub Pages site against a real Stripe test account. The fare
 suggestion is built and runs on the device. **The AI agent is back** (0.22.0,

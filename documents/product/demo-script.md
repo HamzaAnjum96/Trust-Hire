@@ -2,8 +2,8 @@
 
 How to see each Phase 1 rule working, in about fifteen minutes, on one device
 with no account and no network beyond map tiles — except two optional stops
-that need one: paying in Stripe's test mode (4b) and the on-device AI's
-one-time download (8b). Those two are the evaluators' asks, the Stripe
+that need one: paying in Stripe's test mode (4b) and the AI assistant (8b),
+which runs on Cloudflare. Those two are the evaluators' asks, the Stripe
 integration and the AI fare agent; the fare suggestion itself (3b) and the
 assistant (5d) work without either.
 
@@ -133,7 +133,7 @@ fare**.
 - **Try Medical.** One agreed fare is all there is, and the card shows that
   one figure and says one, rather than dressing it up as a market.
 
-This is the fare recommendation the evaluators asked for. With the on-device AI
+This is the fare recommendation the evaluators asked for. With the AI assistant
 on (Stop 8b), a model explains the range — and is held to the same evidence.
 
 ---
@@ -275,8 +275,8 @@ the account's initial.
 - **It only does jobs and workers.** Ask it about the weather and it says what
   it can do instead.
 - **The bar at the top says who answered** — here, a word list in English,
-  Urdu and Roman Urdu, with no AI. That is what most phones get, and it is not
-  the lesser mode: with the on-device AI on (Stop 8b), the model is told what
+  Urdu and Roman Urdu, with no AI. That is what you get with the AI off, and it
+  is not the lesser mode: with the AI assistant on (Stop 8b), the model is told what
   the list made of a request, and where they disagree, the list wins.
 
 ---
@@ -354,20 +354,21 @@ that behaves like one in the ways that matter.
 
 ---
 
-## Stop 8b — The on-device AI
+## Stop 8b — The AI assistant
 
-*Optional, and needs desktop Chrome or Edge* — browsers with WebGPU; most
-phones do not have it yet, and are told so. **Go:** Profile → On-device AI.
+*Optional, and needs the site to have its AI* — the Cloudflare Worker deployed
+and its address set (see the README). **Go:** Profile → AI assistant. On a
+build without it, the group says this version has no AI, and every stop above
+still works.
 
-1. **Choose Lighter, and Turn on.** It says the size first — about 300 MB,
-   once — and downloads nothing until you agree. *Standard*, about 900 MB,
-   writes better sentences. Either way the model runs in this browser and
-   nothing typed leaves the device.
-2. **Ask again** (Stop 5d). The answer is signed by the model, which writes a
-   sentence of its own above the app's — or, where its reading did not fit the
-   words, says the AI's answer was set aside and shows the word list's. A
-   sentence that only repeats the model's instructions — the lighter model's
-   habit — is not shown at all.
+1. **Turn on.** The dialog says where questions go — Llama 3.1 8B on
+   Cloudflare, for Trust Hire — that phone numbers never do, and that nothing
+   is kept. Nothing is sent until you agree. It works on any phone: nothing
+   downloads and nothing runs on the device.
+2. **Ask again** (Stop 5d), in Roman Urdu too: "rang ka kaam chahiye". The
+   answer is signed by the model, which writes a sentence of its own above the
+   app's — or, where its reading did not fit the words, says the AI's answer
+   was set aside and shows the word list's.
 3. **Post a job and Suggest a fare** (Stop 3b). The model looks at the same
    similar jobs, through two read-only tools, and says why in two sentences —
    or is set aside, with a note, and the arithmetic stands.

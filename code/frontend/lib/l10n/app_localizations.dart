@@ -761,7 +761,7 @@ abstract class AppStrings {
   /// No description provided for @settingsStorageNotice.
   ///
   /// In en, this message translates to:
-  /// **'This POC stores jobs only on this device. Nothing is uploaded and no account is needed.'**
+  /// **'This POC keeps jobs only on this device and needs no account. Nothing is uploaded, except what the AI assistant sends once you turn it on.'**
   String get settingsStorageNotice;
 
   /// No description provided for @appearance.
@@ -3620,41 +3620,23 @@ abstract class AppStrings {
   /// **'Balance {amount}'**
   String walletBalanceAfter(String amount);
 
-  /// Profile group for the in-browser language model
+  /// Heading of the profile group for the AI, which runs on Cloudflare for Trust Hire.
   ///
   /// In en, this message translates to:
-  /// **'On-device AI'**
+  /// **'AI assistant'**
   String get aiSection;
 
-  /// What the on-device AI is, under its profile group
+  /// What the AI is and what leaves the device when it is on.
   ///
   /// In en, this message translates to:
-  /// **'A small language model that runs in this browser. It explains fare suggestions and answers questions about jobs and workers. Nothing you type leaves this device, and it can only show what the app already shows you.'**
-  String get aiExplain;
+  /// **'{model}, running on Cloudflare for Trust Hire, explains fare suggestions and answers questions about jobs and workers. When it is on, your question and the job details it needs go there to be answered. Phone numbers never do, nothing is kept, and it can only show what the app already shows you.'**
+  String aiExplain(String model);
 
-  /// What the AI is, when a build points at a hosted model
+  /// Shown in the AI group when the build was made without an AI endpoint.
   ///
   /// In en, this message translates to:
-  /// **'This build uses {model}, a hosted model, through Trust Hire\'s own server. Job text leaves this device; phone numbers never do.'**
-  String aiRemoteExplain(String model);
-
-  /// Why the AI cannot be switched on here
-  ///
-  /// In en, this message translates to:
-  /// **'This browser cannot run a model: it needs WebGPU, which most recent desktop browsers and some phones have. The assistant and fare suggestions still work, from the app\'s own data.'**
-  String get aiUnsupported;
-
-  /// AI status pill
-  ///
-  /// In en, this message translates to:
-  /// **'Checking'**
-  String get aiStatusChecking;
-
-  /// AI status pill
-  ///
-  /// In en, this message translates to:
-  /// **'Not on this device'**
-  String get aiStatusUnsupported;
+  /// **'This version of the app has no AI. The assistant and fare suggestions still work, from the app\'s own data.'**
+  String get aiNotInThisBuild;
 
   /// AI status pill
   ///
@@ -3662,53 +3644,11 @@ abstract class AppStrings {
   /// **'Off'**
   String get aiStatusOff;
 
-  /// AI status pill: switched on, not loaded yet
+  /// Status pill: the AI is switched on.
   ///
   /// In en, this message translates to:
-  /// **'On, starts when used'**
-  String get aiStatusIdle;
-
-  /// AI status while the model downloads or loads
-  ///
-  /// In en, this message translates to:
-  /// **'Loading {percent}%'**
-  String aiStatusLoading(int percent);
-
-  /// AI status pill
-  ///
-  /// In en, this message translates to:
-  /// **'Ready'**
+  /// **'On'**
   String get aiStatusReady;
-
-  /// AI status pill
-  ///
-  /// In en, this message translates to:
-  /// **'Could not start'**
-  String get aiStatusFailed;
-
-  /// The larger on-device model
-  ///
-  /// In en, this message translates to:
-  /// **'Standard'**
-  String get aiModelStandard;
-
-  /// The smaller on-device model
-  ///
-  /// In en, this message translates to:
-  /// **'Lighter'**
-  String get aiModelLight;
-
-  /// Download size of the chosen model
-  ///
-  /// In en, this message translates to:
-  /// **'{model}: about {size} MB, downloaded once.'**
-  String aiModelSize(String model, int size);
-
-  /// The chosen model is cached
-  ///
-  /// In en, this message translates to:
-  /// **'{model} is already on this device.'**
-  String aiModelDownloaded(String model);
 
   /// Switch the AI on
   ///
@@ -3728,35 +3668,17 @@ abstract class AppStrings {
   /// **'Try again'**
   String get aiTryAgain;
 
-  /// Delete the cached model
+  /// Title of the dialog asking consent before anything is sent to the AI.
   ///
   /// In en, this message translates to:
-  /// **'Remove the download'**
-  String get aiRemoveDownload;
-
-  /// Consent dialog title
-  ///
-  /// In en, this message translates to:
-  /// **'Turn on the on-device AI?'**
+  /// **'Turn on the AI assistant?'**
   String get aiConsentTitle;
 
-  /// Consent dialog: what switching on costs
+  /// Body of the consent dialog: what is sent, to whom, and what is not.
   ///
   /// In en, this message translates to:
-  /// **'{model} runs in this browser. It is about {size} MB, downloaded once over your connection and kept for next time. Nothing you type leaves this device.'**
-  String aiConsentBody(String model, int size);
-
-  /// Consent dialog when the model is cached
-  ///
-  /// In en, this message translates to:
-  /// **'{model} is already on this device, so switching it on costs no data. Nothing you type leaves this device.'**
-  String aiConsentBodyDownloaded(String model);
-
-  /// Consent dialog for a hosted model
-  ///
-  /// In en, this message translates to:
-  /// **'Questions go to {model}, a hosted model, through Trust Hire\'s own server. Job text leaves this device; phone numbers never do.'**
-  String aiConsentRemoteBody(String model);
+  /// **'{model} answers on Cloudflare, for Trust Hire. Your question, and the job details it needs to answer, are sent there. Phone numbers never are, and nothing is kept. You can turn it off in your profile.'**
+  String aiConsentBody(String model);
 
   /// Decline the consent dialog
   ///
@@ -3764,35 +3686,17 @@ abstract class AppStrings {
   /// **'Not now'**
   String get aiConsentCancel;
 
-  /// Accept the consent dialog
+  /// Signs an answer the AI gave.
   ///
   /// In en, this message translates to:
-  /// **'Download and turn on'**
-  String get aiConsentDownload;
-
-  /// Who answered: the on-device model
-  ///
-  /// In en, this message translates to:
-  /// **'Answered by {model}, running on this device.'**
+  /// **'Answered by {model}, through Cloudflare.'**
   String aiAnsweredBy(String model);
 
-  /// The assistant's status bar, before and between answers: who will answer
+  /// Says which model answers in the assistant.
   ///
   /// In en, this message translates to:
-  /// **'{model} answers here, running on this device.'**
+  /// **'{model} answers here, through Cloudflare.'**
   String aiAnswersHere(String model);
-
-  /// The assistant's status bar when a hosted model will answer
-  ///
-  /// In en, this message translates to:
-  /// **'{model} answers here, a hosted model.'**
-  String aiAnswersHereRemote(String model);
-
-  /// Who answered: a hosted model
-  ///
-  /// In en, this message translates to:
-  /// **'Answered by {model}, a hosted model.'**
-  String aiAnsweredByRemote(String model);
 
   /// Who answered: the word list
   ///
@@ -3869,7 +3773,7 @@ abstract class AppStrings {
   /// Assistant status when the AI is off
   ///
   /// In en, this message translates to:
-  /// **'Matching your words. The on-device AI can also read ways of asking the word list does not know.'**
+  /// **'Matching your words. The AI assistant can also read ways of asking the word list does not know.'**
   String get assistantAiOffNote;
 
   /// Assistant status after an AI failure
@@ -3890,17 +3794,11 @@ abstract class AppStrings {
   /// **'The AI took too long, so this was matched from your words.'**
   String get assistantAiSlowNote;
 
-  /// Assistant status bar when the model failed to load
+  /// Shown when the AI failed and the word list answered instead.
   ///
   /// In en, this message translates to:
-  /// **'The on-device AI could not start here, so your words are matched instead.'**
+  /// **'The AI could not answer just now, so your words are matched instead.'**
   String get aiStartFailedNote;
-
-  /// Why the AI is unavailable: WebGPU is a software fallback adapter
-  ///
-  /// In en, this message translates to:
-  /// **'This browser has only a software stand-in for a graphics chip here, far too slow to run a model. The assistant and fare suggestions still work, from the app\'s own data.'**
-  String get aiUnsupportedSoftware;
 
   /// The last AI failure, technical, for reporting it
   ///
@@ -3971,25 +3869,19 @@ abstract class AppStrings {
   /// Who answers the fare question
   ///
   /// In en, this message translates to:
-  /// **'Explained by {model}, running on this device.'**
+  /// **'Explained by {model}, through Cloudflare.'**
   String fareAdviceByAi(String model);
-
-  /// Who answers the fare question
-  ///
-  /// In en, this message translates to:
-  /// **'Explained by {model}, a hosted model.'**
-  String fareAdviceByRemoteAi(String model);
 
   /// Link to switch the AI on, from the fare panel
   ///
   /// In en, this message translates to:
-  /// **'Explain it with the on-device AI'**
+  /// **'Explain it with the AI assistant'**
   String get fareAdviceTurnOnAi;
 
   /// While the AI works out a fare
   ///
   /// In en, this message translates to:
-  /// **'Asking {model}. On a phone this can take a minute.'**
+  /// **'Asking {model}. This takes a few seconds.'**
   String fareAdviceAsking(String model);
 
   /// Above the AI's explanation

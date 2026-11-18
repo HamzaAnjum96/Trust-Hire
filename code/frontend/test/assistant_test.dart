@@ -661,21 +661,17 @@ void main() {
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.reset);
 
-    // Answers at once, without searching — what Qwen2.5 1.5B did when asked
-    // about the weather.
+    // Answers at once, without searching — what the small in-browser model
+    // (Qwen2.5 1.5B) did when asked about the weather, before 0.25.
     final ai = AiController(
       store,
-      remote: ScriptedModel(
-        [
-          {
-            'action': 'answer',
-            'answer': {'reply': 'It is sunny in Lahore today.'},
-          },
-        ],
-        name: 'Hosted test model',
-        onDevice: false,
-      ),
-      remoteFromBuild: false,
+      model: ScriptedModel([
+        {
+          'action': 'answer',
+          'answer': {'reply': 'It is sunny in Lahore today.'},
+        },
+      ], name: 'Test cloud model'),
+      modelFromBuild: false,
     );
     await tester.runAsync(() async {
       await ai.load();
@@ -690,7 +686,7 @@ void main() {
     // Who will answer, before anything is asked — not "Answered by", which
     // claimed an answer that did not exist yet.
     expect(
-      find.text('Hosted test model answers here, a hosted model.'),
+      find.text('Test cloud model answers here, through Cloudflare.'),
       findsOneWidget,
     );
 
@@ -722,12 +718,10 @@ void main() {
 
     final ai = AiController(
       store,
-      remote: ScriptedModel(
-        [const AiFailure('timeout')],
-        name: 'Hosted test model',
-        onDevice: false,
-      ),
-      remoteFromBuild: false,
+      model: ScriptedModel([
+        const AiFailure('timeout'),
+      ], name: 'Test cloud model'),
+      modelFromBuild: false,
     );
     await tester.runAsync(() async {
       await ai.load();
